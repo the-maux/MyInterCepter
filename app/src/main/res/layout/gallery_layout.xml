@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:background="#ff000000" android:layout_width="match_parent" android:layout_height="match_parent">
+    <CheckBox android:id="@+id/checkBox1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SSLStrip" android:onClick="OnStrip" />
+    <CheckBox android:id="@+id/checkBox3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Forced DL" android:layout_below="@+id/checkBox1" android:onClick="OnForce" />
+    <CheckBox android:id="@+id/checkBox2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cookie Killer" android:layout_toRightOf="@+id/checkBox1" android:onClick="OnCookieKiller" />
+    <Button android:id="@+id/button1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="DNS Spoofing" android:layout_below="@+id/checkBox3" android:onClick="OnDNS" />
+    <CheckBox android:id="@+id/checkBox5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="I'm Expert and I know what im doing" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true" android:onClick="OnExpert" />
+    <Button android:id="@+id/button5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="HTTP Injections" android:layout_toRightOf="@+id/button1" android:layout_alignTop="@+id/button1" android:onClick="OnInject" />
+</RelativeLayout>

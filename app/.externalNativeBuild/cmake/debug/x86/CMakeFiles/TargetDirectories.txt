@@ -1,0 +1,3 @@
+/home/the-maux/Work/MyInterCepter/app/.externalNativeBuild/cmake/debug/x86/CMakeFiles/rebuild_cache.dir
+/home/the-maux/Work/MyInterCepter/app/.externalNativeBuild/cmake/debug/x86/CMakeFiles/edit_cache.dir
+/home/the-maux/Work/MyInterCepter/app/.externalNativeBuild/cmake/debug/x86/CMakeFiles/native-lib.dir

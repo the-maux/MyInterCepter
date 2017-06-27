@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="match_parent">
+    <CheckBox android:id="@+id/checkBox1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Save .pcap session" android:onClick="OnSave" />
+    <CheckBox android:id="@+id/checkBox2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Autoscroll" android:layout_toRightOf="@+id/checkBox1" android:layout_below="@+id/checkBox1" android:onClick="OnRawScroll" />
+    <CheckBox android:id="@+id/checkBox3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Lock Screen" android:layout_below="@+id/checkBox1" android:layout_alignParentLeft="true" android:onClick="OnLock" />
+    <TextView  android:gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" android:id="@+id/textView3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="v 2.0" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" />
+    <Button android:id="@+id/button2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Clear *.pcap" android:layout_toRightOf="@+id/button1" android:layout_below="@+id/spinner3" android:onClick="OnClearPcap"  />
+    <TextView  android:autoLink="web|email|phone|map|all" android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TextView" android:layout_below="@+id/imageView1" android:layout_alignParentLeft="true" />
+    <ImageView android:id="@+id/imageView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ico" android:layout_above="@+id/textView3" android:layout_centerHorizontal="true" android:onClick="OnLogo" />
+    <Spinner android:id="@+id/spinner2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@+id/checkBox3" android:layout_alignLeft="@+id/checkBox3" />
+    <Spinner android:id="@+id/spinner3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toRightOf="@+id/checkBox3" android:layout_below="@+id/checkBox3" />
+    <CheckBox android:id="@+id/checkBox4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Show HTTP Reqs" android:layout_toRightOf="@+id/checkBox1" android:layout_alignParentTop="true" android:onClick="OnShowHTTP" />
+</RelativeLayout>

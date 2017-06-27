@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" android:layout_width="match_parent" android:layout_height="match_parent">
+    <Button android:id="@+id/button" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Add" android:layout_alignParentLeft="true" android:layout_alignParentBottom="true" android:onClick="OnAdd"  />
+    <Button android:id="@+id/button4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Clear all" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" android:onClick="OnClear"  />
+    <ListView android:id="@+id/listView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_above="@+id/button" android:layout_below="@+id/checkBox" android:layout_centerHorizontal="true" />
+    <TextView  android:id="@+id/textView" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Example: abc.com:1.2.3.4" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true" />
+    <CheckBox android:id="@+id/checkBox" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="DNS Spoofing" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" />
+</RelativeLayout>

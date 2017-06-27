@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="arp">#d6e7ff</color>
+    <color name="bg">#000000</color>
+    <color name="ftp">#e7e5ff</color>
+    <color name="green">#00aa00</color>
+    <color name="http">#8cff7f</color>
+    <color name="icmp">#c1c2ff</color>
+    <color name="smb">#fff999</color>
+    <color name="udp">#70dfff</color>
+</resources>
