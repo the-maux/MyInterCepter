@@ -9,9 +9,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.view.MotionEventCompat;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -20,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -34,57 +30,27 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import su.sniff.cepter.*;
+import su.sniff.cepter.Controller.RootProcess;
+import su.sniff.cepter.Misc.CookieThing;
+import su.sniff.cepter.Misc.Interceptor;
+import su.sniff.cepter.Utils.Net.IpTablesConfStrippedMode;
 import su.sniff.cepter.Utils.OpenFileDialog;
-import su.sniff.cepter.Utils.OpenFileDialog.OnFileSelectedListener;
 import su.sniff.cepter.Utils.SaveFileDialog;
 import su.sniff.cepter.Utils.SaveFileDialog.OnNewFileSelectedListener;
 
-public class MainActivity extends Activity {
-    static TextView tvHello;
-    static ListView tvList;
+public class                    MainActivity extends Activity {
+    static TextView             tvHello;
+    static ListView             tvList;
     String TAG = "MainActivity";
     String cmd;
     String cmd2;
     Activity mActivity;
     public Context mCtx;
-    Process sniff_process = null;
+    public Process sniff_process = null;
 
-    class stripMethod implements Runnable {
-        stripMethod() {
-        }
 
-        public void run() {
-            try {
-                Process process2 = Runtime.getRuntime().exec("su");
-                DataOutputStream os = new DataOutputStream(process2.getOutputStream());
-                Log.d(TAG, "iptables -F;iptables -X;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT");
-                os.writeBytes("iptables -F;iptables -X;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT\n");
-                os.flush();
-                Log.d(TAG, "echo '1' > /proc/sys/net/ipv4/ip_forward");
-                os.writeBytes("echo '1' > /proc/sys/net/ipv4/ip_forward\n");
-                os.flush();
-                Log.d(TAG, "iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8081");
-                os.writeBytes("iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8081\n");
-                os.flush();
-                if (globalVariable.dnss == 1) {
-                    Log.d(TAG, "DNS:" + "iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053");
-                    os.writeBytes("iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053\n");
-                    os.flush();
-                }
-                os.writeBytes("exit\n");
-                os.flush();
-                os.close();
-                process2.waitFor();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e2) {
-                e2.printStackTrace();
-            }
-        }
-    }
-
-    class C01275 implements OnNewFileSelectedListener {
-        C01275() {
+    class OnNewFileSelectedL implements OnNewFileSelectedListener {
+        OnNewFileSelectedL() {
         }
 
         public void onNewFileSelected(File f) {
@@ -96,138 +62,6 @@ public class MainActivity extends Activity {
                 writer.close();
             } catch (IOException e) {
                 e.printStackTrace();
-            }
-        }
-    }
-
-    class C01286 implements OnFileSelectedListener {
-        C01286() {
-        }
-
-        public void onFileSelected(File f) {
-            String sc;
-            if (globalVariable.savepcap == 1) {
-                sc = " w ";
-            } else {
-                sc = " ";
-            }
-            MainActivity.tvHello.setTextSize(2, (float) globalVariable.raw_textsize);
-            ((TextView) MainActivity.this.findViewById(R.id.textView1)).setTextSize(2, (float) globalVariable.raw_textsize);
-            File fDroidSheep = new File(globalVariable.path + "/exits.id");
-            if (fDroidSheep.exists()) {
-                fDroidSheep.delete();
-            }
-            try {
-                final Process process = Runtime.getRuntime().exec("su", null, new File(globalVariable.path + ""));
-                DataOutputStream os = new DataOutputStream(process.getOutputStream());
-                os.writeBytes(globalVariable.path + "/cepter " + f.getAbsolutePath() + " " + Integer.toString(globalVariable.resurrection) + "\n");
-                os.flush();
-                os.writeBytes("exit\n");
-                os.flush();
-                os.close();
-                MainActivity.this.sniff_process = process;
-                new Thread(new Runnable() {
-                    public void run() {
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                        while (true) {
-                            try {
-                                String line = reader.readLine();
-                                if (line == null) {
-                                    reader.close();
-                                    process.waitFor();
-                                    return;
-                                }
-                                final String temp = line;
-                                Log.d(TAG, "INTERCEPTOR:" + temp);
-                                if (temp.indexOf("###STAT###") != -1) {
-                                    MainActivity.this.runOnUiThread(new Runnable() {
-                                        public void run() {
-                                            int b = temp.indexOf("###STAT###") + 11;
-                                            ((TextView) MainActivity.this.findViewById(R.id.textView1)).setText(temp.substring(b, (temp.length() - b) + 11));
-                                        }
-                                    });
-                                } else if (temp.indexOf("REQ###") != -1) {
-                                    if (globalVariable.showhttp == 1) {
-                                        MainActivity.this.runOnUiThread(new Runnable() {
-                                            public void run() {
-                                                MainActivity.tvHello.append(temp.substring(6, temp.length() - 6));
-                                                MainActivity.tvHello.append("\n");
-                                            }
-                                        });
-                                    }
-                                } else if (temp.indexOf("Cookie###") != -1) {
-                                    final String domain = reader.readLine();
-                                    final String ip = reader.readLine();
-                                    final String getreq = reader.readLine();
-                                    final String coo = reader.readLine();
-                                    String z = reader.readLine();
-                                    if (!ip.equals(globalVariable.own_ip)) {
-                                        int dub = 0;
-                                        for (int i = 0; i < globalVariable.cookies_c; i++) {
-                                            if (((String) globalVariable.cookies_value.get(i)).equals(coo)) {
-                                                dub = 1;
-                                                break;
-                                            }
-                                        }
-                                        if (dub != 1) {
-                                            MainActivity.this.runOnUiThread(new Runnable() {
-                                                public void run() {
-                                                    if (globalVariable.lock == 0) {
-                                                        globalVariable.lock = 1;
-                                                    } else {
-                                                        while (globalVariable.lock == 1) {
-                                                            try {
-                                                                Thread.sleep(1);
-                                                            } catch (InterruptedException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                        }
-                                                        globalVariable.lock = 1;
-                                                    }
-                                                    globalVariable.cookies_domain.add(globalVariable.cookies_c, domain + " : " + ip);
-                                                    globalVariable.cookies_domain2.add(globalVariable.cookies_c, "<font color=\"#00aa00\"><b>" + domain + " : " + ip + "</b></font><br>" + "<font color=\"#397E7E\">" + coo + "</font>");
-                                                    globalVariable.adapter.notifyDataSetChanged();
-                                                    globalVariable.adapter2.notifyDataSetChanged();
-                                                    globalVariable.cookies_getreq.add(globalVariable.cookies_c, getreq);
-                                                    globalVariable.cookies_value.add(globalVariable.cookies_c, coo);
-                                                    globalVariable.cookies_ip.add(globalVariable.cookies_c, ip);
-                                                    globalVariable.cookies_getreq2.add(globalVariable.cookies_c, getreq);
-                                                    globalVariable.cookies_value2.add(globalVariable.cookies_c, coo);
-                                                    globalVariable.cookies_ip2.add(globalVariable.cookies_c, ip);
-                                                    globalVariable.cookies_c++;
-                                                    globalVariable.lock = 0;
-                                                }
-                                            });
-                                        }
-                                    }
-                                } else {
-                                    MainActivity.this.runOnUiThread(new Runnable() {
-                                        public void run() {
-                                            Log.d(TAG, "");
-                                            if (temp.indexOf("intercepted") != -1) {
-                                                Spannable WordtoSpan = new SpannableString(temp);
-                                                WordtoSpan.setSpan(new ForegroundColorSpan(-1), 0, temp.length(), 33);
-                                                MainActivity.tvHello.append(WordtoSpan);
-                                            } else {
-                                                MainActivity.tvHello.append(temp);
-                                            }
-                                            MainActivity.tvHello.append("\n");
-                                            ScrollView scrollview = (ScrollView) MainActivity.this.findViewById(R.id.scrollview);
-                                            if (globalVariable.raw_autoscroll == 1) {
-                                                scrollview.scrollTo(0, MainActivity.tvHello.getHeight());
-                                            }
-                                        }
-                                    });
-                                }
-                            } catch (IOException e) {
-                            } catch (InterruptedException e2) {
-                                e2.printStackTrace();
-                            }
-                        }
-                    }
-                }).start();
-            } catch (IOException e1) {
-                e1.printStackTrace();
             }
         }
     }
@@ -291,8 +125,7 @@ public class MainActivity extends Activity {
         return false;
     }
 
-    public void clk_run(View v) throws IOException {
-        Process process2;
+    public void onInterceptorRunClick(View v) throws IOException {
         if (this.sniff_process != null) {
             try {
                 Thread.sleep(1000);
@@ -303,25 +136,11 @@ public class MainActivity extends Activity {
             openFileOutput("exits.id", 0).close();
             this.sniff_process = null;
             if (globalVariable.strip == 1) {
-                process2 = Runtime.getRuntime().exec("su");
-                DataOutputStream os = new DataOutputStream(process2.getOutputStream());
-                Log.d(TAG, "clk_run::iptables -F;iptables -X;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT");
-                os.writeBytes("iptables -F;iptables -X;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT\n");
-                os.flush();
-                os.writeBytes("exit\n");
-                os.flush();
-                os.close();
-                try {
-                    process2.waitFor();
-                    Log.d(TAG, "clk_run:: wait for Over");
-                    return;
-                } catch (InterruptedException e2) {
-                    e2.printStackTrace();
-                    Log.d(TAG, "clk_run::Error over with strip");
-                    return;
-                }
+                RootProcess rootProcess = new RootProcess("globalVariable.strip=1");
+                rootProcess.exec("iptables -F;iptables -X;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT");
+                rootProcess.closeProcess();
             }
-            Log.d(TAG, "clk_run::typical over with strip");
+            Log.d(TAG, "onInterceptorRunClick::typical over with strip");
             return;
         }
         String sc;
@@ -339,30 +158,19 @@ public class MainActivity extends Activity {
             fDroidSheep.delete();
         }
         if (globalVariable.strip == 1) {
-            new Thread(new stripMethod()).start();
+            Log.d(TAG, "iptables Conf as full striped");
+            new IpTablesConfStrippedMode();
         } else {
-            try {
-                process2 = Runtime.getRuntime().exec("su");
-                DataOutputStream os = new DataOutputStream(process2.getOutputStream());
-                Log.d(TAG, "root@ iptables -F;iptables -X;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT");
-                os.writeBytes("iptables -F;iptables -X;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT\n");
-                os.flush();
-                os.writeBytes("echo '1' > /proc/sys/net/ipv4/ip_forward\n");
-                os.flush();
-                if (globalVariable.dnss == 1) {
-                    os.writeBytes("iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053\n");
-                    os.flush();
-                }
-                os.writeBytes("exit\n");
-                os.flush();
-                os.close();
-                process2.waitFor();
-            } catch (IOException e3) {
-                e3.printStackTrace();
-            } catch (InterruptedException e22) {
-                e22.printStackTrace();
+            Log.d(TAG, "iptables Conf as partially striped");
+            RootProcess process = new RootProcess("IpTableStriped");
+            process.exec("iptables -F;iptables -X;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT");
+            process.exec("echo '1' > /proc/sys/net/ipv4/ip_forward");
+            if (globalVariable.dnss == 1) {
+                process.exec("iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053");
             }
+            process.closeProcess();
         }
+
         final Process process = Runtime.getRuntime().exec("su", null, new File(globalVariable.path + ""));
         DataOutputStream os = new DataOutputStream(process.getOutputStream());
         os.writeBytes(globalVariable.path + "/cepter " + Integer.toString(globalVariable.adapt_num) + " " + Integer.toString(globalVariable.resurrection) + sc + this.cmd + "\n");
@@ -371,115 +179,7 @@ public class MainActivity extends Activity {
         os.flush();
         os.close();
         this.sniff_process = process;
-        new Thread(new Runnable() {
-
-            class C00591 implements Runnable {
-                C00591() {
-                }
-
-                public void run() {
-                    MainActivity.tvHello.append("*\n");
-                }
-            }
-
-            public void run() {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                while (true) {
-                    try {
-                        String line = reader.readLine();
-                        if (line == null) {
-                            reader.close();
-                            process.waitFor();
-                            MainActivity.this.runOnUiThread(new C00591());
-                            return;
-                        }
-                        final String temp = line;
-                        if (temp.indexOf("###STAT###") != -1) {
-                            MainActivity.this.runOnUiThread(new Runnable() {
-                                public void run() {
-                                    int b = temp.indexOf("###STAT###") + 11;
-                                    ((TextView) MainActivity.this.findViewById(R.id.textView1)).setText(temp.substring(b, (temp.length() - b) + 11));
-                                }
-                            });
-                        } else if (temp.indexOf("REQ###") != -1) {
-                            if (globalVariable.showhttp == 1) {
-                                MainActivity.this.runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        MainActivity.tvHello.append(temp.substring(6, temp.length() - 6));
-                                        MainActivity.tvHello.append("\n");
-                                    }
-                                });
-                            }
-                        } else if (temp.indexOf("Cookie###") != -1) {
-                            final String domain = reader.readLine();
-                            final String ip = reader.readLine();
-                            final String getreq = reader.readLine();
-                            final String coo = reader.readLine();
-                            String z = reader.readLine();
-                            if (!ip.equals(globalVariable.own_ip)) {
-                                int dub = 0;
-                                for (int i = 0; i < globalVariable.cookies_c; i++) {
-                                    if (((String) globalVariable.cookies_value.get(i)).equals(coo)) {
-                                        dub = 1;
-                                        break;
-                                    }
-                                }
-                                if (dub != 1) {
-                                    MainActivity.this.runOnUiThread(new Runnable() {
-                                        public void run() {
-                                            if (globalVariable.lock == 0) {
-                                                globalVariable.lock = 1;
-                                            } else {
-                                                while (globalVariable.lock == 1) {
-                                                    try {
-                                                        Thread.sleep(1);
-                                                    } catch (InterruptedException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                                globalVariable.lock = 1;
-                                            }
-                                            globalVariable.cookies_domain.add(globalVariable.cookies_c, domain + " : " + ip);
-                                            globalVariable.cookies_domain2.add(globalVariable.cookies_c, "<font color=\"#00aa00\"><b>" + domain + " : " + ip + "</b></font><br>" + "<font color=\"#397E7E\">" + coo + "</font>");
-                                            globalVariable.adapter.notifyDataSetChanged();
-                                            globalVariable.adapter2.notifyDataSetChanged();
-                                            globalVariable.cookies_getreq.add(globalVariable.cookies_c, getreq);
-                                            globalVariable.cookies_value.add(globalVariable.cookies_c, coo);
-                                            globalVariable.cookies_ip.add(globalVariable.cookies_c, ip);
-                                            globalVariable.cookies_getreq2.add(globalVariable.cookies_c, getreq);
-                                            globalVariable.cookies_value2.add(globalVariable.cookies_c, coo);
-                                            globalVariable.cookies_ip2.add(globalVariable.cookies_c, ip);
-                                            globalVariable.cookies_c++;
-                                            globalVariable.lock = 0;
-                                        }
-                                    });
-                                }
-                            }
-                        } else {
-                            MainActivity.this.runOnUiThread(new Runnable() {
-                                public void run() {
-                                    if (temp.indexOf("intercepted") != -1) {
-                                        Spannable WordtoSpan = new SpannableString(temp);
-                                        WordtoSpan.setSpan(new ForegroundColorSpan(-1), 0, temp.length(), 33);
-                                        MainActivity.tvHello.append(WordtoSpan);
-                                    } else {
-                                        MainActivity.tvHello.append(temp);
-                                    }
-                                    MainActivity.tvHello.append("\n");
-                                    ScrollView scrollview = (ScrollView) MainActivity.this.findViewById(R.id.scrollview);
-                                    if (globalVariable.raw_autoscroll == 1) {
-                                        scrollview.scrollTo(0, MainActivity.tvHello.getHeight() + 50);
-                                    }
-                                }
-                            });
-                        }
-                    } catch (IOException e) {
-                    } catch (InterruptedException e2) {
-                        e2.printStackTrace();
-                    }
-                }
-            }
-        }).start();
+        new CookieThing(this, tvHello, process);
     }
 
     public void OnCLS(View v) {
@@ -504,11 +204,11 @@ public class MainActivity extends Activity {
     }
 
     public void OnSave(View v) {
-        new SaveFileDialog(this, Environment.getExternalStorageDirectory().getAbsolutePath(), new String[]{".txt"}, new C01275()).show();
+        new SaveFileDialog(this, Environment.getExternalStorageDirectory().getAbsolutePath(), new String[]{".txt"}, new OnNewFileSelectedL()).show();
     }
 
     public void OnOpenCap(View v) {
-        new OpenFileDialog(this, globalVariable.PCAP_PATH, new String[]{".pcap"}, new C01286()).show();
+        new OpenFileDialog(this, globalVariable.PCAP_PATH, new String[]{".pcap"}, new Interceptor(this, tvHello)).show();
     }
 
     public void onConfigurationChanged(Configuration newConfig) {

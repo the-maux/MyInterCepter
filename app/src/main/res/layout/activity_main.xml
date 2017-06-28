@@ -5,7 +5,7 @@
             <requestFocus />
         </TextView>
     </ScrollView>
-    <ImageView android:id="@+id/imageView5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:src="@drawable/start" android:layout_alignParentLeft="true" android:layout_alignParentTop="true" android:onClick="clk_run" />
+    <ImageView android:id="@+id/imageView5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:src="@drawable/start" android:layout_alignParentLeft="true" android:layout_alignParentTop="true" android:onClick="onInterceptorRunClick" />
     <ImageView android:id="@+id/imageView4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="17dp" android:layout_marginTop="2dp" android:src="@drawable/open" android:layout_toRightOf="@+id/imageView5" android:layout_alignParentTop="true" android:onClick="OnOpenCap" />
     <ImageView android:id="@+id/imageView3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:layout_marginRight="17dp" android:src="@drawable/save" android:layout_toLeftOf="@+id/imageView1" android:onClick="OnSave" />
     <ImageView android:id="@+id/imageView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:src="@drawable/erase" android:layout_alignParentTop="true" android:layout_alignParentRight="true" android:onClick="OnCLS" />

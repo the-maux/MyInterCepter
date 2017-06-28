@@ -30,7 +30,6 @@ public class                    InitActivity extends Activity {
         globalVariable.PCAP_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
     }
 
-
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mCtx = this;
@@ -40,10 +39,7 @@ public class                    InitActivity extends Activity {
         try {
             buildCepter();
             BufferedReader bufferedReader = buildBusybox();
-
-
             int c = 0;
-            boolean found = false;
             while (true) {
                 String read = "";
                 read = bufferedReader.readLine();
@@ -53,8 +49,6 @@ public class                    InitActivity extends Activity {
                     Log.d(TAG, "read is " + read); //read: wlan0 : IP: 10.16.184.230 / 255.255.254.0
                 }
                 globalVariable.adapt_num = c + 1;
-                found = true;
-                int b = read.indexOf(" / ") + 3;
                 String data = wifiManager.getDhcpInfo().toString();
                 String[] res = data.split(" ");
                 for (int i = 0; i < res.length; i++) {
@@ -87,7 +81,6 @@ public class                    InitActivity extends Activity {
             e322.getStackTrace();
         }
     }
-
 
     private void                buildCepter() throws IOException, InterruptedException {
         Process p = Runtime.getRuntime().exec("su");
@@ -169,14 +162,10 @@ public class                    InitActivity extends Activity {
     private BufferedReader      buildBusybox() throws IOException, InterruptedException {
         Process p = Runtime.getRuntime().exec("su");
         DataOutputStream dataOutputStream = new DataOutputStream(p.getOutputStream());
-        Context cc = this;
-        cc = this;
         Process rootProcess = Runtime.getRuntime().exec("chmod");
-        new DataOutputStream(rootProcess.getOutputStream()).close();
+        new DataOutputStream(rootProcess.getOutputStream()).close(); //close the root process ?
         rootProcess.waitFor();
-        Log.d(TAG, "chmod rootProcess.waitFor()");
-
-
+        Log.d(TAG, "chmod RootProcess.waitFor()");
         if (!((ConnectivityManager) getSystemService("connectivity")).getNetworkInfo(1).isConnected()) {
             Toast.makeText(getApplicationContext(), "NO ACTIVE CONNECTION! TURN ON WIFI!", 1).show();
         }
@@ -186,11 +175,12 @@ public class                    InitActivity extends Activity {
         dataOutputStream = new DataOutputStream(process.getOutputStream());
 
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        Log.d(TAG, "su " + globalVariable.path + "/cepter list");
+
         dataOutputStream.writeBytes(globalVariable.path + "/cepter list\n");
         dataOutputStream.flush();
         dataOutputStream.writeBytes("exit\n");
         dataOutputStream.flush();
+        Log.d(TAG, "su " + globalVariable.path + "/cepter list; exit");
         process.waitFor();
         return bufferedReader;
     }
