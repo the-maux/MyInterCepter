@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class SettingsActivity extends Activity {
+    private String TAG = "SettingsActivity";
     public String cmd;
     private Context mCtx;
     public String orig_str;
@@ -177,7 +179,8 @@ public class SettingsActivity extends Activity {
     public void OnClearPcap(View v) throws IOException, InterruptedException {
         Process p = Runtime.getRuntime().exec("su");
         DataOutputStream os = new DataOutputStream(p.getOutputStream());
-        os.writeBytes("LD_LIBRARY_PATH=/data/data/su.sniff.cepter/files /data/data/su.sniff.cepter/files/busybox rm /data/data/su.sniff.cepter/files/*.pcap\n");
+        Log.d(TAG, "LD_LIBRARY_PATH=" + globalVariable.path + " " + globalVariable.path + "/busybox rm " + globalVariable.path + "/*.pcap");
+        os.writeBytes("LD_LIBRARY_PATH=" + globalVariable.path + " " + globalVariable.path + "/busybox rm " + globalVariable.path + "/*.pcap\n");
         os.flush();
         os.close();
         p.waitFor();

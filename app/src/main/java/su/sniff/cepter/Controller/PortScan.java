@@ -67,11 +67,11 @@ public class PortScan extends Activity {
                 IOException e;
                 InterruptedException e2;
                 try {
-                    Process process2 = Runtime.getRuntime().exec("su", null, new File("/data/data/su.sniff.cepter/files"));
+                    Process process2 = Runtime.getRuntime().exec("su", null, new File(globalVariable.path + ""));
                     DataOutputStream os = new DataOutputStream(process2.getOutputStream());
                     BufferedReader reader = new BufferedReader(new InputStreamReader(process2.getInputStream()));
                     try {
-                        os.writeBytes("/data/data/su.sniff.cepter/files/cepter " + Integer.toString(globalVariable.adapt_num) + " -ps " + target + "\n");
+                        os.writeBytes(globalVariable.path + "/cepter " + Integer.toString(globalVariable.adapt_num) + " -ps " + target + "\n");
                         os.flush();
                         os.writeBytes("exit\n");
                         os.flush();

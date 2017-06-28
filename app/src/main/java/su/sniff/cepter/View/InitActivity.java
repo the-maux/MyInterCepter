@@ -24,15 +24,23 @@ public class                    InitActivity extends Activity {
     private String              TAG = "InitActivity";
     private Context             mCtx;
 
+    private void                buildPath() {
+        globalVariable.path = String.valueOf(mCtx.getFilesDir());
+        Log.d(TAG, "path:" + globalVariable.path);
+        globalVariable.PCAP_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
+    }
+
+
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mCtx = this;
+        buildPath();
         globalVariable.resurrection = 1;
         WifiManager wifiManager = (WifiManager) getSystemService("wifi");
         try {
             buildCepter();
             BufferedReader bufferedReader = buildBusybox();
-            globalVariable.PCAP_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
+
 
             int c = 0;
             boolean found = false;
@@ -60,18 +68,6 @@ public class                    InitActivity extends Activity {
                 }
                 if (globalVariable.netmask.contains("0.0.0.0"))
                     globalVariable.netmask = "255.255.255.0";
-
-//                DhcpInfo dhcpInfo = wifiManager.getDhcpInfo();
-//                try {
-//                    InetAddress inetAddress = InetAddress.getByAddress(extractBytes(dhcpInfo.ipAddress));
-//                    NetworkInterface networkInterface = NetworkInterface.getByInetAddress(inetAddress);
-//                    for (InterfaceAddress address : networkInterface.getInterfaceAddresses()) {
-//                        //short netPrefix = address.getNetworkPrefixLength();
-//                        Log.d(TAG, address.toString());
-//                    }
-//                } catch (IOException e) {
-//                    Log.e(TAG, e.getMessage());
-//                }
                 Log.d(TAG, "All : " + data);
                 Log.d(TAG, "IP:" + globalVariable.own_ip);
                 Log.d(TAG, "GW:" + globalVariable.gw_ip);
@@ -92,17 +88,18 @@ public class                    InitActivity extends Activity {
         }
     }
 
+
     private void                buildCepter() throws IOException, InterruptedException {
         Process p = Runtime.getRuntime().exec("su");
         DataOutputStream dataOutputStream = new DataOutputStream(p.getOutputStream());
         InputStream cepter;
 
 
-        File force = new File("/data/data/su.sniff.cepter/files/force");
+        File force = new File(globalVariable.path + "/force");
         if (force.exists()) {
             force.delete();
         }
-        File ck = new File("/data/data/su.sniff.cepter/files/ck");
+        File ck = new File(globalVariable.path + "/ck");
         if (ck.exists()) {
             ck.delete();
         }
@@ -117,9 +114,12 @@ public class                    InitActivity extends Activity {
         if (Build.CPU_ABI.contains("arm64")) {
             cepter = getResources().openRawResource(R.raw.cepter_android_21_arm64_v8a);
         }
-        File fDroidSheep = new File("/data/data/su.sniff.cepter/files/cepter");
+        File fDroidSheep = new File(globalVariable.path + "/cepter");
         if (fDroidSheep.exists()) {
+            Log.d(TAG, "je n'ai pas supprimer le cepter");
             fDroidSheep.delete();
+            fDroidSheep.setExecutable(true);
+            fDroidSheep.setReadable(true);
         }
         FileOutputStream out = openFileOutput("cepter", 0);
         byte[] bufferDroidSheep = new byte[64];
@@ -130,13 +130,18 @@ public class                    InitActivity extends Activity {
         out.close();
 
 
-        fDroidSheep = new File("/data/data/su.sniff.cepter/files/busybox");
+        fDroidSheep = new File(globalVariable.path + "/busybox");
         if (fDroidSheep.exists()) {
             fDroidSheep.delete();
+            fDroidSheep.setExecutable(true);
+            fDroidSheep.setReadable(true);
         }
-        fDroidSheep = new File("/data/data/su.sniff.cepter/files/savepath");
+
+        fDroidSheep = new File(globalVariable.path + "/savepath");
         if (fDroidSheep.exists()) {
             fDroidSheep.delete();
+            fDroidSheep.setExecutable(true);
+            fDroidSheep.setReadable(true);
         }
 
         out = openFileOutput("busybox", Context.MODE_PRIVATE);
@@ -147,10 +152,11 @@ public class                    InitActivity extends Activity {
         }
         oos.flush();
         oos.close();
-
-        dataOutputStream.writeBytes("chmod 777 /data/data/su.sniff.cepter/files/cepter\n");
+        Log.d(TAG, "chmod 777 " + globalVariable.path + "/cepter\n");
+        dataOutputStream.writeBytes("chmod 777 " + globalVariable.path + "/cepter\n");
         dataOutputStream.flush();
-        dataOutputStream.writeBytes("chmod 777 /data/data/su.sniff.cepter/files/busybox\n");
+        Log.d(TAG, "chmod 777 " + globalVariable.path + "/busybox");
+        dataOutputStream.writeBytes("chmod 777 " + globalVariable.path + "/busybox\n");
         dataOutputStream.flush();
 
         Log.d(TAG, "p.waitFor files/busybox");
@@ -165,10 +171,10 @@ public class                    InitActivity extends Activity {
         DataOutputStream dataOutputStream = new DataOutputStream(p.getOutputStream());
         Context cc = this;
         cc = this;
-        Process p2 = Runtime.getRuntime().exec("chmod");
-        new DataOutputStream(p2.getOutputStream()).close();
-        p2.waitFor();
-        Log.d(TAG, "chmod OK");
+        Process rootProcess = Runtime.getRuntime().exec("chmod");
+        new DataOutputStream(rootProcess.getOutputStream()).close();
+        rootProcess.waitFor();
+        Log.d(TAG, "chmod rootProcess.waitFor()");
 
 
         if (!((ConnectivityManager) getSystemService("connectivity")).getNetworkInfo(1).isConnected()) {
@@ -176,11 +182,12 @@ public class                    InitActivity extends Activity {
         }
 
 
-        Process process = Runtime.getRuntime().exec("su", null, new File("/data/data/su.sniff.cepter/files"));
+        Process process = Runtime.getRuntime().exec("su", null, new File(globalVariable.path));
         dataOutputStream = new DataOutputStream(process.getOutputStream());
 
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        dataOutputStream.writeBytes("/data/data/su.sniff.cepter/files/cepter list\n");
+        Log.d(TAG, "su " + globalVariable.path + "/cepter list");
+        dataOutputStream.writeBytes(globalVariable.path + "/cepter list\n");
         dataOutputStream.flush();
         dataOutputStream.writeBytes("exit\n");
         dataOutputStream.flush();

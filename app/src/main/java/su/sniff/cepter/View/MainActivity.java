@@ -49,21 +49,25 @@ public class MainActivity extends Activity {
     public Context mCtx;
     Process sniff_process = null;
 
-    class C00583 implements Runnable {
-        C00583() {
+    class stripMethod implements Runnable {
+        stripMethod() {
         }
 
         public void run() {
             try {
                 Process process2 = Runtime.getRuntime().exec("su");
                 DataOutputStream os = new DataOutputStream(process2.getOutputStream());
+                Log.d(TAG, "iptables -F;iptables -X;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT");
                 os.writeBytes("iptables -F;iptables -X;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT\n");
                 os.flush();
+                Log.d(TAG, "echo '1' > /proc/sys/net/ipv4/ip_forward");
                 os.writeBytes("echo '1' > /proc/sys/net/ipv4/ip_forward\n");
                 os.flush();
+                Log.d(TAG, "iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8081");
                 os.writeBytes("iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8081\n");
                 os.flush();
                 if (globalVariable.dnss == 1) {
+                    Log.d(TAG, "DNS:" + "iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053");
                     os.writeBytes("iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053\n");
                     os.flush();
                 }
@@ -109,14 +113,14 @@ public class MainActivity extends Activity {
             }
             MainActivity.tvHello.setTextSize(2, (float) globalVariable.raw_textsize);
             ((TextView) MainActivity.this.findViewById(R.id.textView1)).setTextSize(2, (float) globalVariable.raw_textsize);
-            File fDroidSheep = new File("/data/data/su.sniff.cepter/files/exits.id");
+            File fDroidSheep = new File(globalVariable.path + "/exits.id");
             if (fDroidSheep.exists()) {
                 fDroidSheep.delete();
             }
             try {
-                final Process process = Runtime.getRuntime().exec("su", null, new File("/data/data/su.sniff.cepter/files"));
+                final Process process = Runtime.getRuntime().exec("su", null, new File(globalVariable.path + ""));
                 DataOutputStream os = new DataOutputStream(process.getOutputStream());
-                os.writeBytes("/data/data/su.sniff.cepter/files/cepter " + f.getAbsolutePath() + " " + Integer.toString(globalVariable.resurrection) + "\n");
+                os.writeBytes(globalVariable.path + "/cepter " + f.getAbsolutePath() + " " + Integer.toString(globalVariable.resurrection) + "\n");
                 os.flush();
                 os.writeBytes("exit\n");
                 os.flush();
@@ -134,6 +138,7 @@ public class MainActivity extends Activity {
                                     return;
                                 }
                                 final String temp = line;
+                                Log.d(TAG, "INTERCEPTOR:" + temp);
                                 if (temp.indexOf("###STAT###") != -1) {
                                     MainActivity.this.runOnUiThread(new Runnable() {
                                         public void run() {
@@ -198,6 +203,7 @@ public class MainActivity extends Activity {
                                 } else {
                                     MainActivity.this.runOnUiThread(new Runnable() {
                                         public void run() {
+                                            Log.d(TAG, "");
                                             if (temp.indexOf("intercepted") != -1) {
                                                 Spannable WordtoSpan = new SpannableString(temp);
                                                 WordtoSpan.setSpan(new ForegroundColorSpan(-1), 0, temp.length(), 33);
@@ -259,7 +265,9 @@ public class MainActivity extends Activity {
             }
         };
         this.cmd = getIntent().getExtras().getString("Key_String");
+        Log.d(TAG, "this.cmd:" + this.cmd);
         this.cmd2 = getIntent().getExtras().getString("Key_String_origin");
+        Log.d(TAG, "this.cmd:" + this.cmd2);
         tvHello.setTypeface(Typeface.MONOSPACE);
     }
 
@@ -297,6 +305,7 @@ public class MainActivity extends Activity {
             if (globalVariable.strip == 1) {
                 process2 = Runtime.getRuntime().exec("su");
                 DataOutputStream os = new DataOutputStream(process2.getOutputStream());
+                Log.d(TAG, "clk_run::iptables -F;iptables -X;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT");
                 os.writeBytes("iptables -F;iptables -X;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT\n");
                 os.flush();
                 os.writeBytes("exit\n");
@@ -304,12 +313,15 @@ public class MainActivity extends Activity {
                 os.close();
                 try {
                     process2.waitFor();
+                    Log.d(TAG, "clk_run:: wait for Over");
                     return;
                 } catch (InterruptedException e2) {
                     e2.printStackTrace();
+                    Log.d(TAG, "clk_run::Error over with strip");
                     return;
                 }
             }
+            Log.d(TAG, "clk_run::typical over with strip");
             return;
         }
         String sc;
@@ -322,16 +334,17 @@ public class MainActivity extends Activity {
         }
         tvHello.setTextSize(2, (float) globalVariable.raw_textsize);
         ((TextView) findViewById(R.id.textView1)).setTextSize(2, (float) globalVariable.raw_textsize);
-        File fDroidSheep = new File("/data/data/su.sniff.cepter/files/exits.id");
+        File fDroidSheep = new File(globalVariable.path + "/exits.id");
         if (fDroidSheep.exists()) {
             fDroidSheep.delete();
         }
         if (globalVariable.strip == 1) {
-            new Thread(new C00583()).start();
+            new Thread(new stripMethod()).start();
         } else {
             try {
                 process2 = Runtime.getRuntime().exec("su");
                 DataOutputStream os = new DataOutputStream(process2.getOutputStream());
+                Log.d(TAG, "root@ iptables -F;iptables -X;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT");
                 os.writeBytes("iptables -F;iptables -X;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT\n");
                 os.flush();
                 os.writeBytes("echo '1' > /proc/sys/net/ipv4/ip_forward\n");
@@ -350,9 +363,9 @@ public class MainActivity extends Activity {
                 e22.printStackTrace();
             }
         }
-        final Process process = Runtime.getRuntime().exec("su", null, new File("/data/data/su.sniff.cepter/files"));
+        final Process process = Runtime.getRuntime().exec("su", null, new File(globalVariable.path + ""));
         DataOutputStream os = new DataOutputStream(process.getOutputStream());
-        os.writeBytes("/data/data/su.sniff.cepter/files/cepter " + Integer.toString(globalVariable.adapt_num) + " " + Integer.toString(globalVariable.resurrection) + sc + this.cmd + "\n");
+        os.writeBytes(globalVariable.path + "/cepter " + Integer.toString(globalVariable.adapt_num) + " " + Integer.toString(globalVariable.resurrection) + sc + this.cmd + "\n");
         os.flush();
         os.writeBytes("exit\n");
         os.flush();
@@ -513,6 +526,7 @@ public class MainActivity extends Activity {
             if (read == null) {
                 break;
             }
+            Log.d(TAG, "OnDefend::" + read);
             String ip = read.substring(0, read.indexOf(" "));
             Matcher matcher = Pattern.compile(String.format(MAC_RE, new Object[]{ip.replace(".", "\\.")})).matcher(read);
             if (matcher.matches()) {
@@ -532,11 +546,11 @@ public class MainActivity extends Activity {
                 if (maclist[a].equals(maclist[i]) && a != i && globalVariable.gw_ip.equals(iplist[i])) {
                     tvHello.append("Warning! Gateway poisoned by " + iplist[a] + " - " + maclist[a] + "\n");
                     found = true;
-                    Process process2 = Runtime.getRuntime().exec("su", null, new File("/data/data/su.sniff.cepter/files"));
+                    Process process2 = Runtime.getRuntime().exec("su", null, new File(globalVariable.path + ""));
                     DataOutputStream dataOutputStream = new DataOutputStream(process2.getOutputStream());
                     bufferedReader = new BufferedReader(new InputStreamReader(process2.getInputStream()));
                     Log.d(TAG, "Exec: cepter " + Integer.toString(globalVariable.adapt_num) + " -r " + globalVariable.gw_ip);
-                    dataOutputStream.writeBytes("/data/data/su.sniff.cepter/files/cepter " + Integer.toString(globalVariable.adapt_num) + " -r " + globalVariable.gw_ip + "\n");
+                    dataOutputStream.writeBytes(globalVariable.path + "/cepter " + Integer.toString(globalVariable.adapt_num) + " -r " + globalVariable.gw_ip + "\n");
                     dataOutputStream.flush();
                     dataOutputStream.writeBytes("exit\n");
                     dataOutputStream.flush();
@@ -549,7 +563,8 @@ public class MainActivity extends Activity {
                     tvHello.append("Restoring original mac - " + m + "\n");
                     Process process3 = Runtime.getRuntime().exec("su", null, new File("/system/bin"));
                     dataOutputStream = new DataOutputStream(process3.getOutputStream());
-                    dataOutputStream.writeBytes("LD_LIBRARY_PATH=/data/data/su.sniff.cepter/files /data/data/su.sniff.cepter/files/busybox arp -s " + globalVariable.gw_ip + " " + m + "\n");
+                    Log.d(TAG, "LD_LIBRARY_PATH=" + globalVariable.path + " " + globalVariable.path +"/busybox arp -s " + globalVariable.gw_ip + " " + m);
+                    dataOutputStream.writeBytes("LD_LIBRARY_PATH=" + globalVariable.path + " " + globalVariable.path +"/busybox arp -s " + globalVariable.gw_ip + " " + m + "\n");
                     dataOutputStream.flush();
                     dataOutputStream.writeBytes("exit\n");
                     dataOutputStream.flush();

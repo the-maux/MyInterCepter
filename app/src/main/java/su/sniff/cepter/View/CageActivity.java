@@ -42,7 +42,7 @@ public class CageActivity extends Activity {
         if (this.run == 0) {
             this.run = 1;
             final TextView tv = (TextView) findViewById(R.id.textView1);
-            File fDroidSheep = new File("/data/data/su.sniff.cepter/files/exitc.id");
+            File fDroidSheep = new File(globalVariable.path + "/exitc.id");
             if (fDroidSheep.exists()) {
                 fDroidSheep.delete();
             }
@@ -52,12 +52,12 @@ public class CageActivity extends Activity {
                     IOException e;
                     InterruptedException e2;
                     try {
-                        Process process2 = Runtime.getRuntime().exec("su", null, new File("/data/data/su.sniff.cepter/files"));
+                        Process process2 = Runtime.getRuntime().exec("su", null, new File(globalVariable.path + ""));
                         DataOutputStream os = new DataOutputStream(process2.getOutputStream());
                         BufferedReader reader = new BufferedReader(new InputStreamReader(process2.getInputStream()));
                         BufferedReader bufferedReader;
                         try {
-                            os.writeBytes("/data/data/su.sniff.cepter/files/cepter " + Integer.toString(globalVariable.adapt_num) + " cage " + globalVariable.gw_ip + "\n");
+                            os.writeBytes(globalVariable.path + "/cepter " + Integer.toString(globalVariable.adapt_num) + " cage " + globalVariable.gw_ip + "\n");
                             os.flush();
                             os.writeBytes("exit\n");
                             os.flush();

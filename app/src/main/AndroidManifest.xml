@@ -29,7 +29,7 @@
         <activity android:name="su.sniff.cepter.View.InjectActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity android:name="su.sniff.cepter.View.CageActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity android:label="@string/app_name" android:name="su.sniff.cepter.View.ScanActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.Utils.TabAct" android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name="su.sniff.cepter.Utils.TabActivitys" android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity android:name="su.sniff.cepter.View.SettingsActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity android:name="su.sniff.cepter.View.WebActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity android:name="su.sniff.cepter.View.BrowserActivity" android:configChanges="keyboardHidden|orientation|screenSize" />

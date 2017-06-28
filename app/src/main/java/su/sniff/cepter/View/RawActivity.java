@@ -47,14 +47,14 @@ public class RawActivity extends Activity {
                 sc = " ";
             }
             ((ImageView) RawActivity.this.findViewById(R.id.imageView2)).setImageResource(R.drawable.stop);
-            File fDroidSheep = new File("/data/data/su.sniff.cepter/files/exitr.id");
+            File fDroidSheep = new File(globalVariable.path + "/exitr.id");
             if (fDroidSheep.exists()) {
                 fDroidSheep.delete();
             }
             try {
-                final Process process = Runtime.getRuntime().exec("su", null, new File("/data/data/su.sniff.cepter/files"));
+                final Process process = Runtime.getRuntime().exec("su", null, new File(globalVariable.path + ""));
                 DataOutputStream os = new DataOutputStream(process.getOutputStream());
-                os.writeBytes("/data/data/su.sniff.cepter/files/cepter " + f.getAbsolutePath() + " 3 raw\n");
+                os.writeBytes(globalVariable.path + "/cepter " + f.getAbsolutePath() + " 3 raw\n");
                 os.flush();
                 os.writeBytes("exit\n");
                 os.flush();
@@ -191,7 +191,7 @@ public class RawActivity extends Activity {
         }
         String sc;
         ((ImageView) findViewById(R.id.imageView2)).setImageResource(R.drawable.stop);
-        File fDroidSheep = new File("/data/data/su.sniff.cepter/files/exitr.id");
+        File fDroidSheep = new File(globalVariable.path + "/exitr.id");
         if (fDroidSheep.exists()) {
             fDroidSheep.delete();
         }
@@ -204,9 +204,9 @@ public class RawActivity extends Activity {
         FileOutputStream out = openFileOutput("pf", 0);
         out.write(txt.getEditableText().toString().getBytes());
         out.close();
-        final Process process = Runtime.getRuntime().exec("su", null, new File("/data/data/su.sniff.cepter/files"));
+        final Process process = Runtime.getRuntime().exec("su", null, new File(globalVariable.path + ""));
         DataOutputStream os = new DataOutputStream(process.getOutputStream());
-        os.writeBytes("/data/data/su.sniff.cepter/files/cepter " + Integer.toString(globalVariable.adapt_num) + " 3 raw" + sc + "\n");
+        os.writeBytes(globalVariable.path + "/cepter " + Integer.toString(globalVariable.adapt_num) + " 3 raw" + sc + "\n");
         os.flush();
         os.writeBytes("exit\n");
         os.flush();

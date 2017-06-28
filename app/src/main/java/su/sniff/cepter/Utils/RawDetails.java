@@ -41,10 +41,10 @@ public class RawDetails extends Activity {
         tv.setTextSize(2, (float) globalVariable.raw_textsize);
         StringBuilder text = new StringBuilder();
         try {
-            Process process = Runtime.getRuntime().exec("su", null, new File("/data/data/su.sniff.cepter/files"));
+            Process process = Runtime.getRuntime().exec("su", null, new File(globalVariable.path + ""));
             DataOutputStream os = new DataOutputStream(process.getOutputStream());
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            os.writeBytes("/data/data/su.sniff.cepter/files/busybox cat /data/data/su.sniff.cepter/files/Raw/" + position + ".dat\n");
+            os.writeBytes(globalVariable.path + "/busybox cat " + globalVariable.path + "/Raw/" + position + ".dat\n");
             os.flush();
             os.writeBytes("exit\n");
             os.flush();

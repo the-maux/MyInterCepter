@@ -97,7 +97,7 @@ public class DNSSpoofing extends Activity {
         }
         StringBuilder text = new StringBuilder();
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(new File("/data/data/su.sniff.cepter/files/dnss")));
+            BufferedReader reader = new BufferedReader(new FileReader(new File(globalVariable.path + "/dnss")));
             while (true) {
                 String read = reader.readLine();
                 if (read == null) {

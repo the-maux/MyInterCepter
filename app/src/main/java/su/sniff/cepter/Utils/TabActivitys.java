@@ -12,7 +12,7 @@ import su.sniff.cepter.R;
 import su.sniff.cepter.View.*;
 import su.sniff.cepter.globalVariable;
 
-public class TabAct extends TabActivity {
+public class TabActivitys extends TabActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(3);

@@ -72,7 +72,7 @@ public class GalleryActivity extends Activity {
             new OpenFileDialog(this, globalVariable.PCAP_PATH, new String[]{BuildConfig.FLAVOR}, new C01251()).show();
             return;
         }
-        File ck = new File("/data/data/su.sniff.cepter/files/force");
+        File ck = new File(globalVariable.path + "/force");
         if (ck.exists()) {
             ck.delete();
         }
@@ -95,7 +95,7 @@ public class GalleryActivity extends Activity {
             }
         }
         globalVariable.killer = 0;
-        File ck = new File("/data/data/su.sniff.cepter/files/ck");
+        File ck = new File(globalVariable.path + "/ck");
         if (ck.exists()) {
             ck.delete();
         }

@@ -24,7 +24,7 @@ import android.widget.Toast;
 import su.sniff.cepter.*;
 import su.sniff.cepter.Controller.IPv4;
 import su.sniff.cepter.Controller.PortScan;
-import su.sniff.cepter.Utils.TabAct;
+import su.sniff.cepter.Utils.TabActivitys;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -98,11 +98,11 @@ public class                        ScanActivity extends Activity {
                 }
                 GWMAC = mac;
                 bufferedReader.close();
-                Process process = Runtime.getRuntime().exec("su", null, new File("/data/data/su.sniff.cepter/files"));
+                Process process = Runtime.getRuntime().exec("su", null, new File(globalVariable.path + ""));
                 DataOutputStream os = new DataOutputStream(process.getOutputStream());
                 reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-                os.writeBytes("/data/data/su.sniff.cepter/files/cepter getv " + GWMAC + "\n");
+                os.writeBytes(globalVariable.path + "/cepter getv " + GWMAC + "\n");
                 os.flush();
                 os.writeBytes("exit\n");
                 os.flush();
@@ -275,7 +275,7 @@ public class                        ScanActivity extends Activity {
                     os.close();
                     process2.waitFor();
                 }
-                File ck = new File("/data/data/su.sniff.cepter/files/inj");
+                File ck = new File(globalVariable.path + "/inj");
                 if (ck.exists()) {
                     ck.delete();
                 }
@@ -402,11 +402,11 @@ public class                        ScanActivity extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Process process2 = Runtime.getRuntime().exec("su", null, new File("/data/data/su.sniff.cepter/files"));
+        Process process2 = Runtime.getRuntime().exec("su", null, new File(globalVariable.path + ""));
         DataOutputStream dataOutputStream = new DataOutputStream(process2.getOutputStream());
         bufferedReader = new BufferedReader(new InputStreamReader(process2.getInputStream()));
-        Log.d(TAG, "cepter scan");
-        dataOutputStream.writeBytes("/data/data/su.sniff.cepter/files/cepter scan " + Integer.toString(globalVariable.adapt_num) + "\n");
+        Log.d(TAG, "cepter scan " + globalVariable.adapt_num);
+        dataOutputStream.writeBytes(globalVariable.path + "/cepter scan " + Integer.toString(globalVariable.adapt_num) + "\n");
         dataOutputStream.flush();
         dataOutputStream.writeBytes("exit\n");
         dataOutputStream.flush();
@@ -504,7 +504,7 @@ public class                        ScanActivity extends Activity {
             }
             WifiManager wifiManager = (WifiManager) getSystemService("wifi");
             String cmd = "-gw " + globalVariable.gw_ip;
-            Intent i2 = new Intent(this.mCtx, TabAct.class);
+            Intent i2 = new Intent(this.mCtx, TabActivitys.class);
             i2.putExtra("Key_String", cmd);
             i2.putExtra("Key_String_origin", this.origin_str);
             startActivity(i2);
@@ -546,7 +546,7 @@ public class                        ScanActivity extends Activity {
     }
 
     public void OnSkip(View v2) {
-        Intent i = new Intent(this.mCtx, TabAct.class);
+        Intent i = new Intent(this.mCtx, TabActivitys.class);
         i.putExtra("Key_String", BuildConfig.FLAVOR);
         i.putExtra("Key_String_origin", this.origin_str);
         startActivity(i);
