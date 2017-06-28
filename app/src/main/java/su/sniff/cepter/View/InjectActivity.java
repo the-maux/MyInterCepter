@@ -1,4 +1,4 @@
-package su.sniff.cepter;
+package su.sniff.cepter.View;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,7 +18,12 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import su.sniff.cepter.OpenFileDialog.OnFileSelectedListener;
+
+import su.sniff.cepter.BuildConfig;
+import su.sniff.cepter.Utils.OpenFileDialog;
+import su.sniff.cepter.Utils.OpenFileDialog.OnFileSelectedListener;
+import su.sniff.cepter.R;
+import su.sniff.cepter.globalVariable;
 
 public class InjectActivity extends Activity {
     private ArrayAdapter<String> adapter;

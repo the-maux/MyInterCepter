@@ -1,14 +1,16 @@
-package su.sniff.cepter;
+package su.sniff.cepter.Controller;
 
 import android.support.v4.view.MotionEventCompat;
+import su.sniff.cepter.BuildConfig;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class IPv4 {
-    int baseIPnumeric;
-    int netmaskNumeric;
+public class                        IPv4 {
+    int                             baseIPnumeric;
+    int                             netmaskNumeric;
 
-    public IPv4(String symbolicIP, String netmask) throws NumberFormatException {
+    public                          IPv4(String symbolicIP, String netmask) throws NumberFormatException {
         String[] st = symbolicIP.split("\\.");
         if (st.length != 4) {
             throw new NumberFormatException("Invalid IP address: " + symbolicIP);
@@ -52,14 +54,14 @@ public class IPv4 {
         }
     }
 
-    public IPv4(String IPinCIDRFormat) throws NumberFormatException {
+    public                          IPv4(String IPinCIDRFormat) throws NumberFormatException {
         String[] st = IPinCIDRFormat.split("\\/");
         if (st.length != 2) {
             throw new NumberFormatException("Invalid CIDR format '" + IPinCIDRFormat + "', should be: xx.xx.xx.xx/xx");
         }
         String symbolicIP = st[0];
         Integer numericCIDR = new Integer(st[1]);
-        if (numericCIDR.intValue() > 32) {
+        if (numericCIDR  > 32) {
             throw new NumberFormatException("CIDR can not be greater than 32");
         }
         st = symbolicIP.split("\\.");
@@ -76,28 +78,28 @@ public class IPv4 {
             this.baseIPnumeric += value << i;
             i -= 8;
         }
-        if (numericCIDR.intValue() < 8) {
+        if (numericCIDR < 8) {
             throw new NumberFormatException("Netmask CIDR can not be less than 8");
         }
         this.netmaskNumeric = -1;
-        this.netmaskNumeric <<= 32 - numericCIDR.intValue();
+        this.netmaskNumeric <<= 32 - numericCIDR;
     }
 
-    public String getIP() {
-        return convertNumericIpToSymbolic(Integer.valueOf(this.baseIPnumeric));
+    public String                   getIP() {
+        return convertNumericIpToSymbolic(this.baseIPnumeric);
     }
 
-    private String convertNumericIpToSymbolic(Integer ip) {
+    private String                  convertNumericIpToSymbolic(Integer ip) {
         StringBuffer sb = new StringBuffer(15);
         for (int shift = 24; shift > 0; shift -= 8) {
-            sb.append(Integer.toString((ip.intValue() >>> shift) & MotionEventCompat.ACTION_MASK));
+            sb.append(Integer.toString((ip  >>> shift) & MotionEventCompat.ACTION_MASK));
             sb.append('.');
         }
-        sb.append(Integer.toString(ip.intValue() & MotionEventCompat.ACTION_MASK));
+        sb.append(Integer.toString(ip  & MotionEventCompat.ACTION_MASK));
         return sb.toString();
     }
 
-    public String getNetmask() {
+    public String                   getNetmask() {
         StringBuffer sb = new StringBuffer(15);
         for (int shift = 24; shift > 0; shift -= 8) {
             sb.append(Integer.toString((this.netmaskNumeric >>> shift) & MotionEventCompat.ACTION_MASK));
@@ -107,71 +109,71 @@ public class IPv4 {
         return sb.toString();
     }
 
-    public String getCIDR() {
+    public String                   getCIDR() {
         int i = 0;
         while (i < 32 && (this.netmaskNumeric << i) != 0) {
             i++;
         }
-        return convertNumericIpToSymbolic(Integer.valueOf(this.baseIPnumeric & this.netmaskNumeric)) + "/" + i;
+        return convertNumericIpToSymbolic(this.baseIPnumeric & this.netmaskNumeric) + "/" + i;
     }
 
-    public List<String> getAvailableIPs(Integer numberofIPs) {
-        ArrayList<String> result = new ArrayList();
+    public List<String>             getAvailableIPs(Integer numberofIPs) {
+        ArrayList result = new ArrayList();
         int numberOfBits = 0;
         while (numberOfBits < 32 && (this.netmaskNumeric << numberOfBits) != 0) {
             numberOfBits++;
         }
-        Integer numberOfIPs = Integer.valueOf(0);
+        Integer numberOfIPs = 0;
         for (int n = 0; n < 32 - numberOfBits; n++) {
-            numberOfIPs = Integer.valueOf(Integer.valueOf(numberOfIPs.intValue() << 1).intValue() | 1);
+            numberOfIPs = numberOfIPs << 1 | 1;
         }
-        Integer baseIP = Integer.valueOf(this.baseIPnumeric & this.netmaskNumeric);
+        Integer baseIP = this.baseIPnumeric & this.netmaskNumeric;
         int i = 1;
-        while (i < numberOfIPs.intValue() && i < numberofIPs.intValue()) {
-            result.add(convertNumericIpToSymbolic(Integer.valueOf(baseIP.intValue() + i)));
+        while (i < numberOfIPs  && i < numberofIPs ) {
+            result.add(convertNumericIpToSymbolic(baseIP + i));
             i++;
         }
         return result;
     }
 
-    public String getHostAddressRange() {
+    public String                   getHostAddressRange() {
         int numberOfBits = 0;
         while (numberOfBits < 32 && (this.netmaskNumeric << numberOfBits) != 0) {
             numberOfBits++;
         }
-        Integer numberOfIPs = Integer.valueOf(0);
+        Integer numberOfIPs = 0;
         for (int n = 0; n < 32 - numberOfBits; n++) {
-            numberOfIPs = Integer.valueOf(Integer.valueOf(numberOfIPs.intValue() << 1).intValue() | 1);
+            numberOfIPs = numberOfIPs << 1 | 1;
         }
-        Integer baseIP = Integer.valueOf(this.baseIPnumeric & this.netmaskNumeric);
-        String firstIP = convertNumericIpToSymbolic(Integer.valueOf(baseIP.intValue() + 1));
-        return firstIP + " - " + convertNumericIpToSymbolic(Integer.valueOf((baseIP.intValue() + numberOfIPs.intValue()) - 1));
+        Integer baseIP = this.baseIPnumeric & this.netmaskNumeric;
+        String firstIP = convertNumericIpToSymbolic(baseIP + 1);
+        return firstIP + " - " + convertNumericIpToSymbolic((baseIP + numberOfIPs) - 1);
     }
 
-    public Integer getNumberOfHosts() {
+    public Integer                  getNumberOfHosts() {
         int numberOfBits = 0;
         while (numberOfBits < 32 && (this.netmaskNumeric << numberOfBits) != 0) {
             numberOfBits++;
         }
-        Double x = Double.valueOf(Math.pow(2.0d, (double) (32 - numberOfBits)));
-        if (x.doubleValue() == -1.0d) {
-            x = Double.valueOf(1.0d);
+        Double x = Math.pow(2.0d, (double) (32 - numberOfBits));
+        if (x == -1.0d) {
+            x = 1.0d;
         }
-        return Integer.valueOf(x.intValue());
+        return x.intValue();
     }
 
-    public String getWildcardMask() {
-        Integer wildcardMask = Integer.valueOf(this.netmaskNumeric ^ -1);
+    public String                   getWildcardMask() {
+        Integer wildcardMask = ~this.netmaskNumeric;
         StringBuffer sb = new StringBuffer(15);
         for (int shift = 24; shift > 0; shift -= 8) {
-            sb.append(Integer.toString((wildcardMask.intValue() >>> shift) & MotionEventCompat.ACTION_MASK));
+            sb.append(Integer.toString((wildcardMask  >>> shift) & MotionEventCompat.ACTION_MASK));
             sb.append('.');
         }
-        sb.append(Integer.toString(wildcardMask.intValue() & MotionEventCompat.ACTION_MASK));
+        sb.append(Integer.toString(wildcardMask  & MotionEventCompat.ACTION_MASK));
         return sb.toString();
     }
 
-    public String getBroadcastAddress() {
+    public String                   getBroadcastAddress() {
         if (this.netmaskNumeric == -1) {
             return "0.0.0.0";
         }
@@ -179,19 +181,19 @@ public class IPv4 {
         while (numberOfBits < 32 && (this.netmaskNumeric << numberOfBits) != 0) {
             numberOfBits++;
         }
-        Integer numberOfIPs = Integer.valueOf(0);
+        Integer numberOfIPs = 0;
         for (int n = 0; n < 32 - numberOfBits; n++) {
-            numberOfIPs = Integer.valueOf(Integer.valueOf(numberOfIPs.intValue() << 1).intValue() | 1);
+            numberOfIPs = numberOfIPs << 1 | 1;
         }
-        return convertNumericIpToSymbolic(Integer.valueOf(Integer.valueOf(this.baseIPnumeric & this.netmaskNumeric).intValue() + numberOfIPs.intValue()));
+        return convertNumericIpToSymbolic((this.baseIPnumeric & this.netmaskNumeric) + numberOfIPs);
     }
 
-    private String getBinary(Integer number) {
+    private String                  getBinary(Integer number) {
         String result = BuildConfig.FLAVOR;
-        Integer ourMaskBitPattern = Integer.valueOf(1);
+        Integer ourMaskBitPattern = 1;
         int i = 1;
         while (i <= 32) {
-            if ((number.intValue() & ourMaskBitPattern.intValue()) != 0) {
+            if ((number  & ourMaskBitPattern ) != 0) {
                 result = "1" + result;
             } else {
                 result = "0" + result;
@@ -199,18 +201,18 @@ public class IPv4 {
             if (!(i % 8 != 0 || i == 0 || i == 32)) {
                 result = "." + result;
             }
-            ourMaskBitPattern = Integer.valueOf(ourMaskBitPattern.intValue() << 1);
+            ourMaskBitPattern = ourMaskBitPattern << 1;
             i++;
         }
         return result;
     }
 
-    public String getNetmaskInBinary() {
-        return getBinary(Integer.valueOf(this.netmaskNumeric));
+    public String                   getNetmaskInBinary() {
+        return getBinary(this.netmaskNumeric);
     }
 
-    public boolean contains(String IPaddress) {
-        Integer checkingIP = Integer.valueOf(0);
+    public boolean                  contains(String IPaddress) {
+        Integer checkingIP = 0;
         String[] st = IPaddress.split("\\.");
         if (st.length != 4) {
             throw new NumberFormatException("Invalid IP address: " + IPaddress);
@@ -221,20 +223,20 @@ public class IPv4 {
             if (value != (value & MotionEventCompat.ACTION_MASK)) {
                 throw new NumberFormatException("Invalid IP address: " + IPaddress);
             }
-            checkingIP = Integer.valueOf(checkingIP.intValue() + (value << i));
+            checkingIP = checkingIP + (value << i);
             i -= 8;
         }
-        if ((this.baseIPnumeric & this.netmaskNumeric) == (checkingIP.intValue() & this.netmaskNumeric)) {
+        if ((this.baseIPnumeric & this.netmaskNumeric) == (checkingIP  & this.netmaskNumeric)) {
             return true;
         }
         return false;
     }
 
-    public boolean contains(IPv4 child) {
-        Integer subnetID = Integer.valueOf(child.baseIPnumeric);
-        Integer subnetMask = Integer.valueOf(child.netmaskNumeric);
-        if ((subnetID.intValue() & this.netmaskNumeric) == (this.baseIPnumeric & this.netmaskNumeric)) {
-            if ((this.netmaskNumeric < subnetMask.intValue()) && this.baseIPnumeric <= subnetID.intValue()) {
+    public boolean                  contains(IPv4 child) {
+        Integer subnetID = child.baseIPnumeric;
+        Integer subnetMask = child.netmaskNumeric;
+        if ((subnetID  & this.netmaskNumeric) == (this.baseIPnumeric & this.netmaskNumeric)) {
+            if ((this.netmaskNumeric < subnetMask ) && this.baseIPnumeric <= subnetID ) {
                 return true;
             }
         }

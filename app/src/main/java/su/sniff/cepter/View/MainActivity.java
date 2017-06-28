@@ -1,4 +1,4 @@
-package su.sniff.cepter;
+package su.sniff.cepter.View;
 
 import android.app.Activity;
 import android.content.Context;
@@ -32,8 +32,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import su.sniff.cepter.OpenFileDialog.OnFileSelectedListener;
-import su.sniff.cepter.SaveFileDialog.OnNewFileSelectedListener;
+
+import su.sniff.cepter.*;
+import su.sniff.cepter.Utils.OpenFileDialog;
+import su.sniff.cepter.Utils.OpenFileDialog.OnFileSelectedListener;
+import su.sniff.cepter.Utils.SaveFileDialog;
+import su.sniff.cepter.Utils.SaveFileDialog.OnNewFileSelectedListener;
 
 public class MainActivity extends Activity {
     static TextView tvHello;

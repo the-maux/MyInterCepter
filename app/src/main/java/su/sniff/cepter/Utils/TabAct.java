@@ -1,4 +1,4 @@
-package su.sniff.cepter;
+package su.sniff.cepter.Utils;
 
 import android.app.TabActivity;
 import android.content.Intent;
@@ -7,6 +7,10 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
+import su.sniff.cepter.BuildConfig;
+import su.sniff.cepter.R;
+import su.sniff.cepter.View.*;
+import su.sniff.cepter.globalVariable;
 
 public class TabAct extends TabActivity {
     public void onCreate(Bundle savedInstanceState) {

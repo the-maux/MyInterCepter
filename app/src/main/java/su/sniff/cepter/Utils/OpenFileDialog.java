@@ -1,4 +1,4 @@
-package su.sniff.cepter;
+package su.sniff.cepter.Utils;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import su.sniff.cepter.R;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;

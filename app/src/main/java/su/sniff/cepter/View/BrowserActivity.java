@@ -1,4 +1,4 @@
-package su.sniff.cepter;
+package su.sniff.cepter.View;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,7 +20,11 @@ import android.widget.ListView;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import su.sniff.cepter.SaveFileDialog.OnNewFileSelectedListener;
+
+import su.sniff.cepter.R;
+import su.sniff.cepter.Utils.SaveFileDialog;
+import su.sniff.cepter.Utils.SaveFileDialog.OnNewFileSelectedListener;
+import su.sniff.cepter.globalVariable;
 
 
 public class BrowserActivity extends Activity {

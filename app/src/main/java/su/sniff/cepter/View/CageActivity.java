@@ -1,4 +1,4 @@
-package su.sniff.cepter;
+package su.sniff.cepter.View;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,6 +6,9 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import su.sniff.cepter.R;
+import su.sniff.cepter.globalVariable;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;

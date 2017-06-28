@@ -1,4 +1,4 @@
-package su.sniff.cepter;
+package su.sniff.cepter.Controller;
 
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
@@ -16,6 +16,10 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ListView;
+import su.sniff.cepter.BuildConfig;
+import su.sniff.cepter.R;
+import su.sniff.cepter.globalVariable;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;

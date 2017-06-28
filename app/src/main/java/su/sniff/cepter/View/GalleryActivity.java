@@ -1,4 +1,4 @@
-package su.sniff.cepter;
+package su.sniff.cepter.View;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,7 +13,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import su.sniff.cepter.OpenFileDialog.OnFileSelectedListener;
+
+import su.sniff.cepter.*;
+import su.sniff.cepter.Controller.DNSSpoofing;
+import su.sniff.cepter.Utils.OpenFileDialog;
+import su.sniff.cepter.Utils.OpenFileDialog.OnFileSelectedListener;
 
 public class GalleryActivity extends Activity {
     private Context mCtx;

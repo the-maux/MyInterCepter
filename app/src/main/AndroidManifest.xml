@@ -14,25 +14,25 @@
                  android:allowBackup="true"
                  android:largeHeap="true">
         <activity android:label="@string/app_name"
-                  android:name="su.sniff.cepter.ChooseActivity"
+                  android:name="su.sniff.cepter.View.InitActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="su.sniff.cepter.MainActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.RawActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.RawDetails" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.PortScan" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.DNSSpoofing" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.InjectActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.CageActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:label="@string/app_name" android:name="su.sniff.cepter.ScanActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.TabAct" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.SettingsActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.WebActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.BrowserActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.GalleryActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name="su.sniff.cepter.View.MainActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name="su.sniff.cepter.View.RawActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name="su.sniff.cepter.Utils.RawDetails" android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name="su.sniff.cepter.Controller.PortScan" android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name="su.sniff.cepter.Controller.DNSSpoofing" android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name="su.sniff.cepter.View.InjectActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name="su.sniff.cepter.View.CageActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:label="@string/app_name" android:name="su.sniff.cepter.View.ScanActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name="su.sniff.cepter.Utils.TabAct" android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name="su.sniff.cepter.View.SettingsActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name="su.sniff.cepter.View.WebActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name="su.sniff.cepter.View.BrowserActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name="su.sniff.cepter.View.GalleryActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>
 </manifest>

@@ -1,4 +1,4 @@
-package su.sniff.cepter;
+package su.sniff.cepter.View;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,7 +21,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import su.sniff.cepter.OpenFileDialog.OnFileSelectedListener;
+
+import su.sniff.cepter.*;
+import su.sniff.cepter.Utils.OpenFileDialog;
+import su.sniff.cepter.Utils.OpenFileDialog.OnFileSelectedListener;
+import su.sniff.cepter.Utils.RawDetails;
 import su.sniff.cepter.adapter.ProtocolAdapter;
 
 public class RawActivity extends Activity {
@@ -68,7 +72,7 @@ public class RawActivity extends Activity {
                             if (offset > 0) {
                                 String index = it.substring(0, offset);
                                 try {
-                                    int a = Integer.valueOf(index).intValue();
+                                    int a = Integer.valueOf(index) ;
                                     Intent i = new Intent(RawActivity.this.mCtx, RawDetails.class);
                                     i.putExtra("Key_Int", Integer.valueOf(index));
                                     RawActivity.this.startActivityForResult(i, 1);
@@ -220,7 +224,7 @@ public class RawActivity extends Activity {
                     if (offset > 0) {
                         String index = it.substring(0, offset);
                         try {
-                            int a = Integer.valueOf(index).intValue();
+                            int a = Integer.valueOf(index) ;
                             Intent i = new Intent(RawActivity.this.mCtx, RawDetails.class);
                             i.putExtra("Key_Int", Integer.valueOf(index));
                             RawActivity.this.startActivityForResult(i, 1);

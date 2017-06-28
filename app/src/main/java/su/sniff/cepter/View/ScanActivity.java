@@ -1,4 +1,4 @@
-package su.sniff.cepter;
+package su.sniff.cepter.View;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,6 +21,11 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import su.sniff.cepter.*;
+import su.sniff.cepter.Controller.IPv4;
+import su.sniff.cepter.Controller.PortScan;
+import su.sniff.cepter.Utils.TabAct;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -294,7 +299,8 @@ public class                        ScanActivity extends Activity {
         this.glob_adapter = adapter;
         ((ImageView) findViewById(R.id.imageView1)).setImageResource(R.drawable.scan2);
         ExecutorService service = Executors.newCachedThreadPool();
-        IPv4 iPv4 = new IPv4(globalVariable.own_ip + "/" + this.mask2);
+        IPv4 iPv4 = new IPv4(globalVariable.own_ip, globalVariable.netmask);
+//        IPv4 iPv4 = new IPv4(globalVariable.own_ip + "/" + this.mask2);
         Integer num = iPv4.getNumberOfHosts();
         List<String> availableIPs = iPv4.getAvailableIPs(num);
         int count = 0;
@@ -316,7 +322,7 @@ public class                        ScanActivity extends Activity {
                 count = 0;
             }
         }
-        if (num.intValue() < 300) {
+        if (num  < 300) {
             for (final String str2 : availableIPs) {
                 service.submit(new Runnable() {
                     public void run() {

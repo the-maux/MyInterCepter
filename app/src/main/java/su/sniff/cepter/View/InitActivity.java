@@ -1,24 +1,27 @@
-package su.sniff.cepter;
+package su.sniff.cepter.View;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.net.wifi.WifiInfo;
+import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
-import android.widget.ListView;
 import android.widget.Toast;
+import su.sniff.cepter.R;
+import su.sniff.cepter.globalVariable;
 
 import java.io.*;
+import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
 
-public class                    ChooseActivity extends Activity {
-    private String              TAG = "ChooseActivity";
+public class                    InitActivity extends Activity {
+    private String              TAG = "InitActivity";
     private Context             mCtx;
 
     public void                 onCreate(Bundle savedInstanceState) {
@@ -55,13 +58,27 @@ public class                    ChooseActivity extends Activity {
                         globalVariable.netmask = res[i+1];
                     }
                 }
+                if (globalVariable.netmask.contains("0.0.0.0"))
+                    globalVariable.netmask = "255.255.255.0";
+
+//                DhcpInfo dhcpInfo = wifiManager.getDhcpInfo();
+//                try {
+//                    InetAddress inetAddress = InetAddress.getByAddress(extractBytes(dhcpInfo.ipAddress));
+//                    NetworkInterface networkInterface = NetworkInterface.getByInetAddress(inetAddress);
+//                    for (InterfaceAddress address : networkInterface.getInterfaceAddresses()) {
+//                        //short netPrefix = address.getNetworkPrefixLength();
+//                        Log.d(TAG, address.toString());
+//                    }
+//                } catch (IOException e) {
+//                    Log.e(TAG, e.getMessage());
+//                }
                 Log.d(TAG, "All : " + data);
                 Log.d(TAG, "IP:" + globalVariable.own_ip);
                 Log.d(TAG, "GW:" + globalVariable.gw_ip);
                 Log.d(TAG, "NetMask:" + globalVariable.netmask);
                 Intent i = new Intent(this.mCtx, ScanActivity.class);
                 i.putExtra("Key_Int", c);
-                i.putExtra("Key_String", read.substring(0, b - 3));
+                i.putExtra("Key_String", globalVariable.own_ip);
                 bufferedReader.close();
                 startActivity(i);
                 finish();

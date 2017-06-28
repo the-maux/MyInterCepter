@@ -1,4 +1,4 @@
-package su.sniff.cepter;
+package su.sniff.cepter.View;
 
 import android.app.Activity;
 import android.content.ClipData;
@@ -15,6 +15,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+import su.sniff.cepter.R;
+import su.sniff.cepter.globalVariable;
 
 public class WebActivity extends Activity {
     Context mCtx;

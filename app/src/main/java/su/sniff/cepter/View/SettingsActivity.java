@@ -1,4 +1,4 @@
-package su.sniff.cepter;
+package su.sniff.cepter.View;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,6 +16,9 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import su.sniff.cepter.R;
+import su.sniff.cepter.globalVariable;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;

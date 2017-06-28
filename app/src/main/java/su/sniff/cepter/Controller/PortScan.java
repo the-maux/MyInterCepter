@@ -1,4 +1,4 @@
-package su.sniff.cepter;
+package su.sniff.cepter.Controller;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +7,9 @@ import android.view.KeyEvent;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import su.sniff.cepter.R;
+import su.sniff.cepter.globalVariable;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;

@@ -1,4 +1,4 @@
-package su.sniff.cepter;
+package su.sniff.cepter.Utils;
 
 import android.util.Log;
 import android.view.MotionEvent;
