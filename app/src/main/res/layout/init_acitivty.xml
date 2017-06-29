@@ -21,6 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/progressBar"
+            android:textColor="#20C20E"
             android:layout_centerHorizontal="true"
             android:id="@+id/monitor"
             android:textSize="16sp"
@@ -30,6 +31,6 @@
             android:text="Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true" android:id="@+id/button7"/>
+            android:layout_alignParentEnd="true" android:id="@+id/button7" android:visibility="gone"/>
 
 </RelativeLayout>

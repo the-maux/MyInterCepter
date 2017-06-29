@@ -3,7 +3,6 @@ package su.sniff.cepter.View;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -12,7 +11,6 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import su.sniff.cepter.Controller.RootProcess;
@@ -23,6 +21,7 @@ import java.io.*;
 
 public class                    InitActivity extends Activity {
     private String              TAG = "InitActivity";
+    private InitActivity        mInstance = this;
     private TextView            monitor;
 
     public void                 onCreate(Bundle savedInstanceState) {
@@ -32,13 +31,34 @@ public class                    InitActivity extends Activity {
         initXml(rootView);
     }
 
-    @Override
-    protected void               onPostCreate(Bundle savedInstanceState) {
+    private void                initXml(View rootView) {
+        monitor = (TextView) rootView.findViewById(R.id.monitor);
+        monitor.setText("Initialization");
+        findViewById(R.id.button7).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initInfo();
+                    }
+                }).start();
+            }
+        });
+    }
+
+    @Override protected void    onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         buildPath();
         globalVariable.resurrection = 1;
         try {
             buildFiles();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    initInfo();
+                }
+            }).start();
         } catch (IOException e) {
             monitor.setText("Error IO");
             e.printStackTrace();
@@ -46,17 +66,6 @@ public class                    InitActivity extends Activity {
             monitor.setText("Error Interupted");
             e.printStackTrace();
         }
-    }
-
-    private void                initXml(View rootView) {
-        monitor = (TextView) rootView.findViewById(R.id.monitor);
-        monitor.setText("Initialization");
-        findViewById(R.id.button7).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initInfo();
-            }
-        });
     }
 
     private void                buildPath() {
@@ -75,7 +84,6 @@ public class                    InitActivity extends Activity {
         File cepterFile = new File(globalVariable.path + "/cepter");
         if (cepterFile.exists()) {
             Log.d(TAG, "cepter exist");
-            //fDroidSheep.delete();
         } else {
             monitor.setText("Building cepter modules");
             Log.d(TAG, "Building cepter modules");
@@ -85,15 +93,11 @@ public class                    InitActivity extends Activity {
             }
             out.flush();
             out.close();
-            Log.d(TAG, "natif chmod +x cepter: " + cepterFile.setExecutable(true, false));
-            Log.d(TAG, "natif chmod +r cepter: " + cepterFile.setReadable(true, false));
-//            cepterFile.setWritable(true, false);
         }
 
         File busyboxFile = new File(globalVariable.path + "/busybox");
         if (busyboxFile.exists()) {
             Log.d(TAG, "Busybox exist");
-//            fDroidSheep.delete();
         } else {
             Log.d(TAG, "Building busybox");
             monitor.setText("Building busybox");
@@ -105,34 +109,16 @@ public class                    InitActivity extends Activity {
             }
             oos.flush();
             oos.close();
-            Log.d(TAG, "natif chmod +x cepter: " + busyboxFile.setExecutable(true, false));
-            Log.d(TAG, "natif chmod +r cepter: " + busyboxFile.setReadable(true, false));
         }
-
-/*
-        Log.d(TAG, "chmod 777 " + globalVariable.path + "/cepter\n");
-        dataOutputStream.writeBytes("chmod 777 " + globalVariable.path + "/cepter\n");
-        dataOutputStream.flush();
-        Log.d(TAG, "chmod 777 " + globalVariable.path + "/busybox");
-        dataOutputStream.writeBytes("chmod 777 " + globalVariable.path + "/busybox\n");
-        dataOutputStream.flush();
-
-        Log.d(TAG, "p.waitFor files/busybox");*/
         new RootProcess("Kill cepter").exec("killall cepter").closeProcess();
-/*        Process                 p = Runtime.getRuntime().exec("su");
-        DataOutputStream        dataOutputStream = new DataOutputStream(p.getOutputStream());
-
-        dataOutputStream.writeBytes("killall cepter\n");
-        dataOutputStream.flush();
-        dataOutputStream.close();
-        p.waitFor();*/
     }
 
     private void                initInfo() {
         try {
             WifiManager wifiManager = (WifiManager) getSystemService("wifi");
             Log.d(TAG, "init Net infos");
-            BufferedReader bufferedReader = cepterList();
+            RootProcess process = getNetworkInfoByCept();
+            BufferedReader bufferedReader = process.getReader();
             if (bufferedReader == null)
                 finish();
             int c = 0;
@@ -140,11 +126,11 @@ public class                    InitActivity extends Activity {
                 String read = "";
                 read = bufferedReader.readLine();
                 if (read == null) {
-                    Log.d(TAG, "waiting Net Info from cepter");
                     continue;
                 } else {
                     Log.d(TAG, "read is " + read); //read: wlan0 : IP: 10.16.184.230 / 255.255.254.0
                 }
+                monitor("Initialization...");
                 globalVariable.adapt_num = c + 1;
                 String data = wifiManager.getDhcpInfo().toString();
                 String[] res = data.split(" ");
@@ -179,19 +165,16 @@ public class                    InitActivity extends Activity {
         }
     }
 
-    private BufferedReader      cepterList() throws IOException, InterruptedException {
-        monitor.setText("Testing busybox");
-        Process process = Runtime.getRuntime().exec("su", null, new File(globalVariable.path));
-        DataOutputStream dataOutputStream = new DataOutputStream(process.getOutputStream());
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        monitor.setText("./cepter list");
+    private RootProcess         getNetworkInfoByCept() throws IOException, InterruptedException {
+        monitor("Testing busybox");
+        RootProcess process = new RootProcess("getNetworkInfoByCept", globalVariable.path);
+        monitor("Testing busybox... OK");
         Log.d(TAG, "su " + globalVariable.path + "/cepter list; exit");
-        dataOutputStream.writeBytes(globalVariable.path + "/cepter list\n");
-        dataOutputStream.flush();
-        dataOutputStream.writeBytes("exit\n");
-        dataOutputStream.flush();
+        process.exec(globalVariable.path + "/cepter list");
+        process.exec("exit");
+        monitor("Get network Information");
         process.waitFor();
-        return bufferedReader;
+        return process;
     }
 
     private InputStream         getCepterRessource() {
@@ -232,4 +215,12 @@ public class                    InitActivity extends Activity {
         monitor.setText("Clearing previous Data over");
     }
 
+    private void                monitor(final String log) {
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                monitor.setText(log);
+            }
+        });
+    }
 }

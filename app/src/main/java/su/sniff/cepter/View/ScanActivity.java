@@ -23,7 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import su.sniff.cepter.*;
 import su.sniff.cepter.Controller.IPv4;
+import su.sniff.cepter.Controller.NetUtils;
 import su.sniff.cepter.Controller.PortScan;
+import su.sniff.cepter.Controller.RootProcess;
 import su.sniff.cepter.Utils.TabActivitys;
 
 import java.io.BufferedReader;
@@ -50,19 +52,18 @@ public class                        ScanActivity extends Activity {
     private ArrayAdapter<String>    glob_adapter;
     private boolean[]               itemToggled;
     private ArrayList<String>       lst;
-    private Context                 mCtx;
+    private Context                 mCtx = this;
     private int                     mask2;
     private String                  origin_str, monitor;
     private ListView                tvList1;
     private ProgressBar             progressBar;
 
-    public void onCreate(Bundle savedInstanceState) {
+    public void                     onCreate(Bundle savedInstanceState) {
         IOException e;
         super.onCreate(savedInstanceState);
         requestWindowFeature(3);
         setContentView(R.layout.scan_layout);
         getWindow().setFeatureDrawableResource(3, R.drawable.ico);
-        this.mCtx = this;
         this.itemToggled = new boolean[2048];
         progressBar = (ProgressBar) findViewById(R.id.progressBar1);
         Arrays.fill(this.itemToggled, false);
@@ -76,62 +77,17 @@ public class                        ScanActivity extends Activity {
         String vendor = BuildConfig.FLAVOR;
         String GWMAC;
         try {
-            Log.d(TAG, "Reading /proc/net/arp");
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"));
-            BufferedReader reader;
-            String mac = "";
-            try {
-
-                String MAC_RE = "^%s\\s+0x1\\s+0x2\\s+([:0-9a-fA-F]+)\\s+\\*\\s+\\w+$";
-                while (true) {
-                    String read = bufferedReader.readLine();
-                    if (read == null) {
-                        break;
-                    }
-                    Matcher matcher = Pattern.compile(String.format(MAC_RE, new Object[]{read.substring(0, read.indexOf(" ")).replace(".", "\\.")})).matcher(read);
-                    if (matcher.matches()) {
-                        mac = matcher.group(1);
-                        if (globalVariable.own_ip.equals(globalVariable.gw_ip)) {
-                            break;
-                        }
-                    }
-                }
-                GWMAC = mac;
-                bufferedReader.close();
-                Process process = Runtime.getRuntime().exec("su", null, new File(globalVariable.path + ""));
-                DataOutputStream os = new DataOutputStream(process.getOutputStream());
-                reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-                os.writeBytes(globalVariable.path + "/cepter getv " + GWMAC + "\n");
-                os.flush();
-                os.writeBytes("exit\n");
-                os.flush();
-                os.close();
-                vendor = reader.readLine();
-                reader.close();
-            } catch (IOException e2) {
-                e = e2;
-                reader = bufferedReader;
-                e.printStackTrace();
-                if (monitor.indexOf("WiFi") == -1) {
-                    monitor += "\nNon LMFR: " + wifiInfo.getSSID() + ", GW: " + globalVariable.gw_ip + "/" + globalVariable.netmask + "\nVendor: " + vendor;
-                }
-                t.setText(monitor);
-                try {
-                    this.mask2 = Integer.bitCount(getIPAsInteger(globalVariable.netmask));
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-                if (this.mask2 < 24) {
-                    runOnUiThread(new ToastNetMask());
-                }
-                this.tvList1 = (ListView) findViewById(R.id.listView1);
-            }
-        } catch (IOException e3) {
-            e = e3;
-            e.printStackTrace();
+            GWMAC = NetUtils.getMac();
+            RootProcess process = new RootProcess("/cepter getv", globalVariable.path);
+            process.exec(globalVariable.path + "/cepter getv " + GWMAC);
+            process.exec("exit");
+            vendor = "Fonction non active";
+            process.closeProcess();
+        } catch (Exception e2) {
+            e2.printStackTrace();
+        } finally {
             if (!monitor.contains("WiFi")) {
-                monitor += "\nWiFi: " + wifiInfo.getSSID() + ", GW: " + globalVariable.gw_ip + "/" + globalVariable.netmask + "\nVendor: " + vendor;
+                monitor += "\nNon LMFR: " + wifiInfo.getSSID() + ", GW: " + globalVariable.gw_ip + "/" + globalVariable.netmask + "\nVendor: " + vendor;
             }
             t.setText(monitor);
             try {
@@ -144,22 +100,9 @@ public class                        ScanActivity extends Activity {
             }
             this.tvList1 = (ListView) findViewById(R.id.listView1);
         }
-        if (!monitor.contains("WiFi")) {
-            monitor += "\nWiFi: " + wifiInfo.getSSID() + ", GW: " + globalVariable.gw_ip + "/" + globalVariable.netmask + "\nVendor: " + vendor;
-        }
-        t.setText(monitor);
-        try {
-            this.mask2 = Integer.bitCount(getIPAsInteger(globalVariable.netmask));
-            if (this.mask2 < 24) {
-                runOnUiThread(new ToastNetMask());
-            }
-        } catch (Exception e4) {
-            e4.printStackTrace();
-        }
-        this.tvList1 = (ListView) findViewById(R.id.listView1);
     }
 
-    protected void onStart() {
+    protected void                  onStart() {
         super.onStart();
         progressBar.setVisibility(View.GONE);
         Toast.makeText(getApplicationContext(), "Sniffer Enabled", 0).show();
@@ -171,14 +114,6 @@ public class                        ScanActivity extends Activity {
 
         public void run() {
             Toast.makeText(ScanActivity.this.getApplicationContext(), "Due to netmask the scanning might take a while, be patient", 1).show();
-        }
-    }
-
-    class EmptyClass implements Runnable {
-        EmptyClass() {
-        }
-
-        public void run() {
         }
     }
 
@@ -215,7 +150,7 @@ public class                        ScanActivity extends Activity {
         }
     }
 
-    private class pictureFromOsTypeArray<T> extends ArrayAdapter<T> {
+    private class                   pictureFromOsTypeArray<T> extends ArrayAdapter<T> {
         public pictureFromOsTypeArray(Context context, int resource, int textViewResourceId, List<T> objects) {
             super(context, resource, textViewResourceId, objects);
         }
@@ -238,7 +173,7 @@ public class                        ScanActivity extends Activity {
         }
     }
 
-    private static Integer getIPAsInteger(String ip) throws Exception {
+    private static Integer          getIPAsInteger(String ip) throws Exception {
         if (ip == null) {
             return null;
         }
@@ -250,7 +185,7 @@ public class                        ScanActivity extends Activity {
         return result;
     }
     
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    public boolean                  onKeyDown(int keyCode, KeyEvent event) {
         Log.d(TAG, "onKeyDown: " + keyCode);
         if (keyCode == 4) {
             try {
@@ -289,7 +224,7 @@ public class                        ScanActivity extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
-    public void onScanNet(View v) throws IOException, InterruptedException {
+    public void                     onScanNet(View v) throws IOException, InterruptedException {
         Log.d(TAG, "onScanNet");
         BufferedReader bufferedReader;
         this.lst = new ArrayList();
@@ -393,7 +328,7 @@ public class                        ScanActivity extends Activity {
                     FileOutputStream fileOutputStream = out;
                     fileOutputStream.write((ip + ":" + matcher.group(1) + "\n").getBytes());
                     int c2 = c;
-                    runOnUiThread(new EmptyClass());
+                    //runOnUiThread(new EmptyClass()); wtf is that ?
                     c++;
                 }
             }
@@ -479,7 +414,7 @@ public class                        ScanActivity extends Activity {
         this.tvList1.setOnItemLongClickListener(new possibleClickTarget());
     }
 
-    public void OnScanNext(View v2) throws IOException {
+    public void                     OnScanNext(View v2) throws IOException {
         String selected = BuildConfig.FLAVOR;
         if (this.tvList1.getCount() > 0) {
             int t = 1;
@@ -514,7 +449,7 @@ public class                        ScanActivity extends Activity {
         Toast.makeText(getApplicationContext(), "Scan network!", 0).show();
     }
 
-    public void OnCage(View v2) throws IOException {
+    public void                     OnCage(View v2) throws IOException {
         Log.d(TAG, "OnCage");
         String selected = BuildConfig.FLAVOR;
         if (this.tvList1.getCount() > 0) {
@@ -545,7 +480,7 @@ public class                        ScanActivity extends Activity {
         Toast.makeText(getApplicationContext(), "Scan network!", 0).show();
     }
 
-    public void OnSkip(View v2) {
+    public void                     OnSkip(View v2) {
         Intent i = new Intent(this.mCtx, TabActivitys.class);
         i.putExtra("Key_String", BuildConfig.FLAVOR);
         i.putExtra("Key_String_origin", this.origin_str);
@@ -553,8 +488,7 @@ public class                        ScanActivity extends Activity {
         finish();
     }
 
-    public void OnSelectAll(View v2) throws IOException {
-        String selected = BuildConfig.FLAVOR;
+    public void                     OnSelectAll(View v2) throws IOException {
         if (this.tvList1.getCount() > 0) {
             int total = this.tvList1.getCount();
             WifiManager wifiManager = (WifiManager) getSystemService("wifi");
@@ -580,10 +514,6 @@ public class                        ScanActivity extends Activity {
             return;
         }
         Toast.makeText(getApplicationContext(), "Scan network!", 0).show();
-    }
-
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
     }
 
     public void OnPics(View v) {
