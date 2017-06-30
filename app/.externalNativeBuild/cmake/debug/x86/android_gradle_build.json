@@ -1,9 +1,9 @@
 
 {
-	"buildFiles" : [ "/home/the-maux/Work/MyInterCepter/app/CMakeLists.txt" ],
+	"buildFiles" : [ "/home/the-maux/Secu/MyInterCepter/app/CMakeLists.txt" ],
 	"cleanCommands" : 
 	[
-		"/home/the-maux/Android/Sdk/cmake/3.6.3155560/bin/cmake --build /home/the-maux/Work/MyInterCepter/app/.externalNativeBuild/cmake/debug/x86 --target clean"
+		"/home/the-maux/Android/Sdk/cmake/3.6.3155560/bin/cmake --build /home/the-maux/Secu/MyInterCepter/app/.externalNativeBuild/cmake/debug/x86 --target clean"
 	],
 	"cppFileExtensions" : [ "cpp" ],
 	"libraries" : 
@@ -12,18 +12,18 @@
 		{
 			"abi" : "x86",
 			"artifactName" : "native-lib",
-			"buildCommand" : "/home/the-maux/Android/Sdk/cmake/3.6.3155560/bin/cmake --build /home/the-maux/Work/MyInterCepter/app/.externalNativeBuild/cmake/debug/x86 --target native-lib",
+			"buildCommand" : "/home/the-maux/Android/Sdk/cmake/3.6.3155560/bin/cmake --build /home/the-maux/Secu/MyInterCepter/app/.externalNativeBuild/cmake/debug/x86 --target native-lib",
 			"buildType" : "debug",
 			"files" : 
 			[
 				
 				{
-					"flags" : "  --target=i686-none-linux-android --gcc-toolchain=/home/the-maux/Android/android-ndk-r15/toolchains/x86-4.9/prebuilt/linux-x86_64 --sysroot=/home/the-maux/Android/android-ndk-r15/sysroot  -Dnative_lib_EXPORTS -isystem /home/the-maux/Android/android-ndk-r15/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem /home/the-maux/Android/android-ndk-r15/sources/cxx-stl/gnu-libstdc++/4.9/libs/x86/include -isystem /home/the-maux/Android/android-ndk-r15/sources/cxx-stl/gnu-libstdc++/4.9/include/backward  -isystem /home/the-maux/Android/android-ndk-r15/sysroot/usr/include/i686-linux-android -D__ANDROID_API__=15 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -Wa,--noexecstack -Wformat -Werror=format-security   -O0 -fno-limit-debug-info  -fPIC    -c ",
-					"src" : "/home/the-maux/Work/MyInterCepter/app/src/main/cpp/native-lib.cpp",
-					"workingDirectory" : "/home/the-maux/Work/MyInterCepter/app/.externalNativeBuild/cmake/debug/x86"
+					"flags" : "  --target=i686-none-linux-android --gcc-toolchain=/home/the-maux/Android/android-ndk-r15/toolchains/x86-4.9/prebuilt/linux-x86_64 --sysroot=/home/the-maux/Android/android-ndk-r15/sysroot  -Dnative_lib_EXPORTS -isystem /home/the-maux/Android/android-ndk-r15/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem /home/the-maux/Android/android-ndk-r15/sources/cxx-stl/gnu-libstdc++/4.9/libs/x86/include -isystem /home/the-maux/Android/android-ndk-r15/sources/cxx-stl/gnu-libstdc++/4.9/include/backward  -isystem /home/the-maux/Android/android-ndk-r15/sysroot/usr/include/i686-linux-android -D__ANDROID_API__=21 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -Wa,--noexecstack -Wformat -Werror=format-security   -O0 -fno-limit-debug-info  -fPIC    -c ",
+					"src" : "/home/the-maux/Secu/MyInterCepter/app/src/main/cpp/native-lib.cpp",
+					"workingDirectory" : "/home/the-maux/Secu/MyInterCepter/app/.externalNativeBuild/cmake/debug/x86"
 				}
 			],
-			"output" : "/home/the-maux/Work/MyInterCepter/app/build/intermediates/cmake/debug/obj/x86/libnative-lib.so",
+			"output" : "/home/the-maux/Secu/MyInterCepter/app/build/intermediates/cmake/debug/obj/x86/libnative-lib.so",
 			"toolchain" : "14358435581049917050"
 		}
 	},

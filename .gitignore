@@ -153,3 +153,10 @@ Supprimerait app/libs/
 Supprimerait app/src/main/res/drawable/
 /app/app.iml
 /app/.externalNativeBuild/
+Supprimerait app/src/main/res/drawable-hdpi/
+Supprimerait app/src/main/res/drawable-mdpi/
+Supprimerait app/src/main/res/drawable-xhdpi/
+Supprimerait app/src/main/res/drawable-xxhdpi/
+Supprimerait app/src/main/res/drawable-xxxhdpi/
+/local.properties
+!/local.properties

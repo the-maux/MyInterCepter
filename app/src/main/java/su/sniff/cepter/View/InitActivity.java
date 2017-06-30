@@ -82,9 +82,10 @@ public class                    InitActivity extends Activity {
         clearingTmpFiles();
         InputStream cepter = getCepterRessource();
         File cepterFile = new File(globalVariable.path + "/cepter");
-        if (cepterFile.exists()) {
+        if (cepterFile.exists() && cepterFile.canExecute()) {
             Log.d(TAG, "cepter exist");
         } else {
+            cepterFile.delete();
             monitor.setText("Building cepter modules");
             Log.d(TAG, "Building cepter modules");
             out = openFileOutput("cepter", 0);
@@ -93,13 +94,15 @@ public class                    InitActivity extends Activity {
             }
             out.flush();
             out.close();
+            cepterFile.setExecutable(true, false);
         }
 
         File busyboxFile = new File(globalVariable.path + "/busybox");
-        if (busyboxFile.exists()) {
-            Log.d(TAG, "Busybox exist");
+        if (busyboxFile.exists() && busyboxFile.canExecute()) {
+            Log.d(TAG, "Busybox exist and can be executed");
         } else {
             Log.d(TAG, "Building busybox");
+            busyboxFile.delete();
             monitor.setText("Building busybox");
             out = openFileOutput("busybox", Context.MODE_PRIVATE);
             ObjectOutputStream oos = new ObjectOutputStream(out);
@@ -109,6 +112,7 @@ public class                    InitActivity extends Activity {
             }
             oos.flush();
             oos.close();
+            cepterFile.setExecutable(true, false);
         }
         new RootProcess("Kill cepter").exec("killall cepter").closeProcess();
     }

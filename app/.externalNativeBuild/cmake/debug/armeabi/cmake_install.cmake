@@ -1,4 +1,4 @@
-# Install script for directory: /home/the-maux/Work/MyInterCepter/app
+# Install script for directory: /home/the-maux/Secu/MyInterCepter/app
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/the-maux/Work/MyInterCepter/app/.externalNativeBuild/cmake/debug/armeabi/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/the-maux/Secu/MyInterCepter/app/.externalNativeBuild/cmake/debug/armeabi/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

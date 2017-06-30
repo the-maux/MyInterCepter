@@ -63,5 +63,5 @@ endif()
 
 
 set(CMAKE_C_IMPLICIT_LINK_LIBRARIES "dl;c;dl")
-set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES "/home/the-maux/Android/android-ndk-r15/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/5.0.300080/lib/linux/i386;/home/the-maux/Android/android-ndk-r15/toolchains/x86-4.9/prebuilt/linux-x86_64/lib/gcc/i686-linux-android/4.9.x;/home/the-maux/Android/android-ndk-r15/toolchains/x86-4.9/prebuilt/linux-x86_64/i686-linux-android/lib;/home/the-maux/Android/android-ndk-r15/platforms/android-15/arch-x86/usr/lib")
+set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES "/home/the-maux/Android/android-ndk-r15/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/5.0.300080/lib/linux/i386;/home/the-maux/Android/android-ndk-r15/toolchains/x86-4.9/prebuilt/linux-x86_64/lib/gcc/i686-linux-android/4.9.x;/home/the-maux/Android/android-ndk-r15/toolchains/x86-4.9/prebuilt/linux-x86_64/i686-linux-android/lib;/home/the-maux/Android/android-ndk-r15/platforms/android-21/arch-x86/usr/lib")
 set(CMAKE_C_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "")

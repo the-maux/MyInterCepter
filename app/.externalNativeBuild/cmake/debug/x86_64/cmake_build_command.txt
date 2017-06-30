@@ -1,11 +1,11 @@
 Executable : /home/the-maux/Android/Sdk/cmake/3.6.3155560/bin/cmake
 arguments : 
--H/home/the-maux/Work/MyInterCepter/app
--B/home/the-maux/Work/MyInterCepter/app/.externalNativeBuild/cmake/debug/x86_64
+-H/home/the-maux/Secu/MyInterCepter/app
+-B/home/the-maux/Secu/MyInterCepter/app/.externalNativeBuild/cmake/debug/x86_64
 -GAndroid Gradle - Ninja
 -DANDROID_ABI=x86_64
 -DANDROID_NDK=/home/the-maux/Android/android-ndk-r15
--DCMAKE_LIBRARY_OUTPUT_DIRECTORY=/home/the-maux/Work/MyInterCepter/app/build/intermediates/cmake/debug/obj/x86_64
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=/home/the-maux/Secu/MyInterCepter/app/build/intermediates/cmake/debug/obj/x86_64
 -DCMAKE_BUILD_TYPE=Debug
 -DCMAKE_MAKE_PROGRAM=/home/the-maux/Android/Sdk/cmake/3.6.3155560/bin/ninja
 -DCMAKE_TOOLCHAIN_FILE=/home/the-maux/Android/android-ndk-r15/build/cmake/android.toolchain.cmake

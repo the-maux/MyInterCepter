@@ -3,24 +3,6 @@
 
     <item
         is-multidex="false"
-        jar="/home/the-maux/Work/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.3.1/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="052f5f840f21174a3ecf6544130194e2652cbb73">
-        <dex dex="/home/the-maux/Work/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-ui-25.3.1_b0b15549ab5d63e2674d29ebc2fd605c3709c095.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/the-maux/Work/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.3.1/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="150252b33b00274cc868578ade018fda0d43a3eb">
-        <dex dex="/home/the-maux/Work/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-25.3.1_2a18c9abdc58cd356b80dbff91d43eeb9cac543f.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="/home/the-maux/Work/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.3.1/jars/classes.jar"
         jumboMode="false"
         optimize="true"
@@ -30,21 +12,75 @@
     </item>
     <item
         is-multidex="false"
-        jar="/home/the-maux/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/25.3.1/support-annotations-25.3.1.jar"
+        jar="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.3.1/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
-        sha1="bf8841d29fa39e077730e7a91222c2ce269fa7c9">
-        <dex dex="/home/the-maux/Work/MyInterCepter/app/build/intermediates/pre-dexed/debug/support-annotations-25.3.1_88fc61bc0365f3edb091b269c98f168f51c796c6.jar" />
+        sha1="4a26a1154d053ab11aaf4c3967c42a4d66390991">
+        <dex dex="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-support-fragment-25.3.1_a619107b0d23326dd0e826e40c3c31917e5afb5a.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/home/the-maux/Work/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.3.1/jars/classes.jar"
+        jar="/home/the-maux/Work/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="47635644d0d5c103c1dd8360549eb9ba3225c7d3">
+        <dex dex="/home/the-maux/Work/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-25.3.1_d68c3800e9080f29d77ffd637dd8d0bb6db6f013.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.4/695b63d702f505b9b916e02272e3b6381bade7f/gson-2.4.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="0695b63d702f505b9b916e02272e3b6381bade7f">
+        <dex dex="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/pre-dexed/debug/gson-2.4_f52abcf7a40e1d1cd3be0e4d3928b6143b13217f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/.gradle/caches/modules-2/files-2.1/com.github.bumptech.glide/glide/3.7.0/9e9eeaf9948ee4d6c3ab354e8dc14368f16994a4/glide-3.7.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="9e9eeaf9948ee4d6c3ab354e8dc14368f16994a4">
+        <dex dex="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/pre-dexed/debug/glide-3.7.0_e1ddbcc0e530b63d583937b566c5d8d5b41e27cf.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/palette-v7/25.1.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="6f68018b5ddc2493f5e5cecc5601c05d0539281a">
+        <dex dex="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-palette-v7-25.1.0_d84dee0c1e311799987e5db6657b700d19d29f06.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="efb8cb62d47d157c29d1521daac7eefd4cb881ee">
+        <dex dex="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-25.3.1_efd7c36dc028b3544ea1f2d6281450e32e4849ac.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.3.1/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
         sha1="da27a32db6af8954ee8061537c7d476fcb1df46f">
-        <dex dex="/home/the-maux/Work/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-support-compat-25.3.1_f33ac2e1e18409985f7e6cd9e924f88c734aa9eb.jar" />
+        <dex dex="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-support-compat-25.3.1_7732e8562c434bf361ceb0115a838b0a51547440.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/transition/25.1.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="d38084015027549951cbaea5d5f6fb795cc81151">
+        <dex dex="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-transition-25.1.0_6189622408bbc35c1d28a11dfb01c6435b22a56b.jar" />
     </item>
     <item
         is-multidex="false"
@@ -66,21 +102,66 @@
     </item>
     <item
         is-multidex="false"
-        jar="/home/the-maux/Work/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.3.1/jars/classes.jar"
+        jar="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="6ef31f1555bb4cc513ec8d52711365a8b89f3600">
+        <dex dex="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-utils-25.3.1_603f2e29123fc8bb5b36034526fd571a180d64ce.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/25.3.1/support-annotations-25.3.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="bf8841d29fa39e077730e7a91222c2ce269fa7c9">
+        <dex dex="/home/the-maux/Work/MyInterCepter/app/build/intermediates/pre-dexed/debug/support-annotations-25.3.1_88fc61bc0365f3edb091b269c98f168f51c796c6.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/Work/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="da27a32db6af8954ee8061537c7d476fcb1df46f">
+        <dex dex="/home/the-maux/Work/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-support-compat-25.3.1_f33ac2e1e18409985f7e6cd9e924f88c734aa9eb.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/25.1.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="b266c8faa5af72e579b9da36ef35053ffed6ac64">
+        <dex dex="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-recyclerview-v7-25.1.0_01f416272c6f59bf479e4a328b7737f1166b58ea.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/exploded-aar/com.ashokvarma.android/bottom-navigation-bar/1.3.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="84a5e720e441032fc979314a4539f3d40079801b">
+        <dex dex="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.ashokvarma.android-bottom-navigation-bar-1.3.0_88fac2b76cd4440746d8e1bcc6c677f15a63a609.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.3.1/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
         sha1="47635644d0d5c103c1dd8360549eb9ba3225c7d3">
-        <dex dex="/home/the-maux/Work/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-25.3.1_d68c3800e9080f29d77ffd637dd8d0bb6db6f013.jar" />
+        <dex dex="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-25.3.1_037dc28eaf52196ebeda69f0e4729b5a57444bb6.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/home/the-maux/Work/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.3.1/jars/classes.jar"
+        jar="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.3.1/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
-        sha1="4a26a1154d053ab11aaf4c3967c42a4d66390991">
-        <dex dex="/home/the-maux/Work/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-support-fragment-25.3.1_c930352348902790afcf5813d2c6cf8ad1161f3c.jar" />
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-25.3.1_bc097bb4ec62d07a44c3eb78d4c7a0b18b26b26f.jar" />
     </item>
     <item
         is-multidex="false"
@@ -90,6 +171,87 @@
         revision="25.0.3"
         sha1="45f697922e6f072daa12f8a2995dc77ab03c11da">
         <dex dex="/home/the-maux/Work/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-support-media-compat-25.3.1_dccac10cd75adf9556fec8ee128fd7d99b1afe30.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="150252b33b00274cc868578ade018fda0d43a3eb">
+        <dex dex="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-25.3.1_aa2f1371afc435a7f1bda6f891a7e5ce8a0b5d48.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/Work/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="052f5f840f21174a3ecf6544130194e2652cbb73">
+        <dex dex="/home/the-maux/Work/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-ui-25.3.1_b0b15549ab5d63e2674d29ebc2fd605c3709c095.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/Work/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="150252b33b00274cc868578ade018fda0d43a3eb">
+        <dex dex="/home/the-maux/Work/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-25.3.1_2a18c9abdc58cd356b80dbff91d43eeb9cac543f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/design/25.1.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="30103d98fa5ed824b54af839c85e2111f9bde8ec">
+        <dex dex="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-design-25.1.0_8ed5b660bbb9d670251019ea76b34833080e96c5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="45f697922e6f072daa12f8a2995dc77ab03c11da">
+        <dex dex="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-support-media-compat-25.3.1_1372e18f742916116df05c110ec1b03762eb1e49.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/exploded-aar/de.hdodenhof/circleimageview/2.1.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="a2af9c72ccaa4c5c049b500ca6ea664a4ce1f7d4">
+        <dex dex="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/pre-dexed/debug/de.hdodenhof-circleimageview-2.1.0_7e742e7a8a23635702c9533429f12c2b0bbade98.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/25.1.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="7f2420506110902f033406b25697cf97ee8c38b2">
+        <dex dex="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-cardview-v7-25.1.0_5a70d4c3e28b919c7a5f0b6bb0142abc94be56ab.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="052f5f840f21174a3ecf6544130194e2652cbb73">
+        <dex dex="/home/the-maux/Secu/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-ui-25.3.1_fc0b2bb82113ff21cf89a3f34739e77ba1f90526.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/the-maux/Work/MyInterCepter/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="4a26a1154d053ab11aaf4c3967c42a4d66390991">
+        <dex dex="/home/the-maux/Work/MyInterCepter/app/build/intermediates/pre-dexed/debug/com.android.support-support-fragment-25.3.1_c930352348902790afcf5813d2c6cf8ad1161f3c.jar" />
     </item>
 
 </items>

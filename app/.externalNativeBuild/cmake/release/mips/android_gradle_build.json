@@ -1,9 +1,9 @@
 
 {
-	"buildFiles" : [ "/home/the-maux/Work/MyInterCepter/app/CMakeLists.txt" ],
+	"buildFiles" : [ "/home/the-maux/Secu/MyInterCepter/app/CMakeLists.txt" ],
 	"cleanCommands" : 
 	[
-		"/home/the-maux/Android/Sdk/cmake/3.6.3155560/bin/cmake --build /home/the-maux/Work/MyInterCepter/app/.externalNativeBuild/cmake/release/mips --target clean"
+		"/home/the-maux/Android/Sdk/cmake/3.6.3155560/bin/cmake --build /home/the-maux/Secu/MyInterCepter/app/.externalNativeBuild/cmake/release/mips --target clean"
 	],
 	"cppFileExtensions" : [ "cpp" ],
 	"libraries" : 
@@ -12,18 +12,18 @@
 		{
 			"abi" : "mips",
 			"artifactName" : "native-lib",
-			"buildCommand" : "/home/the-maux/Android/Sdk/cmake/3.6.3155560/bin/cmake --build /home/the-maux/Work/MyInterCepter/app/.externalNativeBuild/cmake/release/mips --target native-lib",
+			"buildCommand" : "/home/the-maux/Android/Sdk/cmake/3.6.3155560/bin/cmake --build /home/the-maux/Secu/MyInterCepter/app/.externalNativeBuild/cmake/release/mips --target native-lib",
 			"buildType" : "release",
 			"files" : 
 			[
 				
 				{
-					"flags" : "  --target=mipsel-none-linux-android --gcc-toolchain=/home/the-maux/Android/android-ndk-r15/toolchains/mips64el-linux-android-4.9/prebuilt/linux-x86_64 --sysroot=/home/the-maux/Android/android-ndk-r15/sysroot  -Dnative_lib_EXPORTS -isystem /home/the-maux/Android/android-ndk-r15/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem /home/the-maux/Android/android-ndk-r15/sources/cxx-stl/gnu-libstdc++/4.9/libs/mips/include -isystem /home/the-maux/Android/android-ndk-r15/sources/cxx-stl/gnu-libstdc++/4.9/include/backward  -isystem /home/the-maux/Android/android-ndk-r15/sysroot/usr/include/mipsel-linux-android -D__ANDROID_API__=15 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security   -O2 -DNDEBUG  -fPIC    -c ",
-					"src" : "/home/the-maux/Work/MyInterCepter/app/src/main/cpp/native-lib.cpp",
-					"workingDirectory" : "/home/the-maux/Work/MyInterCepter/app/.externalNativeBuild/cmake/release/mips"
+					"flags" : "  --target=mipsel-none-linux-android --gcc-toolchain=/home/the-maux/Android/android-ndk-r15/toolchains/mips64el-linux-android-4.9/prebuilt/linux-x86_64 --sysroot=/home/the-maux/Android/android-ndk-r15/sysroot  -Dnative_lib_EXPORTS -isystem /home/the-maux/Android/android-ndk-r15/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem /home/the-maux/Android/android-ndk-r15/sources/cxx-stl/gnu-libstdc++/4.9/libs/mips/include -isystem /home/the-maux/Android/android-ndk-r15/sources/cxx-stl/gnu-libstdc++/4.9/include/backward  -isystem /home/the-maux/Android/android-ndk-r15/sysroot/usr/include/mipsel-linux-android -D__ANDROID_API__=21 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security   -O2 -DNDEBUG  -fPIC    -c ",
+					"src" : "/home/the-maux/Secu/MyInterCepter/app/src/main/cpp/native-lib.cpp",
+					"workingDirectory" : "/home/the-maux/Secu/MyInterCepter/app/.externalNativeBuild/cmake/release/mips"
 				}
 			],
-			"output" : "/home/the-maux/Work/MyInterCepter/app/build/intermediates/cmake/release/obj/mips/libnative-lib.so",
+			"output" : "/home/the-maux/Secu/MyInterCepter/app/build/intermediates/cmake/release/obj/mips/libnative-lib.so",
 			"toolchain" : "14358435581049917050"
 		}
 	},

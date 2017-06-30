@@ -5,9 +5,6 @@ import su.sniff.cepter.globalVariable;
 
 import java.io.*;
 
-/**
- * Created by maxim on 28/06/2017.
- */
 public class                    RootProcess {
     private String              TAG = "RootProcess";
     private Process             process;
