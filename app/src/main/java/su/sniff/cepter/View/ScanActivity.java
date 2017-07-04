@@ -8,6 +8,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -232,7 +233,7 @@ public class                        ScanActivity extends Activity {
         final ArrayAdapter<String> adapter = new pictureFromOsTypeArray(this, R.layout.my_list2, R.id.label, this.lst);
         this.tvList1.setAdapter(adapter);
         this.glob_adapter = adapter;
-        ((ImageView) findViewById(R.id.imageView1)).setImageResource(R.drawable.scan2);
+        //((ImageView) findViewById(R.id.fab)).setImageResource(R.drawable.scan2);
         ExecutorService service = Executors.newCachedThreadPool();
         IPv4 iPv4 = new IPv4(globalVariable.own_ip, globalVariable.netmask);
 //        IPv4 iPv4 = new IPv4(globalVariable.own_ip + "/" + this.mask2);
@@ -275,8 +276,7 @@ public class                        ScanActivity extends Activity {
         progressBar.setVisibility(View.VISIBLE);
         progressBar.setProgress(0);
         progressBar.setMax(8500);
-        final ImageView but = (ImageView) findViewById(R.id.imageView1);
-        but.setEnabled(false);
+
         final ProgressBar progressBar2 = progressBar;
         new Thread(new Runnable() {
 
