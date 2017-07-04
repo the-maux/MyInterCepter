@@ -54,6 +54,10 @@ public class                    RootProcess {
         return new BufferedReader(new InputStreamReader(process.getInputStream()));
     }
 
+    public InputStreamReader    getInputStreamReader() {
+        return new InputStreamReader(process.getInputStream());
+    }
+
     public void                 closeProcess() {
         try {
             Log.d(TAG, this.LogID + "::Close");
