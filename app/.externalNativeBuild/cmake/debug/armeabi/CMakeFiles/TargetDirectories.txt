@@ -1,3 +1,0 @@
-D:/Work/MyInterCepter/app/.externalNativeBuild/cmake/debug/armeabi/CMakeFiles/native-lib.dir
-D:/Work/MyInterCepter/app/.externalNativeBuild/cmake/debug/armeabi/CMakeFiles/edit_cache.dir
-D:/Work/MyInterCepter/app/.externalNativeBuild/cmake/debug/armeabi/CMakeFiles/rebuild_cache.dir
