@@ -5,6 +5,11 @@ Fork-Projet IntercepterNG, reversed App
   MyInterCepter is an network map to scan and install an MITM attack to the hostanmes he discover.
   The point is the refactor all the app and after put new features
 
+#### ToInstall
+    - Cloner le dépot
+    - Ajouter son local.properties
+    - Réouvrir ce projet avec ton IDE avec "app" gradle
+
 #### TODO
   * [**X**] Clean les activity des codes doublon
   * [**X**] Utiliser un maximum les process dans l'objet RootProcess
