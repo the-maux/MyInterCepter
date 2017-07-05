@@ -46,7 +46,7 @@ public class RawActivity extends Activity {
             } else {
                 sc = " ";
             }
-            ((ImageView) RawActivity.this.findViewById(R.id.imageView2)).setImageResource(R.drawable.stop);
+            ((ImageView) RawActivity.this.findViewById(R.id.goNext)).setImageResource(R.drawable.stop);
             File fDroidSheep = new File(globalVariable.path + "/exitr.id");
             if (fDroidSheep.exists()) {
                 fDroidSheep.delete();
@@ -88,7 +88,7 @@ public class RawActivity extends Activity {
                         }
 
                         public void run() {
-                            ((ImageView) RawActivity.this.findViewById(R.id.imageView2)).setImageResource(R.drawable.start);
+                            ((ImageView) RawActivity.this.findViewById(R.id.goNext)).setImageResource(R.drawable.start);
                         }
                     }
 
@@ -184,13 +184,13 @@ public class RawActivity extends Activity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            ((ImageView) findViewById(R.id.imageView2)).setImageResource(R.drawable.start);
+            ((ImageView) findViewById(R.id.goNext)).setImageResource(R.drawable.start);
             openFileOutput("exitr.id", 0).close();
             this.sniff_process = null;
             return;
         }
         String sc;
-        ((ImageView) findViewById(R.id.imageView2)).setImageResource(R.drawable.stop);
+        ((ImageView) findViewById(R.id.goNext)).setImageResource(R.drawable.stop);
         File fDroidSheep = new File(globalVariable.path + "/exitr.id");
         if (fDroidSheep.exists()) {
             fDroidSheep.delete();
@@ -346,7 +346,7 @@ public class RawActivity extends Activity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            ((ImageView) findViewById(R.id.imageView2)).setImageResource(R.drawable.start);
+            ((ImageView) findViewById(R.id.goNext)).setImageResource(R.drawable.start);
             openFileOutput("exitr.id", 0).close();
             this.sniff_process = null;
         }

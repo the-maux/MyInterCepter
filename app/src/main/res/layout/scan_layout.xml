@@ -8,13 +8,30 @@
 			android:id="@+id/appbar"
 			android:layout_height="wrap_content"
 			android:layout_width="match_parent">
-		<android.support.v7.widget.Toolbar
-				android:layout_height="?attr/actionBarSize"
-				android:layout_width="match_parent"
-				app:layout_scrollFlags="scroll|enterAlways" app:title="Scanner" app:subtitle="Scannez votre réseau">
-			<RelativeLayout
-					android:layout_height="match_parent" android:layout_width="match_parent">
+		<RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content">
 
+			<android.support.v7.widget.Toolbar
+					android:layout_height="?attr/actionBarSize"
+					android:layout_width="match_parent"
+					app:layout_scrollFlags="scroll|enterAlways" app:title="Scanner" app:subtitle="Scannez votre réseau"
+					android:addStatesFromChildren="true">
+
+			</android.support.v7.widget.Toolbar>
+			<RelativeLayout
+					android:layout_height="match_parent" android:layout_width="wrap_content" android:gravity="right"
+			>
+
+				<ImageView android:id="@+id/arpCage" android:layout_width="45dp"
+				           android:layout_height="match_parent"
+				           android:layout_marginRight="10dp" android:src="@drawable/cage"
+				           android:layout_toLeftOf="@+id/goNext"
+				           android:layout_alignBottom="@+id/goNext" android:onClick="OnCage" android:padding="4dp"/>
+				<ImageView android:id="@+id/goNext" android:layout_width="45dp"
+				           android:layout_height="match_parent"
+				           android:src="@drawable/next" android:layout_alignBottom="@+id/imageView1"
+				           android:layout_alignParentTop="true" android:layout_alignParentRight="false"
+				           android:onClick="OnScanNext" android:layout_toLeftOf="@+id/action_settings"
+				           android:padding="8dp" android:layout_marginRight="8dp"/>
 				<ImageButton
 						android:id="@+id/action_settings"
 
@@ -23,11 +40,12 @@
 						android:background="@android:color/transparent"
 						android:src="@android:drawable/ic_menu_more"
 						android:baselineAlignBottom="false"
-						android:layout_alignParentRight="true" android:layout_marginRight="8dp"/>
+						android:layout_alignParentRight="true" android:layout_marginRight="8dp"
+						android:layout_alignParentEnd="false"/>
 
 
 			</RelativeLayout>
-		</android.support.v7.widget.Toolbar>
+		</RelativeLayout>
 
 		<android.support.design.widget.TabLayout
 				android:id="@+id/tabs"
@@ -55,7 +73,7 @@
 			app:layout_anchorGravity="bottom|right|end"
 			android:layout_marginRight="16dp"
 			android:clickable="true"
-			app:fabSize="mini" android:onClick="onScanNet" android:src="@android:drawable/ic_search_category_default"
+			app:fabSize="normal" android:onClick="onScanNet" android:src="@android:drawable/ic_search_category_default"
 			android:id="@+id/fab"/>
 
 
@@ -75,11 +93,6 @@
 			          android:id="@+id/listView1" android:layout_width="wrap_content"
 			          android:layout_height="wrap_content"
 			          android:choiceMode="multipleChoice" android:layout_below="@+id/progressBar1"/>
-			<ImageView android:id="@+id/imageView2" android:layout_width="wrap_content"
-			           android:layout_height="wrap_content"
-			           android:src="@drawable/next" android:layout_alignBottom="@+id/imageView1"
-			           android:layout_alignParentTop="true" android:layout_alignParentRight="true"
-			           android:onClick="OnScanNext"/>
 			<ProgressBar android:id="@+id/progressBar1" android:layout_width="wrap_content"
 			             android:layout_height="wrap_content"
 			             android:minHeight="10dp" android:layout_below="@+id/imageView1"
@@ -87,11 +100,6 @@
 			             android:layout_alignParentRight="true" style="?android:attr/progressBarStyleHorizontal"/>
 
 
-			<ImageView android:id="@+id/imageView" android:layout_width="wrap_content"
-			           android:layout_height="wrap_content"
-			           android:layout_marginRight="10dp" android:src="@drawable/cage"
-			           android:layout_toLeftOf="@+id/imageView2"
-			           android:layout_alignBottom="@+id/imageView2" android:onClick="OnCage"/>
 		</RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
