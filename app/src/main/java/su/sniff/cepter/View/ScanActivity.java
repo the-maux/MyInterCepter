@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.github.clans.fab.FloatingActionButton;
 import su.sniff.cepter.*;
 import su.sniff.cepter.Controller.IPv4;
 import su.sniff.cepter.Controller.NetUtils;
@@ -51,7 +52,8 @@ public class                        ScanActivity extends Activity {
     private int                     mask2;
     private String                  origin_str, monitor;
     private ListView                hostsListView;
-    private ProgressBar             progressBar;
+//    private ProgressBar             progressBar;
+    private FloatingActionButton    progressBar;
 
     public void                     onCreate(Bundle savedInstanceState) {
         IOException e;
@@ -60,7 +62,9 @@ public class                        ScanActivity extends Activity {
         setContentView(R.layout.scan_layout);
         getWindow().setFeatureDrawableResource(3, R.drawable.ico);
         this.itemToggled = new boolean[2048];
-        progressBar = (ProgressBar) findViewById(R.id.progressBar1);
+        //progressBar = (ProgressBar) findViewById(R.id.progressBar1);
+        progressBar = (FloatingActionButton) findViewById(R.id.fab);
+
         Arrays.fill(this.itemToggled, false);
         monitor = getIntent().getExtras().getString("Key_String");
         this.origin_str = monitor;
@@ -101,7 +105,7 @@ public class                        ScanActivity extends Activity {
             }
             this.hostsListView = (ListView) findViewById(R.id.listView1);
         }
-        progressBar.setVisibility(View.GONE);
+       // progressBar.setVisibility(View.GONE);
     }
 
     private static Integer          getIPAsInteger(String ip) throws Exception {
@@ -246,12 +250,12 @@ public class                        ScanActivity extends Activity {
     private void                    progressAnimation() {
         Log.d(TAG, "progress Animation");
         progressBar.setVisibility(View.VISIBLE);
-        progressBar.setProgress(0);
-        progressBar.setMax(8500);
+        progressBar.setProgress(0, true);
+        progressBar.setMax(4000);
         new Thread(new Runnable() {
             public void run() {
                 int progress = 0;
-                while (progress <= 8500) {
+                while (progress <= 4000) {
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException e) {
@@ -261,7 +265,7 @@ public class                        ScanActivity extends Activity {
                     final int prog2 = progress;
                     mInstance.runOnUiThread(new Runnable() {
                         public void run() {
-                            progressBar.setProgress(prog2);
+                            progressBar.setProgress(prog2, true);
                         }
                     });
                 }

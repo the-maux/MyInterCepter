@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:app="http://schemas.android.com/apk/res-auto"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" xmlns:fab="http://schemas.android.com/tools">
 	<android.support.design.widget.AppBarLayout
 			android:id="@+id/appbar"
 			android:layout_height="wrap_content"
@@ -18,14 +18,27 @@
 
 			</android.support.v7.widget.Toolbar>
 			<RelativeLayout
-					android:layout_height="match_parent" android:layout_width="wrap_content" android:gravity="right"
-			>
+					android:layout_height="match_parent" android:layout_width="wrap_content"
+					android:gravity="right"
+					android:focusable="true"
+					android:focusableInTouchMode="true">
 
+				<android.support.design.widget.TextInputLayout
+						android:layout_width="150dp"
+						android:layout_height="wrap_content" android:layout_toLeftOf="@+id/arpCage"
+						android:layout_margin="4dp" android:background="@color/cardview_shadow_start_color">
+
+					<EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Rechercher" android:inputType="text|textShortMessage|textFilter"/>
+				</android.support.design.widget.TextInputLayout>
 				<ImageView android:id="@+id/arpCage" android:layout_width="45dp"
-				           android:layout_height="match_parent"
-				           android:layout_marginRight="10dp" android:src="@drawable/cage"
-				           android:layout_toLeftOf="@+id/goNext"
-				           android:layout_alignBottom="@+id/goNext" android:onClick="OnCage" android:padding="4dp"/>
+						   android:layout_height="match_parent"
+						   android:layout_marginRight="10dp" android:src="@drawable/cage"
+						   android:layout_toLeftOf="@+id/goNext"
+						   android:layout_alignBottom="@+id/goNext" android:onClick="OnCage" android:padding="4dp"
+						   android:layout_marginLeft="8dp"/>
 				<ImageView android:id="@+id/goNext" android:layout_width="45dp"
 				           android:layout_height="match_parent"
 				           android:src="@drawable/next" android:layout_alignBottom="@+id/imageView1"
@@ -66,15 +79,24 @@
 					android:text="Scan port "/>
 		</android.support.design.widget.TabLayout>
 	</android.support.design.widget.AppBarLayout>
-	<android.support.design.widget.FloatingActionButton
+
+
+	<com.github.clans.fab.FloatingActionButton
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"
 			app:layout_anchor="@id/appbar"
 			app:layout_anchorGravity="bottom|right|end"
 			android:layout_marginRight="16dp"
 			android:clickable="true"
-			app:fabSize="normal" android:onClick="onScanNet" android:src="@android:drawable/ic_search_category_default"
-			android:id="@+id/fab"/>
+			android:onClick="onScanNet"
+            android:src="@android:drawable/ic_search_category_default"
+			android:id="@+id/fab"
+
+            app:fab_showShadow="false"
+            app:fab_colorNormal="@android:color/holo_blue_light"
+            app:fab_progress_showBackground="false"
+
+            app:fab_elevationCompat="4dp"/>
 
 
 		<RelativeLayout
@@ -82,17 +104,18 @@
 				android:layout_width="match_parent"
 				android:layout_height="match_parent" android:id="@+id/layout">
 
-
-			<TextView android:textColor="@color/green"
-			          android:layout_gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end"
-			          android:id="@+id/Message" android:layout_width="wrap_content"
-			          android:layout_height="wrap_content"
-			          android:text="Scan Network" android:layout_alignParentBottom="true"
-			          android:layout_centerHorizontal="true"/>
 			<ListView android:layout_gravity="left|right|center_horizontal|fill_horizontal|center|fill|start|end"
-			          android:id="@+id/listView1" android:layout_width="wrap_content"
-			          android:layout_height="wrap_content"
-			          android:choiceMode="multipleChoice" android:layout_below="@+id/progressBar1"/>
+					  android:id="@+id/listView1" android:layout_width="wrap_content"
+					  android:layout_height="wrap_content"
+					  android:layout_above="@+id/Message"
+					  android:choiceMode="multipleChoice" android:layout_below="@+id/progressBar1"/>
+			<TextView android:textColor="@color/green"
+					  android:id="@+id/Message" android:layout_width="match_parent"
+					  android:layout_height="wrap_content"
+					  android:text="192.168.10.24\n Non LMFR &quot;SFR-4328', GW: 192.168.0.1/255.255.255.0\nVendor:Fonction non active" android:layout_alignParentBottom="true"
+					  android:layout_centerHorizontal="true" android:padding="8dp"
+					  android:background="@color/cardview_shadow_end_color"/>
+
 			<ProgressBar android:id="@+id/progressBar1" android:layout_width="wrap_content"
 			             android:layout_height="wrap_content"
 			             android:minHeight="10dp" android:layout_below="@+id/imageView1"
