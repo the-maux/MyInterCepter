@@ -117,7 +117,7 @@ public class WebActivity extends Activity {
             globalVariable.lock = 1;
         }
         globalVariable.lock = 0;
-        this.tvList = (ListView) findViewById(R.id.listView1);
+        this.tvList = (ListView) findViewById(R.id.listHosts);
         this.tvList.setAdapter(globalVariable.adapter);
         new Thread(new C01081()).start();
         this.tvList.setOnItemLongClickListener(new C01092());

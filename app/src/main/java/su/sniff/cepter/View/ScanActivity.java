@@ -89,7 +89,7 @@ public class                        ScanActivity extends Activity {
     private void                    initMonitor(WifiInfo wifiInfo) throws Exception{
         monitor = getIntent().getExtras().getString("Key_String");
         if (!monitor.contains("WiFi")) {
-            monitor += "\nNon LMFR: " + wifiInfo.getSSID() + ", GW: " + globalVariable.gw_ip + "/" + globalVariable.netmask + "\n";
+            monitor += "\nNon LMFR: " + wifiInfo.getSSID() + ", GW: " + globalVariable.gw_ip + "/" + globalVariable.netmask;
         }
         ((TextView)findViewById(R.id.Message)).setText(monitor);
         if (Integer.bitCount(IpUtils.getIPAsInteger(globalVariable.netmask)) < 24) {
@@ -104,6 +104,7 @@ public class                        ScanActivity extends Activity {
 
     private void                    initHostListView() {
         hostsListView.setChoiceMode(2);
+        //Select or Unselect
         hostsListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View itemClicked, int position, long id) {
@@ -113,6 +114,7 @@ public class                        ScanActivity extends Activity {
                 imageView1.setImageResource(ScanActivity.this.itemToggled[position] ? android.R.drawable.checkbox_on_background : android.R.drawable.checkbox_off_background);
             }
         });
+        //Start PortScan
         hostsListView.setOnItemLongClickListener(new OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -120,13 +122,10 @@ public class                        ScanActivity extends Activity {
                 int offset = it.indexOf(" ");
                 if (offset > 0) {
                     String index = it.substring(0, offset);
-                    try {
-                        Intent i = new Intent(mInstance, PortScan.class);
-                        i.putExtra("Key_Int", index);
-                        mInstance.startActivityForResult(i, 1);
-                        globalVariable.lock = 0;
-                    } catch (NumberFormatException e) {
-                    }
+                    Intent i = new Intent(mInstance, PortScan.class);
+                    i.putExtra("Key_Int", index);
+                    mInstance.startActivityForResult(i, 1);
+                    globalVariable.lock = 0;
                 }
                 return true;
             }

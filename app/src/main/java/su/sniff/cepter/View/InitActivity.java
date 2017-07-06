@@ -29,6 +29,7 @@ public class                    InitActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(rootView);
         initXml(rootView);
+
     }
 
     private void                initXml(View rootView) {
@@ -66,6 +67,7 @@ public class                    InitActivity extends Activity {
             monitor.setText("Error Interupted");
             e.printStackTrace();
         }
+        monitor(getMsgFromJni());
     }
 
     private void                buildPath() {
@@ -227,4 +229,9 @@ public class                    InitActivity extends Activity {
             }
         });
     }
+
+    static {
+        System.loadLibrary("native-lib");
+    }
+    public native String        getMsgFromJni();
 }

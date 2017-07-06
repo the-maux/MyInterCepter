@@ -150,7 +150,7 @@ public class RawActivity extends Activity {
         requestWindowFeature(3);
         setContentView(R.layout.raw_layout);
         getWindow().setFeatureDrawableResource(3, R.drawable.shark);
-        this.tvList = (ListView) findViewById(R.id.listView1);
+        this.tvList = (ListView) findViewById(R.id.listHosts);
         ArrayList<String> lst = new ArrayList();
         this.mCtx = this;
         this.cmd = getIntent().getExtras().getString("Key_String");

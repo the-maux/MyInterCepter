@@ -1,9 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" android:layout_width="match_parent" android:layout_height="match_parent">
-    <ProgressBar android:id="@+id/progressBar1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minHeight="10dp" android:layout_alignParentLeft="true" android:layout_alignParentRight="true"  />
-    <ScrollView android:id="@+id/scrollview" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_weight="1.0" android:layout_below="@+id/progressBar1">
-        <TextView android:id="@+id/textView1"  android:scrollbars="vertical" android:clickable="false" android:layout_width="match_parent" android:layout_height="match_parent" android:editable="false" android:layout_alignParentLeft="true" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" >
-            <requestFocus />
-        </TextView>
-    </ScrollView>
-</RelativeLayout>
+<android.support.design.widget.CoordinatorLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" xmlns:fab="http://schemas.android.com/tools">
+	<android.support.design.widget.AppBarLayout
+			android:id="@+id/appbar"
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent">
+		<RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content">
+
+			<android.support.v7.widget.Toolbar
+					android:layout_height="?attr/actionBarSize"
+					android:layout_width="match_parent"
+					app:layout_scrollFlags="scroll|enterAlways" app:title="Port Scan" app:subtitle="Scannez les ports d'un host"
+					android:addStatesFromChildren="true">
+
+			</android.support.v7.widget.Toolbar>
+			<RelativeLayout
+					android:layout_height="match_parent" android:layout_width="wrap_content"
+					android:gravity="right"
+					android:focusable="true"
+					android:focusableInTouchMode="true">
+
+				<android.support.design.widget.TextInputLayout
+						android:layout_width="150dp"
+						android:layout_height="wrap_content" android:layout_toLeftOf="@+id/arpCage"
+						android:layout_margin="4dp" android:background="@color/cardview_shadow_start_color">
+
+					<EditText
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:hint="Rechercher" android:inputType="text|textShortMessage|textFilter"/>
+				</android.support.design.widget.TextInputLayout>
+				<ImageView android:id="@+id/arpCage" android:layout_width="45dp"
+				           android:layout_height="match_parent"
+				           android:layout_marginRight="10dp" android:src="@drawable/cage"
+				           android:layout_toLeftOf="@+id/action_settings"
+				           android:layout_alignBottom="@+id/goNext" android:onClick="OnCage" android:padding="4dp"
+				           android:layout_marginLeft="8dp"/>
+				<ImageButton
+						android:id="@+id/action_settings"
+						android:layout_width="wrap_content"
+						android:layout_height="50dp"
+						android:background="@android:color/transparent"
+						android:src="@android:drawable/ic_menu_more"
+						android:baselineAlignBottom="false"
+						android:layout_alignParentRight="true" android:layout_marginRight="8dp"
+						android:layout_alignParentEnd="false"/>
+
+
+			</RelativeLayout>
+		</RelativeLayout>
+
+		<android.support.design.widget.TabLayout
+				android:id="@+id/tabs"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:tabMode="scrollable">
+			<android.support.design.widget.TabItem
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:text="SCAN"/>
+			<android.support.design.widget.TabItem
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:text="ARPCage"/>
+			<android.support.design.widget.TabItem
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:text="Scan port "/>
+		</android.support.design.widget.TabLayout>
+	</android.support.design.widget.AppBarLayout>
+
+
+	<com.github.clans.fab.FloatingActionButton
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:layout_marginRight="16dp"
+			android:clickable="true"
+			android:onClick="onFabClick"
+			android:id="@+id/fab"
+			android:src="@android:drawable/ic_menu_search"
+			app:layout_anchor="@id/appbar"
+			app:layout_anchorGravity="bottom|right|end"
+			app:fab_showShadow="false"
+			app:fab_colorNormal="@android:color/holo_blue_light"
+			app:fab_colorPressed="@android:color/holo_blue_bright"
+			app:fab_progress_showBackground="false"
+			app:fab_elevationCompat="4dp"/>
+
+
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	                android:layout_width="match_parent"
+	                android:layout_height="match_parent">
+
+		<ScrollView android:id="@+id/scrollview"
+		            android:layout_width="match_parent"
+		            android:layout_height="match_parent"
+		            android:layout_weight="1.0"
+		            android:layout_below="@+id/progressBar1">
+
+			<TextView android:id="@+id/textView1"
+			          android:scrollbars="vertical"
+			          android:layout_width="match_parent"
+			          android:layout_height="match_parent"
+			          android:layout_alignParentLeft="true"
+			          android:layout_alignParentRight="true"
+			          android:layout_alignParentBottom="true">
+				<requestFocus/>
+			</TextView>
+		</ScrollView>
+	</RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>
+
+
+
+

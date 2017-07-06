@@ -73,7 +73,7 @@ public class DNSSpoofing extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dns_layout);
         this.arrayList = new ArrayList();
-        this.tvList1 = (ListView) findViewById(R.id.listView1);
+        this.tvList1 = (ListView) findViewById(R.id.listHosts);
         this.mySwitch = (CheckBox) findViewById(R.id.checkBox);
         if (globalVariable.dnss == 1) {
             this.mySwitch.setChecked(true);

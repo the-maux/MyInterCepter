@@ -74,7 +74,7 @@ public class InjectActivity extends Activity {
             globalVariable.lock = 1;
         }
         this.arrayList = new ArrayList();
-        this.tvList1 = (ListView) findViewById(R.id.listView1);
+        this.tvList1 = (ListView) findViewById(R.id.listHosts);
         this.adapter = new ArrayAdapter(getApplicationContext(), 17367048, this.arrayList);
         this.tvList1.setAdapter(this.adapter);
         this.tvList1.setOnItemLongClickListener(new C00551());
