@@ -18,18 +18,22 @@ import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
 
 import java.io.*;
+import java.util.Arrays;
 
 public class                    InitActivity extends Activity {
     private String              TAG = "InitActivity";
     private InitActivity        mInstance = this;
     private TextView            monitor;
+    static {
+        System.loadLibrary("native-lib");
+    }
 
     public void                 onCreate(Bundle savedInstanceState) {
         View rootView = LayoutInflater.from(this).inflate(R.layout.init_acitivty, null);
         super.onCreate(savedInstanceState);
         setContentView(rootView);
         initXml(rootView);
-
+        new RootProcess("Init").closeProcess();
     }
 
     private void                initXml(View rootView) {
@@ -67,7 +71,7 @@ public class                    InitActivity extends Activity {
             monitor.setText("Error Interupted");
             e.printStackTrace();
         }
-        monitor(getMsgFromJni());
+//        monitor(stringFromJNI());
     }
 
     private void                buildPath() {
@@ -75,48 +79,6 @@ public class                    InitActivity extends Activity {
         Log.d(TAG, "path:" + globalVariable.path);
         globalVariable.PCAP_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
         monitor.setText("Building Path");
-    }
-
-    private void                buildFiles() throws IOException, InterruptedException {
-        FileOutputStream        out;
-        byte[]                  bufferDroidSheep = new byte[64];
-
-        clearingTmpFiles();
-        InputStream cepter = getCepterRessource();
-        File cepterFile = new File(globalVariable.path + "/cepter");
-        if (cepterFile.exists() && cepterFile.canExecute()) {
-            Log.d(TAG, "cepter exist");
-        } else {
-            cepterFile.delete();
-            monitor.setText("Building cepter modules");
-            Log.d(TAG, "Building cepter modules");
-            out = openFileOutput("cepter", 0);
-            while (cepter.read(bufferDroidSheep) > -1) {
-                out.write(bufferDroidSheep);
-            }
-            out.flush();
-            out.close();
-            cepterFile.setExecutable(true, false);
-        }
-
-        File busyboxFile = new File(globalVariable.path + "/busybox");
-        if (busyboxFile.exists() && busyboxFile.canExecute()) {
-            Log.d(TAG, "Busybox exist and can be executed");
-        } else {
-            Log.d(TAG, "Building busybox");
-            busyboxFile.delete();
-            monitor.setText("Building busybox");
-            out = openFileOutput("busybox", Context.MODE_PRIVATE);
-            ObjectOutputStream oos = new ObjectOutputStream(out);
-            InputStream su = getResources().openRawResource(R.raw.busybox);
-            while (su.read(bufferDroidSheep) > -1) {
-                oos.write(bufferDroidSheep);
-            }
-            oos.flush();
-            oos.close();
-            cepterFile.setExecutable(true, false);
-        }
-        new RootProcess("Kill cepter").exec("killall cepter").closeProcess();
     }
 
     private void                initInfo() {
@@ -164,7 +126,7 @@ public class                    InitActivity extends Activity {
                 break;
             }
         } catch (IOException e222) {
-            Toast.makeText(getApplicationContext(), "Broken pipe! Reinstall supersu and busybox!", 1).show();
+            Toast.makeText(getApplicationContext(), "Broken pipe! Reinstall supersu and busybox!", Toast.LENGTH_SHORT).show();
             e222.getStackTrace();
         } catch (InterruptedException e322) {
             e322.getStackTrace();
@@ -181,24 +143,6 @@ public class                    InitActivity extends Activity {
         monitor("Get network Information");
         process.waitFor();
         return process;
-    }
-
-    private InputStream         getCepterRessource() {
-        InputStream             cepter;
-
-        if (VERSION.SDK_INT < 21) {
-            cepter = getResources().openRawResource(R.raw.cepter_android_14_armeabi);
-        } else {
-            cepter = getResources().openRawResource(R.raw.cepter_android_21_armeabi);
-            if (Build.CPU_ABI.contains("x86")) {
-                cepter = getResources().openRawResource(R.raw.cepter_android_21_x86);
-            }
-        }
-        if (Build.CPU_ABI.contains("arm64")) {
-            cepter = getResources().openRawResource(R.raw.cepter_android_21_arm64_v8a);
-        }
-        Log.d(TAG, "Return Cepter ressource");
-        return cepter;
     }
 
     private void                clearingTmpFiles() {
@@ -221,6 +165,88 @@ public class                    InitActivity extends Activity {
         monitor.setText("Clearing previous Data over");
     }
 
+    private InputStream         getCepterRessource() {
+        InputStream             cepter;
+
+        if (VERSION.SDK_INT < 21) {
+            cepter = getResources().openRawResource(R.raw.cepter_android_14_armeabi);
+        } else {
+            cepter = getResources().openRawResource(R.raw.cepter_android_21_armeabi);
+            if (Build.CPU_ABI.contains("x86")) {
+                cepter = getResources().openRawResource(R.raw.cepter_android_21_x86);
+            }
+        }
+        if (Build.CPU_ABI.contains("arm64")) {
+            cepter = getResources().openRawResource(R.raw.cepter_android_21_arm64_v8a);
+        }
+        Log.d(TAG, "Return Cepter ressource");
+        return cepter;
+    }
+
+    private void                buildFile(String nameFile, int ressource) throws IOException, InterruptedException {
+        File file = new File(globalVariable.path + "/" + nameFile);
+        //if (file.exists() && file.canExecute()) {
+        //    Log.d(TAG, nameFile + " exist and can be executed");
+        //} else {
+        file.delete();
+        monitor.setText("Building " + nameFile);
+
+        int size;
+        InputStream inputStream = getResources().openRawResource(ressource);
+        int sizeOfInputStram = inputStream.available();
+        byte[] bufferDroidSheep = new byte[sizeOfInputStram];
+        Arrays.fill( bufferDroidSheep, (byte) 0 );
+        size = inputStream.read(bufferDroidSheep, 0, sizeOfInputStram);
+        FileOutputStream out = openFileOutput(nameFile, Context.MODE_PRIVATE);
+        //ObjectOutputStream oos = new ObjectOutputStream(out);
+        out.write(bufferDroidSheep, 0, size);
+        out.flush();
+        out.close();
+        inputStream.close();
+        out.close();
+        Log.d(TAG, "buildFile " + nameFile + "(" + sizeOfInputStram + "octet) and write :" + size);
+        //}
+        file.setExecutable(true, false);
+    }
+
+    private void                buildFiles() throws IOException, InterruptedException {
+        FileOutputStream        out;
+        byte[]                  bufferDroidSheep = new byte[64];
+
+        clearingTmpFiles();
+        InputStream cepter = getCepterRessource();
+        File cepterFile = new File(globalVariable.path + "/cepter");
+        if (cepterFile.exists() && cepterFile.canExecute()) {
+            Log.d(TAG, "cepter exist");
+        } else {
+            cepterFile.delete();
+            monitor.setText("Building cepter modules");
+            Log.d(TAG, "Building cepter modules");
+            out = openFileOutput("cepter", 0);
+            while (cepter.read(bufferDroidSheep) > -1) {
+                out.write(bufferDroidSheep);
+            }
+            out.flush();
+            out.close();
+            cepter.close();
+        }
+        cepterFile.setExecutable(true, false);
+        buildFile("busybox", R.raw.busybox);
+        buildFile("tcpdump", R.raw.tcpdump);
+        buildFile("hydra", R.raw.hydra);
+        buildFile("usernames", R.raw.usernames);
+        buildFile("arpspoof", R.raw.arpspoof);
+        buildFile("ettercap_archive", R.raw.ettercap_archive);
+        buildFile("archive_nmap", R.raw.nmap);
+        new RootProcess("UNZIP FILES", globalVariable.path)
+                .exec("./busybox unzip ettercap_archive")
+                .exec("./busybox unzip archive_nmap")
+                .exec("chmod 777 ./nmap/*")
+                .exec("chmod 777 ./*")
+                .exec("killall cepter")
+                .closeProcess();
+    }
+
     private void                monitor(final String log) {
         mInstance.runOnUiThread(new Runnable() {
             @Override
@@ -230,8 +256,5 @@ public class                    InitActivity extends Activity {
         });
     }
 
-    static {
-        System.loadLibrary("native-lib");
-    }
-    public native String        getMsgFromJni();
+    public native String        stringFromJNI();
 }
