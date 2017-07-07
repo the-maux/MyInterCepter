@@ -146,11 +146,10 @@ public class                        ScanActivity extends Activity {
                         if (read != null) {
                             int ipo = read.indexOf(32);
                             if (ipo > 0) {
+                                //TODO: Build Stack of Client
                                 // Format : 10.16.186.3 	(-) \n [D8-FC-93-26-D4-EB] [Windows 7\8\10] : Intel Corporate \n
-                                final String z2 = read.replace(": ", "\n").replace(";", ":");
-                                final int c2 = rcx;
-                                sortAdapterHosts(z2, c2, adapter);
-                                rcx++;
+                                final String host = read.replace(": ", "\n").replace(";", ":");
+                                sortAdapterHosts(host, rcx++, adapter);
                             }
                         } else {
                             bufferedReader2.close();
@@ -168,13 +167,13 @@ public class                        ScanActivity extends Activity {
     /**
      * Trie la list des host par IP
      * @param host1
-     * @param host2
+     * @param index
      * @param adapter
      */
-    private void                    sortAdapterHosts(final String host1, final int host2, final ArrayAdapter<String> adapter) { // Wtf is that ?
+    private void                    sortAdapterHosts(final String host1, final int index, final ArrayAdapter<String> adapter) { // Wtf is that ?
         mInstance.runOnUiThread(new Runnable() {
             public void run() {
-                lst.add(host2, host1);
+                lst.add(index, host1);
                 adapter.sort(new Comparator<Object>() {
                     @Override
                     public int compare(Object o1, Object o2) {
