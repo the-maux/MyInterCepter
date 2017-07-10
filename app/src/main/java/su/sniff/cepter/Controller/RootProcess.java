@@ -59,15 +59,16 @@ public class                    RootProcess {
     }
 
     public void                 closeProcess() {
+        closeDontWait();
+        waitFor();
+    }
+    public void                 closeDontWait() {
         try {
             Log.d(TAG, this.LogID + "::Close");
             os.writeBytes("exit\n");
             os.flush();
             os.close();
-            process.waitFor();
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

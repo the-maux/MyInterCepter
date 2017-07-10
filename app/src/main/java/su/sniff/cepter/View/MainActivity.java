@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -31,30 +30,28 @@ import java.util.regex.Pattern;
 
 import su.sniff.cepter.*;
 import su.sniff.cepter.Controller.RootProcess;
-import su.sniff.cepter.Misc.CookieThing;
-import su.sniff.cepter.Misc.Interceptor;
+import su.sniff.cepter.Misc.IntercepterReader;
+import su.sniff.cepter.Misc.InterceptorFileSelected;
 import su.sniff.cepter.Utils.Net.IpTablesConfStrippedMode;
 import su.sniff.cepter.Utils.OpenFileDialog;
 import su.sniff.cepter.Utils.SaveFileDialog;
 import su.sniff.cepter.Utils.SaveFileDialog.OnNewFileSelectedListener;
 
 public class                    MainActivity extends Activity {
-    static TextView             tvHello;
-    static ListView             tvList;
-    String TAG = "MainActivity";
-    String cmd;
-    String cmd2;
-    Activity mActivity;
-    public Context mCtx;
-    public Process sniff_process = null;
+    private MainActivity        mInstance = this;
+    private String              TAG = "MainActivity";
+    private static TextView     monitorIntercepter;
+    private String              cmd;
+    private String              cmd2;
+    public RootProcess          sniff_process = null;
 
 
-    class OnNewFileSelectedL implements OnNewFileSelectedListener {
+    class                       OnNewFileSelectedL implements OnNewFileSelectedListener {
         OnNewFileSelectedL() {
         }
 
         public void onNewFileSelected(File f) {
-            String buf = MainActivity.tvHello.getText().toString();
+            String buf = MainActivity.monitorIntercepter.getText().toString();
             try {
                 FileWriter writer = new FileWriter(f);
                 writer.append(buf);
@@ -66,14 +63,12 @@ public class                    MainActivity extends Activity {
         }
     }
 
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(3);
         setContentView(R.layout.activity_main);
         getWindow().setFeatureDrawableResource(3, R.drawable.ico);
-        tvHello = (TextView) findViewById(R.id.editText1);
-        this.mActivity = this;
-        this.mCtx = this;
+        monitorIntercepter = (TextView) findViewById(R.id.editText1);
         globalVariable.adapter = new ArrayAdapter<String>(this, R.layout.raw_list2, R.id.label, globalVariable.cookies_domain) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
@@ -102,30 +97,12 @@ public class                    MainActivity extends Activity {
         Log.d(TAG, "this.cmd:" + this.cmd);
         this.cmd2 = getIntent().getExtras().getString("Key_String_origin");
         Log.d(TAG, "this.cmd:" + this.cmd2);
-        tvHello.setTypeface(Typeface.MONOSPACE);
+        monitorIntercepter.setTypeface(Typeface.MONOSPACE);
     }
 
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode != 4) {
-            return super.onKeyDown(keyCode, event);
-        }
-        try {
-            openFileOutput("exits.id", 0).close();
-            openFileOutput("exitr.id", 0).close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e2) {
-            e2.printStackTrace();
-        }
-        Log.d(TAG, "at the end");
-        Intent i = new Intent(this.mCtx, ScanActivity.class);
-        i.putExtra("Key_String", this.cmd2);
-        startActivity(i);
-        finish();
-        return false;
-    }
 
-    public void onInterceptorRunClick(View v) throws IOException {
+    public void                 onInterceptorRunClick(View v) throws IOException {
+        RootProcess process;
         if (this.sniff_process != null) {
             try {
                 Thread.sleep(1000);
@@ -136,9 +113,9 @@ public class                    MainActivity extends Activity {
             openFileOutput("exits.id", 0).close();
             this.sniff_process = null;
             if (globalVariable.strip == 1) {
-                RootProcess rootProcess = new RootProcess("globalVariable.strip=1");
-                rootProcess.exec("iptables -F;iptables -X;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT");
-                rootProcess.closeProcess();
+                process = new RootProcess("globalVariable.strip=1");
+                process.exec("iptables -F;iptables -X;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT");
+                process.closeProcess();
             }
             Log.d(TAG, "onInterceptorRunClick::typical over with strip");
             return;
@@ -151,7 +128,7 @@ public class                    MainActivity extends Activity {
         } else {
             sc = " ";
         }
-        tvHello.setTextSize(2, (float) globalVariable.raw_textsize);
+        monitorIntercepter.setTextSize(2, (float) globalVariable.raw_textsize);
         ((TextView) findViewById(R.id.textView1)).setTextSize(2, (float) globalVariable.raw_textsize);
         File fDroidSheep = new File(globalVariable.path + "/exits.id");
         if (fDroidSheep.exists()) {
@@ -162,7 +139,7 @@ public class                    MainActivity extends Activity {
             new IpTablesConfStrippedMode();
         } else {
             Log.d(TAG, "iptables Conf as partially striped");
-            RootProcess process = new RootProcess("IpTableStriped");
+            process = new RootProcess("IpTableStriped");
             process.exec("iptables -F;iptables -X;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT");
             process.exec("echo '1' > /proc/sys/net/ipv4/ip_forward");
             if (globalVariable.dnss == 1) {
@@ -170,23 +147,18 @@ public class                    MainActivity extends Activity {
             }
             process.closeProcess();
         }
-
-        final Process process = Runtime.getRuntime().exec("su", null, new File(globalVariable.path + ""));
-        DataOutputStream os = new DataOutputStream(process.getOutputStream());
-        os.writeBytes(globalVariable.path + "/cepter " + Integer.toString(globalVariable.adapt_num) + " " + Integer.toString(globalVariable.resurrection) + sc + this.cmd + "\n");
-        os.flush();
-        os.writeBytes("exit\n");
-        os.flush();
-        os.close();
+        process = new RootProcess("Start ARP", globalVariable.path + "");
+        process.exec(globalVariable.path + "/cepter " + Integer.toString(globalVariable.adapt_num) + " " + Integer.toString(globalVariable.resurrection) + sc + this.cmd);
+        process.exec("exit").closeDontWait();
         this.sniff_process = process;
-        new CookieThing(this, tvHello, process);
+        new IntercepterReader(this, monitorIntercepter, process);
     }
 
-    public void OnCLS(View v) {
-        tvHello.setText(BuildConfig.FLAVOR);
+    public void                 OnCLS(View v) {
+        monitorIntercepter.setText(BuildConfig.FLAVOR);
     }
 
-    public void OnBack(View v) throws IOException {
+    public void                 OnBack(View v) throws IOException {
         if (this.sniff_process != null) {
             openFileOutput("exits.id", 0).close();
             openFileOutput("exitr.id", 0).close();
@@ -197,25 +169,25 @@ public class                    MainActivity extends Activity {
                 e.printStackTrace();
             }
         }
-        Intent i = new Intent(this.mCtx, ScanActivity.class);
+        Intent i = new Intent(mInstance, ScanActivity.class);
         i.putExtra("Key_String", this.cmd2);
         startActivity(i);
         finish();
     }
 
-    public void OnSave(View v) {
+    public void                 OnSave(View v) {
         new SaveFileDialog(this, Environment.getExternalStorageDirectory().getAbsolutePath(), new String[]{".txt"}, new OnNewFileSelectedL()).show();
     }
 
-    public void OnOpenCap(View v) {
-        new OpenFileDialog(this, globalVariable.PCAP_PATH, new String[]{".pcap"}, new Interceptor(this, tvHello)).show();
+    public void                 OnOpenCap(View v) {
+        new OpenFileDialog(this, globalVariable.PCAP_PATH, new String[]{".pcap"}, new InterceptorFileSelected(this, monitorIntercepter)).show();
     }
 
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void                 onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
 
-    public void OnDefend(View v) throws IOException, InterruptedException {
+    public void                 OnDefend(View v) throws IOException, InterruptedException {
         String[] maclist = new String[MotionEventCompat.ACTION_MASK];
         String[] iplist = new String[MotionEventCompat.ACTION_MASK];
         BufferedReader bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"));
@@ -244,32 +216,22 @@ public class                    MainActivity extends Activity {
             int a = 0;
             while (a < c) {
                 if (maclist[a].equals(maclist[i]) && a != i && globalVariable.gw_ip.equals(iplist[i])) {
-                    tvHello.append("Warning! Gateway poisoned by " + iplist[a] + " - " + maclist[a] + "\n");
+                    monitorIntercepter.append("Warning! Gateway poisoned by " + iplist[a] + " - " + maclist[a] + "\n");
                     found = true;
-                    Process process2 = Runtime.getRuntime().exec("su", null, new File(globalVariable.path + ""));
-                    DataOutputStream dataOutputStream = new DataOutputStream(process2.getOutputStream());
-                    bufferedReader = new BufferedReader(new InputStreamReader(process2.getInputStream()));
+                    RootProcess process = new RootProcess("onDefend", globalVariable.path + "");
                     Log.d(TAG, "Exec: cepter " + Integer.toString(globalVariable.adapt_num) + " -r " + globalVariable.gw_ip);
-                    dataOutputStream.writeBytes(globalVariable.path + "/cepter " + Integer.toString(globalVariable.adapt_num) + " -r " + globalVariable.gw_ip + "\n");
-                    dataOutputStream.flush();
-                    dataOutputStream.writeBytes("exit\n");
-                    dataOutputStream.flush();
-                    dataOutputStream.close();
+                    process.exec(globalVariable.path + "/cepter " + Integer.toString(globalVariable.adapt_num) + " -r " + globalVariable.gw_ip);
+                    process.exec("exit");
+                    bufferedReader = process.getReader();
                     String read = bufferedReader.readLine();
-                    String m = read.substring(read.indexOf(58) + 1, read.length());
+                    String mac = read.substring(read.indexOf(58) + 1, read.length());
                     bufferedReader.close();
-                    process2.waitFor();
-                    m = m.replaceAll("-", ":");
-                    tvHello.append("Restoring original mac - " + m + "\n");
-                    Process process3 = Runtime.getRuntime().exec("su", null, new File("/system/bin"));
-                    dataOutputStream = new DataOutputStream(process3.getOutputStream());
-                    Log.d(TAG, "LD_LIBRARY_PATH=" + globalVariable.path + " " + globalVariable.path +"/busybox arp -s " + globalVariable.gw_ip + " " + m);
-                    dataOutputStream.writeBytes("LD_LIBRARY_PATH=" + globalVariable.path + " " + globalVariable.path +"/busybox arp -s " + globalVariable.gw_ip + " " + m + "\n");
-                    dataOutputStream.flush();
-                    dataOutputStream.writeBytes("exit\n");
-                    dataOutputStream.flush();
-                    dataOutputStream.close();
-                    process3.waitFor();
+                    process.waitFor();
+                    mac = mac.replaceAll("-", ":");
+                    monitorIntercepter.append("Restoring original mac - " + mac + "\n");
+                    process = new RootProcess("BUSYBOX", "/system/bin");
+                    process.exec("LD_LIBRARY_PATH=" + globalVariable.path + " " + globalVariable.path +"/busybox arp -s " + globalVariable.gw_ip + " " + mac);
+                    process.closeProcess();
                     break;
                 }
                 a++;
@@ -277,7 +239,28 @@ public class                    MainActivity extends Activity {
             i++;
         }
         if (!found) {
-            tvHello.append("ARP Cache is clean. No attacks detected.\n");
+            monitorIntercepter.append("ARP Cache is clean. No attacks detected.\n");
         }
     }
+
+    public boolean              onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode != 4) {
+            return super.onKeyDown(keyCode, event);
+        }
+        try {
+            openFileOutput("exits.id", 0).close();
+            openFileOutput("exitr.id", 0).close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e2) {
+            e2.printStackTrace();
+        }
+        Log.d(TAG, "at the end");
+        Intent i = new Intent(mInstance, ScanActivity.class);
+        i.putExtra("Key_String", this.cmd2);
+        startActivity(i);
+        finish();
+        return false;
+    }
+
 }
