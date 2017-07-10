@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent">
     <WebView android:id="@+id/webView1" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_below="@+id/primaryMonitor" android:layout_alignParentLeft="true" android:layout_alignParentBottom="true" />
-    <Button android:id="@+id/button1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Back" android:layout_below="@+id/primaryMonitor" android:layout_alignParentRight="true" android:onClick="OnBack"  />
-    <Button android:id="@+id/button2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Save" android:layout_toLeftOf="@+id/button1" android:layout_below="@+id/primaryMonitor" android:onClick="OnSaveCookie" />
+    <Button android:id="@+id/DNSSpoofButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Back" android:layout_below="@+id/primaryMonitor" android:layout_alignParentRight="true" android:onClick="OnBack"  />
+    <Button android:id="@+id/button2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Save" android:layout_toLeftOf="@+id/DNSSpoofButton" android:layout_below="@+id/primaryMonitor" android:onClick="OnSaveCookie" />
     <EditText android:id="@+id/primaryMonitor" android:background="#00000000" android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="1" android:lines="1" android:ems="5" android:layout_alignLeft="@+id/monitor" />
 </RelativeLayout>

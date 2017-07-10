@@ -41,7 +41,7 @@ public class SettingsActivity extends Activity {
         this.orig_str = getIntent().getExtras().getString("Key_String_origin");
         ((TextView) findViewById(R.id.monitor)).setText("Home dir: " + getFilesDir().toString());
         this.mCtx = this;
-        CheckBox c1 = (CheckBox) findViewById(R.id.checkBox1);
+        CheckBox c1 = (CheckBox) findViewById(R.id.SSLStrip_CB);
         if (globalVariable.savepcap == 1) {
             c1.setChecked(true);
         }
@@ -49,7 +49,7 @@ public class SettingsActivity extends Activity {
         if (globalVariable.raw_autoscroll == 1) {
             c1.setChecked(true);
         }
-        c1 = (CheckBox) findViewById(R.id.checkBox3);
+        c1 = (CheckBox) findViewById(R.id.ForcedDL_CB);
         if (globalVariable.screenlock == 1) {
             c1.setChecked(true);
         }

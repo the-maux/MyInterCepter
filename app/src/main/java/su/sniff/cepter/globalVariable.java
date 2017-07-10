@@ -26,7 +26,7 @@ public class                                globalVariable {
     public static ArrayList                 cookies_value2 = new ArrayList();
     public static int                       dnss;
     public static String                    gw_ip;
-    public static int                       killer = 0;
+    public static int CookieKillerOption = 0;
     public static int                       lock = 0;
     public static String                    netmask;
     public static String                    own_ip;

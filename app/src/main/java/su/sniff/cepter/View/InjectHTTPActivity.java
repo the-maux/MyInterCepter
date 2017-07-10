@@ -25,7 +25,7 @@ import su.sniff.cepter.Utils.OpenFileDialog.OnFileSelectedListener;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
 
-public class InjectActivity extends Activity {
+public class InjectHTTPActivity extends Activity {
     private ArrayAdapter<String> adapter;
     private ArrayList<String> arrayList;
     Context mCtx;
@@ -38,8 +38,8 @@ public class InjectActivity extends Activity {
         }
 
         public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-            InjectActivity.this.arrayList.remove(position);
-            InjectActivity.this.adapter.notifyDataSetChanged();
+            InjectHTTPActivity.this.arrayList.remove(position);
+            InjectHTTPActivity.this.adapter.notifyDataSetChanged();
             return true;
         }
     }
@@ -50,11 +50,11 @@ public class InjectActivity extends Activity {
 
         public void onFileSelected(File f) {
             String[] content = new String[]{BuildConfig.FLAVOR, "application/javascript", "image/jpeg", "image/jpeg", "image/png", "application/octet-stream", "text/html", "text/html", "text/plain"};
-            Spinner spinner1 = (Spinner) InjectActivity.this.findViewById(R.id.spinner);
-            Spinner spinner2 = (Spinner) InjectActivity.this.findViewById(R.id.spinner4);
+            Spinner spinner1 = (Spinner) InjectHTTPActivity.this.findViewById(R.id.spinner);
+            Spinner spinner2 = (Spinner) InjectHTTPActivity.this.findViewById(R.id.spinner4);
             String pattern = spinner1.getSelectedItem().toString();
-            InjectActivity.this.arrayList.add((pattern + ";" + content[spinner1.getSelectedItemPosition()] + ";" + spinner2.getSelectedItem().toString() + ";") + f.getAbsolutePath() + ";");
-            InjectActivity.this.adapter.notifyDataSetChanged();
+            InjectHTTPActivity.this.arrayList.add((pattern + ";" + content[spinner1.getSelectedItemPosition()] + ";" + spinner2.getSelectedItem().toString() + ";") + f.getAbsolutePath() + ";");
+            InjectHTTPActivity.this.adapter.notifyDataSetChanged();
         }
     }
 

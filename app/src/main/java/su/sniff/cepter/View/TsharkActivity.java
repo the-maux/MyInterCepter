@@ -28,7 +28,7 @@ import su.sniff.cepter.Utils.OpenFileDialog.OnFileSelectedListener;
 import su.sniff.cepter.Utils.RawDetails;
 import su.sniff.cepter.adapter.ProtocolAdapter;
 
-public class RawActivity extends Activity {
+public class TsharkActivity extends Activity {
     public String cmd;
     private Context mCtx;
     public String orig_str;
@@ -46,7 +46,7 @@ public class RawActivity extends Activity {
             } else {
                 sc = " ";
             }
-            ((ImageView) RawActivity.this.findViewById(R.id.onDefendIcon)).setImageResource(R.drawable.stop);
+            ((ImageView) TsharkActivity.this.findViewById(R.id.onDefendIcon)).setImageResource(R.drawable.stop);
             File fDroidSheep = new File(globalVariable.path + "/exitr.id");
             if (fDroidSheep.exists()) {
                 fDroidSheep.delete();
@@ -59,7 +59,7 @@ public class RawActivity extends Activity {
                 os.writeBytes("exit\n");
                 os.flush();
                 os.close();
-                RawActivity.this.sniff_process = process;
+                TsharkActivity.this.sniff_process = process;
                 new Thread(new Runnable() {
 
                     class C00852 implements OnItemClickListener {
@@ -73,9 +73,9 @@ public class RawActivity extends Activity {
                                 String index = it.substring(0, offset);
                                 try {
                                     int a = Integer.valueOf(index) ;
-                                    Intent i = new Intent(RawActivity.this.mCtx, RawDetails.class);
+                                    Intent i = new Intent(TsharkActivity.this.mCtx, RawDetails.class);
                                     i.putExtra("Key_Int", Integer.valueOf(index));
-                                    RawActivity.this.startActivityForResult(i, 1);
+                                    TsharkActivity.this.startActivityForResult(i, 1);
                                     globalVariable.lock = 0;
                                 } catch (NumberFormatException e) {
                                 }
@@ -88,7 +88,7 @@ public class RawActivity extends Activity {
                         }
 
                         public void run() {
-                            ((ImageView) RawActivity.this.findViewById(R.id.onDefendIcon)).setImageResource(R.drawable.start);
+                            ((ImageView) TsharkActivity.this.findViewById(R.id.onDefendIcon)).setImageResource(R.drawable.start);
                         }
                     }
 
@@ -96,35 +96,35 @@ public class RawActivity extends Activity {
                         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                         final ArrayList<String> lst = new ArrayList();
                         int c = 0;
-                        final ProtocolAdapter adapter = new ProtocolAdapter(RawActivity.this, R.layout.raw_list, lst);
-                        RawActivity.this.runOnUiThread(new Runnable() {
+                        final ProtocolAdapter adapter = new ProtocolAdapter(TsharkActivity.this, R.layout.raw_list, lst);
+                        TsharkActivity.this.runOnUiThread(new Runnable() {
                             public void run() {
-                                RawActivity.this.tvList.setAdapter(adapter);
+                                TsharkActivity.this.tvList.setAdapter(adapter);
                                 adapter.notifyDataSetChanged();
                             }
                         });
-                        RawActivity.this.tvList.setOnItemClickListener(new C00852());
+                        TsharkActivity.this.tvList.setOnItemClickListener(new C00852());
                         while (true) {
                             try {
                                 String line = reader.readLine();
                                 if (line == null) {
                                     reader.close();
                                     process.waitFor();
-                                    RawActivity.this.runOnUiThread(new C00885());
-                                    RawActivity.this.sniff_process = null;
+                                    TsharkActivity.this.runOnUiThread(new C00885());
+                                    TsharkActivity.this.sniff_process = null;
                                     return;
                                 }
                                 final String temp = line;
                                 if (temp.indexOf("###STAT###") != -1) {
-                                    RawActivity.this.runOnUiThread(new Runnable() {
+                                    TsharkActivity.this.runOnUiThread(new Runnable() {
                                         public void run() {
                                             int b = temp.indexOf("###STAT###") + 11;
-                                            ((TextView) RawActivity.this.findViewById(R.id.monitor)).setText(temp.substring(b, (temp.length() - b) + 11));
+                                            ((TextView) TsharkActivity.this.findViewById(R.id.monitor)).setText(temp.substring(b, (temp.length() - b) + 11));
                                         }
                                     });
                                 } else {
                                     final int c2 = c;
-                                    RawActivity.this.runOnUiThread(new Runnable() {
+                                    TsharkActivity.this.runOnUiThread(new Runnable() {
                                         public void run() {
                                             lst.add(c2, temp);
                                             adapter.notifyDataSetChanged();
@@ -225,9 +225,9 @@ public class RawActivity extends Activity {
                         String index = it.substring(0, offset);
                         try {
                             int a = Integer.valueOf(index) ;
-                            Intent i = new Intent(RawActivity.this.mCtx, RawDetails.class);
+                            Intent i = new Intent(TsharkActivity.this.mCtx, RawDetails.class);
                             i.putExtra("Key_Int", Integer.valueOf(index));
-                            RawActivity.this.startActivityForResult(i, 1);
+                            TsharkActivity.this.startActivityForResult(i, 1);
                             globalVariable.lock = 0;
                         } catch (NumberFormatException e) {
                         }
@@ -239,14 +239,14 @@ public class RawActivity extends Activity {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 final ArrayList<String> lst = new ArrayList();
                 int c = 0;
-                final ProtocolAdapter adapter = new ProtocolAdapter(RawActivity.this, R.layout.raw_list, lst);
-                RawActivity.this.runOnUiThread(new Runnable() {
+                final ProtocolAdapter adapter = new ProtocolAdapter(TsharkActivity.this, R.layout.raw_list, lst);
+                TsharkActivity.this.runOnUiThread(new Runnable() {
                     public void run() {
-                        RawActivity.this.tvList.setAdapter(adapter);
+                        TsharkActivity.this.tvList.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                     }
                 });
-                RawActivity.this.tvList.setOnItemClickListener(new C00782());
+                TsharkActivity.this.tvList.setOnItemClickListener(new C00782());
                 while (true) {
                     try {
                         String line = bufferedReader.readLine();
@@ -255,12 +255,12 @@ public class RawActivity extends Activity {
                             bufferedReader.close();
                             process.waitFor();
                             c2 = c;
-                            RawActivity.this.runOnUiThread(new Runnable() {
+                            TsharkActivity.this.runOnUiThread(new Runnable() {
                                 public void run() {
                                     lst.add(c2, "***");
                                     adapter.notifyDataSetChanged();
                                     if (globalVariable.raw_autoscroll == 1) {
-                                        RawActivity.this.tvList.setSelection(c2);
+                                        TsharkActivity.this.tvList.setSelection(c2);
                                     }
                                 }
                             });
@@ -268,10 +268,10 @@ public class RawActivity extends Activity {
                         }
                         final String temp = line;
                         if (temp.indexOf("###STAT###") != -1) {
-                            RawActivity.this.runOnUiThread(new Runnable() {
+                            TsharkActivity.this.runOnUiThread(new Runnable() {
                                 public void run() {
                                     int b = temp.indexOf("###STAT###") + 11;
-                                    ((TextView) RawActivity.this.findViewById(R.id.monitor)).setText(temp.substring(b, (temp.length() - b) + 11));
+                                    ((TextView) TsharkActivity.this.findViewById(R.id.monitor)).setText(temp.substring(b, (temp.length() - b) + 11));
                                 }
                             });
                         } else if (temp.indexOf("Cookie###") != -1) {
@@ -288,7 +288,7 @@ public class RawActivity extends Activity {
                                 }
                             }
                             if (dub != 1) {
-                                RawActivity.this.runOnUiThread(new Runnable() {
+                                TsharkActivity.this.runOnUiThread(new Runnable() {
                                     public void run() {
                                         if (globalVariable.lock == 0) {
                                             globalVariable.lock = 1;
@@ -319,12 +319,12 @@ public class RawActivity extends Activity {
                             }
                         } else {
                             c2 = c;
-                            RawActivity.this.runOnUiThread(new Runnable() {
+                            TsharkActivity.this.runOnUiThread(new Runnable() {
                                 public void run() {
                                     lst.add(c2, temp);
                                     adapter.notifyDataSetChanged();
                                     if (globalVariable.raw_autoscroll == 1) {
-                                        RawActivity.this.tvList.setSelection(c2);
+                                        TsharkActivity.this.tvList.setSelection(c2);
                                     }
                                 }
                             });
