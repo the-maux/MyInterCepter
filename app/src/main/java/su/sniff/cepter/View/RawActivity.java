@@ -46,7 +46,7 @@ public class RawActivity extends Activity {
             } else {
                 sc = " ";
             }
-            ((ImageView) RawActivity.this.findViewById(R.id.goNext)).setImageResource(R.drawable.stop);
+            ((ImageView) RawActivity.this.findViewById(R.id.onDefendIcon)).setImageResource(R.drawable.stop);
             File fDroidSheep = new File(globalVariable.path + "/exitr.id");
             if (fDroidSheep.exists()) {
                 fDroidSheep.delete();
@@ -88,7 +88,7 @@ public class RawActivity extends Activity {
                         }
 
                         public void run() {
-                            ((ImageView) RawActivity.this.findViewById(R.id.goNext)).setImageResource(R.drawable.start);
+                            ((ImageView) RawActivity.this.findViewById(R.id.onDefendIcon)).setImageResource(R.drawable.start);
                         }
                     }
 
@@ -119,7 +119,7 @@ public class RawActivity extends Activity {
                                     RawActivity.this.runOnUiThread(new Runnable() {
                                         public void run() {
                                             int b = temp.indexOf("###STAT###") + 11;
-                                            ((TextView) RawActivity.this.findViewById(R.id.textView1)).setText(temp.substring(b, (temp.length() - b) + 11));
+                                            ((TextView) RawActivity.this.findViewById(R.id.monitor)).setText(temp.substring(b, (temp.length() - b) + 11));
                                         }
                                     });
                                 } else {
@@ -184,13 +184,13 @@ public class RawActivity extends Activity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            ((ImageView) findViewById(R.id.goNext)).setImageResource(R.drawable.start);
+            ((ImageView) findViewById(R.id.onDefendIcon)).setImageResource(R.drawable.start);
             openFileOutput("exitr.id", 0).close();
             this.sniff_process = null;
             return;
         }
         String sc;
-        ((ImageView) findViewById(R.id.goNext)).setImageResource(R.drawable.stop);
+        ((ImageView) findViewById(R.id.onDefendIcon)).setImageResource(R.drawable.stop);
         File fDroidSheep = new File(globalVariable.path + "/exitr.id");
         if (fDroidSheep.exists()) {
             fDroidSheep.delete();
@@ -200,7 +200,7 @@ public class RawActivity extends Activity {
         } else {
             sc = " ";
         }
-        EditText txt = (EditText) findViewById(R.id.editText1);
+        EditText txt = (EditText) findViewById(R.id.primaryMonitor);
         FileOutputStream out = openFileOutput("pf", 0);
         out.write(txt.getEditableText().toString().getBytes());
         out.close();
@@ -271,7 +271,7 @@ public class RawActivity extends Activity {
                             RawActivity.this.runOnUiThread(new Runnable() {
                                 public void run() {
                                     int b = temp.indexOf("###STAT###") + 11;
-                                    ((TextView) RawActivity.this.findViewById(R.id.textView1)).setText(temp.substring(b, (temp.length() - b) + 11));
+                                    ((TextView) RawActivity.this.findViewById(R.id.monitor)).setText(temp.substring(b, (temp.length() - b) + 11));
                                 }
                             });
                         } else if (temp.indexOf("Cookie###") != -1) {
@@ -346,7 +346,7 @@ public class RawActivity extends Activity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            ((ImageView) findViewById(R.id.goNext)).setImageResource(R.drawable.start);
+            ((ImageView) findViewById(R.id.onDefendIcon)).setImageResource(R.drawable.start);
             openFileOutput("exitr.id", 0).close();
             this.sniff_process = null;
         }
@@ -358,7 +358,7 @@ public class RawActivity extends Activity {
 
     public void OnOpenCap(View v) {
         try {
-            EditText txt = (EditText) findViewById(R.id.editText1);
+            EditText txt = (EditText) findViewById(R.id.primaryMonitor);
             FileOutputStream out = openFileOutput("pf", 0);
             out.write(txt.getEditableText().toString().getBytes());
             out.close();

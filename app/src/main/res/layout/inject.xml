@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" android:layout_width="wrap_content" android:layout_height="wrap_content">
-    <ListView android:id="@+id/listHosts" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_above="@+id/button2" android:layout_below="@+id/textView1" android:layout_alignParentRight="true"
+    <ListView android:id="@+id/listHosts" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_above="@+id/button2" android:layout_below="@+id/monitor" android:layout_alignParentRight="true"
               android:textSize="7dp"/>
-    <TextView android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Injection Rules" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" />
+    <TextView android:id="@+id/monitor" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Injection Rules" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" />
     <Button android:id="@+id/button1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Add" android:layout_toLeftOf="@+id/button2" android:layout_alignParentBottom="true" android:onClick="OnAdd" />
     <Button android:id="@+id/button2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Clear all" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" android:onClick="OnClear"  />
     <Spinner android:id="@+id/spinner" android:layout_width="100dp" android:layout_height="wrap_content" android:minWidth="150dp" android:layout_below="@+id/listHosts" />

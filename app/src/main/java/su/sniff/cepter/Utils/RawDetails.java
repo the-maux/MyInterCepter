@@ -36,7 +36,7 @@ public class RawDetails extends Activity {
             }
             globalVariable.lock = 1;
         }
-        TextView tv = (TextView) findViewById(R.id.textView1);
+        TextView tv = (TextView) findViewById(R.id.monitor);
         tv.setTypeface(Typeface.MONOSPACE);
         tv.setTextSize(2, (float) globalVariable.raw_textsize);
         StringBuilder text = new StringBuilder();

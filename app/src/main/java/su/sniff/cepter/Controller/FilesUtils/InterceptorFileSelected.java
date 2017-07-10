@@ -1,13 +1,10 @@
-package su.sniff.cepter.Misc;
+package su.sniff.cepter.Controller.FilesUtils;
 
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import org.w3c.dom.Text;
+
 import su.sniff.cepter.Controller.RootProcess;
+import su.sniff.cepter.Misc.IntercepterReader;
 import su.sniff.cepter.R;
 import su.sniff.cepter.Utils.OpenFileDialog;
 import su.sniff.cepter.View.MainActivity;
@@ -28,7 +25,7 @@ public class                    InterceptorFileSelected implements OpenFileDialo
 
     public void                 onFileSelected(File f) {
         tvHello.setTextSize(2, (float) globalVariable.raw_textsize);
-        ((TextView) activity.findViewById(R.id.textView1)).setTextSize(2, (float) globalVariable.raw_textsize);
+        ((TextView) activity.findViewById(R.id.monitor)).setTextSize(2, (float) globalVariable.raw_textsize);
         File fDroidSheep = new File(globalVariable.path + "/exits.id");
         if (fDroidSheep.exists()) {
             fDroidSheep.delete();

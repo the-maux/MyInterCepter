@@ -1,1 +1,18 @@
 /build
+/.externalNativeBuild/
+
+/app/.externalNativeBuild
+/app/build/
+/app/app.iml
+/app/CMakeLists.txt
+/build/generated/
+/.idea/
+/local.properties
+Supprimerait .gradle/
+Supprimerait app/libs/
+Supprimerait app/src/main/res/drawable/
+Supprimerait build/
+.idea/.name
+.idea/workspace.xml
+gen/
+/.externalNativeBuild/cmake/

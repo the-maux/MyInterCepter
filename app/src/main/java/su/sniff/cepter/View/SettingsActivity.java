@@ -39,7 +39,7 @@ public class SettingsActivity extends Activity {
         setContentView(R.layout.settings_layout);
         this.cmd = getIntent().getExtras().getString("Key_String");
         this.orig_str = getIntent().getExtras().getString("Key_String_origin");
-        ((TextView) findViewById(R.id.textView1)).setText("Home dir: " + getFilesDir().toString());
+        ((TextView) findViewById(R.id.monitor)).setText("Home dir: " + getFilesDir().toString());
         this.mCtx = this;
         CheckBox c1 = (CheckBox) findViewById(R.id.checkBox1);
         if (globalVariable.savepcap == 1) {

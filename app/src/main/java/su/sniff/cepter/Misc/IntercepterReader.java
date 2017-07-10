@@ -10,7 +10,6 @@ import android.widget.TextView;
 import su.sniff.cepter.Controller.IntercepterParser;
 import su.sniff.cepter.Controller.RootProcess;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.MainActivity;
 import su.sniff.cepter.globalVariable;
 
 import java.io.BufferedReader;
@@ -65,7 +64,7 @@ public class                    IntercepterReader extends Thread {
             public void run() {
                 int b = temp.indexOf("###STAT###") + 11;
                 Log.d(TAG, "parseStat::" + temp.substring(b, (temp.length() - b) + 11));
-                ((TextView) activity.findViewById(R.id.textView1)).setText(temp.substring(b, (temp.length() - b) + 11));
+                ((TextView) activity.findViewById(R.id.monitor)).setText(temp.substring(b, (temp.length() - b) + 11));
             }
         });
     }

@@ -30,7 +30,7 @@ public class                        PortScan extends Activity {
 
     private void                    initXml() {
         FAB = (FloatingActionButton) findViewById(R.id.fab);
-        tv = (TextView) findViewById(R.id.textView1);
+        tv = (TextView) findViewById(R.id.monitor);
         tv.setTextSize(2, (float) (globalVariable.raw_textsize + 3));
     }
 

@@ -14,8 +14,8 @@ public class                                globalVariable {
     public static ArrayAdapter<String>      adapter2;
     public static String                    codepage =         "Cp1251";
     public static int                       cookies_c =         0;
-    public static ArrayList                 cookies_domain = new ArrayList();
-    public static ArrayList                 cookies_domain2 = new ArrayList();
+    public static ArrayList<String>         cookies_domain = new ArrayList<>();
+    public static ArrayList<String>         cookies_domain2 = new ArrayList<>();
     public static ArrayList                 cookies_getreq = new ArrayList();
     public static ArrayList                 cookies_getreq2 = new ArrayList();
     public static ArrayList<Drawable>       cookies_icon;

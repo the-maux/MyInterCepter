@@ -34,14 +34,14 @@ public class CageActivity extends Activity {
             }
             globalVariable.lock = 1;
         }
-        ((TextView) findViewById(R.id.textView1)).setTextSize(2, (float) (globalVariable.raw_textsize + 3));
+        ((TextView) findViewById(R.id.monitor)).setTextSize(2, (float) (globalVariable.raw_textsize + 3));
         globalVariable.lock = 0;
     }
 
     public void OnRun(View v) {
         if (this.run == 0) {
             this.run = 1;
-            final TextView tv = (TextView) findViewById(R.id.textView1);
+            final TextView tv = (TextView) findViewById(R.id.monitor);
             File fDroidSheep = new File(globalVariable.path + "/exitc.id");
             if (fDroidSheep.exists()) {
                 fDroidSheep.delete();

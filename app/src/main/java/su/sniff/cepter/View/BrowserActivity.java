@@ -38,7 +38,7 @@ public class BrowserActivity extends Activity {
         }
 
         public void afterTextChanged(Editable s) {
-            BrowserActivity.this.mWebView.loadUrl(((EditText) BrowserActivity.this.findViewById(R.id.editText1)).getText().toString());
+            BrowserActivity.this.mWebView.loadUrl(((EditText) BrowserActivity.this.findViewById(R.id.primaryMonitor)).getText().toString());
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -84,8 +84,8 @@ public class BrowserActivity extends Activity {
                 this.mWebView.getSettings().setBuiltInZoomControls(true);
                 this.mWebView.getSettings().setUserAgentString("Mozilla/5.0 (Windows NT 6.1; WOW64) Chrome/23.0.1271.64 Safari/537.11");
                 this.mWebView.loadUrl("http://" + domain);
-                ((EditText) findViewById(R.id.editText1)).setText("http://" + domain);
-                ((EditText) findViewById(R.id.editText1)).addTextChangedListener(new C00481());
+                ((EditText) findViewById(R.id.primaryMonitor)).setText("http://" + domain);
+                ((EditText) findViewById(R.id.primaryMonitor)).addTextChangedListener(new C00481());
                 globalVariable.lock = 0;
                 return;
             }
