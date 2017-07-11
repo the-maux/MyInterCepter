@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.text.ClipboardManager;
 import android.view.KeyEvent;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -20,7 +19,7 @@ import su.sniff.cepter.globalVariable;
 
 public class                    CookiesActivity extends Activity {
     private CookiesActivity     mInstance = this;
-    public ListView             tvList;
+    private ListView            tvList;
 
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +29,7 @@ public class                    CookiesActivity extends Activity {
         super.onCreate(savedInstanceState);
         initThreadsBehavior();
         initXml();
-        notifyDataSetChangedDeamon();
+        loopNotifyDataSetChangedDeamon();
     }
 
     private void                initXml() {
@@ -88,7 +87,7 @@ public class                    CookiesActivity extends Activity {
         globalVariable.lock = 0;
     }
 
-    private void                notifyDataSetChangedDeamon() {
+    private void                loopNotifyDataSetChangedDeamon() {
         new Thread(new Runnable() {
             @Override
             public void run() {

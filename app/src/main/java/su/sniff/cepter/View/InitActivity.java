@@ -24,9 +24,10 @@ public class                    InitActivity extends Activity {
     private String              TAG = "InitActivity";
     private InitActivity        mInstance = this;
     private TextView            monitor;
-    static {
+
+    /*static {
         System.loadLibrary("native-lib");
-    }
+    }*/
 
     public void                 onCreate(Bundle savedInstanceState) {
         View rootView = LayoutInflater.from(this).inflate(R.layout.init_acitivty, null);
