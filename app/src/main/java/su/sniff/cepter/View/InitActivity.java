@@ -84,7 +84,7 @@ public class                    InitActivity extends Activity {
 
     private void                initInfo() {
         try {
-            WifiManager wifiManager = (WifiManager) getSystemService("wifi");
+            WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             Log.d(TAG, "init Net infos");
             RootProcess process = getNetworkInfoByCept();
             BufferedReader bufferedReader = process.getReader();
@@ -245,6 +245,7 @@ public class                    InitActivity extends Activity {
                 .exec("chmod 777 ./nmap/*")
                 .exec("chmod 777 ./*")
                 .exec("killall cepter")
+                .exec("chown root:root ./cepter")
                 .closeProcess();
     }
 
@@ -257,5 +258,5 @@ public class                    InitActivity extends Activity {
         });
     }
 
-    public native String        stringFromJNI();
+ //   public native String        stringFromJNI();
 }

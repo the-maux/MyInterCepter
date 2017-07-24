@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class                CageActivity extends Activity {
-    int run = 0;
+    int                     run = 0;
 
     public void             onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

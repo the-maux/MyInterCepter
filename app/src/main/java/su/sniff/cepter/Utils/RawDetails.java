@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import su.sniff.cepter.Controller.RootProcess;
+import su.sniff.cepter.Misc.ThreadUtils;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
 
@@ -16,56 +19,38 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class RawDetails extends Activity {
-    Context mCtx;
-    public ListView tvList;
+public class                    RawDetails extends Activity {
 
-    public void onCreate(Bundle savedInstanceState) {
+    public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.raw_details);
         int position = getIntent().getExtras().getInt("Key_Int", 0);
-        if (globalVariable.lock == 0) {
-            globalVariable.lock = 1;
-        } else {
-            while (globalVariable.lock == 1) {
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            globalVariable.lock = 1;
-        }
-        TextView tv = (TextView) findViewById(R.id.monitor);
-        tv.setTypeface(Typeface.MONOSPACE);
-        tv.setTextSize(2, (float) globalVariable.raw_textsize);
+        ThreadUtils.lock();
+        TextView monitor = (TextView) findViewById(R.id.monitor);
+        monitor.setTypeface(Typeface.MONOSPACE);
+        monitor.setTextSize(2, (float) globalVariable.raw_textsize);
         StringBuilder text = new StringBuilder();
         try {
-            Process process = Runtime.getRuntime().exec("su", null, new File(globalVariable.path + ""));
-            DataOutputStream os = new DataOutputStream(process.getOutputStream());
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            os.writeBytes(globalVariable.path + "/busybox cat " + globalVariable.path + "/Raw/" + position + ".dat\n");
-            os.flush();
-            os.writeBytes("exit\n");
-            os.flush();
-            os.close();
+            RootProcess process = new RootProcess("RawDetails", globalVariable.path + "");
+            BufferedReader reader = new BufferedReader(process.getInputStreamReader());
+            process.exec(globalVariable.path + "/busybox cat " + globalVariable.path + "/Raw/" + position + ".dat");
+            process.closeDontWait();
             while (true) {
                 String read = reader.readLine();
                 if (read == null) {
                     break;
                 }
-                text.append(read);
-                text.append("\n");
+                text.append(read).append('\n');
             }
             reader.close();
         } catch (IOException e2) {
             e2.printStackTrace();
         }
-        tv.setText(text.toString());
+        monitor.setText(text.toString());
         globalVariable.lock = 0;
     }
 
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    public boolean                  onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode != 4) {
             return super.onKeyDown(keyCode, event);
         }

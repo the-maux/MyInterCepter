@@ -72,4 +72,7 @@ public class                    RootProcess {
             e.printStackTrace();
         }
     }
+    public Process              getActualProcess() {
+        return process;
+    }
 }

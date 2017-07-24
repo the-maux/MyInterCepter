@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 public class                    IntercepterReader extends Thread {
     private TextView            monitor;
-    private String              TAG = "IntercepterReader";
+    private static String       TAG = "IntercepterReader";
     private Activity            activity;
     private RootProcess         process;
 
@@ -48,28 +48,28 @@ public class                    IntercepterReader extends Thread {
                 return;
             }
             if (line.contains("###STAT###")) {
-                parseStat(line);
+                parseStat(line, activity);
             } else if (line.contains("REQ###")) {
-                parseREQ(line);
+                parseREQ(line, activity, monitor);
             } else if (line.contains("Cookie###")) {
-                IntercepterParser.parseCookie(reader, activity);
+                parseCookie(reader, activity);
             } else {
-                parseOther(line);
+                parseOther(line, activity, monitor);
             }
         }
     }
 
-    private void                parseStat(final String temp) {
+    public static void        parseStat(final String temp, final Activity activity) {
         activity.runOnUiThread(new Runnable() {
             public void run() {
                 int b = temp.indexOf("###STAT###") + 11;
-                Log.d(TAG, "parseStat::" + temp.substring(b, (temp.length() - b) + 11));
+                //Log.d(TAG, "parseStat::" + temp.substring(b, (temp.length() - b) + 11));
                 ((TextView) activity.findViewById(R.id.monitor)).setText(temp.substring(b, (temp.length() - b) + 11));
             }
         });
     }
 
-    private void                parseREQ(final String temp) {
+    public static void         parseREQ(final String temp, final Activity activity, final TextView monitor) {
         if (globalVariable.showhttp == 1) {
             activity.runOnUiThread(new Runnable() {
                 public void run() {
@@ -80,7 +80,7 @@ public class                    IntercepterReader extends Thread {
         }
     }
 
-    private void                parseOther(final String temp) {
+    public static void         parseOther(final String temp, final Activity activity, final TextView monitor) {
         activity.runOnUiThread(new Runnable() {
             public void run() {
                 if (temp.contains("intercepted")) {
@@ -101,7 +101,7 @@ public class                    IntercepterReader extends Thread {
         });
     }
 
-    private void                closeAll(BufferedReader reader, RootProcess process, Activity activity) throws IOException {
+    public void                closeAll(BufferedReader reader, RootProcess process, Activity activity) throws IOException {
         reader.close();
         process.waitFor();
         Log.d(TAG, "closing");
@@ -111,5 +111,41 @@ public class                    IntercepterReader extends Thread {
                 monitor.append("*\n");
             }
         });
+    }
+
+    public static void          parseCookie(BufferedReader reader, Activity activity) throws IOException {
+        final String domain = reader.readLine();
+        final String ip = reader.readLine();
+        final String getreq = reader.readLine();
+        final String coo = reader.readLine();
+        String z = reader.readLine();
+        if (!ip.equals(globalVariable.own_ip)) {
+            int dub = 0;
+            for (int i = 0; i < globalVariable.cookies_c; i++) {
+                if (((String) globalVariable.cookies_value.get(i)).equals(coo)) {
+                    dub = 1;
+                    break;
+                }
+            }
+            if (dub != 1) {
+                activity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        ThreadUtils.lock();
+                        globalVariable.cookies_domain.add(globalVariable.cookies_c, domain + " : " + ip);
+                        globalVariable.cookies_domain2.add(globalVariable.cookies_c, "<font color=\"#00aa00\"><b>" + domain + " : " + ip + "</b></font><br>" + "<font color=\"#397E7E\">" + coo + "</font>");
+                        globalVariable.adapter.notifyDataSetChanged();
+                        globalVariable.adapter2.notifyDataSetChanged();
+                        globalVariable.cookies_getreq.add(globalVariable.cookies_c, getreq);
+                        globalVariable.cookies_value.add(globalVariable.cookies_c, coo);
+                        globalVariable.cookies_ip.add(globalVariable.cookies_c, ip);
+                        globalVariable.cookies_getreq2.add(globalVariable.cookies_c, getreq);
+                        globalVariable.cookies_value2.add(globalVariable.cookies_c, coo);
+                        globalVariable.cookies_ip2.add(globalVariable.cookies_c, ip);
+                        globalVariable.cookies_c++;
+                        globalVariable.lock = 0;
+                    }
+                });
+            }
+        }
     }
 }
