@@ -245,7 +245,7 @@ public class                    InitActivity extends Activity {
                 .exec("chmod 777 ./nmap/*")
                 .exec("chmod 777 ./*")
                 .exec("killall cepter")
-                .exec("chown root:root ./cepter")
+      //          .exec("chown root:root ./cepter")
                 .closeProcess();
     }
 
@@ -258,5 +258,6 @@ public class                    InitActivity extends Activity {
         });
     }
 
- //   public native String        stringFromJNI();
+ //
+    //   public native String        stringFromJNI();
 }

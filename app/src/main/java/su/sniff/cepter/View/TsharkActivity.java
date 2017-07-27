@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -34,9 +33,10 @@ public class                    TsharkActivity extends Activity {
     private TsharkActivity      mInstance = this;
     private String              cmd;
     private String              orig_str;
-    private Process             sniff_process = null;
+    private Thread              threadProcess = null;
     private ListView            tvList;
     private ProtocolAdapter     adapter;
+    private boolean             isAlreadyLaunched = false;
 
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +50,9 @@ public class                    TsharkActivity extends Activity {
         orig_str = getIntent().getExtras().getString("Key_String_origin");
     }
 
-    private void                checkIfLaunched() throws IOException {
-        if (sniff_process != null) {
+    private boolean             isAlreadyLauched() throws IOException {
+        if (isAlreadyLaunched) {
+            Log.d(TAG, "TSHARK is already launched");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -59,12 +60,17 @@ public class                    TsharkActivity extends Activity {
             }
             ((ImageView) findViewById(R.id.onDefendIcon)).setImageResource(R.drawable.start);
             openFileOutput("exitr.id", 0).close();
-            sniff_process = null;
-            return;
+            threadProcess.interrupt();
+            isAlreadyLaunched = false;
+            return true;
         }
+        return false;
     }
+
     public void                 OnRaw(View v) throws IOException {
-        checkIfLaunched();
+        if (isAlreadyLauched())
+            return ;
+        isAlreadyLaunched = true;
         ((ImageView) findViewById(R.id.onDefendIcon)).setImageResource(R.drawable.stop);
         File fDroidSheep = new File(globalVariable.path + "/exitr.id");
         if (fDroidSheep.exists()) {
@@ -77,7 +83,8 @@ public class                    TsharkActivity extends Activity {
         final ArrayList<String> lst = new ArrayList<>();
         adapter = new ProtocolAdapter(mInstance.getApplication(), R.layout.raw_list, lst);
         initArrayList();
-        new Thread(execParseCepter(lst)).start();
+        threadProcess = new Thread(execParseCepter(lst));
+        threadProcess.start();
     }
 
     private void                initArrayList() {
@@ -133,9 +140,9 @@ public class                    TsharkActivity extends Activity {
                                 @Override
                                 public void run() {
                                     ((ImageView) findViewById(R.id.onDefendIcon)).setImageResource(R.drawable.start);
+                                    isAlreadyLaunched = false;
                                 }
                             });
-                            sniff_process = null;
                             return;
                         }
                         final String temp = line;
@@ -207,7 +214,7 @@ public class                    TsharkActivity extends Activity {
                 RootProcess processRoot = new RootProcess("tShark SNIFF launch to Cepter", globalVariable.path + "");
                 processRoot.exec(globalVariable.path + "/cepter " + Integer.toString(globalVariable.adapt_num) + " 3 raw" + sc);
                 processRoot.exec("exit");
-                sniff_process = processRoot.getActualProcess();
+
                 BufferedReader bufferedReader = new BufferedReader(processRoot.getInputStreamReader());
                 int offsetLine = 0;
                 while (true) {
@@ -262,7 +269,6 @@ public class                    TsharkActivity extends Activity {
                 RootProcess process = new RootProcess("Dump RAW SNIFF", globalVariable.path + "");
                 process.exec(globalVariable.path + "/cepter " + file.getAbsolutePath() + " 3 raw");
                 process.exec("exit");
-                sniff_process = process.getActualProcess();
                 dumpingCurrentSniff(process.getActualProcess());
 
             }
@@ -270,7 +276,7 @@ public class                    TsharkActivity extends Activity {
     }
 
     public void                 OnBack(View v) throws IOException {
-        if (sniff_process != null) {
+        if (isAlreadyLaunched) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -278,7 +284,8 @@ public class                    TsharkActivity extends Activity {
             }
             ((ImageView) findViewById(R.id.onDefendIcon)).setImageResource(R.drawable.start);
             openFileOutput("exitr.id", 0).close();
-            sniff_process = null;
+            threadProcess.interrupt();
+            isAlreadyLaunched = false;
         }
         Intent i = new Intent(mInstance, ScanActivity.class);
         i.putExtra("Key_String", orig_str);

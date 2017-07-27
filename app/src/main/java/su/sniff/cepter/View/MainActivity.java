@@ -21,14 +21,16 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import su.sniff.cepter.*;
+import su.sniff.cepter.BuildConfig;
 import su.sniff.cepter.Controller.CepterControl.onDefend;
 import su.sniff.cepter.Controller.CepterControl.onInterceptRun;
-import su.sniff.cepter.Controller.RootProcess;
 import su.sniff.cepter.Controller.FilesUtils.InterceptorFileSelected;
+import su.sniff.cepter.Controller.RootProcess;
+import su.sniff.cepter.R;
 import su.sniff.cepter.Utils.OpenFileDialog;
 import su.sniff.cepter.Utils.SaveFileDialog;
 import su.sniff.cepter.Utils.SaveFileDialog.OnNewFileSelectedListener;
+import su.sniff.cepter.globalVariable;
 
 public class                    MainActivity extends Activity {
     private MainActivity        mInstance = this;
