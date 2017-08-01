@@ -50,11 +50,11 @@ public class                        ScanActivity extends Activity {
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(3);
-        setContentView(R.layout.scan_layout);
-        getWindow().setFeatureDrawableResource(3, R.drawable.ico);
-        this.origin_str = monitor;
         try {
+            requestWindowFeature(3);
+            setContentView(R.layout.scan_layout);
+            getWindow().setFeatureDrawableResource(3, R.drawable.ico);
+            this.origin_str = monitor;
             init();
         } catch (Exception e) {
             Log.e(TAG, "Big error dans l'init");
@@ -95,84 +95,43 @@ public class                        ScanActivity extends Activity {
     private void                    initHostsRecyclerView() {
         hostsRecyclerView.setHasFixedSize(true);
         hostsRecyclerView.setLayoutManager(new LinearLayoutManager(mInstance));
-        //hostsRecyclerView.setAdapter(new HostAdapter(hosts, mInstance));
     }
 
-    private void                        dumpListHost(final HostAdapter adapter)  throws IOException, InterruptedException {
-        final BufferedReader bufferedReader2 = Cepter.searchDevices(Integer.toString(globalVariable.adapt_num));
-        Log.d(TAG, "reading list host from Cepter");
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    while (true) {
-                        String read = bufferedReader2.readLine();
-                        if (read != null) {
-                            if (read.indexOf(32) > 0) {
-                                // Format : 10.16.186.3 	(-) \n [D8-FC-93-26-D4-EB] [Windows 7\8\10] : Intel Corporate \n
-                                Host hostObj = new Host(read);
-                                hosts.add(hostObj);
-                            }
-                        } else {
-                            bufferedReader2.close();
-                            Cepter.waitForCepter();
-                            return;
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    mInstance.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            sortHosts();
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
-                }
-            }
-        }).start();
+    private void                    startNetworkScan() throws IOException, InterruptedException {
+        //lst = new ArrayList<>();
+        hosts = new ArrayList<>();
+        final HostAdapter adapter = new HostAdapter(hosts, mInstance);
+        //hostsListView.setAdapter(adapter);
+        hostsRecyclerView.setAdapter(adapter);
+        progressAnimation();
+        IPv4 iPv4 = new IPv4(globalVariable.own_ip, globalVariable.netmask);//IPv4 iPv4 = new IPv4(globalVariable.own_ip + "/" + this.mask2);
+        new ScanNetmask(iPv4);
+        progress = 1000;
+        readARPTable();
+        progress = 1500;
+        readingCepterAnalysFromArp(adapter);
+        progress = 2000;
+        initHostsRecyclerView();
+        //initHostListView();
     }
 
-    private void                    sortHosts() {
-        mInstance.runOnUiThread(new Runnable() {
-            public void run() {
-                Collections.sort(hosts, new Comparator<Host>() {
-                    @Override
-                    public int compare(Host o1, Host o2) {
-                        String ip1[] = o1.getIp().replace(".", "::").split("::");
-                        String ip2[] = o2.getIp().replace(".", "::").split("::");
-                        if (Integer.parseInt(ip1[2]) > Integer.parseInt(ip2[2]))
-                            return 1;
-                        else if (Integer.parseInt(ip1[2]) < Integer.parseInt(ip2[2]))
-                            return -1;
-                        else if (Integer.parseInt(ip1[3]) > Integer.parseInt(ip2[3]))
-                            return 1;
-                        else if (Integer.parseInt(ip1[3]) < Integer.parseInt(ip2[3]))
-                            return -1;
-                        return 0;
-                    }
-                });
-            }
-        });
-    }
-
-    private void                    dumpListHost() {
-        Log.i(TAG, "Dump list host");
+    /*
+        Guessing list of host by reading ARP table
+     */
+    private void                    readARPTable() {
+        Log.i(TAG, "Dump list host from Arp Table");
         try {
             FileOutputStream hostListFile = openFileOutput("hostlist", 0);
             BufferedReader bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"));
             String MAC_RE = "^%s\\s+0x1\\s+0x2\\s+([:0-9a-fA-F]+)\\s+\\*\\s+\\w+$";
-            while (true) {
-                String read = bufferedReader.readLine();
-                if (read == null) {
-                    break;
-                }
+            String read;
+            while ((read = bufferedReader.readLine()) != null) {
                 String ip = read.substring(0, read.indexOf(" "));
                 Object[] objArr = new Object[1];
                 objArr[0] = ip.replace(".", "\\.");
                 Matcher matcher = Pattern.compile(String.format(MAC_RE, objArr)).matcher(read);
                 if (matcher.matches()) {
-                    Log.i(TAG, ip + " " + matcher.group(1) + "\n");
+                    Log.i(TAG, "DUMP:" + ip + " " + matcher.group(1));
                     hostListFile.write((ip + ":" + matcher.group(1) + "\n").getBytes());
                 }
             }
@@ -183,8 +142,35 @@ public class                        ScanActivity extends Activity {
         }
     }
 
+    private void                    readingCepterAnalysFromArp(final HostAdapter adapter)  throws IOException, InterruptedException {
+        final BufferedReader bufferedReader2 = Cepter.searchDevices(Integer.toString(globalVariable.adapt_num));
+        Log.d(TAG, "reading list host from Cepter");
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    String read;
+                    while ((read = bufferedReader2.readLine()) != null) {//sanityze: at least 3 '.' for x.x.x.x : Ip
+                        if ((read.length() - read.replace(".", "").length()) >= 3) {//Format : 10.16.186.3 	(-) \n [D8-FC-93-26-D4-EB] [Windows 7\8\10] : Intel Corporate \n
+                            Host hostObj = new Host(read);
+                            hosts.add(hostObj);
+                        }
+                    }
+                    mInstance.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            sortHosts();
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
     private void                    progressAnimation() {
-        //TODO: Color FAB, ProgressInThread, handlerAllHostname, IconSwitchOnHandler, +SCAN PORT, RefreshOnSwipe
+        //TODO: RefreshOnSwipe
         Log.d(TAG, "progress Animation");
         progressBar.setImageResource(android.R.drawable.ic_menu_search);
         progressBar.setProgress(0, true);
@@ -224,24 +210,6 @@ public class                        ScanActivity extends Activity {
         }
     }
 
-    private void                    startNetworkScan() throws IOException, InterruptedException {
-        //lst = new ArrayList<>();
-        hosts = new ArrayList<>();
-        final HostAdapter adapter = new HostAdapter(hosts, mInstance);
-        //hostsListView.setAdapter(adapter);
-        hostsRecyclerView.setAdapter(adapter);
-        progressAnimation();
-        IPv4 iPv4 = new IPv4(globalVariable.own_ip, globalVariable.netmask);//IPv4 iPv4 = new IPv4(globalVariable.own_ip + "/" + this.mask2);
-        new ScanNetmask(iPv4);
-        progress = 1000;
-        dumpListHost();
-        progress = 1500;
-        dumpListHost(adapter);
-        progress = 2000;
-        initHostsRecyclerView();
-        //initHostListView();
-    }
-
     /**
      * Create a file "./targets" dumping the hostList than start the TabActivitys
      * @throws IOException
@@ -253,7 +221,7 @@ public class                        ScanActivity extends Activity {
             if (host.isSelected()) {
                 noTargetSelected = false;
                 String dumpHost = host.getIp() + ":" + host.getMac() + "\n";
-                Log.d(TAG, "dumpHost:" + dumpHost);
+                Log.d(TAG, "Dumpin File(./targets):" + dumpHost);
                 out.write(dumpHost.getBytes());
             }
         }
@@ -271,28 +239,50 @@ public class                        ScanActivity extends Activity {
         finish();
     }
 
+    private void                    sortHosts() {
+        mInstance.runOnUiThread(new Runnable() {
+            public void run() {
+                Collections.sort(hosts, new Comparator<Host>() {
+                    @Override
+                    public int compare(Host o1, Host o2) {
+                        String ip1[] = o1.getIp().replace(".", "::").split("::");
+                        String ip2[] = o2.getIp().replace(".", "::").split("::");
+                        if (Integer.parseInt(ip1[2]) > Integer.parseInt(ip2[2]))
+                            return 1;
+                        else if (Integer.parseInt(ip1[2]) < Integer.parseInt(ip2[2]))
+                            return -1;
+                        else if (Integer.parseInt(ip1[3]) > Integer.parseInt(ip2[3]))
+                            return 1;
+                        else if (Integer.parseInt(ip1[3]) < Integer.parseInt(ip2[3]))
+                            return -1;
+                        return 0;
+                    }
+                });
+            }
+        });
+    }
+
     public void                     OnCage(View v2) throws IOException {
         Log.d(TAG, "OnCage");
         boolean noTargetSelected = true;
-            FileOutputStream out = openFileOutput("cage", 0);
-            if (hosts.size() == 0) {
-                Toast.makeText(getApplicationContext(), "Scan network", Toast.LENGTH_SHORT).show();
-                return ;
+        FileOutputStream out = openFileOutput("cage", 0);
+
+        for (Host host : hosts) {
+            if (host.isSelected()) {
+                noTargetSelected = false;
+                String dumpHost = host.getIp() + ":" + host.getMac() + "\n";
+                Log.d(TAG, "dumpHost:" + dumpHost);
+                out.write(dumpHost.getBytes());
             }
-            for (Host host : hosts) {
-                if (host.isSelected()) {
-                    noTargetSelected = false;
-                    String dumpHost = host.getIp() + ":" + host.getMac() + "\n";
-                    Log.d(TAG, "dumpHost:" + dumpHost);
-                    out.write(dumpHost.getBytes());
-                }
-            }
-            out.close();
-            if (noTargetSelected) {
-                Toast.makeText(getApplicationContext(), "Choose target!", Toast.LENGTH_SHORT).show();
-            } else {
-                startActivityForResult(new Intent(mInstance, CageActivity.class), 1);
-            }
+        }
+        out.close();
+        if (hosts.size() == 0)
+            Toast.makeText(getApplicationContext(), "Scan network", Toast.LENGTH_SHORT).show();
+        else if (noTargetSelected)
+            Toast.makeText(getApplicationContext(), "Choose target!", Toast.LENGTH_SHORT).show();
+        else
+            startActivityForResult(new Intent(mInstance, CageActivity.class), 1);
+
     }
 
     public boolean                  onKeyDown(int keyCode, KeyEvent event) {
@@ -306,7 +296,15 @@ public class                        ScanActivity extends Activity {
                         .exec("killall cepter")
                         .exec("killall cepter");
                 if (globalVariable.strip == 1) {
-                    process.exec("iptables -F;iptables -X;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT");
+                    process.exec("iptables -F;" +
+                            "iptables -X; " +
+                            "iptables -t nat -F;" +
+                            "iptables -t nat -X;" +
+                            "iptables -t mangle -F;" +
+                            "iptables -t mangle -X;" +
+                            "iptables -P INPUT ACCEPT;"+
+                            "iptables -P FORWARD ACCEPT;"+
+                            "iptables -P OUTPUT ACCEPT");
                 }
                 process.closeProcess();
                 File ck = new File(globalVariable.path + "/inj");

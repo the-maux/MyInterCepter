@@ -72,7 +72,6 @@ public class                    InitActivity extends Activity {
             monitor.setText("Error Interupted");
             e.printStackTrace();
         }
-//        monitor(stringFromJNI());
     }
 
     private void                buildPath() {
@@ -84,24 +83,18 @@ public class                    InitActivity extends Activity {
 
     private void                initInfo() {
         try {
-            WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             Log.d(TAG, "init Net infos");
             RootProcess process = getNetworkInfoByCept();
-            BufferedReader bufferedReader = process.getReader();
-            if (bufferedReader == null)
-                finish();
+            BufferedReader bufferedReader;
             int c = 0;
-            while (true) {
-                String read = "";
-                read = bufferedReader.readLine();
-                if (read == null) {
-                    continue;
-                } else {
-                    Log.d(TAG, "read is " + read); //read: wlan0 : IP: 10.16.184.230 / 255.255.254.0
-                }
+            String read;
+            if ((bufferedReader = process.getReader()) == null)
+                finish();
+            while ((read = bufferedReader.readLine()) != null) {
+                Log.d(TAG, "read is " + read); //read: wlan0 : IP: 10.16.184.230 / 255.255.254.0
                 monitor("Initialization...");
                 globalVariable.adapt_num = c + 1;
-                String data = wifiManager.getDhcpInfo().toString();
+                String data = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getDhcpInfo().toString();
                 String[] res = data.split(" ");
                 for (int i = 0; i < res.length; i++) {
                     if (res[i].contains("ipaddr"))
@@ -124,10 +117,9 @@ public class                    InitActivity extends Activity {
                 bufferedReader.close();
                 startActivity(i);
                 finish();
-                break;
             }
         } catch (IOException e222) {
-            Toast.makeText(getApplicationContext(), "Broken pipe! Reinstall supersu and busybox!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Broken pipe! Reinstall supersu and busybox!", Toast.LENGTH_SHORT).show();
             e222.getStackTrace();
         } catch (InterruptedException e322) {
             e322.getStackTrace();
@@ -186,12 +178,8 @@ public class                    InitActivity extends Activity {
 
     private void                buildFile(String nameFile, int ressource) throws IOException, InterruptedException {
         File file = new File(globalVariable.path + "/" + nameFile);
-        //if (file.exists() && file.canExecute()) {
-        //    Log.d(TAG, nameFile + " exist and can be executed");
-        //} else {
         file.delete();
         monitor.setText("Building " + nameFile);
-
         int size;
         InputStream inputStream = getResources().openRawResource(ressource);
         int sizeOfInputStram = inputStream.available();
@@ -199,14 +187,12 @@ public class                    InitActivity extends Activity {
         Arrays.fill( bufferDroidSheep, (byte) 0 );
         size = inputStream.read(bufferDroidSheep, 0, sizeOfInputStram);
         FileOutputStream out = openFileOutput(nameFile, Context.MODE_PRIVATE);
-        //ObjectOutputStream oos = new ObjectOutputStream(out);
         out.write(bufferDroidSheep, 0, size);
         out.flush();
         out.close();
         inputStream.close();
         out.close();
         Log.d(TAG, "buildFile " + nameFile + "(" + sizeOfInputStram + "octet) and write :" + size);
-        //}
         file.setExecutable(true, false);
     }
 
@@ -245,7 +231,6 @@ public class                    InitActivity extends Activity {
                 .exec("chmod 777 ./nmap/*")
                 .exec("chmod 777 ./*")
                 .exec("killall cepter")
-      //          .exec("chown root:root ./cepter")
                 .closeProcess();
     }
 
