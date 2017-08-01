@@ -76,7 +76,7 @@ public class                    InitActivity extends Activity {
     }
 
     private void                buildPath() {
-        globalVariable.path = String.valueOf(this.getFilesDir());
+        globalVariable.path = this.getFilesDir().getPath();
         Log.d(TAG, "path:" + globalVariable.path);
         globalVariable.PCAP_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
         monitor.setText("Building Path");
@@ -135,7 +135,7 @@ public class                    InitActivity extends Activity {
     }
 
     private RootProcess         getNetworkInfoByCept() throws IOException, InterruptedException {
-        monitor("Testing busybox");
+        monitor("Get network Information Loading");
         RootProcess process = new RootProcess("getNetworkInfoByCept", globalVariable.path);
         monitor("Testing busybox... OK");
         Log.d(TAG, "su " + globalVariable.path + "/cepter list; exit");

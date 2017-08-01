@@ -1,30 +1,25 @@
 package su.sniff.cepter.View;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.SystemClock;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 import su.sniff.cepter.*;
 import su.sniff.cepter.Controller.IPv4;
 import su.sniff.cepter.Controller.NetUtils;
-import su.sniff.cepter.Controller.PortScan;
 import su.sniff.cepter.Controller.RootProcess;
+import su.sniff.cepter.Model.Host;
 import su.sniff.cepter.Network.ScanNetmask;
 import su.sniff.cepter.Utils.Net.IpUtils;
 import su.sniff.cepter.Utils.TabActivitys;
@@ -35,14 +30,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.StringTokenizer;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,9 +42,10 @@ public class                        ScanActivity extends Activity {
     private String                  TAG = "ScanActivity";
     private ScanActivity            mInstance = this;
     private boolean[]               itemToggled = new boolean[2048];
-    private ArrayList<String>       lst;//Liste de String contenant Ip(Hostname)\n[MAC][OS] : Info
+    private ArrayList<Host>         lst;//Liste de String contenant Ip(Hostname)\n[MAC][OS] : Info
+    private List<Host>              hosts; // Liste de Host contenant Ip(Hostname)\n[MAC][OS] : Info
+    private RecyclerView            hostsRecyclerView;
     private String                  origin_str, monitor;
-    private ListView                hostsListView;
     private FloatingActionButton    progressBar;
     private int                     progress = 0;
     private boolean                 hostLoaded = false;
@@ -73,13 +66,13 @@ public class                        ScanActivity extends Activity {
 
     private void                    init() throws Exception {
         progressBar = (FloatingActionButton) findViewById(R.id.fab);
-        hostsListView = (ListView) findViewById(R.id.listView1);
+        hostsRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         Arrays.fill(itemToggled, false); //clear tab of bool
         new RootProcess("/cepter getv", globalVariable.path) //Start Cepter Binary
                 .exec(globalVariable.path + "/cepter getv " + NetUtils.getMac())
                 .exec("exit")
                 .closeProcess();
-        initMonitor(((WifiManager) getSystemService("wifi")).getConnectionInfo());
+        initMonitor(((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo());
     }
 
     /**
@@ -87,7 +80,9 @@ public class                        ScanActivity extends Activity {
      * @param wifiInfo
      */
     private void                    initMonitor(WifiInfo wifiInfo) throws Exception{
+        Log.d(TAG, "Init Monitor");
         monitor = getIntent().getExtras().getString("Key_String");
+        Log.d(TAG, "Monitor [" + monitor + "]");
         if (!monitor.contains("WiFi")) {
             monitor += "\nNon LMFR: " + wifiInfo.getSSID() + ", GW: " + globalVariable.gw_ip + "/" + globalVariable.netmask;
         }
@@ -96,14 +91,20 @@ public class                        ScanActivity extends Activity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(mInstance, "Due to netmask the scanning might take a while, be patient", 1).show();
+                    Toast.makeText(mInstance, "Due to netmask the scanning might take a while, be patient", Toast.LENGTH_LONG).show();
                 }
             });
         }
     }
 
+    private void                    initHostsRecyclerView() {
+        hostsRecyclerView.setHasFixedSize(true);
+        hostsRecyclerView.setLayoutManager(new LinearLayoutManager(mInstance));
+        //hostsRecyclerView.setAdapter(new HostAdapter(hosts, mInstance));
+    }
+
     private void                    initHostListView() {
-        hostsListView.setChoiceMode(2);
+        /*hostsListView.setChoiceMode(2);
         //Select or Unselect
         hostsListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -129,10 +130,10 @@ public class                        ScanActivity extends Activity {
                 }
                 return true;
             }
-        });
+        });*/
     }
 
-    private void                    sortListHosts(final HostAdapter<String> adapter)  throws IOException, InterruptedException {
+    private void                    sortListHosts(final HostAdapter adapter)  throws IOException, InterruptedException {
         final RootProcess process = new RootProcess("Cepter Scan1", globalVariable.path + "");
         final BufferedReader bufferedReader2 = new BufferedReader(process.getInputStreamReader());
         process.exec(globalVariable.path + "/cepter scan " + Integer.toString(globalVariable.adapt_num));
@@ -141,17 +142,26 @@ public class                        ScanActivity extends Activity {
             public void run() {
                 try {
                     int rcx = 0;
+                    Log.d(TAG, "sortListHosts");
                     while (true) {
                         String read = bufferedReader2.readLine();
                         if (read != null) {
                             int ipo = read.indexOf(32);
                             if (ipo > 0) {
-                                //TODO: Build Stack of Client
                                 // Format : 10.16.186.3 	(-) \n [D8-FC-93-26-D4-EB] [Windows 7\8\10] : Intel Corporate \n
+                                Host hostObj = new Host(read);
+                                hosts.add(hostObj);
+                                mInstance.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                });
                                 final String host = read.replace(": ", "\n").replace(";", ":");
-                                sortAdapterHosts(host, rcx++, adapter);
+                                //sortAdapterHosts(hostObj, rcx++, adapter);
                             }
                         } else {
+                            sortHosts();
                             bufferedReader2.close();
                             process.waitFor();
                             return;
@@ -164,27 +174,14 @@ public class                        ScanActivity extends Activity {
         }).start();
     }
 
-    /**
-     * Trie la list des host par IP
-     * @param host1
-     * @param index
-     * @param adapter
-     */
-    private void                    sortAdapterHosts(final String host1, final int index, final ArrayAdapter<String> adapter) { // Wtf is that ?
+    private void                    sortHosts() {
         mInstance.runOnUiThread(new Runnable() {
             public void run() {
-                lst.add(index, host1);
-                adapter.sort(new Comparator<Object>() {
+                Collections.sort(hosts, new Comparator<Host>() {
                     @Override
-                    public int compare(Object o1, Object o2) {
-                        String p1 = (String) o1;
-                        String p2 = (String) o2;
-                        int z1 = p1.indexOf(32);
-                        int z2 = p2.indexOf(32);
-                        String ip1 = p1.substring(0, z1);
-                        String ip2 = p2.substring(0, z2);
-                        String ip11 = ip1.substring(ip1.lastIndexOf(".") + 1, ip1.length());
-                        String ip22 = ip2.substring(ip2.lastIndexOf(".") + 1, ip2.length());
+                    public int compare(Host o1, Host o2) {
+                        String ip11 = o1.getIp().substring(o1.getIp().lastIndexOf(".") + 1, o1.getIp().length());
+                        String ip22 = o2.getIp().substring(o2.getIp().lastIndexOf(".") + 1, o2.getIp().length());
                         if (ip11.length() == 0 || ip22.length() == 0 || Integer.parseInt(ip11) == Integer.parseInt(ip22)) {
                             return 0;
                         }
@@ -194,7 +191,6 @@ public class                        ScanActivity extends Activity {
                         return -1;
                     }
                 });
-                adapter.notifyDataSetChanged();
             }
         });
     }
@@ -215,7 +211,7 @@ public class                        ScanActivity extends Activity {
                 objArr[0] = ip.replace(".", "\\.");
                 Matcher matcher = Pattern.compile(String.format(MAC_RE, objArr)).matcher(read);
                 if (matcher.matches()) {
-                    Log.i(TAG, ip + ":" + matcher.group(1) + "\n");
+                    Log.i(TAG, ip + " " + matcher.group(1) + "\n");
                     hostListFile.write((ip + ":" + matcher.group(1) + "\n").getBytes());
                 }
             }
@@ -268,10 +264,11 @@ public class                        ScanActivity extends Activity {
     }
 
     private void                    startNetworkScan() throws IOException, InterruptedException {
-
-        lst = new ArrayList<>();
-        final HostAdapter<String> adapter = new HostAdapter<>(this, R.layout.my_list2, R.id.label, lst, itemToggled);
-        hostsListView.setAdapter(adapter);
+        //lst = new ArrayList<>();
+        hosts = new ArrayList<>();
+        final HostAdapter adapter = new HostAdapter(hosts, mInstance);
+        //hostsListView.setAdapter(adapter);
+        hostsRecyclerView.setAdapter(adapter);
         progressAnimation();
         IPv4 iPv4 = new IPv4(globalVariable.own_ip, globalVariable.netmask);//IPv4 iPv4 = new IPv4(globalVariable.own_ip + "/" + this.mask2);
         new ScanNetmask(iPv4);
@@ -280,7 +277,8 @@ public class                        ScanActivity extends Activity {
         progress = 1500;
         sortListHosts(adapter);
         progress = 2000;
-        initHostListView();
+        initHostsRecyclerView();
+        //initHostListView();
     }
 
     /**
@@ -288,27 +286,19 @@ public class                        ScanActivity extends Activity {
      * @throws IOException
      */
     private void                    startAttack() throws IOException {
-        String selected = BuildConfig.FLAVOR;
-        int t = 1;
-        int total = hostsListView.getCount();
+        boolean noTargetSelected = true;
         FileOutputStream out = openFileOutput("targets", 0);
-        for (int i = 0; i < total; i++) {
-            if (this.itemToggled[i]) {
-                int z = hostsListView.getAdapter().getItem(i).toString().indexOf(10);
-                int z2 = hostsListView.getAdapter().getItem(i).toString().indexOf(32);
-                int z3 = hostsListView.getAdapter().getItem(i).toString().indexOf("] ");
-                String deb = hostsListView.getAdapter().getItem(i).toString();
-                String mac = hostsListView.getAdapter().getItem(i).toString().substring(z + 3, z3);
-                selected = selected + " -t" + Integer.toString(t) + " " + hostsListView.getAdapter().getItem(i).toString().substring(0, z2);
-                t++;
-                //out.write(Ip(Hostname)\n[MAC][OS] : Info)
-                Log.d(TAG, (hostsListView.getAdapter().getItem(i).toString().substring(0, z2) + ":" + mac) + " BONUS;" + deb);
-                out.write((hostsListView.getAdapter().getItem(i).toString().substring(0, z2) + ":" + mac + "\n").getBytes());
+        for (Host host : hosts) {
+            if (host.isSelected()) {
+                noTargetSelected = false;
+                String dumpHost = host.getIp() + ":" + host.getMac() + "\n";
+                Log.d(TAG, "dumpHost:" + dumpHost);
+                out.write(dumpHost.getBytes());
             }
         }
         out.close();
-        if (selected.equals(BuildConfig.FLAVOR)) {
-            Toast.makeText(getApplicationContext(), "No target selected!", 0).show();
+        if (noTargetSelected) {
+            Toast.makeText(getApplicationContext(), "No target selected!", Toast.LENGTH_SHORT).show();
             return;
         }
         String cmd = "-gw " + globalVariable.gw_ip;
@@ -322,47 +312,26 @@ public class                        ScanActivity extends Activity {
 
     public void                     OnCage(View v2) throws IOException {
         Log.d(TAG, "OnCage");
-        String selected = BuildConfig.FLAVOR;
-        if (this.hostsListView.getCount() > 0) {
-            int t = 1;
-            int total = this.hostsListView.getCount();
+        boolean noTargetSelected = true;
             FileOutputStream out = openFileOutput("cage", 0);
-            for (int i = 0; i < total; i++) {
-                if (this.itemToggled[i]) {
-                    int z = hostsListView.getAdapter().getItem(i).toString().indexOf(10);
-                    int z2 = hostsListView.getAdapter().getItem(i).toString().indexOf(32);
-                    int z3 = hostsListView.getAdapter().getItem(i).toString().indexOf("] ");
-                    String deb = hostsListView.getAdapter().getItem(i).toString();
-                    String mac = hostsListView.getAdapter().getItem(i).toString().substring(z + 3, z3);
-                    selected = selected + " -t" + Integer.toString(t) + " " + hostsListView.getAdapter().getItem(i).toString().substring(0, z2);
-                    t++;
-                    Log.d(TAG, hostsListView.getAdapter().getItem(i).toString().substring(0, z2) + ":" + mac + "\n");
-                    out.write((hostsListView.getAdapter().getItem(i).toString().substring(0, z2) + ":" + mac + "\n").getBytes());
+            if (hosts.size() == 0) {
+                Toast.makeText(getApplicationContext(), "Scan network", Toast.LENGTH_SHORT).show();
+                return ;
+            }
+            for (Host host : hosts) {
+                if (host.isSelected()) {
+                    noTargetSelected = false;
+                    String dumpHost = host.getIp() + ":" + host.getMac() + "\n";
+                    Log.d(TAG, "dumpHost:" + dumpHost);
+                    out.write(dumpHost.getBytes());
                 }
             }
             out.close();
-            if (selected.equals(BuildConfig.FLAVOR)) {
-                Toast.makeText(getApplicationContext(), "Choose target!", 0).show();
-                return;
+            if (noTargetSelected) {
+                Toast.makeText(getApplicationContext(), "Choose target!", Toast.LENGTH_SHORT).show();
             } else {
                 startActivityForResult(new Intent(mInstance, CageActivity.class), 1);
-                return;
             }
-        }
-        Toast.makeText(getApplicationContext(), "Scan network!", 0).show();
-    }
-
-    public void                     OnSelectAll(View v2) throws IOException {
-        if (this.hostsListView.getCount() > 0) {
-            int total = this.hostsListView.getCount();
-            for (int i = 0; i < total; i++) {
-                itemToggled[i] = true;
-                ImageView imageView1 = (ImageView) hostsListView.getChildAt(i).findViewById(R.id.icon2);
-                imageView1.setImageResource((itemToggled[i]) ? android.R.drawable.checkbox_on_background : android.R.drawable.checkbox_off_background);
-            }
-            return;
-        }
-        Toast.makeText(getApplicationContext(), "Scan network!", 0).show();
     }
 
     public boolean                  onKeyDown(int keyCode, KeyEvent event) {
