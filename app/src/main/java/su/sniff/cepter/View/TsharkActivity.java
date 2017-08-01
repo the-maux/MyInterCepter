@@ -210,9 +210,9 @@ public class                    TsharkActivity extends Activity {
         return new Runnable() {
             public void run() {
                 Log.d(TAG, "execParseCepter started");
-                String sc = " w "; //Dump le pcap sous forme de fichier .pcap
+                String sc = " w "; //Dump le pcap sous forme de fichier .pcap mais ca fait segfault, bisare
                 RootProcess processRoot = new RootProcess("tShark SNIFF launch to Cepter", globalVariable.path + "");
-                processRoot.exec(globalVariable.path + "/cepter " + Integer.toString(globalVariable.adapt_num) + " 3 raw" + sc);
+                processRoot.exec(globalVariable.path + "/cepter " + Integer.toString(globalVariable.adapt_num) + " 3 raw" );//+ sc
                 processRoot.exec("exit");
 
                 BufferedReader bufferedReader = new BufferedReader(processRoot.getInputStreamReader());

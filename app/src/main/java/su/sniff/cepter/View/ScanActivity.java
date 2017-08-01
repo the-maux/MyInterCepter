@@ -10,8 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
@@ -68,10 +66,7 @@ public class                        ScanActivity extends Activity {
         progressBar = (FloatingActionButton) findViewById(R.id.fab);
         hostsRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         Arrays.fill(itemToggled, false); //clear tab of bool
-        new RootProcess("/cepter getv", globalVariable.path) //Start Cepter Binary
-                .exec(globalVariable.path + "/cepter getv " + NetUtils.getMac())
-                .exec("exit")
-                .closeProcess();
+        Cepter.startCepter(NetUtils.getMac());
         initMonitor(((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo());
     }
 
@@ -103,72 +98,36 @@ public class                        ScanActivity extends Activity {
         //hostsRecyclerView.setAdapter(new HostAdapter(hosts, mInstance));
     }
 
-    private void                    initHostListView() {
-        /*hostsListView.setChoiceMode(2);
-        //Select or Unselect
-        hostsListView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View itemClicked, int position, long id) {
-                ScanActivity.this.itemToggled[position] = !ScanActivity.this.itemToggled[position];
-                ImageView imageView1 = (ImageView) itemClicked.findViewById(R.id.icon2);
-                imageView1.setImageResource(android.R.drawable.checkbox_off_background);
-                imageView1.setImageResource(ScanActivity.this.itemToggled[position] ? android.R.drawable.checkbox_on_background : android.R.drawable.checkbox_off_background);
-            }
-        });
-        //Start PortScan
-        hostsListView.setOnItemLongClickListener(new OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                String it = parent.getItemAtPosition(position).toString();
-                int offset = it.indexOf(" ");
-                if (offset > 0) {
-                    String index = it.substring(0, offset);
-                    Intent i = new Intent(mInstance, PortScan.class);
-                    i.putExtra("Key_Int", index);
-                    mInstance.startActivityForResult(i, 1);
-                    globalVariable.lock = 0;
-                }
-                return true;
-            }
-        });*/
-    }
-
-    private void                    sortListHosts(final HostAdapter adapter)  throws IOException, InterruptedException {
-        final RootProcess process = new RootProcess("Cepter Scan1", globalVariable.path + "");
-        final BufferedReader bufferedReader2 = new BufferedReader(process.getInputStreamReader());
-        process.exec(globalVariable.path + "/cepter scan " + Integer.toString(globalVariable.adapt_num));
-        process.exec("exit");
+    private void                        dumpListHost(final HostAdapter adapter)  throws IOException, InterruptedException {
+        final BufferedReader bufferedReader2 = Cepter.searchDevices(Integer.toString(globalVariable.adapt_num));
+        Log.d(TAG, "reading list host from Cepter");
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    int rcx = 0;
-                    Log.d(TAG, "sortListHosts");
                     while (true) {
                         String read = bufferedReader2.readLine();
                         if (read != null) {
-                            int ipo = read.indexOf(32);
-                            if (ipo > 0) {
+                            if (read.indexOf(32) > 0) {
                                 // Format : 10.16.186.3 	(-) \n [D8-FC-93-26-D4-EB] [Windows 7\8\10] : Intel Corporate \n
                                 Host hostObj = new Host(read);
                                 hosts.add(hostObj);
-                                mInstance.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                });
-                                final String host = read.replace(": ", "\n").replace(";", ":");
-                                //sortAdapterHosts(hostObj, rcx++, adapter);
                             }
                         } else {
-                            sortHosts();
                             bufferedReader2.close();
-                            process.waitFor();
+                            Cepter.waitForCepter();
                             return;
                         }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                } finally {
+                    mInstance.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            sortHosts();
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
                 }
             }
         }).start();
@@ -180,15 +139,17 @@ public class                        ScanActivity extends Activity {
                 Collections.sort(hosts, new Comparator<Host>() {
                     @Override
                     public int compare(Host o1, Host o2) {
-                        String ip11 = o1.getIp().substring(o1.getIp().lastIndexOf(".") + 1, o1.getIp().length());
-                        String ip22 = o2.getIp().substring(o2.getIp().lastIndexOf(".") + 1, o2.getIp().length());
-                        if (ip11.length() == 0 || ip22.length() == 0 || Integer.parseInt(ip11) == Integer.parseInt(ip22)) {
-                            return 0;
-                        }
-                        if (Integer.parseInt(ip11) > Integer.parseInt(ip22)) {
+                        String ip1[] = o1.getIp().replace(".", "::").split("::");
+                        String ip2[] = o2.getIp().replace(".", "::").split("::");
+                        if (Integer.parseInt(ip1[2]) > Integer.parseInt(ip2[2]))
                             return 1;
-                        }
-                        return -1;
+                        else if (Integer.parseInt(ip1[2]) < Integer.parseInt(ip2[2]))
+                            return -1;
+                        else if (Integer.parseInt(ip1[3]) > Integer.parseInt(ip2[3]))
+                            return 1;
+                        else if (Integer.parseInt(ip1[3]) < Integer.parseInt(ip2[3]))
+                            return -1;
+                        return 0;
                     }
                 });
             }
@@ -275,7 +236,7 @@ public class                        ScanActivity extends Activity {
         progress = 1000;
         dumpListHost();
         progress = 1500;
-        sortListHosts(adapter);
+        dumpListHost(adapter);
         progress = 2000;
         initHostsRecyclerView();
         //initHostListView();

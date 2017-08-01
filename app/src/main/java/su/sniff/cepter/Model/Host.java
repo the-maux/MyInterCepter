@@ -16,6 +16,7 @@ public class Host {
     private String          os = "Unknown";
     private String          vendor = "Unknown";
     private boolean         selected = false;
+    private String          dumpInfo;
 
     /**
      * Format : 192.168.0.12 	(theMaux) : [E8-B1-FC-A6-CF-11] [Windows 7\8\10] ; Intel Corporate
@@ -32,6 +33,7 @@ public class Host {
         os = mid.substring(mid.indexOf(" ") + 1);
         vendor = end;
         logHost(buffer);
+        this.dumpInfo = buffer;
     }
 
     /**
@@ -105,5 +107,9 @@ public class Host {
 
     public void             setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public String getDumpInfo() {
+        return dumpInfo;
     }
 }

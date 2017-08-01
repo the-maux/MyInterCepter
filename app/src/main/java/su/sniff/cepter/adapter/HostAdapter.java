@@ -44,35 +44,35 @@ public class                    HostAdapter extends RecyclerView.Adapter<HostHol
         holder.vendor.setText(host.getVendor());
         holder.selected.setChecked(host.isSelected());
         Log.d(TAG, "updating :" + position + " with selected:" + host.isSelected());
-        setOsIcon(mHosts.get(position).getOS(), holder.osIcon);
+        setOsIcon(mHosts.get(position).getDumpInfo(), holder.osIcon);
     }
 
-    private void                setOsIcon(String os, CircleImageView view) {
+    private void                setOsIcon(String InfoDevice, CircleImageView osImageView) {
         int ImageRessource;
-        if (os.contains("Windows")) {
+        if (InfoDevice.contains("Windows")) {
             ImageRessource = R.drawable.winicon;
-        } else if (os.contains("Apple")) {
+        } else if (InfoDevice.contains("Apple")) {
             ImageRessource = R.drawable.ios;
-        } else if (os.contains("Android") || os.contains("Mobile") || os.contains("Samsung")) {
+        } else if (InfoDevice.contains("Android") || InfoDevice.contains("Mobile") || InfoDevice.contains("Samsung")) {
             ImageRessource = R.drawable.android;
-        } else if (os.contains("Cisco")) {
+        } else if (InfoDevice.contains("Cisco")) {
             ImageRessource = R.drawable.cisco;
-        } else if (os.contains("Raspberry")) {
+        } else if (InfoDevice.contains("Raspberry")) {
             ImageRessource = R.drawable.rasp;
-        } else if (os.contains("QUANTA")) {
+        } else if (InfoDevice.contains("QUANTA")) {
             ImageRessource = R.drawable.quanta;
-        } else if (os.contains("Bluebird")) {
+        } else if (InfoDevice.contains("Bluebird")) {
             ImageRessource = R.drawable.bluebird;
-        } else if (os.contains("Ios")) {
+        } else if (InfoDevice.contains("Ios")) {
             ImageRessource = R.drawable.ios;
-        } else if (!(!os.contains("Unix") && !os.contains("Linux") && !os.contains("BSD"))) {
+        } else if (!(!InfoDevice.contains("Unix") && !InfoDevice.contains("Linux") && !InfoDevice.contains("BSD"))) {
             ImageRessource = R.drawable.linuxicon;
         } else
             ImageRessource = R.drawable.monitor;
         Glide.with(activity)
                 .load(ImageRessource)
                 .centerCrop()
-                .into(view);
+                .into(osImageView);
     }
 
     /**
