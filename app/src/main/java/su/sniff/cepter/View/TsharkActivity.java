@@ -202,34 +202,31 @@ public class                    TsharkActivity extends Activity {
         return new Runnable() {
             public void run() {
                 Log.d(TAG, "execParseCepter started");
-                String sc = " w "; //Dump le pcap sous forme de fichier .pcap mais ca fait segfault, bisare
-                RootProcess processRoot = new RootProcess("tShark SNIFF launch to Cepter", globalVariable.path + "");
-                processRoot.exec(globalVariable.path + "/cepter " + Integer.toString(globalVariable.adapt_num) + " 3 raw w " );//+ sc
-                processRoot.exec("exit");
-
-                BufferedReader bufferedReader = new BufferedReader(processRoot.getInputStreamReader());
                 int offsetLine = 0;
-                while (true) {
-                    try {
-                        final String line = bufferedReader.readLine();
-                        if (line == null) {
-                            Log.d(TAG, "Dump of cepter for tShark is null");
-                            bufferedReader.close();
-                            processRoot.waitFor();
-                            addToListView(lst, offsetLine, "***");
-                            return;
-                        }
+                String line;
+                try {
+                    RootProcess processRoot = new RootProcess("cepter RAW MODE(tshark)", globalVariable.path + "");String sc = " w "; //Dump le pcap sous forme de fichier .pcap mais ca fait segfault, bisare
+                    processRoot.exec(globalVariable.path + "/cepter " + Integer.toString(globalVariable.adapt_num) + " 3 raw" );//+ sc
+                    InputStreamReader reader = processRoot.getInputStreamReader();
+                    Log.i(TAG, "RAW MODE reader ready:" + reader.ready());
+                    BufferedReader bufferedReader = new BufferedReader(reader);
+                    while ((line = bufferedReader.readLine()) != null) {
+                        Log.d(TAG, "line:" + line);
                         if (line.contains("###STAT###")) {
                             IntercepterReader.parseStat(line, mInstance);
-                        } else if (line.contains("Cookie###")) {
+                        } else if (line.contains("  Cookie###")) {
                             IntercepterReader.parseCookie(bufferedReader, mInstance);
                         } else {
                             addToListView(lst, offsetLine, line);
                             offsetLine++;
                         }
-                    } catch (IOException e) {
-                        e.getStackTrace();
                     }
+                    Log.d(TAG, "Dump of cepter for tShark is null");
+                    bufferedReader.close();
+                    processRoot.waitFor();
+                    addToListView(lst, offsetLine, "***");
+                } catch (IOException e) {
+                    e.getStackTrace();
                 }
             }
         };

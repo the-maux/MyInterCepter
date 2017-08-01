@@ -230,6 +230,7 @@ public class                    InitActivity extends Activity {
                 .exec("./busybox unzip archive_nmap")
                 .exec("chmod 777 ./nmap/*")
                 .exec("chmod 777 ./*")
+                .exec("rm -f ./Raw/*")
                 .exec("killall cepter")
                 .closeProcess();
     }

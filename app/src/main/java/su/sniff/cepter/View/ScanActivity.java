@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 import su.sniff.cepter.*;
+import su.sniff.cepter.Controller.CepterControl.Cepter;
 import su.sniff.cepter.Controller.IPv4;
 import su.sniff.cepter.Controller.NetUtils;
 import su.sniff.cepter.Controller.RootProcess;
@@ -68,6 +69,7 @@ public class                        ScanActivity extends Activity {
         Arrays.fill(itemToggled, false); //clear tab of bool
         Cepter.startCepter(NetUtils.getMac());
         initMonitor(((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo());
+        Log.d(TAG, "whoami:" + new BufferedReader(new RootProcess("Whoami").exec("id").getInputStreamReader()).readLine());
     }
 
     /**

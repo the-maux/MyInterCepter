@@ -41,12 +41,8 @@ public class                    IntercepterReader extends Thread {
 
     private void                readThePipe() throws IOException {
         BufferedReader reader = new BufferedReader(process.getInputStreamReader());
-        while (true) {
-            String line = reader.readLine();
-            if (line == null) {
-                closeAll(reader, process, activity);
-                return;
-            }
+        String line;
+        while ((line = reader.readLine()) != null) {
             if (line.contains("###STAT###")) {
                 parseStat(line, activity);
             } else if (line.contains("REQ###")) {
@@ -57,6 +53,15 @@ public class                    IntercepterReader extends Thread {
                 parseOther(line, activity, monitor);
             }
         }
+        reader.close();
+        process.waitFor();
+        Log.d(TAG, "closing");
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                monitor.append("*\n");
+            }
+        });
     }
 
     public static void        parseStat(final String temp, final Activity activity) {
@@ -97,18 +102,6 @@ public class                    IntercepterReader extends Thread {
                 if (globalVariable.raw_autoscroll == 1) {
                     scrollview.scrollTo(0, monitor.getHeight() + 50);
                 }
-            }
-        });
-    }
-
-    public void                closeAll(BufferedReader reader, RootProcess process, Activity activity) throws IOException {
-        reader.close();
-        process.waitFor();
-        Log.d(TAG, "closing");
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                monitor.append("*\n");
             }
         });
     }

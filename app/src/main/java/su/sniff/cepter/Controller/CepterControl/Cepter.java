@@ -1,9 +1,10 @@
-package su.sniff.cepter;
+package su.sniff.cepter.Controller.CepterControl;
 
 import java.io.BufferedReader;
 
 import su.sniff.cepter.Controller.NetUtils;
 import su.sniff.cepter.Controller.RootProcess;
+import su.sniff.cepter.globalVariable;
 
 /**
  * Created by root on 01/08/17.
