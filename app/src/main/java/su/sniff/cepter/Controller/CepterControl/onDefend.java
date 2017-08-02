@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import su.sniff.cepter.Controller.RootProcess;
+import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.globalVariable;
 
 /**

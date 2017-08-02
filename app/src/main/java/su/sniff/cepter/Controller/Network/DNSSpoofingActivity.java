@@ -1,4 +1,4 @@
-package su.sniff.cepter.Controller;
+package su.sniff.cepter.Controller.Network;
 
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
@@ -18,12 +18,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import su.sniff.cepter.BuildConfig;
 import su.sniff.cepter.R;
-import su.sniff.cepter.adapter.DNSAdapter;
+import su.sniff.cepter.View.adapter.DNSAdapter;
 import su.sniff.cepter.globalVariable;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;

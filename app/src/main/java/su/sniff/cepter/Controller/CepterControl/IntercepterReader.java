@@ -1,4 +1,4 @@
-package su.sniff.cepter.Misc;
+package su.sniff.cepter.Controller.CepterControl;
 
 import android.app.Activity;
 import android.text.Spannable;
@@ -7,8 +7,9 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import su.sniff.cepter.Controller.IntercepterParser;
-import su.sniff.cepter.Controller.RootProcess;
+
+import su.sniff.cepter.Controller.System.RootProcess;
+import su.sniff.cepter.Controller.System.ThreadUtils;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
 

@@ -153,7 +153,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="8dp"
                 android:scrollbars="vertical"
-                tools:listitem="@layout/card_host" />
+                tools:listitem="@layout/adapter_host" />
         </android.support.v4.widget.SwipeRefreshLayout>
 
 		<TextView

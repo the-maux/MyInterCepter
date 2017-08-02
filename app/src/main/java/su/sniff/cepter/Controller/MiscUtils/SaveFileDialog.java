@@ -1,4 +1,4 @@
-package su.sniff.cepter.Utils;
+package su.sniff.cepter.Controller.MiscUtils;
 
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;

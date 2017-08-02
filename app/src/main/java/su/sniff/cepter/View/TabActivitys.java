@@ -1,4 +1,4 @@
-package su.sniff.cepter.Utils;
+package su.sniff.cepter.View;
 
 import android.app.TabActivity;
 import android.content.Intent;
@@ -32,8 +32,8 @@ public class TabActivitys extends TabActivity {
         i3.putExtra("Key_String", str);
         i3.putExtra("Key_String_origin", orig_str);
         Intent i4 = new Intent(this, CookiesActivity.class);
-        Intent i5 = new Intent(this, ExpertSettingsActivity.class);
-        Intent i6 = new Intent(this, ExpertSettingsActivity.class);
+        Intent i5 = new Intent(this, SettingsExpertActivity.class);
+        Intent i6 = new Intent(this, SettingsExpertActivity.class);
         Resources res = getResources();
         TabSpec tabSpec = tabHost.newTabSpec("tag1");
         tabSpec.setIndicator(BuildConfig.FLAVOR, res.getDrawable(R.drawable.poiz));

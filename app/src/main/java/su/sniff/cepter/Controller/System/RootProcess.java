@@ -1,7 +1,6 @@
-package su.sniff.cepter.Controller;
+package su.sniff.cepter.Controller.System;
 
 import android.util.Log;
-import su.sniff.cepter.globalVariable;
 
 import java.io.*;
 

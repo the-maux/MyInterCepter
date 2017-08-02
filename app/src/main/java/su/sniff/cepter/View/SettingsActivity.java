@@ -36,7 +36,7 @@ public class SettingsActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_layout);
+        setContentView(R.layout.activity_settings);
         this.cmd = getIntent().getExtras().getString("Key_String");
         this.orig_str = getIntent().getExtras().getString("Key_String_origin");
         ((TextView) findViewById(R.id.monitor)).setText("Home dir: " + getFilesDir().toString());

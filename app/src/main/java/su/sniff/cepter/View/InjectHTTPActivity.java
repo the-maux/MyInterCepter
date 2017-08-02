@@ -20,8 +20,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import su.sniff.cepter.BuildConfig;
-import su.sniff.cepter.Utils.OpenFileDialog;
-import su.sniff.cepter.Utils.OpenFileDialog.OnFileSelectedListener;
+import su.sniff.cepter.Controller.MiscUtils.OpenFileDialog;
+import su.sniff.cepter.Controller.MiscUtils.OpenFileDialog.OnFileSelectedListener;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
 
@@ -60,7 +60,7 @@ public class InjectHTTPActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.inject);
+        setContentView(R.layout.activity_inject_http);
         if (globalVariable.lock == 0) {
             globalVariable.lock = 1;
         } else {

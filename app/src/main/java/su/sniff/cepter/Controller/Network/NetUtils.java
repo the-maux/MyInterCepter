@@ -1,4 +1,4 @@
-package su.sniff.cepter.Controller;
+package su.sniff.cepter.Controller.Network;
 
 import android.content.Context;
 import android.util.Log;

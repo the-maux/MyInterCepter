@@ -40,13 +40,13 @@
             android:name="su.sniff.cepter.View.TsharkActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name="su.sniff.cepter.Utils.RawDetails"
+            android:name="su.sniff.cepter.View.TsharkDetailsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name="su.sniff.cepter.Controller.PortScan"
+            android:name="su.sniff.cepter.View.PortScanActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name="su.sniff.cepter.Controller.DNSSpoofingActivity"
+            android:name="su.sniff.cepter.Controller.Network.DNSSpoofingActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.InjectHTTPActivity"
@@ -59,7 +59,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name" />
         <activity
-            android:name="su.sniff.cepter.Utils.TabActivitys"
+            android:name=".View.TabActivitys"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.SettingsActivity"
@@ -71,7 +71,7 @@
             android:name="su.sniff.cepter.View.BrowserActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name="su.sniff.cepter.View.ExpertSettingsActivity"
+            android:name="su.sniff.cepter.View.SettingsExpertActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>
 </manifest>

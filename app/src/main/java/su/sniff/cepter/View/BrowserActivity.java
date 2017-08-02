@@ -19,10 +19,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import su.sniff.cepter.Misc.ThreadUtils;
+import su.sniff.cepter.Controller.System.ThreadUtils;
 import su.sniff.cepter.R;
-import su.sniff.cepter.Utils.SaveFileDialog;
-import su.sniff.cepter.Utils.SaveFileDialog.OnNewFileSelectedListener;
+import su.sniff.cepter.Controller.MiscUtils.SaveFileDialog;
+import su.sniff.cepter.Controller.MiscUtils.SaveFileDialog.OnNewFileSelectedListener;
 import su.sniff.cepter.globalVariable;
 
 
@@ -34,7 +34,7 @@ public class                BrowserActivity extends Activity {
 
     public void             onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.browser_layout);
+        setContentView(R.layout.activity_browser);
         mWebView = (WebView) findViewById(R.id.webView1);
         ThreadUtils.lock();
         initCookieManager();

@@ -1,19 +1,14 @@
 package su.sniff.cepter.Controller.CepterControl;
 
-import android.widget.TextView;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import su.sniff.cepter.Controller.NetUtils;
-import su.sniff.cepter.Controller.RootProcess;
+import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.Model.Host;
 import su.sniff.cepter.View.ScanActivity;
-import su.sniff.cepter.adapter.HostAdapter;
 import su.sniff.cepter.globalVariable;
 
 /**

@@ -1,17 +1,14 @@
-package su.sniff.cepter.Network;
+package su.sniff.cepter.Controller.Network;
 
-import android.os.SystemClock;
 import android.util.Log;
-import su.sniff.cepter.Controller.IPv4CIDR;
+
 import su.sniff.cepter.View.ScanActivity;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.ArrayList;
-import java.util.Formatter;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

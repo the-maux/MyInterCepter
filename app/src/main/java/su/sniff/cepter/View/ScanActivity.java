@@ -31,17 +31,14 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import su.sniff.cepter.Controller.CepterControl.Cepter;
-import su.sniff.cepter.Controller.IPv4CIDR;
-import su.sniff.cepter.Controller.NetUtils;
-import su.sniff.cepter.Controller.RootProcess;
+import su.sniff.cepter.Controller.Network.IPv4CIDR;
+import su.sniff.cepter.Controller.Network.NetUtils;
+import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.Model.Host;
-import su.sniff.cepter.Network.ScanNetmask;
+import su.sniff.cepter.Controller.Network.ScanNetmask;
 import su.sniff.cepter.R;
-import su.sniff.cepter.Utils.TabActivitys;
-import su.sniff.cepter.adapter.HostAdapter;
+import su.sniff.cepter.View.adapter.HostAdapter;
 import su.sniff.cepter.globalVariable;
-
-import static su.sniff.cepter.R.id.os;
 
 public class                        ScanActivity extends Activity {
     private String                  TAG = "ScanActivity";
@@ -62,7 +59,7 @@ public class                        ScanActivity extends Activity {
         super.onCreate(savedInstanceState);
         try {
             requestWindowFeature(3);
-            setContentView(R.layout.scan_layout);
+            setContentView(R.layout.activity_scan);
             getWindow().setFeatureDrawableResource(3, R.drawable.ico);
             this.origin_str = monitor;
             init();
