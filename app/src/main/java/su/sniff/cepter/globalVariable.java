@@ -37,4 +37,5 @@ public class                                globalVariable {
     public static int                       screenlock = 0;
     public static int                       showhttp = 0;
     public static int                       strip = 0;
+    public static boolean                   DEBUG = true;
 }

@@ -6,11 +6,11 @@ import su.sniff.cepter.BuildConfig;
 import java.util.ArrayList;
 import java.util.List;
 
-public class                        IPv4 {
+public class IPv4CIDR {
     int                             baseIPnumeric;
     int                             netmaskNumeric;
 
-    public                          IPv4(String symbolicIP, String netmask) throws NumberFormatException {
+    public IPv4CIDR(String symbolicIP, String netmask) throws NumberFormatException {
         String[] st = symbolicIP.split("\\.");
         if (st.length != 4) {
             throw new NumberFormatException("Invalid IP address: " + symbolicIP);
@@ -54,7 +54,7 @@ public class                        IPv4 {
         }
     }
 
-    public                          IPv4(String IPinCIDRFormat) throws NumberFormatException {
+    public IPv4CIDR(String IPinCIDRFormat) throws NumberFormatException {
         String[] st = IPinCIDRFormat.split("\\/");
         if (st.length != 2) {
             throw new NumberFormatException("Invalid CIDR format '" + IPinCIDRFormat + "', should be: xx.xx.xx.xx/xx");
@@ -232,7 +232,7 @@ public class                        IPv4 {
         return false;
     }
 
-    public boolean                  contains(IPv4 child) {
+    public boolean                  contains(IPv4CIDR child) {
         Integer subnetID = child.baseIPnumeric;
         Integer subnetMask = child.netmaskNumeric;
         if ((subnetID  & this.netmaskNumeric) == (this.baseIPnumeric & this.netmaskNumeric)) {

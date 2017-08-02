@@ -2,7 +2,7 @@ package su.sniff.cepter.Network;
 
 import android.os.SystemClock;
 import android.util.Log;
-import su.sniff.cepter.Controller.IPv4;
+import su.sniff.cepter.Controller.IPv4CIDR;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -17,9 +17,9 @@ public class                        ScanNetmask {
     private String                  TAG = "ScanNetmask";
     private ExecutorService         service;
 
-    public                          ScanNetmask(IPv4 iPv4) {
+    public                          ScanNetmask(IPv4CIDR iPv4CIDR) {
         service = Executors.newCachedThreadPool();
-        reachableLoop(iPv4, service);
+        reachableLoop(iPv4CIDR, service);
     }
 
     private void                    runnableReachable(ExecutorService service, final String str) {
@@ -34,9 +34,9 @@ public class                        ScanNetmask {
         });
     }
 
-    private void                    reachableLoop(IPv4 iPv4, ExecutorService service) {
-        Integer NumberOfHosts = iPv4.getNumberOfHosts();
-        List<String> availableIPs = iPv4.getAvailableIPs(NumberOfHosts);
+    private void                    reachableLoop(IPv4CIDR iPv4CIDR, ExecutorService service) {
+        Integer NumberOfHosts = iPv4CIDR.getNumberOfHosts();
+        List<String> availableIPs = iPv4CIDR.getAvailableIPs(NumberOfHosts);
         Log.i(TAG, "NumberOfHosts:" + NumberOfHosts + " ipAvailable:" + availableIPs.size());
         int count = 0;
         for (final String ip : availableIPs) {

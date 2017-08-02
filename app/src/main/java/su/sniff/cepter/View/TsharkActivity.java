@@ -33,7 +33,7 @@ public class                    TsharkActivity extends Activity {
     private TsharkActivity      mInstance = this;
     private String              cmd;
     private String              orig_str;
-    private Thread              threadProcess = null;
+    private Thread              readCepterRawThread = null;
     private ListView            tvList;
     private ProtocolAdapter     adapter;
     private boolean             isAlreadyLaunched = false;
@@ -58,7 +58,7 @@ public class                    TsharkActivity extends Activity {
                 e.printStackTrace();
             }
             ((ImageView) findViewById(R.id.onDefendIcon)).setImageResource(R.drawable.start);
-            threadProcess.interrupt();
+            readCepterRawThread.interrupt();
             isAlreadyLaunched = false;
             return true;
         }
@@ -77,8 +77,8 @@ public class                    TsharkActivity extends Activity {
         final ArrayList<String> lst = new ArrayList<>();
         adapter = new ProtocolAdapter(mInstance.getApplication(), R.layout.raw_list, lst);
         initArrayList();
-        threadProcess = new Thread(execParseCepter(lst));
-        threadProcess.start();
+        readCepterRawThread = new Thread(execParseCepter(lst));
+        readCepterRawThread.start();
     }
 
     private void                initArrayList() {
@@ -156,6 +156,7 @@ public class                    TsharkActivity extends Activity {
             }
         }).start();
     }
+
     private void                informDumpStoped() {
         runOnUiThread(new Runnable() {
             @Override
@@ -165,6 +166,7 @@ public class                    TsharkActivity extends Activity {
             }
         });
     }
+
     private OnItemClickListener onListViewItemClicked() {
         return new OnItemClickListener() {
             @Override
@@ -187,13 +189,14 @@ public class                    TsharkActivity extends Activity {
     }
 
     private void                addToListView(final ArrayList<String> lst, final int offsetLine, final String line) {
+        Log.d(TAG, "listView add at:" + offsetLine + ": " + line);
         runOnUiThread(new Runnable() {
             public void run() {
                 lst.add(offsetLine, line);
                 globalVariable.adapter.notifyDataSetChanged();
-                if (globalVariable.raw_autoscroll == 1) {
+                //if (globalVariable.raw_autoscroll == 1) {
                     tvList.setSelection(offsetLine);
-                }
+                //}
             }
         });
     }
@@ -210,7 +213,7 @@ public class                    TsharkActivity extends Activity {
                     InputStreamReader reader = processRoot.getInputStreamReader();
                     Log.i(TAG, "RAW MODE reader ready:" + reader.ready());
                     BufferedReader bufferedReader = new BufferedReader(reader);
-                    while ((line = bufferedReader.readLine()) != null) {
+                    while (isAlreadyLaunched && (line = bufferedReader.readLine()) != null) {
                         Log.d(TAG, "line:" + line);
                         if (line.contains("###STAT###")) {
                             IntercepterReader.parseStat(line, mInstance);
@@ -221,10 +224,10 @@ public class                    TsharkActivity extends Activity {
                             offsetLine++;
                         }
                     }
-                    Log.d(TAG, "Dump of cepter for tShark is null");
+                    Log.d(TAG, "Cepter Raw listener Over");
                     bufferedReader.close();
                     processRoot.waitFor();
-                    addToListView(lst, offsetLine, "***");
+                    addToListView(lst, offsetLine, "***\t Quiting");
                 } catch (IOException e) {
                     e.getStackTrace();
                 }
@@ -268,7 +271,7 @@ public class                    TsharkActivity extends Activity {
                 e.printStackTrace();
             }
             ((ImageView) findViewById(R.id.onDefendIcon)).setImageResource(R.drawable.start);
-            threadProcess.interrupt();
+            readCepterRawThread.interrupt();
             isAlreadyLaunched = false;
         }
         Intent i = new Intent(mInstance, ScanActivity.class);

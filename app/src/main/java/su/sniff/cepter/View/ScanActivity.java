@@ -15,12 +15,12 @@ import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 import su.sniff.cepter.*;
 import su.sniff.cepter.Controller.CepterControl.Cepter;
-import su.sniff.cepter.Controller.IPv4;
+import su.sniff.cepter.Controller.IPv4CIDR;
 import su.sniff.cepter.Controller.NetUtils;
 import su.sniff.cepter.Controller.RootProcess;
 import su.sniff.cepter.Model.Host;
+import su.sniff.cepter.Model.Ipv4;
 import su.sniff.cepter.Network.ScanNetmask;
-import su.sniff.cepter.Utils.Net.IpUtils;
 import su.sniff.cepter.Utils.TabActivitys;
 import su.sniff.cepter.adapter.HostAdapter;
 
@@ -57,6 +57,10 @@ public class                        ScanActivity extends Activity {
             getWindow().setFeatureDrawableResource(3, R.drawable.ico);
             this.origin_str = monitor;
             init();
+            if (globalVariable.DEBUG) {
+                Log.d(TAG, "debug enabled, starting Scan automaticaly");
+                startNetworkScan();
+            }
         } catch (Exception e) {
             Log.e(TAG, "Big error dans l'init");
             e.printStackTrace();
@@ -84,7 +88,7 @@ public class                        ScanActivity extends Activity {
             monitor += "\nNon LMFR: " + wifiInfo.getSSID() + ", GW: " + globalVariable.gw_ip + "/" + globalVariable.netmask;
         }
         ((TextView)findViewById(R.id.Message)).setText(monitor);
-        if (Integer.bitCount(IpUtils.getIPAsInteger(globalVariable.netmask)) < 24) {
+        if (Integer.bitCount(new Ipv4(globalVariable.netmask).getIpInt()) < 24) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -106,8 +110,8 @@ public class                        ScanActivity extends Activity {
         //hostsListView.setAdapter(adapter);
         hostsRecyclerView.setAdapter(adapter);
         progressAnimation();
-        IPv4 iPv4 = new IPv4(globalVariable.own_ip, globalVariable.netmask);//IPv4 iPv4 = new IPv4(globalVariable.own_ip + "/" + this.mask2);
-        new ScanNetmask(iPv4);
+        IPv4CIDR iPv4CIDR = new IPv4CIDR(globalVariable.own_ip, globalVariable.netmask);//IPv4CIDR iPv4CIDR = new IPv4CIDR(globalVariable.own_ip + "/" + this.mask2);
+        new ScanNetmask(iPv4CIDR);
         progress = 1000;
         readARPTable();
         progress = 1500;
