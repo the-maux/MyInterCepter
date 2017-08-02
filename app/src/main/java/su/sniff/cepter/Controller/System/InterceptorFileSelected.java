@@ -1,12 +1,11 @@
-package su.sniff.cepter.Controller.FilesUtils;
+package su.sniff.cepter.Controller.System;
 
 import android.util.Log;
 import android.widget.TextView;
 
-import su.sniff.cepter.Controller.RootProcess;
-import su.sniff.cepter.Misc.IntercepterReader;
+import su.sniff.cepter.Controller.CepterControl.IntercepterReader;
 import su.sniff.cepter.R;
-import su.sniff.cepter.Utils.OpenFileDialog;
+import su.sniff.cepter.Controller.MiscUtils.OpenFileDialog;
 import su.sniff.cepter.View.MainActivity;
 import su.sniff.cepter.globalVariable;
 

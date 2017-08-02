@@ -1,38 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="17" android:versionName="2.0" package="su.sniff.cepter" platformBuildVersionCode="17" platformBuildVersionName="4.2.2-1425461">
-    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="14" android:maxSdkVersion="25" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="su.sniff.cepter"
+    platformBuildVersionCode="17"
+    platformBuildVersionName="4.2.2-1425461"
+    android:versionCode="17"
+    android:versionName="2.0">
+
+    <uses-sdk
+        android:maxSdkVersion="25"
+        android:minSdkVersion="7"
+        android:targetSdkVersion="14" />
+
     <uses-permission android:name="android.permission.ACCESS_SUPERUSER" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <application android:theme="@style/AppTheme"
-                 android:label="@string/app_name"
-                 android:icon="@drawable/ico"
-                 android:excludeFromRecents="true"
-                 android:allowBackup="true"
-                 android:largeHeap="true">
-        <activity android:label="@string/app_name"
-                  android:name="su.sniff.cepter.View.InitActivity"
-                  >
+
+    <application
+        android:allowBackup="true"
+        android:excludeFromRecents="true"
+        android:icon="@drawable/ico"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="su.sniff.cepter.View.InitActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="su.sniff.cepter.View.MainActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.View.TsharkActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.Utils.RawDetails" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.Controller.PortScan" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.Controller.DNSSpoofingActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.View.InjectHTTPActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.View.CageActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:label="@string/app_name" android:name="su.sniff.cepter.View.ScanActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.Utils.TabActivitys" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.View.SettingsActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.View.CookiesActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.View.BrowserActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="su.sniff.cepter.View.ExpertSettingsActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="su.sniff.cepter.View.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="su.sniff.cepter.View.TsharkActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="su.sniff.cepter.View.TsharkDetailsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="su.sniff.cepter.View.PortScanActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="su.sniff.cepter.Controller.Network.DNSSpoofingActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="su.sniff.cepter.View.InjectHTTPActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="su.sniff.cepter.View.CageActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="su.sniff.cepter.View.ScanActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".View.TabActivitys"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="su.sniff.cepter.View.SettingsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="su.sniff.cepter.View.CookiesActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="su.sniff.cepter.View.BrowserActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="su.sniff.cepter.View.SettingsExpertActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>
 </manifest>

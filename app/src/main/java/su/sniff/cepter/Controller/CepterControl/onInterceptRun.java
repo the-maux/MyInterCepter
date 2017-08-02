@@ -7,10 +7,9 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.IOException;
 
-import su.sniff.cepter.Controller.RootProcess;
-import su.sniff.cepter.Misc.IntercepterReader;
+import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.R;
-import su.sniff.cepter.Utils.Net.IpTablesConfStrippedMode;
+import su.sniff.cepter.Controller.Network.IpTablesConfStrippedMode;
 import su.sniff.cepter.View.MainActivity;
 import su.sniff.cepter.globalVariable;
 

@@ -11,7 +11,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
@@ -19,11 +18,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import su.sniff.cepter.Controller.RootProcess;
-import su.sniff.cepter.Misc.IntercepterReader;
+import su.sniff.cepter.Controller.System.RootProcess;
+import su.sniff.cepter.Controller.CepterControl.IntercepterReader;
 import su.sniff.cepter.R;
-import su.sniff.cepter.Utils.RawDetails;
-import su.sniff.cepter.adapter.ProtocolAdapter;
+import su.sniff.cepter.View.adapter.ProtocolAdapter;
 import su.sniff.cepter.globalVariable;
 
 public class                    TsharkActivity extends Activity {
@@ -38,7 +36,7 @@ public class                    TsharkActivity extends Activity {
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(3);
-        setContentView(R.layout.tshark_activity);
+        setContentView(R.layout.activity_tshark);
         getWindow().setFeatureDrawableResource(3, R.drawable.shark);
         tvList = (ListView) findViewById(R.id.listHosts);
         mInstance = this;
@@ -72,7 +70,7 @@ public class                    TsharkActivity extends Activity {
         out.write(txt.getEditableText().toString().getBytes());
         out.close();
         final ArrayList<String> lst = new ArrayList<>();
-        adapter = new ProtocolAdapter(mInstance.getApplication(), R.layout.raw_list, lst);
+        adapter = new ProtocolAdapter(mInstance.getApplication(), R.layout.adapter_raw, lst);
         initArrayList();
         readCepterRawThread = new Thread(execParseCepter(lst));
         readCepterRawThread.start();
@@ -128,7 +126,7 @@ public class                    TsharkActivity extends Activity {
                     String index = it.substring(0, offset);
                     try {
                         int a = Integer.valueOf(index) ;
-                        Intent i = new Intent(mInstance, RawDetails.class);
+                        Intent i = new Intent(mInstance, TsharkDetailsActivity.class);
                         i.putExtra("Key_Int", Integer.valueOf(index));
                         startActivityForResult(i, 1);
                         globalVariable.lock = 0;

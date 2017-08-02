@@ -1,4 +1,4 @@
-package su.sniff.cepter.Controller;
+package su.sniff.cepter.Controller.Network;
 
 import android.support.v4.view.MotionEventCompat;
 import su.sniff.cepter.BuildConfig;

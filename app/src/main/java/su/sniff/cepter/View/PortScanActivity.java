@@ -1,4 +1,4 @@
-package su.sniff.cepter.Controller;
+package su.sniff.cepter.View;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,15 +6,17 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.TextView;
 import com.github.clans.fab.FloatingActionButton;
+
+import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class                        PortScan extends Activity {
-    private String                  TAG = "PortScan";
-    private PortScan                mInstance = this;
+public class PortScanActivity extends Activity {
+    private String                  TAG = "PortScanActivity";
+    private PortScanActivity mInstance = this;
     private FloatingActionButton    FAB;
     private TextView                tv;
 
@@ -138,7 +140,7 @@ public class                        PortScan extends Activity {
                             String read = reader.readLine();
                             if (read != null) {
                                 final String read2 = read;
-                                PortScan.this.runOnUiThread(new Runnable() {
+                                PortScanActivity.this.runOnUiThread(new Runnable() {
                                     public void run() {
                                         tv.append(read2);
                                         tv.append("\n");

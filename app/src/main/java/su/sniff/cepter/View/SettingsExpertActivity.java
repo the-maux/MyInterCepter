@@ -1,7 +1,6 @@
 package su.sniff.cepter.View;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,22 +9,21 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import su.sniff.cepter.*;
-import su.sniff.cepter.Controller.DNSSpoofingActivity;
-import su.sniff.cepter.Utils.OpenFileDialog;
-import su.sniff.cepter.Utils.OpenFileDialog.OnFileSelectedListener;
+import su.sniff.cepter.Controller.Network.DNSSpoofingActivity;
+import su.sniff.cepter.Controller.MiscUtils.OpenFileDialog;
+import su.sniff.cepter.Controller.MiscUtils.OpenFileDialog.OnFileSelectedListener;
 
-public class                ExpertSettingsActivity extends Activity {
+public class SettingsExpertActivity extends Activity {
     private Activity        mInstance = this;
-    private String          TAG = "ExpertSettingsActivity";
+    private String          TAG = "SettingsExpertActivity";
 
     public void             onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.gallery_layout);
+        setContentView(R.layout.activity_expertsettings);
         initXml();
     }
 

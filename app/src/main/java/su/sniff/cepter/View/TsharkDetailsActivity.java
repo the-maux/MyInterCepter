@@ -1,29 +1,24 @@
-package su.sniff.cepter.Utils;
+package su.sniff.cepter.View;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import su.sniff.cepter.Controller.RootProcess;
-import su.sniff.cepter.Misc.ThreadUtils;
+import su.sniff.cepter.Controller.System.RootProcess;
+import su.sniff.cepter.Controller.System.ThreadUtils;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
-public class                    RawDetails extends Activity {
+public class TsharkDetailsActivity extends Activity {
 
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.raw_details);
+        setContentView(R.layout.adapter_dns);
         int position = getIntent().getExtras().getInt("Key_Int", 0);
         ThreadUtils.lock();
         TextView monitor = (TextView) findViewById(R.id.monitor);
@@ -31,7 +26,7 @@ public class                    RawDetails extends Activity {
         monitor.setTextSize(2, (float) globalVariable.raw_textsize);
         StringBuilder text = new StringBuilder();
         try {
-            RootProcess process = new RootProcess("RawDetails", globalVariable.path + "");
+            RootProcess process = new RootProcess("TsharkDetailsActivity", globalVariable.path + "");
             BufferedReader reader = new BufferedReader(process.getInputStreamReader());
             process.exec(globalVariable.path + "/busybox cat " + globalVariable.path + "/Raw/" + position + ".dat");
             process.closeDontWait();

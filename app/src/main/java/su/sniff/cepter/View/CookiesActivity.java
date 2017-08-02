@@ -24,7 +24,7 @@ public class                    CookiesActivity extends Activity {
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(3);
-        setContentView(R.layout.web_layout);
+        setContentView(R.layout.activity_cookies);
         getWindow().setFeatureDrawableResource(3, R.drawable.shark);
         super.onCreate(savedInstanceState);
         initThreadsBehavior();

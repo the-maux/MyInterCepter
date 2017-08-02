@@ -1,4 +1,4 @@
-package su.sniff.cepter.adapter;
+package su.sniff.cepter.View.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -21,7 +21,7 @@ public class                DNSAdapter extends ArrayAdapter<String> {
     private List<String>    DnsSpoof;
 
     public                  DNSAdapter(Context context, List<String> listDnsSpoof) {
-        super(context, R.layout.raw_details, R.id.monitor, listDnsSpoof);
+        super(context, R.layout.adapter_dns, R.id.monitor, listDnsSpoof);
         this.context = context;
         this.DnsSpoof = listDnsSpoof;
     }
@@ -31,7 +31,7 @@ public class                DNSAdapter extends ArrayAdapter<String> {
     public View             getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null)
-            convertView = inflater.inflate(R.layout.raw_details, parent, false);
+            convertView = inflater.inflate(R.layout.adapter_dns, parent, false);
         ((TextView) convertView.findViewById(R.id.monitor)).setText(DnsSpoof.get(position));
         return convertView;
     }

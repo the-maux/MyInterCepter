@@ -1,6 +1,6 @@
-package su.sniff.cepter.Utils.Net;
+package su.sniff.cepter.Controller.Network;
 
-import su.sniff.cepter.Controller.RootProcess;
+import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.globalVariable;
 
 public class        IpTablesConfStrippedMode implements  Runnable {

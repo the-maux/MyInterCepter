@@ -12,8 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-import su.sniff.cepter.Controller.RootProcess;
+
+import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
 
@@ -30,7 +30,7 @@ public class                    InitActivity extends Activity {
     }*/
 
     public void                 onCreate(Bundle savedInstanceState) {
-        View rootView = LayoutInflater.from(this).inflate(R.layout.init_acitivty, null);
+        View rootView = LayoutInflater.from(this).inflate(R.layout.activity_init, null);
         super.onCreate(savedInstanceState);
         setContentView(rootView);
         initXml(rootView);
