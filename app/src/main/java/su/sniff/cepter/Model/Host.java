@@ -2,6 +2,8 @@ package su.sniff.cepter.Model;
 
 import android.icu.text.LocaleDisplayNames;
 import android.util.Log;
+
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -17,6 +19,22 @@ public class Host {
     private String          vendor = "Unknown";
     private boolean         selected = false;
     private String          dumpInfo;
+    public static Comparator<Host> comparator = new Comparator<Host>() {
+        @Override
+        public int compare(Host o1, Host o2) {
+            String ip1[] = o1.getIp().replace(".", "::").split("::");
+            String ip2[] = o2.getIp().replace(".", "::").split("::");
+            if (Integer.parseInt(ip1[2]) > Integer.parseInt(ip2[2]))
+                return 1;
+            else if (Integer.parseInt(ip1[2]) < Integer.parseInt(ip2[2]))
+                return -1;
+            else if (Integer.parseInt(ip1[3]) > Integer.parseInt(ip2[3]))
+                return 1;
+            else if (Integer.parseInt(ip1[3]) < Integer.parseInt(ip2[3]))
+                return -1;
+            return 0;
+        }
+    };
 
     /**
      * Format : 192.168.0.12 	(theMaux) : [E8-B1-FC-A6-CF-11] [Windows 7\8\10] ; Intel Corporate
@@ -34,6 +52,7 @@ public class Host {
         vendor = end;
         logHost(buffer);
         this.dumpInfo = buffer;
+
     }
 
     /**
@@ -109,7 +128,7 @@ public class Host {
         this.selected = selected;
     }
 
-    public String getDumpInfo() {
+    public String           getDumpInfo() {
         return dumpInfo;
     }
 }

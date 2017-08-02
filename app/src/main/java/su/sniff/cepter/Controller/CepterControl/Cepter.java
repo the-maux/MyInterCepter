@@ -1,9 +1,18 @@
 package su.sniff.cepter.Controller.CepterControl;
 
+import android.widget.TextView;
+
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import su.sniff.cepter.Controller.NetUtils;
 import su.sniff.cepter.Controller.RootProcess;
+import su.sniff.cepter.Model.Host;
+import su.sniff.cepter.View.ScanActivity;
+import su.sniff.cepter.adapter.HostAdapter;
 import su.sniff.cepter.globalVariable;
 
 /**
@@ -20,13 +29,35 @@ public class                    Cepter {
                 .closeProcess();
     }
 
-    public static BufferedReader searchDevices(String AdaptNumb) {
-        final RootProcess process = new RootProcess("Cepter Scan1", globalVariable.path + "");
-        final BufferedReader bufferedReader2 = new BufferedReader(process.getInputStreamReader());
-        process.exec(globalVariable.path + "/cepter scan " + AdaptNumb);
+    /**
+     * Scan with cepter the hostList
+     * @param scanActivity activity for callback
+     * @param hosts
+     * @return
+     */
+    public static void          fillHostAdapter(final ScanActivity scanActivity, final List<Host> hosts) {
+        final RootProcess process = new RootProcess("Cepter Scan host", globalVariable.path + "");
+        final BufferedReader bufferedReader = new BufferedReader(process.getInputStreamReader());
+        process.exec(globalVariable.path + "/cepter scan " + Integer.toString(globalVariable.adapt_num));
         process.exec("exit");
         actualProcess = process;
-        return bufferedReader2;
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    String read;
+                    while ((read = bufferedReader.readLine()) != null) {//sanityzeCheck: at least 3 '.' for x.x.x.x : Ip
+                        if ((read.length() - read.replace(".", "").length()) >= 3) {
+                            Host hostObj = new Host(read);//Format : IP\t(HOSTNAME) \n [MAC] [OS] : VENDOR \n
+                            hosts.add(hostObj);
+                        }
+                    }
+                    Collections.sort(hosts, Host.comparator);
+                    scanActivity.onHostActualized();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     public static void          waitForCepter() {

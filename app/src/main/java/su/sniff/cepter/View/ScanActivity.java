@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -40,14 +41,15 @@ import java.util.regex.Pattern;
 public class                        ScanActivity extends Activity {
     private String                  TAG = "ScanActivity";
     private ScanActivity            mInstance = this;
-    private boolean[]               itemToggled = new boolean[2048];
-    private ArrayList<Host>         lst;//Liste de String contenant Ip(Hostname)\n[MAC][OS] : Info
     private List<Host>              hosts; // Liste de Host contenant Ip(Hostname)\n[MAC][OS] : Info
+    private HostAdapter             adapter;
     private RecyclerView            hostsRecyclerView;
     private String                  origin_str, monitor;
     private FloatingActionButton    progressBar;
     private int                     progress = 0;
     private boolean                 hostLoaded = false;
+    public boolean                  inLoading = false;
+    private SwipeRefreshLayout      swipeRefreshLayout;
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,109 +72,76 @@ public class                        ScanActivity extends Activity {
     private void                    init() throws Exception {
         progressBar = (FloatingActionButton) findViewById(R.id.fab);
         hostsRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        Arrays.fill(itemToggled, false); //clear tab of bool
         Cepter.startCepter(NetUtils.getMac());
-        initMonitor(((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo());
-        Log.d(TAG, "whoami:" + new BufferedReader(new RootProcess("Whoami").exec("id").getInputStreamReader()).readLine());
+        initMonitor();
+        initSwipeRefresh();
+    }
+
+    private void                    initSwipeRefresh() {
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeResources(
+                R.color.material_green_200,
+                R.color.material_green_500,
+                R.color.material_green_900);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (!inLoading) {
+                    Log.d(TAG, "clearing Refresh");
+                    hosts.clear();
+                    adapter.notifyDataSetChanged();
+                    initMonitor();
+                    progress = 0;
+                    startNetworkScan();
+                }
+            }
+        });
     }
 
     /**
      * Monitor is the basic network Information
-     * @param wifiInfo
      */
-    private void                    initMonitor(WifiInfo wifiInfo) throws Exception{
+    private void                    initMonitor() {
         Log.d(TAG, "Init Monitor");
+        WifiInfo wifiInfo = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
         monitor = getIntent().getExtras().getString("Key_String");
-        Log.d(TAG, "Monitor [" + monitor + "]");
-        if (!monitor.contains("WiFi")) {
-            monitor += "\nNon LMFR: " + wifiInfo.getSSID() + ", GW: " + globalVariable.gw_ip + "/" + globalVariable.netmask;
+        if (monitor != null && !monitor.contains("WiFi")) {
+            monitor += "\n" + wifiInfo.getSSID() + ", GW: " + globalVariable.gw_ip + "/" + globalVariable.netmask;
+        } else {
+            monitor += "Not Connected";
         }
         ((TextView)findViewById(R.id.Message)).setText(monitor);
-        if (Integer.bitCount(new Ipv4(globalVariable.netmask).getIpInt()) < 24) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(mInstance, "Due to netmask the scanning might take a while, be patient", Toast.LENGTH_LONG).show();
-                }
-            });
-        }
     }
 
     private void                    initHostsRecyclerView() {
+        hosts = new ArrayList<>();
+        adapter = new HostAdapter(hosts, mInstance);
+        hostsRecyclerView.setAdapter(adapter);
         hostsRecyclerView.setHasFixedSize(true);
         hostsRecyclerView.setLayoutManager(new LinearLayoutManager(mInstance));
     }
 
-    private void                    startNetworkScan() throws IOException, InterruptedException {
-        //lst = new ArrayList<>();
-        hosts = new ArrayList<>();
-        final HostAdapter adapter = new HostAdapter(hosts, mInstance);
-        //hostsListView.setAdapter(adapter);
-        hostsRecyclerView.setAdapter(adapter);
-        progressAnimation();
-        IPv4CIDR iPv4CIDR = new IPv4CIDR(globalVariable.own_ip, globalVariable.netmask);//IPv4CIDR iPv4CIDR = new IPv4CIDR(globalVariable.own_ip + "/" + this.mask2);
-        new ScanNetmask(iPv4CIDR);
-        progress = 1000;
-        readARPTable();
-        progress = 1500;
-        readingCepterAnalysFromArp(adapter);
-        progress = 2000;
-        initHostsRecyclerView();
-        //initHostListView();
-    }
-
-    /*
-        Guessing list of host by reading ARP table
-     */
-    private void                    readARPTable() {
-        Log.i(TAG, "Dump list host from Arp Table");
-        try {
-            FileOutputStream hostListFile = openFileOutput("hostlist", 0);
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"));
-            String MAC_RE = "^%s\\s+0x1\\s+0x2\\s+([:0-9a-fA-F]+)\\s+\\*\\s+\\w+$";
-            String read;
-            while ((read = bufferedReader.readLine()) != null) {
-                String ip = read.substring(0, read.indexOf(" "));
-                Object[] objArr = new Object[1];
-                objArr[0] = ip.replace(".", "\\.");
-                Matcher matcher = Pattern.compile(String.format(MAC_RE, objArr)).matcher(read);
-                if (matcher.matches()) {
-                    Log.i(TAG, "DUMP:" + ip + " " + matcher.group(1));
-                    hostListFile.write((ip + ":" + matcher.group(1) + "\n").getBytes());
-                }
-            }
-            bufferedReader.close();
-            hostListFile.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void                    startNetworkScan() {
+        if (!inLoading) {
+            inLoading = true;
+            initHostsRecyclerView();
+            progressAnimation();
+            //IPv4CIDR iPv4CIDR = new IPv4CIDR(globalVariable.own_ip, globalVariable.netmask);
+            //new ScanNetmask(iPv4CIDR); TODO: we can really scan who is reachable or not and dump it in hostFile
+            progress = 1000;
+            NetUtils.dumpListHostFromARPTableInFile(this);
+            progress = 1500;
+            Cepter.fillHostAdapter(this, hosts);
+            progress = 2000;
         }
     }
 
-    private void                    readingCepterAnalysFromArp(final HostAdapter adapter)  throws IOException, InterruptedException {
-        final BufferedReader bufferedReader2 = Cepter.searchDevices(Integer.toString(globalVariable.adapt_num));
-        Log.d(TAG, "reading list host from Cepter");
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    String read;
-                    while ((read = bufferedReader2.readLine()) != null) {//sanityze: at least 3 '.' for x.x.x.x : Ip
-                        if ((read.length() - read.replace(".", "").length()) >= 3) {//Format : 10.16.186.3 	(-) \n [D8-FC-93-26-D4-EB] [Windows 7\8\10] : Intel Corporate \n
-                            Host hostObj = new Host(read);
-                            hosts.add(hostObj);
-                        }
-                    }
-                    mInstance.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            sortHosts();
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+    public void                     onFabClick(View v) throws IOException, InterruptedException  {
+        if (!hostLoaded) {
+            startNetworkScan();
+        } else {
+            startAttack();
+        }
     }
 
     private void                    progressAnimation() {
@@ -202,18 +171,11 @@ public class                        ScanActivity extends Activity {
                     public void run() {
                         progressBar.setImageResource(android.R.drawable.ic_media_play);
                         hostLoaded = true;
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 });
             }
         }).start();
-    }
-
-    public void                     onFabClick(View v) throws IOException, InterruptedException  {
-        if (!hostLoaded) {
-            startNetworkScan();
-        } else {
-            startAttack();
-        }
     }
 
     /**
@@ -243,29 +205,6 @@ public class                        ScanActivity extends Activity {
         i2.putExtra("Key_String_origin", origin_str);
         startActivity(i2);
         finish();
-    }
-
-    private void                    sortHosts() {
-        mInstance.runOnUiThread(new Runnable() {
-            public void run() {
-                Collections.sort(hosts, new Comparator<Host>() {
-                    @Override
-                    public int compare(Host o1, Host o2) {
-                        String ip1[] = o1.getIp().replace(".", "::").split("::");
-                        String ip2[] = o2.getIp().replace(".", "::").split("::");
-                        if (Integer.parseInt(ip1[2]) > Integer.parseInt(ip2[2]))
-                            return 1;
-                        else if (Integer.parseInt(ip1[2]) < Integer.parseInt(ip2[2]))
-                            return -1;
-                        else if (Integer.parseInt(ip1[3]) > Integer.parseInt(ip2[3]))
-                            return 1;
-                        else if (Integer.parseInt(ip1[3]) < Integer.parseInt(ip2[3]))
-                            return -1;
-                        return 0;
-                    }
-                });
-            }
-        });
     }
 
     public void                     OnCage(View v2) throws IOException {
@@ -325,4 +264,15 @@ public class                        ScanActivity extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
+    public void                     onHostActualized() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ((TextView) findViewById(R.id.Message))
+                        .setText(hosts.size() + " device" + ((hosts.size() > 1) ? "s": "") + " found");// oui je fais des ternaires pour faire le pluriel
+                adapter.notifyDataSetChanged();
+                inLoading = false;
+            }
+        });
+    }
 }

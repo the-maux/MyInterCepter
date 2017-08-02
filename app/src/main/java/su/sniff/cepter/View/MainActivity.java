@@ -97,22 +97,6 @@ public class                    MainActivity extends Activity {
         monitorIntercepter.setText(BuildConfig.FLAVOR);
     }
 
-    public void                 OnBack(View v) throws IOException {
-        if (this.sniff_process != null) {
-            openFileOutput("exitr.id", 0).close();
-            this.sniff_process = null;
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        Intent i = new Intent(mInstance, ScanActivity.class);
-        i.putExtra("Key_String", this.cmd2);
-        startActivity(i);
-        finish();
-    }
-
     public void                 OnSave(View v) {
         new SaveFileDialog(this, Environment.getExternalStorageDirectory().getAbsolutePath(), new String[]{".txt"},
                 getFileSelectedListerner()).show();

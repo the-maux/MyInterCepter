@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Created by maxim on 06/07/2017.
+ * Scan Netmask check the rechability of devices in file hostfile
  */
 public class                        ScanNetmask {
     private String                  TAG = "ScanNetmask";

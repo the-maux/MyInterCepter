@@ -29,8 +29,7 @@ import su.sniff.cepter.globalVariable;
 public class                    TsharkActivity extends Activity {
     private String              TAG = "TsharkActivity";
     private TsharkActivity      mInstance = this;
-    private String              cmd;
-    private String              orig_str;
+    private String              cmd, orig_str;
     private Thread              readCepterRawThread = null;
     private ListView            tvList;
     private ProtocolAdapter     adapter;

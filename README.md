@@ -25,3 +25,9 @@ Fork-Projet IntercepterNG, reversed App
  
 
 #### TOFIX
+
+
+#### Example :
+* Afficher le resultat d'une commande shell:
+
+         Log.d(TAG, "whoami:" + new BufferedReader(new RootProcess("Whoami").exec("id").getInputStreamReader()).readLine());
