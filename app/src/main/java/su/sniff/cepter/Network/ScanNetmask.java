@@ -78,8 +78,6 @@ public class                        ScanNetmask {
                 } finally {
                     if (nbrHostScanned > NumberOfHosts)
                         ScanOver();
-                    else
-                        Log.d(TAG, "nbrHostScanned:" + nbrHostScanned + "->NumberOfHost:" + NumberOfHosts);
                 }
             }
         });

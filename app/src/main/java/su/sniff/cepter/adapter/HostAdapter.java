@@ -35,7 +35,6 @@ public class                    HostAdapter extends RecyclerView.Adapter<HostHol
         return new HostHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.card_host, parent, false));
     }
 
-    @SuppressWarnings("WrongConstant")
     @Override
     public void                 onBindViewHolder(HostHolder holder, int position) {
         Host host = mHosts.get(position);
@@ -87,8 +86,13 @@ public class                    HostAdapter extends RecyclerView.Adapter<HostHol
         mHosts.clear();
         filtered = true;
         for (Host host : originalList) {
-            if (Os.contains(host.getOS()))
-                mHosts.add(host);
+            for (String os : Os) {
+                if (os.contains(host.getOS())) {
+                    mHosts.add(host);
+                    Log.d(TAG, "os OK:" + os);
+                    break;
+                }
+            }
         }
         notifyDataSetChanged();
     }
@@ -105,8 +109,9 @@ public class                    HostAdapter extends RecyclerView.Adapter<HostHol
     }
     public void                 updateHostList(List<Host> hosts) {
         mHosts = new ArrayList<>();
-        hosts.addAll(mHosts);
+        mHosts.addAll(hosts);
         originalList = hosts;
+        Log.d(TAG, "updateHostList mHost" + mHosts.size() + " and hosts:" + hosts.size());
         notifyDataSetChanged();
     }
 }

@@ -4,8 +4,7 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-    android:theme="@style/AppTheme">
+	android:layout_height="match_parent">
 
 	<android.support.design.widget.AppBarLayout
 		android:id="@+id/appbar"
@@ -78,7 +77,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/topToolbar"
-                android:visibility="invisible"
+                android:visibility="gone"
                 app:tabMode="scrollable">
 
                 <android.support.design.widget.TabItem
@@ -98,16 +97,17 @@
             </android.support.design.widget.TabLayout>
 
 			<ScrollView
+				android:id="@+id/ScrollViewFilter"
 				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:visibility="gone"
-				android:layout_below="@+id/tabs">
+				android:layout_height="wrap_content"
+				android:layout_below="@+id/tabs"
+				android:visibility="visible">
 
 				<LinearLayout
+					android:id="@+id/filterLL"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-                    android:id="@+id/filterLL"
-					android:orientation="vertical">
+					android:orientation="horizontal">
 
 				</LinearLayout>
 			</ScrollView>
@@ -115,9 +115,6 @@
 		</RelativeLayout>
 
     </android.support.design.widget.AppBarLayout>
-
-
-
 
 	<com.github.clans.fab.FloatingActionButton
 		android:layout_height="wrap_content"
@@ -133,7 +130,7 @@
 		app:fab_colorPressed="@android:color/holo_blue_bright"
 		app:fab_progress_showBackground="false"
 		app:fab_elevationCompat="4dp"
-        app:fab_colorNormal="@android:color/holo_blue_light">
+        app:fab_colorNormal="@android:color/holo_blue_light"/>
 
 
 	<RelativeLayout

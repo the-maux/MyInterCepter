@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +37,8 @@ import su.sniff.cepter.R;
 import su.sniff.cepter.Utils.TabActivitys;
 import su.sniff.cepter.adapter.HostAdapter;
 import su.sniff.cepter.globalVariable;
+
+import static su.sniff.cepter.R.id.os;
 
 public class                        ScanActivity extends Activity {
     private String                  TAG = "ScanActivity";
@@ -208,21 +211,35 @@ public class                        ScanActivity extends Activity {
         final ArrayList<String> listOs = adapter.getOsList();
         monitor += "\n" + listOs.size() +" Os détected";
         TxtMonitor.setText(monitor);
-        for (String os : listOs) {
-            View OsView = View.inflate(this, R.layout.layout_filter_os, filterLL);
+        for (final String os : listOs) {
+            View OsView = View.inflate(this, R.layout.layout_filter_os, null);
             Host.setOsIcon(this, os, (CircleImageView)OsView.findViewById(R.id.imageOS));
             ((TextView)OsView.findViewById(R.id.nameOS)).setText(os);
             final CheckBox cb = ((CheckBox)OsView.findViewById(R.id.checkBox));
-            OsView.setOnClickListener(new View.OnClickListener() {
+            OsView.setOnClickListener(filtereffect(cb, os, listOs));
+            cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View v) {// oui je fais des ternaires pour faire le pluriel
-                    cb.setChecked(!cb.isChecked());
-                    adapter.filterByOs(listOs);
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    filtereffect(cb, os, listOs);
                 }
             });
+            filterLL.addView(OsView, 200, 40);
         }
+        findViewById(R.id.ScrollViewFilter).setVisibility(View.VISIBLE);
     }
-
+    private View.OnClickListener   filtereffect(final CheckBox cb, final String os, final ArrayList<String> listOs) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {// oui je fais des ternaires pour faire le pluriel
+                cb.setChecked(!cb.isChecked());
+                if (cb.isChecked())
+                    listOs.remove(os);
+                else
+                    listOs.add(os);
+                adapter.filterByOs(listOs);
+            }
+        };
+    }
     /**
      * Create a file "./targets" dumping the hostList than start the TabActivitys
      * @throws IOException
