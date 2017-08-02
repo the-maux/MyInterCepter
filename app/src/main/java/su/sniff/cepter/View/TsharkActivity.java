@@ -12,21 +12,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import su.sniff.cepter.*;
 import su.sniff.cepter.Controller.RootProcess;
 import su.sniff.cepter.Misc.IntercepterReader;
-import su.sniff.cepter.Utils.OpenFileDialog;
-import su.sniff.cepter.Utils.OpenFileDialog.OnFileSelectedListener;
+import su.sniff.cepter.R;
 import su.sniff.cepter.Utils.RawDetails;
 import su.sniff.cepter.adapter.ProtocolAdapter;
+import su.sniff.cepter.globalVariable;
 
 public class                    TsharkActivity extends Activity {
     private String              TAG = "TsharkActivity";
@@ -41,7 +39,7 @@ public class                    TsharkActivity extends Activity {
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(3);
-        setContentView(R.layout.raw_layout);
+        setContentView(R.layout.tshark_activity);
         getWindow().setFeatureDrawableResource(3, R.drawable.shark);
         tvList = (ListView) findViewById(R.id.listHosts);
         mInstance = this;
@@ -81,126 +79,6 @@ public class                    TsharkActivity extends Activity {
         readCepterRawThread.start();
     }
 
-    private void                initArrayList() {
-        runOnUiThread(new Runnable() {
-            public void run() {
-                tvList.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-            }
-        });
-        tvList.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String it = parent.getItemAtPosition(position).toString();
-                int offset = it.indexOf(" ");
-                if (offset > 0) {
-                    String index = it.substring(0, offset);
-                    try {
-                        int a = Integer.valueOf(index) ;
-                        Intent i = new Intent(mInstance, RawDetails.class);
-                        i.putExtra("Key_Int", Integer.valueOf(index));
-                        startActivityForResult(i, 1);
-                        globalVariable.lock = 0;
-                    } catch (NumberFormatException e) {
-                        e.getStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
-    private void                dumpingCurrentSniff(final Process process) {
-        new Thread(new Runnable() {
-            public void run() {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                final ArrayList<String> lst = new ArrayList<>();
-                int nbrLineDumped = 0;
-                final ProtocolAdapter adapter = new ProtocolAdapter(mInstance, R.layout.raw_list, lst);
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        tvList.setAdapter(adapter);
-                        adapter.notifyDataSetChanged();
-                    }
-                });
-                tvList.setOnItemClickListener(onListViewItemClicked());
-                String line;
-                try {
-                    while ((line = reader.readLine()) != null) {
-                        final String temp = line;
-                        if (temp.contains("###STAT###")) {
-                            final int b = temp.indexOf("###STAT###") + 11;
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    ((TextView) findViewById(R.id.monitor)).setText(temp.substring(b, (temp.length() - b) + 11));
-                                }
-                            });
-                        } else {
-                            final int offsetList = nbrLineDumped;
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    lst.add(offsetList, temp);
-                                    adapter.notifyDataSetChanged();
-                                }
-                            });
-                            nbrLineDumped++;
-                        }
-                    }
-                    reader.close();
-                    process.waitFor();
-                    informDumpStoped();
-                } catch (IOException ignored) {
-                    ignored.getStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-    private void                informDumpStoped() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ((ImageView) findViewById(R.id.onDefendIcon)).setImageResource(R.drawable.start);
-                isAlreadyLaunched = false;
-            }
-        });
-    }
-
-    private OnItemClickListener onListViewItemClicked() {
-        return new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String it = parent.getItemAtPosition(position).toString();
-                int offset = it.indexOf(" ");
-                if (offset > 0) {
-                    String index = it.substring(0, offset);
-                    try {
-                        int a = Integer.valueOf(index) ;
-                        Intent i = new Intent(mInstance, RawDetails.class);
-                        i.putExtra("Key_Int", Integer.valueOf(index));
-                        startActivityForResult(i, 1);
-                        globalVariable.lock = 0;
-                    } catch (NumberFormatException e) {
-                    }
-                }
-            }
-        };
-    }
-
-    private void                addToListView(final ArrayList<String> lst, final int offsetLine, final String line) {
-        Log.d(TAG, "listView add at:" + offsetLine + ": " + line);
-        runOnUiThread(new Runnable() {
-            public void run() {
-                lst.add(offsetLine, line);
-                globalVariable.adapter.notifyDataSetChanged();
-                //if (globalVariable.raw_autoscroll == 1) {
-                    tvList.setSelection(offsetLine);
-                //}
-            }
-        });
-    }
-
     private Runnable            execParseCepter(final ArrayList<String> lst) {
         return new Runnable() {
             public void run() {
@@ -235,42 +113,49 @@ public class                    TsharkActivity extends Activity {
         };
     }
 
-    public void                 OnOpenCap(View v) {
-        try {
-            EditText txt = (EditText) findViewById(R.id.primaryMonitor);
-            FileOutputStream out = openFileOutput("pf", 0);
-            out.write(txt.getEditableText().toString().getBytes());
-            out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e2) {
-            e2.printStackTrace();
-        }
-        new OpenFileDialog(this, globalVariable.PCAP_PATH, new String[]{".pcap"}, onFileSelectedListener()).show();
-    }
-
-    private OnFileSelectedListener onFileSelectedListener() {
-        return new OnFileSelectedListener() {
+    private void                initArrayList() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                tvList.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        tvList.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onFileSelected(File file) {
-                ((ImageView) findViewById(R.id.onDefendIcon)).setImageResource(R.drawable.stop);
-                RootProcess process = new RootProcess("Dump RAW SNIFF", globalVariable.path + "");
-                process.exec(globalVariable.path + "/cepter " + file.getAbsolutePath() + " 3 raw w ");
-                process.exec("exit");
-                dumpingCurrentSniff(process.getActualProcess());
-
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String it = parent.getItemAtPosition(position).toString();
+                int offset = it.indexOf(" ");
+                if (offset > 0) {
+                    String index = it.substring(0, offset);
+                    try {
+                        int a = Integer.valueOf(index) ;
+                        Intent i = new Intent(mInstance, RawDetails.class);
+                        i.putExtra("Key_Int", Integer.valueOf(index));
+                        startActivityForResult(i, 1);
+                        globalVariable.lock = 0;
+                    } catch (NumberFormatException e) {
+                        e.getStackTrace();
+                    }
+                }
             }
-        };
+        });
     }
 
-    public void                 OnBack(View v) throws IOException {
-        if (isAlreadyLaunched) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    private void                addToListView(final ArrayList<String> lst, final int offsetLine, final String line) {
+        Log.d(TAG, "listView add at:" + offsetLine + ": " + line);
+        runOnUiThread(new Runnable() {
+            public void run() {
+                lst.add(offsetLine, line);
+                globalVariable.adapter.notifyDataSetChanged();
+                //if (globalVariable.raw_autoscroll == 1) {
+                    tvList.setSelection(offsetLine);
+                //}
             }
-            ((ImageView) findViewById(R.id.onDefendIcon)).setImageResource(R.drawable.start);
+        });
+    }
+
+    private void                closeActualProcess() {
+        if (isAlreadyLaunched) {
             readCepterRawThread.interrupt();
             isAlreadyLaunched = false;
         }
@@ -284,10 +169,7 @@ public class                    TsharkActivity extends Activity {
         if (keyCode != 4) {
             return super.onKeyDown(keyCode, event);
         }
-        Intent i = new Intent(mInstance, ScanActivity.class);
-        i.putExtra("Key_String", orig_str);
-        startActivity(i);
-        finish();
+        closeActualProcess();
         return false;
     }
 
