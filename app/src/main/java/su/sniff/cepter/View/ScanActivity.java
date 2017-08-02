@@ -1,4 +1,5 @@
 package su.sniff.cepter.View;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -11,41 +12,39 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.github.clans.fab.FloatingActionButton;
-import su.sniff.cepter.*;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 import su.sniff.cepter.Controller.CepterControl.Cepter;
-import su.sniff.cepter.Controller.IPv4CIDR;
 import su.sniff.cepter.Controller.NetUtils;
 import su.sniff.cepter.Controller.RootProcess;
 import su.sniff.cepter.Model.Host;
-import su.sniff.cepter.Model.Ipv4;
-import su.sniff.cepter.Network.ScanNetmask;
+import su.sniff.cepter.R;
 import su.sniff.cepter.Utils.TabActivitys;
 import su.sniff.cepter.adapter.HostAdapter;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import su.sniff.cepter.globalVariable;
 
 public class                        ScanActivity extends Activity {
     private String                  TAG = "ScanActivity";
     private ScanActivity            mInstance = this;
-    private List<Host>              hosts; // Liste de Host contenant Ip(Hostname)\n[MAC][OS] : Info
+    private List<Host>              mHosts;
     private HostAdapter             adapter;
     private RecyclerView            hostsRecyclerView;
+    private LinearLayout            filterLL;
     private String                  origin_str, monitor;
     private FloatingActionButton    progressBar;
+    private TextView                TxtMonitor;
     private int                     progress = 0;
     private boolean                 hostLoaded = false;
     public boolean                  inLoading = false;
@@ -72,30 +71,11 @@ public class                        ScanActivity extends Activity {
     private void                    init() throws Exception {
         progressBar = (FloatingActionButton) findViewById(R.id.fab);
         hostsRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        filterLL = (LinearLayout) findViewById(R.id.filterLL);
+        TxtMonitor = ((TextView) findViewById(R.id.Message));
         Cepter.startCepter(NetUtils.getMac());
         initMonitor();
         initSwipeRefresh();
-    }
-
-    private void                    initSwipeRefresh() {
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setColorSchemeResources(
-                R.color.material_green_200,
-                R.color.material_green_500,
-                R.color.material_green_900);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (!inLoading) {
-                    Log.d(TAG, "clearing Refresh");
-                    hosts.clear();
-                    adapter.notifyDataSetChanged();
-                    initMonitor();
-                    progress = 0;
-                    startNetworkScan();
-                }
-            }
-        });
     }
 
     /**
@@ -110,12 +90,33 @@ public class                        ScanActivity extends Activity {
         } else {
             monitor += "Not Connected";
         }
-        ((TextView)findViewById(R.id.Message)).setText(monitor);
+        TxtMonitor.setText(monitor);
+    }
+
+    private void                    initSwipeRefresh() {
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeResources(
+                R.color.material_green_200,
+                R.color.material_green_500,
+                R.color.material_green_900);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (!inLoading) {
+                    Log.d(TAG, "clearing Refresh");
+                    mHosts.clear();
+                    adapter.notifyDataSetChanged();
+                    initMonitor();
+                    progress = 0;
+                    startNetworkScan();
+                }
+            }
+        });
     }
 
     private void                    initHostsRecyclerView() {
-        hosts = new ArrayList<>();
-        adapter = new HostAdapter(hosts, mInstance);
+        mHosts = new ArrayList<>();
+        adapter = new HostAdapter(this);
         hostsRecyclerView.setAdapter(adapter);
         hostsRecyclerView.setHasFixedSize(true);
         hostsRecyclerView.setLayoutManager(new LinearLayoutManager(mInstance));
@@ -131,16 +132,21 @@ public class                        ScanActivity extends Activity {
             progress = 1000;
             NetUtils.dumpListHostFromARPTableInFile(this);
             progress = 1500;
-            Cepter.fillHostAdapter(this, hosts);
+            Cepter.fillHostAdapter(this);
             progress = 2000;
         }
     }
 
-    public void                     onFabClick(View v) throws IOException, InterruptedException  {
+    public void                     onFabClick(View v)  {
         if (!hostLoaded) {
             startNetworkScan();
         } else {
-            startAttack();
+            try {
+                startAttack();
+            } catch (IOException e) {
+                Log.e(TAG, "Error in start attack");
+                e.getStackTrace();
+            }
         }
     }
 
@@ -178,6 +184,39 @@ public class                        ScanActivity extends Activity {
         }).start();
     }
 
+    public void                     onHostActualized(final List<Host> hosts) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mHosts = hosts;
+                monitor = mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": "") + " found";// oui je fais des ternaires pour faire le pluriel
+                TxtMonitor.setText(monitor);
+                adapter.updateHostList(mHosts);
+                buildFilterLayout();
+                inLoading = false;
+            }
+        });
+    }
+
+    private void                    buildFilterLayout() {
+        final ArrayList<String> listOs = adapter.getOsList();
+        monitor += "\n" + listOs.size() +" Os détected";
+        TxtMonitor.setText(monitor);
+        for (String os : listOs) {
+            View OsView = View.inflate(this, R.layout.layout_filter_os, filterLL);
+            Host.setOsIcon(this, os, (CircleImageView)OsView.findViewById(R.id.imageOS));
+            ((TextView)OsView.findViewById(R.id.nameOS)).setText(os);
+            final CheckBox cb = ((CheckBox)OsView.findViewById(R.id.checkBox));
+            OsView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {// oui je fais des ternaires pour faire le pluriel
+                    cb.setChecked(!cb.isChecked());
+                    adapter.filterByOs(listOs);
+                }
+            });
+        }
+    }
+
     /**
      * Create a file "./targets" dumping the hostList than start the TabActivitys
      * @throws IOException
@@ -185,7 +224,7 @@ public class                        ScanActivity extends Activity {
     private void                    startAttack() throws IOException {
         boolean noTargetSelected = true;
         FileOutputStream out = openFileOutput("targets", 0);
-        for (Host host : hosts) {
+        for (Host host : mHosts) {
             if (host.isSelected()) {
                 noTargetSelected = false;
                 String dumpHost = host.getIp() + ":" + host.getMac() + "\n";
@@ -212,7 +251,7 @@ public class                        ScanActivity extends Activity {
         boolean noTargetSelected = true;
         FileOutputStream out = openFileOutput("cage", 0);
 
-        for (Host host : hosts) {
+        for (Host host : mHosts) {
             if (host.isSelected()) {
                 noTargetSelected = false;
                 String dumpHost = host.getIp() + ":" + host.getMac() + "\n";
@@ -221,7 +260,7 @@ public class                        ScanActivity extends Activity {
             }
         }
         out.close();
-        if (hosts.size() == 0)
+        if (mHosts.size() == 0)
             Toast.makeText(getApplicationContext(), "Scan network", Toast.LENGTH_SHORT).show();
         else if (noTargetSelected)
             Toast.makeText(getApplicationContext(), "Choose target!", Toast.LENGTH_SHORT).show();
@@ -264,15 +303,5 @@ public class                        ScanActivity extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
-    public void                     onHostActualized() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ((TextView) findViewById(R.id.Message))
-                        .setText(hosts.size() + " device" + ((hosts.size() > 1) ? "s": "") + " found");// oui je fais des ternaires pour faire le pluriel
-                adapter.notifyDataSetChanged();
-                inLoading = false;
-            }
-        });
-    }
+
 }

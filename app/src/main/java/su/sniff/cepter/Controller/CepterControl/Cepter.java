@@ -4,6 +4,7 @@ import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -32,10 +33,10 @@ public class                    Cepter {
     /**
      * Scan with cepter the hostList
      * @param scanActivity activity for callback
-     * @param hosts
      * @return
      */
-    public static void          fillHostAdapter(final ScanActivity scanActivity, final List<Host> hosts) {
+    public static void          fillHostAdapter(final ScanActivity scanActivity) {
+        final List<Host> hosts = new ArrayList<>();
         final RootProcess process = new RootProcess("Cepter Scan host", globalVariable.path + "");
         final BufferedReader bufferedReader = new BufferedReader(process.getInputStreamReader());
         process.exec(globalVariable.path + "/cepter scan " + Integer.toString(globalVariable.adapt_num));
@@ -52,7 +53,7 @@ public class                    Cepter {
                         }
                     }
                     Collections.sort(hosts, Host.comparator);
-                    scanActivity.onHostActualized();
+                    scanActivity.onHostActualized(hosts);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

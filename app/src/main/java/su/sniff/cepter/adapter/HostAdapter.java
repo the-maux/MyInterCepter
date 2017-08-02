@@ -11,6 +11,7 @@ import su.sniff.cepter.R;
 import su.sniff.cepter.View.ScanActivity;
 import su.sniff.cepter.adapter.Holder.HostHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.support.v7.widget.RecyclerView;
@@ -21,10 +22,11 @@ import com.bumptech.glide.Glide;
 public class                    HostAdapter extends RecyclerView.Adapter<HostHolder> {
     private String              TAG = "HostAdapter";
     private ScanActivity        activity;
-    private List<Host>          mHosts;
+    private List<Host>          mHosts = null;
+    private List<Host>          originalList;
+    private boolean             filtered = false;
 
-    public HostAdapter(List<Host> hosts, ScanActivity context) {
-        mHosts = hosts;
+    public                      HostAdapter(ScanActivity context) {
         activity = context;
     }
 
@@ -44,35 +46,7 @@ public class                    HostAdapter extends RecyclerView.Adapter<HostHol
         holder.vendor.setText(host.getVendor());
         holder.selected.setChecked(host.isSelected());
         Log.d(TAG, "updating :" + position + " with selected:" + host.isSelected());
-        setOsIcon(mHosts.get(position).getDumpInfo(), holder.osIcon);
-    }
-
-    private void                setOsIcon(String InfoDevice, CircleImageView osImageView) {
-        int ImageRessource;
-        if (InfoDevice.contains("Windows")) {
-            ImageRessource = R.drawable.winicon;
-        } else if (InfoDevice.contains("Apple")) {
-            ImageRessource = R.drawable.ios;
-        } else if (InfoDevice.contains("Android") || InfoDevice.contains("Mobile") || InfoDevice.contains("Samsung")) {
-            ImageRessource = R.drawable.android;
-        } else if (InfoDevice.contains("Cisco")) {
-            ImageRessource = R.drawable.cisco;
-        } else if (InfoDevice.contains("Raspberry")) {
-            ImageRessource = R.drawable.rasp;
-        } else if (InfoDevice.contains("QUANTA")) {
-            ImageRessource = R.drawable.quanta;
-        } else if (InfoDevice.contains("Bluebird")) {
-            ImageRessource = R.drawable.bluebird;
-        } else if (InfoDevice.contains("Ios")) {
-            ImageRessource = R.drawable.ios;
-        } else if (!(!InfoDevice.contains("Unix") && !InfoDevice.contains("Linux") && !InfoDevice.contains("BSD"))) {
-            ImageRessource = R.drawable.linuxicon;
-        } else
-            ImageRessource = R.drawable.monitor;
-        Glide.with(activity)
-                .load(ImageRessource)
-                .centerCrop()
-                .into(osImageView);
+        Host.setOsIcon(activity, mHosts.get(position).getDumpInfo(), holder.osIcon);
     }
 
     /**
@@ -96,6 +70,43 @@ public class                    HostAdapter extends RecyclerView.Adapter<HostHol
 
     @Override
     public int                  getItemCount() {
-        return mHosts.size();
+        return (mHosts == null) ? 0 : mHosts.size();
+    }
+
+    public ArrayList<String>    getOsList() {
+        ArrayList<String> listOs = new ArrayList<>();
+        for (Host host : originalList) {
+            if (!listOs.contains(host.getOS()))
+                listOs.add(host.getOS());
+        }
+        return listOs;
+    }
+
+    public void                 filterByOs(ArrayList<String> Os) {
+        Log.d(TAG, "filterByOs:" + Os);
+        mHosts.clear();
+        filtered = true;
+        for (Host host : originalList) {
+            if (Os.contains(host.getOS()))
+                mHosts.add(host);
+        }
+        notifyDataSetChanged();
+    }
+
+    public void                 filterByString(String query) {
+        Log.d(TAG, "filterByString:" + query);
+        mHosts.clear();
+        filtered = true;
+        for (Host host : originalList) {
+            if (host.getDumpInfo().contains(query))
+                mHosts.add(host);
+        }
+        notifyDataSetChanged();
+    }
+    public void                 updateHostList(List<Host> hosts) {
+        mHosts = new ArrayList<>();
+        hosts.addAll(mHosts);
+        originalList = hosts;
+        notifyDataSetChanged();
     }
 }

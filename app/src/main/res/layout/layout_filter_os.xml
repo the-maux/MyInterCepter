@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="40dp"
+    android:background="@color/material_grey_700"
+    android:elevation="1dp"
+    android:paddingRight="6dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageOS"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:padding="2dp"
+        app:srcCompat="@drawable/android" />
+
+    <TextView
+        android:id="@+id/nameOS"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_toRightOf="@+id/imageOS"
+
+        android:gravity="center_vertical"
+        android:text="Android" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginRight="4dp"
+        android:layout_toRightOf="@+id/nameOS"
+        android:checked="true" />
+
+    <Space
+        android:layout_width="20dp"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/checkBox"
+        android:background="@color/material_light_black" />
+</RelativeLayout>
