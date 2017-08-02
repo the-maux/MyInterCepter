@@ -25,7 +25,7 @@ public class Host {
     private String          vendor = "Unknown";
     private boolean         selected = false;
     private String          dumpInfo;
-
+    private Os              osType;
 
     /**
      * Format : 192.168.0.12 	(theMaux) : [E8-B1-FC-A6-CF-11] [Windows 7\8\10] ; Intel Corporate
@@ -42,7 +42,8 @@ public class Host {
         os = mid.substring(mid.indexOf(" ") + 1);
         vendor = end;
         logHost(buffer);
-        this.dumpInfo = buffer;
+        dumpInfo = buffer;
+        guessOsType(dumpInfo);
     }
 
     /**
@@ -150,6 +151,31 @@ public class Host {
                 .into(osImageView);
     }
 
+    private void                guessOsType(String InfoDevice) {
+        if (InfoDevice.contains("Windows 7")) {
+            osType = Os.Windows7_8_10;
+        } else if (InfoDevice.contains("Windows 2000")) {
+            osType = Os.WindowsXP;
+        } else if (InfoDevice.contains("Apple")) {
+            osType = Os.Apple;
+        } else if (InfoDevice.contains("Android") || InfoDevice.contains("Mobile") || InfoDevice.contains("Samsung")) {
+            osType = Os.Android;
+        } else if (InfoDevice.contains("Cisco")) {
+            osType = Os.Cisco;
+        } else if (InfoDevice.contains("Raspberry")) {
+            osType = Os.Raspberry;
+        } else if (InfoDevice.contains("QUANTA")) {
+            osType = Os.QUANTA;
+        } else if (InfoDevice.contains("Bluebird")) {
+            osType = Os.Bluebird;
+        } else if (InfoDevice.contains("Ios")) {
+            osType = Os.Ios;
+        } else if (!(!InfoDevice.contains("Unix") && !InfoDevice.contains("Linux") && !InfoDevice.contains("BSD"))) {
+            osType = Os.Linux_Unix;
+        } else
+            osType = Os.Unknow;
+    }
+
     public static Comparator<Host> comparator = new Comparator<Host>() {
         @Override
         public int compare(Host o1, Host o2) {
@@ -166,4 +192,9 @@ public class Host {
             return 0;
         }
     };
+
+
+    public Os getOsType() {
+        return osType;
+    }
 }

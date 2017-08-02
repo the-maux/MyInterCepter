@@ -39,11 +39,12 @@
                     android:layout_margin="4dp"
                     android:layout_toLeftOf="@+id/arpCage">
 
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Rechercher"
-                        android:inputType="text|textShortMessage|textFilter" />
+					<EditText
+						android:id="@+id/filterText"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Rechercher"
+						android:inputType="text|textShortMessage|textFilter" />
                 </android.support.design.widget.TextInputLayout>
 
                 <ImageView

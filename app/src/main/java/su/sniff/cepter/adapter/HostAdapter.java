@@ -75,9 +75,10 @@ public class                    HostAdapter extends RecyclerView.Adapter<HostHol
     public ArrayList<String>    getOsList() {
         ArrayList<String> listOs = new ArrayList<>();
         for (Host host : originalList) {
-            if (!listOs.contains(host.getOS()))
-                listOs.add(host.getOS());
+            if (!listOs.contains(host.getOsType().name()))
+                listOs.add(host.getOsType().name());
         }
+        Log.d(TAG, "listOS:" + listOs);
         return listOs;
     }
 
@@ -87,7 +88,7 @@ public class                    HostAdapter extends RecyclerView.Adapter<HostHol
         filtered = true;
         for (Host host : originalList) {
             for (String os : Os) {
-                if (os.contains(host.getOS())) {
+                if (os.contains(host.getOsType().name())) {
                     mHosts.add(host);
                     Log.d(TAG, "os OK:" + os);
                     break;
@@ -102,7 +103,7 @@ public class                    HostAdapter extends RecyclerView.Adapter<HostHol
         mHosts.clear();
         filtered = true;
         for (Host host : originalList) {
-            if (host.getDumpInfo().contains(query))
+            if (host.getDumpInfo().toLowerCase().contains(query.toLowerCase()))
                 mHosts.add(host);
         }
         notifyDataSetChanged();

@@ -9,11 +9,14 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -214,7 +217,7 @@ public class                        ScanActivity extends Activity {
         for (final String os : listOs) {
             View OsView = View.inflate(this, R.layout.layout_filter_os, null);
             Host.setOsIcon(this, os, (CircleImageView)OsView.findViewById(R.id.imageOS));
-            ((TextView)OsView.findViewById(R.id.nameOS)).setText(os);
+            ((TextView)OsView.findViewById(R.id.nameOS)).setText(os.replace("_", "/"));
             final CheckBox cb = ((CheckBox)OsView.findViewById(R.id.checkBox));
             OsView.setOnClickListener(filtereffect(cb, os, listOs));
             cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -226,13 +229,31 @@ public class                        ScanActivity extends Activity {
             filterLL.addView(OsView, 200, 40);
         }
         findViewById(R.id.ScrollViewFilter).setVisibility(View.VISIBLE);
+        ((EditText)findViewById(R.id.filterText)).addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                adapter.filterByString(editable.toString());
+            }
+        });
     }
-    private View.OnClickListener   filtereffect(final CheckBox cb, final String os, final ArrayList<String> listOs) {
+
+    private View.OnClickListener    filtereffect(final CheckBox cb, final String os, final ArrayList<String> listOs) {
         return new View.OnClickListener() {
             @Override
-            public void onClick(View v) {// oui je fais des ternaires pour faire le pluriel
+            public void onClick(View v) {
                 cb.setChecked(!cb.isChecked());
-                if (cb.isChecked())
+                if (!cb.isChecked())
                     listOs.remove(os);
                 else
                     listOs.add(os);
