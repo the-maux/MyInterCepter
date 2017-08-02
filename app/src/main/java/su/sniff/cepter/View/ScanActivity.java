@@ -27,9 +27,11 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import su.sniff.cepter.Controller.CepterControl.Cepter;
+import su.sniff.cepter.Controller.IPv4CIDR;
 import su.sniff.cepter.Controller.NetUtils;
 import su.sniff.cepter.Controller.RootProcess;
 import su.sniff.cepter.Model.Host;
+import su.sniff.cepter.Network.ScanNetmask;
 import su.sniff.cepter.R;
 import su.sniff.cepter.Utils.TabActivitys;
 import su.sniff.cepter.adapter.HostAdapter;
@@ -127,8 +129,8 @@ public class                        ScanActivity extends Activity {
             inLoading = true;
             initHostsRecyclerView();
             progressAnimation();
-            //IPv4CIDR iPv4CIDR = new IPv4CIDR(globalVariable.own_ip, globalVariable.netmask);
-            //new ScanNetmask(iPv4CIDR); TODO: we can really scan who is reachable or not and dump it in hostFile
+            IPv4CIDR iPv4CIDR = new IPv4CIDR(globalVariable.own_ip, globalVariable.netmask);
+            new ScanNetmask(iPv4CIDR, this);
             progress = 1000;
             NetUtils.dumpListHostFromARPTableInFile(this);
             progress = 1500;
@@ -182,6 +184,10 @@ public class                        ScanActivity extends Activity {
                 });
             }
         }).start();
+    }
+
+    public void                     onReachableScanOver(ArrayList<String> ipReachable) {
+        Log.e(TAG, "tu dois toujours faire le scan par cepter des reachable que ta trouvé en ping ;)");
     }
 
     public void                     onHostActualized(final List<Host> hosts) {
@@ -302,6 +308,4 @@ public class                        ScanActivity extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     }
-
-
 }
