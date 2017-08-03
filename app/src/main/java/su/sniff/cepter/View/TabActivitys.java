@@ -9,14 +9,13 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import su.sniff.cepter.BuildConfig;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.*;
 import su.sniff.cepter.globalVariable;
 
 public class TabActivitys extends TabActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(3);
-        setContentView(R.layout.tabtest_layout);
+        setContentView(R.layout.activity_tabs);
         getWindow().setFeatureDrawableResource(3, R.drawable.ico);
         globalVariable.parent = this;
         TabHost tabHost = getTabHost();

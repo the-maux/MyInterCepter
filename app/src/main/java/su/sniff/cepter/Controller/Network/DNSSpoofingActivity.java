@@ -39,7 +39,7 @@ public class                            DNSSpoofingActivity extends Activity {
 
     public void                         onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dns_layout);
+        setContentView(R.layout.activity_layout);
         initXml();
         initThreadBehavior();
         fillListDNSSpoofedFromFile();

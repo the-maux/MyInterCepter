@@ -24,7 +24,7 @@ public class                    MenuActivity extends Activity {
 
     @Override protected void    onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String str = getIntent().getExtras().getString("Key_String");
+        String str = getIntent().getExtras().getString("Key_String");// I need to understand this
         setContentView(R.layout.activity_menu);
         initXml();
     }

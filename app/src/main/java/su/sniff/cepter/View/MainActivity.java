@@ -55,11 +55,11 @@ public class                    MainActivity extends Activity {
     }
 
     private void                initAdapters() {
-        globalVariable.adapter = new ArrayAdapter<String>(this, R.layout.raw_list2, R.id.label, globalVariable.cookies_domain) {
+        globalVariable.adapter = new ArrayAdapter<String>(this, R.layout.item_cookies_lv, R.id.label, globalVariable.cookies_domain) {
             public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 if (convertView == null) {
                     convertView = ((LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                            .inflate(R.layout.raw_list2, parent, false);
+                            .inflate(R.layout.item_cookies_lv, parent, false);
                 }
                 TextView tt = (TextView) convertView.findViewById(R.id.label);
                 Log.d(TAG, "initAdapters::adapter1::Item(" + position + "):" +  getItem(position));
@@ -70,11 +70,11 @@ public class                    MainActivity extends Activity {
             }
         };
         Log.d(TAG, "");
-        globalVariable.adapter2 = new ArrayAdapter<String>(this, R.layout.raw_list2, R.id.label, globalVariable.cookies_domain2) {
+        globalVariable.adapter2 = new ArrayAdapter<String>(this, R.layout.item_cookies_lv, R.id.label, globalVariable.cookies_domain2) {
             public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 if (convertView == null) {
                     convertView = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                            .inflate(R.layout.raw_list2, parent, false);
+                            .inflate(R.layout.item_cookies_lv, parent, false);
                 }
                 Log.d(TAG, "initAdapters::adapter2::Item(" + position + "):" +  getItem(position));
                 TextView tt = (TextView) convertView.findViewById(R.id.label);

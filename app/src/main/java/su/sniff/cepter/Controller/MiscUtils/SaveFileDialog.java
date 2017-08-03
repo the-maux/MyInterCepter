@@ -72,7 +72,7 @@ public class SaveFileDialog extends Dialog implements OnClickListener {
             this.currentDir = new File(dir);
         }
         prepareFileFilter(fileExt);
-        setContentView(R.layout.sfd_layout);
+        setContentView(R.layout.dialog_save_file);
         setTitle(R.string.sfd_title);
         this.edit = (EditText) findViewById(R.id.sfd_file_name);
         Calendar cal = Calendar.getInstance();

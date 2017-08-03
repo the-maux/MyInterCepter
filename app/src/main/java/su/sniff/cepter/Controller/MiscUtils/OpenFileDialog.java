@@ -57,7 +57,7 @@ public class OpenFileDialog extends Dialog implements OnClickListener {
             this.currentDir = new File(dir);
         }
         prepareFileFilter(fileExt);
-        setContentView(R.layout.ofd_layout);
+        setContentView(R.layout.dialog_openfile);
         setTitle(R.string.ofd_title);
         this.view = (ListView) findViewById(R.id.ofd_list);
         browseTo(this.currentDir);
@@ -122,7 +122,7 @@ public class OpenFileDialog extends Dialog implements OnClickListener {
             item.put(IMAGE_KEY, Integer.valueOf(new File(new StringBuilder().append(dir.getAbsolutePath()).append(File.separator).append(file).toString()).isDirectory() ? R.drawable.ic_osdialogs_dir : R.drawable.ic_osdialogs_file));
             list.add(item);
         }
-        this.view.setAdapter(new SimpleAdapter(getContext(), list, R.layout.ofd_list_item, new String[]{FILE_KEY, IMAGE_KEY}, new int[]{R.id.ofd_item_text, R.id.ofd_item_image}));
+        this.view.setAdapter(new SimpleAdapter(getContext(), list, R.layout.item_dialog_openfile, new String[]{FILE_KEY, IMAGE_KEY}, new int[]{R.id.ofd_item_text, R.id.ofd_item_image}));
         return true;
     }
 

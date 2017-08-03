@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" android:orientation="horizontal" android:id="@+id/LinearLayout2" android:layout_width="match_parent" android:layout_height="match_parent">
-    <ListView android:id="@+id/listHosts" android:layout_width="wrap_content" android:layout_height="wrap_content" android:divider="#ffffff" android:dividerHeight="2px" android:layout_weight="1.29" android:layout_below="@+id/Message" />
-    <TextView android:textSize="30sp" android:textColor="@color/green" android:id="@+id/Message" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Select Network Interface" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" />
-</RelativeLayout>

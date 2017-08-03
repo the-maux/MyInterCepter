@@ -22,7 +22,7 @@ public class PortScanActivity extends Activity {
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.portscan);
+        setContentView(R.layout.activity_portscan);
         initThread();
         initXml();
         progressAnimation();
