@@ -33,6 +33,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import su.sniff.cepter.Controller.CepterControl.Cepter;
 import su.sniff.cepter.Controller.Network.IPv4CIDR;
 import su.sniff.cepter.Controller.Network.NetUtils;
+import su.sniff.cepter.Controller.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.Model.Host;
 import su.sniff.cepter.Controller.Network.ScanNetmask;
@@ -110,6 +111,7 @@ public class                        ScanActivity extends Activity {
                 if (!inLoading) {
                     Log.d(TAG, "clearing Refresh");
                     mHosts.clear();
+                    filterLL.removeAllViews();
                     adapter.notifyDataSetChanged();
                     initMonitor();
                     progress = 0;
@@ -263,10 +265,12 @@ public class                        ScanActivity extends Activity {
      * @throws IOException
      */
     private void                    startAttack() throws IOException {
+        ArrayList<Host> selectedHost = new ArrayList<>();
         boolean noTargetSelected = true;
         FileOutputStream out = openFileOutput("targets", 0);
         for (Host host : mHosts) {
             if (host.isSelected()) {
+                selectedHost.add(host);
                 noTargetSelected = false;
                 String dumpHost = host.getIp() + ":" + host.getMac() + "\n";
                 Log.d(TAG, "Dumpin File(./targets):" + dumpHost);
@@ -279,12 +283,12 @@ public class                        ScanActivity extends Activity {
             return;
         }
         String cmd = "-gw " + globalVariable.gw_ip;
-        Intent i2 = new Intent(mInstance, TabActivitys.class);
+        Intent i2 = new Intent(mInstance, MenuActivity.class);
         Log.i(TAG, cmd);
         i2.putExtra("Key_String", cmd);
-        i2.putExtra("Key_String_origin", origin_str);
+        Singleton.hostsList = selectedHost;
         startActivity(i2);
-        finish();
+
     }
 
     public void                     OnCage(View v2) throws IOException {

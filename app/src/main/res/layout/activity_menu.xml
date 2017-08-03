@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/Coordonitor"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/material_blue_grey_100">
+
+        <LinearLayout
+            android:id="@+id/LL_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="32dp"
+            android:orientation="vertical"
+            android:weightSum="4">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp"
+                    android:layout_weight="1"
+                    android:background="@color/material_grey_700"
+                    app:cardCornerRadius="6dp"
+                    app:cardElevation="8dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/NmapButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="Nmap"
+                            android:textColor="@color/material_light_white"
+                            android:textSize="18sp" />
+
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp"
+                    android:layout_weight="1"
+                    android:background="@color/material_grey_700"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="8dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/MitmButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="Cepter\nMITM"
+                            android:textColor="@color/material_light_white"
+                            android:textSize="18sp" />
+
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp"
+                    android:layout_weight="1"
+                    android:background="@color/material_grey_700"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="8dp">
+
+                    <RelativeLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/ArpButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="ARP\nCAGE"
+                            android:textColor="@color/material_light_white"
+                            android:textSize="18sp" />
+
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp"
+                    android:layout_weight="1"
+                    android:background="@color/material_grey_700"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="8dp">
+
+                    <RelativeLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/DnsButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="DNS\nSpoofing"
+                            android:textColor="@color/material_light_white"
+                            android:textSize="18sp" />
+
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp"
+                    android:layout_weight="1"
+                    android:background="@color/material_grey_700"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="8dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/WiresharkButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="Wireshark"
+                            android:textColor="@color/material_light_white"
+                            android:textSize="18sp" />
+
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp"
+                    android:layout_weight="1"
+                    android:background="@color/material_grey_700"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="8dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/DoraDiagnostic"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="DORA\nDiagnostic"
+                            android:textColor="@color/material_light_white"
+                            android:textSize="18sp" />
+
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp"
+                    android:layout_weight="1"
+                    android:background="@color/material_grey_700"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="8dp">
+
+                    <RelativeLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Metasploit"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="Metasploit"
+                            android:textColor="@color/material_light_white"
+                            android:textSize="18sp" />
+
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp"
+                    android:layout_weight="1"
+                    android:background="@color/material_grey_700"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="8dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/SettingsButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="Settings"
+                            android:textColor="@color/material_light_white"
+                            android:textSize="18sp" />
+
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

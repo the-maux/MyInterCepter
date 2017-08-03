@@ -73,5 +73,8 @@
         <activity
             android:name="su.sniff.cepter.View.SettingsExpertActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="su.sniff.cepter.View.MenuActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>
 </manifest>
