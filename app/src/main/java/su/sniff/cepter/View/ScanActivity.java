@@ -214,7 +214,7 @@ public class                        ScanActivity extends Activity {
         monitor += "\n" + listOs.size() +" Os détected";
         TxtMonitor.setText(monitor);
         for (final String os : listOs) {
-            View OsView = View.inflate(this, R.layout.item_filter_os, null);
+            View OsView = View.inflate(this, R.layout.item_host_checkbox, null);
             Host.setOsIcon(this, os, (CircleImageView)OsView.findViewById(R.id.imageOS));
             ((TextView)OsView.findViewById(R.id.nameOS)).setText(os.replace("_", "/"));
             final CheckBox cb = ((CheckBox)OsView.findViewById(R.id.checkBox));

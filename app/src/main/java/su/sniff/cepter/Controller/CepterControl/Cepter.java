@@ -44,7 +44,8 @@ public class                    Cepter {
                     while ((read = bufferedReader.readLine()) != null) {//sanityzeCheck: at least 3 '.' for x.x.x.x : Ip
                         if ((read.length() - read.replace(".", "").length()) >= 3) {
                             Host hostObj = new Host(read);//Format : IP\t(HOSTNAME) \n [MAC] [OS] : VENDOR \n
-                            hosts.add(hostObj);
+                            if (!hosts.contains(hostObj))
+                                hosts.add(hostObj);
                         }
                     }
                     Collections.sort(hosts, Host.comparator);

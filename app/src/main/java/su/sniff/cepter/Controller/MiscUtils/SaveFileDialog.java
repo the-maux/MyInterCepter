@@ -76,7 +76,7 @@ public class SaveFileDialog extends Dialog implements OnClickListener {
         setTitle(R.string.sfd_title);
         this.edit = (EditText) findViewById(R.id.sfd_file_name);
         Calendar cal = Calendar.getInstance();
-        int day = cal.get(5);
+        /*int day = cal.get(5);
         int month = cal.get(2) + 1;
         int year = cal.get(1);
         int hour = cal.get(11);
@@ -86,7 +86,7 @@ public class SaveFileDialog extends Dialog implements OnClickListener {
         this.view.setOnItemClickListener(new C00901());
         ((Button) findViewById(R.id.sfd_go_up)).setOnClickListener(this);
         ((Button) findViewById(R.id.sfd_new_dir)).setOnClickListener(this);
-        ((Button) findViewById(R.id.sfd_save)).setOnClickListener(this);
+        ((Button) findViewById(R.id.sfd_save)).setOnClickListener(this);*/
     }
 
     public void onClick(View v) {
@@ -155,7 +155,7 @@ public class SaveFileDialog extends Dialog implements OnClickListener {
             item.put(IMAGE_KEY, Integer.valueOf(new File(new StringBuilder().append(dir.getAbsolutePath()).append(File.separator).append(file).toString()).isDirectory() ? R.drawable.ic_osdialogs_dir : R.drawable.ic_osdialogs_file));
             list.add(item);
         }
-        this.view.setAdapter(new SimpleAdapter(getContext(), list, R.layout.sfd_list_item, new String[]{FILE_KEY, IMAGE_KEY}, new int[]{R.id.sfd_item_text, R.id.sfd_item_image}));
+       // this.view.setAdapter(new SimpleAdapter(getContext(), list, R.layout.sfd_list_item, new String[]{FILE_KEY, IMAGE_KEY}, new int[]{R.id.sfd_item_text, R.id.sfd_item_image}));
         return true;
     }
 
@@ -174,12 +174,12 @@ public class SaveFileDialog extends Dialog implements OnClickListener {
         File file = null;
         this.newfile = new File(this.currentDir + File.separator + name);
         if (this.newfile.exists()) {
-            new Builder(getContext()).setIcon(17301543).setTitle(R.string.sfd_confirmation_title).setMessage(R.string.sfd_confirmation_message).setPositiveButton(R.string.sfd_btn_yes, new C00923()).setNegativeButton("Non", new OnClickListener() {
+            /*new Builder(getContext()).setIcon(17301543).setTitle(R.string.sfd_confirmation_title).setMessage(R.string.sfd_confirmation_message).setPositiveButton(R.string.sfd_btn_yes, new C00923()).setNegativeButton("Non", new OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
                 }
-            }).show();
+            }).show();*/
             return file;
         }
         try {

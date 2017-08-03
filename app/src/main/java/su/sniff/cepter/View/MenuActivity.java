@@ -48,8 +48,8 @@ public class                    MenuActivity extends Activity {
                 Class choice = TabActivitys.class;
                 switch (clickChoice) {
                     case Nmap:
+                        choice = NmapActivity.class;
                         Snackbar.make(coordinatorLayout, "Fonctionnalité Nmap non implémenté", Snackbar.LENGTH_LONG).show();
-                        choice = null;
                         break;
                     case CepterMitm:
                         choice = TabActivitys.class;
@@ -70,7 +70,7 @@ public class                    MenuActivity extends Activity {
                         choice = null;
                         break;
                     case Metasploit:
-                        Snackbar.make(coordinatorLayout, "Fonctionnalité Nmap non implémenté", Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, "Fonctionnalité Metasploit non implémenté", Snackbar.LENGTH_LONG).show();
                         choice = null;
                         break;
                     case Settings:

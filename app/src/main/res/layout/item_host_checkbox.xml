@@ -11,7 +11,7 @@
         android:id="@+id/imageOS"
         android:layout_width="50dp"
         android:layout_height="match_parent"
-        android:padding="2dp"
+        android:padding="4dp"
         android:src="@drawable/android" />
 
     <TextView
@@ -37,9 +37,4 @@
         android:layout_toRightOf="@+id/nameOS"
         android:checked="true" />
 
-    <Space
-        android:layout_width="5dp"
-        android:layout_height="match_parent"
-        android:layout_toRightOf="@+id/checkBox"
-        android:background="@color/material_light_black" />
 </RelativeLayout>

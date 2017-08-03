@@ -31,7 +31,7 @@ public class Host {
      * Format : 192.168.0.12 	(theMaux) : [E8-B1-FC-A6-CF-11] [Windows 7\8\10] ; Intel Corporate
      * @param buffer buffer
      */
-    public Host(String buffer) {
+    public                  Host(String buffer) {
         buffer = buffer.replace("\t", " ").replace("  ", " ");
         String beg = buffer.substring(0, buffer.indexOf(":") - 1);
         String mid = buffer.substring(buffer.indexOf(":") + 2, buffer.indexOf(";") - 1);
@@ -50,7 +50,7 @@ public class Host {
      * Log host created in console
      * @param buffer buffer
      */
-    private void                logHost(String buffer) {
+    private void            logHost(String buffer) {
         Log.d(TAG, "buffer " + buffer + "");
         Log.d(TAG, "==> ip " + ip + "");
         Log.d(TAG, "==> name " + name + "");

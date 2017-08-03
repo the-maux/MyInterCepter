@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="su.sniff.cepter"
-    platformBuildVersionCode="17"
-    platformBuildVersionName="4.2.2-1425461"
     android:versionCode="17"
     android:versionName="2.0">
 
@@ -72,6 +70,9 @@
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.SettingsExpertActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="su.sniff.cepter.View.NmapActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.MenuActivity"
