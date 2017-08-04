@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import su.sniff.cepter.Model.Host;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.ScanActivity;
-import su.sniff.cepter.View.adapter.Holder.HostHolder;
+import su.sniff.cepter.View.adapter.Holder.HostScanHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,21 +16,21 @@ import java.util.List;
 import android.support.v7.widget.RecyclerView;
 
 
-public class                    HostAdapter extends RecyclerView.Adapter<HostHolder> {
-    private String              TAG = "HostAdapter";
+public class                    HostScanAdapter extends RecyclerView.Adapter<HostScanHolder> {
+    private String              TAG = "HostScanAdapter";
     private ScanActivity        activity;
     private List<Host>          mHosts = null;
     private List<Host>          originalList;
 
-    public                      HostAdapter(ScanActivity context) {
+    public                      HostScanAdapter(ScanActivity context) {
         activity = context;
     }
 
-    @Override public HostHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new HostHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_host, parent, false));
+    @Override public HostScanHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new HostScanHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_host, parent, false));
     }
 
-    @Override public void       onBindViewHolder(HostHolder holder, int position) {
+    @Override public void       onBindViewHolder(HostScanHolder holder, int position) {
         Host host = mHosts.get(position);
         holder.relativeLayout.setOnClickListener(onCardClick(position, holder));
         holder.ipHostname.setText(host.getIp() + " " + host.getName());
@@ -48,7 +48,7 @@ public class                    HostAdapter extends RecyclerView.Adapter<HostHol
      * @param holder
      * @return listener
      */
-    private View.OnClickListener onCardClick(final int position, final HostHolder holder) {
+    private View.OnClickListener onCardClick(final int position, final HostScanHolder holder) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {

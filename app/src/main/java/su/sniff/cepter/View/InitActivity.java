@@ -159,15 +159,10 @@ public class                    InitActivity extends Activity {
     }
 
     private InputStream         getCepterRessource() {
-        InputStream             cepter;
-
-        if (VERSION.SDK_INT < 21) {
-            cepter = getResources().openRawResource(R.raw.cepter_android_14_armeabi);
-        } else {
-            cepter = getResources().openRawResource(R.raw.cepter_android_21_armeabi);
-            if (Build.CPU_ABI.contains("x86")) {
-                cepter = getResources().openRawResource(R.raw.cepter_android_21_x86);
-            }
+        InputStream cepter;
+        cepter = getResources().openRawResource(R.raw.cepter_android_21_armeabi);
+        if (Build.CPU_ABI.contains("x86")) {
+            cepter = getResources().openRawResource(R.raw.cepter_android_21_x86);
         }
         if (Build.CPU_ABI.contains("arm64")) {
             cepter = getResources().openRawResource(R.raw.cepter_android_21_arm64_v8a);
@@ -225,14 +220,18 @@ public class                    InitActivity extends Activity {
         buildFile("arpspoof", R.raw.arpspoof);
         buildFile("ettercap_archive", R.raw.ettercap_archive);
         buildFile("archive_nmap", R.raw.nmap);
-        new RootProcess("UNZIP FILES", globalVariable.path)
-                .exec("./busybox unzip ettercap_archive")
+        RootProcess process = new RootProcess("UNZIP FILES", globalVariable.path);
+        String Output;
+        process.exec("./busybox unzip ettercap_archive")
                 .exec("./busybox unzip archive_nmap")
                 .exec("chmod 777 ./nmap/*")
                 .exec("chmod 777 ./*")
                 .exec("rm -f ./Raw/*")
                 .exec("killall cepter")
                 .closeProcess();
+        process = new RootProcess("Setup")
+                .exec("mount -o rw,remount /system");
+        Log.d(TAG, "Setup::Echo Dns::" + new BufferedReader(process.exec("echo \"nameserver `getprop net.dns1`\" > /etc/resolv.conf; cat /etc/resolv.conf").getInputStreamReader()).readLine());
     }
 
     private void                monitor(final String log) {

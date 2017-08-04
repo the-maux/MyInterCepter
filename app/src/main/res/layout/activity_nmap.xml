@@ -22,7 +22,7 @@
                 android:layout_width="100dp"
                 android:layout_height="56dp"
                 app:layout_scrollFlags="scroll|enterAlways"
-                app:subtitle="v7.92"
+                app:subtitle="v7.31"
                 app:title="Nmap">
 
             </android.support.v7.widget.Toolbar>
@@ -46,7 +46,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="16dp"
                 android:layout_toStartOf="@+id/action_settings"
-                app:srcCompat="@android:drawable/ic_menu_info_details" />
+                android:src="@android:drawable/ic_menu_info_details" />
 
             <ImageButton
                 android:id="@+id/action_settings"
@@ -79,7 +79,7 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/RV_host"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
                 android:layout_alignTop="@+id/spinnerTypeScan"
@@ -87,14 +87,12 @@
                 android:layout_marginRight="16dp"
                 android:layout_toStartOf="@+id/spinnerTypeScan"
                 android:background="@color/material_grey_700"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Name"
+                android:elevation="4dp"
                 tools:listitem="@layout/item_host_checkbox" />
 
             <com.jaredrummler.materialspinner.MaterialSpinner
                 android:id="@+id/spinnerTypeScan"
-                android:layout_width="180dp"
+                android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentStart="false"
@@ -128,7 +126,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_weight="1"
                 android:background="@drawable/rounded_corner_param"
-                android:elevation="4dp"
+                android:elevation="3dp"
                 android:maxLines="1"
                 android:paddingLeft="8dp"
                 android:text="192.168.0.1"
@@ -146,7 +144,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_weight="1"
                 android:background="@drawable/rounded_corner_param"
-                android:elevation="4dp"
+                android:elevation="3dp"
                 android:maxLines="1"
                 android:paddingLeft="8dp"
                 android:text="-Pn -Sv -w -vv"
@@ -170,7 +168,6 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp"
                 android:text="nmap 192.168.0.1 -Pn -Sv -w -vv"
-                android:textColor="@color/material_light_white"
                 android:textStyle="italic"
                 android:typeface="monospace" />
 
@@ -184,6 +181,7 @@
                 android:padding="16dp"
                 android:scrollbars="vertical"
                 android:text="@string/nmapblabla"
+                android:textColor="@color/material_light_white"
                 android:textSize="12sp" />
         </RelativeLayout>
 
@@ -196,6 +194,7 @@
             android:layout_marginBottom="16dp"
             android:id="@+id/fab"
             android:src="@android:drawable/ic_menu_search"
+            app:fab_progress="0"
             app:layout_anchorGravity="bottom|right|end"
             app:fab_colorPressed="@android:color/holo_blue_bright"
             app:fab_elevationCompat="4dp"

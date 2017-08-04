@@ -58,6 +58,10 @@ public class                    RootProcess {
         return new InputStreamReader(process.getInputStream());
     }
 
+    public InputStreamReader    getErrorStreamReader() {
+        return new InputStreamReader(process.getErrorStream());
+    }
+
     public void                 closeProcess() {
         closeDontWait();
         waitFor();

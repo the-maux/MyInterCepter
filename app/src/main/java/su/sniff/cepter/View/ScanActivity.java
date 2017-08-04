@@ -38,14 +38,14 @@ import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.Model.Host;
 import su.sniff.cepter.Controller.Network.ScanNetmask;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.adapter.HostAdapter;
+import su.sniff.cepter.View.adapter.HostScanAdapter;
 import su.sniff.cepter.globalVariable;
 
 public class                        ScanActivity extends Activity {
     private String                  TAG = "ScanActivity";
     private ScanActivity            mInstance = this;
     private List<Host>              mHosts;
-    private HostAdapter             adapter;
+    private HostScanAdapter adapter;
     private RecyclerView            hostsRecyclerView;
     private LinearLayout            filterLL;
     private String                  origin_str, monitor;
@@ -123,7 +123,7 @@ public class                        ScanActivity extends Activity {
 
     private void                    initHostsRecyclerView() {
         mHosts = new ArrayList<>();
-        adapter = new HostAdapter(this);
+        adapter = new HostScanAdapter(this);
         hostsRecyclerView.setAdapter(adapter);
         hostsRecyclerView.setHasFixedSize(true);
         hostsRecyclerView.setLayoutManager(new LinearLayoutManager(mInstance));

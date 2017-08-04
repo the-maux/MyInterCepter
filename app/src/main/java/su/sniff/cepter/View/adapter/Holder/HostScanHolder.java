@@ -12,7 +12,7 @@ import su.sniff.cepter.R;
 /**
  * Host holder
  */
-public class                HostHolder extends RecyclerView.ViewHolder {
+public class HostScanHolder extends RecyclerView.ViewHolder {
     public View             itemView;
     public RelativeLayout   relativeLayout;
     public TextView         ipHostname;
@@ -22,7 +22,7 @@ public class                HostHolder extends RecyclerView.ViewHolder {
     public CheckBox         selected;
     public CircleImageView  osIcon;
 
-    public                  HostHolder(View v) {
+    public HostScanHolder(View v) {
         super(v);
         itemView = v;
         relativeLayout = (RelativeLayout) itemView.findViewById(R.id.relative_layout);
