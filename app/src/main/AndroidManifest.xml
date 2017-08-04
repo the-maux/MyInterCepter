@@ -41,9 +41,6 @@
             android:name="su.sniff.cepter.View.TsharkDetailsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name="su.sniff.cepter.View.PortScanActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
             android:name="su.sniff.cepter.Controller.Network.DNSSpoofingActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
