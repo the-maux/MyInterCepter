@@ -123,17 +123,35 @@ public class                    NmapActivity extends Activity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    Output.setText("");
-                    String cmd = globalVariable.path + "/nmap/nmap " + host_et.getText() + " " + params_et.getText();
-                    Monitor.setText(cmd);
-                    String dumpOutput = new BufferedReader(new RootProcess("Nmap", globalVariable.path)//Exec and > in BufferedReader
-                                                .exec(cmd).getInputStreamReader()).readLine();
-                    Log.d(TAG, "output:" + dumpOutput);
-                    Output.setText(dumpOutput);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Output.setText("Wait...");
+                final String cmd = globalVariable.path + "/nmap/nmap " + host_et.getText() + " " + params_et.getText() + " ";
+                Monitor.setText(cmd);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            BufferedReader reader = new BufferedReader(new RootProcess("Nmap", globalVariable.path)//Exec and > in BufferedReader
+                                    .exec(cmd).exec("exit").getInputStreamReader());
+                            String dumpOutput = "", tmp;
+                            while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {
+                                dumpOutput += tmp + '\n';
+                                Log.d(TAG, "output:In::" + dumpOutput);
+                            }
+                            dumpOutput += tmp;
+                            final String finalDumpOutput = dumpOutput;
+                            mInstance.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Output.setText(finalDumpOutput);
+                                }
+                            });
+                            Log.d(TAG, "output:" + dumpOutput);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }).start();
             }
         };
     }

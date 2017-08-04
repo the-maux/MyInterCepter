@@ -32,7 +32,7 @@ public class                    RootProcess {
 
     public RootProcess          exec(String cmd) {
         try {
-            Log.d(TAG, this.LogID + "::" + cmd);
+            Log.d(TAG, LogID + "::" + cmd);
             os.writeBytes(cmd + "\n");
             os.flush();
         } catch (IOException e) {
