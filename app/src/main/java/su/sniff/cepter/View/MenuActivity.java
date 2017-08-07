@@ -55,15 +55,13 @@ public class                    MenuActivity extends Activity {
                         choice = TabActivitys.class;
                         break;
                     case ARPCage:
-                        Snackbar.make(coordinatorLayout, "Fonctionnalité Cage ARP non implémenté", Snackbar.LENGTH_LONG).show();
-                        choice = null;
+                        choice =  CageActivity.class;
                         break;
                     case DnsSpoofing:
-                        Snackbar.make(coordinatorLayout, "Fonctionnalité Spoof DNS non implémenté", Snackbar.LENGTH_LONG).show();
-                        choice = null;
+                        choice = InjectHTTPActivity.class;
                         break;
                     case Wireshark:
-                        choice = TabActivitys.class;
+                        choice = WiresharkActivity.class;
                         break;
                     case DoraDiagnostic:
                         Snackbar.make(coordinatorLayout, "Fonctionnalité Dora non implémenté", Snackbar.LENGTH_LONG).show();
@@ -74,7 +72,7 @@ public class                    MenuActivity extends Activity {
                         choice = null;
                         break;
                     case Settings:
-                        choice = TabActivitys.class;
+                        choice = SettingsActivity.class;
                         break;
                 }
                 if (choice != null) {

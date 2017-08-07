@@ -124,7 +124,7 @@ public class                    CookiesActivity extends Activity {
 
     public void                 OnShowMore(View v) {
         if (globalVariable.cookies_show == 0) {
-            ((Button) findViewById(R.id.button2)).setText("Show Less");
+            ((Button) findViewById(R.id.clearButton)).setText("Show Less");
             globalVariable.cookies_show = 1;
             runOnUiThread(new Runnable() {
                 @Override
@@ -135,7 +135,7 @@ public class                    CookiesActivity extends Activity {
             });
             return;
         }
-        ((Button) findViewById(R.id.button2)).setText("Show More");
+        ((Button) findViewById(R.id.clearButton)).setText("Show More");
         globalVariable.cookies_show = 0;
         tvList.setAdapter(globalVariable.adapter);
         globalVariable.adapter.notifyDataSetInvalidated();

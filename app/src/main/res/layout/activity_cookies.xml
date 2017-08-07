@@ -4,5 +4,5 @@
               android:textSize="7dp"/>
     <TextView android:id="@+id/monitor" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cookies" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" />
     <Button android:id="@+id/DNSSpoofButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Clear all" android:layout_alignParentTop="true" android:layout_alignParentRight="true" android:onClick="OnClearCookie"  />
-    <Button android:id="@+id/button2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Show More" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" android:onClick="OnShowMore"  />
+    <Button android:id="@+id/clearButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Show More" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" android:onClick="OnShowMore"  />
 </RelativeLayout>

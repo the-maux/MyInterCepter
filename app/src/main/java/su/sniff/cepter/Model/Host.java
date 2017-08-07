@@ -21,6 +21,7 @@ public class Host {
     private String          ip = "Unknown";
     private String          name = "Unknown";
     private String          mac = "Unknown";
+    private String          hostname;
     private String          os = "Unknown";
     private String          vendor = "Unknown";
     private boolean         selected = false;

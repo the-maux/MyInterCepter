@@ -88,19 +88,6 @@ public class                CageActivity extends Activity {
 
     }
 
-    public boolean          onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode != 4) {
-            return super.onKeyDown(keyCode, event);
-        }
-        try {
-            openFileOutput("exitc.id", 0).close();
-        } catch (IOException e2) {
-            e2.printStackTrace();
-        }
-        finish();
-        return true;
-    }
-
     private void            closeOnCage() {
         try {
             openFileOutput("exitc.id", 0).close();

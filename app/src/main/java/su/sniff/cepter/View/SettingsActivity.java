@@ -169,13 +169,6 @@ public class SettingsActivity extends Activity {
         Toast.makeText(getBaseContext(), "API " + VERSION.SDK_INT + ":" + Build.CPU_ABI + "\nhttp://sniff.su", 1).show();
     }
 
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == 4) {
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
     public void OnClearPcap(View v) throws IOException, InterruptedException {
         Process p = Runtime.getRuntime().exec("su");
         DataOutputStream os = new DataOutputStream(p.getOutputStream());

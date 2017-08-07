@@ -221,7 +221,6 @@ public class                    InitActivity extends Activity {
         buildFile("ettercap_archive", R.raw.ettercap_archive);
         buildFile("archive_nmap", R.raw.nmap);
         RootProcess process = new RootProcess("UNZIP FILES", globalVariable.path);
-        String Output;
         process.exec("./busybox unzip ettercap_archive")
                 .exec("./busybox unzip archive_nmap")
                 .exec("chmod 777 ./nmap/*")
