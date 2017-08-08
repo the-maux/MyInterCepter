@@ -56,7 +56,6 @@ public class                    InitActivity extends Activity {
     @Override protected void    onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         buildPath();
-        globalVariable.resurrection = 1;
         try {
             buildFiles();
             new Thread(new Runnable() {

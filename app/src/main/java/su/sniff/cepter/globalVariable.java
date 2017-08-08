@@ -32,7 +32,6 @@ public class                                globalVariable {
     public static String                    own_ip;
     public static int                       raw_autoscroll = 0;
     public static int                       raw_textsize = 9;
-    public static int                       resurrection;
     public static int                       savepcap;
     public static int                       screenlock = 0;
     public static int                       showhttp = 0;

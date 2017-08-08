@@ -22,8 +22,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import su.sniff.cepter.BuildConfig;
+import su.sniff.cepter.Controller.CepterControl.IntercepterWrapper;
 import su.sniff.cepter.Controller.CepterControl.onDefend;
-import su.sniff.cepter.Controller.CepterControl.onInterceptRun;
 import su.sniff.cepter.Controller.System.InterceptorFileSelected;
 import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.R;
@@ -87,7 +87,7 @@ public class                    MainActivity extends Activity {
     }
 
     public void                 onInterceptorRunClick(View v) throws IOException {
-        RootProcess process = new onInterceptRun(this, sniff_process, ((ImageView) findViewById(R.id.runIcon)),
+        RootProcess process = new IntercepterWrapper(this, sniff_process, ((ImageView) findViewById(R.id.runIcon)),
                 monitorIntercepter).run(gateway);
         if (process != null)
             sniff_process = process;

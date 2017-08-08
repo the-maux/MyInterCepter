@@ -22,6 +22,11 @@ public class                onDefend {
     private String[]        maclist = new String[MotionEventCompat.ACTION_MASK];
     private String[]        iplist = new String[MotionEventCompat.ACTION_MASK];
 
+    /**
+     * Si deux Host dans la List Tab ont la meme mac
+     * Alors il y a une attaque Referele chmillblick plus simplement quand tout aura était printé
+     * @param monitorIntercepter
+     */
     public                  onDefend(TextView monitorIntercepter){
         try {
             boolean found = false;
@@ -60,26 +65,28 @@ public class                onDefend {
         }
     }
 
+    /**
+     * Reading ARP Table to guess host
+     * @return
+     * @throws IOException
+     */
     private int        fillListHost() throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"));
-        int nbrHostToDefend = 0;
+        int offsetHostToDefend = 0;
         String MAC_RE = "^%s\\s+0x1\\s+0x2\\s+([:0-9a-fA-F]+)\\s+\\*\\s+\\w+$";
-        while (true) {
-            String read = bufferedReader.readLine();
-            if (read == null) {
-                break;
-            }
+        String read;
+        while ((read = bufferedReader.readLine()) != null ) {
             Log.d(TAG, "OnDefend::" + read);
             String ip = read.substring(0, read.indexOf(" "));
             Matcher matcher = Pattern.compile(String.format(MAC_RE, ip.replace(".", "\\."))).matcher(read);
             if (matcher.matches()) {
                 String mac = matcher.group(1);
-                maclist[nbrHostToDefend] = mac;
-                iplist[nbrHostToDefend] = ip;
-                nbrHostToDefend++;
+                maclist[offsetHostToDefend] = mac;
+                iplist[offsetHostToDefend] = ip;
+                offsetHostToDefend++;
             }
         }
         bufferedReader.close();
-        return nbrHostToDefend;
+        return offsetHostToDefend;
     }
 }

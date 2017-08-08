@@ -30,7 +30,7 @@ public class                    InterceptorFileSelected implements OpenFileDialo
             fDroidSheep.delete();
         }
         activity.sniff_process = new RootProcess("InterceptorFileSelected", globalVariable.path + "");
-        activity.sniff_process.exec(globalVariable.path + "/cepter " + f.getAbsolutePath() + " " + Integer.toString(globalVariable.resurrection));
+        activity.sniff_process.exec(globalVariable.path + "/cepter " + f.getAbsolutePath() + " " + "1");//1 pour la resurection? i dunno what this mean
         activity.sniff_process.exec("exit").closeDontWait();
         new IntercepterReader(activity, tvHello, activity.sniff_process);
     }

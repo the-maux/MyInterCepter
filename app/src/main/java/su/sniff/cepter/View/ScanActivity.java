@@ -30,7 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import su.sniff.cepter.Controller.CepterControl.Cepter;
+
+import su.sniff.cepter.Controller.CepterControl.IntercepterWrapper;
 import su.sniff.cepter.Controller.Network.IPv4CIDR;
 import su.sniff.cepter.Controller.Network.NetUtils;
 import su.sniff.cepter.Controller.Singleton;
@@ -79,7 +80,7 @@ public class                        ScanActivity extends Activity {
         hostsRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         filterLL = (LinearLayout) findViewById(R.id.filterLL);
         TxtMonitor = ((TextView) findViewById(R.id.Message));
-        Cepter.startCepter(NetUtils.getMac());
+        IntercepterWrapper.initCepter(NetUtils.getMac());
         initMonitor();
         initSwipeRefresh();
     }
@@ -139,7 +140,7 @@ public class                        ScanActivity extends Activity {
             progress = 1000;
             NetUtils.dumpListHostFromARPTableInFile(this);
             progress = 1500;
-            Cepter.fillHostAdapter(this);
+            IntercepterWrapper.fillHostListWithCepterScan(this);
             progress = 2000;
         }
     }
