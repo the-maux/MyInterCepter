@@ -201,7 +201,7 @@ public class                            DNSSpoofingActivity extends Activity {
         Matcher matcher = Pattern.compile(regex).matcher(line);
         Log.d(TAG, "TcpDump::" + line);
         if (!matcher.find() && !line.contains("tcpdump")){
-            line=line.substring(line.indexOf(":")+1).trim().replace(" ", "");
+            line = line.substring(line.indexOf(":")+1).trim().replace(" ", "");
             reqdata.append(line);
         } else {
             if (reqdata.length()>0){

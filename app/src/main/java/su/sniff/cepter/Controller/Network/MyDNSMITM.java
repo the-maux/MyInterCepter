@@ -10,7 +10,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 
 import su.sniff.cepter.Model.DNSPacket;
-import su.sniff.cepter.View.DNSSpoof;
+
 
 
 public class                        MyDNSMITM {
@@ -47,12 +47,11 @@ public class                        MyDNSMITM {
     public static void              sendQuery(String DNSMessage, int srcport, String dstIP){
         try {
             DatagramSocket s = new DatagramSocket(srcport);
-            byte[] data =hexStringToByteArray(DNSMessage);
-            DatagramPacket p=new DatagramPacket(data,data.length, InetAddress.getByName(dstIP),53);
+            byte[] data = hexStringToByteArray(DNSMessage);
+            DatagramPacket p = new DatagramPacket(data, data.length, InetAddress.getByName(dstIP), 53);
             s.send(p);
             s.close();
         } catch (SocketException e) {
-
             Log.i("SocketException","socket exception: "+e.getMessage());
         } catch (IOException e) {
             Log.i("IOSocketException","IOException");
@@ -61,49 +60,42 @@ public class                        MyDNSMITM {
     }
 
     //finds domain on host File entries
-    public static String            findInEntriesList(String s){
-        String fakeDomain=null;
-        for(int i=0;i<entries.size();i++){
+    private static String            findInEntriesList(String s){
+        String fakeDomain = null;
+        for (int i = 0; i < entries.size(); i++) {
             if(s.equals(removeNonPrintableChars(entries.get(i).host2Spoof))){
-                fakeDomain=entries.get(i).HexfakeHost;
+                fakeDomain = entries.get(i).HexfakeHost;
                 break;
             }
         }
         return fakeDomain;
     }
 
-    public static byte[]            hexStringToByteArray(String s) {
+    private static byte[]            hexStringToByteArray(String s) {
         int len = s.length();
         byte[] data = new byte[len / 2];
         for (int i = 0; i < len; i += 2) {
             data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
                     + Character.digit(s.charAt(i+1), 16));
         }
-
         return data;
     }
 
-    public static String            removeNonPrintableChars(String S){
-        String printable="";
-        for(int i=0;i<S.length();i++){
-
-            if(isPrintable(S.charAt(i))){
-                printable+=S.charAt(i);
+    private static String            removeNonPrintableChars(String S){
+        String printable = "";
+        for (int i = 0 ; i < S.length(); i++){
+            if (isPrintable(S.charAt(i))){
+                printable += S.charAt(i);
             }
         }
         return printable;
     }
 
-    public static boolean           isPrintable(char c){
-        boolean printable=false;
-
-        if( (c>=65 && c<=90) || (c>=97 && c<=122) ){
-            printable=true;
-        }
-        return printable;
+    private static boolean           isPrintable(char c){
+        return ((c >= 65 && c <= 90) || (c >= 97 && c <= 122));
     }
 
-    public static class             HostFileEntry{
+    private static class             HostFileEntry{
         String host2Spoof;	//domain to spoof
         String HexfakeHost;	//replacing domain
 
