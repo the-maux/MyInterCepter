@@ -224,7 +224,7 @@ public class                    InitActivity extends Activity {
                 .exec("./busybox unzip archive_nmap")
                 .exec("chmod 777 ./nmap/*")
                 .exec("chmod 777 ./*")
-                .exec("rm -f ./Raw/*")
+                .exec("rm -f ./Raw/*; rm -f dnss ; rm -f hostlist; rm -f *Activity")
                 .exec("killall cepter")
                 .closeProcess();
         process = new RootProcess("Setup")

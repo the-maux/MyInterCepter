@@ -27,7 +27,7 @@ import su.sniff.cepter.globalVariable;
 public class                        InjectHTTPActivity extends Activity {
     private String                  TAG = getClass().getName();
     private InjectHTTPActivity      mInstance = this;
-    private ArrayAdapter<String> InjectionAdapter;
+    private ArrayAdapter<String>    InjectionAdapter;
     private ArrayList<String>       ListOfInjection;
     public ListView                 listViewInjections;
     private Spinner                 numberSpinner, patternSpinner;

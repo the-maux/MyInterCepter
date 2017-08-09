@@ -13,7 +13,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import su.sniff.cepter.*;
-import su.sniff.cepter.Controller.Network.DNSSpoofingActivity;
 import su.sniff.cepter.Controller.MiscUtils.OpenFileDialog;
 import su.sniff.cepter.Controller.MiscUtils.OpenFileDialog.OnFileSelectedListener;
 

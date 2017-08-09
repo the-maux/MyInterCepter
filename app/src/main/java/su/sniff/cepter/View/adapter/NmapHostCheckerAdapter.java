@@ -23,12 +23,12 @@ import su.sniff.cepter.View.adapter.Holder.HostScanHolder;
  * Created by root on 04/08/17.
  */
 
-public class                    HostCheckBoxAdapter extends RecyclerView.Adapter<HostCheckBoxHolder> {
+public class                    NmapHostCheckerAdapter extends RecyclerView.Adapter<HostCheckBoxHolder> {
     private String              TAG = this.getClass().getName();
     private Activity            activity;
     private List<Host>          hosts;
 
-    public                      HostCheckBoxAdapter(Activity activity, List<Host> hosts) {
+    public                      NmapHostCheckerAdapter(Activity activity, List<Host> hosts) {
         this.hosts = hosts;
         this.activity = activity;
     }

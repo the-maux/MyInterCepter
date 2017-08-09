@@ -41,7 +41,7 @@
             android:name="su.sniff.cepter.View.TsharkDetailsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name="su.sniff.cepter.Controller.Network.DNSSpoofingActivity"
+            android:name="su.sniff.cepter.View.DNSSpoofingActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.InjectHTTPActivity"
@@ -73,6 +73,9 @@
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.MenuActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="su.sniff.cepter.View.WiresharkActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>
 </manifest>

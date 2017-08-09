@@ -1,4 +1,4 @@
-package su.sniff.cepter.Controller.Network;
+package su.sniff.cepter.View;
 
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
@@ -17,6 +17,8 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ListView;
 import su.sniff.cepter.BuildConfig;
+import su.sniff.cepter.Controller.Network.IPTables;
+import su.sniff.cepter.Controller.Network.MyDNSMITM;
 import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.adapter.DNSAdapter;
@@ -43,7 +45,7 @@ public class                            DNSSpoofingActivity extends Activity {
     private String                      m_Text = BuildConfig.FLAVOR;
     private CheckBox                    mySwitch;
     public ListView                     listViewDNSSpoof;
-    private RootProcess                 tcpDumpProcess;
+
 
     public void                         onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,42 +174,5 @@ public class                            DNSSpoofingActivity extends Activity {
     }
 
 
-    private void                        onTcpDumpStart() {
-        try {
-            new IPTables().discardForwardding2Port(53);
-            tcpDumpProcess = new RootProcess("TcpDump::DNSSpood")
-                    .exec("tcpdump -i wlan0 -l -vv -s 0 -vvvx dst port 53");
-            BufferedReader reader = tcpDumpProcess.getReader();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                onNewLineTcpDump(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    private void                        onTcpDumpStop() {
-        tcpDumpProcess.exec("exit")
-                .closeProcess();
-    }
-
-    /**
-     *
-     */
-    private void                        onNewLineTcpDump(String line) {
-        StringBuilder reqdata = new StringBuilder();
-        String regex = "^.+length\\s+(\\d+)\\)\\s+([\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3})\\.[^\\s]+\\s+>\\s+([\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3})\\.[^\\:]+.*";
-        Matcher matcher = Pattern.compile(regex).matcher(line);
-        Log.d(TAG, "TcpDump::" + line);
-        if (!matcher.find() && !line.contains("tcpdump")){
-            line = line.substring(line.indexOf(":")+1).trim().replace(" ", "");
-            reqdata.append(line);
-        } else {
-            if (reqdata.length()>0){
-                new MyDNSMITM(reqdata.toString());
-            }
-            reqdata.delete(0,reqdata.length());
-        }
-    }
 }

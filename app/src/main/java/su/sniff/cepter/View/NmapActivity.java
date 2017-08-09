@@ -1,14 +1,10 @@
 package su.sniff.cepter.View;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringDef;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,7 +24,7 @@ import su.sniff.cepter.Controller.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.Model.Host;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.adapter.HostCheckBoxAdapter;
+import su.sniff.cepter.View.adapter.NmapHostCheckerAdapter;
 import su.sniff.cepter.globalVariable;
 
 /**
@@ -102,7 +98,7 @@ public class                    NmapActivity extends Activity {
     }
 
     private void                initRecyHost() {
-        HostCheckBoxAdapter adapter = new HostCheckBoxAdapter(this, Singleton.hostsList);
+        NmapHostCheckerAdapter adapter = new NmapHostCheckerAdapter(this, Singleton.hostsList);
         RV_host.setAdapter(adapter);
         RV_host.setHasFixedSize(true);
         RV_host.setLayoutManager(new LinearLayoutManager(mInstance));
