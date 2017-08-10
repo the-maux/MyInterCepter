@@ -17,6 +17,8 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import su.sniff.cepter.Controller.Singleton;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
 
@@ -172,8 +174,8 @@ public class SettingsActivity extends Activity {
     public void OnClearPcap(View v) throws IOException, InterruptedException {
         Process p = Runtime.getRuntime().exec("su");
         DataOutputStream os = new DataOutputStream(p.getOutputStream());
-        Log.d(TAG, "LD_LIBRARY_PATH=" + globalVariable.path + " " + globalVariable.path + "/busybox rm " + globalVariable.path + "/*.pcap");
-        os.writeBytes("LD_LIBRARY_PATH=" + globalVariable.path + " " + globalVariable.path + "/busybox rm " + globalVariable.path + "/*.pcap\n");
+        Log.d(TAG, "LD_LIBRARY_PATH=" + Singleton.FilesPath + " " + Singleton.FilesPath + "/busybox rm " + Singleton.FilesPath + "/*.pcap");
+        os.writeBytes("LD_LIBRARY_PATH=" + Singleton.FilesPath + " " + Singleton.FilesPath + "/busybox rm " + Singleton.FilesPath + "/*.pcap\n");
         os.flush();
         os.close();
         p.waitFor();

@@ -105,7 +105,7 @@ public class Host {
     }
 
     public String           getName() {
-        return name;
+        return (name.contains("Unknown") ? getIp() : name);
     }
 
     public void             setName(String name) {

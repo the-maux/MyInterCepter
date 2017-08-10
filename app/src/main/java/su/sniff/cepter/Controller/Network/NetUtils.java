@@ -2,6 +2,8 @@ package su.sniff.cepter.Controller.Network;
 
 import android.content.Context;
 import android.util.Log;
+
+import su.sniff.cepter.Controller.Singleton;
 import su.sniff.cepter.globalVariable;
 
 import java.io.BufferedReader;
@@ -34,7 +36,7 @@ public class                NetUtils {
                     Matcher matcher = Pattern.compile(String.format(MAC_RE, read.substring(0, read.indexOf(" ")).replace(".", "\\."))).matcher(read);
                     if (matcher.matches()) {
                         mac = matcher.group(1);
-                        if (globalVariable.own_ip.equals(globalVariable.gw_ip)) {
+                        if (Singleton.network.myIp.equals(Singleton.network.gateway)) {
                             break;
                         }
                     }

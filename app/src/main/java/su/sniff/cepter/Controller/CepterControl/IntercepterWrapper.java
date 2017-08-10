@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 import su.sniff.cepter.Controller.Network.IPTables;
+import su.sniff.cepter.Controller.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.Model.Host;
 import su.sniff.cepter.R;
@@ -48,8 +49,8 @@ public class                    IntercepterWrapper {
     }
 
     private RootProcess         startCepter(String gateway) {
-        RootProcess process = new RootProcess("Start ARP", globalVariable.path + "");
-        process.exec(globalVariable.path + "/cepter " + Integer.toString(globalVariable.adapt_num) + " " + "1" + " " + gateway);
+        RootProcess process = new RootProcess("Start ARP", Singleton.FilesPath);
+        process.exec(Singleton.FilesPath + "/cepter " + Integer.toString(globalVariable.adapt_num) + " " + "1" + " " + gateway);
         process.exec("exit").closeDontWait();
         new IntercepterReader(activity, monitorIntercepter, process);
         return process;
@@ -102,8 +103,8 @@ public class                    IntercepterWrapper {
      * @param MAC
      */
     public static void          initCepter(String MAC) {
-        new RootProcess("/cepter getv", globalVariable.path) //Start Cepter Binary
-                .exec(globalVariable.path + "/cepter getv " + MAC)
+        new RootProcess("/cepter getv", Singleton.FilesPath) //Start Cepter Binary
+                .exec(Singleton.FilesPath + "/cepter getv " + MAC)
                 .exec("exit")
                 .closeProcess();
     }
@@ -115,9 +116,9 @@ public class                    IntercepterWrapper {
      */
     public static void          fillHostListWithCepterScan(final ScanActivity scanActivity) {
         final List<Host> hosts = new ArrayList<>();
-        final RootProcess process = new RootProcess("Cepter Scan host", globalVariable.path + "");
+        final RootProcess process = new RootProcess("Cepter Scan host", Singleton.FilesPath);
         final BufferedReader bufferedReader = new BufferedReader(process.getInputStreamReader());
-        process.exec(globalVariable.path + "/cepter scan " + Integer.toString(globalVariable.adapt_num));
+        process.exec(Singleton.FilesPath + "/cepter scan " + Integer.toString(globalVariable.adapt_num));
         process.exec("exit");
         new Thread(new Runnable() {
             public void run() {

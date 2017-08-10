@@ -118,7 +118,7 @@ public class                    WiresharkActivity extends Activity {
     }
 
     private void                       onTcpDumpStart() throws IOException {
-        String TcpDumpPath = globalVariable.path + "/tcpdump ";
+        String TcpDumpPath = Singleton.FilesPath + "/tcpdump ";
         String cmd = TcpDumpPath + actualParam + hostFilter;
         Monitor.setText(cmd);
         new IPTables().discardForwardding2Port(53);

@@ -15,6 +15,7 @@ import java.io.IOException;
 import su.sniff.cepter.*;
 import su.sniff.cepter.Controller.MiscUtils.OpenFileDialog;
 import su.sniff.cepter.Controller.MiscUtils.OpenFileDialog.OnFileSelectedListener;
+import su.sniff.cepter.Controller.Singleton;
 
 public class SettingsExpertActivity extends Activity {
     private Activity        mInstance = this;
@@ -55,7 +56,7 @@ public class SettingsExpertActivity extends Activity {
                     }).show();
             return;
         }
-        File ck = new File(globalVariable.path + "/force");
+        File ck = new File(Singleton.FilesPath + "/force");
         if (ck.exists()) {
             ck.delete();
         }
@@ -75,7 +76,7 @@ public class SettingsExpertActivity extends Activity {
         } else {
             globalVariable.CookieKillerOption = 0;
             Log.d(TAG, "KillerSwitchOption" + globalVariable.CookieKillerOption);
-            File ck = new File(globalVariable.path + "/ck");
+            File ck = new File(Singleton.FilesPath + "/ck");
             if (ck.exists()) {
                 ck.delete();
             }

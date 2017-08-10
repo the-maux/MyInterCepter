@@ -19,6 +19,7 @@ import android.widget.ListView;
 import su.sniff.cepter.BuildConfig;
 import su.sniff.cepter.Controller.Network.IPTables;
 import su.sniff.cepter.Controller.Network.MyDNSMITM;
+import su.sniff.cepter.Controller.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.adapter.DNSAdapter;
@@ -88,7 +89,7 @@ public class                            DNSSpoofingActivity extends Activity {
 
     private void                        fillListDNSSpoofedFromFile() {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(new File(globalVariable.path + "/dnss")));
+            BufferedReader reader = new BufferedReader(new FileReader(new File(Singleton.FilesPath + "/dnss")));
             while (true) {
                 String read = reader.readLine();
                 if (read == null) {

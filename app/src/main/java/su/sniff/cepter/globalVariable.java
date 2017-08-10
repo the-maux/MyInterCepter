@@ -6,7 +6,6 @@ import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 
 public class                                globalVariable {
-    public static String                    path;
     public static Activity                  parent;
     public static String                    PCAP_PATH;
     public static int                       adapt_num;
@@ -25,11 +24,8 @@ public class                                globalVariable {
     public static ArrayList                 cookies_value = new ArrayList();
     public static ArrayList                 cookies_value2 = new ArrayList();
     public static int                       dnss;
-    public static String                    gw_ip;
-    public static int CookieKillerOption = 0;
+    public static int                       CookieKillerOption = 0;
     public static int                       lock = 0;
-    public static String                    netmask;
-    public static String                    own_ip;
     public static int                       raw_autoscroll = 0;
     public static int                       raw_textsize = 9;
     public static int                       savepcap;

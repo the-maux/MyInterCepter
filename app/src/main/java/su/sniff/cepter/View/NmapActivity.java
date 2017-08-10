@@ -120,13 +120,13 @@ public class                    NmapActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Output.setText("Wait...");
-                final String cmd = globalVariable.path + "/nmap/nmap " + host_et.getText() + " " + params_et.getText() + " ";
+                final String cmd = Singleton.FilesPath + "/nmap/nmap " + host_et.getText() + " " + params_et.getText() + " ";
                 Monitor.setText(cmd);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            BufferedReader reader = new BufferedReader(new RootProcess("Nmap", globalVariable.path)//Exec and > in BufferedReader
+                            BufferedReader reader = new BufferedReader(new RootProcess("Nmap", Singleton.FilesPath)//Exec and > in BufferedReader
                                     .exec(cmd).exec("exit").getInputStreamReader());
                             String dumpOutput = "", tmp;
                             while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {

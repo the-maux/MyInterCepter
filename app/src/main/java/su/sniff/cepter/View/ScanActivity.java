@@ -93,7 +93,7 @@ public class                        ScanActivity extends Activity {
         WifiInfo wifiInfo = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
         monitor = getIntent().getExtras().getString("Key_String");
         if (monitor != null && !monitor.contains("WiFi")) {
-            monitor += "\n" + wifiInfo.getSSID() + ", GW: " + globalVariable.gw_ip + "/" + globalVariable.netmask;
+            monitor += "\n" + wifiInfo.getSSID() + ", GW: " + Singleton.network.gateway + "/" + Singleton.network.netmask;
         } else {
             monitor += "Not Connected";
         }
@@ -135,7 +135,7 @@ public class                        ScanActivity extends Activity {
             inLoading = true;
             initHostsRecyclerView();
             progressAnimation();
-            IPv4CIDR iPv4CIDR = new IPv4CIDR(globalVariable.own_ip, globalVariable.netmask);
+            IPv4CIDR iPv4CIDR = new IPv4CIDR(Singleton.network.myIp, Singleton.network.netmask);
             new ScanNetmask(iPv4CIDR, this);
             progress = 1000;
             NetUtils.dumpListHostFromARPTableInFile(this);
@@ -283,7 +283,7 @@ public class                        ScanActivity extends Activity {
             Toast.makeText(getApplicationContext(), "No target selected!", Toast.LENGTH_SHORT).show();
             return;
         }
-        String cmd = "-gw " + globalVariable.gw_ip;
+        String cmd = "-gw " + Singleton.network.gateway;
         Intent i2 = new Intent(mInstance, MenuActivity.class);
         Log.i(TAG, cmd);
         i2.putExtra("Key_String", cmd);
@@ -337,7 +337,7 @@ public class                        ScanActivity extends Activity {
                             "iptables -P OUTPUT ACCEPT");
                 }
                 process.closeProcess();
-                File ck = new File(globalVariable.path + "/inj");
+                File ck = new File(Singleton.FilesPath + "/inj");
                 if (ck.exists()) {
                     ck.delete();
                 }

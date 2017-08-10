@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import su.sniff.cepter.Controller.Singleton;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
 
@@ -76,7 +77,7 @@ public class                    MenuActivity extends Activity {
                         break;
                 }
                 if (choice != null) {
-                    String cmd = "-gw " + globalVariable.gw_ip;
+                    String cmd = "-gw " + Singleton.network.gateway;
                     Intent intent = new Intent(mInstance, choice);
                     intent.putExtra("Key_String", cmd);
                     intent.putExtra("Key_String_origin", "Oui tu venais de la");

@@ -21,6 +21,7 @@ package su.sniff.cepter.Controller.Network;
 
 import android.util.Log;
 
+import su.sniff.cepter.Controller.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.globalVariable;
 
@@ -69,7 +70,7 @@ public class                    IPTables {
                 .exec("iptables " + "-F")// clear
                 .exec("iptables " + "-t nat -I POSTROUTING -s 0/0 -j MASQUERADE")// post route
                 .exec("iptables " + "-P FORWARD ACCEPT")// accept all
-                .exec("iptables " + "-t nat -A PREROUTING -j DNAT -p tcp --dport " + from + " --to " + globalVariable.own_ip + ":" + to);// add rule;
+                .exec("iptables " + "-t nat -A PREROUTING -j DNAT -p tcp --dport " + from + " --to " + Singleton.network.myIp + ":" + to);// add rule;
     }
 
     public void                 undoPortRedirect(int from, int to) {
@@ -78,7 +79,7 @@ public class                    IPTables {
                 .exec("iptables " + "-t nat -F") // clear nat
                 .exec("iptables " + "-F")// clear
                 .exec("iptables " + "-t nat -D POSTROUTING -s 0/0 -j MASQUERADE")  // remove post route
-                .exec("iptables " + "-t nat -D PREROUTING -j DNAT -p tcp --dport " + from + " --to " + globalVariable.own_ip + ":" + to);// remove rule
+                .exec("iptables " + "-t nat -D PREROUTING -j DNAT -p tcp --dport " + from + " --to " + Singleton.network.myIp + ":" + to);// remove rule
     }
 
     public static void          InterceptWithoutSSL() {

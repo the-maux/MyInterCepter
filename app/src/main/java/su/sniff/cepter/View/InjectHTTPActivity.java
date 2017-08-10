@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import su.sniff.cepter.BuildConfig;
 import su.sniff.cepter.Controller.MiscUtils.OpenFileDialog;
 import su.sniff.cepter.Controller.MiscUtils.OpenFileDialog.OnFileSelectedListener;
+import su.sniff.cepter.Controller.Singleton;
 import su.sniff.cepter.Controller.System.ThreadUtils;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
@@ -44,7 +45,7 @@ public class                        InjectHTTPActivity extends Activity {
 
     private void                    initInj() {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(new File(globalVariable.path + "/inj")));
+            BufferedReader reader = new BufferedReader(new FileReader(new File(Singleton.FilesPath + "/inj")));
             String read;
             while ((read = reader.readLine()) != null) {
                 Log.d(TAG, "Inj File read:");
