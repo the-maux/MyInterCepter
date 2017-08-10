@@ -30,6 +30,7 @@ import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.Model.Host;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.adapter.TcpdumpHostCheckerADapter;
+import su.sniff.cepter.globalVariable;
 
 /**
  * Created by maxim on 03/08/2017.
@@ -64,17 +65,21 @@ public class                    WiresharkActivity extends Activity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initFab();
+                fabBehavior();
             }
         });
     }
 
-    private void                initFab() {
+    private void                fabBehavior() {
         if (!isRunning) {
             if (initParams()) {
-                onTcpDumpStart();
-                fab.setImageResource(android.R.drawable.ic_media_play);
-                isRunning = true;
+                try {
+                    onTcpDumpStart();
+                    fab.setImageResource(android.R.drawable.ic_media_play);
+                    isRunning = true;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             onTcpDumpStop();
@@ -112,20 +117,18 @@ public class                    WiresharkActivity extends Activity {
         return true;
     }
 
-    private void                       onTcpDumpStart() {
-        try {
-            Monitor.setText("./tcpdump " + actualParam);
-            new IPTables().discardForwardding2Port(53);
-            tcpDumpProcess = new RootProcess("TcpDump::DNSSpood")
-                    .exec("tcpdump " + actualParam + hostFilter);
-            BufferedReader reader = tcpDumpProcess.getReader();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                onNewLineTcpDump(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void                       onTcpDumpStart() throws IOException {
+        String TcpDumpPath = globalVariable.path + "/tcpdump ";
+        String cmd = TcpDumpPath + actualParam + hostFilter;
+        Monitor.setText(cmd);
+        new IPTables().discardForwardding2Port(53);
+        tcpDumpProcess = new RootProcess("TcpDump::DNSSpoof").exec(cmd);
+        BufferedReader reader = tcpDumpProcess.getReader();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            onNewLineTcpDump(line);
         }
+        Log.d(TAG, "onTcpDump start over");
     }
 
     private void                        onTcpDumpStop() {

@@ -103,7 +103,7 @@
                 android:elevation="4dp"
                 android:text="Intense scan "
                 android:textColor="@color/material_light_black"
-                android:visibility="invisible" />
+                android:visibility="visible" />
 
         </RelativeLayout>
 
@@ -133,7 +133,8 @@
                 android:text="192.168.0.1"
                 android:textColor="@color/primary_text"
                 android:textSize="16sp"
-                android:typeface="serif" />
+                android:typeface="serif"
+                android:visibility="invisible" />
 
             <EditText
                 android:id="@+id/binParamsEditText"
@@ -151,7 +152,8 @@
                 android:text="-Pn -Sv -w -vv"
                 android:textColor="@color/primary_text"
                 android:textSize="16sp"
-                android:typeface="serif" />
+                android:typeface="serif"
+                android:visibility="invisible" />
         </LinearLayout>
 
         <RelativeLayout
@@ -168,7 +170,7 @@
                 android:elevation="2dp"
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp"
-                android:text="nmap 192.168.0.1 -Pn -Sv -w -vv"
+                android:text="tcpdump -i wlan0 -l -vv  -s 0 -vvvx ' dst port 53'"
                 android:textStyle="italic"
                 android:typeface="monospace" />
 
@@ -181,7 +183,7 @@
                 android:maxLines="200"
                 android:padding="16dp"
                 android:scrollbars="vertical"
-                android:text="@string/nmapblabla"
+                android:text="@string/tcpDumpBlabla"
                 android:textColor="@color/material_light_white"
                 android:textSize="12sp" />
         </RelativeLayout>
