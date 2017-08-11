@@ -38,7 +38,6 @@ public class                    HostScanAdapter extends RecyclerView.Adapter<Hos
         holder.os.setText(host.getOS());
         holder.vendor.setText(host.getVendor());
         holder.selected.setChecked(host.isSelected());
-        Log.d(TAG, "updating :" + position + " with selected:" + host.isSelected());
         Host.setOsIcon(activity, mHosts.get(position).getDumpInfo(), holder.osIcon);
     }
 

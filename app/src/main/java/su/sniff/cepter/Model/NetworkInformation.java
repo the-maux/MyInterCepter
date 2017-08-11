@@ -10,7 +10,7 @@ public class                NetworkInformation {
     public String           mac = "";
     public String           netmask = "";
 
-    public NetworkInformation(String ip, String gateway, String mac, String netmask) {
+    public NetworkInformation(String ip, String gateway, String netmask, String mac) {
         this.myIp = ip;
         this.gateway = gateway;
         this.mac = mac;

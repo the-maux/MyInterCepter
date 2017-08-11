@@ -1,6 +1,5 @@
 package su.sniff.cepter.View;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,14 +17,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import su.sniff.cepter.Controller.Singleton;
+import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.Controller.CepterControl.IntercepterReader;
+import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.adapter.ProtocolAdapter;
 import su.sniff.cepter.globalVariable;
 
-public class                    TsharkActivity extends Activity {
+public class                    TsharkActivity extends MyActivity {
     private String              TAG = "TsharkActivity";
     private TsharkActivity      mInstance = this;
     private String              cmd, orig_str;

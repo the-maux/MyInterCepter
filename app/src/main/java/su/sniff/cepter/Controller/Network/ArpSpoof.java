@@ -17,10 +17,12 @@
  * along with dSploit.  If not, see <http://www.gnu.org/licenses/>.
  */
 package su.sniff.cepter.Controller.Network;
-import android.content.Context;
 import android.util.Log;
 
-import su.sniff.cepter.Controller.Singleton;
+import java.io.BufferedReader;
+import java.io.IOException;
+
+import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.Model.Host;
 
@@ -29,6 +31,7 @@ import su.sniff.cepter.Model.Host;
  */
 public class                        ArpSpoof {
     private static final String     TAG = "ARPSPOOF";
+    private ArpSpoof                mInstance = this;
     private Host                    target;
     private RootProcess             process;
 
@@ -36,18 +39,57 @@ public class                        ArpSpoof {
         this.target = target;
     }
     public ArpSpoof                 start() {
-        process = new RootProcess("ARPSPoof::" + target.getIp());
-        process.exec(Singleton.BinaryPath + "arpspoof -i eth0 -t " + target.getIp() + " " + Singleton.network.gateway);
-        Singleton.ArpSpoofProcessStack.add(this);
-        return this;
-    }
-    public void                     stop() {
-        Log.d(TAG, "Stoppinf Arp attack against::" + target.getName());
         new Thread(new Runnable() {
             @Override
             public void run() {
-                process.closeProcess();
+                process = new RootProcess("ARPSPoof::" + target.getIp());
+                process.exec(Singleton.BinaryPath + "arpspoof -i wlan0 -t " + target.getIp() + " " + Singleton.network.gateway);
+                Singleton.ArpSpoofProcessStack.add(mInstance);
+                if (Singleton.DebugMode) {
+                    BufferedReader reader = process.getReader();
+                    String read;
+                    try {
+                        while ((read = reader.readLine()) != null) {
+                            Log.d(TAG, target.getIp() + "::" + read);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }).start();
+        return this;
+    }
+
+
+    public static void             stopArpSpoof() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                RootProcess process = new RootProcess("ARPSpoof");
+                process.exec("ps | grep arpspoof");
+                BufferedReader reader = new BufferedReader(process.getReader());
+                String line;
+                try {
+                    while ((line = reader.readLine()) != null) {
+                        if (line.contains("arp"))
+                            Log.d(TAG, line);
+                        String pidArpProcess = line.replace("  ", " ").split(" ")[3];
+                        new RootProcess("ARPSpoof").exec("kill SIGINT " + pidArpProcess).closeProcess();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                process.closeProcess();
+
+            }
+        }).start();
+    }
+    public static void              launchArpSpoof() {
+        for (Host host : Singleton.hostsList) {
+            if (host.isSelected()) {
+                new ArpSpoof(host).start();
+            }
+        }
     }
 }

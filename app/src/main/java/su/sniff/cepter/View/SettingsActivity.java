@@ -1,6 +1,5 @@
 package su.sniff.cepter.View;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -8,7 +7,6 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -18,7 +16,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import su.sniff.cepter.Controller.Singleton;
+import su.sniff.cepter.Controller.System.Singleton;
+import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
 
@@ -29,7 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends MyActivity {
     private String TAG = "SettingsActivity";
     public String cmd;
     private Context mCtx;

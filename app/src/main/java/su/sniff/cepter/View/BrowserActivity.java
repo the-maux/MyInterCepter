@@ -1,6 +1,5 @@
 package su.sniff.cepter.View;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,13 +19,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import su.sniff.cepter.Controller.System.ThreadUtils;
+import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
 import su.sniff.cepter.Controller.MiscUtils.SaveFileDialog;
 import su.sniff.cepter.Controller.MiscUtils.SaveFileDialog.OnNewFileSelectedListener;
 import su.sniff.cepter.globalVariable;
 
 
-public class                BrowserActivity extends Activity {
+public class                BrowserActivity extends MyActivity {
     private String          TAG = "BrowserActivity";
     private WebView         mWebView;
     private CookieSyncManager cookieSyncManager;

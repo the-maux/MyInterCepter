@@ -8,7 +8,7 @@ import android.util.Log;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import su.sniff.cepter.Controller.Singleton;
+import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.Controller.System.ThreadUtils;
 import su.sniff.cepter.R;

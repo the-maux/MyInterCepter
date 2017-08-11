@@ -4,7 +4,6 @@ import android.util.Log;
 import android.widget.TextView;
 
 import su.sniff.cepter.Controller.CepterControl.IntercepterReader;
-import su.sniff.cepter.Controller.Singleton;
 import su.sniff.cepter.R;
 import su.sniff.cepter.Controller.MiscUtils.OpenFileDialog;
 import su.sniff.cepter.View.MainActivity;

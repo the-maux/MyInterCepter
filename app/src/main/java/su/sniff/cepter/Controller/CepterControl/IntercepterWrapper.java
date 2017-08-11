@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 import su.sniff.cepter.Controller.Network.IPTables;
-import su.sniff.cepter.Controller.Singleton;
+import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.Model.Host;
 import su.sniff.cepter.R;

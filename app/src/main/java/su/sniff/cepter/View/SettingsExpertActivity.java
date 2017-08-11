@@ -15,9 +15,10 @@ import java.io.IOException;
 import su.sniff.cepter.*;
 import su.sniff.cepter.Controller.MiscUtils.OpenFileDialog;
 import su.sniff.cepter.Controller.MiscUtils.OpenFileDialog.OnFileSelectedListener;
-import su.sniff.cepter.Controller.Singleton;
+import su.sniff.cepter.Controller.System.Singleton;
+import su.sniff.cepter.Controller.System.MyActivity;
 
-public class SettingsExpertActivity extends Activity {
+public class SettingsExpertActivity extends MyActivity {
     private Activity        mInstance = this;
     private String          TAG = "SettingsExpertActivity";
 

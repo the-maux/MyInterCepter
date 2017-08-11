@@ -42,7 +42,7 @@ public class Host {
         mac = mid.substring(0, mid.indexOf(" ")).replace("\n", "");
         os = mid.substring(mid.indexOf(" ") + 1).replace("\n", "");
         vendor = end.replace("\n", "");
-        logHost(buffer);
+        //logHost(buffer);
         dumpInfo = buffer;
         guessOsType(dumpInfo);
     }

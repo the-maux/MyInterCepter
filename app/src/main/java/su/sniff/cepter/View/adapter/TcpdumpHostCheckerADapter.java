@@ -37,6 +37,7 @@ public class                    TcpdumpHostCheckerADapter extends RecyclerView.A
         final Host host = hosts.get(position);
         holder.nameOS.setText(host.getIp());
         Host.setOsIcon(activity, host.getDumpInfo(), holder.imageOS);
+        holder.checkBox.setChecked(false);
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

@@ -1,6 +1,5 @@
 package su.sniff.cepter.View;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiInfo;
@@ -32,17 +31,19 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import su.sniff.cepter.Controller.CepterControl.IntercepterWrapper;
+import su.sniff.cepter.Controller.Network.ArpSpoof;
 import su.sniff.cepter.Controller.Network.IPv4CIDR;
 import su.sniff.cepter.Controller.Network.NetUtils;
-import su.sniff.cepter.Controller.Singleton;
+import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.Model.Host;
 import su.sniff.cepter.Controller.Network.ScanNetmask;
+import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.adapter.HostScanAdapter;
 import su.sniff.cepter.globalVariable;
 
-public class                        ScanActivity extends Activity {
+public class                        ScanActivity extends MyActivity {
     private String                  TAG = "ScanActivity";
     private ScanActivity            mInstance = this;
     private List<Host>              mHosts;
@@ -80,7 +81,14 @@ public class                        ScanActivity extends Activity {
         hostsRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         filterLL = (LinearLayout) findViewById(R.id.filterLL);
         TxtMonitor = ((TextView) findViewById(R.id.Message));
-        IntercepterWrapper.initCepter(NetUtils.getMac());
+        TxtMonitor.setText("");
+        if (Singleton.network.myIp == null) {
+            Toast.makeText(getApplicationContext(), "You need to be connected to a network",
+                    Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
+        IntercepterWrapper.initCepter(NetUtils.getMac(Singleton.network.myIp, Singleton.network.gateway));
         initMonitor();
         initSwipeRefresh();
     }
@@ -91,9 +99,9 @@ public class                        ScanActivity extends Activity {
     private void                    initMonitor() {
         Log.d(TAG, "Init Monitor");
         WifiInfo wifiInfo = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
-        monitor = getIntent().getExtras().getString("Key_String");
-        if (monitor != null && !monitor.contains("WiFi")) {
-            monitor += "\n" + wifiInfo.getSSID() + ", GW: " + Singleton.network.gateway + "/" + Singleton.network.netmask;
+        monitor = wifiInfo.getSSID().replace("\"", "") + ':' + getIntent().getExtras().getString("Key_String");
+        if (!monitor.contains("WiFi")) {
+            monitor += "\n" + "GW: " + Singleton.network.gateway + "/" + Singleton.network.netmask;
         } else {
             monitor += "Not Connected";
         }
@@ -130,18 +138,27 @@ public class                        ScanActivity extends Activity {
         hostsRecyclerView.setLayoutManager(new LinearLayoutManager(mInstance));
     }
 
+    /**
+     * BuildIPv4 objet to scan netmask
+     * Get list of potential target from arp table file
+     * get Cepter scan
+     */
     private void                    startNetworkScan() {
         if (!inLoading) {
             inLoading = true;
             initHostsRecyclerView();
             progressAnimation();
-            IPv4CIDR iPv4CIDR = new IPv4CIDR(Singleton.network.myIp, Singleton.network.netmask);
-            new ScanNetmask(iPv4CIDR, this);
-            progress = 1000;
-            NetUtils.dumpListHostFromARPTableInFile(this);
-            progress = 1500;
-            IntercepterWrapper.fillHostListWithCepterScan(this);
-            progress = 2000;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    new ScanNetmask(new IPv4CIDR(Singleton.network.myIp, Singleton.network.netmask), mInstance);
+                    progress = 1000;
+                    NetUtils.dumpListHostFromARPTableInFile(mInstance);
+                    progress = 1500;
+                    IntercepterWrapper.fillHostListWithCepterScan(mInstance);
+                    progress = 2000;
+                }
+            }).start();
         }
     }
 
@@ -194,6 +211,7 @@ public class                        ScanActivity extends Activity {
 
     public void                     onReachableScanOver(ArrayList<String> ipReachable) {
         Log.e(TAG, "tu dois toujours faire le scan par cepter des reachable que ta trouvé en ping ;)");
+        //Apparament non
     }
 
     public void                     onHostActualized(final List<Host> hosts) {
@@ -201,11 +219,12 @@ public class                        ScanActivity extends Activity {
             @Override
             public void run() {
                 mHosts = hosts;
-                monitor = mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": "") + " found";// oui je fais des ternaires pour faire le pluriel
+                monitor = "GW: " + Singleton.network.gateway + ": " + mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": "") + " found";// oui je fais des ternaires pour faire le pluriel
                 TxtMonitor.setText(monitor);
                 adapter.updateHostList(mHosts);
                 buildFilterLayout();
                 inLoading = false;
+                Log.d(TAG, "scan Over with " + mHosts.size() + " possible target");
             }
         });
     }

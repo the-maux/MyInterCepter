@@ -1,24 +1,21 @@
 package su.sniff.cepter.View;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
-import su.sniff.cepter.Controller.Singleton;
+import su.sniff.cepter.Controller.System.Singleton;
+import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
-import su.sniff.cepter.globalVariable;
 
 /**
  * Created by root on 03/08/17.
  */
 
-public class                    MenuActivity extends Activity {
+public class                    MenuActivity extends MyActivity {
     private String              TAG = "MenuActivity";
     private MenuActivity        mInstance = this;
     private CoordinatorLayout   coordinatorLayout;

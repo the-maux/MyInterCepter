@@ -1,21 +1,21 @@
 package su.sniff.cepter.View;
 
-import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.TextView;
 
-import su.sniff.cepter.Controller.Singleton;
+import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.Controller.System.ThreadUtils;
+import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class TsharkDetailsActivity extends Activity {
+public class TsharkDetailsActivity extends MyActivity {
 
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

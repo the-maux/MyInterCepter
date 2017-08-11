@@ -1,14 +1,13 @@
 package su.sniff.cepter.View;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import su.sniff.cepter.Controller.Singleton;
+import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
+import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
 
@@ -17,7 +16,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class                CageActivity extends Activity {
+public class                CageActivity extends MyActivity {
     int                     run = 0;
 
     public void             onCreate(Bundle savedInstanceState) {

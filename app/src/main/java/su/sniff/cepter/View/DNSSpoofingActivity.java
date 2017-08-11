@@ -1,6 +1,5 @@
 package su.sniff.cepter.View;
 
-import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -17,10 +16,8 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ListView;
 import su.sniff.cepter.BuildConfig;
-import su.sniff.cepter.Controller.Network.IPTables;
-import su.sniff.cepter.Controller.Network.MyDNSMITM;
-import su.sniff.cepter.Controller.Singleton;
-import su.sniff.cepter.Controller.System.RootProcess;
+import su.sniff.cepter.Controller.System.Singleton;
+import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.adapter.DNSAdapter;
 import su.sniff.cepter.globalVariable;
@@ -31,14 +28,12 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Rebuild this with /tcpdump -i wlan0 -l -vv -s 0 -vvvx dst port 53
  * Good luck bra
  */
-public class                            DNSSpoofingActivity extends Activity {
+public class                            DNSSpoofingActivity extends MyActivity {
     private DNSSpoofingActivity         mInstance = this;
     private String                      TAG = "DNSSpoofingActivity";
     private ArrayAdapter<String>        DNSAdapter;
