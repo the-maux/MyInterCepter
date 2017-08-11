@@ -1,6 +1,5 @@
 package su.sniff.cepter.View;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -8,7 +7,6 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -17,6 +15,9 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import su.sniff.cepter.Controller.System.Singleton;
+import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
 
@@ -27,7 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends MyActivity {
     private String TAG = "SettingsActivity";
     public String cmd;
     private Context mCtx;
@@ -172,8 +173,8 @@ public class SettingsActivity extends Activity {
     public void OnClearPcap(View v) throws IOException, InterruptedException {
         Process p = Runtime.getRuntime().exec("su");
         DataOutputStream os = new DataOutputStream(p.getOutputStream());
-        Log.d(TAG, "LD_LIBRARY_PATH=" + globalVariable.path + " " + globalVariable.path + "/busybox rm " + globalVariable.path + "/*.pcap");
-        os.writeBytes("LD_LIBRARY_PATH=" + globalVariable.path + " " + globalVariable.path + "/busybox rm " + globalVariable.path + "/*.pcap\n");
+        Log.d(TAG, "LD_LIBRARY_PATH=" + Singleton.FilesPath + " " + Singleton.FilesPath + "/busybox rm " + Singleton.FilesPath + "/*.pcap");
+        os.writeBytes("LD_LIBRARY_PATH=" + Singleton.FilesPath + " " + Singleton.FilesPath + "/busybox rm " + Singleton.FilesPath + "/*.pcap\n");
         os.flush();
         os.close();
         p.waitFor();

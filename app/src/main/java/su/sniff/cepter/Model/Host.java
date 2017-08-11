@@ -37,12 +37,12 @@ public class Host {
         String beg = buffer.substring(0, buffer.indexOf(":") - 1);
         String mid = buffer.substring(buffer.indexOf(":") + 2, buffer.indexOf(";") - 1);
         String end = buffer.substring(buffer.indexOf(";") + 2);
-        ip = beg.substring(0, beg.indexOf("(") - 1);
-        name = beg.substring(beg.indexOf("("));
-        mac = mid.substring(0, mid.indexOf(" "));
-        os = mid.substring(mid.indexOf(" ") + 1);
-        vendor = end;
-        logHost(buffer);
+        ip = beg.substring(0, beg.indexOf("(") - 1).replace("\n", "");
+        name = beg.substring(beg.indexOf("(")).replace("\n", "");
+        mac = mid.substring(0, mid.indexOf(" ")).replace("\n", "");
+        os = mid.substring(mid.indexOf(" ") + 1).replace("\n", "");
+        vendor = end.replace("\n", "");
+        //logHost(buffer);
         dumpInfo = buffer;
         guessOsType(dumpInfo);
     }
@@ -105,7 +105,7 @@ public class Host {
     }
 
     public String           getName() {
-        return name;
+        return (name.contains("Unknown") ? getIp() : name);
     }
 
     public void             setName(String name) {

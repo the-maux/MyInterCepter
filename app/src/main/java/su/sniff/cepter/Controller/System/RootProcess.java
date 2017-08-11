@@ -79,4 +79,10 @@ public class                    RootProcess {
     public Process              getActualProcess() {
         return process;
     }
+
+    public static void          kill(String binary) {
+        new RootProcess("ARP::kill")
+                .exec(Singleton.BinaryPath + "busybox killall " + binary)
+                .closeProcess();
+    }
 }

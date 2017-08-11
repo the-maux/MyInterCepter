@@ -58,5 +58,44 @@ Service Info: Hosts:  metasploitable.localdomain, localhost, irc.Metasploitable.
  \n
 OS and Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .\n
 # Nmap done at Sat Nov  1 16:38:16 2014 -- 1 IP address (1 host up) scanned in 180.40 seconds</string>
+    <string name="tcpDumpBlabla">tcpdump: verbose output suppressed, use -v or -vv for full protocol decode\n
+listening on eth3, link-type EN10MB (Ethernet), capture size 96 bytes\n
+00:14:21.307397 802.1d unknown version
+00:14:29.938697 arp who-has 10.117.110.103 tell 10.117.110.49\n
+00:14:29.938728 arp reply 10.117.110.103 is-at 00:1b:21:9b:1a:65 (oui Unknown)\n
+00:14:29.939951 IP 10.117.110.103 > 10.117.110.49: ICMP echo reply, id 42606, seq 1, length 64\n
+00:14:30.935756 IP 10.117.110.103 > 10.117.110.49: ICMP echo reply, id 42606, seq 2, length 64\n
+00:14:31.462745 802.1d unknown version\n
+00:14:31.935748 IP 10.117.110.103 > 10.117.110.49: ICMP echo reply, id 42606, seq 3, length 64\n
+00:14:32.935787 IP 10.117.110.103 > 10.117.110.49: ICMP echo reply, id 42606, seq 4, length 64\n
+00:14:33.493366 802.1d unknown version\n
+00:14:33.935776 IP 10.117.110.103 > 10.117.110.49: ICMP echo reply, id 42606, seq 5, length 64\n
+00:14:34.935815 IP 10.117.110.103 > 10.117.110.49: ICMP echo reply, id 42606, seq 6, length 64\n
+00:14:34.940355 arp who-has 10.117.110.49 tell 10.117.110.103\n
+00:14:35.524282 802.1d unknown version\n
+00:14:35.935805 IP 10.117.110.103 > 10.117.110.49: ICMP echo reply, id 42606, seq 7, length 64\n
+00:14:35.940346 arp who-has 10.117.110.49 tell 10.117.110.103\n
+00:14:36.935816 IP 10.117.110.103 > 10.117.110.49: ICMP echo reply, id 42606, seq 8, length 64\n
+00:14:36.939386 arp who-has 10.117.110.49 tell 10.117.110.103\n
+00:14:37.555449 802.1d unknown version\n
+00:14:37.934829 IP 10.117.110.103 > 10.117.110.49: ICMP echo reply, id 42606, seq 9, length 64\n
+00:14:38.935375 arp who-has 10.117.110.49 tell 10.117.110.103\n
+00:14:39.586964 802.1d unknown version\n
+00:14:39.936350 arp who-has 10.117.110.49 tell 10.117.110.103\n
+00:14:40.935370 arp who-has 10.117.110.49 tell 10.117.110.103\n
+00:14:41.614588 802.1d unknown version\n
+00:14:42.212607 arp reply 192.168.0.120 is-at 18:03:73:ef:e1:da (oui Unknown)\n
+00:14:42.937337 arp who-has 10.117.110.49 tell 10.117.110.103\n
+00:14:43.644258 802.1d unknown version\n
+00:14:43.937313 arp who-has 10.117.110.49 tell 10.117.110.103\n
+00:14:44.937176 arp who-has 10.117.110.49 tell 10.117.110.103\n
+00:14:45.674927 802.1d unknown version\n
+00:14:46.936469 arp who-has 10.117.110.49 tell 10.117.110.103\n
+00:14:47.705995 802.1d unknown version\n
+00:14:47.936461 arp who-has 10.117.110.49 tell 10.117.110.103\n
+00:14:48.936438 arp who-has 10.117.110.49 tell 10.117.110.103\n
+00:14:49.737810 802.1d unknown version\n
+00:14:51.151290 arp reply 192.168.0.120 is-at 00:22:19:6d:23:82 (oui Unknown)\n
+00:14:51.780357 802.1d unknown version</string>
 
 </resources>

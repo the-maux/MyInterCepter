@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.globalVariable;
 
@@ -22,6 +23,11 @@ public class                onDefend {
     private String[]        maclist = new String[MotionEventCompat.ACTION_MASK];
     private String[]        iplist = new String[MotionEventCompat.ACTION_MASK];
 
+    /**
+     * Si deux Host dans la List Tab ont la meme mac
+     * Alors il y a une attaque Referele chmillblick plus simplement quand tout aura était printé
+     * @param monitorIntercepter
+     */
     public                  onDefend(TextView monitorIntercepter){
         try {
             boolean found = false;
@@ -30,11 +36,11 @@ public class                onDefend {
             while (rcx < nbrHostToDefend) {
                 int rax = 0;
                 while (rax < nbrHostToDefend) {
-                    if (maclist[rax].equals(maclist[rcx]) && rax != rcx && globalVariable.gw_ip.equals(iplist[rcx])) {
+                    if (maclist[rax].equals(maclist[rcx]) && rax != rcx && Singleton.network.gateway.equals(iplist[rcx])) {
                         monitorIntercepter.append("Warning! Gateway poisoned by " + iplist[rax] + " - " + maclist[rax] + "\n");
                         found = true;
-                        RootProcess process = new RootProcess("onDefend", globalVariable.path + "");
-                        process.exec(globalVariable.path + "/cepter " + globalVariable.adapt_num + " -r " + globalVariable.gw_ip);
+                        RootProcess process = new RootProcess("onDefend", Singleton.FilesPath);
+                        process.exec(Singleton.FilesPath + "/cepter " + globalVariable.adapt_num + " -r " + Singleton.network.gateway);
                         process.exec("exit");
                         BufferedReader bufferedReader = process.getReader();
                         String read = bufferedReader.readLine();
@@ -44,7 +50,7 @@ public class                onDefend {
                         mac = mac.replaceAll("-", ":");
                         monitorIntercepter.append("Restoring original mac - " + mac + "\n");
                         process = new RootProcess("BUSYBOX", "/system/bin");
-                        process.exec("LD_LIBRARY_PATH=" + globalVariable.path + " " + globalVariable.path + "/busybox arp -s " + globalVariable.gw_ip + " " + mac);
+                        process.exec("LD_LIBRARY_PATH=" + Singleton.FilesPath + " " + Singleton.FilesPath + "/busybox arp -s " + Singleton.network.gateway + " " + mac);
                         process.closeProcess();
                         break;
                     }
@@ -60,26 +66,28 @@ public class                onDefend {
         }
     }
 
+    /**
+     * Reading ARP Table to guess host
+     * @return
+     * @throws IOException
+     */
     private int        fillListHost() throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"));
-        int nbrHostToDefend = 0;
+        int offsetHostToDefend = 0;
         String MAC_RE = "^%s\\s+0x1\\s+0x2\\s+([:0-9a-fA-F]+)\\s+\\*\\s+\\w+$";
-        while (true) {
-            String read = bufferedReader.readLine();
-            if (read == null) {
-                break;
-            }
+        String read;
+        while ((read = bufferedReader.readLine()) != null ) {
             Log.d(TAG, "OnDefend::" + read);
             String ip = read.substring(0, read.indexOf(" "));
             Matcher matcher = Pattern.compile(String.format(MAC_RE, ip.replace(".", "\\."))).matcher(read);
             if (matcher.matches()) {
                 String mac = matcher.group(1);
-                maclist[nbrHostToDefend] = mac;
-                iplist[nbrHostToDefend] = ip;
-                nbrHostToDefend++;
+                maclist[offsetHostToDefend] = mac;
+                iplist[offsetHostToDefend] = ip;
+                offsetHostToDefend++;
             }
         }
         bufferedReader.close();
-        return nbrHostToDefend;
+        return offsetHostToDefend;
     }
 }

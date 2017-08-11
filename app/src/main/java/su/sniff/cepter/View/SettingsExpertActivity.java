@@ -13,11 +13,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import su.sniff.cepter.*;
-import su.sniff.cepter.Controller.Network.DNSSpoofingActivity;
 import su.sniff.cepter.Controller.MiscUtils.OpenFileDialog;
 import su.sniff.cepter.Controller.MiscUtils.OpenFileDialog.OnFileSelectedListener;
+import su.sniff.cepter.Controller.System.Singleton;
+import su.sniff.cepter.Controller.System.MyActivity;
 
-public class SettingsExpertActivity extends Activity {
+public class SettingsExpertActivity extends MyActivity {
     private Activity        mInstance = this;
     private String          TAG = "SettingsExpertActivity";
 
@@ -56,7 +57,7 @@ public class SettingsExpertActivity extends Activity {
                     }).show();
             return;
         }
-        File ck = new File(globalVariable.path + "/force");
+        File ck = new File(Singleton.FilesPath + "/force");
         if (ck.exists()) {
             ck.delete();
         }
@@ -76,7 +77,7 @@ public class SettingsExpertActivity extends Activity {
         } else {
             globalVariable.CookieKillerOption = 0;
             Log.d(TAG, "KillerSwitchOption" + globalVariable.CookieKillerOption);
-            File ck = new File(globalVariable.path + "/ck");
+            File ck = new File(Singleton.FilesPath + "/ck");
             if (ck.exists()) {
                 ck.delete();
             }

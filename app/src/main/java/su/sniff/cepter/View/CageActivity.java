@@ -1,12 +1,13 @@
 package su.sniff.cepter.View;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
+import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
 
@@ -15,7 +16,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class                CageActivity extends Activity {
+public class                CageActivity extends MyActivity {
     int                     run = 0;
 
     public void             onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,7 @@ public class                CageActivity extends Activity {
     public void             OnRun(View v) {
         if (run == 0) {
             run = 1;
-            File fDroidSheep = new File(globalVariable.path + "/exitc.id");
+            File fDroidSheep = new File(Singleton.FilesPath + "/exitc.id");
             if (fDroidSheep.exists()) {
                 fDroidSheep.delete();
             }
@@ -61,10 +62,10 @@ public class                CageActivity extends Activity {
         final TextView tv = (TextView) findViewById(R.id.monitor);
         new Thread(new Runnable() {
             public void run() {
-                RootProcess process = new RootProcess("onCage", globalVariable.path + "");
+                RootProcess process = new RootProcess("onCage", Singleton.FilesPath);
                 BufferedReader reader = new BufferedReader(process.getInputStreamReader());
                 try {
-                    process.exec(globalVariable.path + "/cepter " + Integer.toString(globalVariable.adapt_num) + " cage " + globalVariable.gw_ip)
+                    process.exec(Singleton.FilesPath + "/cepter " + Integer.toString(globalVariable.adapt_num) + " cage " + Singleton.network.gateway)
                             .exec("exit");
                     while (true) {
                         final String read = reader.readLine();

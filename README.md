@@ -11,16 +11,16 @@ Fork-Projet IntercepterNG, reversed App
     - Réouvrir ce projet avec ton IDE avec "app" gradle
 
 #### TODO
-  * [**X**] Clean les activity des codes doublon
-  * [**X**] Utiliser un maximum les process dans l'objet RootProcess
-  * [**X**] fragmenter tout le code procédural en fonction
-  * [**X**] Refactoriser la majorité des activité lourde en fragment simple
-  * [**X**] Créer le AppTabLayout
-  * [**X**] Changer les icones
-  * [**X**] Changer les theme des couleurs par un vrai styles::*primary_*_colour
-  * [**X**] 
-  * [**X**] 
-  * [**X**] 
+  * [**X**] Clean les process lorsque l'application s'arete au travers d'un service
+  * [**X**] Changer tout les path de globalVariable dans Single ou dispatch
+  * [**X**] Intégration Ruby=> Metasploit
+  * [**X**] Réaliser un vrai visuel design
+  * [**X**] Créer un BottomBar groupant les actions MITM
+  * [**X**] DORA diagnotique
+  * [**X**] Supprimer les actions Cepter
+  * [**X**] Intégrer Python=> WPScan.py [etc...]
+  * [**X**] Automatiser l'attaque ARP
+  * [**X**] Wrapper :: Tcpdump, Nmap, ArpSpoof, ping, etc
   * [**X**] 
  
 

@@ -2,7 +2,6 @@ package su.sniff.cepter.Controller.Network;
 
 import android.content.Context;
 import android.util.Log;
-import su.sniff.cepter.globalVariable;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -19,7 +18,7 @@ public class                NetUtils {
     private static String   TAG = "NetUtils";
     private static String   MAC = null;
 
-    public static String    getMac() throws FileNotFoundException {
+    public static String    getMac(String myIp, String gateway) throws FileNotFoundException {
         if (MAC == null) {
             Log.d(TAG, "Reading /proc/net/arp");
             BufferedReader bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"));
@@ -34,7 +33,7 @@ public class                NetUtils {
                     Matcher matcher = Pattern.compile(String.format(MAC_RE, read.substring(0, read.indexOf(" ")).replace(".", "\\."))).matcher(read);
                     if (matcher.matches()) {
                         mac = matcher.group(1);
-                        if (globalVariable.own_ip.equals(globalVariable.gw_ip)) {
+                        if (myIp.equals(gateway)) {
                             break;
                         }
                     }
@@ -65,7 +64,6 @@ public class                NetUtils {
                 objArr[0] = ip.replace(".", "\\.");
                 Matcher matcher = Pattern.compile(String.format(MAC_RE, objArr)).matcher(read);
                 if (matcher.matches()) {
-                    Log.i(TAG, "DUMP:" + ip + " " + matcher.group(1));
                     hostListFile.write((ip + ":" + matcher.group(1) + "\n").getBytes());
                 }
             }

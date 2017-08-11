@@ -1,14 +1,9 @@
 package su.sniff.cepter.View;
 
-import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringDef;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,17 +19,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import su.sniff.cepter.Controller.Singleton;
+import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.Model.Host;
+import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.adapter.HostCheckBoxAdapter;
-import su.sniff.cepter.globalVariable;
+import su.sniff.cepter.View.adapter.NmapHostCheckerAdapter;
 
 /**
  * Created by maxim on 03/08/2017.
  */
-public class                    NmapActivity extends Activity {
+public class                    NmapActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
     private NmapActivity        mInstance = this;
     private CoordinatorLayout   coordinatorLayout;
@@ -102,7 +97,7 @@ public class                    NmapActivity extends Activity {
     }
 
     private void                initRecyHost() {
-        HostCheckBoxAdapter adapter = new HostCheckBoxAdapter(this, Singleton.hostsList);
+        NmapHostCheckerAdapter adapter = new NmapHostCheckerAdapter(this, Singleton.hostsList);
         RV_host.setAdapter(adapter);
         RV_host.setHasFixedSize(true);
         RV_host.setLayoutManager(new LinearLayoutManager(mInstance));
@@ -124,13 +119,13 @@ public class                    NmapActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Output.setText("Wait...");
-                final String cmd = globalVariable.path + "/nmap/nmap " + host_et.getText() + " " + params_et.getText() + " ";
+                final String cmd = Singleton.FilesPath + "/nmap/nmap " + host_et.getText() + " " + params_et.getText() + " ";
                 Monitor.setText(cmd);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            BufferedReader reader = new BufferedReader(new RootProcess("Nmap", globalVariable.path)//Exec and > in BufferedReader
+                            BufferedReader reader = new BufferedReader(new RootProcess("Nmap", Singleton.FilesPath)//Exec and > in BufferedReader
                                     .exec(cmd).exec("exit").getInputStreamReader());
                             String dumpOutput = "", tmp;
                             while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {

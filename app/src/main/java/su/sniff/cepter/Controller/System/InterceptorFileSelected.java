@@ -25,12 +25,12 @@ public class                    InterceptorFileSelected implements OpenFileDialo
     public void                 onFileSelected(File f) {
         tvHello.setTextSize(2, (float) globalVariable.raw_textsize);
         ((TextView) activity.findViewById(R.id.monitor)).setTextSize(2, (float) globalVariable.raw_textsize);
-        File fDroidSheep = new File(globalVariable.path + "/exits.id");
+        File fDroidSheep = new File(Singleton.FilesPath + "/exits.id");
         if (fDroidSheep.exists()) {
             fDroidSheep.delete();
         }
-        activity.sniff_process = new RootProcess("InterceptorFileSelected", globalVariable.path + "");
-        activity.sniff_process.exec(globalVariable.path + "/cepter " + f.getAbsolutePath() + " " + Integer.toString(globalVariable.resurrection));
+        activity.sniff_process = new RootProcess("InterceptorFileSelected", Singleton.FilesPath);
+        activity.sniff_process.exec(Singleton.FilesPath + "/cepter " + f.getAbsolutePath() + " " + "1");//1 pour la resurection? i dunno what this mean
         activity.sniff_process.exec("exit").closeDontWait();
         new IntercepterReader(activity, tvHello, activity.sniff_process);
     }

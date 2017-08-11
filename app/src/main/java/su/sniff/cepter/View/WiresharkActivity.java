@@ -1,10 +1,11 @@
 package su.sniff.cepter.View;
 
-import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
+
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,144 +13,174 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import su.sniff.cepter.Controller.Singleton;
+import su.sniff.cepter.Controller.Network.ArpSpoof;
+import su.sniff.cepter.Controller.Network.IPTables;
+import su.sniff.cepter.Controller.Network.MyDNSMITM;
+import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.Model.Host;
+import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.adapter.HostCheckBoxAdapter;
-import su.sniff.cepter.globalVariable;
+import su.sniff.cepter.View.adapter.TcpdumpHostCheckerADapter;
 
 /**
  * Created by maxim on 03/08/2017.
  */
-public class WiresharkActivity extends Activity {
+public class                    WiresharkActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
-    private WiresharkActivity mInstance = this;
+    private WiresharkActivity   mInstance = this;
     private CoordinatorLayout   coordinatorLayout;
-    private MaterialSpinner     spinner;
-    private Map<String, String> params =  new HashMap<>();
-    private ArrayList<String>   cmd = new ArrayList<>();
-    private TextView            host_et, params_et, Output, Monitor;
+    private TextView            host_et, Output, Monitor, cmd;
     private RecyclerView        RV_host;
+    private MaterialSpinner     spinnerTypeScan;
+    private String              actualParam = "", hostFilter = "", OutputTxt = "";
     private FloatingActionButton fab;
-    private Host                actualTarget = null;
-
+    private RootProcess         tcpDumpProcess;
+    private List<Host>          listHostSelected = new ArrayList<>();
+    private boolean             isRunning = false;
 
     @Override protected void    onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nmap);
-        initParams();
+        setContentView(R.layout.activity_tcpdump);
         initXml();
-        initSpinner();
         initRecyHost();
-        host_et.setText(Singleton.hostsList.get(0).getIp());
-        params_et.setText(params.get(cmd.get(0)));
     }
 
     private void                initXml() {
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
-        spinner = (MaterialSpinner) findViewById(R.id.spinnerTypeScan);
-        host_et = (EditText) findViewById(R.id.hostEditext);
-        params_et = (EditText) findViewById(R.id.binParamsEditText);
+        host_et = (TextView) findViewById(R.id.hostEditext);
         RV_host = (RecyclerView) findViewById(R.id.RV_host);
         Output = (TextView) findViewById(R.id.Output);
         Monitor = (TextView) findViewById(R.id.Monitor);
-        findViewById(R.id.fab).setOnClickListener(onStartCmd());
-    }
-
-    private void                initSpinner() {
-        spinner.setItems(cmd);
-        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String typeScan) {
-                params_et.setText(params.get(typeScan));
+        spinnerTypeScan = (MaterialSpinner) findViewById(R.id.spinnerTypeScan);
+        cmd = (TextView) findViewById(R.id.cmd);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fabBehavior();
             }
         });
     }
 
-    private void                initParams() {
-        cmd.add("Ping scan");
-        cmd.add("Quick scan");
-        cmd.add("Quick scan plus");
-        cmd.add("Quick traceroute");
-        cmd.add("Regular scan");
-        cmd.add("Intrusive scan");
-        cmd.add("Intense Scan");
-        cmd.add("Intense scan plus UDP");
-        cmd.add("Intense scan, all TCP ports");
-        cmd.add("Intense scan, no ping");
-        params.put(cmd.get(0), " -sn");
-        params.put(cmd.get(1), " -T4 -F");
-        params.put(cmd.get(2), " -sV -T4 -O -F --version-light");
-        params.put(cmd.get(3), " -sn --traceroute");
-        params.put(cmd.get(4), " ");
-        params.put(cmd.get(5), " -sS -sU -T4 -A -v -PE -PP -PS80,443 -PA3389 -PU40125 -PY -g 53 ");
-        params.put(cmd.get(6), " -T4 -A -v");
-        params.put(cmd.get(7), " -sS -sU -T4 -A -v");
-        params.put(cmd.get(8), " -p 1-65535 -T4 -A -v");
-        params.put(cmd.get(9), " -T4 -A -v -Pn");
+    private void                fabBehavior() {
+        if (!isRunning) {
+            if (initParams()) {
+                onTcpDumpStart();
+                fab.setImageResource(android.R.drawable.ic_media_pause);
+                isRunning = true;
+            }
+        } else {
+            onTcpDumpStop();
+        }
     }
 
     private void                initRecyHost() {
-        HostCheckBoxAdapter adapter = new HostCheckBoxAdapter(this, Singleton.hostsList);
+        TcpdumpHostCheckerADapter adapter = new TcpdumpHostCheckerADapter(this, Singleton.hostsList, listHostSelected);
         RV_host.setAdapter(adapter);
         RV_host.setHasFixedSize(true);
         RV_host.setLayoutManager(new LinearLayoutManager(mInstance));
-        /*RV_host.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });*/
     }
 
-    public void                 newTarget(Host host) {
-        actualTarget = host;
-        host_et.setText(host.getIp());
+
+    private boolean             initParams() {
+        actualParam =   " -i wlan0 " +  //  Focus interfacte
+                        "-l " +         //  Make stdout line buffered.  Useful if you want to see  the  data in live
+                        "-vv  " +       //  Even more verbose output.
+                        "-s 0 " +       //  Snarf snaplen bytes of data from each  packet , no idea what this mean
+                        "-vvvx ";       //  -vvv is verbose
+                                        /*  -x When parsing and printing, in addition to printing  the  headers
+                                        of  each  packet,  print the data of each packet (minus its link
+                                        level header) in hex.*/
+        cmd.setText(actualParam);
+        hostFilter = "\' dst port 53 and (";
+        if (listHostSelected.isEmpty()) {
+            Snackbar.make(coordinatorLayout, "Selectionner une target", Snackbar.LENGTH_SHORT).setActionTextColor(Color.RED).show();
+            return false;
+        }
+        for (int i = 0; i < listHostSelected.size(); i++) {
+            if (i > 0)
+                hostFilter += " or ";
+            hostFilter += " host " + listHostSelected.get(i).getIp();
+        }        hostFilter += ")\'";
+        return true;
     }
 
-    private View.OnClickListener onStartCmd() {
-        return new View.OnClickListener() {
+    /**
+     * Start ARPSpoof
+     * Bloque le port des trames DNS
+     * Inspect/Alter DNS Query
+     * Dispatch the DNS request on network
+     */
+    private void                       onTcpDumpStart() {
+        final String cmd = Singleton.FilesPath + "/tcpdump " + actualParam + hostFilter;
+        Monitor.setText(cmd.replace(Singleton.FilesPath, ""));
+        new Thread(new Runnable() {
             @Override
-            public void onClick(View v) {
-                Output.setText("Wait...");
-                final String cmd = globalVariable.path + "/nmap/nmap " + host_et.getText() + " " + params_et.getText() + " ";
-                Monitor.setText(cmd);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            BufferedReader reader = new BufferedReader(new RootProcess("Nmap", globalVariable.path)//Exec and > in BufferedReader
-                                    .exec(cmd).exec("exit").getInputStreamReader());
-                            String dumpOutput = "", tmp;
-                            while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {
-                                dumpOutput += tmp + '\n';
-                                Log.d(TAG, "output:In::" + dumpOutput);
-                            }
-                            dumpOutput += tmp;
-                            final String finalDumpOutput = dumpOutput;
-                            mInstance.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Output.setText(finalDumpOutput);
-                                }
-                            });
-                            Log.d(TAG, "output:" + dumpOutput);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
+            public void run() {
+                ArpSpoof.launchArpSpoof();
+                try {
+                    Thread.sleep(2000);//Wait a sec for ARP Catched for target
+                    new IPTables().discardForwardding2Port(53);
+                    tcpDumpProcess = new RootProcess("TcpDump::DNSSpoof").exec(cmd);
+                    BufferedReader reader = tcpDumpProcess.getReader();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        onNewLineTcpDump(line);
                     }
-                }).start();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Log.d(TAG, "onTcpDump start over");
             }
-        };
+        }).start();
+    }
+
+    private void                        onTcpDumpStop() {
+        ArpSpoof.stopArpSpoof();
+        RootProcess.kill("tcpdump");
+        isRunning = false;
+        fab.setImageResource(android.R.drawable.ic_media_play);
+    }
+
+
+    private void                        onNewLineTcpDump(String line) {
+        StringBuilder reqdata = new StringBuilder();
+        String regex = "^.+length\\s+(\\d+)\\)\\s+([\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3})\\.[^\\s]+\\s+>\\s+([\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3})\\.[^\\:]+.*";
+        Matcher matcher = Pattern.compile(regex).matcher(line);
+        Log.d(TAG, "TcpDump::" + line);
+        stdout(line);
+        if (!matcher.find() && !line.contains("tcpdump")){
+            line = line.substring(line.indexOf(":")+1).trim().replace(" ", "");
+            reqdata.append(line);
+        } else {
+            if (reqdata.length()>0){
+                new MyDNSMITM(reqdata.toString());
+            }
+            reqdata.delete(0,reqdata.length());
+        }
+    }
+
+    private void                    stdout(String line) {
+        OutputTxt += line + '\n';
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Output.setText(OutputTxt);
+            }
+        });
     }
 
 }

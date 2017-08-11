@@ -1,6 +1,5 @@
-package su.sniff.cepter.Controller.Network;
+package su.sniff.cepter.View;
 
-import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -17,6 +16,8 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ListView;
 import su.sniff.cepter.BuildConfig;
+import su.sniff.cepter.Controller.System.Singleton;
+import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.adapter.DNSAdapter;
 import su.sniff.cepter.globalVariable;
@@ -28,7 +29,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class                            DNSSpoofingActivity extends Activity {
+/**
+ * Rebuild this with /tcpdump -i wlan0 -l -vv -s 0 -vvvx dst port 53
+ * Good luck bra
+ */
+public class                            DNSSpoofingActivity extends MyActivity {
     private DNSSpoofingActivity         mInstance = this;
     private String                      TAG = "DNSSpoofingActivity";
     private ArrayAdapter<String>        DNSAdapter;
@@ -36,6 +41,7 @@ public class                            DNSSpoofingActivity extends Activity {
     private String                      m_Text = BuildConfig.FLAVOR;
     private CheckBox                    mySwitch;
     public ListView                     listViewDNSSpoof;
+
 
     public void                         onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +84,7 @@ public class                            DNSSpoofingActivity extends Activity {
 
     private void                        fillListDNSSpoofedFromFile() {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(new File(globalVariable.path + "/dnss")));
+            BufferedReader reader = new BufferedReader(new FileReader(new File(Singleton.FilesPath + "/dnss")));
             while (true) {
                 String read = reader.readLine();
                 if (read == null) {
@@ -162,4 +168,7 @@ public class                            DNSSpoofingActivity extends Activity {
         finish();
         return true;
     }
+
+
+
 }

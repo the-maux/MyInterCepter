@@ -1,6 +1,5 @@
 package su.sniff.cepter.View;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,14 +19,16 @@ import java.util.ArrayList;
 import su.sniff.cepter.BuildConfig;
 import su.sniff.cepter.Controller.MiscUtils.OpenFileDialog;
 import su.sniff.cepter.Controller.MiscUtils.OpenFileDialog.OnFileSelectedListener;
+import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.ThreadUtils;
+import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
 
-public class                        InjectHTTPActivity extends Activity {
+public class                        InjectHTTPActivity extends MyActivity {
     private String                  TAG = getClass().getName();
     private InjectHTTPActivity      mInstance = this;
-    private ArrayAdapter<String> InjectionAdapter;
+    private ArrayAdapter<String>    InjectionAdapter;
     private ArrayList<String>       ListOfInjection;
     public ListView                 listViewInjections;
     private Spinner                 numberSpinner, patternSpinner;
@@ -44,7 +45,7 @@ public class                        InjectHTTPActivity extends Activity {
 
     private void                    initInj() {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(new File(globalVariable.path + "/inj")));
+            BufferedReader reader = new BufferedReader(new FileReader(new File(Singleton.FilesPath + "/inj")));
             String read;
             while ((read = reader.readLine()) != null) {
                 Log.d(TAG, "Inj File read:");

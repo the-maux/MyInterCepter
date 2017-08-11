@@ -1,26 +1,29 @@
 package su.sniff.cepter.View;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Build;
-import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import su.sniff.cepter.Controller.Network.NetUtils;
+import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
+import su.sniff.cepter.Controller.System.MyActivity;
+import su.sniff.cepter.Model.NetworkInformation;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
 
 import java.io.*;
 import java.util.Arrays;
 
-public class                    InitActivity extends Activity {
+public class                    InitActivity extends MyActivity {
     private String              TAG = "InitActivity";
     private InitActivity        mInstance = this;
     private TextView            monitor;
@@ -40,31 +43,15 @@ public class                    InitActivity extends Activity {
     private void                initXml(View rootView) {
         monitor = (TextView) rootView.findViewById(R.id.monitor);
         monitor.setText("Initialization");
-        findViewById(R.id.button7).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        initInfo();
-                    }
-                }).start();
-            }
-        });
     }
 
     @Override protected void    onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         buildPath();
-        globalVariable.resurrection = 1;
         try {
+
             buildFiles();
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    initInfo();
-                }
-            }).start();
+            initInfo();
         } catch (IOException e) {
             monitor.setText("Error IO");
             e.printStackTrace();
@@ -75,63 +62,58 @@ public class                    InitActivity extends Activity {
     }
 
     private void                buildPath() {
-        globalVariable.path = this.getFilesDir().getPath();
-        Log.d(TAG, "path:" + globalVariable.path);
+        Singleton.FilesPath = this.getFilesDir().getPath() + '/';
+        Singleton.BinaryPath = Singleton.FilesPath;//shouldn't be the same as FilesPath
+        Log.d(TAG, "path:" + Singleton.FilesPath);
         globalVariable.PCAP_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
         monitor.setText("Building Path");
     }
 
-    private void                initInfo() {
+    private void                initInfo() throws FileNotFoundException {
+        monitor("Initialization...");
         try {
             Log.d(TAG, "init Net infos");
-            RootProcess process = getNetworkInfoByCept();
-            BufferedReader bufferedReader;
-            int c = 0;
-            String read;
-            if ((bufferedReader = process.getReader()) == null)
-                finish();
-            while ((read = bufferedReader.readLine()) != null) {
-                Log.d(TAG, "read is " + read); //read: wlan0 : IP: 10.16.184.230 / 255.255.254.0
-                monitor("Initialization...");
-                globalVariable.adapt_num = c + 1;
-                String data = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getDhcpInfo().toString();
-                String[] res = data.split(" ");
-                for (int i = 0; i < res.length; i++) {
-                    if (res[i].contains("ipaddr"))
-                        globalVariable.own_ip = res[i+1];
-                    else if (res[i].contains("gateway")) {
-                        globalVariable.gw_ip = res[i+1];
-                    } else if (res[i].contains("netmask")) {
-                        globalVariable.netmask = res[i+1];
-                    }
-                }
-                if (globalVariable.netmask.contains("0.0.0.0"))
-                    globalVariable.netmask = "255.255.255.0";
-                Log.d(TAG, "All : " + data);
-                Log.d(TAG, "IP:" + globalVariable.own_ip);
-                Log.d(TAG, "GW:" + globalVariable.gw_ip);
-                Log.d(TAG, "NetMask:" + globalVariable.netmask);
-                Intent i = new Intent(this, ScanActivity.class);
-                i.putExtra("Key_Int", c);
-                i.putExtra("Key_String", globalVariable.own_ip);
-                bufferedReader.close();
-                startActivity(i);
-                finish();
-            }
-        } catch (IOException e222) {
-            //Toast.makeText(getApplicationContext(), "Broken pipe! Reinstall supersu and busybox!", Toast.LENGTH_SHORT).show();
-            e222.getStackTrace();
-        } catch (InterruptedException e322) {
-            e322.getStackTrace();
+            getNetworkInfoByCept();//Is it still usefull? need to test without
+        } catch (InterruptedException e2) {
+            e2.getStackTrace();
+        } catch (IOException e) {
+            e.getStackTrace();
         }
+        globalVariable.adapt_num = 1;
+        String data = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getDhcpInfo().toString();
+        String[] res = data.split(" ");
+        int ip = 0, gw = 0, netmask = 0;
+        for (int i = 0; i < res.length; i++) {
+            if (res[i].contains("ipaddr")) {
+                ip = i + 1;
+            } else if (res[i].contains("gateway")) {
+                gw = i + 1;
+            } else if (res[i].contains("netmask")) {
+                netmask = i + 1;
+            }
+        }
+        if (!data.contains("ipaddr") || !data.contains("gateway") || !data.contains("netmask") ) {
+            Toast.makeText(this, "Your not connected to a network", Toast.LENGTH_LONG).show();
+            finish();
+            return ;
+        }
+        if (res[netmask].contains("0.0.0.0"))
+            res[netmask] = "255.255.255.0";
+        Singleton.network = new NetworkInformation(res[ip], res[gw], res[netmask], NetUtils.getMac(res[ip], res[gw]));
+        Intent i = new Intent(this, ScanActivity.class);
+        i.putExtra("Key_Int", 1);//1 est censé représenté l'interface network, en l'occurence 1=> eth0
+        i.putExtra("Key_String", Singleton.network.myIp);
+        startActivity(i);
+        finish();
+
     }
 
     private RootProcess         getNetworkInfoByCept() throws IOException, InterruptedException {
         monitor("Get network Information Loading");
-        RootProcess process = new RootProcess("getNetworkInfoByCept", globalVariable.path);
+        RootProcess process = new RootProcess("getNetworkInfoByCept", Singleton.FilesPath);
         monitor("Testing busybox... OK");
-        Log.d(TAG, "su " + globalVariable.path + "/cepter list; exit");
-        process.exec(globalVariable.path + "/cepter list");
+        Log.d(TAG, "su " + Singleton.FilesPath + "/cepter list; exit");
+        process.exec(Singleton.FilesPath + "/cepter list");
         process.exec("exit");
         monitor("Get network Information");
         process.waitFor();
@@ -140,17 +122,17 @@ public class                    InitActivity extends Activity {
 
     private void                clearingTmpFiles() {
         monitor.setText("Clearing previous Data");
-        File force = new File(globalVariable.path + "/force");
+        File force = new File(Singleton.FilesPath + "/force");
         if (force.exists()) {
             Log.d(TAG, "Deleting /force");
             force.delete();
         }
-        File ck = new File(globalVariable.path + "/ck");
+        File ck = new File(Singleton.FilesPath + "/ck");
         if (ck.exists()) {
             Log.d(TAG, "Deleting /ck");
             ck.delete();
         }
-        File savepath = new File(globalVariable.path + "/savepath");
+        File savepath = new File(Singleton.FilesPath + "/savepath");
         if (savepath.exists()) {
             Log.d(TAG, "Deleting /savepath");
             savepath.delete();
@@ -172,7 +154,7 @@ public class                    InitActivity extends Activity {
     }
 
     private void                buildFile(String nameFile, int ressource) throws IOException, InterruptedException {
-        File file = new File(globalVariable.path + "/" + nameFile);
+        File file = new File(Singleton.FilesPath + "/" + nameFile);
         file.delete();
         monitor.setText("Building " + nameFile);
         int size;
@@ -197,13 +179,13 @@ public class                    InitActivity extends Activity {
 
         clearingTmpFiles();
         InputStream cepter = getCepterRessource();
-        File cepterFile = new File(globalVariable.path + "/cepter");
+        File cepterFile = new File(Singleton.FilesPath + "/cepter");
         if (cepterFile.exists() && cepterFile.canExecute()) {
-            Log.d(TAG, "cepter exist");
+            Log.d(TAG, "cepter exist, nothing to do");
         } else {
             cepterFile.delete();
             monitor.setText("Building cepter modules");
-            Log.d(TAG, "Building cepter modules");
+            Log.d(TAG, "Building cepter binary");
             out = openFileOutput("cepter", 0);
             while (cepter.read(bufferDroidSheep) > -1) {
                 out.write(bufferDroidSheep);
@@ -220,17 +202,20 @@ public class                    InitActivity extends Activity {
         buildFile("arpspoof", R.raw.arpspoof);
         buildFile("ettercap_archive", R.raw.ettercap_archive);
         buildFile("archive_nmap", R.raw.nmap);
-        RootProcess process = new RootProcess("UNZIP FILES", globalVariable.path);
-        process.exec("./busybox unzip ettercap_archive")
-                .exec("./busybox unzip archive_nmap")
-                .exec("chmod 777 ./nmap/*")
-                .exec("chmod 777 ./*")
-                .exec("rm -f ./Raw/*")
-                .exec("killall cepter")
+        RootProcess process = new RootProcess("UNZIP FILES", Singleton.FilesPath);
+        process.exec(Singleton.BinaryPath + "/busybox unzip ettercap_archive")
+                .exec(Singleton.BinaryPath + "/busybox unzip archive_nmap")
+                .exec("chmod 777 " + Singleton.BinaryPath + "/nmap/*")
+                .exec("mount -o rw,remount /system")
+                .exec("echo \"nameserver `getprop net.dns1`\" > /etc/resolv.conf")
+                .exec("rm -f " + Singleton.FilesPath + "/Raw/*;")
+                .exec("rm -f " + Singleton.FilesPath + "/dnss ;")
+                .exec("rm -f " + Singleton.FilesPath + "/hostlist;")
+                .exec("rm -f " + Singleton.FilesPath + "/*Activity")
+                .exec(Singleton.BinaryPath + "busybox killall cepter")
+                .exec(Singleton.BinaryPath + "busybox killall tcpdump")
+                .exec(Singleton.BinaryPath + "busybox killall arpspoof")
                 .closeProcess();
-        process = new RootProcess("Setup")
-                .exec("mount -o rw,remount /system");
-        Log.d(TAG, "Setup::Echo Dns::" + new BufferedReader(process.exec("echo \"nameserver `getprop net.dns1`\" > /etc/resolv.conf; cat /etc/resolv.conf").getInputStreamReader()).readLine());
     }
 
     private void                monitor(final String log) {

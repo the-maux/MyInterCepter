@@ -1,6 +1,5 @@
 package su.sniff.cepter.View;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,13 +17,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.Controller.CepterControl.IntercepterReader;
+import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.adapter.ProtocolAdapter;
 import su.sniff.cepter.globalVariable;
 
-public class                    TsharkActivity extends Activity {
+public class                    TsharkActivity extends MyActivity {
     private String              TAG = "TsharkActivity";
     private TsharkActivity      mInstance = this;
     private String              cmd, orig_str;
@@ -83,8 +84,8 @@ public class                    TsharkActivity extends Activity {
                 int offsetLine = 0;
                 String line;
                 try {
-                    RootProcess processRoot = new RootProcess("cepter RAW MODE(tshark)", globalVariable.path + "");String sc = " w "; //Dump le pcap sous forme de fichier .pcap mais ca fait segfault, bisare
-                    processRoot.exec(globalVariable.path + "/cepter " + Integer.toString(globalVariable.adapt_num) + " 3 raw" );//+ sc
+                    RootProcess processRoot = new RootProcess("cepter RAW MODE(tshark)", Singleton.FilesPath);String sc = " w "; //Dump le pcap sous forme de fichier .pcap mais ca fait segfault, bisare
+                    processRoot.exec(Singleton.FilesPath + "/cepter " + Integer.toString(globalVariable.adapt_num) + " 3 raw" );//+ sc
                     InputStreamReader reader = processRoot.getInputStreamReader();
                     Log.i(TAG, "RAW MODE reader ready:" + reader.ready());
                     BufferedReader bufferedReader = new BufferedReader(reader);

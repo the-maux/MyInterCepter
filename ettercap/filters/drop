@@ -1,0 +1,5 @@
+if(ip.src == $target_ip || ip.dst == $target_ip) {
+  drop();
+  kill();
+  msg("log: dropped\n");
+}
