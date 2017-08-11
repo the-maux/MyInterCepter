@@ -8,9 +8,10 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -30,6 +31,7 @@ import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.Model.Host;
 import su.sniff.cepter.Controller.System.MyActivity;
+import su.sniff.cepter.Model.Wireshark.DNS;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.adapter.TcpdumpHostCheckerADapter;
 
@@ -61,6 +63,7 @@ public class                    WiresharkActivity extends MyActivity {
         host_et = (TextView) findViewById(R.id.hostEditext);
         RV_host = (RecyclerView) findViewById(R.id.RV_host);
         Output = (TextView) findViewById(R.id.Output);
+        Output.setMovementMethod(new ScrollingMovementMethod());
         Monitor = (TextView) findViewById(R.id.Monitor);
         spinnerTypeScan = (MaterialSpinner) findViewById(R.id.spinnerTypeScan);
         cmd = (TextView) findViewById(R.id.cmd);
@@ -95,7 +98,7 @@ public class                    WiresharkActivity extends MyActivity {
 
     private boolean             initParams() {
         actualParam =   " -i wlan0 " +  //  Focus interfacte
-                        "-l " +         //  Make stdout line buffered.  Useful if you want to see  the  data in live
+                        "-l " +         //  Make stdoutDNS line buffered.  Useful if you want to see  the  data in live
                         "-vv  " +       //  Even more verbose output.
                         "-s 0 " +       //  Snarf snaplen bytes of data from each  packet , no idea what this mean
                         "-vvvx ";       //  -vvv is verbose
@@ -153,15 +156,21 @@ public class                    WiresharkActivity extends MyActivity {
         RootProcess.kill("tcpdump");
         isRunning = false;
         fab.setImageResource(android.R.drawable.ic_media_play);
+        Snackbar.make(coordinatorLayout, "Mitm interupted", Snackbar.LENGTH_SHORT);
     }
 
-
+    /**
+     * Le traitement + renvoie de la trame DNS
+     * doit avoir lieu avant le output
+     * @param line
+     */
     private void                        onNewLineTcpDump(String line) {
         StringBuilder reqdata = new StringBuilder();
         String regex = "^.+length\\s+(\\d+)\\)\\s+([\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3})\\.[^\\s]+\\s+>\\s+([\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3})\\.[^\\:]+.*";
         Matcher matcher = Pattern.compile(regex).matcher(line);
         Log.d(TAG, "TcpDump::" + line);
-        stdout(line);
+        if (line.contains("A?"))
+            stdoutDNS(new DNS(line));
         if (!matcher.find() && !line.contains("tcpdump")){
             line = line.substring(line.indexOf(":")+1).trim().replace(" ", "");
             reqdata.append(line);
@@ -173,12 +182,17 @@ public class                    WiresharkActivity extends MyActivity {
         }
     }
 
-    private void                    stdout(String line) {
-        OutputTxt += line + '\n';
+    private void                        stdoutDNS(DNS trame) {
+        OutputTxt = "<p>" +
+                "<font color='green'>" + trame.time + "</font>" +
+                "<font color='red'>" + "   " + trame.ipSrc + " > " + trame.ipDst + "</font>" +
+                "<font color='white'>" + " : " + trame.domain + "</font>" +
+                "</p>" + OutputTxt;
+
         mInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Output.setText(OutputTxt);
+                Output.setText(Html.fromHtml(OutputTxt), TextView.BufferType.SPANNABLE);
             }
         });
     }

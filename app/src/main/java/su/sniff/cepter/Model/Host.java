@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.bumptech.glide.Glide;
 
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 
@@ -33,18 +34,23 @@ public class Host {
      * @param buffer buffer
      */
     public                  Host(String buffer) {
-        buffer = buffer.replace("\t", " ").replace("  ", " ");
-        String beg = buffer.substring(0, buffer.indexOf(":") - 1);
-        String mid = buffer.substring(buffer.indexOf(":") + 2, buffer.indexOf(";") - 1);
-        String end = buffer.substring(buffer.indexOf(";") + 2);
-        ip = beg.substring(0, beg.indexOf("(") - 1).replace("\n", "");
-        name = beg.substring(beg.indexOf("(")).replace("\n", "");
-        mac = mid.substring(0, mid.indexOf(" ")).replace("\n", "");
-        os = mid.substring(mid.indexOf(" ") + 1).replace("\n", "");
-        vendor = end.replace("\n", "");
-        //logHost(buffer);
-        dumpInfo = buffer;
-        guessOsType(dumpInfo);
+        try {
+            buffer = buffer.replace("\t", " ").replace("  ", " ");
+            String beg = buffer.substring(0, buffer.indexOf(":") - 1);
+            String mid = buffer.substring(buffer.indexOf(":") + 2, buffer.indexOf(";") - 1);
+            String end = buffer.substring(buffer.indexOf(";") + 2);
+            ip = beg.substring(0, beg.indexOf("(") - 1).replace("\n", "");
+            name = beg.substring(beg.indexOf("(")).replace("\n", "");
+            mac = mid.substring(0, mid.indexOf(" ")).replace("\n", "");
+            os = mid.substring(mid.indexOf(" ") + 1).replace("\n", "");
+            vendor = end.replace("\n", "");
+            //logHost(buffer);
+            dumpInfo = buffer;
+            guessOsType(dumpInfo);
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.e(TAG, buffer);
+            e.getStackTrace();
+        }
     }
 
     /**
