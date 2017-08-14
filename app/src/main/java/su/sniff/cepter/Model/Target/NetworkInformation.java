@@ -1,4 +1,4 @@
-package su.sniff.cepter.Model;
+package su.sniff.cepter.Model.Target;
 
 /**
  * Created by maxim on 10/08/2017.

@@ -24,7 +24,7 @@ import java.io.IOException;
 
 import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
-import su.sniff.cepter.Model.Host;
+import su.sniff.cepter.Model.Target.Host;
 
 /**
  * Wrapper of ArpSpoof tool

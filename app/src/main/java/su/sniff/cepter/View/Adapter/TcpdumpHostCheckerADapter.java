@@ -9,7 +9,7 @@ import android.widget.CompoundButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import su.sniff.cepter.Model.Host;
+import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.Holder.HostCheckBoxHolder;
 

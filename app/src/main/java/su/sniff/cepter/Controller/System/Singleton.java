@@ -1,13 +1,11 @@
 package su.sniff.cepter.Controller.System;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import su.sniff.cepter.Controller.Network.ArpSpoof;
-import su.sniff.cepter.Model.Host;
-import su.sniff.cepter.Model.NetworkInformation;
+import su.sniff.cepter.Model.Target.Host;
+import su.sniff.cepter.Model.Target.NetworkInformation;
 
 /**
  * Created by root on 03/08/17.

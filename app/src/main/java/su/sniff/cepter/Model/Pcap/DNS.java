@@ -1,4 +1,4 @@
-package su.sniff.cepter.Model.Wireshark;
+package su.sniff.cepter.Model.Pcap;
 
 import android.util.Log;
 

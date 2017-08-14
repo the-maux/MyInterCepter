@@ -35,13 +35,21 @@ import su.sniff.cepter.Controller.Network.IPv4CIDR;
 import su.sniff.cepter.Controller.Network.NetUtils;
 import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
-import su.sniff.cepter.Model.Host;
+import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Controller.Network.ScanNetmask;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.HostScanAdapter;
 import su.sniff.cepter.globalVariable;
 
+/**
+ * TODO:    + Add manual target
+ *          + filterOs scrollView (bottom or top ?)
+ *          + filter Text as SearchView
+ *          + Button add -> No target mode / Settings /
+ *          + detect target onFly ?
+ *          + better Os detection
+ */
 public class                        ScanActivity extends MyActivity {
     private String                  TAG = "ScanActivity";
     private ScanActivity            mInstance = this;

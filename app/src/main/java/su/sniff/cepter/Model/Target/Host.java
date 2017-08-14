@@ -1,12 +1,10 @@
-package su.sniff.cepter.Model;
+package su.sniff.cepter.Model.Target;
 
 import android.content.Context;
-import android.icu.text.LocaleDisplayNames;
 import android.util.Log;
 
 import com.bumptech.glide.Glide;
 
-import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 
@@ -17,7 +15,7 @@ import su.sniff.cepter.R;
  * Created by AdeTek on 07/07/17.
  */
 
-public class Host {
+public class                Host {
     private String          TAG = "Host";
     private String          ip = "Unknown";
     private String          name = "Unknown";
@@ -207,6 +205,6 @@ public class Host {
 
     @Override
     public boolean          equals(Object obj) {
-        return super.equals(obj) || ip.contains(((Host) obj).getIp()) && mac.contains(((Host) obj).getMac());
+        return  ip.contains(((Host) obj).getIp()) && mac.contains(((Host) obj).getMac());
     }
 }

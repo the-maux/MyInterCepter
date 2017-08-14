@@ -1,4 +1,4 @@
-package su.sniff.cepter.Model;
+package su.sniff.cepter.Model.Pcap;
 
 /**
  * Created by root on 02/08/17.

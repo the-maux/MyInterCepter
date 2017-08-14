@@ -1,4 +1,4 @@
-package su.sniff.cepter.Model;
+package su.sniff.cepter.Model.Pcap;
 
 import java.util.StringTokenizer;
 
