@@ -1,4 +1,4 @@
-package su.sniff.cepter.View.adapter.Holder;
+package su.sniff.cepter.View.Adapter.Holder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

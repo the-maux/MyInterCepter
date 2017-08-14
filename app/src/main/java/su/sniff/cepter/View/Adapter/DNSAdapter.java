@@ -1,4 +1,4 @@
-package su.sniff.cepter.View.adapter;
+package su.sniff.cepter.View.Adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

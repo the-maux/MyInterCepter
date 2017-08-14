@@ -204,4 +204,9 @@ public class Host {
     public Os getOsType() {
         return osType;
     }
+
+    @Override
+    public boolean          equals(Object obj) {
+        return super.equals(obj) || ip.contains(((Host) obj).getIp()) && mac.contains(((Host) obj).getMac());
+    }
 }

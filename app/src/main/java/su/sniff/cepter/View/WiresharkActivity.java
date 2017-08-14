@@ -33,7 +33,7 @@ import su.sniff.cepter.Model.Host;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.Model.Wireshark.DNS;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.adapter.TcpdumpHostCheckerADapter;
+import su.sniff.cepter.View.Adapter.TcpdumpHostCheckerADapter;
 
 /**
  * Created by maxim on 03/08/2017.

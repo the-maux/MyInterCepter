@@ -31,7 +31,6 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import su.sniff.cepter.Controller.CepterControl.IntercepterWrapper;
-import su.sniff.cepter.Controller.Network.ArpSpoof;
 import su.sniff.cepter.Controller.Network.IPv4CIDR;
 import su.sniff.cepter.Controller.Network.NetUtils;
 import su.sniff.cepter.Controller.System.Singleton;
@@ -40,7 +39,7 @@ import su.sniff.cepter.Model.Host;
 import su.sniff.cepter.Controller.Network.ScanNetmask;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.adapter.HostScanAdapter;
+import su.sniff.cepter.View.Adapter.HostScanAdapter;
 import su.sniff.cepter.globalVariable;
 
 public class                        ScanActivity extends MyActivity {
@@ -54,8 +53,7 @@ public class                        ScanActivity extends MyActivity {
     private FloatingActionButton    progressBar;
     private TextView                TxtMonitor;
     private int                     progress = 0;
-    private boolean                 hostLoaded = false;
-    public boolean                  inLoading = false;
+    private boolean                 hostLoaded = false, inLoading = false, doWeWaitForMyOwnScan = true;
     private SwipeRefreshLayout      swipeRefreshLayout;
 
     public void                     onCreate(Bundle savedInstanceState) {
@@ -153,10 +151,6 @@ public class                        ScanActivity extends MyActivity {
                 public void run() {
                     new ScanNetmask(new IPv4CIDR(Singleton.network.myIp, Singleton.network.netmask), mInstance);
                     progress = 1000;
-                    NetUtils.dumpListHostFromARPTableInFile(mInstance);
-                    progress = 1500;
-                    IntercepterWrapper.fillHostListWithCepterScan(mInstance);
-                    progress = 2000;
                 }
             }).start();
         }
@@ -212,6 +206,10 @@ public class                        ScanActivity extends MyActivity {
     public void                     onReachableScanOver(ArrayList<String> ipReachable) {
         Log.e(TAG, "tu dois toujours faire le scan par cepter des reachable que ta trouvé en ping ;)");
         //Apparament non
+        NetUtils.dumpListHostFromARPTableInFile(mInstance, ipReachable);
+        progress = 1500;
+        IntercepterWrapper.fillHostListWithCepterScan(mInstance);
+        progress = 2000;
     }
 
     public void                     onHostActualized(final List<Host> hosts) {

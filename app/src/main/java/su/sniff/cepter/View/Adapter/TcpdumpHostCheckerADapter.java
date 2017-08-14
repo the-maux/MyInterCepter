@@ -1,9 +1,8 @@
-package su.sniff.cepter.View.adapter;
+package su.sniff.cepter.View.Adapter;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
@@ -12,9 +11,7 @@ import java.util.List;
 
 import su.sniff.cepter.Model.Host;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.NmapActivity;
-import su.sniff.cepter.View.WiresharkActivity;
-import su.sniff.cepter.View.adapter.Holder.HostCheckBoxHolder;
+import su.sniff.cepter.View.Adapter.Holder.HostCheckBoxHolder;
 
 
 public class                    TcpdumpHostCheckerADapter extends RecyclerView.Adapter<HostCheckBoxHolder> {

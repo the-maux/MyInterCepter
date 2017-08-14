@@ -127,8 +127,15 @@ public class                    IntercepterWrapper {
                     while ((read = bufferedReader.readLine()) != null) {//sanityzeCheck: at least 3 '.' for x.x.x.x : Ip
                         if ((read.length() - read.replace(".", "").length()) >= 3) {
                             Host hostObj = new Host(read);//Format : IP\t(HOSTNAME) \n [MAC] [OS] : VENDOR \n
-                            if (!hosts.contains(hostObj))
+                            if (!hosts.contains(hostObj)) {
+                                boolean alreadyIn = false;
+                                for (Host host : hosts) {
+                                    if (host.equals(hostObj))
+                                        alreadyIn = true;
+                                }
+                                if (!alreadyIn)
                                 hosts.add(hostObj);
+                            }
                         }
                     }
                     Collections.sort(hosts, Host.comparator);

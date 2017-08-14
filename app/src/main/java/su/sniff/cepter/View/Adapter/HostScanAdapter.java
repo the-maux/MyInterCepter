@@ -1,4 +1,4 @@
-package su.sniff.cepter.View.adapter;
+package su.sniff.cepter.View.Adapter;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import su.sniff.cepter.Model.Host;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.ScanActivity;
-import su.sniff.cepter.View.adapter.Holder.HostScanHolder;
+import su.sniff.cepter.View.Adapter.Holder.HostScanHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,6 +101,7 @@ public class                    HostScanAdapter extends RecyclerView.Adapter<Hos
 
     public void                 updateHostList(List<Host> hosts) {
         mHosts = new ArrayList<>();
+
         mHosts.addAll(hosts);
         originalList = hosts;
         Log.d(TAG, "updateHostList mHost" + mHosts.size() + " and hosts:" + hosts.size());
