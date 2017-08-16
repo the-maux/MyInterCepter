@@ -40,7 +40,8 @@ import su.sniff.cepter.View.Dialog.HostChoiceDialog;
 import su.sniff.cepter.View.TextView.TrameToHtml;
 
 /**
- * Created by maxim on 03/08/2017.
+ * TODO:    + Add filter
+ *          + RecyclerView with addView(TextView.stdout())
  */
 public class                    WiresharkActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
@@ -51,7 +52,7 @@ public class                    WiresharkActivity extends MyActivity {
     private TextView            host_et, Output, Monitor, cmd, monitorHost;
     private MaterialSpinner     spinner;
     private ProgressBar         progressBar;
-    private String              actualParam = "", hostFilter = "", OutputTxt = "", mTypeScan = "";
+    private volatile String     actualParam = "", hostFilter = "", OutputTxt = "", mTypeScan = "";
     private FloatingActionButton fab;
     private RootProcess         tcpDumpProcess;
     private TrameToHtml         trameToHtml = new TrameToHtml();
@@ -109,7 +110,6 @@ public class                    WiresharkActivity extends MyActivity {
         monitorHost.setText(listHostSelected.size() + " target");
     }
 
-
     private void                onClickChoiceTarget() {
         AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
         new HostChoiceDialog().ShowDialog(mInstance, alert, listHostSelected, monitorHost);
@@ -117,7 +117,7 @@ public class                    WiresharkActivity extends MyActivity {
     private void                initSpinner() {
         final ArrayList<String> cmds = new ArrayList<>();
         cmds.add("Arp Filter");
-        params.put(cmds.get(0), INTERFACE + " \' arp ");
+        params.put(cmds.get(0), INTERFACE + " \' arp and rarp ");
         cmds.add("DNS Filter");
         params.put(cmds.get(1), INTERFACE + "\' dst port 53 ");
         cmds.add("DNS Intercepter");
@@ -257,21 +257,20 @@ public class                    WiresharkActivity extends MyActivity {
      * @param line
      */
     private void                stdOUT(String line) {
-        if (line.contains("A?")) {
-            OutputTxt = trameToHtml.Stdout(line, Protocol.DNS) + OutputTxt;
-        } else if (line.contains("arp")) {
-            OutputTxt = trameToHtml.Stdout(line, Protocol.ARP) + OutputTxt;
-        } else {
-            OutputTxt = new TrameToHtml().Stdout(line, Protocol.UNKNOW) + OutputTxt;
+        String lastLine = "FirstLineIsNotThat", newLine;
+        newLine = trameToHtml.Stdout(line);
+        if (!newLine.contains(lastLine)) {//Too much verbose kill the verbose
+            lastLine = newLine;
+            OutputTxt = lastLine + OutputTxt;
+            mInstance.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (progressBar.getVisibility() == View.VISIBLE)
+                        progressBar.setVisibility(View.GONE);
+                    Output.setText(Html.fromHtml("<p>" + OutputTxt + "</p>"), TextView.BufferType.SPANNABLE);
+                }
+            });
         }
-        mInstance.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (progressBar.getVisibility() == View.VISIBLE)
-                    progressBar.setVisibility(View.GONE);
-                Output.setText(Html.fromHtml(OutputTxt), TextView.BufferType.SPANNABLE);
-            }
-        });
     }
 
     private void                onTcpDumpStop() {
