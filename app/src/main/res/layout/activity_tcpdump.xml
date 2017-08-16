@@ -83,6 +83,9 @@
                 android:id="@+id/targetSelectionner"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_margin="2dp"
+                android:background="@color/material_grey_900"
+                android:elevation="5dp"
                 android:gravity="center">
 
                 <TextView
@@ -95,7 +98,6 @@
                     android:paddingLeft="8dp"
                     android:text="Name" />
             </RelativeLayout>
-
 
 
             <com.jaredrummler.materialspinner.MaterialSpinner
@@ -123,12 +125,12 @@
                 android:layout_alignTop="@+id/spinnerTypeScan"
                 android:layout_toRightOf="@+id/spinnerTypeScan"
                 android:background="@color/material_grey_400"
+                android:focusableInTouchMode="true"
                 android:gravity="center_vertical"
                 android:paddingLeft="8dp"
                 android:text="DNS"
                 android:textColor="@color/primary_text"
-                android:textSize="16sp"
-                android:focusableInTouchMode="true"/>
+                android:textSize="16sp" />
 
         </RelativeLayout>
 
@@ -141,25 +143,18 @@
             <TextView
                 android:id="@+id/Monitor"
                 android:layout_width="match_parent"
-                android:layout_height="26dp"
+                android:layout_height="wrap_content"
                 android:background="#111111"
                 android:elevation="2dp"
                 android:gravity="center_vertical"
+                android:paddingBottom="2dp"
                 android:paddingLeft="16dp"
-                android:text="tcpdump -i wlan0 -l -vv  -s 0 -vvvx ' dst port 53'"
+                android:paddingRight="2dp"
+                android:paddingTop="2dp"
+                android:text="tcpdump [ -AdDefIKlLnNOpqRStuUvxX ] [Expression]"
+                android:textColor="@color/material_light_white"
                 android:textStyle="italic"
-                android:typeface="monospace" />
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="false"
-                android:layout_below="@+id/Monitor"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="16dp" />
+                android:typeface="normal" />
 
             <TextView
                 android:id="@+id/Output"
@@ -170,9 +165,23 @@
                 android:maxLines="200"
                 android:padding="16dp"
                 android:scrollbars="vertical"
-                android:text="@string/tcpDumpBlabla"
+                android:text="No Execution..."
                 android:textColor="@color/material_light_white"
                 android:textSize="12sp" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="false"
+                android:layout_below="@+id/Monitor"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:visibility="invisible" />
+
         </RelativeLayout>
 
         <com.github.clans.fab.FloatingActionButton

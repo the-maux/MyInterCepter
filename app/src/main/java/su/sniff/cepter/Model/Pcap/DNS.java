@@ -15,10 +15,6 @@ public class            DNS {
 
     public              DNS(String line) {
         String[] lineSub = line.split(" ");
-        //time = lineSub[0];
-        for (int i = 0; i < lineSub.length; i++) {
-            Log.d("DNSAHAH", i + "->[" + lineSub[i] + ']');
-        }
         time = lineSub[0].substring(0, lineSub[0].indexOf("."));
         ipSrc = lineSub[17];
         ipDst = lineSub[19].replace(".domain:", "");

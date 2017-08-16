@@ -77,8 +77,9 @@ public class                NetUtils {
                 flag = false;
                 Log.d(TAG, "asking for:" + reachable);
                 for (String s : listOfIpsAlreadyIn) {
-                    Log.d(TAG, s + "-in>" + reachable.substring(0, reachable.indexOf(":")));
+
                     if ((reachable.substring(0, reachable.indexOf(":")) + "..").contains(s + "..")) {
+                        Log.d(TAG, s + "-Alreadyin>" + reachable.substring(0, reachable.indexOf(":")));
                         flag = true;
                     }
                 }

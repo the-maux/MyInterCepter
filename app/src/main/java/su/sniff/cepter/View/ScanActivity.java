@@ -182,11 +182,11 @@ public class                        ScanActivity extends MyActivity {
         Log.d(TAG, "progress Animation");
         progressBar.setImageResource(android.R.drawable.ic_menu_search);
         progressBar.setProgress(0, true);
-        progressBar.setMax(4000);
+        progressBar.setMax(5000);
         new Thread(new Runnable() {
             public void run() {
                 progress = 0;
-                while (progress <= 4000) {
+                while (progress <= 5000) {
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException e) {

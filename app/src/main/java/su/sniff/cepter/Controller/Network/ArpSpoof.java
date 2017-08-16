@@ -61,7 +61,6 @@ public class                        ArpSpoof {
         return this;
     }
 
-
     public static void             stopArpSpoof() {
         new Thread(new Runnable() {
             @Override
@@ -72,7 +71,7 @@ public class                        ArpSpoof {
                 String line;
                 try {
                     while ((line = reader.readLine()) != null) {
-                        if (line.contains("arp"))
+                        if (line.contains("arp") && Singleton.UltraDebugMode)
                             Log.d(TAG, line);
                         String pidArpProcess = line.replace("  ", " ").split(" ")[3];
                         new RootProcess("ARPSpoof").exec("kill SIGINT " + pidArpProcess).closeProcess();

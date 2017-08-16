@@ -1,8 +1,6 @@
 package su.sniff.cepter.View;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -39,7 +37,7 @@ import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Dialog.HostChoiceDialog;
-import su.sniff.cepter.View.TextView.StdoutTcpDump;
+import su.sniff.cepter.View.TextView.TrameToHtml;
 
 /**
  * Created by maxim on 03/08/2017.
@@ -53,9 +51,10 @@ public class                    WiresharkActivity extends MyActivity {
     private TextView            host_et, Output, Monitor, cmd, monitorHost;
     private MaterialSpinner     spinner;
     private ProgressBar         progressBar;
-    private String              actualParam = "", hostFilter = "", OutputTxt = "";
+    private String              actualParam = "", hostFilter = "", OutputTxt = "", mTypeScan = "";
     private FloatingActionButton fab;
     private RootProcess         tcpDumpProcess;
+    private TrameToHtml         trameToHtml = new TrameToHtml();
     private List<Host>          listHostSelected = new ArrayList<>();
     private boolean             isRunning = false;
 
@@ -95,62 +94,74 @@ public class                    WiresharkActivity extends MyActivity {
                 fabBehavior();
             }
         });
-        targetSelectionner.setOnClickListener(onClickTarget());
-        monitorHost.setOnClickListener(onClickTarget());
+        targetSelectionner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickChoiceTarget();
+            }
+        });
+        monitorHost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickChoiceTarget();
+            }
+        });
         monitorHost.setText(listHostSelected.size() + " target");
     }
 
-    private View.OnClickListener onClickTarget() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                new HostChoiceDialog().ShowDialog(mInstance, alert, listHostSelected, monitorHost);
-            }
-        };
-    }
 
+    private void                onClickChoiceTarget() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+        new HostChoiceDialog().ShowDialog(mInstance, alert, listHostSelected, monitorHost);
+    }
     private void                initSpinner() {
         final ArrayList<String> cmds = new ArrayList<>();
         cmds.add("Arp Filter");
-        params.put(cmds.get(0), INTERFACE + VERBOSE_v2 + " \' arp ");
+        params.put(cmds.get(0), INTERFACE + " \' arp ");
         cmds.add("DNS Filter");
-        params.put(cmds.get(1), INTERFACE + VERBOSE_v2 + "\' dst port 53 ");
+        params.put(cmds.get(1), INTERFACE + "\' dst port 53 ");
         cmds.add("DNS Intercepter");
         params.put(cmds.get(2), INTERFACE + STDOUT_BUFF + VERBOSE_v2 + SNARF + VERBOSE_v3 + "\' dst port 53 ");
         cmds.add("HTTP Filter");
-        params.put(cmds.get(3), INTERFACE + VERBOSE_v2 + " \' http ");
+        params.put(cmds.get(3), INTERFACE + " \' port 80 and port 443 ");
         cmds.add("Display Format");
         params.put(cmds.get(4), INTERFACE + STDOUT_BUFF + VERBOSE_v2 + SNARF + VERBOSE_v3 + "\'");
         cmds.add("TCP Filter");
-        params.put(cmds.get(5), INTERFACE + VERBOSE_v2 + " \' tcp ");
+        params.put(cmds.get(5), INTERFACE  + " \' tcp ");
         cmds.add("UDP Filter");
-        params.put(cmds.get(6), INTERFACE + VERBOSE_v2 + " \' udp ");
+        params.put(cmds.get(6), INTERFACE + " \' udp ");
         cmds.add("Custom Filter");
         params.put(cmds.get(7), INTERFACE + "\' ");
         cmds.add("No Filter");
-        params.put(cmds.get(8), INTERFACE + STDOUT_BUFF + VERBOSE_v2 + SNARF + VERBOSE_v3 + "\' ");
+        params.put(cmds.get(8), INTERFACE + STDOUT_BUFF +  SNARF + "\' ");
+
         spinner.setItems(cmds);
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, String typeScan) {
                 cmd.setText(params.get(typeScan));
-                Monitor.setText("tcpdump " + params.get(typeScan));
+                mTypeScan = typeScan;
+                Monitor.setText("./tcpdump " + params.get(typeScan).replace("  ", " "));
             }
         });
         cmd.setText(params.get(cmds.get(0)));
-        Monitor.setText("tcpdump " + params.get(cmds.get(0)));
+
     }
 
     private void                fabBehavior() {
         if (!isRunning) {
             if (initParams()) {
                 progressBar.setVisibility(View.VISIBLE);
+                OutputTxt = "";
+                Output.setText("");
                 onTcpDumpStart();
                 fab.setImageResource(android.R.drawable.ic_media_pause);
                 isRunning = true;
+            } else {
+                onClickChoiceTarget();
             }
         } else {
+            progressBar.setVisibility(View.GONE);
             onTcpDumpStop();
         }
     }
@@ -158,7 +169,7 @@ public class                    WiresharkActivity extends MyActivity {
     private boolean             initParams() {
         actualParam = cmd.getText().toString();
         cmd.setText(actualParam);
-        hostFilter = " and (";
+        hostFilter = (mTypeScan.contains("No Filter")) ? " (" : " and (" ;//If no filter, no '&&' in expression
         if (listHostSelected.isEmpty()) {
             Snackbar.make(coordinatorLayout, "Selectionner une target", Snackbar.LENGTH_SHORT).setActionTextColor(Color.RED).show();
             return false;
@@ -179,6 +190,7 @@ public class                    WiresharkActivity extends MyActivity {
      * Dispatch the DNS request on network
      */
     private void                onTcpDumpStart() {
+
         final String cmd = Singleton.FilesPath + "/tcpdump " + actualParam + hostFilter;
         Monitor.setText(cmd.replace(Singleton.FilesPath, ""));
         new Thread(new Runnable() {
@@ -194,6 +206,8 @@ public class                    WiresharkActivity extends MyActivity {
                     while ((line = reader.readLine()) != null) {
                         onNewLineTcpDump(line);
                     }
+                    Log.d(TAG, "./Tcpdump finish");
+                    stdOUT("Quiting...");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -212,15 +226,18 @@ public class                    WiresharkActivity extends MyActivity {
      */
     private void                onNewLineTcpDump(String line) {
         Log.d(TAG, "onNewLineTcpDump::" + line);
-
         stdOUT(line);
         // IF MITM DNS ACTIVATED
         if (actualParam.contains(STDOUT_BUFF) && actualParam.contains("dst port 53")) {
-            mitmDNS(line);
+            MITM_DNS(line);
         }
     }
 
-    private void                mitmDNS(String line) {
+    /**
+     * Renvoie la trame mais peut altérer la réponse
+     * @param line
+     */
+    private void                MITM_DNS(String line) {
         StringBuilder reqdata = new StringBuilder();
         String regex = "^.+length\\s+(\\d+)\\)\\s+([\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3})\\.[^\\s]+\\s+>\\s+([\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3})\\.[^\\:]+.*";
         Matcher matcher = Pattern.compile(regex).matcher(line);
@@ -235,16 +252,23 @@ public class                    WiresharkActivity extends MyActivity {
         }
     }
 
+    /**
+     * Send to trameToHtml with protocol choice
+     * @param line
+     */
     private void                stdOUT(String line) {
         if (line.contains("A?")) {
-            OutputTxt = new StdoutTcpDump().stdout(line, Protocol.DNS) + OutputTxt;
+            OutputTxt = trameToHtml.Stdout(line, Protocol.DNS) + OutputTxt;
+        } else if (line.contains("arp")) {
+            OutputTxt = trameToHtml.Stdout(line, Protocol.ARP) + OutputTxt;
         } else {
-            OutputTxt = new StdoutTcpDump().stdout(line, Protocol.UNKNOW) + OutputTxt;
+            OutputTxt = new TrameToHtml().Stdout(line, Protocol.UNKNOW) + OutputTxt;
         }
         mInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                progressBar.setVisibility(View.GONE);
+                if (progressBar.getVisibility() == View.VISIBLE)
+                    progressBar.setVisibility(View.GONE);
                 Output.setText(Html.fromHtml(OutputTxt), TextView.BufferType.SPANNABLE);
             }
         });

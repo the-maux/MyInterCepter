@@ -17,7 +17,7 @@ public class                            Singleton {
     public static ArrayList<Host>       hostsList;
     public static List<ArpSpoof>        ArpSpoofProcessStack = new ArrayList<>();
     public static NetworkInformation    network = null;
-    public static boolean               DebugMode = true;
+    public static boolean               DebugMode = true, UltraDebugMode = false;
 
 
 }
