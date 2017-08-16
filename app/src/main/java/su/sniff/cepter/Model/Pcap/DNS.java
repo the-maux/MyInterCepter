@@ -14,6 +14,7 @@ public class            DNS {
     public String       detailTrame;
 
     public              DNS(String line) {
+        //TODO: bug on DNS parsing when not filtered on 'port 53' only and no -verbose
         String[] lineSub = line.split(" ");
         time = lineSub[0].substring(0, lineSub[0].indexOf("."));
         ipSrc = lineSub[17];

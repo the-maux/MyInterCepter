@@ -36,13 +36,9 @@ public class                        ScanNetmask {
         NumberOfHosts = iPv4CIDR.getNumberOfHosts() - 2;
         List<String> availableIPs = iPv4CIDR.getAvailableIPs(NumberOfHosts);
         Log.i(TAG, "NumberOfHosts:" + NumberOfHosts + " ipAvailable:" + availableIPs.size());
-        //if (NumberOfHosts  < 300) {
-
-            for (final String ip : availableIPs) {
-
-                runnableReachable(service, ip);
-            }
-        //}
+        for (final String ip : availableIPs) {
+            runnableReachable(service, ip);
+        }
     }
 
     private void                    ScanOver() {
@@ -76,7 +72,6 @@ public class                        ScanNetmask {
                         } else {
                             Log.e(TAG, "Network Interface for " + ip);
                         }
-                        Log.d(TAG, "HERE:" + nbrHostScanned + " : " + NumberOfHosts);
 
                     }
                 }  catch (UnknownHostException e) {
