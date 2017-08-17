@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_marginTop="1dp"
+    android:layout_height="16dp"
+    android:id="@+id/lllayout"
+    android:background="@color/material_blue_grey_300"
+    android:orientation="horizontal"
+    android:weightSum="100">
+
+    <TextView
+        android:id="@+id/No"
+        android:layout_width="0dp"
+        android:maxLines="1"
+        android:layout_height="match_parent"
+        android:layout_weight="7"
+        android:background="@color/ftp"
+        android:gravity="center_vertical"
+        android:paddingLeft="4dp"
+        android:textSize="12sp"
+        android:text="No"
+        android:textColor="@color/primary_text" />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:maxLines="1"
+        android:layout_marginLeft="1px"
+        android:layout_weight="13"
+        android:background="@color/ftp"
+        android:gravity="center_vertical"
+        android:paddingLeft="4dp"
+        android:text="Time"
+        android:textSize="12sp"
+        android:textColor="@color/primary_text" />
+
+    <TextView
+        android:id="@+id/Source"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:maxLines="1"
+        android:layout_marginLeft="1px"
+        android:layout_weight="17"
+        android:background="@color/ftp"
+        android:gravity="center_vertical"
+        android:paddingLeft="4dp"
+        android:text="Source"
+        android:textSize="12sp"
+        android:textColor="@color/primary_text" />
+
+    <TextView
+        android:id="@+id/Destination"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:maxLines="1"
+        android:textSize="12sp"
+        android:layout_marginLeft="1px"
+        android:layout_weight="17"
+        android:background="@color/ftp"
+        android:gravity="center_vertical"
+        android:paddingLeft="4dp"
+        android:text="Destination"
+        android:textColor="@color/primary_text" />
+
+    <TextView
+        android:id="@+id/Protocol"
+        android:layout_width="0dp"
+        android:maxLines="1"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="1px"
+        android:textSize="12sp"
+        android:layout_weight="16"
+        android:background="@color/ftp"
+        android:ems="10"
+        android:gravity="center_vertical"
+        android:paddingLeft="4dp"
+        android:text="Protocol"
+        android:textColor="@color/primary_text" />
+
+    <TextView
+        android:id="@+id/Info"
+        android:layout_width="wrap_content"
+        android:textSize="12sp"
+        android:maxLines="1"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="1px"
+        android:layout_weight="30"
+        android:background="@color/ftp"
+        android:gravity="center_vertical"
+        android:paddingLeft="4dp"
+        android:text="Info"
+        android:textColor="@color/primary_text" />
+</LinearLayout>

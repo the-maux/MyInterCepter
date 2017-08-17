@@ -4,6 +4,7 @@ import android.util.Log;
 
 import su.sniff.cepter.Model.Pcap.DNS;
 import su.sniff.cepter.Model.Pcap.Protocol;
+import su.sniff.cepter.Model.Pcap.Trame;
 
 
 /**
@@ -13,71 +14,41 @@ import su.sniff.cepter.Model.Pcap.Protocol;
 public class                TrameToHtml {
     private String          TAG = getClass().getName();
 
-    public String           Stdout(String line) {
-        if (line.contains("A?")) {
-            return dispatch(line, Protocol.DNS);
-        } else if (line.toLowerCase().contains("arp")) {
-            return dispatch(line, Protocol.ARP);
-        } else if (line.toLowerCase().contains("https")){
-            return dispatch(line, Protocol.HTTPS);
-        } else if (line.toLowerCase().contains("http")){
-            return dispatch(line, Protocol.HTTP);
-        }  else if (line.toLowerCase().contains("tcp")){
-            return dispatch(line, Protocol.TCP);
-        } else if (line.toLowerCase().contains("udp")){
-            return dispatch(line, Protocol.UDP);
-        } else if (line.toLowerCase().contains("icmp")){
-            return dispatch(line, Protocol.ICMP);
-        } else if (line.contains("Quiting...")){
-            return "<h5>Quiting...</h5>";
-        } else {
-            return dispatch(line, Protocol.UNKNOW);
-        }
-    }
-
-    private String            dispatch(String line, Protocol protocol) {
-        switch (protocol) {
+    public String           toHtml(Trame trame) {
+        switch (trame.protocol) {
             case ARP:
                 Log.d(TAG, "ARP trame");
-                return ArpParsing(line);
+                return ArpParsing(trame);
             case HTTP:
                 Log.d(TAG, "HTTP trame");
-                return HttpParsing(line);
+                return HttpParsing(trame);
             case HTTPS:
                 Log.d(TAG, "HTTPS trame");
-                return HttpsParsing(line);
+                return HttpsParsing(trame);
             case TCP:
                 Log.d(TAG, "TCP trame");
-                return TcpParsing(line);
+                return TcpParsing(trame);
             case UDP:
                 Log.d(TAG, "UDP trame");
-                return UdpParsing(line);
+                return UdpParsing(trame);
             case DNS:
                 Log.d(TAG, "DNS trame");
-                return DnsParsing(line);
+                return DnsParsing(trame);
             case SMB:
                 Log.d(TAG, "SMB trame");
-                return SmbParsing(line);
+                return SmbParsing(trame);
             case NBNS:
                 Log.d(TAG, "NBNS trame");
-                return NBNSParsing(line);
+                return NBNSParsing(trame);
             case ICMP:
-                Log.d(TAG, "NBNS trame");
-                return ICMPParsing(line);
+                Log.d(TAG, "ICMP trame");
+                return ICMPParsing(trame);
             default:
-                try {
-                    Log.d(TAG, "Unknow trame");
-                    return NBNSParsing(line);
-                } catch (StringIndexOutOfBoundsException e) {
-                    e.getStackTrace();
-                    Log.e(TAG, "Trame:" + line);
-                    return newHtmlPara(line, Protocol.UNKNOW);
-                }
+                Log.d(TAG, "Unknow trame");
+                return newHtmlPara(trame.info, Protocol.UNKNOW);
         }
     }
-
-
-
+    
     private String          newHtmlPara(String line, Protocol protocol) throws StringIndexOutOfBoundsException  {
         switch (protocol) {
             case ARP:
@@ -126,58 +97,41 @@ public class                TrameToHtml {
      * @return
      * @throws StringIndexOutOfBoundsException
      */
-    private String          DnsParsing(String line)  throws StringIndexOutOfBoundsException {
-        DNS trame = new DNS(line);
+    private String          DnsParsing(Trame trame)  throws StringIndexOutOfBoundsException {
         return newHtmlPara(
                         "<font color='green'>" + trame.time + "</font>" +
-                        "<font color='red'>" + "   " + trame.ipSrc + " > " + trame.ipDst + "</font>" +
-                        "<font color='white'>" + " : " + trame.domain + "</font>", Protocol.DNS);
+                        "<font color='red'>" + "   " + trame.StringSrc + " > " + trame.StringDest + "</font>" +
+                        "<font color='white'>" + " : " + trame.info + "</font>", Protocol.DNS);
     }
-    private String          ArpParsing(String line) {
-        String[] splitted = line.substring(line.indexOf(" "), line.length()).split(" ");
-        line = "<font color='green'>" + splitted[2].toUpperCase() + " </font>" + // 'REPLY' OR 'WHO-HAS'
-                "<font color='red'>" + splitted[3] + " </font>" + //Ip1
-                "<font color='green'>" + splitted[4].toUpperCase() + " </font>" + //'is-at' OR 'tell'
-                "<font color='white'>" + splitted[5] + " </font>"; //Ip2 OR MAC
+    private String          ArpParsing(Trame trame) {
+        String line = "<font color='green'>" + trame.info + " </font>";
         if (line.contains("WHO-HAS")) {
             line = line + " ?";
         }
         return newHtmlPara(line, Protocol.ARP);
     }
-    private String          HttpParsing(String line) throws StringIndexOutOfBoundsException  {
-        String lineTmp = line.substring(line.indexOf(" "), line.length()).replace("IP ", "");
-        lineTmp = "<font color='blue'>" + lineTmp + "</font>";
-        return newHtmlPara(lineTmp, Protocol.HTTP);
+    private String          HttpParsing(Trame trame) throws StringIndexOutOfBoundsException  {
+        String line = "<font color='blue'>" + trame.info + "</font>";
+        return newHtmlPara(line, Protocol.HTTP);
     }
 
-    private String          HttpsParsing(String line) throws StringIndexOutOfBoundsException  {
-        String lineTmp = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
-        lineTmp = "<font color='blue'>" + lineTmp + "</font>";
-        return newHtmlPara(lineTmp, Protocol.HTTPS);
+    private String          HttpsParsing(Trame trame) throws StringIndexOutOfBoundsException  {
+        String line = "<font color='blue'>" + trame.info + "</font>";
+        return newHtmlPara(line, Protocol.HTTPS);
     }
-    private String          TcpParsing(String line) throws StringIndexOutOfBoundsException  {
-        String lineTmp = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
-        lineTmp = "" + lineTmp + "";
-        return newHtmlPara(lineTmp, Protocol.TCP);
+    private String          TcpParsing(Trame trame) throws StringIndexOutOfBoundsException  {
+        return newHtmlPara(trame.info, Protocol.TCP);
     }
-    private String          UdpParsing(String line) throws StringIndexOutOfBoundsException  {
-        String lineTmp = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
-        lineTmp = "" + lineTmp + "";
-        return newHtmlPara(lineTmp, Protocol.UDP);
+    private String          UdpParsing(Trame trame) throws StringIndexOutOfBoundsException  {
+        return newHtmlPara(trame.info, Protocol.UDP);
     }
-    private String          SmbParsing(String line) throws StringIndexOutOfBoundsException  {
-        String lineTmp = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
-        lineTmp = "" + lineTmp + "";
-        return newHtmlPara(lineTmp, Protocol.SMB);
+    private String          SmbParsing(Trame trame) throws StringIndexOutOfBoundsException  {
+        return newHtmlPara(trame.info, Protocol.SMB);
     }
-    private String          NBNSParsing(String line) throws StringIndexOutOfBoundsException  {
-        String lineTmp = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
-        lineTmp = "" + lineTmp + "";
-        return newHtmlPara(lineTmp, Protocol.UNKNOW);
+    private String          NBNSParsing(Trame trame) throws StringIndexOutOfBoundsException  {
+        return newHtmlPara(trame.info, Protocol.UNKNOW);
     }
-    private String          ICMPParsing(String line) {
-        String lineTmp = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
-        lineTmp = "<font color='yellow'>" + lineTmp + "</font>";
-        return newHtmlPara(lineTmp, Protocol.ICMP);
+    private String          ICMPParsing(Trame trame) {
+        return newHtmlPara(trame.info, Protocol.ICMP);
     }
 }

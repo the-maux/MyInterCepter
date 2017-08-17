@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -32,10 +34,12 @@ import su.sniff.cepter.Controller.Network.IPTables;
 import su.sniff.cepter.Controller.Network.MyDNSMITM;
 import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
-import su.sniff.cepter.Model.Pcap.Protocol;
+import su.sniff.cepter.Model.Pcap.Trame;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
+import su.sniff.cepter.View.Adapter.HostScanAdapter;
+import su.sniff.cepter.View.Adapter.WiresharkAdapter;
 import su.sniff.cepter.View.Dialog.HostChoiceDialog;
 import su.sniff.cepter.View.TextView.TrameToHtml;
 
@@ -49,13 +53,16 @@ public class                    WiresharkActivity extends MyActivity {
     private CoordinatorLayout   coordinatorLayout;
     private Map<String, String> params = new HashMap<>();
     private RelativeLayout      targetSelectionner;
-    private TextView            host_et, Output, Monitor, cmd, monitorHost;
+    private TextView            host_et, Monitor, cmd, monitorHost;
+    private RecyclerView        Output;
     private MaterialSpinner     spinner;
     private ProgressBar         progressBar;
-    private volatile String     actualParam = "", hostFilter = "", OutputTxt = "", mTypeScan = "";
     private FloatingActionButton fab;
     private RootProcess         tcpDumpProcess;
-    private TrameToHtml         trameToHtml = new TrameToHtml();
+    private volatile ArrayList<Trame>    listOfTrames = new ArrayList<>();
+    private volatile WiresharkAdapter    adapterRecy;
+    private volatile String     actualParam = "", hostFilter = "", mTypeScan = "";
+//    private TrameToHtml         trameToHtml = new TrameToHtml();
     private List<Host>          listHostSelected = new ArrayList<>();
     private boolean             isRunning = false;
 
@@ -81,8 +88,7 @@ public class                    WiresharkActivity extends MyActivity {
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
         host_et = (TextView) findViewById(R.id.hostEditext);
         monitorHost = (TextView) findViewById(R.id.monitorHost);
-        Output = (TextView) findViewById(R.id.Output);
-        Output.setMovementMethod(new ScrollingMovementMethod());
+        Output = (RecyclerView) findViewById(R.id.Output);
         Monitor = (TextView) findViewById(R.id.Monitor);
         spinner = (MaterialSpinner) findViewById(R.id.spinnerTypeScan);
         cmd = (TextView) findViewById(R.id.cmd);
@@ -108,16 +114,21 @@ public class                    WiresharkActivity extends MyActivity {
             }
         });
         monitorHost.setText(listHostSelected.size() + " target");
+        adapterRecy = new WiresharkAdapter(this, listOfTrames);
+        Output.setAdapter(adapterRecy);
+        Output.setHasFixedSize(true);
+        Output.setLayoutManager(new LinearLayoutManager(mInstance));
     }
 
     private void                onClickChoiceTarget() {
         AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
         new HostChoiceDialog().ShowDialog(mInstance, alert, listHostSelected, monitorHost);
     }
+
     private void                initSpinner() {
         final ArrayList<String> cmds = new ArrayList<>();
         cmds.add("Arp Filter");
-        params.put(cmds.get(0), INTERFACE + " \' arp and rarp ");
+        params.put(cmds.get(0), INTERFACE + " \' arp ");
         cmds.add("DNS Filter");
         params.put(cmds.get(1), INTERFACE + "\' dst port 53 ");
         cmds.add("DNS Intercepter");
@@ -134,7 +145,6 @@ public class                    WiresharkActivity extends MyActivity {
         params.put(cmds.get(7), INTERFACE + "\' ");
         cmds.add("No Filter");
         params.put(cmds.get(8), INTERFACE + STDOUT_BUFF +  SNARF + "\' ");
-
         spinner.setItems(cmds);
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
             @Override
@@ -152,8 +162,6 @@ public class                    WiresharkActivity extends MyActivity {
         if (!isRunning) {
             if (initParams()) {
                 progressBar.setVisibility(View.VISIBLE);
-                OutputTxt = "";
-                Output.setText("");
                 onTcpDumpStart();
                 fab.setImageResource(android.R.drawable.ic_media_pause);
                 isRunning = true;
@@ -200,8 +208,10 @@ public class                    WiresharkActivity extends MyActivity {
                 try {
                     Thread.sleep(2000);//Wait a sec for ARP Catched for target
                     if (actualParam.contains(STDOUT_BUFF) && actualParam.contains("dst port 53")) {
+                        Log.i(TAG, "DNS REQUEST MITM");
                         new IPTables().discardForwardding2Port(53);//MITM DNS
-                    }
+                     }
+                    listOfTrames.clear();
                     tcpDumpProcess = new RootProcess("TcpDump::DNSSpoof").exec(cmd);
                     BufferedReader reader = tcpDumpProcess.getReader();
                     String line;
@@ -233,7 +243,6 @@ public class                    WiresharkActivity extends MyActivity {
      * @param line
      */
     private void                onNewLineTcpDump(String line) {
-        Log.d(TAG, "onNewLineTcpDump::" + line);
         if (actualParam.contains(STDOUT_BUFF) && actualParam.contains("dst port 53")) {
             MITM_DNS(line);
         }
@@ -263,22 +272,29 @@ public class                    WiresharkActivity extends MyActivity {
     /**
      * Send to trameToHtml with protocol choice
      * @param line
-     */String lastLine = "FirstLineIsNotThat";
+     */
     private void                stdOUT(String line) {
-        String newLine;
-        newLine = trameToHtml.Stdout(line);
-        if (!newLine.contains(lastLine)) {//Too much verbose kill the verbose
-            lastLine = newLine;
-            OutputTxt = lastLine + OutputTxt;
+        if (line.contains("Quiting...")) {
             mInstance.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    Snackbar.make(coordinatorLayout, "Mitm stopped", Snackbar.LENGTH_LONG).show();
+                }
+            });
+        } else {
+            final Trame trame = new Trame(line, listOfTrames.size(), 0);
+            mInstance.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    listOfTrames.add(0, trame);
+                    trame.offsett = listOfTrames.size();
                     if (progressBar.getVisibility() == View.VISIBLE)
                         progressBar.setVisibility(View.GONE);
-                    Output.setText(Html.fromHtml("<p>" + OutputTxt + "</p>"), TextView.BufferType.SPANNABLE);
+                    adapterRecy.notifyDataSetChanged();
                 }
             });
         }
+    //    }
     }
 
     private void                onTcpDumpStop() {
