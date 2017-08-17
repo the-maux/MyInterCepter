@@ -16,9 +16,7 @@ public class            DNS {
     public              DNS(String line) {
         //TODO: bug on DNS parsing when not filtered on 'port 53' only and no -verbose
         String[] lineSub = line.split(" ");
-        for (int i = 0; i < lineSub.length; i++) {
-            Log.d("DNS", "rcx[" + i + "]:" + lineSub[i]);
-        }
+
         if (lineSub.length <= 9) {//if no verbose
             time = lineSub[0];
             ipSrc = lineSub[2];

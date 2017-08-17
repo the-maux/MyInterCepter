@@ -162,7 +162,6 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/Monitor"
                 android:background="@color/material_light_black"
-                android:maxLines="200"
                 android:padding="16dp"
                 android:scrollbars="vertical"
                 android:text="No Execution..."

@@ -199,12 +199,20 @@ public class                    WiresharkActivity extends MyActivity {
                 ArpSpoof.launchArpSpoof();
                 try {
                     Thread.sleep(2000);//Wait a sec for ARP Catched for target
-                    new IPTables().discardForwardding2Port(53);
+                    if (actualParam.contains(STDOUT_BUFF) && actualParam.contains("dst port 53")) {
+                        new IPTables().discardForwardding2Port(53);//MITM DNS
+                    }
                     tcpDumpProcess = new RootProcess("TcpDump::DNSSpoof").exec(cmd);
                     BufferedReader reader = tcpDumpProcess.getReader();
                     String line;
                     while ((line = reader.readLine()) != null) {
-                        onNewLineTcpDump(line);
+                        final String finalLine = line;
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                onNewLineTcpDump(finalLine);
+                            }
+                        }).start();
                     }
                     Log.d(TAG, "./Tcpdump finish");
                     stdOUT("Quiting...");
@@ -226,11 +234,11 @@ public class                    WiresharkActivity extends MyActivity {
      */
     private void                onNewLineTcpDump(String line) {
         Log.d(TAG, "onNewLineTcpDump::" + line);
-        stdOUT(line);
-        // IF MITM DNS ACTIVATED
         if (actualParam.contains(STDOUT_BUFF) && actualParam.contains("dst port 53")) {
             MITM_DNS(line);
         }
+        stdOUT(line);
+        // IF MITM DNS ACTIVATED
     }
 
     /**
@@ -255,9 +263,9 @@ public class                    WiresharkActivity extends MyActivity {
     /**
      * Send to trameToHtml with protocol choice
      * @param line
-     */
+     */String lastLine = "FirstLineIsNotThat";
     private void                stdOUT(String line) {
-        String lastLine = "FirstLineIsNotThat", newLine;
+        String newLine;
         newLine = trameToHtml.Stdout(line);
         if (!newLine.contains(lastLine)) {//Too much verbose kill the verbose
             lastLine = newLine;

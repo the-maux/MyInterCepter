@@ -16,16 +16,20 @@ public class                TrameToHtml {
     public String           Stdout(String line) {
         if (line.contains("A?")) {
             return dispatch(line, Protocol.DNS);
-        } else if (line.contains("arp")) {
+        } else if (line.toLowerCase().contains("arp")) {
             return dispatch(line, Protocol.ARP);
-        } else if (line.contains("https")){
+        } else if (line.toLowerCase().contains("https")){
             return dispatch(line, Protocol.HTTPS);
-        } else if (line.contains("http")){
+        } else if (line.toLowerCase().contains("http")){
             return dispatch(line, Protocol.HTTP);
-        }  else if (line.contains("tcp")){
+        }  else if (line.toLowerCase().contains("tcp")){
             return dispatch(line, Protocol.TCP);
-        } else if (line.contains("udp")){
+        } else if (line.toLowerCase().contains("udp")){
             return dispatch(line, Protocol.UDP);
+        } else if (line.toLowerCase().contains("icmp")){
+            return dispatch(line, Protocol.ICMP);
+        } else if (line.contains("Quiting...")){
+            return "<h5>Quiting...</h5>";
         } else {
             return dispatch(line, Protocol.UNKNOW);
         }
@@ -57,10 +61,13 @@ public class                TrameToHtml {
             case NBNS:
                 Log.d(TAG, "NBNS trame");
                 return NBNSParsing(line);
+            case ICMP:
+                Log.d(TAG, "NBNS trame");
+                return ICMPParsing(line);
             default:
                 try {
                     Log.d(TAG, "Unknow trame");
-                    return newHtmlPara(line, Protocol.UNKNOW);
+                    return NBNSParsing(line);
                 } catch (StringIndexOutOfBoundsException e) {
                     e.getStackTrace();
                     Log.e(TAG, "Trame:" + line);
@@ -68,6 +75,8 @@ public class                TrameToHtml {
                 }
         }
     }
+
+
 
     private String          newHtmlPara(String line, Protocol protocol) throws StringIndexOutOfBoundsException  {
         switch (protocol) {
@@ -87,6 +96,8 @@ public class                TrameToHtml {
                 return "<h5 bgcolor='#fff999'>" + "SMB  :" + line + "<br />" + "</h5>";
             case NBNS:
                 return "<h5 bgcolor='#fff999'>" + "NBNS :" + line + "<br />" + "</h5>";
+            case ICMP:
+                return "<h5 bgcolor='#fff999'>" + "ICMP :" + line + "<br />" + "</h5>";
             default:
                 return "<h5 bgcolor='#FFFFFF'>" + "IP   :" + line + "<br />" + "</h5>";
         }
@@ -138,29 +149,35 @@ public class                TrameToHtml {
         lineTmp = "<font color='blue'>" + lineTmp + "</font>";
         return newHtmlPara(lineTmp, Protocol.HTTP);
     }
+
     private String          HttpsParsing(String line) throws StringIndexOutOfBoundsException  {
-        String lineTmp = line.substring(line.indexOf(" "), line.length()).replace("IP ", "");
+        String lineTmp = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
         lineTmp = "<font color='blue'>" + lineTmp + "</font>";
         return newHtmlPara(lineTmp, Protocol.HTTPS);
     }
     private String          TcpParsing(String line) throws StringIndexOutOfBoundsException  {
-        String lineTmp = line.substring(line.indexOf(" "), line.length()).replace("IP ", "");
+        String lineTmp = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
         lineTmp = "" + lineTmp + "";
         return newHtmlPara(lineTmp, Protocol.TCP);
     }
     private String          UdpParsing(String line) throws StringIndexOutOfBoundsException  {
-        String lineTmp = line.substring(line.indexOf(" "), line.length()).replace("IP ", "");
+        String lineTmp = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
         lineTmp = "" + lineTmp + "";
         return newHtmlPara(lineTmp, Protocol.UDP);
     }
     private String          SmbParsing(String line) throws StringIndexOutOfBoundsException  {
-        String lineTmp = line.substring(line.indexOf(" "), line.length()).replace("IP ", "");
+        String lineTmp = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
         lineTmp = "" + lineTmp + "";
         return newHtmlPara(lineTmp, Protocol.SMB);
     }
     private String          NBNSParsing(String line) throws StringIndexOutOfBoundsException  {
-        String lineTmp = line.substring(line.indexOf(" "), line.length()).replace("IP ", "");
+        String lineTmp = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
         lineTmp = "" + lineTmp + "";
-        return newHtmlPara(lineTmp, Protocol.NBNS);
+        return newHtmlPara(lineTmp, Protocol.UNKNOW);
+    }
+    private String          ICMPParsing(String line) {
+        String lineTmp = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
+        lineTmp = "<font color='yellow'>" + lineTmp + "</font>";
+        return newHtmlPara(lineTmp, Protocol.ICMP);
     }
 }
