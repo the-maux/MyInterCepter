@@ -16,6 +16,7 @@ import su.sniff.cepter.View.Adapter.Holder.WiresharkHolder;
 
 
 public class                WiresharkAdapter extends RecyclerView.Adapter<WiresharkHolder> {
+    private String          TAG = "WiresharkAdapter";
     private ArrayList<Trame> listOfTrame;
     private Activity        activity;
 
@@ -35,7 +36,11 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         holder.No.setText(trame.offsett + "");
         holder.time.setText(trame.time);
         holder.source.setText(trame.StringSrc);
-        holder.dest.setText(trame.StringDest);
+        if (trame.StringDest.contains("00:16:7f")) {
+            Log.d(TAG, "trame.StringDest:" + trame.StringDest + "&Upper=>" + trame.StringDest.toUpperCase());
+            holder.dest.setText("00:16:7F:13:4A:DD");
+        }
+        holder.dest.setText(trame.StringDest.toUpperCase());
         holder.proto.setText(trame.protocol.name().toUpperCase());
         holder.info.setText(trame.info);
         setBacgroundColor(trame.backgroundColor, holder);

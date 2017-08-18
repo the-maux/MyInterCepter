@@ -2,6 +2,8 @@ package su.sniff.cepter.Model.Pcap;
 
 import android.util.Log;
 
+import java.util.Arrays;
+
 import su.sniff.cepter.R;
 
 /**
@@ -97,6 +99,7 @@ public class                Trame {
      */
     private  void          DnsParsing(String line)  throws StringIndexOutOfBoundsException {
         String[] lineSub = line.split(" ");
+        Log.d(TAG, "DnsParsing::->"+Arrays.toString(lineSub));
         protocol = Protocol.DNS;
         if (lineSub.length <= 9) {//if no verbose
             time = lineSub[0];
@@ -111,17 +114,20 @@ public class                Trame {
         }
     }
     private  void          ArpParsing(String line) {
-        String[] splitted = line.substring(line.indexOf(" "), line.length()).split(" ");
+        String[] splitted = line.split(" ");
         protocol = Protocol.ARP;
-        time = splitted[1];
+        Log.d(TAG, "ArpParsing::->"+Arrays.toString(splitted));
+        time = splitted[0].substring(0, splitted[0].indexOf("."));
         StringSrc = splitted[3];
         StringDest = splitted[5];
+        Log.d(TAG, "StringDest::" + StringDest);
         info = splitted[2].toUpperCase() + " " + StringSrc + " " + splitted[4].toUpperCase() + " " + splitted[5];
     }
     private  void          HttpParsing(String line) throws StringIndexOutOfBoundsException  {
         String[] splitted = line.split(" ");
+        Log.d(TAG, "HttpParsing::->"+Arrays.toString(splitted));
         protocol = Protocol.HTTP;
-        time = splitted[0];
+        time = splitted[0].substring(0, splitted[0].indexOf("."));
         StringSrc = splitted[2];
         StringDest = splitted[4].replace("http", "");
         info = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
@@ -129,8 +135,9 @@ public class                Trame {
 
     private  void          HttpsParsing(String line) throws StringIndexOutOfBoundsException  {
         String[] splitted = line.split(" ");
+        Log.d(TAG, "HttpsParsing::->"+Arrays.toString(splitted));
         protocol = Protocol.HTTPS;
-        time = splitted[0];
+        time = splitted[0].substring(0, splitted[0].indexOf("."));
         StringSrc = splitted[2];
         StringDest = splitted[4].replace("https", "");
         info = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
@@ -143,8 +150,9 @@ public class                Trame {
      */
     private  void          TcpParsing(String line) throws StringIndexOutOfBoundsException  {
         String[] splitted = line.split(" ");
+        Log.d(TAG, "TcpParsing::->"+Arrays.toString(splitted));
         protocol = Protocol.TCP;
-        time = splitted[0];
+        time = splitted[0].substring(0, splitted[0].indexOf("."));
         StringSrc = splitted[2];
         StringDest = splitted[4];
         info = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
@@ -157,8 +165,9 @@ public class                Trame {
      */
     private  void          UdpParsing(String line) throws StringIndexOutOfBoundsException  {
         String[] splitted = line.split(" ");
+        Log.d(TAG, "UdpParsing::->"+Arrays.toString(splitted));
         protocol = Protocol.UDP;
-        time = splitted[0];
+        time = splitted[0].substring(0, splitted[0].indexOf("."));
         StringSrc = splitted[2];
         StringDest = splitted[4];
         info = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
@@ -171,8 +180,9 @@ public class                Trame {
      */
     private  void          SmbParsing(String line) throws StringIndexOutOfBoundsException  {
         String[] splitted = line.split(" ");
+        Log.d(TAG, "SmbParsing::->"+Arrays.toString(splitted));
         protocol = Protocol.SMB;
-        time = splitted[0];
+        time = splitted[0].substring(0, splitted[0].indexOf("."));
         StringSrc = splitted[2];
         StringDest = splitted[4];
         info = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
@@ -180,7 +190,8 @@ public class                Trame {
     private  void          NBNSParsing(String line) throws StringIndexOutOfBoundsException  {
         String[] splitted = line.split(" ");
         protocol = Protocol.NBNS;
-        time = splitted[0];
+        Log.d(TAG, "NBNSParsing::->"+Arrays.toString(splitted));
+        time = splitted[0].substring(0, splitted[0].indexOf("."));
         StringSrc = splitted[2];
         StringDest = splitted[4];
         info = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
@@ -188,7 +199,8 @@ public class                Trame {
     private  void          ICMPParsing(String line) {
         String[] splitted = line.split(" ");
         protocol = Protocol.ICMP;
-        time = splitted[0];
+        Log.d(TAG, "ICMPParsing::->"+Arrays.toString(splitted));
+        time = splitted[0].substring(0, splitted[0].indexOf("."));
         StringSrc = splitted[2];
         StringDest = splitted[4];
         info = line.substring(line.indexOf("ICMP"), line.length()).replace("ICMP ", "");
@@ -197,14 +209,15 @@ public class                Trame {
     private void           IParsing(String line) {
         String[] splitted = line.split(" ");
         protocol = Protocol.IP;
+        Log.d(TAG, "IParsing::->"+ Arrays.toString(splitted));
         if (splitted.length >= 4) {
-            time = splitted[0];
+            time = splitted[0].substring(0, splitted[0].indexOf("."));
             StringSrc = splitted[2];
             StringDest = splitted[4];
         } else {
-            time = "Parsing";
-            StringSrc = "Parsing";
-            StringDest = "Parsing";
+            time = "Quiting...";
+            StringSrc = "  ";
+            StringDest = "  ";
         }
         try {
             info = line;
@@ -214,7 +227,7 @@ public class                Trame {
         }
     }
 
-    public  void            initColorBackground() {
+    private void            initColorBackground() {
         switch (protocol) {
             case ARP:
                 backgroundColor = R.color.arp;
