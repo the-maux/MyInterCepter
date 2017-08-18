@@ -152,7 +152,9 @@ public class                Host {
             ImageRessource = R.drawable.monitor;
         Glide.with(context)
                 .load(ImageRessource)
-                .centerCrop()
+                .override(100, 100)
+                .fitCenter()
+                .crossFade()
                 .into(osImageView);
     }
 

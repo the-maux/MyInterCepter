@@ -42,6 +42,8 @@ import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.HostScanAdapter;
 import su.sniff.cepter.globalVariable;
 
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 /**
  * TODO:    + Add manual target
  *          + filterOs scrollView (bottom or top ?)
@@ -182,11 +184,11 @@ public class                        ScanActivity extends MyActivity {
         Log.d(TAG, "progress Animation");
         progressBar.setImageResource(android.R.drawable.ic_menu_search);
         progressBar.setProgress(0, true);
-        progressBar.setMax(5000);
+        progressBar.setMax(4500);
         new Thread(new Runnable() {
             public void run() {
                 progress = 0;
-                while (progress <= 5000) {
+                while (progress <= 4500) {
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException e) {
@@ -251,7 +253,7 @@ public class                        ScanActivity extends MyActivity {
                     filtereffect(cb, os, listOs);
                 }
             });
-            filterLL.addView(OsView, 200, 40);
+            filterLL.addView(OsView, WRAP_CONTENT, 50);
         }
         findViewById(R.id.ScrollViewFilter).setVisibility(View.VISIBLE);
         ((EditText)findViewById(R.id.filterText)).addTextChangedListener(new TextWatcher() {
