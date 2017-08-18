@@ -26,49 +26,64 @@
         </activity>
         <activity
             android:name="su.sniff.cepter.View.MainActivity"
+            android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.TsharkActivity"
+            android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.TsharkDetailsActivity"
+            android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.DNSSpoofingActivity"
+            android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.InjectHTTPActivity"
+            android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.CageActivity"
+            android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.ScanActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden"
             android:label="@string/app_name" />
         <activity
             android:name=".View.TabActivitys"
+            android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.SettingsActivity"
+            android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.CookiesActivity"
+            android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.BrowserActivity"
+            android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.SettingsExpertActivity"
+            android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.NmapActivity"
+            android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.MenuActivity"
+            android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.WiresharkActivity"
+            android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>
 </manifest>

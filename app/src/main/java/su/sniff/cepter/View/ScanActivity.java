@@ -31,18 +31,27 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import su.sniff.cepter.Controller.CepterControl.IntercepterWrapper;
-import su.sniff.cepter.Controller.Network.ArpSpoof;
 import su.sniff.cepter.Controller.Network.IPv4CIDR;
 import su.sniff.cepter.Controller.Network.NetUtils;
 import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
-import su.sniff.cepter.Model.Host;
+import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Controller.Network.ScanNetmask;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.adapter.HostScanAdapter;
+import su.sniff.cepter.View.Adapter.HostScanAdapter;
 import su.sniff.cepter.globalVariable;
 
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
+/**
+ * TODO:    + Add manual target
+ *          + filterOs scrollView (bottom or top ?)
+ *          + filter Text as SearchView
+ *          + Button add -> No target mode / Settings /
+ *          + detect target onFly ?
+ *          + better Os detection
+ */
 public class                        ScanActivity extends MyActivity {
     private String                  TAG = "ScanActivity";
     private ScanActivity            mInstance = this;
@@ -54,8 +63,7 @@ public class                        ScanActivity extends MyActivity {
     private FloatingActionButton    progressBar;
     private TextView                TxtMonitor;
     private int                     progress = 0;
-    private boolean                 hostLoaded = false;
-    public boolean                  inLoading = false;
+    private boolean                 hostLoaded = false, inLoading = false, doWeWaitForMyOwnScan = true;
     private SwipeRefreshLayout      swipeRefreshLayout;
 
     public void                     onCreate(Bundle savedInstanceState) {
@@ -153,10 +161,6 @@ public class                        ScanActivity extends MyActivity {
                 public void run() {
                     new ScanNetmask(new IPv4CIDR(Singleton.network.myIp, Singleton.network.netmask), mInstance);
                     progress = 1000;
-                    NetUtils.dumpListHostFromARPTableInFile(mInstance);
-                    progress = 1500;
-                    IntercepterWrapper.fillHostListWithCepterScan(mInstance);
-                    progress = 2000;
                 }
             }).start();
         }
@@ -180,11 +184,11 @@ public class                        ScanActivity extends MyActivity {
         Log.d(TAG, "progress Animation");
         progressBar.setImageResource(android.R.drawable.ic_menu_search);
         progressBar.setProgress(0, true);
-        progressBar.setMax(4000);
+        progressBar.setMax(4500);
         new Thread(new Runnable() {
             public void run() {
                 progress = 0;
-                while (progress <= 4000) {
+                while (progress <= 4500) {
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException e) {
@@ -212,6 +216,10 @@ public class                        ScanActivity extends MyActivity {
     public void                     onReachableScanOver(ArrayList<String> ipReachable) {
         Log.e(TAG, "tu dois toujours faire le scan par cepter des reachable que ta trouvé en ping ;)");
         //Apparament non
+        NetUtils.dumpListHostFromARPTableInFile(mInstance, ipReachable);
+        progress = 1500;
+        IntercepterWrapper.fillHostListWithCepterScan(mInstance);
+        progress = 2000;
     }
 
     public void                     onHostActualized(final List<Host> hosts) {
@@ -245,7 +253,7 @@ public class                        ScanActivity extends MyActivity {
                     filtereffect(cb, os, listOs);
                 }
             });
-            filterLL.addView(OsView, 200, 40);
+            filterLL.addView(OsView, WRAP_CONTENT, 50);
         }
         findViewById(R.id.ScrollViewFilter).setVisibility(View.VISIBLE);
         ((EditText)findViewById(R.id.filterText)).addTextChangedListener(new TextWatcher() {

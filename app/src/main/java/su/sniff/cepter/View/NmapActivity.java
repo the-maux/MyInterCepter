@@ -21,10 +21,10 @@ import java.util.Map;
 
 import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
-import su.sniff.cepter.Model.Host;
+import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.adapter.NmapHostCheckerAdapter;
+import su.sniff.cepter.View.Adapter.NmapHostCheckerAdapter;
 
 /**
  * Created by maxim on 03/08/2017.

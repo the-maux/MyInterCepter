@@ -1,7 +1,6 @@
-package su.sniff.cepter.Model;
+package su.sniff.cepter.Model.Target;
 
 import android.content.Context;
-import android.icu.text.LocaleDisplayNames;
 import android.util.Log;
 
 import com.bumptech.glide.Glide;
@@ -16,7 +15,7 @@ import su.sniff.cepter.R;
  * Created by AdeTek on 07/07/17.
  */
 
-public class Host {
+public class                Host {
     private String          TAG = "Host";
     private String          ip = "Unknown";
     private String          name = "Unknown";
@@ -33,18 +32,23 @@ public class Host {
      * @param buffer buffer
      */
     public                  Host(String buffer) {
-        buffer = buffer.replace("\t", " ").replace("  ", " ");
-        String beg = buffer.substring(0, buffer.indexOf(":") - 1);
-        String mid = buffer.substring(buffer.indexOf(":") + 2, buffer.indexOf(";") - 1);
-        String end = buffer.substring(buffer.indexOf(";") + 2);
-        ip = beg.substring(0, beg.indexOf("(") - 1).replace("\n", "");
-        name = beg.substring(beg.indexOf("(")).replace("\n", "");
-        mac = mid.substring(0, mid.indexOf(" ")).replace("\n", "");
-        os = mid.substring(mid.indexOf(" ") + 1).replace("\n", "");
-        vendor = end.replace("\n", "");
-        //logHost(buffer);
-        dumpInfo = buffer;
-        guessOsType(dumpInfo);
+        try {
+            buffer = buffer.replace("\t", " ").replace("  ", " ");
+            String beg = buffer.substring(0, buffer.indexOf(":") - 1);
+            String mid = buffer.substring(buffer.indexOf(":") + 2, buffer.indexOf(";") - 1);
+            String end = buffer.substring(buffer.indexOf(";") + 2);
+            ip = beg.substring(0, beg.indexOf("(") - 1).replace("\n", "");
+            name = beg.substring(beg.indexOf("(")).replace("\n", "");
+            mac = mid.substring(0, mid.indexOf(" ")).replace("\n", "");
+            os = mid.substring(mid.indexOf(" ") + 1).replace("\n", "");
+            vendor = end.replace("\n", "");
+            //logHost(buffer);
+            dumpInfo = buffer;
+            guessOsType(dumpInfo);
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.e(TAG, buffer);
+            e.getStackTrace();
+        }
     }
 
     /**
@@ -148,7 +152,9 @@ public class Host {
             ImageRessource = R.drawable.monitor;
         Glide.with(context)
                 .load(ImageRessource)
-                .centerCrop()
+                .override(100, 100)
+                .fitCenter()
+                .crossFade()
                 .into(osImageView);
     }
 
@@ -197,5 +203,10 @@ public class Host {
 
     public Os getOsType() {
         return osType;
+    }
+
+    @Override
+    public boolean          equals(Object obj) {
+        return  ip.contains(((Host) obj).getIp()) && mac.contains(((Host) obj).getMac());
     }
 }

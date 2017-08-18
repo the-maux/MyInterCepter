@@ -13,7 +13,7 @@ import java.util.List;
 import su.sniff.cepter.Controller.Network.IPTables;
 import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
-import su.sniff.cepter.Model.Host;
+import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.MainActivity;
 import su.sniff.cepter.View.ScanActivity;
@@ -124,11 +124,22 @@ public class                    IntercepterWrapper {
             public void run() {
                 try {
                     String read;
+                    boolean alreadyIn;
                     while ((read = bufferedReader.readLine()) != null) {//sanityzeCheck: at least 3 '.' for x.x.x.x : Ip
                         if ((read.length() - read.replace(".", "").length()) >= 3) {
+                            alreadyIn = false;
                             Host hostObj = new Host(read);//Format : IP\t(HOSTNAME) \n [MAC] [OS] : VENDOR \n
-                            if (!hosts.contains(hostObj))
-                                hosts.add(hostObj);
+                            if (!hosts.contains(hostObj)) {
+
+                                for (Host host : hosts) {
+                                    if (host.equals(hostObj)) {
+                                        alreadyIn = true;
+                                        Log.d("IntercepterWrapper", host.getIp() + " is already in");
+                                    }
+                                }
+                                if (!alreadyIn)
+                                    hosts.add(hostObj);
+                            }
                         }
                     }
                     Collections.sort(hosts, Host.comparator);

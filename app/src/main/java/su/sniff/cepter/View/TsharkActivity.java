@@ -22,7 +22,7 @@ import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.Controller.CepterControl.IntercepterReader;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.adapter.ProtocolAdapter;
+import su.sniff.cepter.View.Adapter.ProtocolAdapter;
 import su.sniff.cepter.globalVariable;
 
 public class                    TsharkActivity extends MyActivity {

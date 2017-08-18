@@ -5,7 +5,7 @@
     <color name="ftp">#e7e5ff</color>
     <color name="green">#00aa00</color>
     <color name="http">#8cff7f</color>
-    <color name="icmp">#c1c2ff</color>
+    <color name="icmp">#75b6f7</color>
     <color name="smb">#fff999</color>
     <color name="udp">#70dfff</color>
     <color name="primary">#607d8b</color>
@@ -16,4 +16,6 @@
     <color name="secondary_text">#757575</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
+    <color name="tcp">#cb0003</color>
+    <color name="dns">#0ecb00</color>
 </resources>

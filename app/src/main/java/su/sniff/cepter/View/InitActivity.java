@@ -16,7 +16,7 @@ import su.sniff.cepter.Controller.Network.NetUtils;
 import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.RootProcess;
 import su.sniff.cepter.Controller.System.MyActivity;
-import su.sniff.cepter.Model.NetworkInformation;
+import su.sniff.cepter.Model.Target.NetworkInformation;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
 

@@ -19,7 +19,7 @@ import su.sniff.cepter.BuildConfig;
 import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.adapter.DNSAdapter;
+import su.sniff.cepter.View.Adapter.DNSAdapter;
 import su.sniff.cepter.globalVariable;
 
 import java.io.BufferedReader;

@@ -1,23 +1,17 @@
-package su.sniff.cepter.View.adapter;
+package su.sniff.cepter.View.Adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-
-import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import su.sniff.cepter.Model.Host;
+import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.NmapActivity;
-import su.sniff.cepter.View.ScanActivity;
-import su.sniff.cepter.View.adapter.Holder.HostCheckBoxHolder;
-import su.sniff.cepter.View.adapter.Holder.HostScanHolder;
+import su.sniff.cepter.View.Adapter.Holder.HostCheckBoxHolder;
 
 /**
  * Created by root on 04/08/17.

@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,10 +52,12 @@ public class                NetUtils {
     /**
      **  Guessing list of host by reading ARP table and dump it in ./hostlist file
      **/
-    public static void      dumpListHostFromARPTableInFile(Context context) {
+    public static void      dumpListHostFromARPTableInFile(Context context, ArrayList<String> ipReachable) {
         Log.i(TAG, "Dump list host from Arp Table");
         try {
+            ArrayList<String> listOfIpsAlreadyIn = new ArrayList<>();
             FileOutputStream hostListFile = context.openFileOutput("hostlist", 0);
+
             BufferedReader bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"));
             String MAC_RE = "^%s\\s+0x1\\s+0x2\\s+([:0-9a-fA-F]+)\\s+\\*\\s+\\w+$";
             String read;
@@ -64,7 +67,27 @@ public class                NetUtils {
                 objArr[0] = ip.replace(".", "\\.");
                 Matcher matcher = Pattern.compile(String.format(MAC_RE, objArr)).matcher(read);
                 if (matcher.matches()) {
+                    listOfIpsAlreadyIn.add(ip);
+                    Log.d(TAG, "dumpHOSTFILE:" + ip + ":" + matcher.group(1));
                     hostListFile.write((ip + ":" + matcher.group(1) + "\n").getBytes());
+                }
+            }
+            boolean flag;
+            for (String reachable : ipReachable) {
+                flag = false;
+                Log.d(TAG, "asking for:" + reachable);
+                for (String s : listOfIpsAlreadyIn) {
+
+                    if ((reachable.substring(0, reachable.indexOf(":")) + "..").contains(s + "..")) {
+                        Log.d(TAG, s + "-Alreadyin>" + reachable.substring(0, reachable.indexOf(":")));
+                        flag = true;
+                    }
+                }
+                if (!flag) {
+                    Log.d(TAG, "dumpHOSTFILE:" + reachable + "& flag == " + flag);
+                    hostListFile.write((reachable + "\n").getBytes());
+                } else if (flag) {
+                    Log.d("ScanNetmask", "Detected but not added::" + reachable + "with flag at :"+flag);
                 }
             }
             bufferedReader.close();
