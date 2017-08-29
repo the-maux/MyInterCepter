@@ -85,6 +85,7 @@ public class                    WiresharkActivity extends MyActivity {
         setContentView(R.layout.activity_tcpdump);
         initXml();
         initSpinner();
+        initRV();
     }
 
     private void                initXml() {
@@ -121,12 +122,14 @@ public class                    WiresharkActivity extends MyActivity {
             }
         });
         monitorHost.setText(listHostSelected.size() + " target");
+        wiresharkMode.setOnClickListener(onWiresharkModeActivated());
+    }
+
+    private void                initRV() {
         adapterRecy = new WiresharkAdapter(this, listOfTrames);
         Output.setAdapter(adapterRecy);
         Output.setHasFixedSize(true);
-        LinearLayoutManager manager = new LinearLayoutManager(mInstance);
         Output.setLayoutManager(new LinearLayoutManager(mInstance));
-        wiresharkMode.setOnClickListener(onWiresharkModeActivated());
     }
 
     private View.OnClickListener onWiresharkModeActivated() {
@@ -178,7 +181,7 @@ public class                    WiresharkActivity extends MyActivity {
 
     }
 
-    public void                fabBehavior() {
+    public void                 fabBehavior() {
         if (!isRunning) {
             if (initParams()) {
                 progressBar.setVisibility(View.VISIBLE);

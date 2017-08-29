@@ -62,8 +62,7 @@ public class                    MenuActivity extends MyActivity {
                         choice = WiresharkActivity.class;
                         break;
                     case DoraDiagnostic:
-                        Snackbar.make(coordinatorLayout, "Fonctionnalité Dora non implémenté", Snackbar.LENGTH_LONG).show();
-                        choice = null;
+                        choice = DoraActivity.class;
                         break;
                     case Metasploit:
                         Snackbar.make(coordinatorLayout, "Fonctionnalité Metasploit non implémenté", Snackbar.LENGTH_LONG).show();
@@ -79,7 +78,6 @@ public class                    MenuActivity extends MyActivity {
                     intent.putExtra("Key_String", cmd);
                     intent.putExtra("Key_String_origin", "Oui tu venais de la");
                     startActivity(intent);
-                    finish();
                 }
             }
         };

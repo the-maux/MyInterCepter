@@ -85,5 +85,9 @@
             android:name="su.sniff.cepter.View.WiresharkActivity"
             android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="su.sniff.cepter.View.DoraActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>
 </manifest>

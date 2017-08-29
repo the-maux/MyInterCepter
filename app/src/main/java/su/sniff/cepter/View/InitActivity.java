@@ -42,23 +42,27 @@ public class                    InitActivity extends MyActivity {
 
     private void                initXml(View rootView) {
         monitor = (TextView) rootView.findViewById(R.id.monitor);
-        monitor.setText("Initialization");
+        monitor("Initialization");
     }
 
     @Override protected void    onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         buildPath();
-        try {
-
-            buildFiles();
-            initInfo();
-        } catch (IOException e) {
-            monitor.setText("Error IO");
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            monitor.setText("Error Interupted");
-            e.printStackTrace();
-        }
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        buildFiles();
+                        initInfo();
+                    } catch (IOException e) {
+                        monitor("Error IO");
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        monitor("Error Interupted");
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
     }
 
     private void                buildPath() {
@@ -66,7 +70,7 @@ public class                    InitActivity extends MyActivity {
         Singleton.BinaryPath = Singleton.FilesPath;//shouldn't be the same as FilesPath
         Log.d(TAG, "path:" + Singleton.FilesPath);
         globalVariable.PCAP_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
-        monitor.setText("Building Path");
+        monitor("Building Path");
     }
 
     private void                initInfo() throws FileNotFoundException {
@@ -121,7 +125,7 @@ public class                    InitActivity extends MyActivity {
     }
 
     private void                clearingTmpFiles() {
-        monitor.setText("Clearing previous Data");
+        monitor("Clearing previous Data");
         File force = new File(Singleton.FilesPath + "/force");
         if (force.exists()) {
             Log.d(TAG, "Deleting /force");
@@ -137,7 +141,7 @@ public class                    InitActivity extends MyActivity {
             Log.d(TAG, "Deleting /savepath");
             savepath.delete();
         }
-        monitor.setText("Clearing previous Data over");
+        monitor("Clearing previous Data over");
     }
 
     private InputStream         getCepterRessource() {
@@ -156,7 +160,7 @@ public class                    InitActivity extends MyActivity {
     private void                buildFile(String nameFile, int ressource) throws IOException, InterruptedException {
         File file = new File(Singleton.FilesPath + "/" + nameFile);
         file.delete();
-        monitor.setText("Building " + nameFile);
+        monitor("Building " + nameFile);
         int size;
         InputStream inputStream = getResources().openRawResource(ressource);
         int sizeOfInputStram = inputStream.available();
@@ -184,7 +188,7 @@ public class                    InitActivity extends MyActivity {
             Log.d(TAG, "cepter exist, nothing to do");
         } else {
             cepterFile.delete();
-            monitor.setText("Building cepter modules");
+            monitor("Building cepter modules");
             Log.d(TAG, "Building cepter binary");
             out = openFileOutput("cepter", 0);
             while (cepter.read(bufferDroidSheep) > -1) {
@@ -207,6 +211,7 @@ public class                    InitActivity extends MyActivity {
                 .exec(Singleton.BinaryPath + "/busybox unzip archive_nmap")
                 .exec("chmod 777 " + Singleton.BinaryPath + "/nmap/*")
                 .exec("mount -o rw,remount /system")
+                .exec("cp ./ping /system/bin/")
                 .exec("echo \"nameserver `getprop net.dns1`\" > /etc/resolv.conf")
                 .exec("rm -f " + Singleton.FilesPath + "/Raw/*;")
                 .exec("rm -f " + Singleton.FilesPath + "/dnss ;")

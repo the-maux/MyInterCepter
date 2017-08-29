@@ -90,7 +90,7 @@ public class                        ScanActivity extends MyActivity {
         filterLL = (LinearLayout) findViewById(R.id.filterLL);
         TxtMonitor = ((TextView) findViewById(R.id.Message));
         TxtMonitor.setText("");
-        if (Singleton.network.myIp == null) {
+        if (Singleton.network == null || Singleton.network.myIp == null) {
             Toast.makeText(getApplicationContext(), "You need to be connected to a network",
                     Toast.LENGTH_LONG).show();
             finish();
