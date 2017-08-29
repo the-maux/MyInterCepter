@@ -2,6 +2,7 @@ package su.sniff.cepter.View;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import com.github.clans.fab.FloatingActionButton;
@@ -90,15 +91,37 @@ public class                    DoraActivity extends MyActivity {
     }
 
     private void                launchDiagnose() {
-
+        fab.setImageResource((!running) ? android.R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
         for (DoraProcess doraProcess : listOfHostDored) {
             if (!running) {
                 doraProcess.exec();
+                adapterRefreshDeamon();
             } else {
-                doraProcess.reset();
+                RootProcess.kill("ping");
             }
         }
 
+    }
+
+    private int                 REFRESH_TIME = 1000;// == 1seconde
+    private void                adapterRefreshDeamon() {
+        if (running) {
+            final Handler handler = new Handler();
+            handler.postDelayed( new Runnable() {
+
+                @Override
+                public void run() {
+                    mInstance.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (running)
+                                Rv_Adapter.notifyDataSetChanged();
+                        }
+                    });
+                    handler.postDelayed( this, 60 * 1000 );
+                }
+            }, 60 * 1000 );
+        }
     }
 
 }

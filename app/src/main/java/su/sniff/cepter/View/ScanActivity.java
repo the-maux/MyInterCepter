@@ -56,14 +56,14 @@ public class                        ScanActivity extends MyActivity {
     private String                  TAG = "ScanActivity";
     private ScanActivity            mInstance = this;
     private List<Host>              mHosts;
-    private HostScanAdapter adapter;
+    private HostScanAdapter         adapter;
     private RecyclerView            hostsRecyclerView;
     private LinearLayout            filterLL;
-    private String                  origin_str, monitor;
-    private FloatingActionButton    progressBar;
+    private String                  monitor;
+    private FloatingActionButton    fab;
     private TextView                TxtMonitor;
     private int                     progress = 0;
-    private boolean                 hostLoaded = false, inLoading = false, doWeWaitForMyOwnScan = true;
+    private boolean                 hostLoaded = false, inLoading = false;
     private SwipeRefreshLayout      swipeRefreshLayout;
 
     public void                     onCreate(Bundle savedInstanceState) {
@@ -72,7 +72,6 @@ public class                        ScanActivity extends MyActivity {
             requestWindowFeature(3);
             setContentView(R.layout.activity_scan);
             getWindow().setFeatureDrawableResource(3, R.drawable.ico);
-            this.origin_str = monitor;
             init();
             if (globalVariable.DEBUG) {
                 Log.d(TAG, "debug enabled, starting Scan automaticaly");
@@ -85,7 +84,7 @@ public class                        ScanActivity extends MyActivity {
     }
 
     private void                    init() throws Exception {
-        progressBar = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         hostsRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         filterLL = (LinearLayout) findViewById(R.id.filterLL);
         TxtMonitor = ((TextView) findViewById(R.id.Message));
@@ -182,9 +181,9 @@ public class                        ScanActivity extends MyActivity {
     private void                    progressAnimation() {
         //TODO: RefreshOnSwipe
         Log.d(TAG, "progress Animation");
-        progressBar.setImageResource(android.R.drawable.ic_menu_search);
-        progressBar.setProgress(0, true);
-        progressBar.setMax(4500);
+        fab.setImageResource(android.R.drawable.ic_menu_search);
+        fab.setProgress(0, true);
+        fab.setMax(4500);
         new Thread(new Runnable() {
             public void run() {
                 progress = 0;
@@ -198,13 +197,13 @@ public class                        ScanActivity extends MyActivity {
                     final int prog2 = progress;
                     mInstance.runOnUiThread(new Runnable() {
                         public void run() {
-                            progressBar.setProgress(prog2, true);
+                            fab.setProgress(prog2, true);
                         }
                     });
                 }
                 mInstance.runOnUiThread(new Runnable() {
                     public void run() {
-                        progressBar.setImageResource(android.R.drawable.ic_media_play);
+                        fab.setImageResource(android.R.drawable.ic_media_play);
                         hostLoaded = true;
                         swipeRefreshLayout.setRefreshing(false);
                     }
