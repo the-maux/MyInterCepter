@@ -9,9 +9,11 @@ import com.github.clans.fab.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabItem;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -79,7 +81,7 @@ public class                    DoraActivity extends MyActivity {
     private void                initDoraList() {
         listOfHostDored = new ArrayList<>();
         for (Host host : Singleton.hostsList) {
-            listOfHostDored.add(new DoraProcess(new RootProcess("Dora:" + host.getIp()), host));
+            listOfHostDored.add(new DoraProcess(host));
         }
     }
 
@@ -87,20 +89,23 @@ public class                    DoraActivity extends MyActivity {
         Rv_Adapter = new DoraAdapter(mInstance, listOfHostDored);
         RV_dora.setAdapter(Rv_Adapter);
         RV_dora.setHasFixedSize(true);
-        RV_dora.setLayoutManager(new LinearLayoutManager(mInstance));
+        RV_dora.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
     }
 
     private void                launchDiagnose() {
-        fab.setImageResource((!running) ? android.R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
-        for (DoraProcess doraProcess : listOfHostDored) {
-            if (!running) {
+        if (!running) {
+            running = true;
+            for (DoraProcess doraProcess : listOfHostDored) {
                 doraProcess.exec();
-                adapterRefreshDeamon();
-            } else {
-                RootProcess.kill("ping");
             }
+            adapterRefreshDeamon();
+            Log.d(TAG, "diagnose dora started");
+        } else {
+            running = false;
+            Log.d(TAG, "diagnose dora stopped");
+            RootProcess.kill("ping");
         }
-
+        fab.setImageResource((!running) ? android.R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
     }
 
     private int                 REFRESH_TIME = 1000;// == 1seconde
@@ -114,14 +119,21 @@ public class                    DoraActivity extends MyActivity {
                     mInstance.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (running)
+                            if (running) {
                                 Rv_Adapter.notifyDataSetChanged();
+                            }
                         }
                     });
-                    handler.postDelayed( this, 60 * 1000 );
+                    handler.postDelayed( this, REFRESH_TIME );
                 }
-            }, 60 * 1000 );
+            }, REFRESH_TIME );
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        running = false;
+        RootProcess.kill("ping");
+        super.onBackPressed();
+    }
 }

@@ -39,7 +39,7 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
         final DoraProcess host = hosts.get(position);
         holder.diagnose.setText(new String(new char[(host.sent - host.rcv)]).replace("\0", "*"));
         holder.IP.setText(host.host.getIp());
-        holder.uptime.setText("Uptime:" + host.getUptime());
+        holder.uptime.setText("Uptime:    " + host.getUptime());
         holder.stat.setText("sent: " + host.sent + " / rcv: " + host.rcv);
         int pourc = host.getPourcentage();
         if (pourc == 0) {
@@ -58,4 +58,5 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
     public int                  getItemCount() {
         return hosts.size();
     }
+
 }

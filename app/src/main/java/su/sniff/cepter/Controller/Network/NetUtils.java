@@ -68,7 +68,7 @@ public class                NetUtils {
                 Matcher matcher = Pattern.compile(String.format(MAC_RE, objArr)).matcher(read);
                 if (matcher.matches()) {
                     listOfIpsAlreadyIn.add(ip);
-                    Log.d(TAG, "dumpHOSTFILE:" + ip + ":" + matcher.group(1));
+                    //Log.d(TAG, "dumpHOSTFILE:" + ip + ":" + matcher.group(1));
                     hostListFile.write((ip + ":" + matcher.group(1) + "\n").getBytes());
                 }
             }

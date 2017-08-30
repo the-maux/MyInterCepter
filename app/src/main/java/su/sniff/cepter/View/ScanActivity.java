@@ -213,8 +213,6 @@ public class                        ScanActivity extends MyActivity {
     }
 
     public void                     onReachableScanOver(ArrayList<String> ipReachable) {
-        Log.e(TAG, "tu dois toujours faire le scan par cepter des reachable que ta trouvé en ping ;)");
-        //Apparament non
         NetUtils.dumpListHostFromARPTableInFile(mInstance, ipReachable);
         progress = 1500;
         IntercepterWrapper.fillHostListWithCepterScan(mInstance);
@@ -269,6 +267,12 @@ public class                        ScanActivity extends MyActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if (editable.toString().contains("cheat")) {
+                    for (Host host : mHosts) {
+                        host.setSelected(true);
+                    }
+                    adapter.notifyDataSetChanged();
+                }
                 adapter.filterByString(editable.toString());
             }
         });
@@ -315,7 +319,6 @@ public class                        ScanActivity extends MyActivity {
         i2.putExtra("Key_String", cmd);
         Singleton.hostsList = selectedHost;
         startActivity(i2);
-
     }
 
     public void                     OnCage(View v2) throws IOException {
