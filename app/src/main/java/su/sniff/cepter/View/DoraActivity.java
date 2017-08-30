@@ -131,7 +131,7 @@ public class                    DoraActivity extends MyActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    public void                 onBackPressed() {
         running = false;
         RootProcess.kill("ping");
         super.onBackPressed();

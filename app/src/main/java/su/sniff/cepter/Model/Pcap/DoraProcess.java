@@ -82,8 +82,9 @@ public class            DoraProcess {
     public int          getPourcentage() {
         //Si not started, return 0
         Log.d(TAG, "Dora::POURCENTAGE::" + host.getIp() + "::Terminated->Dump::rcv:" + rcv + "&sent:" + sent);
-        if (rcv > MARGE_ERREUR+1 && sent > MARGE_ERREUR+1) {
-            Log.d(TAG, "%%::" + (rcv / sent) * 100);
+        if (rcv < MARGE_ERREUR+1 && sent < MARGE_ERREUR+1) {
+            if (rcv > 0 && sent > 0)
+                Log.d(TAG, "%%::" + (rcv / sent) * 100);
             return 0;
         } else {
             float a = (((float) (rcv - MARGE_ERREUR) / ((float)sent - MARGE_ERREUR) * 100));

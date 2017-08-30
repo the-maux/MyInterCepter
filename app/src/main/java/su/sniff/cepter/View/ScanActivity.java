@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -253,27 +254,22 @@ public class                        ScanActivity extends MyActivity {
             filterLL.addView(OsView, WRAP_CONTENT, 50);
         }
         findViewById(R.id.ScrollViewFilter).setVisibility(View.VISIBLE);
-        ((EditText)findViewById(R.id.filterText)).addTextChangedListener(new TextWatcher() {
-
+        ((SearchView)findViewById(R.id.filterText)).setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (editable.toString().contains("cheat")) {
+            public boolean onQueryTextSubmit(String query) {
+                if (query.contains("cheat")) {
                     for (Host host : mHosts) {
                         host.setSelected(true);
                     }
                     adapter.notifyDataSetChanged();
                 }
-                adapter.filterByString(editable.toString());
+                adapter.filterByString(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
             }
         });
     }
