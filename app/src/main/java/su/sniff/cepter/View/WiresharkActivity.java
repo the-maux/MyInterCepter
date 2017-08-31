@@ -1,6 +1,6 @@
 package su.sniff.cepter.View;
 
-import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -38,8 +38,9 @@ import su.sniff.cepter.Model.Pcap.Trame;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
+import su.sniff.cepter.View.Adapter.TcpdumpHostCheckerADapter;
 import su.sniff.cepter.View.Adapter.WiresharkAdapter;
-import su.sniff.cepter.View.Dialog.HostChoiceDialog;
+import su.sniff.cepter.View.Dialog.RV_dialog;
 
 /**
  * TODO:    + Add filter
@@ -139,8 +140,17 @@ public class                    WiresharkActivity extends MyActivity {
     }
 
     private void                onClickChoiceTarget() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-        new HostChoiceDialog().ShowDialog(mInstance, alert, listHostSelected, monitorHost);
+        RecyclerView.Adapter adapter = new TcpdumpHostCheckerADapter(this, Singleton.getInstance().hostsList, listHostSelected);
+        new RV_dialog(this)
+                .setAdapter(adapter)
+                .setTitle("Choix des cibles")
+                .onPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        monitorHost.setText(listHostSelected.size() + " target");
+                    }
+                })
+                .show();
     }
 
     private void                initSpinner() {
@@ -304,10 +314,6 @@ public class                    WiresharkActivity extends MyActivity {
         }
     }
 
-    /**
-     * Send to trameToHtml with protocol choice
-     * @param line
-     */
     private void                stdOUT(final Trame trame) {
         mInstance.runOnUiThread(new Runnable() {
             @Override
