@@ -34,7 +34,7 @@ public class                    RootProcess {
 
     public RootProcess          exec(String cmd) {
         try {
-            Log.d(TAG, LogID + "::" + cmd + " 2>&1 ");
+            Log.d(TAG, LogID + "::" + cmd);
             os.writeBytes(cmd + " 2>&1 \n");
             os.flush();
         } catch (IOException e) {

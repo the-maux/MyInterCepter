@@ -20,12 +20,14 @@ public class                NetworkInformation {
 
     public NetworkInformation(DhcpInfo dhcpInfo, String mac) {
 
-        this.myIp = NetUtils.intADDRtoStringHostname(dhcpInfo.ipAddress);
-        this.gateway = NetUtils.intADDRtoStringHostname(dhcpInfo.gateway);
-        this.netmask = NetUtils.intADDRtoStringHostname(dhcpInfo.netmask);
-        this.dns1 = NetUtils.intADDRtoStringHostname(dhcpInfo.dns1);
-        this.dns2 = NetUtils.intADDRtoStringHostname(dhcpInfo.dns2);
-        this.dhcp = NetUtils.intADDRtoStringHostname(dhcpInfo.serverAddress);
+        myIp = NetUtils.intADDRtoStringHostname(dhcpInfo.ipAddress);
+        gateway = NetUtils.intADDRtoStringHostname(dhcpInfo.gateway);
+        netmask = NetUtils.intADDRtoStringHostname(dhcpInfo.netmask);
+        if (netmask.contains("0.0.0.0"))
+            netmask = "255.255.255.0";
+        dns1 = NetUtils.intADDRtoStringHostname(dhcpInfo.dns1);
+        dns2 = NetUtils.intADDRtoStringHostname(dhcpInfo.dns2);
+        dhcp = NetUtils.intADDRtoStringHostname(dhcpInfo.serverAddress);
         this.mac = mac;
         Log.d(TAG, "IP:" + myIp + "&GW:" + gateway + "&netmask=" + netmask + "&mac="+mac);
     }
