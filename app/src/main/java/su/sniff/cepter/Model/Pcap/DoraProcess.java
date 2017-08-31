@@ -2,7 +2,6 @@ package su.sniff.cepter.Model.Pcap;
 
 import android.util.Log;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
@@ -10,7 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import su.sniff.cepter.Controller.System.RootProcess;
+import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
 import su.sniff.cepter.Model.Target.Host;
 
 public class            DoraProcess {
@@ -102,5 +101,12 @@ public class            DoraProcess {
             return sdf.format(tmp);
         } else
             return "0:00:00";
+    }
+
+
+    public int          getVisu() {
+        if (sent == 0 || rcv == 0)
+            return 0;
+        return sent - rcv;
     }
 }

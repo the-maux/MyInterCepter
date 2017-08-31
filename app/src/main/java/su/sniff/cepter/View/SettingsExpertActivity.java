@@ -57,7 +57,7 @@ public class SettingsExpertActivity extends MyActivity {
                     }).show();
             return;
         }
-        File ck = new File(Singleton.FilesPath + "/force");
+        File ck = new File(Singleton.getInstance().FilesPath + "/force");
         if (ck.exists()) {
             ck.delete();
         }
@@ -77,7 +77,7 @@ public class SettingsExpertActivity extends MyActivity {
         } else {
             globalVariable.CookieKillerOption = 0;
             Log.d(TAG, "KillerSwitchOption" + globalVariable.CookieKillerOption);
-            File ck = new File(Singleton.FilesPath + "/ck");
+            File ck = new File(Singleton.getInstance().FilesPath + "/ck");
             if (ck.exists()) {
                 ck.delete();
             }

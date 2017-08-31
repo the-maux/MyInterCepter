@@ -1,16 +1,13 @@
 package su.sniff.cepter.View;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import com.github.clans.fab.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+
 import android.support.design.widget.TabItem;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -21,13 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import su.sniff.cepter.Controller.System.MyActivity;
-import su.sniff.cepter.Controller.System.RootProcess;
+import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
 import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Model.Pcap.DoraProcess;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.DoraAdapter;
-import su.sniff.cepter.View.Adapter.WiresharkAdapter;
 
 public class                    DoraActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
@@ -80,7 +76,7 @@ public class                    DoraActivity extends MyActivity {
 
     private void                initDoraList() {
         listOfHostDored = new ArrayList<>();
-        for (Host host : Singleton.hostsList) {
+        for (Host host : Singleton.getInstance().hostsList) {
             listOfHostDored.add(new DoraProcess(host));
         }
     }

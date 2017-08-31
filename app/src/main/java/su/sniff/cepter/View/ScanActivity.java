@@ -9,14 +9,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +32,7 @@ import su.sniff.cepter.Controller.CepterControl.IntercepterWrapper;
 import su.sniff.cepter.Controller.Network.IPv4CIDR;
 import su.sniff.cepter.Controller.Network.NetUtils;
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.RootProcess;
+import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Controller.Network.ScanNetmask;
 import su.sniff.cepter.Controller.System.MyActivity;
@@ -90,16 +87,19 @@ public class                        ScanActivity extends MyActivity {
         filterLL = (LinearLayout) findViewById(R.id.filterLL);
         TxtMonitor = ((TextView) findViewById(R.id.Message));
         TxtMonitor.setText("");
-        if (Singleton.network == null || Singleton.network.myIp == null) {
+        if (Singleton.getInstance().network == null || Singleton.getInstance().network.myIp == null) {
             Toast.makeText(getApplicationContext(), "You need to be connected to a network",
                     Toast.LENGTH_LONG).show();
             finish();
             return;
         }
-        IntercepterWrapper.initCepter(NetUtils.getMac(Singleton.network.myIp, Singleton.network.gateway));
+        IntercepterWrapper.initCepter(NetUtils.getMac(Singleton.getInstance().network.myIp, Singleton.getInstance().network.gateway));
         initMonitor();
         initSwipeRefresh();
+        initSearchView();
     }
+
+
 
     /**
      * Monitor is the basic network Information
@@ -109,7 +109,7 @@ public class                        ScanActivity extends MyActivity {
         WifiInfo wifiInfo = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
         monitor = wifiInfo.getSSID().replace("\"", "") + ':' + getIntent().getExtras().getString("Key_String");
         if (!monitor.contains("WiFi")) {
-            monitor += "\n" + "GW: " + Singleton.network.gateway + "/" + Singleton.network.netmask;
+            monitor += "\n" + "GW: " + Singleton.getInstance().network.gateway + "/" + Singleton.getInstance().network.netmask;
         } else {
             monitor += "Not Connected";
         }
@@ -138,6 +138,36 @@ public class                        ScanActivity extends MyActivity {
         });
     }
 
+    private void                    initSearchView() {
+        SearchView searchView = (SearchView)findViewById(R.id.filterText);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (query.contains("cheat")) {
+                    for (Host host : mHosts) {
+                        host.setSelected(true);
+                    }
+                    adapter.notifyDataSetChanged();
+                } else {
+                    adapter.filterByString(query);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                adapter.filterByString("");
+                return false;
+            }
+        });
+    }
+
     private void                    initHostsRecyclerView() {
         mHosts = new ArrayList<>();
         adapter = new HostScanAdapter(this);
@@ -159,7 +189,7 @@ public class                        ScanActivity extends MyActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    new ScanNetmask(new IPv4CIDR(Singleton.network.myIp, Singleton.network.netmask), mInstance);
+                    new ScanNetmask(new IPv4CIDR(Singleton.getInstance().network.myIp, Singleton.getInstance().network.netmask), mInstance);
                     progress = 1000;
                 }
             }).start();
@@ -225,7 +255,7 @@ public class                        ScanActivity extends MyActivity {
             @Override
             public void run() {
                 mHosts = hosts;
-                monitor = "GW: " + Singleton.network.gateway + ": " + mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": "") + " found";// oui je fais des ternaires pour faire le pluriel
+                monitor = "GW: " + Singleton.getInstance().     network.gateway + ": " + mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": "") + " found";// oui je fais des ternaires pour faire le pluriel
                 TxtMonitor.setText(monitor);
                 adapter.updateHostList(mHosts);
                 buildFilterLayout();
@@ -253,25 +283,7 @@ public class                        ScanActivity extends MyActivity {
             });
             filterLL.addView(OsView, WRAP_CONTENT, 50);
         }
-        findViewById(R.id.ScrollViewFilter).setVisibility(View.VISIBLE);
-        ((SearchView)findViewById(R.id.filterText)).setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                if (query.contains("cheat")) {
-                    for (Host host : mHosts) {
-                        host.setSelected(true);
-                    }
-                    adapter.notifyDataSetChanged();
-                }
-                adapter.filterByString(query);
-                return false;
-            }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
     }
 
     private View.OnClickListener    filtereffect(final CheckBox cb, final String os, final ArrayList<String> listOs) {
@@ -309,11 +321,11 @@ public class                        ScanActivity extends MyActivity {
             Toast.makeText(getApplicationContext(), "No target selected!", Toast.LENGTH_SHORT).show();
             return;
         }
-        String cmd = "-gw " + Singleton.network.gateway;
+        String cmd = "-gw " + Singleton.getInstance().network.gateway;
         Intent i2 = new Intent(mInstance, MenuActivity.class);
         Log.i(TAG, cmd);
         i2.putExtra("Key_String", cmd);
-        Singleton.hostsList = selectedHost;
+        Singleton.getInstance().hostsList = selectedHost;
         startActivity(i2);
     }
 
@@ -362,7 +374,7 @@ public class                        ScanActivity extends MyActivity {
                             "iptables -P OUTPUT ACCEPT");
                 }
                 process.closeProcess();
-                File ck = new File(Singleton.FilesPath + "/inj");
+                File ck = new File(Singleton.getInstance().FilesPath + "/inj");
                 if (ck.exists()) {
                     ck.delete();
                 }

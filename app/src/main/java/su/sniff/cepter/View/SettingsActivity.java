@@ -173,8 +173,8 @@ public class SettingsActivity extends MyActivity {
     public void OnClearPcap(View v) throws IOException, InterruptedException {
         Process p = Runtime.getRuntime().exec("su");
         DataOutputStream os = new DataOutputStream(p.getOutputStream());
-        Log.d(TAG, "LD_LIBRARY_PATH=" + Singleton.FilesPath + " " + Singleton.FilesPath + "/busybox rm " + Singleton.FilesPath + "/*.pcap");
-        os.writeBytes("LD_LIBRARY_PATH=" + Singleton.FilesPath + " " + Singleton.FilesPath + "/busybox rm " + Singleton.FilesPath + "/*.pcap\n");
+        Log.d(TAG, "LD_LIBRARY_PATH=" + Singleton.getInstance().FilesPath + " " + Singleton.getInstance().FilesPath + "/busybox rm " + Singleton.getInstance().FilesPath + "/*.pcap");
+        os.writeBytes("LD_LIBRARY_PATH=" + Singleton.getInstance().FilesPath + " " + Singleton.getInstance().FilesPath + "/busybox rm " + Singleton.getInstance().FilesPath + "/*.pcap\n");
         os.flush();
         os.close();
         p.waitFor();

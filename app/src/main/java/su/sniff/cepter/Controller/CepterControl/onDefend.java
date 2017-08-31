@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.RootProcess;
+import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
 import su.sniff.cepter.globalVariable;
 
 /**
@@ -36,11 +36,11 @@ public class                onDefend {
             while (rcx < nbrHostToDefend) {
                 int rax = 0;
                 while (rax < nbrHostToDefend) {
-                    if (maclist[rax].equals(maclist[rcx]) && rax != rcx && Singleton.network.gateway.equals(iplist[rcx])) {
+                    if (maclist[rax].equals(maclist[rcx]) && rax != rcx && Singleton.getInstance().network.gateway.equals(iplist[rcx])) {
                         monitorIntercepter.append("Warning! Gateway poisoned by " + iplist[rax] + " - " + maclist[rax] + "\n");
                         found = true;
-                        RootProcess process = new RootProcess("onDefend", Singleton.FilesPath);
-                        process.exec(Singleton.FilesPath + "/cepter " + globalVariable.adapt_num + " -r " + Singleton.network.gateway);
+                        RootProcess process = new RootProcess("onDefend", Singleton.getInstance().FilesPath);
+                        process.exec(Singleton.getInstance().FilesPath + "/cepter " + globalVariable.adapt_num + " -r " + Singleton.getInstance().network.gateway);
                         process.exec("exit");
                         BufferedReader bufferedReader = process.getReader();
                         String read = bufferedReader.readLine();
@@ -50,7 +50,7 @@ public class                onDefend {
                         mac = mac.replaceAll("-", ":");
                         monitorIntercepter.append("Restoring original mac - " + mac + "\n");
                         process = new RootProcess("BUSYBOX", "/system/bin");
-                        process.exec("LD_LIBRARY_PATH=" + Singleton.FilesPath + " " + Singleton.FilesPath + "/busybox arp -s " + Singleton.network.gateway + " " + mac);
+                        process.exec("LD_LIBRARY_PATH=" + Singleton.getInstance().FilesPath + " " + Singleton.getInstance().FilesPath + "/busybox arp -s " + Singleton.getInstance().network.gateway + " " + mac);
                         process.closeProcess();
                         break;
                     }

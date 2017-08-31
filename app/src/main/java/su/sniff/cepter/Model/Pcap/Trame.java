@@ -10,7 +10,7 @@ import su.sniff.cepter.R;
  * Created by root on 02/08/17.
  */
 
-public class                Trame {
+public class               Trame {
     public String          TAG = "Trame";
     public int             offsett, verbose;
     public String          time;
@@ -20,9 +20,15 @@ public class                Trame {
     public byte[]          bufferByte = null;
     public String          info;
     public int             backgroundColor;
-    
+    public boolean         initialised = false;
+
     public                  Trame(String dump, int offsett, int verbose_lvl) {
         this.verbose = verbose_lvl;//0: Nothing; 1 => -v ; 2 -vv ; 3 -vvv ; 4 -X
+
+        if (skipUnnecessary(dump)) {
+            Log.e(TAG, "Skipped:" + dump);
+            return;
+        }
         if (dump.contains("A?")) {
             dispatch(dump, Protocol.DNS);
         } else if (dump.toLowerCase().contains("arp")) {
@@ -41,54 +47,70 @@ public class                Trame {
             dispatch(dump, Protocol.IP);
         }
         initColorBackground();
+        initialised = true;
+    }
+
+    private boolean        skipUnnecessary(String line) {
+        if (line.contains("for full protocol decode") ||
+            line.contains("listening on ") ||
+                line.contains("packets captured") ||
+                line.contains("packets received by filter") ||
+                line.contains("packets dropped by kernel"))
+            return true;
+        return false;
     }
 
     private  void           dispatch(String line, Protocol protocol) {
-        switch (protocol) {
-            case ARP:
-                Log.d(TAG, "ARP trame: " + line);
-                ArpParsing(line);
-                break;
-            case HTTP:
-                Log.d(TAG, "HTTP trame: "  + line);
-                HttpParsing(line);
-                break;
-            case HTTPS:
-                Log.d(TAG, "HTTPS trame " + line);
-                HttpsParsing(line);
-                break;
-            case TCP:
-                Log.d(TAG, "TCP trame " + line);
-                TcpParsing(line);
-                break;
-            case UDP:
-                Log.d(TAG, "UDP trame " + line);
-                UdpParsing(line);
-                break;
-            case DNS:
-                Log.d(TAG, "DNS trame " + line);
-                DnsParsing(line);
-                break;
-            case SMB:
-                Log.d(TAG, "SMB trame " + line);
-                SmbParsing(line);
-                break;
-            case NBNS:
-                Log.d(TAG, "NBNS trame " + line);
-                NBNSParsing(line);
-                break;
-            case ICMP:
-                Log.d(TAG, "NBNS trame " + line);
-                ICMPParsing(line);
-                break;
-            case IP:
-                Log.d(TAG, "IP trame " + line);
-                IParsing(line);
-                break;
-            default:
-                Log.d(TAG, "Unknow trame " + line);
-                IParsing(line);
-                break;
+        try {
+            switch (protocol) {
+                case ARP:
+                    Log.d(TAG, "ARP trame: " + line);
+                    ArpParsing(line);
+                    break;
+                case HTTP:
+                    Log.d(TAG, "HTTP trame: " + line);
+                    HttpParsing(line);
+                    break;
+                case HTTPS:
+                    Log.d(TAG, "HTTPS trame " + line);
+                    HttpsParsing(line);
+                    break;
+                case TCP:
+                    Log.d(TAG, "TCP trame " + line);
+                    TcpParsing(line);
+                    break;
+                case UDP:
+                    Log.d(TAG, "UDP trame " + line);
+                    UdpParsing(line);
+                    break;
+                case DNS:
+                    Log.d(TAG, "DNS trame " + line);
+                    DnsParsing(line);
+                    break;
+                case SMB:
+                    Log.d(TAG, "SMB trame " + line);
+                    SmbParsing(line);
+                    break;
+                case NBNS:
+                    Log.d(TAG, "NBNS trame " + line);
+                    NBNSParsing(line);
+                    break;
+                case ICMP:
+                    Log.d(TAG, "NBNS trame " + line);
+                    ICMPParsing(line);
+                    break;
+                case IP:
+                    Log.d(TAG, "IP trame " + line);
+                    IParsing(line);
+                    break;
+                default:
+                    Log.d(TAG, "Unknow trame " + line);
+                    IParsing(line);
+                    break;
+            }
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.e(TAG, "Error in trame : " + line);
+            e.getStackTrace();
         }
     }
 

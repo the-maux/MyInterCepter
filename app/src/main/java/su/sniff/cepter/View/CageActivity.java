@@ -6,7 +6,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.RootProcess;
+import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
@@ -45,7 +45,7 @@ public class                CageActivity extends MyActivity {
     public void             OnRun(View v) {
         if (run == 0) {
             run = 1;
-            File fDroidSheep = new File(Singleton.FilesPath + "/exitc.id");
+            File fDroidSheep = new File(Singleton.getInstance().FilesPath + "/exitc.id");
             if (fDroidSheep.exists()) {
                 fDroidSheep.delete();
             }
@@ -62,10 +62,10 @@ public class                CageActivity extends MyActivity {
         final TextView tv = (TextView) findViewById(R.id.monitor);
         new Thread(new Runnable() {
             public void run() {
-                RootProcess process = new RootProcess("onCage", Singleton.FilesPath);
+                RootProcess process = new RootProcess("onCage", Singleton.getInstance().FilesPath);
                 BufferedReader reader = new BufferedReader(process.getInputStreamReader());
                 try {
-                    process.exec(Singleton.FilesPath + "/cepter " + Integer.toString(globalVariable.adapt_num) + " cage " + Singleton.network.gateway)
+                    process.exec(Singleton.getInstance().FilesPath + "/cepter " + Integer.toString(globalVariable.adapt_num) + " cage " + Singleton.getInstance().network.gateway)
                             .exec("exit");
                     while (true) {
                         final String read = reader.readLine();

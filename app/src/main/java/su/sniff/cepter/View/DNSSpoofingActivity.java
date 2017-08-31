@@ -84,7 +84,7 @@ public class                            DNSSpoofingActivity extends MyActivity {
 
     private void                        fillListDNSSpoofedFromFile() {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(new File(Singleton.FilesPath + "/dnss")));
+            BufferedReader reader = new BufferedReader(new FileReader(new File(Singleton.getInstance().FilesPath + "/dnss")));
             while (true) {
                 String read = reader.readLine();
                 if (read == null) {

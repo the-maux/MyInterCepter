@@ -73,7 +73,7 @@ public class                    MenuActivity extends MyActivity {
                         break;
                 }
                 if (choice != null) {
-                    String cmd = "-gw " + Singleton.network.gateway;
+                    String cmd = "-gw " + Singleton.getInstance().network.gateway;
                     Intent intent = new Intent(mInstance, choice);
                     intent.putExtra("Key_String", cmd);
                     intent.putExtra("Key_String_origin", "Oui tu venais de la");

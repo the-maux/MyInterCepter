@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.RootProcess;
+import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
@@ -49,7 +49,7 @@ public class                    NmapActivity extends MyActivity {
         initXml();
         initSpinner();
         initRecyHost();
-        host_et.setText(Singleton.hostsList.get(0).getIp());
+        host_et.setText(Singleton.getInstance().hostsList.get(0).getIp());
         params_et.setText(params.get(cmd.get(0)));
     }
 
@@ -97,7 +97,7 @@ public class                    NmapActivity extends MyActivity {
     }
 
     private void                initRecyHost() {
-        NmapHostCheckerAdapter adapter = new NmapHostCheckerAdapter(this, Singleton.hostsList);
+        NmapHostCheckerAdapter adapter = new NmapHostCheckerAdapter(this, Singleton.getInstance().hostsList);
         RV_host.setAdapter(adapter);
         RV_host.setHasFixedSize(true);
         RV_host.setLayoutManager(new LinearLayoutManager(mInstance));
@@ -119,13 +119,13 @@ public class                    NmapActivity extends MyActivity {
             @Override
             public void onClick(View v) {
                 Output.setText("Wait...");
-                final String cmd = Singleton.FilesPath + "/nmap/nmap " + host_et.getText() + " " + params_et.getText() + " ";
+                final String cmd = Singleton.getInstance().FilesPath + "/nmap/nmap " + host_et.getText() + " " + params_et.getText() + " ";
                 Monitor.setText(cmd);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            BufferedReader reader = new BufferedReader(new RootProcess("Nmap", Singleton.FilesPath)//Exec and > in BufferedReader
+                            BufferedReader reader = new BufferedReader(new RootProcess("Nmap", Singleton.getInstance().FilesPath)//Exec and > in BufferedReader
                                     .exec(cmd).exec("exit").getInputStreamReader());
                             String dumpOutput = "", tmp;
                             while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {

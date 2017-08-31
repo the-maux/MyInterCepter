@@ -3,7 +3,7 @@ package su.sniff.cepter.Controller.System;
 import java.util.ArrayList;
 import java.util.List;
 
-import su.sniff.cepter.Controller.Network.ArpSpoof;
+import su.sniff.cepter.Controller.System.Wrapper.ArpSpoof;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Model.Target.NetworkInformation;
 
@@ -12,12 +12,19 @@ import su.sniff.cepter.Model.Target.NetworkInformation;
  */
 
 public class                            Singleton {
-    public static String                BinaryPath = Singleton.FilesPath;
-    public static String                FilesPath;
-    public static ArrayList<Host>       hostsList;
-    public static List<ArpSpoof>        ArpSpoofProcessStack = new ArrayList<>();
-    public static NetworkInformation    network = null;
-    public static boolean               DebugMode = true, UltraDebugMode = false;
+    private static Singleton            mInstance = null;
 
+    private                             Singleton() {}
+    public static synchronized Singleton getInstance() {
+        if(mInstance == null)
+            mInstance = new Singleton();
+        return mInstance;
+    }
 
+    public  String                      BinaryPath = null;
+    public  String                      FilesPath = null;
+    public  ArrayList<Host>             hostsList = null;
+    public  List<ArpSpoof>              ArpSpoofProcessStack = new ArrayList<>();
+    public  NetworkInformation          network = null;
+    public  boolean                     DebugMode = true, UltraDebugMode = false;
 }

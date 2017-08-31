@@ -1,8 +1,10 @@
-package su.sniff.cepter.Controller.System;
+package su.sniff.cepter.Controller.System.Wrapper;
 
 import android.util.Log;
 
 import java.io.*;
+
+import su.sniff.cepter.Controller.System.Singleton;
 
 public class                    RootProcess {
     private String              TAG = "RootProcess";
@@ -81,7 +83,7 @@ public class                    RootProcess {
 
     public static void          kill(String binary) {
         new RootProcess("KILLALL")
-                .exec(Singleton.BinaryPath + "busybox killall " + binary)
+                .exec(Singleton.getInstance().BinaryPath + "busybox killall " + binary)
                 .closeProcess();
     }
 }

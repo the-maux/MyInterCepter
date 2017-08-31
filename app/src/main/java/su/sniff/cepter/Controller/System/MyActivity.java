@@ -2,7 +2,7 @@ package su.sniff.cepter.Controller.System;
 
 import android.app.Activity;
 
-import su.sniff.cepter.Controller.Network.ArpSpoof;
+import su.sniff.cepter.Controller.System.Wrapper.ArpSpoof;
 
 
 public class                    MyActivity extends Activity {

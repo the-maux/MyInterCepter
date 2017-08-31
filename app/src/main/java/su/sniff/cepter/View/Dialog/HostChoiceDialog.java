@@ -32,7 +32,7 @@ public class                    HostChoiceDialog {
         View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_hostchoice, null);
         dialog.setView(dialogView);
         RV_host = (RecyclerView) dialogView.findViewById(R.id.RV_host);
-        TcpdumpHostCheckerADapter adapter = new TcpdumpHostCheckerADapter(activity, Singleton.hostsList, listHostSelected);
+        TcpdumpHostCheckerADapter adapter = new TcpdumpHostCheckerADapter(activity, Singleton.getInstance().hostsList, listHostSelected);
         RV_host.setAdapter(adapter);
         RV_host.setHasFixedSize(true);
         RV_host.setLayoutManager(new LinearLayoutManager(activity));

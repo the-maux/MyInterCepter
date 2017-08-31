@@ -37,7 +37,7 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
     @Override
     public void                 onBindViewHolder(DoraHolder holder, int position) {
         final DoraProcess host = hosts.get(position);
-        holder.diagnose.setText(new String(new char[(host.sent - host.rcv)]).replace("\0", "*"));
+        holder.diagnose.setText(new String(new char[host.getVisu()]).replace("\0", "*"));
         holder.IP.setText(host.host.getIp());
         holder.uptime.setText("Uptime:    " + host.getUptime());
         holder.stat.setText("sent: " + host.sent + " / rcv: " + host.rcv);

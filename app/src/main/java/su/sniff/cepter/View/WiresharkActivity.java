@@ -10,8 +10,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,19 +29,17 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import su.sniff.cepter.Controller.Network.ArpSpoof;
+import su.sniff.cepter.Controller.System.Wrapper.ArpSpoof;
 import su.sniff.cepter.Controller.Network.IPTables;
 import su.sniff.cepter.Controller.Network.MyDNSMITM;
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.RootProcess;
+import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
 import su.sniff.cepter.Model.Pcap.Trame;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.Adapter.HostScanAdapter;
 import su.sniff.cepter.View.Adapter.WiresharkAdapter;
 import su.sniff.cepter.View.Dialog.HostChoiceDialog;
-import su.sniff.cepter.View.TextView.TrameToHtml;
 
 /**
  * TODO:    + Add filter
@@ -227,8 +223,8 @@ public class                    WiresharkActivity extends MyActivity {
      * Dispatch the DNS request on network
      */
     private void                onTcpDumpStart() {
-        final String cmd = Singleton.FilesPath + "/tcpdump " + actualParam + hostFilter;
-        Monitor.setText(cmd.replace(Singleton.FilesPath, ""));
+        final String cmd = Singleton.getInstance().FilesPath + "/tcpdump " + actualParam + hostFilter;
+        Monitor.setText(cmd.replace(Singleton.getInstance().FilesPath, ""));
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -316,11 +312,13 @@ public class                    WiresharkActivity extends MyActivity {
         mInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                listOfTrames.add(0, trame);
-                trame.offsett = listOfTrames.size();
-                if (progressBar.getVisibility() == View.VISIBLE)
-                    progressBar.setVisibility(View.GONE);
-                adapterRecy.notifyDataSetChanged();
+                if (trame.initialised) {
+                    listOfTrames.add(0, trame);
+                    trame.offsett = listOfTrames.size();
+                    if (progressBar.getVisibility() == View.VISIBLE)
+                        progressBar.setVisibility(View.GONE);
+                    adapterRecy.notifyDataSetChanged();
+                }
             }
         });
     }
