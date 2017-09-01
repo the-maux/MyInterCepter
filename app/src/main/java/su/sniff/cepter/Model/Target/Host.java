@@ -130,7 +130,10 @@ public class                Host {
 
     public static void      setOsIcon(Context context, String InfoDevice, CircleImageView osImageView) {
         int                 ImageRessource;
-        if (InfoDevice.contains("Windows")) {
+
+        if (InfoDevice == null) {
+            ImageRessource = R.drawable.monitor;
+        } else if (InfoDevice.contains("Windows")) {
             ImageRessource = R.drawable.winicon;
         } else if (InfoDevice.contains("Apple")) {
             ImageRessource = R.drawable.ios;

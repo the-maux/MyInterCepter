@@ -126,7 +126,7 @@ public class                    IntercepterWrapper {
                     String read;
                     boolean alreadyIn;
                     while ((read = bufferedReader.readLine()) != null) {//sanityzeCheck: at least 3 '.' for x.x.x.x : Ip
-                        if ((read.length() - read.replace(".", "").length()) >= 3) {
+                        if ((read.length() - read.replace(".", "").length()) >= 3 && !read.contains("wrong interface...")) { // wrong interface when no wifi
                             alreadyIn = false;
                             Host hostObj = new Host(read);//Format : IP\t(HOSTNAME) \n [MAC] [OS] : VENDOR \n
                             if (!hosts.contains(hostObj)) {

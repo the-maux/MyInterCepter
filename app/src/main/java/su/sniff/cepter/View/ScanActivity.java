@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +58,7 @@ public class                        ScanActivity extends MyActivity {
     private String                  monitor;
     private FloatingActionButton    fab;
     private TextView                TxtMonitor;
+    private TextView                mEmptyList;
     private ArrayList<String>       listOsSelected = new ArrayList<>();
     private int                     progress = 0;
     private boolean                 hostLoaded = false, inLoading = false, isMenu = false;
@@ -84,6 +84,7 @@ public class                        ScanActivity extends MyActivity {
     private void                    init() throws Exception {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         hostsRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mEmptyList = (TextView) findViewById(R.id.emptyList);
         TxtMonitor = ((TextView) findViewById(R.id.Message));
         TxtMonitor.setText("");
         if (Singleton.getInstance().network == null || Singleton.getInstance().network.myIp == null) {
@@ -127,6 +128,7 @@ public class                        ScanActivity extends MyActivity {
                 if (!inLoading) {
                     Log.d(TAG, "clearing Refresh");
                     mHosts.clear();
+                    mEmptyList.setVisibility(View.GONE);
                     adapter.notifyDataSetChanged();
                     initMonitor();
                     progress = 0;
@@ -277,6 +279,11 @@ public class                        ScanActivity extends MyActivity {
                         fab.setImageResource(android.R.drawable.ic_media_play);
                         hostLoaded = true;
                         swipeRefreshLayout.setRefreshing(false);
+                        if (mHosts == null || mHosts.size() == 0) {
+                            mEmptyList.setVisibility(View.VISIBLE);
+                        } else {
+                            mEmptyList.setVisibility(View.GONE);
+                        }
                     }
                 });
             }

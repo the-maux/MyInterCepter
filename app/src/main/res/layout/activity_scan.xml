@@ -140,8 +140,21 @@
 				android:layout_alignParentTop="true"
 				android:layout_marginTop="8dp"
 				android:scrollbars="vertical"
-				tools:listitem="@layout/adapter_host" />
+				tools:listitem="@layout/adapter_host" >
+
+			</android.support.v7.widget.RecyclerView>
 		</android.support.v4.widget.SwipeRefreshLayout>
+
+		<TextView
+			android:id="@+id/emptyList"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_marginTop="16dp"
+			android:text="No hosts available"
+			android:textStyle="bold"
+			android:typeface="monospace"
+			android:visibility="gone" />
 
 		<TextView
 			android:id="@+id/Message"
