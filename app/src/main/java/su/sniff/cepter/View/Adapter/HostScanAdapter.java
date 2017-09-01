@@ -60,6 +60,15 @@ public class                    HostScanAdapter extends RecyclerView.Adapter<Hos
         };
     }
 
+    public void                 selectAll() {
+        if (mHosts != null && mHosts.size() > 0) {
+            for (Host host : mHosts) {
+                host.setSelected(true);
+            }
+            notifyDataSetChanged();
+        }
+    }
+
     @Override public int        getItemCount() {
         return (mHosts == null) ? 0 : mHosts.size();
     }

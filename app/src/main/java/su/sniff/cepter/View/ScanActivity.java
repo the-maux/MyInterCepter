@@ -56,12 +56,10 @@ public class                        ScanActivity extends MyActivity {
     private TIL_dialog              addHostDialog;
     private HostScanAdapter         adapter;
     private RecyclerView            hostsRecyclerView;
-    private LinearLayout            filterLL;
     private String                  monitor;
     private FloatingActionButton    fab;
     private TextView                TxtMonitor;
     private ArrayList<String>       listOsSelected = new ArrayList<>();
-    private RV_dialog               osDialog;
     private int                     progress = 0;
     private boolean                 hostLoaded = false, inLoading = false, isMenu = false;
     private SwipeRefreshLayout      swipeRefreshLayout;
@@ -86,7 +84,6 @@ public class                        ScanActivity extends MyActivity {
     private void                    init() throws Exception {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         hostsRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        filterLL = (LinearLayout) findViewById(R.id.filterLL);
         TxtMonitor = ((TextView) findViewById(R.id.Message));
         TxtMonitor.setText("");
         if (Singleton.getInstance().network == null || Singleton.getInstance().network.myIp == null) {
@@ -130,7 +127,6 @@ public class                        ScanActivity extends MyActivity {
                 if (!inLoading) {
                     Log.d(TAG, "clearing Refresh");
                     mHosts.clear();
-                    filterLL.removeAllViews();
                     adapter.notifyDataSetChanged();
                     initMonitor();
                     progress = 0;
@@ -430,12 +426,10 @@ public class                        ScanActivity extends MyActivity {
                                             listOsSelected.clear();
                                         }
                                     }
-                                })
-                                .show();
-                        if (osDialog != null) osDialog.show();
+                                }).show();
                         break;
                     case R.id.action_select_all:
-                        Toast.makeText(mInstance, "selectAll", Toast.LENGTH_SHORT).show();
+                        mInstance.adapter.selectAll();
                         break;
                     default:
                         break;
