@@ -46,8 +46,6 @@ public class               Trame {
         } else {
             dispatch(dump, Protocol.IP);
         }
-        initColorBackground();
-        initialised = true;
     }
 
     private boolean        skipUnnecessary(String line) {
@@ -108,6 +106,8 @@ public class               Trame {
                     IParsing(line);
                     break;
             }
+            initColorBackground();
+            initialised = true;
         } catch (StringIndexOutOfBoundsException e) {
             Log.e(TAG, "Error in trame : " + line);
             e.getStackTrace();
@@ -126,23 +126,21 @@ public class               Trame {
         if (lineSub.length <= 9) {//if no verbose
             time = lineSub[0];
             StringSrc = lineSub[2];
-            StringDest = lineSub[4].replace(".domain:", "");
+            StringDest = lineSub[4].replace(".domain:", "").replace(".DOMAIN:", "");
             info = lineSub[7] + " " + lineSub[8];
         } else {// if -vvv
             time = lineSub[0].substring(0, lineSub[0].indexOf("."));
             StringSrc = lineSub[17];
-            StringDest = lineSub[19].replace(".domain:", "");
+            StringDest = lineSub[19].replace(".domain:", "").replace(".DOMAIN:", "");
             info = lineSub[25];
         }
     }
     private  void          ArpParsing(String line) {
         String[] splitted = line.split(" ");
         protocol = Protocol.ARP;
-        Log.d(TAG, "ArpParsing::->"+Arrays.toString(splitted));
         time = splitted[0].substring(0, splitted[0].indexOf("."));
         StringSrc = splitted[3];
         StringDest = splitted[5];
-        Log.d(TAG, "StringDest::" + StringDest);
         info = splitted[2].toUpperCase() + " " + StringSrc + " " + splitted[4].toUpperCase() + " " + splitted[5];
     }
     private  void          HttpParsing(String line) throws StringIndexOutOfBoundsException  {
@@ -230,7 +228,7 @@ public class               Trame {
 
     private void           IParsing(String line) {
         String[] splitted = line.split(" ");
-        protocol = Protocol.IP;
+        protocol = Protocol.TCP;
         Log.d(TAG, "IParsing::->"+ Arrays.toString(splitted));
         if (splitted.length >= 4) {
             time = splitted[0].substring(0, splitted[0].indexOf("."));

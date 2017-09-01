@@ -14,6 +14,7 @@ import su.sniff.cepter.Model.Pcap.DNSPacket;
 
 
 public class                        MyDNSMITM {
+    private static String           TAG = "MyDNSMITM";
     static ArrayList<HostFileEntry> entries;
 
 
@@ -37,12 +38,15 @@ public class                        MyDNSMITM {
             String FakeDomain = findInEntriesList(printableHost);//get replacing domain
             String spoofedDNSReq = dns.getTransacionID() + "01000001000000000000" + FakeDomain + "00010001";//add common flags on type A request, A type and class 1
             sendQuery(spoofedDNSReq, dns.getSRCPort(), dns.getDSTIp());//send query
+            new IPTables().flushNAT();//flush NAT table
+            Log.d(TAG, "MITM DNS:SPOOFED::" + printableHost +"::SPOOFEDTO->::"+ spoofedDNSReq);
         } else {//not found entry on hosts file
             //send the original query
             String originlQuery = packet.replace(new String(dns.IP) + new String(dns.UDP), "");
             sendQuery(originlQuery, dns.getSRCPort(), dns.getDSTIp());
+            new IPTables().flushNAT();//flush NAT table
+            Log.d(TAG, "MITM DNS:NOT SPOOFED::" + originlQuery);
         }
-        new IPTables().flushNAT();//flush NAT table
     }
     public static void              sendQuery(String DNSMessage, int srcport, String dstIP){
         try {
