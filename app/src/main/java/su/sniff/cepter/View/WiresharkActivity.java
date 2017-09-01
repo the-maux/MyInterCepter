@@ -55,13 +55,13 @@ public class                    WiresharkActivity extends MyActivity {
     private RelativeLayout      targetSelectionner, nmapConfEditorLayout, filterPcapLayout;
     private TextView            host_et, Monitor, cmd, monitorHost;
     private ImageView           wiresharkMode;
-    private RecyclerView        Output;
+    private RecyclerView RV_Wireshark;
     private MaterialSpinner     spinner;
     private ProgressBar         progressBar;
     private FloatingActionButton fab;
     private RootProcess         tcpDumpProcess;
     private ArrayList<Trame>    listOfTrames = new ArrayList<>();
-    private WiresharkAdapter    adapterRecy;
+    private WiresharkAdapter adapterWiresharkRV;
     private String     actualParam = "", hostFilter = "", mTypeScan = "";
     private List<Host>          listHostSelected = new ArrayList<>();
     private boolean             isRunning = false;
@@ -90,7 +90,7 @@ public class                    WiresharkActivity extends MyActivity {
         appbar = (AppBarLayout) findViewById(R.id.appbar);
         host_et = (TextView) findViewById(R.id.hostEditext);
         monitorHost = (TextView) findViewById(R.id.monitorHost);
-        Output = (RecyclerView) findViewById(R.id.Output);
+        RV_Wireshark = (RecyclerView) findViewById(R.id.Output);
         filterPcapLayout = (RelativeLayout) findViewById(R.id.filterPcapLayout);
         Monitor = (TextView) findViewById(R.id.Monitor);
         spinner = (MaterialSpinner) findViewById(R.id.spinnerTypeScan);
@@ -123,10 +123,10 @@ public class                    WiresharkActivity extends MyActivity {
     }
 
     private void                initRV() {
-        adapterRecy = new WiresharkAdapter(this, listOfTrames);
-        Output.setAdapter(adapterRecy);
-        Output.setHasFixedSize(true);
-        Output.setLayoutManager(new LinearLayoutManager(mInstance));
+        adapterWiresharkRV = new WiresharkAdapter(this, listOfTrames);
+        RV_Wireshark.setAdapter(adapterWiresharkRV);
+        RV_Wireshark.hasFixedSize();
+        RV_Wireshark.setLayoutManager(new LinearLayoutManager(mInstance));
     }
 
     private View.OnClickListener onWiresharkModeActivated() {
@@ -243,8 +243,9 @@ public class                    WiresharkActivity extends MyActivity {
                     Thread.sleep(2000);//Wait a sec for ARP Catched for target
                     if (actualParam.contains(STDOUT_BUFF) && actualParam.contains("dst port 53")) {
                         Log.i(TAG, "DNS REQUEST MITM");
-                        new IPTables().discardForwardding2Port(53);//MITM DNS
+                       new IPTables().discardForwardding2Port(53); //MITM DNS
                      }
+
                     listOfTrames.clear();
                     tcpDumpProcess = new RootProcess("TcpDump::DNSSpoof").exec(cmd);
                     BufferedReader reader = tcpDumpProcess.getReader();
@@ -308,10 +309,11 @@ public class                    WiresharkActivity extends MyActivity {
             reqdata.append(line);
         } else {
             if (reqdata.length() > 0) {
-                new MyDNSMITM(reqdata.toString());
+
             }
             reqdata.delete(0, reqdata.length());
         }
+        new MyDNSMITM(reqdata.toString());
     }
 
     private void                stdOUT(final Trame trame) {
@@ -323,10 +325,14 @@ public class                    WiresharkActivity extends MyActivity {
                     trame.offsett = listOfTrames.size();
                     if (progressBar.getVisibility() == View.VISIBLE)
                         progressBar.setVisibility(View.GONE);
-                    adapterRecy.notifyDataSetChanged();
+                    if (RV_Wireshark.computeVerticalScrollOffset() == 0) {//Smart insert
+                        adapterWiresharkRV.notifyItemInserted(0);
+                        RV_Wireshark.smoothScrollToPosition(0);
+                    } else {
+                        adapterWiresharkRV.notifyItemInserted(0);
                 }
             }
-        });
+        }});
     }
 
     private void                onTcpDumpStop() {
