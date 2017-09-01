@@ -1,6 +1,7 @@
 package su.sniff.cepter.View;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -12,8 +13,7 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,8 +26,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 import su.sniff.cepter.Controller.CepterControl.IntercepterWrapper;
 import su.sniff.cepter.Controller.Network.IPv4CIDR;
 import su.sniff.cepter.Controller.Network.NetUtils;
@@ -38,9 +36,10 @@ import su.sniff.cepter.Controller.Network.ScanNetmask;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.HostScanAdapter;
+import su.sniff.cepter.View.Adapter.OSAdapter;
+import su.sniff.cepter.View.Dialog.RV_dialog;
+import su.sniff.cepter.View.Dialog.TIL_dialog;
 import su.sniff.cepter.globalVariable;
-
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * TODO:    + Add manual target
@@ -54,14 +53,17 @@ public class                        ScanActivity extends MyActivity {
     private String                  TAG = "ScanActivity";
     private ScanActivity            mInstance = this;
     private List<Host>              mHosts;
+    private TIL_dialog              addHostDialog;
     private HostScanAdapter         adapter;
     private RecyclerView            hostsRecyclerView;
     private LinearLayout            filterLL;
     private String                  monitor;
     private FloatingActionButton    fab;
     private TextView                TxtMonitor;
+    private ArrayList<String>       listOsSelected = new ArrayList<>();
+    private RV_dialog               osDialog;
     private int                     progress = 0;
-    private boolean                 hostLoaded = false, inLoading = false;
+    private boolean                 hostLoaded = false, inLoading = false, isMenu = false;
     private SwipeRefreshLayout      swipeRefreshLayout;
 
     public void                     onCreate(Bundle savedInstanceState) {
@@ -96,10 +98,10 @@ public class                        ScanActivity extends MyActivity {
         IntercepterWrapper.initCepter(NetUtils.getMac(Singleton.getInstance().network.myIp, Singleton.getInstance().network.gateway));
         initMonitor();
         initSwipeRefresh();
+        initDialog();
+        initMenu();
         initSearchView();
     }
-
-
 
     /**
      * Monitor is the basic network Information
@@ -138,8 +140,50 @@ public class                        ScanActivity extends MyActivity {
         });
     }
 
+    private void                    initDialog() {
+        addHostDialog = new TIL_dialog(mInstance)
+                .setTitle("Add host");
+        addHostDialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                onCheckAddedHost(addHostDialog.getText());
+            }
+        });
+    }
+
+    private void                    initMenu() {
+        // add host
+        ImageButton addHost = (ImageButton) findViewById(R.id.action_add_host);
+        addHost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { addHostDialog.show();
+            }
+        });
+        // settings
+        ImageButton settings = (ImageButton) findViewById(R.id.action_settings);
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isMenu = true;
+                mInstance.findViewById(R.id.clipper).setVisibility(View.VISIBLE);
+                fab.setVisibility(View.GONE);
+            }
+        });
+        // os filter
+        TextView osFilter = (TextView) findViewById(R.id.action_os_filter);
+        osFilter.setOnClickListener(onClickMenuItem());
+        // select all
+        TextView selectAll = (TextView) findViewById(R.id.action_select_all);
+        selectAll.setOnClickListener(onClickMenuItem());
+        // offline mode
+        TextView offlineMode = (TextView) findViewById(R.id.action_offline_mode);
+        offlineMode.setOnClickListener(onClickMenuItem());
+        // clipper
+        findViewById(R.id.clipper).setOnClickListener(onClickMenuItem());
+    }
+
     private void                    initSearchView() {
-        SearchView searchView = (SearchView)findViewById(R.id.filterText);
+        SearchView searchView = (SearchView) findViewById(R.id.filterText);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -269,36 +313,8 @@ public class                        ScanActivity extends MyActivity {
         final ArrayList<String> listOs = adapter.getOsList();
         monitor += "\n" + listOs.size() +" Os détected";
         TxtMonitor.setText(monitor);
-        for (final String os : listOs) {
-            View OsView = View.inflate(this, R.layout.item_host_checkbox, null);
-            Host.setOsIcon(this, os, (CircleImageView)OsView.findViewById(R.id.imageOS));
-            ((TextView)OsView.findViewById(R.id.nameOS)).setText(os.replace("_", "/"));
-            final CheckBox cb = ((CheckBox)OsView.findViewById(R.id.checkBox));
-            OsView.setOnClickListener(filtereffect(cb, os, listOs));
-            cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    filtereffect(cb, os, listOs);
-                }
-            });
-            filterLL.addView(OsView, WRAP_CONTENT, 50);
-        }
-
     }
 
-    private View.OnClickListener    filtereffect(final CheckBox cb, final String os, final ArrayList<String> listOs) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cb.setChecked(!cb.isChecked());
-                if (!cb.isChecked())
-                    listOs.remove(os);
-                else
-                    listOs.add(os);
-                adapter.filterByOs(listOs);
-            }
-        };
-    }
     /**
      * Create a file "./targets" dumping the hostList than start the TabActivitys
      * @throws IOException
@@ -384,5 +400,47 @@ public class                        ScanActivity extends MyActivity {
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void onCheckAddedHost(String addedHost) {
+        Toast.makeText(this, "Added host:" + addedHost, Toast.LENGTH_SHORT).show();
+    }
+
+    private View.OnClickListener    onClickMenuItem() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isMenu = false;
+                mInstance.findViewById(R.id.clipper).setVisibility(View.GONE);
+                fab.setVisibility(View.VISIBLE);
+                switch (v.getId()) {
+                    case R.id.action_offline_mode:
+                        Toast.makeText(mInstance, "offlineMode", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.action_os_filter:
+                        final RecyclerView.Adapter adapter = new OSAdapter(mInstance, mInstance.adapter.getOsList(), listOsSelected);
+                        new RV_dialog(mInstance)
+                                .setAdapter(adapter)
+                                .setTitle("Choix des cibles")
+                                .onPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        if (listOsSelected.size() > 0) {
+                                            mInstance.adapter.filterByOs(listOsSelected);
+                                            listOsSelected.clear();
+                                        }
+                                    }
+                                })
+                                .show();
+                        if (osDialog != null) osDialog.show();
+                        break;
+                    case R.id.action_select_all:
+                        Toast.makeText(mInstance, "selectAll", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
     }
 }

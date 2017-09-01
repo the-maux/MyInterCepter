@@ -66,11 +66,13 @@ public class                    HostScanAdapter extends RecyclerView.Adapter<Hos
 
     public ArrayList<String>    getOsList() {
         ArrayList<String> listOs = new ArrayList<>();
-        for (Host host : originalList) {
-            if (!listOs.contains(host.getOsType().name()))
-                listOs.add(host.getOsType().name());
+        if (originalList != null) {
+            for (Host host : originalList) {
+                if (host.getOsType() != null && !listOs.contains(host.getOsType().name()))
+                    listOs.add(host.getOsType().name());
+            }
+            Log.d(TAG, "listOS:" + listOs);
         }
-        Log.d(TAG, "listOS:" + listOs);
         return listOs;
     }
 
