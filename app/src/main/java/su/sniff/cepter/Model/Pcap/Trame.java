@@ -16,7 +16,7 @@ public class               Trame {
     public String          time;
     public Protocol        protocol;
     public Ipv4            src, dest;
-    public String          StringSrc, StringDest;
+    public String          StringSrc, StringDest, Errno;
     public byte[]          bufferByte = null;
     public String          info;
     public int             backgroundColor;
@@ -110,6 +110,7 @@ public class               Trame {
             initialised = true;
         } catch (StringIndexOutOfBoundsException e) {
             Log.e(TAG, "Error in trame : " + line);
+            Errno = line.replace("tcpdump:", "");
             e.getStackTrace();
         }
     }

@@ -8,6 +8,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -48,21 +49,21 @@ import su.sniff.cepter.View.Dialog.RV_dialog;
  */
 public class                    WiresharkActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
-    private WiresharkActivity    mInstance = this;
+    private WiresharkActivity   mInstance = this;
     private CoordinatorLayout   coordinatorLayout;
     private Map<String, String> params = new HashMap<>();
     private AppBarLayout        appbar;
     private RelativeLayout      targetSelectionner, nmapConfEditorLayout, filterPcapLayout;
-    private TextView            host_et, Monitor, cmd, monitorHost;
+    private TextView            Monitor, cmd, monitorHost;
     private ImageView           wiresharkMode;
-    private RecyclerView RV_Wireshark;
+    private RecyclerView        RV_Wireshark;
     private MaterialSpinner     spinner;
     private ProgressBar         progressBar;
     private FloatingActionButton fab;
     private RootProcess         tcpDumpProcess;
     private ArrayList<Trame>    listOfTrames = new ArrayList<>();
-    private WiresharkAdapter adapterWiresharkRV;
-    private String     actualParam = "", hostFilter = "", mTypeScan = "";
+    private WiresharkAdapter    adapterWiresharkRV;
+    private String              actualParam = "", hostFilter = "", mTypeScan = "";
     private List<Host>          listHostSelected = new ArrayList<>();
     private boolean             isRunning = false;
 
@@ -88,7 +89,6 @@ public class                    WiresharkActivity extends MyActivity {
     private void                initXml() {
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
         appbar = (AppBarLayout) findViewById(R.id.appbar);
-        host_et = (TextView) findViewById(R.id.hostEditext);
         monitorHost = (TextView) findViewById(R.id.monitorHost);
         RV_Wireshark = (RecyclerView) findViewById(R.id.Output);
         filterPcapLayout = (RelativeLayout) findViewById(R.id.filterPcapLayout);
@@ -292,7 +292,17 @@ public class                    WiresharkActivity extends MyActivity {
         if (actualParam.contains(STDOUT_BUFF) && actualParam.contains("dst port 53")) {
             MITM_DNS(line);
         }
-        stdOUT(new Trame(line, listOfTrames.size(), 0));
+        Trame trame = new Trame(line, listOfTrames.size(), 0);
+        if (trame.initialised)
+            stdOUT(trame);
+        else {
+            Snackbar snackbar = Snackbar.make(coordinatorLayout, "Error:" + trame.Errno, Snackbar.LENGTH_LONG);
+            ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text))
+                    .setTextColor(ContextCompat.getColor(mInstance, R.color.material_red_400));
+            snackbar.show();
+            progressBar.setVisibility(View.GONE);
+            onTcpDumpStop();
+        }
         // IF MITM DNS ACTIVATED
     }
 
