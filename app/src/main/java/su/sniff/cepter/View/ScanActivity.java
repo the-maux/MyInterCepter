@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +21,6 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,54 +52,66 @@ import su.sniff.cepter.globalVariable;
 public class                        ScanActivity extends MyActivity {
     private String                  TAG = "ScanActivity";
     private ScanActivity            mInstance = this;
+    private CoordinatorLayout       mCoordinatorLayout;
     private List<Host>              mHosts;
-    private TIL_dialog              addHostDialog;
-    private HostScanAdapter         adapter;
-    private RecyclerView            hostsRecyclerView;
+    private TIL_dialog              mAddHostDialog;
+    private HostScanAdapter         mHostAdapter;
+    private RecyclerView            mHost_RV;
     private String                  monitor;
-    private FloatingActionButton    fab;
-    private TextView                TxtMonitor;
-    private TextView                mEmptyList;
-    private ArrayList<String>       listOsSelected = new ArrayList<>();
-    private int                     progress = 0;
-    private boolean                 hostLoaded = false, inLoading = false, isMenu = false;
-    private SwipeRefreshLayout      swipeRefreshLayout;
+    private FloatingActionButton    mFab;
+    private TextView                mEmptyList, mBottomMonitor;
+    private ArrayList<String>       mListOS = new ArrayList<>();
+    private int                     mProgress = 0;
+    private boolean                 mHostLoaded = false, inLoading = false, isMenu = false;
+    private SwipeRefreshLayout      mSwipeRefreshLayout;
+    private TextView                mOsFilterBtn, mSelectAllBtn, mOfflineModeBtn;
+    private ImageButton             mAddHostBtn, mSettingsBtn;
+    private SearchView              mSearchView;
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
-            requestWindowFeature(3);
             setContentView(R.layout.activity_scan);
-            getWindow().setFeatureDrawableResource(3, R.drawable.ico);
+            initXml();
             init();
-            if (globalVariable.DEBUG) {
-                Log.d(TAG, "debug enabled, starting Scan automaticaly");
-                startNetworkScan();
-            }
         } catch (Exception e) {
-            Log.e(TAG, "Big error dans l'init");
+            Log.e(TAG, "Big error dans l'initXml");
             e.printStackTrace();
         }
     }
 
-    private void                    init() throws Exception {
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        hostsRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+    private void                    initXml() throws Exception {
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mHost_RV = (RecyclerView) findViewById(R.id.recycler_view);
         mEmptyList = (TextView) findViewById(R.id.emptyList);
-        TxtMonitor = ((TextView) findViewById(R.id.Message));
-        TxtMonitor.setText("");
+        mBottomMonitor = ((TextView) findViewById(R.id.Message));
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mAddHostBtn = (ImageButton) findViewById(R.id.action_add_host);
+        mSettingsBtn = (ImageButton) findViewById(R.id.action_settings);
+        mOsFilterBtn = (TextView) findViewById(R.id.action_os_filter);
+        mSelectAllBtn = (TextView) findViewById(R.id.action_select_all);
+        mOfflineModeBtn = (TextView) findViewById(R.id.action_offline_mode);
+        mSearchView = (SearchView) findViewById(R.id.filterText);
+    }
+
+    private void                    init()  throws Exception {
         if (Singleton.getInstance().network == null || Singleton.getInstance().network.myIp == null) {
             Toast.makeText(getApplicationContext(), "You need to be connected to a network",
                     Toast.LENGTH_LONG).show();
             finish();
-            return;
+        } else {
+            IntercepterWrapper.initCepter(NetUtils.getMac(Singleton.getInstance().network.myIp, Singleton.getInstance().network.gateway));
+            initMonitor();
+            initSwipeRefresh();
+            initDialog();
+            initMenu();
+            initSearchView();
+            if (globalVariable.DEBUG) {
+                Log.d(TAG, "debug enabled, starting Scan automaticaly");
+                startNetworkScan();
+            }
         }
-        IntercepterWrapper.initCepter(NetUtils.getMac(Singleton.getInstance().network.myIp, Singleton.getInstance().network.gateway));
-        initMonitor();
-        initSwipeRefresh();
-        initDialog();
-        initMenu();
-        initSearchView();
     }
 
     /**
@@ -113,25 +126,25 @@ public class                        ScanActivity extends MyActivity {
         } else {
             monitor += "Not Connected";
         }
-        TxtMonitor.setText(monitor);
+        mBottomMonitor.setText(monitor);
     }
 
     private void                    initSwipeRefresh() {
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setColorSchemeResources(
+
+        mSwipeRefreshLayout.setColorSchemeResources(
                 R.color.material_green_200,
                 R.color.material_green_500,
                 R.color.material_green_900);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 if (!inLoading) {
                     Log.d(TAG, "clearing Refresh");
                     mHosts.clear();
                     mEmptyList.setVisibility(View.GONE);
-                    adapter.notifyDataSetChanged();
+                    mHostAdapter.notifyDataSetChanged();
                     initMonitor();
-                    progress = 0;
+                    mProgress = 0;
                     startNetworkScan();
                 }
             }
@@ -139,59 +152,50 @@ public class                        ScanActivity extends MyActivity {
     }
 
     private void                    initDialog() {
-        addHostDialog = new TIL_dialog(mInstance)
+        mAddHostDialog = new TIL_dialog(mInstance)
                 .setTitle("Add host");
-        addHostDialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
+        mAddHostDialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                onCheckAddedHost(addHostDialog.getText());
+                onCheckAddedHost(mAddHostDialog.getText());
             }
         });
     }
 
     private void                    initMenu() {
-        // add host
-        ImageButton addHost = (ImageButton) findViewById(R.id.action_add_host);
-        addHost.setOnClickListener(new View.OnClickListener() {
+        mAddHostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { addHostDialog.show();
+            public void onClick(View v) {
+                mAddHostDialog.show();
+                //TODO: Faire le add Host
             }
         });
-        // settings
-        ImageButton settings = (ImageButton) findViewById(R.id.action_settings);
-        settings.setOnClickListener(new View.OnClickListener() {
+        mSettingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 isMenu = true;
                 mInstance.findViewById(R.id.clipper).setVisibility(View.VISIBLE);
-                fab.setVisibility(View.GONE);
+                mFab.setVisibility(View.GONE);
             }
         });
-        // os filter
-        TextView osFilter = (TextView) findViewById(R.id.action_os_filter);
-        osFilter.setOnClickListener(onClickMenuItem());
-        // select all
-        TextView selectAll = (TextView) findViewById(R.id.action_select_all);
-        selectAll.setOnClickListener(onClickMenuItem());
-        // offline mode
-        TextView offlineMode = (TextView) findViewById(R.id.action_offline_mode);
-        offlineMode.setOnClickListener(onClickMenuItem());
-        // clipper
-        findViewById(R.id.clipper).setOnClickListener(onClickMenuItem());
+        mBottomMonitor.setText("");
+        mOsFilterBtn.setOnClickListener(onClickTopMenu());
+        mSelectAllBtn.setOnClickListener(onClickTopMenu());
+        mOfflineModeBtn.setOnClickListener(onClickTopMenu());
+        findViewById(R.id.clipper).setOnClickListener(onClickTopMenu());
     }
 
     private void                    initSearchView() {
-        SearchView searchView = (SearchView) findViewById(R.id.filterText);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (query.contains("cheat")) {
                     for (Host host : mHosts) {
                         host.setSelected(true);
                     }
-                    adapter.notifyDataSetChanged();
+                    mHostAdapter.notifyDataSetChanged();
                 } else {
-                    adapter.filterByString(query);
+                    mHostAdapter.filterByString(query);
                 }
                 return false;
             }
@@ -201,10 +205,10 @@ public class                        ScanActivity extends MyActivity {
                 return false;
             }
         });
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                adapter.filterByString("");
+                mHostAdapter.filterByString("");
                 return false;
             }
         });
@@ -212,10 +216,50 @@ public class                        ScanActivity extends MyActivity {
 
     private void                    initHostsRecyclerView() {
         mHosts = new ArrayList<>();
-        adapter = new HostScanAdapter(this);
-        hostsRecyclerView.setAdapter(adapter);
-        hostsRecyclerView.setHasFixedSize(true);
-        hostsRecyclerView.setLayoutManager(new LinearLayoutManager(mInstance));
+        mHostAdapter = new HostScanAdapter(this);
+        mHost_RV.setAdapter(mHostAdapter);
+        mHost_RV.setHasFixedSize(true);
+        mHost_RV.setLayoutManager(new LinearLayoutManager(mInstance));
+    }
+
+    private void                    onCheckAddedHost(String addedHost) {
+        Snackbar.make(mCoordinatorLayout, "Added host:" + addedHost, Toast.LENGTH_SHORT).show();
+    }
+
+    private View.OnClickListener    onClickTopMenu() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isMenu = false;
+                mInstance.findViewById(R.id.clipper).setVisibility(View.GONE);
+                mFab.setVisibility(View.VISIBLE);
+                switch (v.getId()) {
+                    case R.id.action_offline_mode:
+                        Snackbar.make(mCoordinatorLayout, "mOfflineModeBtn", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.action_os_filter:
+                        final RecyclerView.Adapter adapter = new OSAdapter(mInstance, mInstance.mHostAdapter.getOsList(), mListOS);
+                        new RV_dialog(mInstance)
+                                .setAdapter(adapter)
+                                .setTitle("Choix des cibles")
+                                .onPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        if (mListOS.size() > 0) {
+                                            mInstance.mHostAdapter.filterByOs(mListOS);
+                                            mListOS.clear();
+                                        }
+                                    }
+                                }).show();
+                        break;
+                    case R.id.action_select_all:
+                        mInstance.mHostAdapter.selectAll();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
     }
 
     /**
@@ -232,14 +276,14 @@ public class                        ScanActivity extends MyActivity {
                 @Override
                 public void run() {
                     new ScanNetmask(new IPv4CIDR(Singleton.getInstance().network.myIp, Singleton.getInstance().network.netmask), mInstance);
-                    progress = 1000;
+                    mProgress = 1000;
                 }
             }).start();
         }
     }
 
     public void                     onFabClick(View v)  {
-        if (!hostLoaded) {
+        if (!mHostLoaded) {
             startNetworkScan();
         } else {
             try {
@@ -252,38 +296,31 @@ public class                        ScanActivity extends MyActivity {
     }
 
     private void                    progressAnimation() {
-        //TODO: RefreshOnSwipe
-        Log.d(TAG, "progress Animation");
-        fab.setImageResource(android.R.drawable.ic_menu_search);
-        fab.setProgress(0, true);
-        fab.setMax(4500);
+        mFab.setImageResource(android.R.drawable.ic_menu_search);
+        mFab.setProgress(0, true);
+        mFab.setMax(4500);
         new Thread(new Runnable() {
             public void run() {
-                progress = 0;
-                while (progress <= 4500) {
+                mProgress = 0;
+                while (mProgress <= 4500) {
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    progress += 10;
-                    final int prog2 = progress;
+                    mProgress += 10;
+                    final int prog2 = mProgress;
                     mInstance.runOnUiThread(new Runnable() {
                         public void run() {
-                            fab.setProgress(prog2, true);
+                            mFab.setProgress(prog2, true);
                         }
                     });
                 }
                 mInstance.runOnUiThread(new Runnable() {
                     public void run() {
-                        fab.setImageResource(android.R.drawable.ic_media_play);
-                        hostLoaded = true;
-                        swipeRefreshLayout.setRefreshing(false);
-                        if (mHosts == null || mHosts.size() == 0) {
-                            mEmptyList.setVisibility(View.VISIBLE);
-                        } else {
-                            mEmptyList.setVisibility(View.GONE);
-                        }
+                        mFab.setImageResource(android.R.drawable.ic_media_play);
+                        mHostLoaded = true;
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
                 });
             }
@@ -292,9 +329,9 @@ public class                        ScanActivity extends MyActivity {
 
     public void                     onReachableScanOver(ArrayList<String> ipReachable) {
         NetUtils.dumpListHostFromARPTableInFile(mInstance, ipReachable);
-        progress = 1500;
+        mProgress = 1500;
         IntercepterWrapper.fillHostListWithCepterScan(mInstance);
-        progress = 2000;
+        mProgress = 2000;
     }
 
     public void                     onHostActualized(final List<Host> hosts) {
@@ -303,19 +340,18 @@ public class                        ScanActivity extends MyActivity {
             public void run() {
                 mHosts = hosts;
                 monitor = "GW: " + Singleton.getInstance().     network.gateway + ": " + mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": "") + " found";// oui je fais des ternaires pour faire le pluriel
-                TxtMonitor.setText(monitor);
-                adapter.updateHostList(mHosts);
-                buildFilterLayout();
+                mBottomMonitor.setText(monitor);
+                mHostAdapter.updateHostList(mHosts);
                 inLoading = false;
+                mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
+
+                final ArrayList<String> listOs = mHostAdapter.getOsList();
+                monitor += "\n" + listOs.size() +" Os détected";
+                mBottomMonitor.setText(monitor);
+
                 Log.d(TAG, "scan Over with " + mHosts.size() + " possible target");
             }
         });
-    }
-
-    private void                    buildFilterLayout() {
-        final ArrayList<String> listOs = adapter.getOsList();
-        monitor += "\n" + listOs.size() +" Os détected";
-        TxtMonitor.setText(monitor);
     }
 
     /**
@@ -348,41 +384,16 @@ public class                        ScanActivity extends MyActivity {
         startActivity(i2);
     }
 
-    public void                     OnCage(View v2) throws IOException {
-        Log.d(TAG, "OnCage");
-        boolean noTargetSelected = true;
-        FileOutputStream out = openFileOutput("cage", 0);
-
-        for (Host host : mHosts) {
-            if (host.isSelected()) {
-                noTargetSelected = false;
-                String dumpHost = host.getIp() + ":" + host.getMac() + "\n";
-                Log.d(TAG, "dumpHost:" + dumpHost);
-                out.write(dumpHost.getBytes());
-            }
-        }
-        out.close();
-        if (mHosts.size() == 0)
-            Toast.makeText(getApplicationContext(), "Scan network", Toast.LENGTH_SHORT).show();
-        else if (noTargetSelected)
-            Toast.makeText(getApplicationContext(), "Choose target!", Toast.LENGTH_SHORT).show();
-        else
-            startActivityForResult(new Intent(mInstance, CageActivity.class), 1);
-
-    }
-
     public boolean                  onKeyDown(int keyCode, KeyEvent event) {
         Log.d(TAG, "onKeyDown: " + keyCode);
         if (keyCode == 4) {
             try {
                 openFileOutput("exits.id", 0).close();
                 Thread.sleep(100);
-                RootProcess process = new RootProcess("LEAVE APP")
-                        .exec("killall cepter")
-                        .exec("killall cepter")
-                        .exec("killall cepter");
+                RootProcess.kill("cepter");
                 if (globalVariable.strip == 1) {
-                    process.exec("iptables -F;" +
+                    new RootProcess("LEAVE APP")
+                         .exec("iptables -F;" +
                             "iptables -X; " +
                             "iptables -t nat -F;" +
                             "iptables -t nat -X;" +
@@ -390,12 +401,7 @@ public class                        ScanActivity extends MyActivity {
                             "iptables -t mangle -X;" +
                             "iptables -P INPUT ACCEPT;"+
                             "iptables -P FORWARD ACCEPT;"+
-                            "iptables -P OUTPUT ACCEPT");
-                }
-                process.closeProcess();
-                File ck = new File(Singleton.getInstance().FilesPath + "/inj");
-                if (ck.exists()) {
-                    ck.delete();
+                            "iptables -P OUTPUT ACCEPT").closeProcess();
                 }
                 finish();
             } catch (IOException | InterruptedException e) {
@@ -403,45 +409,5 @@ public class                        ScanActivity extends MyActivity {
             }
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    private void onCheckAddedHost(String addedHost) {
-        Toast.makeText(this, "Added host:" + addedHost, Toast.LENGTH_SHORT).show();
-    }
-
-    private View.OnClickListener    onClickMenuItem() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isMenu = false;
-                mInstance.findViewById(R.id.clipper).setVisibility(View.GONE);
-                fab.setVisibility(View.VISIBLE);
-                switch (v.getId()) {
-                    case R.id.action_offline_mode:
-                        Toast.makeText(mInstance, "offlineMode", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.action_os_filter:
-                        final RecyclerView.Adapter adapter = new OSAdapter(mInstance, mInstance.adapter.getOsList(), listOsSelected);
-                        new RV_dialog(mInstance)
-                                .setAdapter(adapter)
-                                .setTitle("Choix des cibles")
-                                .onPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        if (listOsSelected.size() > 0) {
-                                            mInstance.adapter.filterByOs(listOsSelected);
-                                            listOsSelected.clear();
-                                        }
-                                    }
-                                }).show();
-                        break;
-                    case R.id.action_select_all:
-                        mInstance.adapter.selectAll();
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
     }
 }
