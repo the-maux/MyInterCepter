@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView"
+    android:layout_width="150dp"
+    android:layout_height="140dp"
+    android:layout_margin="4dp"
+    android:background="@color/material_light_black"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <RelativeLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/material_light_black">
+
+        <RelativeLayout
+            android:id="@+id/topView"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:background="@color/material_light_black"
+            android:elevation="2dp">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/diagnosPourcentage"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="4dp"
+                android:fontFamily="serif"
+                android:gravity="center_vertical"
+                android:text="76%"
+                android:textColor="@color/material_light_white"
+                android:textStyle="bold" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/uptime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_toRightOf="@+id/diagnosPourcentage"
+                android:gravity="right"
+                android:text="Uptime: 01h42m"
+                android:textColor="@color/material_light_white"
+                android:textSize="11sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/stat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/uptime"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="8dp"
+                android:layout_toRightOf="@+id/diagnosPourcentage"
+                android:fontFamily="sans-serif"
+                android:gravity="bottom|right"
+                android:text="sent: 454 / rcv: 434"
+                android:textColor="@color/material_light_white"
+                android:textSize="11sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/middleView"
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:layout_below="@+id/topView"
+            android:background="@color/material_light_black">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/diagnose"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:background="@color/cardview_dark_background"
+                android:elegantTextHeight="false"
+                android:elevation="2dp"
+                android:ellipsize="start"
+                android:fontFamily="serif"
+                android:lines="7"
+                android:maxLines="6"
+                android:padding="4dp"
+                android:text="........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................"
+                android:textColor="@color/material_green_400"
+                android:textSize="8sp"
+                android:typeface="monospace" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/bottomView"
+            android:layout_width="match_parent"
+            android:layout_height="21dp"
+            android:layout_below="@+id/middleView"
+            android:background="@color/material_light_black"
+            android:elevation="2dp">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/IP"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/cardview_dark_background"
+                android:fontFamily="serif-monospace"
+                android:gravity="center"
+                android:text="127.42.42.1"
+                android:textColor="@color/material_light_white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:typeface="monospace" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

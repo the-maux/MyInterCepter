@@ -2,6 +2,7 @@ package su.sniff.cepter.View;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,7 +15,7 @@ import android.widget.Toast;
 
 import su.sniff.cepter.Controller.Network.NetUtils;
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.RootProcess;
+import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.Model.Target.NetworkInformation;
 import su.sniff.cepter.R;
@@ -42,31 +43,35 @@ public class                    InitActivity extends MyActivity {
 
     private void                initXml(View rootView) {
         monitor = (TextView) rootView.findViewById(R.id.monitor);
-        monitor.setText("Initialization");
+        monitor("Initialization");
     }
 
     @Override protected void    onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         buildPath();
-        try {
-
-            buildFiles();
-            initInfo();
-        } catch (IOException e) {
-            monitor.setText("Error IO");
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            monitor.setText("Error Interupted");
-            e.printStackTrace();
-        }
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        buildFiles();
+                        initInfo();
+                    } catch (IOException e) {
+                        monitor("Error IO");
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        monitor("Error Interupted");
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
     }
 
     private void                buildPath() {
-        Singleton.FilesPath = this.getFilesDir().getPath() + '/';
-        Singleton.BinaryPath = Singleton.FilesPath;//shouldn't be the same as FilesPath
-        Log.d(TAG, "path:" + Singleton.FilesPath);
+        Singleton.getInstance().FilesPath = this.getFilesDir().getPath() + '/';
+        Singleton.getInstance().BinaryPath = Singleton.getInstance().FilesPath;//shouldn't be the same as FilesPath
+        Log.d(TAG, "path:" + Singleton.getInstance().FilesPath);
         globalVariable.PCAP_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
-        monitor.setText("Building Path");
+        monitor("Building Path");
     }
 
     private void                initInfo() throws FileNotFoundException {
@@ -80,7 +85,13 @@ public class                    InitActivity extends MyActivity {
             e.getStackTrace();
         }
         globalVariable.adapt_num = 1;
+        DhcpInfo dhcpInfo = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getDhcpInfo();
         String data = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getDhcpInfo().toString();
+        if (!data.contains("ipaddr") || !data.contains("gateway") || !data.contains("netmask") ) {
+            Toast.makeText(this, "Your not connected to a network", Toast.LENGTH_LONG).show();
+            finish();
+            return ;
+        }
         String[] res = data.split(" ");
         int ip = 0, gw = 0, netmask = 0;
         for (int i = 0; i < res.length; i++) {
@@ -92,17 +103,12 @@ public class                    InitActivity extends MyActivity {
                 netmask = i + 1;
             }
         }
-        if (!data.contains("ipaddr") || !data.contains("gateway") || !data.contains("netmask") ) {
-            Toast.makeText(this, "Your not connected to a network", Toast.LENGTH_LONG).show();
-            finish();
-            return ;
-        }
         if (res[netmask].contains("0.0.0.0"))
             res[netmask] = "255.255.255.0";
-        Singleton.network = new NetworkInformation(res[ip], res[gw], res[netmask], NetUtils.getMac(res[ip], res[gw]));
+        Singleton.getInstance().network = new NetworkInformation(dhcpInfo, NetUtils.getMac(res[ip], res[gw]));
         Intent i = new Intent(this, ScanActivity.class);
         i.putExtra("Key_Int", 1);//1 est censé représenté l'interface network, en l'occurence 1=> eth0
-        i.putExtra("Key_String", Singleton.network.myIp);
+        i.putExtra("Key_String", Singleton.getInstance().network.myIp);
         startActivity(i);
         finish();
 
@@ -110,10 +116,10 @@ public class                    InitActivity extends MyActivity {
 
     private RootProcess         getNetworkInfoByCept() throws IOException, InterruptedException {
         monitor("Get network Information Loading");
-        RootProcess process = new RootProcess("getNetworkInfoByCept", Singleton.FilesPath);
+        RootProcess process = new RootProcess("getNetworkInfoByCept", Singleton.getInstance().FilesPath);
         monitor("Testing busybox... OK");
-        Log.d(TAG, "su " + Singleton.FilesPath + "/cepter list; exit");
-        process.exec(Singleton.FilesPath + "/cepter list");
+        Log.d(TAG, "su " + Singleton.getInstance().FilesPath + "/cepter list; exit");
+        process.exec(Singleton.getInstance().FilesPath + "/cepter list");
         process.exec("exit");
         monitor("Get network Information");
         process.waitFor();
@@ -121,23 +127,23 @@ public class                    InitActivity extends MyActivity {
     }
 
     private void                clearingTmpFiles() {
-        monitor.setText("Clearing previous Data");
-        File force = new File(Singleton.FilesPath + "/force");
+        monitor("Clearing previous Data");
+        File force = new File(Singleton.getInstance().FilesPath + "/force");
         if (force.exists()) {
             Log.d(TAG, "Deleting /force");
             force.delete();
         }
-        File ck = new File(Singleton.FilesPath + "/ck");
+        File ck = new File(Singleton.getInstance().FilesPath + "/ck");
         if (ck.exists()) {
             Log.d(TAG, "Deleting /ck");
             ck.delete();
         }
-        File savepath = new File(Singleton.FilesPath + "/savepath");
+        File savepath = new File(Singleton.getInstance().FilesPath + "/savepath");
         if (savepath.exists()) {
             Log.d(TAG, "Deleting /savepath");
             savepath.delete();
         }
-        monitor.setText("Clearing previous Data over");
+        monitor("Clearing previous Data over");
     }
 
     private InputStream         getCepterRessource() {
@@ -154,9 +160,9 @@ public class                    InitActivity extends MyActivity {
     }
 
     private void                buildFile(String nameFile, int ressource) throws IOException, InterruptedException {
-        File file = new File(Singleton.FilesPath + "/" + nameFile);
+        File file = new File(Singleton.getInstance().FilesPath + "/" + nameFile);
         file.delete();
-        monitor.setText("Building " + nameFile);
+        monitor("Building " + nameFile);
         int size;
         InputStream inputStream = getResources().openRawResource(ressource);
         int sizeOfInputStram = inputStream.available();
@@ -179,12 +185,12 @@ public class                    InitActivity extends MyActivity {
 
         clearingTmpFiles();
         InputStream cepter = getCepterRessource();
-        File cepterFile = new File(Singleton.FilesPath + "/cepter");
+        File cepterFile = new File(Singleton.getInstance().FilesPath + "/cepter");
         if (cepterFile.exists() && cepterFile.canExecute()) {
             Log.d(TAG, "cepter exist, nothing to do");
         } else {
             cepterFile.delete();
-            monitor.setText("Building cepter modules");
+            monitor("Building cepter modules");
             Log.d(TAG, "Building cepter binary");
             out = openFileOutput("cepter", 0);
             while (cepter.read(bufferDroidSheep) > -1) {
@@ -202,19 +208,20 @@ public class                    InitActivity extends MyActivity {
         buildFile("arpspoof", R.raw.arpspoof);
         buildFile("ettercap_archive", R.raw.ettercap_archive);
         buildFile("archive_nmap", R.raw.nmap);
-        RootProcess process = new RootProcess("UNZIP FILES", Singleton.FilesPath);
-        process.exec(Singleton.BinaryPath + "/busybox unzip ettercap_archive")
-                .exec(Singleton.BinaryPath + "/busybox unzip archive_nmap")
-                .exec("chmod 777 " + Singleton.BinaryPath + "/nmap/*")
+        RootProcess process = new RootProcess("UNZIP FILES", Singleton.getInstance().FilesPath);
+        process.exec(Singleton.getInstance().BinaryPath + "/busybox unzip ettercap_archive")
+                .exec(Singleton.getInstance().BinaryPath + "/busybox unzip archive_nmap")
+                .exec("chmod 777 " + Singleton.getInstance().BinaryPath + "/nmap/*")
                 .exec("mount -o rw,remount /system")
+                .exec("cp ./ping /system/bin/")
                 .exec("echo \"nameserver `getprop net.dns1`\" > /etc/resolv.conf")
-                .exec("rm -f " + Singleton.FilesPath + "/Raw/*;")
-                .exec("rm -f " + Singleton.FilesPath + "/dnss ;")
-                .exec("rm -f " + Singleton.FilesPath + "/hostlist;")
-                .exec("rm -f " + Singleton.FilesPath + "/*Activity")
-                .exec(Singleton.BinaryPath + "busybox killall cepter")
-                .exec(Singleton.BinaryPath + "busybox killall tcpdump")
-                .exec(Singleton.BinaryPath + "busybox killall arpspoof")
+                .exec("rm -f " + Singleton.getInstance().FilesPath + "/Raw/*;")
+                .exec("rm -f " + Singleton.getInstance().FilesPath + "/dnss ;")
+                .exec("rm -f " + Singleton.getInstance().FilesPath + "/hostlist;")
+                .exec("rm -f " + Singleton.getInstance().FilesPath + "/*Activity")
+                .exec(Singleton.getInstance().BinaryPath + "busybox killall cepter")
+                .exec(Singleton.getInstance().BinaryPath + "busybox killall tcpdump")
+                .exec(Singleton.getInstance().BinaryPath + "busybox killall arpspoof")
                 .closeProcess();
     }
 

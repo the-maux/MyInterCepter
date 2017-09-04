@@ -25,7 +25,7 @@ import su.sniff.cepter.BuildConfig;
 import su.sniff.cepter.Controller.CepterControl.IntercepterWrapper;
 import su.sniff.cepter.Controller.CepterControl.onDefend;
 import su.sniff.cepter.Controller.System.InterceptorFileSelected;
-import su.sniff.cepter.Controller.System.RootProcess;
+import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
 import su.sniff.cepter.R;
 import su.sniff.cepter.Controller.MiscUtils.OpenFileDialog;
 import su.sniff.cepter.Controller.MiscUtils.SaveFileDialog;

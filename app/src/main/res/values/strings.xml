@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Intercepter-NG</string>
+    <string name="app_name">Scylla</string>
     <string name="menu_settings">Settings</string>
     <string name="ofd_go_up_text">Back</string>
     <string name="ofd_title">Open file</string>

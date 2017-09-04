@@ -18,7 +18,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.RootProcess;
+import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
 import su.sniff.cepter.Controller.CepterControl.IntercepterReader;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
@@ -84,8 +84,8 @@ public class                    TsharkActivity extends MyActivity {
                 int offsetLine = 0;
                 String line;
                 try {
-                    RootProcess processRoot = new RootProcess("cepter RAW MODE(tshark)", Singleton.FilesPath);String sc = " w "; //Dump le pcap sous forme de fichier .pcap mais ca fait segfault, bisare
-                    processRoot.exec(Singleton.FilesPath + "/cepter " + Integer.toString(globalVariable.adapt_num) + " 3 raw" );//+ sc
+                    RootProcess processRoot = new RootProcess("cepter RAW MODE(tshark)", Singleton.getInstance().FilesPath);String sc = " w "; //Dump le pcap sous forme de fichier .pcap mais ca fait segfault, bisare
+                    processRoot.exec(Singleton.getInstance().FilesPath + "/cepter " + Integer.toString(globalVariable.adapt_num) + " 3 raw" );//+ sc
                     InputStreamReader reader = processRoot.getInputStreamReader();
                     Log.i(TAG, "RAW MODE reader ready:" + reader.ready());
                     BufferedReader bufferedReader = new BufferedReader(reader);

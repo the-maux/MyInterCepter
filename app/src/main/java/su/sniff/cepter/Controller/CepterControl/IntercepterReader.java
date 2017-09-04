@@ -9,7 +9,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.RootProcess;
+import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
 import su.sniff.cepter.Controller.System.ThreadUtils;
 import su.sniff.cepter.R;
 import su.sniff.cepter.globalVariable;
@@ -114,7 +114,7 @@ public class                    IntercepterReader extends Thread {
         final String getreq = reader.readLine();
         final String coo = reader.readLine();
         String z = reader.readLine();
-        if (!ip.equals(Singleton.network.myIp)) {
+        if (!ip.equals(Singleton.getInstance().getInstance().network.myIp)) {
             int dub = 0;
 
             for (int i = 0; i < globalVariable.cookies_c; i++) {

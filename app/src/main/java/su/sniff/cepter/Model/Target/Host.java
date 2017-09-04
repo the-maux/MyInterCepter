@@ -130,7 +130,10 @@ public class                Host {
 
     public static void      setOsIcon(Context context, String InfoDevice, CircleImageView osImageView) {
         int                 ImageRessource;
-        if (InfoDevice.contains("Windows")) {
+
+        if (InfoDevice == null) {
+            ImageRessource = R.drawable.monitor;
+        } else if (InfoDevice.contains("Windows")) {
             ImageRessource = R.drawable.winicon;
         } else if (InfoDevice.contains("Apple")) {
             ImageRessource = R.drawable.ios;
@@ -159,7 +162,9 @@ public class                Host {
     }
 
     private void                guessOsType(String InfoDevice) {
-        if (InfoDevice.contains("Windows 7")) {
+        if (InfoDevice.contains("Bluebird")) {
+            osType = Os.Bluebird;
+        } else if (InfoDevice.contains("Windows 7")) {
             osType = Os.Windows7_8_10;
         } else if (InfoDevice.contains("Windows 2000")) {
             osType = Os.WindowsXP;
@@ -173,9 +178,7 @@ public class                Host {
             osType = Os.Raspberry;
         } else if (InfoDevice.contains("QUANTA")) {
             osType = Os.QUANTA;
-        } else if (InfoDevice.contains("Bluebird")) {
-            osType = Os.Bluebird;
-        } else if (InfoDevice.contains("Ios")) {
+        }  else if (InfoDevice.contains("Ios")) {
             osType = Os.Ios;
         } else if (!(!InfoDevice.contains("Unix") && !InfoDevice.contains("Linux") && !InfoDevice.contains("BSD"))) {
             osType = Os.Linux_Unix;

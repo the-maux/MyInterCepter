@@ -8,6 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,7 +70,7 @@ public class                NetUtils {
                 Matcher matcher = Pattern.compile(String.format(MAC_RE, objArr)).matcher(read);
                 if (matcher.matches()) {
                     listOfIpsAlreadyIn.add(ip);
-                    Log.d(TAG, "dumpHOSTFILE:" + ip + ":" + matcher.group(1));
+                    //Log.d(TAG, "dumpHOSTFILE:" + ip + ":" + matcher.group(1));
                     hostListFile.write((ip + ":" + matcher.group(1) + "\n").getBytes());
                 }
             }
@@ -94,6 +96,18 @@ public class                NetUtils {
             hostListFile.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static String    intADDRtoStringHostname(int hostAddress) {
+        byte[] addressBytes = { (byte)(0xff & hostAddress),
+                (byte)(0xff & (hostAddress >> 8)),
+                (byte)(0xff & (hostAddress >> 16)),
+                (byte)(0xff & (hostAddress >> 24)) };
+        try {
+            return InetAddress.getByAddress(addressBytes).getHostAddress();
+        } catch (UnknownHostException e) {
+            throw new AssertionError();
         }
     }
 }

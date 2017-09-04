@@ -45,7 +45,7 @@ public class                        InjectHTTPActivity extends MyActivity {
 
     private void                    initInj() {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(new File(Singleton.FilesPath + "/inj")));
+            BufferedReader reader = new BufferedReader(new FileReader(new File(Singleton.getInstance().FilesPath + "/inj")));
             String read;
             while ((read = reader.readLine()) != null) {
                 Log.d(TAG, "Inj File read:");

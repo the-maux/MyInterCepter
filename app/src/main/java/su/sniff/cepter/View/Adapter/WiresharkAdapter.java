@@ -19,6 +19,7 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
     private String          TAG = "WiresharkAdapter";
     private ArrayList<Trame> listOfTrame;
     private Activity        activity;
+    private boolean         arp, http, tcp, udp, ip;
 
     public                  WiresharkAdapter(Activity activity, ArrayList<Trame> trames) {
         this.listOfTrame = trames;
@@ -37,10 +38,10 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         holder.time.setText(trame.time);
         holder.source.setText(trame.StringSrc);
         if (trame.StringDest.contains("00:16:7f")) {
-            Log.d(TAG, "trame.StringDest:" + trame.StringDest + "&Upper=>" + trame.StringDest.toUpperCase());
             holder.dest.setText("00:16:7F:13:4A:DD");
+        } else {
+            holder.dest.setText(trame.StringDest.toUpperCase());
         }
-        holder.dest.setText(trame.StringDest.toUpperCase());
         holder.proto.setText(trame.protocol.name().toUpperCase());
         holder.info.setText(trame.info);
         setBacgroundColor(trame.backgroundColor, holder);

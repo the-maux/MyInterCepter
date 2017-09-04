@@ -18,7 +18,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="su.sniff.cepter.View.InitActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -52,6 +53,7 @@
             android:name="su.sniff.cepter.View.ScanActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden"
+            android:theme="@style/NoActionBar"
             android:label="@string/app_name" />
         <activity
             android:name=".View.TabActivitys"
@@ -83,6 +85,10 @@
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="su.sniff.cepter.View.WiresharkActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="su.sniff.cepter.View.DoraActivity"
             android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>

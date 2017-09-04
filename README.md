@@ -31,3 +31,11 @@ Fork-Projet IntercepterNG, reversed App
 * Afficher le resultat d'une commande shell:
 
          Log.d(TAG, "whoami:" + new BufferedReader(new RootProcess("Whoami").exec("id").getInputStreamReader()).readLine());
+
+
+What is Install:
++ apt get install python gcc g++ python-pip 
+
+WPScan:
+    apt-get install libxml2-dev libxslt1-dev;
+    pip install lxml

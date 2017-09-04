@@ -1,8 +1,10 @@
-package su.sniff.cepter.Controller.System;
+package su.sniff.cepter.Controller.System.Wrapper;
 
 import android.util.Log;
 
 import java.io.*;
+
+import su.sniff.cepter.Controller.System.Singleton;
 
 public class                    RootProcess {
     private String              TAG = "RootProcess";
@@ -33,7 +35,7 @@ public class                    RootProcess {
     public RootProcess          exec(String cmd) {
         try {
             Log.d(TAG, LogID + "::" + cmd);
-            os.writeBytes(cmd + "\n");
+            os.writeBytes(cmd + " 2>&1 \n");
             os.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,7 +52,6 @@ public class                    RootProcess {
     }
 
     public BufferedReader       getReader() {
-
         return new BufferedReader(new InputStreamReader(process.getInputStream()));
     }
 
@@ -81,8 +82,8 @@ public class                    RootProcess {
     }
 
     public static void          kill(String binary) {
-        new RootProcess("ARP::kill")
-                .exec(Singleton.BinaryPath + "busybox killall " + binary)
+        new RootProcess("KILLALL")
+                .exec(Singleton.getInstance().BinaryPath + "busybox killall " + binary)
                 .closeProcess();
     }
 }

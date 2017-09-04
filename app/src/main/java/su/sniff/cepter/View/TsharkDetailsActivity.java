@@ -6,7 +6,7 @@ import android.view.KeyEvent;
 import android.widget.TextView;
 
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.RootProcess;
+import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
 import su.sniff.cepter.Controller.System.ThreadUtils;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
@@ -27,9 +27,9 @@ public class TsharkDetailsActivity extends MyActivity {
         monitor.setTextSize(2, (float) globalVariable.raw_textsize);
         StringBuilder text = new StringBuilder();
         try {
-            RootProcess process = new RootProcess("TsharkDetailsActivity", Singleton.FilesPath);
+            RootProcess process = new RootProcess("TsharkDetailsActivity", Singleton.getInstance().FilesPath);
             BufferedReader reader = new BufferedReader(process.getInputStreamReader());
-            process.exec(Singleton.FilesPath + "/busybox cat " + Singleton.FilesPath + "/Raw/" + position + ".dat");
+            process.exec(Singleton.getInstance().FilesPath + "/busybox cat " + Singleton.getInstance().FilesPath + "/Raw/" + position + ".dat");
             process.closeDontWait();
             while (true) {
                 String read = reader.readLine();
