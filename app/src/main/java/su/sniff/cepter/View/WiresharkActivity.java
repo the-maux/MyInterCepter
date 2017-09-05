@@ -140,16 +140,15 @@ public class                    WiresharkActivity extends MyActivity {
     }
 
     private void                onClickChoiceTarget() {
-        RecyclerView.Adapter adapter = new TcpdumpHostCheckerADapter(this, Singleton.getInstance().hostsList, listHostSelected);
         new RV_dialog(this)
-                .setAdapter(adapter)
+                .setAdapter(new TcpdumpHostCheckerADapter(this, Singleton.getInstance().hostsList, listHostSelected))
                 .setTitle("Choix des cibles")
                 .onPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        monitorHost.setText(listHostSelected.size() + " target");
-                    }
-                })
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            monitorHost.setText(listHostSelected.size() + " target");
+                        }
+                    })
                 .show();
     }
 
@@ -233,6 +232,7 @@ public class                    WiresharkActivity extends MyActivity {
      * Dispatch the DNS request on network
      */
     private void                onTcpDumpStart() {
+        IPTables.InterceptWithoutSSL();
         final String cmd = Singleton.getInstance().FilesPath + "/tcpdump " + actualParam + hostFilter;
         Monitor.setText(cmd.replace(Singleton.getInstance().FilesPath, ""));
         new Thread(new Runnable() {
@@ -295,12 +295,17 @@ public class                    WiresharkActivity extends MyActivity {
         Trame trame = new Trame(line, listOfTrames.size(), 0);
         if (trame.initialised) {
             stdOUT(trame);
-        } else {
+        } else if (!trame.skipped){
             Snackbar snackbar = Snackbar.make(coordinatorLayout, "Error:" + trame.Errno, Snackbar.LENGTH_LONG);
             ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text))
                     .setTextColor(ContextCompat.getColor(mInstance, R.color.material_red_400));
             snackbar.show();
-            progressBar.setVisibility(View.GONE);
+            mInstance.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressBar.setVisibility(View.GONE);
+                }
+            });
             onTcpDumpStop();
         }
     }
@@ -349,6 +354,7 @@ public class                    WiresharkActivity extends MyActivity {
         RootProcess.kill("tcpdump");
         isRunning = false;
         fab.setImageResource(android.R.drawable.ic_media_play);
+        IPTables.stopIpTable();
         Snackbar.make(coordinatorLayout, "Mitm interupted", Snackbar.LENGTH_SHORT);
     }
 

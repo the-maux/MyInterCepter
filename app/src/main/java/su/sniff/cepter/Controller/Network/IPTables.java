@@ -81,7 +81,7 @@ public class                    IPTables {
     }
 
     public static void          InterceptWithoutSSL() {
-        RootProcess process = new RootProcess("IpTable::InterceptWithoutSSL");
+        RootProcess process = new RootProcess("IpTable::InitWithoutSSL");
         process.exec("iptables -F;")
                 .exec("iptables -X;")
                 .exec("iptables -t nat -F;")
@@ -102,5 +102,19 @@ public class                    IPTables {
         InterceptWithoutSSL();
         new RootProcess("IpTable::InterceptWithSSlStrip")
                 .exec("iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8081");
+    }
+
+    public static void          stopIpTable() {
+        new RootProcess("IpTable stop")
+                .exec("iptables -F;")
+                .exec("iptables -X;")
+                .exec("iptables -t nat -F;")
+                .exec("iptables -t nat -X;")
+                .exec("iptables -t mangle -F;")
+                .exec("iptables -t mangle -X;")
+                .exec("iptables -P INPUT ACCEPT;")
+                .exec("iptables -P FORWARD ACCEPT;")
+                .exec("iptables -P OUTPUT ACCEPT")
+                .closeProcess();
     }
 }
