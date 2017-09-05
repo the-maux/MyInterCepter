@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" android:layout_width="match_parent" android:layout_height="match_parent" android:overScrollMode="always">
-    <ScrollView android:id="@+id/scrollview" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_weight="1.0">
-        <TextView android:id="@+id/monitor" android:scrollbars="vertical" android:clickable="false" android:layout_width="match_parent" android:layout_height="match_parent" android:editable="false" android:layout_alignParentLeft="true" android:layout_alignParentRight="true" android:layout_alignParentBottom="true"  android:textIsSelectable="true">
-            <requestFocus />
-        </TextView>
-    </ScrollView>
-</RelativeLayout>

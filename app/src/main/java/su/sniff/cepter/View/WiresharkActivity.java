@@ -287,15 +287,15 @@ public class                    WiresharkActivity extends MyActivity {
                     Snackbar.make(coordinatorLayout, "Mitm stopped", Snackbar.LENGTH_LONG).show();
                 }
             });
-            return ;
+            return;
         }
         if (actualParam.contains(STDOUT_BUFF) && actualParam.contains("dst port 53")) {
             MITM_DNS(line);
         }
         Trame trame = new Trame(line, listOfTrames.size(), 0);
-        if (trame.initialised)
+        if (trame.initialised) {
             stdOUT(trame);
-        else {
+        } else {
             Snackbar snackbar = Snackbar.make(coordinatorLayout, "Error:" + trame.Errno, Snackbar.LENGTH_LONG);
             ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text))
                     .setTextColor(ContextCompat.getColor(mInstance, R.color.material_red_400));
@@ -303,7 +303,6 @@ public class                    WiresharkActivity extends MyActivity {
             progressBar.setVisibility(View.GONE);
             onTcpDumpStop();
         }
-        // IF MITM DNS ACTIVATED
     }
 
     /**

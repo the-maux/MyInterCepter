@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import su.sniff.cepter.Controller.CepterControl.IntercepterWrapper;
+import su.sniff.cepter.Controller.Network.Fingerprint;
 import su.sniff.cepter.Controller.Network.IPv4CIDR;
 import su.sniff.cepter.Controller.Network.NetUtils;
 import su.sniff.cepter.Controller.System.Singleton;
@@ -330,7 +331,7 @@ public class                        ScanActivity extends MyActivity {
     public void                     onReachableScanOver(ArrayList<String> ipReachable) {
         NetUtils.dumpListHostFromARPTableInFile(mInstance, ipReachable);
         mProgress = 1500;
-        IntercepterWrapper.fillHostListWithCepterScan(mInstance);
+        Fingerprint.guessHostFingerprint(mInstance);
         mProgress = 2000;
     }
 
@@ -354,10 +355,6 @@ public class                        ScanActivity extends MyActivity {
         });
     }
 
-    /**
-     * Create a file "./targets" dumping the hostList than start the TabActivitys
-     * @throws IOException
-     */
     private void                    startAttack() throws IOException {
         ArrayList<Host> selectedHost = new ArrayList<>();
         boolean noTargetSelected = true;
