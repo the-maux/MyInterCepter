@@ -98,7 +98,7 @@ public class                    IPTables {
         process.closeProcess();
     }
 
-    public static  void          InterceptWithSSlStrip() {
+    public static  void         InterceptWithSSlStrip() {
         InterceptWithoutSSL();
         new RootProcess("IpTable::InterceptWithSSlStrip")
                 .exec("iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8081");

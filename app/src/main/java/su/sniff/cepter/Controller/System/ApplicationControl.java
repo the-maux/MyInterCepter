@@ -16,6 +16,8 @@ public class ApplicationControl extends Application {
         ArpSpoof.stopArpSpoof();
         RootProcess.kill("tcpdump");
         RootProcess.kill("cepter");
+        RootProcess.kill("ping");
+        RootProcess.kill("arpspoof");
         super.onTerminate();
     }
 }
