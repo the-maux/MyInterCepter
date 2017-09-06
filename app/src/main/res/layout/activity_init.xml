@@ -46,4 +46,18 @@
         android:elevation="5dp"
         android:src="@drawable/scylla_logo" />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="4dp"
+        android:gravity="right"
+        android:text="&quot;Quand j'vois la normalité de l'homme, je m'dis que la folie doit etre une forme de sagesse&quot; \nS.c.y"
+        android:textColor="@color/material_light_white"
+        android:textSize="10sp"
+        android:textStyle="italic" />
+
 </RelativeLayout>
