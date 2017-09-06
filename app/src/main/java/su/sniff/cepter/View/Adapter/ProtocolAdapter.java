@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
 import su.sniff.cepter.R;
-import su.sniff.cepter.globalVariable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,7 +40,7 @@ public class                ProtocolAdapter extends ArrayAdapter<String> {
         }
         TextView tt = (TextView) convertView.findViewById(R.id.label);
         tt.setText( f1z.get(position));
-        tt.setTextSize(2, (float) globalVariable.raw_textsize);
+        tt.setTextSize(2, 9);
         tt.setBackgroundResource(R.color.ftp);
         if ((f1z.get(position)).indexOf("ARP") > 0) {
             tt.setBackgroundResource(R.color.arp);

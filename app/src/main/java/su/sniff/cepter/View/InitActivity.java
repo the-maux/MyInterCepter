@@ -6,7 +6,6 @@ import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,6 @@ import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.Model.Target.NetworkInformation;
 import su.sniff.cepter.R;
-import su.sniff.cepter.globalVariable;
 
 import java.io.*;
 import java.util.Arrays;
@@ -67,10 +65,9 @@ public class                    InitActivity extends MyActivity {
     }
 
     private void                buildPath() {
-        Singleton.getInstance().FilesPath = this.getFilesDir().getPath() + '/';
+        Singleton.getInstance().FilesPath = mInstance.getFilesDir().getPath() + '/';
         Singleton.getInstance().BinaryPath = Singleton.getInstance().FilesPath;//shouldn't be the same as FilesPath
         Log.d(TAG, "path:" + Singleton.getInstance().FilesPath);
-        globalVariable.PCAP_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
         monitor("Building Path");
     }
 
@@ -84,7 +81,6 @@ public class                    InitActivity extends MyActivity {
         } catch (IOException e) {
             e.getStackTrace();
         }
-        globalVariable.adapt_num = 1;
         DhcpInfo dhcpInfo = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getDhcpInfo();
         String data = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getDhcpInfo().toString();
         if (!data.contains("ipaddr") || !data.contains("gateway") || !data.contains("netmask") ) {

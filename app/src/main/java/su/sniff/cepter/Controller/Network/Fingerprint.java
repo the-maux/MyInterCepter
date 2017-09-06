@@ -12,7 +12,6 @@ import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.View.ScanActivity;
-import su.sniff.cepter.globalVariable;
 
 /**
  * Created by root on 05/09/17.
@@ -29,7 +28,7 @@ public class                         Fingerprint {
         final List<Host> hosts = new ArrayList<>();
         final RootProcess process = new RootProcess("Cepter Scan host", Singleton.getInstance().FilesPath);
         final BufferedReader bufferedReader = new BufferedReader(process.getInputStreamReader());
-        process.exec(Singleton.getInstance().FilesPath + "/cepter scan " + Integer.toString(globalVariable.adapt_num));
+        process.exec(Singleton.getInstance().FilesPath + "/cepter scan " + Singleton.getInstance().nbrInteface);
         process.exec("exit");
         new Thread(new Runnable() {
             public void run() {

@@ -28,6 +28,7 @@ import java.util.List;
 
 import su.sniff.cepter.Controller.CepterControl.IntercepterWrapper;
 import su.sniff.cepter.Controller.Network.Fingerprint;
+import su.sniff.cepter.Controller.Network.IPTables;
 import su.sniff.cepter.Controller.Network.IPv4CIDR;
 import su.sniff.cepter.Controller.Network.NetUtils;
 import su.sniff.cepter.Controller.System.Singleton;
@@ -40,7 +41,6 @@ import su.sniff.cepter.View.Adapter.HostScanAdapter;
 import su.sniff.cepter.View.Adapter.OSAdapter;
 import su.sniff.cepter.View.Dialog.RV_dialog;
 import su.sniff.cepter.View.Dialog.TIL_dialog;
-import su.sniff.cepter.globalVariable;
 
 /**
  * TODO:    + Add manual target
@@ -108,7 +108,7 @@ public class                        ScanActivity extends MyActivity {
             initDialog();
             initMenu();
             initSearchView();
-            if (globalVariable.DEBUG) {
+            if (Singleton.getInstance().DebugMode) {
                 Log.d(TAG, "debug enabled, starting Scan automaticaly");
                 startNetworkScan();
             }
@@ -386,22 +386,10 @@ public class                        ScanActivity extends MyActivity {
         if (keyCode == 4) {
             try {
                 openFileOutput("exits.id", 0).close();
-                Thread.sleep(100);
                 RootProcess.kill("cepter");
-                if (globalVariable.strip == 1) {
-                    new RootProcess("LEAVE APP")
-                         .exec("iptables -F;" +
-                            "iptables -X; " +
-                            "iptables -t nat -F;" +
-                            "iptables -t nat -X;" +
-                            "iptables -t mangle -F;" +
-                            "iptables -t mangle -X;" +
-                            "iptables -P INPUT ACCEPT;"+
-                            "iptables -P FORWARD ACCEPT;"+
-                            "iptables -P OUTPUT ACCEPT").closeProcess();
-                }
+                IPTables.stopIpTable();
                 finish();
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

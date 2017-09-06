@@ -27,4 +27,7 @@ public class                            Singleton {
     public  List<ArpSpoof>              ArpSpoofProcessStack = new ArrayList<>();
     public  NetworkInformation          network = null;
     public  boolean                     DebugMode = true, UltraDebugMode = false;
+    public  boolean                     SslStripModeActived = false, DnsSpoofActived = false;
+
+    public  int                         lock = 0, nbrInteface = 1;
 }

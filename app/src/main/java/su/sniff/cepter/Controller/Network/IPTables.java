@@ -23,7 +23,6 @@ import android.util.Log;
 
 import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
-import su.sniff.cepter.globalVariable;
 
 public class                    IPTables {
     private static final String TAG = "IPTABLES";
@@ -92,7 +91,7 @@ public class                    IPTables {
                 .exec("iptables -P FORWARD ACCEPT;")
                 .exec("iptables -P OUTPUT ACCEPT")
                 .exec("echo '1' > /proc/sys/net/ipv4/ip_forward");
-        if (globalVariable.dnss == 1) {
+        if (Singleton.getInstance().DnsSpoofActived) {
             process.exec("iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053");
         }
         process.closeProcess();

@@ -63,7 +63,7 @@ public class                    WiresharkActivity extends MyActivity {
     private RootProcess         tcpDumpProcess;
     private ArrayList<Trame>    listOfTrames = new ArrayList<>();
     private WiresharkAdapter    adapterWiresharkRV;
-    private String              actualParam = "", hostFilter = "", mTypeScan = "";
+    private String              actualParam = "", hostFilter = "", mTypeScan = "No Filter";
     private List<Host>          listHostSelected = new ArrayList<>();
     private boolean             isRunning = false;
 
@@ -158,9 +158,9 @@ public class                    WiresharkActivity extends MyActivity {
     private void                initSpinner() {
         final ArrayList<String> cmds = new ArrayList<>();
         cmds.add("No Filter");
-        params.put(cmds.get(0), INTERFACE  + "\' ");
+        params.put(cmds.get(0), INTERFACE  + " \' ");
         cmds.add("DNS Filter");
-        params.put(cmds.get(1), INTERFACE + "\' dst port 53 ");
+        params.put(cmds.get(1), INTERFACE + " \' dst port 53 ");
         cmds.add("DNS Intercepter");
         params.put(cmds.get(2), INTERFACE + STDOUT_BUFF + VERBOSE_v2 + SNARF + VERBOSE_v3 + "\' dst port 53 ");
         cmds.add("HTTP Filter");
@@ -174,7 +174,7 @@ public class                    WiresharkActivity extends MyActivity {
         cmds.add("Arp Filter");
         params.put(cmds.get(7), INTERFACE + " \' arp ");
         cmds.add("Custom Filter");
-        params.put(cmds.get(8), INTERFACE + "\' ");
+        params.put(cmds.get(8), INTERFACE + " \' ");
         spinner.setItems(cmds);
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
             @Override
@@ -241,7 +241,7 @@ public class                    WiresharkActivity extends MyActivity {
      */
     private void                onTcpDumpStart() {
         IPTables.InterceptWithoutSSL();
-        final String cmd = Singleton.getInstance().FilesPath + "/tcpdump " + actualParam + hostFilter;
+        final String cmd = Singleton.getInstance().FilesPath + "tcpdump " + actualParam + hostFilter;
         Monitor.setText(cmd.replace(Singleton.getInstance().FilesPath, ""));
         new Thread(new Runnable() {
             @Override
@@ -253,9 +253,14 @@ public class                    WiresharkActivity extends MyActivity {
                         Log.i(TAG, "DNS REQUEST MITM");
                        new IPTables().discardForwardding2Port(53); //MITM DNS
                      }
-
                     listOfTrames.clear();
-                    tcpDumpProcess = new RootProcess("TcpDump::DNSSpoof").exec(cmd);
+                    mInstance.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapterWiresharkRV.notifyDataSetChanged();
+                        }
+                    });
+                    tcpDumpProcess = new RootProcess("Wireshark").exec(cmd);
                     BufferedReader reader = tcpDumpProcess.getReader();
                     String line;
                     while ((line = reader.readLine()) != null) {
@@ -271,10 +276,13 @@ public class                    WiresharkActivity extends MyActivity {
                     onNewLineTcpDump("Quiting...");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    Log.d(TAG, "InterruptedException");
                 } catch (IOException e) {
                     e.printStackTrace();
+                    Log.d(TAG, "Process Error");
                 } finally {
-                    tcpDumpProcess.closeProcess();
+                    if (tcpDumpProcess != null)
+                        tcpDumpProcess.closeProcess();
                 }
                 Log.d(TAG, "onTcpDump start over");
             }
