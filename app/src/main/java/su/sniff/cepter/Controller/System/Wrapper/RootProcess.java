@@ -3,6 +3,7 @@ package su.sniff.cepter.Controller.System.Wrapper;
 import android.util.Log;
 
 import java.io.*;
+import java.lang.reflect.Field;
 
 import su.sniff.cepter.Controller.System.Singleton;
 
@@ -10,6 +11,7 @@ public class                    RootProcess {
     private String              TAG = "RootProcess";
     private Process             process;
     private DataOutputStream    os;
+    private int                 pid;
     private String              LogID;
 
     public                      RootProcess(String LogID) {
@@ -37,10 +39,26 @@ public class                    RootProcess {
             Log.d(TAG, LogID + "::" + cmd);
             os.writeBytes(cmd + " 2>&1 \n");
             os.flush();
+            Field f = process.getClass().getDeclaredField("pid");
+            f.setAccessible(true);
+            pid = f.getInt(process);
+            f.setAccessible(false);
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            Log.d(TAG, "IllegalAccessException PID");
+            e.printStackTrace();
+            pid = -1;
+        } catch (NoSuchFieldException e) {
+            Log.d(TAG, "NoSuchFieldException PID");
+            e.printStackTrace();
+            pid = -1;
         }
         return this;
+    }
+
+    public int                  getPid() {
+        return pid;
     }
 
     public void                 waitFor() {
@@ -67,6 +85,7 @@ public class                    RootProcess {
         closeDontWait();
         waitFor();
     }
+
     public void                 closeDontWait() {
         try {
             Log.d(TAG, this.LogID + "::Close");
@@ -77,8 +96,15 @@ public class                    RootProcess {
             e.printStackTrace();
         }
     }
+    
     public Process              getActualProcess() {
         return process;
+    }
+
+    public static void          kill(int pid) {
+        new RootProcess("Kill:" + pid)
+                .exec(Singleton.getInstance().BinaryPath + "busybox kill " + pid)
+                .closeProcess();
     }
 
     public static void          kill(String binary) {

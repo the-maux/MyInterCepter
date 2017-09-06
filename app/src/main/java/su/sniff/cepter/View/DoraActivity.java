@@ -98,9 +98,12 @@ public class                    DoraActivity extends MyActivity {
             Log.d(TAG, "diagnose dora started");
         } else {
             running = false;
+            for (DoraProcess doraProcess : listOfHostDored) {
+                RootProcess.kill(doraProcess.pingProcess.getPid());
+            }
             Log.d(TAG, "diagnose dora stopped");
-            RootProcess.kill("ping");
         }
+        Rv_Adapter.setRunning(running);
         fab.setImageResource((!running) ? android.R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
     }
 

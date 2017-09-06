@@ -18,6 +18,7 @@ public class            DoraProcess {
     public Host         host;
     public RootProcess  pingProcess;
     public Date         uptime;
+    public int          pid;
     public volatile int rcv = 0x00, sent = 0x00, error = 0x00;
     private int         MARGE_ERREUR = 19;//pour ne pas fausser les stats avec le debut du binaire
     public              DoraProcess(Host host) {
@@ -28,7 +29,6 @@ public class            DoraProcess {
     public void         exec() {
         reset();
         new Thread(new Runnable() {
-
             @Override
             public void run() {
                 String buffer = "";
@@ -36,6 +36,9 @@ public class            DoraProcess {
                     uptime = Calendar.getInstance().getTime();
                     running = true;
                     pingProcess.exec("ping -fi 0.2 " + host.getIp());
+                    pid = pingProcess.getPid();
+                    Log.d(TAG, "Dora:" + host.getIp() + " PID:" + pid);
+                    // find pid pour finir
                     int tmpLine;
                     boolean over = false;
                     while (!over) {
@@ -103,6 +106,9 @@ public class            DoraProcess {
             return "0:00:00";
     }
 
+    public void                 kill() {
+
+    }
 
     public int          getVisu() {
         if (sent == 0 || rcv == 0)

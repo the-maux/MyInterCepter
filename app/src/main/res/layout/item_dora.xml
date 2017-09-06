@@ -1,24 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/tools"
     android:id="@+id/cardView"
     android:layout_width="150dp"
-    android:layout_height="140dp"
-    android:layout_margin="4dp"
+    android:layout_height="180dp"
+    android:layout_margin="8dp"
+    android:layout_marginTop="8dp"
     android:background="@color/material_light_black"
     app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    app:cardElevation="5dp">
 
     <RelativeLayout
         android:id="@+id/rootView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="@color/material_light_black">
+
+        <RelativeLayout
+            android:id="@+id/menuView"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@color/cardview_dark_background"
+            android:elevation="2dp">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="8dp"
+                android:clickable="true"
+                android:elevation="2dp"
+                app:borderWidth="0dp"
+                app:fabSize="mini"
+                app:srcCompat="@drawable/ic_media_play" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/stopFab"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@+id/fab"
+                android:clickable="true"
+                android:elevation="2dp"
+                app:borderWidth="0dp"
+                app:fabSize="mini"
+                app:srcCompat="@drawable/ic_stop" />
+
+            <ImageButton
+                android:id="@+id/menuButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@android:color/transparent"
+                android:elevation="2dp"
+                app:srcCompat="@drawable/ic_chevron_right" />
+
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/topView"
             android:layout_width="match_parent"
             android:layout_height="34dp"
+            android:layout_below="@+id/menuView"
             android:background="@color/material_light_black"
             android:elevation="2dp">
 
@@ -95,7 +142,8 @@
         <RelativeLayout
             android:id="@+id/bottomView"
             android:layout_width="match_parent"
-            android:layout_height="21dp"
+            android:layout_height="31dp"
+            android:layout_alignWithParentIfMissing="false"
             android:layout_below="@+id/middleView"
             android:background="@color/material_light_black"
             android:elevation="2dp">
@@ -105,9 +153,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/cardview_dark_background"
+                android:elevation="2dp"
                 android:fontFamily="serif-monospace"
                 android:gravity="center"
-                android:text="127.42.42.1"
+                android:text="127.42.42.1\nthe-maux"
                 android:textColor="@color/material_light_white"
                 android:textSize="12sp"
                 android:textStyle="bold"
