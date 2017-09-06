@@ -6,14 +6,8 @@ import android.content.DialogInterface;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
 
-import java.util.List;
-
-import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.Adapter.TcpdumpHostCheckerADapter;
 
 /**
  * Générique AlertDialog with RecyclerView

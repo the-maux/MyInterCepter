@@ -39,7 +39,7 @@ import su.sniff.cepter.Model.Pcap.Trame;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.Adapter.TcpdumpHostCheckerADapter;
+import su.sniff.cepter.View.Adapter.HostSelectionAdapter;
 import su.sniff.cepter.View.Adapter.WiresharkAdapter;
 import su.sniff.cepter.View.Dialog.RV_dialog;
 
@@ -141,12 +141,15 @@ public class                    WiresharkActivity extends MyActivity {
 
     private void                onClickChoiceTarget() {
         new RV_dialog(this)
-                .setAdapter(new TcpdumpHostCheckerADapter(this, Singleton.getInstance().hostsList, listHostSelected))
+                .setAdapter(new HostSelectionAdapter(this, Singleton.getInstance().hostsList, listHostSelected))
                 .setTitle("Choix des cibles")
                 .onPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            monitorHost.setText(listHostSelected.size() + " target");
+                            if (listHostSelected.isEmpty())
+                                Snackbar.make(coordinatorLayout, "No target selected", Snackbar.LENGTH_LONG).show();
+                            else
+                                monitorHost.setText(listHostSelected.size() + " target");
                         }
                     })
                 .show();
@@ -154,8 +157,8 @@ public class                    WiresharkActivity extends MyActivity {
 
     private void                initSpinner() {
         final ArrayList<String> cmds = new ArrayList<>();
-        cmds.add("Arp Filter");
-        params.put(cmds.get(0), INTERFACE + " \' arp ");
+        cmds.add("No Filter");
+        params.put(cmds.get(0), INTERFACE  + "\' ");
         cmds.add("DNS Filter");
         params.put(cmds.get(1), INTERFACE + "\' dst port 53 ");
         cmds.add("DNS Intercepter");
@@ -168,10 +171,10 @@ public class                    WiresharkActivity extends MyActivity {
         params.put(cmds.get(5), INTERFACE  + " \' tcp ");
         cmds.add("UDP Filter");
         params.put(cmds.get(6), INTERFACE + " \' udp ");
+        cmds.add("Arp Filter");
+        params.put(cmds.get(7), INTERFACE + " \' arp ");
         cmds.add("Custom Filter");
-        params.put(cmds.get(7), INTERFACE + "\' ");
-        cmds.add("No Filter");
-        params.put(cmds.get(8), INTERFACE  + "\' ");
+        params.put(cmds.get(8), INTERFACE + "\' ");
         spinner.setItems(cmds);
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
             @Override
@@ -197,6 +200,7 @@ public class                    WiresharkActivity extends MyActivity {
                 fab.setImageResource(android.R.drawable.ic_media_pause);
                 isRunning = true;
             } else {
+
                 onClickChoiceTarget();
             }
         } else {
@@ -209,13 +213,17 @@ public class                    WiresharkActivity extends MyActivity {
     }
 
     private boolean             initParams() {
+        if (listHostSelected.isEmpty()) {
+            if (Singleton.getInstance().hostsList.size() == 1) {//Automatic selection when 1 target only
+                listHostSelected.add(Singleton.getInstance().hostsList.get(0));
+            } else {
+                Snackbar.make(coordinatorLayout, "Selectionner une target", Snackbar.LENGTH_SHORT).setActionTextColor(Color.RED).show();
+                return false;
+            }
+        }
         actualParam = cmd.getText().toString();
         cmd.setText(actualParam);
         hostFilter = (mTypeScan.contains("No Filter")) ? " (" : " and (" ;//If no filter, no '&&' in expression
-        if (listHostSelected.isEmpty()) {
-            Snackbar.make(coordinatorLayout, "Selectionner une target", Snackbar.LENGTH_SHORT).setActionTextColor(Color.RED).show();
-            return false;
-        }
         for (int i = 0; i < listHostSelected.size(); i++) {
             if (i > 0)
                 hostFilter += " or ";
@@ -353,7 +361,12 @@ public class                    WiresharkActivity extends MyActivity {
         ArpSpoof.stopArpSpoof();
         RootProcess.kill("tcpdump");
         isRunning = false;
-        fab.setImageResource(android.R.drawable.ic_media_play);
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                fab.setImageResource(android.R.drawable.ic_media_play);
+            }
+        });
         IPTables.stopIpTable();
         Snackbar.make(coordinatorLayout, "Mitm interupted", Snackbar.LENGTH_SHORT);
     }

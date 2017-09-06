@@ -14,12 +14,12 @@ import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.Holder.HostCheckBoxHolder;
 
 
-public class                    TcpdumpHostCheckerADapter extends RecyclerView.Adapter<HostCheckBoxHolder> {
+public class                    HostSelectionAdapter extends RecyclerView.Adapter<HostCheckBoxHolder> {
     private String              TAG = this.getClass().getName();
     private Activity            activity;
     private List<Host>          hosts, listHostSelected;
 
-    public                      TcpdumpHostCheckerADapter(Activity activity, ArrayList<Host> hostsList, List<Host> hostsSelected) {
+    public                      HostSelectionAdapter(Activity activity, ArrayList<Host> hostsList, List<Host> hostsSelected) {
         this.hosts = hostsList;
         this.activity = activity;
         this.listHostSelected = hostsSelected;
