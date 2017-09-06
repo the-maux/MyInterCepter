@@ -20,7 +20,7 @@ public class               Trame {
     public byte[]          bufferByte = null;
     public String          info;
     public int             backgroundColor;
-    public boolean         initialised = false;
+    public boolean         initialised = false, skipped = false;
 
     public                  Trame(String dump, int offsett, int verbose_lvl) {
         this.verbose = verbose_lvl;//0: Nothing; 1 => -v ; 2 -vv ; 3 -vvv ; 4 -X
@@ -53,8 +53,10 @@ public class               Trame {
             line.contains("listening on ") ||
                 line.contains("packets captured") ||
                 line.contains("packets received by filter") ||
-                line.contains("packets dropped by kernel"))
+                line.contains("packets dropped by kernel")) {
+            skipped = true;
             return true;
+        }
         return false;
     }
 
