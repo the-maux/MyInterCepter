@@ -102,12 +102,8 @@ public class                    InitActivity extends MyActivity {
         if (res[netmask].contains("0.0.0.0"))
             res[netmask] = "255.255.255.0";
         Singleton.getInstance().network = new NetworkInformation(dhcpInfo, NetUtils.getMac(res[ip], res[gw]));
-        Intent i = new Intent(this, ScanActivity.class);
-        i.putExtra("Key_Int", 1);//1 est censé représenté l'interface network, en l'occurence 1=> eth0
-        i.putExtra("Key_String", Singleton.getInstance().network.myIp);
-        startActivity(i);
+        startActivity(new Intent(this, ScanActivity.class));
         finish();
-
     }
 
     private RootProcess         getNetworkInfoByCept() throws IOException, InterruptedException {
