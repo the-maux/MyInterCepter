@@ -121,7 +121,7 @@ public class                        ScanActivity extends MyActivity {
     private void                    initMonitor() {
         Log.d(TAG, "Init Monitor");
         WifiInfo wifiInfo = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
-        monitor = wifiInfo.getSSID().replace("\"", "") + ':' + getIntent().getExtras().getString("Key_String");
+        monitor = wifiInfo.getSSID().replace("\"", "") + ':';
         if (!monitor.contains("WiFi")) {
             monitor += "\n" + "GW: " + Singleton.getInstance().network.gateway + "/" + Singleton.getInstance().network.netmask;
         } else {

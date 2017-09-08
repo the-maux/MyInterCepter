@@ -27,9 +27,9 @@ public class                    InitActivity extends MyActivity {
     private InitActivity        mInstance = this;
     private TextView            monitor;
 
-    /*static {
-        System.loadLibrary("native-lib");
-    }*/
+    static {
+        System.loadLibrary("jnetpcap");
+    }
 
     public void                 onCreate(Bundle savedInstanceState) {
         View rootView = LayoutInflater.from(this).inflate(R.layout.activity_init, null);
@@ -200,6 +200,7 @@ public class                    InitActivity extends MyActivity {
         buildFile("arpspoof", R.raw.arpspoof);
         buildFile("ettercap_archive", R.raw.ettercap_archive);
         buildFile("archive_nmap", R.raw.nmap);
+        buildFile("ping", R.raw.ping);
         RootProcess process = new RootProcess("UNZIP FILES", Singleton.getInstance().FilesPath);
         process.exec(Singleton.getInstance().BinaryPath + "/busybox unzip ettercap_archive")
                 .exec(Singleton.getInstance().BinaryPath + "/busybox unzip archive_nmap")
