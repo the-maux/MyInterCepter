@@ -106,8 +106,8 @@
 
 	<com.github.clans.fab.FloatingActionButton
 		android:id="@+id/fab"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
+		android:layout_width="40dp"
+		android:layout_height="40dp"
 		android:layout_marginRight="16dp"
 		android:onClick="onFabClick"
 		android:src="@android:drawable/ic_menu_search"
@@ -165,7 +165,6 @@
 			android:layout_centerHorizontal="true"
 			android:gravity="right"
 			android:padding="8dp"
-			android:text="192.168.10.24\n Non LMFR &quot;SFR-4328', GW: 192.168.0.1/255.255.255.0\nVendor:Fonction non active"
 			android:textColor="@color/green" />
 
 

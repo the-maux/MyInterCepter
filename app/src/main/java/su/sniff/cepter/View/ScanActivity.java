@@ -108,8 +108,8 @@ public class                        ScanActivity extends MyActivity {
             initDialog();
             initMenu();
             initSearchView();
+            Log.d(TAG, "debug enabled, starting Scan automaticaly");
             if (Singleton.getInstance().DebugMode) {
-                Log.d(TAG, "debug enabled, starting Scan automaticaly");
                 startNetworkScan();
             }
         }
@@ -121,7 +121,7 @@ public class                        ScanActivity extends MyActivity {
     private void                    initMonitor() {
         Log.d(TAG, "Init Monitor");
         WifiInfo wifiInfo = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
-        monitor = wifiInfo.getSSID().replace("\"", "") + ':' + getIntent().getExtras().getString("Key_String");
+        monitor = wifiInfo.getSSID().replace("\"", "") + " : " + Singleton.getInstance().network.myIp;
         if (!monitor.contains("WiFi")) {
             monitor += "\n" + "GW: " + Singleton.getInstance().network.gateway + "/" + Singleton.getInstance().network.netmask;
         } else {
@@ -299,11 +299,11 @@ public class                        ScanActivity extends MyActivity {
     private void                    progressAnimation() {
         mFab.setImageResource(android.R.drawable.ic_menu_search);
         mFab.setProgress(0, true);
-        mFab.setMax(4500);
+        mFab.setMax(5500);
         new Thread(new Runnable() {
             public void run() {
                 mProgress = 0;
-                while (mProgress <= 4500) {
+                while (mProgress <= 5500) {
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException e) {
@@ -345,7 +345,7 @@ public class                        ScanActivity extends MyActivity {
                 mHostAdapter.updateHostList(mHosts);
                 inLoading = false;
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
-
+                mFab.setProgress(5500, true);
                 final ArrayList<String> listOs = mHostAdapter.getOsList();
                 monitor += "\n" + listOs.size() +" Os détected";
                 mBottomMonitor.setText(monitor);
