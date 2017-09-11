@@ -1,15 +1,14 @@
 package su.sniff.cepter.View.Adapter;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import su.sniff.cepter.Model.Pcap.Protocol;
 import su.sniff.cepter.Model.Pcap.Trame;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.Holder.WiresharkHolder;
@@ -17,12 +16,14 @@ import su.sniff.cepter.View.Adapter.Holder.WiresharkHolder;
 
 public class                WiresharkAdapter extends RecyclerView.Adapter<WiresharkHolder> {
     private String          TAG = "WiresharkAdapter";
-    private ArrayList<Trame> listOfTrame;
+    private ArrayList<Trame> listOfTrame, originalListOfTrames;
     private Activity        activity;
-    private boolean         arp, http, tcp, udp, ip;
+    public boolean          arp = true, http = true, tcp = true, dns = true, udp = true, ip = true;
 
     public                  WiresharkAdapter(Activity activity, ArrayList<Trame> trames) {
-        this.listOfTrame = trames;
+        this.listOfTrame = new ArrayList<>();
+        this.originalListOfTrames = trames;
+        listOfTrame.addAll(originalListOfTrames);
         this.activity = activity;
     }
 
@@ -44,10 +45,10 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         }
         holder.proto.setText(trame.protocol.name().toUpperCase());
         holder.info.setText(trame.info);
-        setBacgroundColor(trame.backgroundColor, holder);
+        setBackgroundColor(trame.backgroundColor, holder);
     }
 
-    private void            setBacgroundColor(int color, WiresharkHolder holder) {
+    private void            setBackgroundColor(int color, WiresharkHolder holder) {
         holder.No.setBackgroundColor(ContextCompat.getColor(activity, color));
         holder.time.setBackgroundColor(ContextCompat.getColor(activity, color));
         holder.source.setBackgroundColor(ContextCompat.getColor(activity, color));
@@ -60,4 +61,78 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
     public int              getItemCount() {
         return listOfTrame.size();
     }
+
+    private void            addOnList(Trame trame, boolean reverse) {
+        if (reverse) {
+            listOfTrame.add(0, trame);
+        } else {
+            listOfTrame.add(trame);
+        }
+    }
+    private void            addTrameFiltered(Trame trame, boolean reverse) {
+        switch (trame.protocol) {
+            case ARP:
+                if (arp)
+                    addOnList(trame, reverse);
+                break;
+            case HTTP:
+                if (http)
+                    addOnList(trame, reverse);
+                break;
+            case HTTPS:
+                if (http)
+                    addOnList(trame, reverse);
+                break;
+            case DNS:
+                if (dns)
+                    addOnList(trame, reverse);
+                break;
+            case TCP:
+                if (tcp)
+                    addOnList(trame, reverse);
+                break;
+            case UDP:
+                if (udp)
+                    addOnList(trame, reverse);
+                break;
+            case IP:
+                if (ip)
+                    addOnList(trame, reverse);
+                break;
+        }
+
+    }
+    public void             addTrameOnAdapter(Trame trame) {
+        addTrameFiltered(trame, true);
+        originalListOfTrames.add(0, trame);
+    }
+
+    public void             changePermissionFilter(Protocol protocol) {
+        switch (protocol) {
+            case ARP:
+                arp = !arp;
+                break;
+            case HTTP:
+                http = !http;
+                break;
+            case DNS:
+                dns = !dns;
+                break;
+            case TCP:
+                tcp = !tcp;
+                break;
+            case UDP:
+                udp = !udp;
+                break;
+            case IP:
+                ip = !ip;
+                break;
+        }
+        listOfTrame.clear();
+        for (Trame trame : originalListOfTrames) {
+            addTrameFiltered(trame, false);
+        }
+        notifyDataSetChanged();
+    }
+
 }

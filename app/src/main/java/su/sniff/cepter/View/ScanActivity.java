@@ -346,7 +346,7 @@ public class                        ScanActivity extends MyActivity {
                 mHostAdapter.updateHostList(mHosts);
                 inLoading = false;
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
-                mFab.setProgress(5500, true);
+                mProgress = 5450;
                 final ArrayList<String> listOs = mHostAdapter.getOsList();
                 monitor += "\n" + listOs.size() +" Os détected";
                 mBottomMonitor.setText(monitor);
