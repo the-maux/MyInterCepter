@@ -18,7 +18,7 @@
 			<RelativeLayout
 				android:id="@+id/topToolbar"
 				android:layout_width="wrap_content"
-				android:layout_height="75dp"
+				android:layout_height="80dp"
 				android:focusable="true"
 				android:focusableInTouchMode="true"
 				android:gravity="right">
@@ -56,8 +56,8 @@
 					android:layout_centerVertical="false"
 					android:layout_marginEnd="8dp"
 					android:layout_marginTop="12dp"
-					android:background="@android:color/transparent"
 					android:layout_toLeftOf="@+id/action_settings"
+					android:background="@android:color/transparent"
 					app:srcCompat="@drawable/ic_add_circle" />
 
 				<ImageButton
@@ -106,8 +106,8 @@
 
 	<com.github.clans.fab.FloatingActionButton
 		android:id="@+id/fab"
-		android:layout_width="40dp"
-		android:layout_height="40dp"
+		android:layout_width="20dp"
+		android:layout_height="20dp"
 		android:layout_marginRight="16dp"
 		android:onClick="onFabClick"
 		android:src="@android:drawable/ic_menu_search"

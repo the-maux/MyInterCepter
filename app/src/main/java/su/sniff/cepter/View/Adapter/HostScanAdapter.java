@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.support.v7.widget.RecyclerView;
+import android.widget.CompoundButton;
 
 
 public class                    HostScanAdapter extends RecyclerView.Adapter<HostScanHolder> {
@@ -30,15 +31,29 @@ public class                    HostScanAdapter extends RecyclerView.Adapter<Hos
         return new HostScanHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_host, parent, false));
     }
 
-    @Override public void       onBindViewHolder(HostScanHolder holder, int position) {
-        Host host = mHosts.get(position);
-        holder.relativeLayout.setOnClickListener(onCardClick(position, holder));
+    @Override public void       onBindViewHolder(final HostScanHolder holder, final int position) {
+        final Host host = mHosts.get(position);
+
         holder.ipHostname.setText(host.getIp() + " " + host.getName());
         holder.mac.setText(host.getMac());
         holder.os.setText(host.getOS());
         holder.vendor.setText(host.getVendor());
         holder.selected.setChecked(host.isSelected());
+        holder.relativeLayout.setOnClickListener(onCardClick(position, holder));
+        holder.selected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                onHostChecked(holder, host, position);
+            }
+        });
         Host.setOsIcon(activity, mHosts.get(position).getDumpInfo(), holder.osIcon);
+    }
+
+    private void                 onHostChecked(final HostScanHolder holder, Host host, int position) {
+        host.setSelected(!host.isSelected());
+        holder.selected.setSelected(host.isSelected());
+        Log.d(TAG, host.getIp() + " is now isSelected:" + host.isSelected());
+        notifyItemChanged(position);
     }
 
     /**
@@ -51,11 +66,7 @@ public class                    HostScanAdapter extends RecyclerView.Adapter<Hos
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Host host = mHosts.get(position);
-                host.setSelected(!host.isSelected());
-                holder.selected.setSelected(host.isSelected());
-                Log.d(TAG, host.getIp() + " is now isSelected:" + host.isSelected());
-                notifyItemChanged(position);
+                onHostChecked(holder, mHosts.get(position), position);
             }
         };
     }

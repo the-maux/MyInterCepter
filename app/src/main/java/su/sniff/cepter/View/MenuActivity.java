@@ -7,7 +7,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
-import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
 
@@ -46,7 +45,6 @@ public class                    MenuActivity extends MyActivity {
                 switch (clickChoice) {
                     case Nmap:
                         choice = NmapActivity.class;
-                        Snackbar.make(coordinatorLayout, "Fonctionnalité Nmap non implémenté", Snackbar.LENGTH_LONG).show();
                         break;
                     case CepterMitm:
                         choice = null;

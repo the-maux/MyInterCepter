@@ -36,11 +36,12 @@
                     app:cardElevation="8dp">
 
                     <RelativeLayout
+                        android:id="@+id/NmapButton"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/NmapButton"
+                            android:id="@+id/NmapTxt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -53,7 +54,7 @@
                             android:id="@+id/imageView"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_below="@+id/NmapButton"
+                            android:layout_below="@+id/NmapTxt"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:src="@drawable/nmap" />
@@ -71,11 +72,12 @@
                     app:cardElevation="8dp">
 
                     <RelativeLayout
+                        android:id="@+id/MitmButton"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/MitmButton"
+                            android:id="@+id/MitmTxt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -88,7 +90,7 @@
                             android:id="@+id/imageView2"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_below="@+id/MitmButton"
+                            android:layout_below="@+id/MitmTxt"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:src="@drawable/gallery" />
@@ -114,11 +116,12 @@
 
                     <RelativeLayout
 
+                        android:id="@+id/ArpButton"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/ArpButton"
+                            android:id="@+id/ArpTxt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -131,7 +134,7 @@
                             android:id="@+id/imageView9"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_below="@+id/ArpButton"
+                            android:layout_below="@+id/ArpTxt"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:src="@drawable/cage" />
@@ -150,11 +153,12 @@
 
                     <RelativeLayout
 
+                        android:id="@+id/DnsButton"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/DnsButton"
+                            android:id="@+id/txtDNS"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -167,7 +171,7 @@
                             android:id="@+id/imageView8"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_below="@+id/DnsButton"
+                            android:layout_below="@+id/txtDNS"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:src="@drawable/dns" />
@@ -193,12 +197,13 @@
                     app:cardElevation="8dp">
 
                     <RelativeLayout
+                        android:id="@+id/WiresharkButton"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/WiresharkButton"
 
+                            android:id="@+id/WiresharkTxt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -211,7 +216,7 @@
                             android:id="@+id/imageView3"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_below="@+id/WiresharkButton"
+                            android:layout_below="@+id/WiresharkTxt"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:padding="4dp"
@@ -230,11 +235,12 @@
                     app:cardElevation="8dp">
 
                     <RelativeLayout
+                        android:id="@+id/DoraDiagnostic"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/DoraDiagnostic"
+                            android:id="@+id/DoraTxt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
@@ -250,7 +256,7 @@
                             android:id="@+id/imageView10"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_below="@+id/DoraDiagnostic"
+                            android:layout_below="@+id/DoraTxt"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:src="@drawable/scan" />
@@ -277,11 +283,12 @@
 
                     <RelativeLayout
 
+                        android:id="@+id/Metasploit"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/Metasploit"
+                            android:id="@+id/MsfTxt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -294,7 +301,7 @@
                             android:id="@+id/imageView4"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_below="@+id/Metasploit"
+                            android:layout_below="@+id/MsfTxt"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:src="@drawable/metasploit" />
@@ -312,11 +319,12 @@
                     app:cardElevation="8dp">
 
                     <RelativeLayout
+                        android:id="@+id/SettingsButton"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/SettingsButton"
+                            android:id="@+id/SettingsTxt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -329,7 +337,7 @@
                             android:id="@+id/imageView5"
                             android:layout_width="35dp"
                             android:layout_height="35dp"
-                            android:layout_below="@+id/SettingsButton"
+                            android:layout_below="@+id/SettingsTxt"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:src="@drawable/settings" />
