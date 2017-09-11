@@ -22,9 +22,11 @@ public class                    HostScanAdapter extends RecyclerView.Adapter<Hos
     private ScanActivity        activity;
     private List<Host>          mHosts = null;
     private List<Host>          originalList;
+    private RecyclerView        mHost_RV;
 
-    public                      HostScanAdapter(ScanActivity context) {
+    public                      HostScanAdapter(ScanActivity context, RecyclerView Host_RV) {
         activity = context;
+        mHost_RV = Host_RV;
     }
 
     @Override public HostScanHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -32,28 +34,34 @@ public class                    HostScanAdapter extends RecyclerView.Adapter<Hos
     }
 
     @Override public void       onBindViewHolder(final HostScanHolder holder, final int position) {
-        final Host host = mHosts.get(position);
+        final Host host = mHosts.get(holder.getAdapterPosition());
 
         holder.ipHostname.setText(host.getIp() + " " + host.getName());
         holder.mac.setText(host.getMac());
         holder.os.setText(host.getOS());
         holder.vendor.setText(host.getVendor());
         holder.selected.setChecked(host.isSelected());
-        holder.relativeLayout.setOnClickListener(onCardClick(position, holder));
+        holder.relativeLayout.setOnClickListener(onCardClick(holder.getAdapterPosition(), holder));
         holder.selected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onHostChecked(holder, host, position);
+                onHostChecked(holder, host, holder.getAdapterPosition());
             }
         });
-        Host.setOsIcon(activity, mHosts.get(position).getDumpInfo(), holder.osIcon);
+        Host.setOsIcon(activity, mHosts.get(holder.getAdapterPosition()).getDumpInfo(), holder.osIcon);
     }
 
-    private void                 onHostChecked(final HostScanHolder holder, Host host, int position) {
+    private void                 onHostChecked(final HostScanHolder holder, Host host, final int position) {
         host.setSelected(!host.isSelected());
         holder.selected.setSelected(host.isSelected());
         Log.d(TAG, host.getIp() + " is now isSelected:" + host.isSelected());
-        notifyItemChanged(position);
+        mHost_RV.post(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemChanged(position);
+            }
+        });
+
     }
 
     /**

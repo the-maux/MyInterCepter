@@ -83,6 +83,7 @@ public class                        ScanActivity extends MyActivity {
 
     private void                    initXml() throws Exception {
         mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setButtonSize(FloatingActionButton.SIZE_MINI);
         mHost_RV = (RecyclerView) findViewById(R.id.recycler_view);
         mEmptyList = (TextView) findViewById(R.id.emptyList);
         mBottomMonitor = ((TextView) findViewById(R.id.Message));
@@ -217,7 +218,7 @@ public class                        ScanActivity extends MyActivity {
 
     private void                    initHostsRecyclerView() {
         mHosts = new ArrayList<>();
-        mHostAdapter = new HostScanAdapter(this);
+        mHostAdapter = new HostScanAdapter(this, mHost_RV);
         mHost_RV.setAdapter(mHostAdapter);
         mHost_RV.setHasFixedSize(true);
         mHost_RV.setLayoutManager(new LinearLayoutManager(mInstance));
