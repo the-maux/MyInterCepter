@@ -134,5 +134,9 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         }
         notifyDataSetChanged();
     }
-
+    public void             clear() {
+        listOfTrame.clear();
+        originalListOfTrames.clear();
+        notifyDataSetChanged();
+    }
 }

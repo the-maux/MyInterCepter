@@ -45,7 +45,7 @@ public class                    RV_dialog {
         dialog.show();
     }
 
-    public RV_dialog         setLayoutManager(RecyclerView.LayoutManager manager) {
+    public RV_dialog            setLayoutManager(RecyclerView.LayoutManager manager) {
         RV_host.setLayoutManager(manager);
         return this;
     }

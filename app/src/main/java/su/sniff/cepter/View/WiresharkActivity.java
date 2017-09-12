@@ -1,5 +1,6 @@
 package su.sniff.cepter.View;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -52,6 +54,7 @@ public class                    WiresharkActivity extends MyActivity {
     private RelativeLayout      mChoiceTarget, mHeaderConfOFF, mHeaderConfON;
     private TextView            mMonitorAgv, mMonitorCmd, mMonitorHost;
     private ImageView           mWiresharkModeButton;
+    private ImageButton         action_settings;
     private RecyclerView        mRV_Wireshark;
     private MaterialSpinner     spinner;
     private ProgressBar         progressBar;
@@ -67,7 +70,7 @@ public class                    WiresharkActivity extends MyActivity {
     @Override
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tcpdump);
+        setContentView(R.layout.activity_wireshark);
         initXml();
         initSpinner();
         initRV();
@@ -115,6 +118,8 @@ public class                    WiresharkActivity extends MyActivity {
         https_cb = (TextView) findViewById(R.id.https_cb);
         udp_cb = (TextView) findViewById(R.id.udp_cb);
         ip_cb = (TextView) findViewById(R.id.ip_cb);
+        action_settings = (ImageButton) findViewById(R.id.action_settings);
+        action_settings.setOnClickListener(onSettingsClick());
     }
 
     private void                initRV() {
@@ -137,6 +142,18 @@ public class                    WiresharkActivity extends MyActivity {
         udp_cb.setOnClickListener(onChangePermissionFilter(Protocol.UDP));
         arp_cb.setOnClickListener(onChangePermissionFilter(Protocol.ARP));
         ip_cb.setOnClickListener(onChangePermissionFilter(Protocol.IP));
+    }
+
+    private View.OnClickListener onSettingsClick() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder dialog  = new AlertDialog.Builder(mInstance);
+                dialog.setCancelable(false);
+                View dialogView = mInstance.getLayoutInflater().inflate(R.layout.dialog_hostchoice, null);
+                dialog.setView(dialogView);
+            }
+        };
     }
 
     private View.OnClickListener onChangePermissionFilter(final Protocol protocol) {
@@ -162,6 +179,7 @@ public class                    WiresharkActivity extends MyActivity {
                     }
                 })
                 .show();
+        listHostSelected.clear();
     }
 
     private void                initSpinner() {
@@ -188,6 +206,7 @@ public class                    WiresharkActivity extends MyActivity {
     public void                 fabBehavior() {
         if (!tcpdump.isRunning) {
             if (startTcpdump()) {
+                adapterWiresharkRV.clear();
                 progressBar.setVisibility(View.VISIBLE);
                 mHeaderConfOFF.setVisibility(View.GONE);
                 mAppbar.setVisibility(View.GONE);

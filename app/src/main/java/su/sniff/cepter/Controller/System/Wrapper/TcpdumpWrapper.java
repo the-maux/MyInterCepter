@@ -19,21 +19,21 @@ import su.sniff.cepter.View.WiresharkActivity;
 public class                TcpdumpWrapper {
     private LinkedHashMap<String, String> cmds;
     private RootProcess     tcpDumpProcess;
-    public ArrayList<Trame> listOfTrames = new ArrayList<>();
     private String          TAG = "TcpdumpWrapper";
-    public String           actualParam = "";
     private WiresharkActivity activity;
     public boolean          isRunning = false;
+    public ArrayList<Trame> listOfTrames = new ArrayList<>();
+    public String           actualParam = "";
 
-    String                  INTERFACE = "-i wlan0 ";    //  Focus interfacte;
-    String                  STDOUT_BUFF = "-l ";        //  Make stdOUT line buffered.  Useful if you want to see  the  data in live
-    String                  VERBOSE_v1 = "-v ";          //  Verbose mode 1
-    String                  VERBOSE_v2 = "-vv  ";        //  Even more verbose output.
-    String                  VERBOSE_v3 = "-vvvx  ";      //  Print trame in HEXA<->ASCII
+    private String          INTERFACE = "-i wlan0 ";    //  Focus interfacte;
+    private String          STDOUT_BUFF = "-l ";        //  Make stdOUT line buffered.  Useful if you want to see  the  data in live
+    private String          VERBOSE_v1 = "-v ";          //  Verbose mode 1
+    private String          VERBOSE_v2 = "-vv  ";        //  Even more verbose output.
+    private String          VERBOSE_v3 = "-vvvx  ";      //  Print trame in HEXA<->ASCII
     /*                           -x When parsing and printing, in addition to printing  the  headers
                                  of  each  packet,  print the data of each packet (minus its link
                                  level header) in hex.*/
-    String                  SNARF = "-s 0 ";             //  Snarf snaplen bytes of data from each  packet , no idea what this mean
+    private String           SNARF = "-s 0 ";             //  Snarf snaplen bytes of data from each  packet , no idea what this mean
 
     public                  TcpdumpWrapper(WiresharkActivity activity) {
         this.activity = activity;
@@ -120,7 +120,7 @@ public class                TcpdumpWrapper {
         } else if (!trame.skipped)
             onTcpDumpStop();
     }
-    public void            onTcpDumpStop() {
+    public void             onTcpDumpStop() {
         ArpSpoof.stopArpSpoof();
         RootProcess.kill("tcpdump");
         isRunning = false;
