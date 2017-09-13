@@ -34,6 +34,7 @@
                     android:layout_alignParentStart="false"
                     android:layout_alignParentTop="false"
                     android:layout_alignTop="@+id/dumpInFileChkd"
+                    android:padding="2dp"
                     app:srcCompat="@drawable/dns" />
 
                 <TextView
@@ -105,7 +106,7 @@
                     android:gravity="center_vertical"
                     android:inputType="textPersonName"
                     android:paddingLeft="8dp"
-                    android:text="Deep Analyse"
+                    android:text="Deep trame analyse"
                     android:textColor="@color/secondary_text" />
 
                 <TextView
@@ -118,7 +119,7 @@
                     android:typeface="monospace" />
 
                 <CheckedTextView
-                    android:id="@+id/Port redirect"
+                    android:id="@+id/Portredirect"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@+id/dumpInFileChkd"
@@ -134,11 +135,11 @@
                     android:textColor="@color/secondary_text" />
 
                 <CheckedTextView
-                    android:id="@+id/Port filtering"
+                    android:id="@+id/Portfiltering"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@+id/dumpInFileChkd"
-                    android:layout_below="@+id/Port redirect"
+                    android:layout_below="@+id/Portredirect"
                     android:checkMark="?android:attr/textCheckMark"
                     android:checked="true"
                     android:ems="10"
@@ -153,12 +154,13 @@
                     android:id="@+id/DnsSpoofing"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/Port redirect"
+                    android:layout_alignLeft="@+id/dumpInFileChkd"
+                    android:layout_below="@+id/Portfiltering"
                     android:checkMark="?android:attr/textCheckMark"
                     android:checked="true"
                     android:ems="10"
-                    android:gravity="center_vertical"
 
+                    android:gravity="center_vertical"
                     android:inputType="textPersonName"
                     android:paddingLeft="8dp"
                     android:text="Dns Spoofing"

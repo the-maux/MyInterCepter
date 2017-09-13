@@ -29,5 +29,6 @@ public class                            Singleton {
     public  boolean                     DebugMode = true, UltraDebugMode = false;
     public  boolean                     SslStripModeActived = false, DnsSpoofActived = false;
 
+
     public  int                         lock = 0, nbrInteface = 1;
 }

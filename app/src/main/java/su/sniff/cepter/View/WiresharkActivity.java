@@ -69,7 +69,7 @@ public class                    WiresharkActivity extends MyActivity {
     private boolean             autoscroll = true;
     private CheckBox            Autoscroll;
     private TextView            tcp_cb, dns_cb, arp_cb, https_cb, udp_cb, ip_cb;
-
+    private Singleton           singleton = Singleton.getInstance();
     @Override
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,11 +141,32 @@ public class                    WiresharkActivity extends MyActivity {
                 dialog.setCancelable(false);
                 View dialogView = mInstance.getLayoutInflater().inflate(R.layout.view_wireshark_settings, null);
                 dialog.setView(dialogView);
-                CheckedTextView dumpInFileChkd, sslStripChkd, lockScreenChkd, DeepAnalChkd, checkedTextView;
+                final CheckedTextView dumpInFileChkd, sslStripChkd, lockScreenChkd, DeepAnalChkd, checkedTextView;
+                final CheckedTextView Port_redirect, Portfiltering, DnsSpoofing;
+                Port_redirect = (CheckedTextView) dialogView.findViewById(R.id.Portredirect);/**TODO**/
+                Portfiltering = (CheckedTextView) dialogView.findViewById(R.id.Portfiltering);/**TODO**/
+                DnsSpoofing = (CheckedTextView) dialogView.findViewById(R.id.DnsSpoofing);/**TODO**/
+
                 dumpInFileChkd = (CheckedTextView) dialogView.findViewById(R.id.dumpInFileChkd);
-                sslStripChkd = (CheckedTextView) dialogView.findViewById(R.id.sslStripChkd);
-                lockScreenChkd = (CheckedTextView) dialogView.findViewById(R.id.lockScreenChkd);
+                sslStripChkd = (CheckedTextView) dialogView.findViewById(R.id.sslStripChkd);/**TODO**/
+                lockScreenChkd = (CheckedTextView) dialogView.findViewById(R.id.lockScreenChkd);/**TODO**/
                 DeepAnalChkd = (CheckedTextView) dialogView.findViewById(R.id.DeepAnalChkd);
+                dumpInFileChkd.setChecked(tcpdump.isDumpingInFile);
+                dumpInFileChkd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tcpdump.isDumpingInFile = !tcpdump.isDumpingInFile;
+                        dumpInFileChkd.setChecked(tcpdump.isDumpingInFile);
+                    }
+                });
+                sslStripChkd.setChecked(singleton.SslStripModeActived);
+                sslStripChkd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        singleton.SslStripModeActived = !singleton.SslStripModeActived;
+                        sslStripChkd.setChecked(singleton.SslStripModeActived);
+                    }
+                });
                 dialog.show();
             }
         };

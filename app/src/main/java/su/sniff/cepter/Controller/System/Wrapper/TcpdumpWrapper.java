@@ -21,7 +21,7 @@ public class                TcpdumpWrapper {
     private RootProcess     tcpDumpProcess;
     private String          TAG = "TcpdumpWrapper";
     private WiresharkActivity activity;
-    public boolean          isRunning = false;
+    public boolean          isRunning = false, isDumpingInFile = false;
     public ArrayList<Trame> listOfTrames = new ArrayList<>();
     public String           actualParam = "";
 
