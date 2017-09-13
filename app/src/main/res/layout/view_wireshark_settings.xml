@@ -37,6 +37,72 @@
                     android:padding="2dp"
                     app:srcCompat="@drawable/dns" />
 
+                <ImageView
+                    android:id="@+id/imageView12"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/sslStripChkd"
+                    android:layout_alignParentStart="false"
+                    android:layout_alignParentTop="false"
+                    android:layout_alignTop="@+id/sslStripChkd"
+                    android:padding="2dp"
+                    app:srcCompat="@drawable/dns" />
+
+                <ImageView
+                    android:id="@+id/imageView13"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/lockScreenChkd"
+                    android:layout_alignParentStart="false"
+                    android:layout_alignParentTop="false"
+                    android:layout_alignTop="@+id/lockScreenChkd"
+                    android:padding="2dp"
+                    app:srcCompat="@drawable/dns" />
+
+                <ImageView
+                    android:id="@+id/imageView14"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/DeepAnalChkd"
+                    android:layout_alignParentStart="false"
+                    android:layout_alignParentTop="false"
+                    android:layout_alignTop="@+id/DeepAnalChkd"
+                    android:padding="2dp"
+                    app:srcCompat="@drawable/dns" />
+
+                <ImageView
+                    android:id="@+id/imageView15"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/Portredirect"
+                    android:layout_alignParentStart="false"
+                    android:layout_alignParentTop="false"
+                    android:layout_alignTop="@+id/Portredirect"
+                    android:padding="2dp"
+                    app:srcCompat="@drawable/dns" />
+
+                <ImageView
+                    android:id="@+id/imageView16"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/Portfiltering"
+                    android:layout_alignParentStart="false"
+                    android:layout_alignParentTop="false"
+                    android:layout_alignTop="@+id/Portfiltering"
+                    android:padding="2dp"
+                    app:srcCompat="@drawable/dns" />
+
+                <ImageView
+                    android:id="@+id/imageView17"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/DnsSpoofing"
+                    android:layout_alignParentStart="false"
+                    android:layout_alignParentTop="false"
+                    android:layout_alignTop="@+id/DnsSpoofing"
+                    android:padding="2dp"
+                    app:srcCompat="@drawable/dns" />
+
                 <TextView
                     android:id="@+id/title1"
                     android:layout_width="wrap_content"
@@ -52,8 +118,8 @@
                     android:layout_below="@+id/title1"
                     android:layout_toRightOf="@+id/title1"
                     android:checkMark="?android:attr/textCheckMark"
-                    android:checked="true"
 
+                    android:checked="false"
                     android:ems="10"
                     android:gravity="center_vertical"
                     android:inputType="textPersonName"
@@ -68,7 +134,7 @@
                     android:layout_alignLeft="@+id/dumpInFileChkd"
                     android:layout_below="@+id/dumpInFileChkd"
                     android:checkMark="?android:attr/textCheckMark"
-                    android:checked="true"
+                    android:checked="false"
 
                     android:ems="10"
                     android:gravity="center_vertical"
@@ -84,7 +150,7 @@
                     android:layout_alignLeft="@+id/dumpInFileChkd"
                     android:layout_below="@+id/sslStripChkd"
                     android:checkMark="?android:attr/textCheckMark"
-                    android:checked="true"
+                    android:checked="false"
                     android:ems="10"
 
                     android:gravity="center_vertical"
@@ -100,7 +166,7 @@
                     android:layout_alignLeft="@+id/dumpInFileChkd"
                     android:layout_below="@+id/lockScreenChkd"
                     android:checkMark="?android:attr/textCheckMark"
-                    android:checked="true"
+                    android:checked="false"
                     android:ems="10"
 
                     android:gravity="center_vertical"
@@ -125,7 +191,7 @@
                     android:layout_alignLeft="@+id/dumpInFileChkd"
                     android:layout_below="@+id/title2"
                     android:checkMark="?android:attr/textCheckMark"
-                    android:checked="true"
+                    android:checked="false"
                     android:ems="10"
 
                     android:gravity="center_vertical"
@@ -141,7 +207,7 @@
                     android:layout_alignLeft="@+id/dumpInFileChkd"
                     android:layout_below="@+id/Portredirect"
                     android:checkMark="?android:attr/textCheckMark"
-                    android:checked="true"
+                    android:checked="false"
                     android:ems="10"
 
                     android:gravity="center_vertical"
@@ -157,7 +223,7 @@
                     android:layout_alignLeft="@+id/dumpInFileChkd"
                     android:layout_below="@+id/Portfiltering"
                     android:checkMark="?android:attr/textCheckMark"
-                    android:checked="true"
+                    android:checked="false"
                     android:ems="10"
 
                     android:gravity="center_vertical"

@@ -22,6 +22,7 @@ public class                TcpdumpWrapper {
     private String          TAG = "TcpdumpWrapper";
     private WiresharkActivity activity;
     public boolean          isRunning = false, isDumpingInFile = false;
+    private boolean         deepAnalyseTrame = false;
     public ArrayList<Trame> listOfTrames = new ArrayList<>();
     public String           actualParam = "";
 
@@ -148,5 +149,13 @@ public class                TcpdumpWrapper {
 
     public LinkedHashMap<String, String> getCmdsWithArgsInMap() {
         return cmds;
+    }
+
+    public boolean          isDeepAnalyseTrame() {
+        return deepAnalyseTrame;
+    }
+    public void             setDeepAnalyseTrame(boolean deepAnalyseTrame) {
+        /** TODO: Restart App with dump Mode**/
+        this.deepAnalyseTrame = deepAnalyseTrame;
     }
 }

@@ -21,7 +21,8 @@ public class                    IntercepterWrapper {
     private boolean             running = false;
     private ImageView           runIcon;
     private TextView            monitorIntercepter;
-    private Activity activity;
+    private Activity            activity;
+    private Singleton           singleton = Singleton.getInstance();
 
     public                      IntercepterWrapper(Activity activity, RootProcess sniff_process, ImageView runIcon, TextView monitorIntercepter)  {
         this.runIcon = runIcon;
@@ -37,15 +38,7 @@ public class                    IntercepterWrapper {
         return process;
     }
 
-    private void                sslConf() {
-        if (Singleton.getInstance().SslStripModeActived) {
-            Log.d(TAG, "iptables Conf as full striped");
-            IPTables.InterceptWithSSlStrip();
-        } else {
-            Log.d(TAG, "iptables Conf as partially striped");
-            IPTables.InterceptWithoutSSL();
-        }
-    }
+
 
     /**
      * Créer le fichier exits.id

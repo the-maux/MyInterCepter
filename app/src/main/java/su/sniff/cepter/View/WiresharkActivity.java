@@ -70,8 +70,8 @@ public class                    WiresharkActivity extends MyActivity {
     private CheckBox            Autoscroll;
     private TextView            tcp_cb, dns_cb, arp_cb, https_cb, udp_cb, ip_cb;
     private Singleton           singleton = Singleton.getInstance();
-    @Override
-    protected void              onCreate(@Nullable Bundle savedInstanceState) {
+
+    @Override protected void    onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wireshark);
         initXml();
@@ -141,33 +141,84 @@ public class                    WiresharkActivity extends MyActivity {
                 dialog.setCancelable(false);
                 View dialogView = mInstance.getLayoutInflater().inflate(R.layout.view_wireshark_settings, null);
                 dialog.setView(dialogView);
-                final CheckedTextView dumpInFileChkd, sslStripChkd, lockScreenChkd, DeepAnalChkd, checkedTextView;
+                final CheckedTextView dumpInFileChkd, sslStripChkd, lockScreenChkd, DeepAnalChkd;
                 final CheckedTextView Port_redirect, Portfiltering, DnsSpoofing;
                 Port_redirect = (CheckedTextView) dialogView.findViewById(R.id.Portredirect);/**TODO**/
                 Portfiltering = (CheckedTextView) dialogView.findViewById(R.id.Portfiltering);/**TODO**/
                 DnsSpoofing = (CheckedTextView) dialogView.findViewById(R.id.DnsSpoofing);/**TODO**/
-
                 dumpInFileChkd = (CheckedTextView) dialogView.findViewById(R.id.dumpInFileChkd);
                 sslStripChkd = (CheckedTextView) dialogView.findViewById(R.id.sslStripChkd);/**TODO**/
                 lockScreenChkd = (CheckedTextView) dialogView.findViewById(R.id.lockScreenChkd);/**TODO**/
                 DeepAnalChkd = (CheckedTextView) dialogView.findViewById(R.id.DeepAnalChkd);
+
                 dumpInFileChkd.setChecked(tcpdump.isDumpingInFile);
                 dumpInFileChkd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         tcpdump.isDumpingInFile = !tcpdump.isDumpingInFile;
                         dumpInFileChkd.setChecked(tcpdump.isDumpingInFile);
+                        Snackbar.make(mCoordinatorLayout, "Non implémenté", Snackbar.LENGTH_SHORT).show();
                     }
                 });
-                sslStripChkd.setChecked(singleton.SslStripModeActived);
+                sslStripChkd.setChecked(singleton.isSslStripModeActived());
                 sslStripChkd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        singleton.SslStripModeActived = !singleton.SslStripModeActived;
-                        sslStripChkd.setChecked(singleton.SslStripModeActived);
+                        singleton.setSslStripModeActived(!singleton.isSslStripModeActived());
+                        sslStripChkd.setChecked(singleton.isSslStripModeActived());
                     }
                 });
+                lockScreenChkd.setChecked(singleton.isLockScreen());
+                lockScreenChkd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        singleton.setLockScreen(!singleton.isLockScreen());
+                        lockScreenChkd.setChecked(singleton.isLockScreen());
+                        Snackbar.make(mCoordinatorLayout, "Non implémenté", Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+                DeepAnalChkd.setChecked(tcpdump.isDeepAnalyseTrame());
+                DeepAnalChkd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tcpdump.setDeepAnalyseTrame(!tcpdump.isDeepAnalyseTrame());
+                        DeepAnalChkd.setChecked(tcpdump.isDeepAnalyseTrame());
+                    }
+                });
+                Port_redirect.setOnClickListener(onPortMitm(true));
+                Portfiltering.setOnClickListener(onPortMitm(false));
+                DnsSpoofing.setOnClickListener(onDnsSpoof(DnsSpoofing));
                 dialog.show();
+            }
+        };
+    }
+
+    private View.OnClickListener onDnsSpoof(final CheckedTextView dnsSpoofing) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dnsSpoofing.setChecked(singleton.isDnsSpoofActived());
+                dnsSpoofing.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        singleton.setDnsSpoofActived(!singleton.isDnsSpoofActived());
+                        dnsSpoofing.setChecked(singleton.isDnsSpoofActived());
+                    }
+                });
+            }
+        };
+    }
+
+    private View.OnClickListener onPortMitm(final boolean flag) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (flag) { /** TODO: PortRedirect */
+
+                } else {    /** TODO: PortFiltering */
+
+                }
+                Snackbar.make(mCoordinatorLayout, "Non implémenté", Snackbar.LENGTH_SHORT).show();
             }
         };
     }
