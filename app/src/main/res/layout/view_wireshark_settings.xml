@@ -9,7 +9,7 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:background="@color/material_light_white"
         app:cardBackgroundColor="@color/cardview_light_background"
@@ -18,7 +18,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:padding="4dp">
 
             <RelativeLayout
@@ -26,8 +26,18 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical">
 
+                <ImageView
+                    android:id="@+id/imageView11"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/dumpInFileChkd"
+                    android:layout_alignParentStart="false"
+                    android:layout_alignParentTop="false"
+                    android:layout_alignTop="@+id/dumpInFileChkd"
+                    app:srcCompat="@drawable/dns" />
+
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/title1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Behavior:"
@@ -35,55 +45,115 @@
                     android:typeface="monospace" />
 
                 <CheckedTextView
-                    android:id="@+id/editText"
+                    android:id="@+id/dumpInFileChkd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/textView2"
+                    android:layout_below="@+id/title1"
+                    android:layout_toRightOf="@+id/title1"
                     android:checkMark="?android:attr/textCheckMark"
                     android:checked="true"
+
                     android:ems="10"
                     android:gravity="center_vertical"
-
                     android:inputType="textPersonName"
                     android:paddingLeft="8dp"
                     android:text="Write in Pcap file"
                     android:textColor="@color/secondary_text" />
 
                 <CheckedTextView
-                    android:id="@+id/checkedTextView3"
+                    android:id="@+id/sslStripChkd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/editText"
+                    android:layout_alignLeft="@+id/dumpInFileChkd"
+                    android:layout_below="@+id/dumpInFileChkd"
                     android:checkMark="?android:attr/textCheckMark"
                     android:checked="true"
+
                     android:ems="10"
                     android:gravity="center_vertical"
-
                     android:inputType="textPersonName"
                     android:paddingLeft="8dp"
-                    android:text="Write in Pcap file"
+                    android:text="SslStrip Mode"
                     android:textColor="@color/secondary_text" />
 
                 <CheckedTextView
-                    android:id="@+id/checkedTextView2"
+                    android:id="@+id/lockScreenChkd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/checkedTextView3"
+                    android:layout_alignLeft="@+id/dumpInFileChkd"
+                    android:layout_below="@+id/sslStripChkd"
                     android:checkMark="?android:attr/textCheckMark"
                     android:checked="true"
                     android:ems="10"
-                    android:gravity="center_vertical"
 
+                    android:gravity="center_vertical"
                     android:inputType="textPersonName"
                     android:paddingLeft="8dp"
-                    android:text="Write in Pcap file"
+                    android:text="Lockscreen"
                     android:textColor="@color/secondary_text" />
 
                 <CheckedTextView
-                    android:id="@+id/checkedTextView"
+                    android:id="@+id/DeepAnalChkd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/checkedTextView2"
+                    android:layout_alignLeft="@+id/dumpInFileChkd"
+                    android:layout_below="@+id/lockScreenChkd"
+                    android:checkMark="?android:attr/textCheckMark"
+                    android:checked="true"
+                    android:ems="10"
+
+                    android:gravity="center_vertical"
+                    android:inputType="textPersonName"
+                    android:paddingLeft="8dp"
+                    android:text="Deep Analyse"
+                    android:textColor="@color/secondary_text" />
+
+                <TextView
+                    android:id="@+id/title2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/DeepAnalChkd"
+                    android:text="Features:"
+                    android:textColor="@android:color/black"
+                    android:typeface="monospace" />
+
+                <CheckedTextView
+                    android:id="@+id/Port redirect"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/dumpInFileChkd"
+                    android:layout_below="@+id/title2"
+                    android:checkMark="?android:attr/textCheckMark"
+                    android:checked="true"
+                    android:ems="10"
+
+                    android:gravity="center_vertical"
+                    android:inputType="textPersonName"
+                    android:paddingLeft="8dp"
+                    android:text="Port redirect"
+                    android:textColor="@color/secondary_text" />
+
+                <CheckedTextView
+                    android:id="@+id/Port filtering"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/dumpInFileChkd"
+                    android:layout_below="@+id/Port redirect"
+                    android:checkMark="?android:attr/textCheckMark"
+                    android:checked="true"
+                    android:ems="10"
+
+                    android:gravity="center_vertical"
+                    android:inputType="textPersonName"
+                    android:paddingLeft="8dp"
+                    android:text="Port filtering"
+                    android:textColor="@color/secondary_text" />
+
+                <CheckedTextView
+                    android:id="@+id/DnsSpoofing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/Port redirect"
                     android:checkMark="?android:attr/textCheckMark"
                     android:checked="true"
                     android:ems="10"
@@ -91,9 +161,10 @@
 
                     android:inputType="textPersonName"
                     android:paddingLeft="8dp"
-                    android:text="Write in Pcap file"
+                    android:text="Dns Spoofing"
                     android:textColor="@color/secondary_text" />
             </RelativeLayout>
+
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

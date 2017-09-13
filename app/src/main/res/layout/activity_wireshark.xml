@@ -22,45 +22,38 @@
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="56dp"
+                android:layout_toLeftOf="@+id/showCustomCmd"
                 app:layout_scrollFlags="scroll|enterAlways"
-                app:subtitle="v7.31"
-                app:title="Tcpdump">
+                app:subtitle="Aucune cible selectionné"
+                app:title="Wireshark Mode">
 
             </android.support.v7.widget.Toolbar>
 
-            <RelativeLayout
-                android:id="@+id/topToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_toLeftOf="@+id/action_settings"
-                android:layout_toRightOf="@+id/toolbar"
-                android:focusable="false"
-                android:focusableInTouchMode="false">
-
-
-            </RelativeLayout>
-
-            <ImageView
-                android:id="@+id/wiresharkMode"
-                android:layout_width="34dp"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="16dp"
-                android:layout_toStartOf="@+id/action_settings"
-                android:src="@drawable/wireshark" />
-
             <ImageButton
-                android:id="@+id/action_settings"
-                android:layout_width="32dp"
+                android:id="@+id/showCustomCmd"
+                android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="false"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="8dp"
+                android:layout_alignParentRight="false"
+                android:layout_marginRight="12dp"
+                android:layout_toLeftOf="@+id/settings"
                 android:background="@android:color/transparent"
                 android:baselineAlignBottom="false"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
                 android:src="@android:drawable/ic_menu_manage" />
+
+            <ImageView
+                android:id="@+id/settings"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="8dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                app:srcCompat="@drawable/ic_more_vert_white_24dp" />
 
         </RelativeLayout>
 
@@ -75,38 +68,19 @@
 
 
         <RelativeLayout
+            android:id="@+id/TopBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/TopBarLayout">
+            android:background="@color/material_grey_900">
 
             <RelativeLayout
                 android:id="@+id/nmapConfEditorLayout"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:background="@color/material_grey_800"
+                android:layout_height="wrap_content"
+                android:background="@color/material_grey_900"
                 android:elevation="4dp"
                 android:padding="8dp"
-                android:visibility="visible">
-
-                <RelativeLayout
-                    android:id="@+id/targetSelectionner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="70dp"
-                    android:layout_margin="2dp"
-                    android:background="@color/material_grey_900"
-                    android:elevation="5dp"
-                    android:gravity="center">
-
-                    <TextView
-                        android:id="@+id/monitorHost"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:ems="10"
-                        android:gravity="center_vertical"
-                        android:inputType="textPersonName"
-                        android:paddingLeft="8dp"
-                        android:text="Name" />
-                </RelativeLayout>
+                android:visibility="gone">
 
                 <com.jaredrummler.materialspinner.MaterialSpinner
                     android:id="@+id/spinnerTypeScan"
@@ -146,10 +120,9 @@
                 android:id="@+id/filterPcapLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/material_grey_800"
+                android:background="@color/material_grey_900"
                 android:elevation="4dp"
-                android:padding="8dp"
-                android:visibility="gone">
+                android:padding="8dp">
 
                 <RelativeLayout
                     android:id="@+id/lineFilterProto"
@@ -302,6 +275,7 @@
                         android:layout_alignTop="@+id/No_cb"
                         android:layout_marginLeft="17dp"
                         android:layout_toRightOf="@+id/time_cb"
+                        android:checked="true"
                         android:text="Autoscroll"
                         android:textColor="@color/material_light_white"
                         android:textSize="14sp"
@@ -312,6 +286,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/titleSection"
+                        android:checked="true"
                         android:text="N°"
                         android:textColor="@color/material_light_white"
                         android:textSize="14sp"
@@ -324,6 +299,7 @@
                         android:layout_alignTop="@+id/No_cb"
                         android:layout_marginLeft="17dp"
                         android:layout_toRightOf="@+id/No_cb"
+                        android:checked="true"
                         android:text="Timef"
                         android:textColor="@color/material_light_white"
                         android:textSize="14sp"
@@ -355,7 +331,8 @@
                 android:text="tcpdump [ -AdDefIKlLnNOpqRStuUvxX ] [Expression]"
                 android:textColor="@color/material_light_white"
                 android:textStyle="italic"
-                android:typeface="normal" />
+                android:typeface="normal"
+                android:visibility="gone" />
 
 
 
@@ -378,11 +355,11 @@
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/Output"
-                        android:scrollbars="vertical"
-                        android:layout_below="@+id/topBar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/topBar"
                         android:background="@color/material_grey_300"
+                        android:scrollbars="vertical"
                         tools:listitem="@layout/item_tcpdump" />
 
                 </RelativeLayout>
@@ -398,7 +375,7 @@
                 android:layout_below="@+id/Monitor"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="14dp"
                 android:visibility="invisible" />
 
         </RelativeLayout>
@@ -411,11 +388,10 @@
             android:layout_alignParentRight="true"
             android:layout_marginBottom="16dp"
             android:layout_marginRight="16dp"
-            android:src="@android:drawable/ic_media_play"
+            android:src="@drawable/ic_media_play"
             app:fab_colorNormal="@android:color/holo_blue_light"
             app:fab_colorPressed="@android:color/holo_blue_bright"
             app:fab_elevationCompat="4dp"
-            app:fab_progress="0"
             app:layout_anchorGravity="bottom|right|end" />
 
     </RelativeLayout>

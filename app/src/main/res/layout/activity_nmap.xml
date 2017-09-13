@@ -31,7 +31,7 @@
                 android:id="@+id/topToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_toLeftOf="@+id/action_settings"
+                android:layout_toLeftOf="@+id/showCustomCmd"
                 android:layout_toRightOf="@+id/toolbar"
                 android:focusable="false"
                 android:focusableInTouchMode="false">
@@ -45,11 +45,11 @@
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="16dp"
-                android:layout_toStartOf="@+id/action_settings"
+                android:layout_toStartOf="@+id/showCustomCmd"
                 android:src="@android:drawable/ic_menu_info_details" />
 
             <ImageButton
-                android:id="@+id/action_settings"
+                android:id="@+id/showCustomCmd"
                 android:layout_width="32dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="false"
