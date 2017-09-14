@@ -204,7 +204,7 @@ public class                Host {
     };
 
 
-    public Os getOsType() {
+    public Os               getOsType() {
         return osType;
     }
 

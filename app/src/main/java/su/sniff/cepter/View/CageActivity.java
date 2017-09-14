@@ -9,7 +9,6 @@ import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
-import su.sniff.cepter.globalVariable;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,22 +22,22 @@ public class                CageActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cage);
         initThreads();
-        ((TextView) findViewById(R.id.monitor)).setTextSize(2, (float) (globalVariable.raw_textsize + 3));
-        globalVariable.lock = 0;
+        ((TextView) findViewById(R.id.monitor)).setTextSize(2, (float) 12);
+        Singleton.getInstance().lock = 0;
     }
 
     private void            initThreads() {
-        if (globalVariable.lock == 0) {
-            globalVariable.lock = 1;
+        if (Singleton.getInstance().lock == 0) {
+            Singleton.getInstance().lock = 1;
         } else {
-            while (globalVariable.lock == 1) {
+            while (Singleton.getInstance().lock == 1) {
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            globalVariable.lock = 1;
+            Singleton.getInstance().lock = 1;
         }
     }
 
@@ -65,7 +64,9 @@ public class                CageActivity extends MyActivity {
                 RootProcess process = new RootProcess("onCage", Singleton.getInstance().FilesPath);
                 BufferedReader reader = new BufferedReader(process.getInputStreamReader());
                 try {
-                    process.exec(Singleton.getInstance().FilesPath + "/cepter " + Integer.toString(globalVariable.adapt_num) + " cage " + Singleton.getInstance().network.gateway)
+                    process.exec(Singleton.getInstance().FilesPath + "/cepter " +
+                            Singleton.getInstance().nbrInteface +
+                            " cage " + Singleton.getInstance().network.gateway)
                             .exec("exit");
                     while (true) {
                         final String read = reader.readLine();

@@ -6,7 +6,6 @@ import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,6 @@ import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.Model.Target.NetworkInformation;
 import su.sniff.cepter.R;
-import su.sniff.cepter.globalVariable;
 
 import java.io.*;
 import java.util.Arrays;
@@ -67,10 +65,10 @@ public class                    InitActivity extends MyActivity {
     }
 
     private void                buildPath() {
-        Singleton.getInstance().FilesPath = this.getFilesDir().getPath() + '/';
+        Singleton.getInstance().FilesPath = mInstance.getFilesDir().getPath() + '/';
         Singleton.getInstance().BinaryPath = Singleton.getInstance().FilesPath;//shouldn't be the same as FilesPath
+        Singleton.getInstance().PcapPath = Singleton.getInstance().FilesPath + "/"+ "Pcap" + "/";
         Log.d(TAG, "path:" + Singleton.getInstance().FilesPath);
-        globalVariable.PCAP_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
         monitor("Building Path");
     }
 
@@ -84,7 +82,6 @@ public class                    InitActivity extends MyActivity {
         } catch (IOException e) {
             e.getStackTrace();
         }
-        globalVariable.adapt_num = 1;
         DhcpInfo dhcpInfo = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getDhcpInfo();
         String data = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getDhcpInfo().toString();
         if (!data.contains("ipaddr") || !data.contains("gateway") || !data.contains("netmask") ) {
@@ -106,12 +103,8 @@ public class                    InitActivity extends MyActivity {
         if (res[netmask].contains("0.0.0.0"))
             res[netmask] = "255.255.255.0";
         Singleton.getInstance().network = new NetworkInformation(dhcpInfo, NetUtils.getMac(res[ip], res[gw]));
-        Intent i = new Intent(this, ScanActivity.class);
-        i.putExtra("Key_Int", 1);//1 est censé représenté l'interface network, en l'occurence 1=> eth0
-        i.putExtra("Key_String", Singleton.getInstance().network.myIp);
-        startActivity(i);
+        startActivity(new Intent(this, ScanActivity.class));
         finish();
-
     }
 
     private RootProcess         getNetworkInfoByCept() throws IOException, InterruptedException {
@@ -213,6 +206,7 @@ public class                    InitActivity extends MyActivity {
                 .exec(Singleton.getInstance().BinaryPath + "/busybox unzip archive_nmap")
                 .exec("chmod 777 " + Singleton.getInstance().BinaryPath + "/nmap/*")
                 .exec("mount -o rw,remount /system")
+                .exec("mkdir " + Singleton.getInstance().FilesPath + "/"+ "Pcap")
                 .exec("cp ./ping /system/bin/")
                 .exec("echo \"nameserver `getprop net.dns1`\" > /etc/resolv.conf")
                 .exec("rm -f " + Singleton.getInstance().FilesPath + "/Raw/*;")

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import com.github.clans.fab.FloatingActionButton;
 
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabItem;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -76,8 +77,12 @@ public class                    DoraActivity extends MyActivity {
 
     private void                initDoraList() {
         listOfHostDored = new ArrayList<>();
-        for (Host host : Singleton.getInstance().hostsList) {
-            listOfHostDored.add(new DoraProcess(host));
+        if (Singleton.getInstance().hostsList == null) {
+            Snackbar.make(coordinatorLayout, "No target selected", Snackbar.LENGTH_LONG);
+        } else {
+            for (Host host : Singleton.getInstance().hostsList) {
+                listOfHostDored.add(new DoraProcess(host));
+            }
         }
     }
 
@@ -98,9 +103,12 @@ public class                    DoraActivity extends MyActivity {
             Log.d(TAG, "diagnose dora started");
         } else {
             running = false;
+            for (DoraProcess doraProcess : listOfHostDored) {
+                RootProcess.kill(doraProcess.pingProcess.getPid());
+            }
             Log.d(TAG, "diagnose dora stopped");
-            RootProcess.kill("ping");
         }
+        Rv_Adapter.setRunning(running);
         fab.setImageResource((!running) ? android.R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
     }
 

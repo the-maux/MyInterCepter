@@ -18,7 +18,7 @@
 			<RelativeLayout
 				android:id="@+id/topToolbar"
 				android:layout_width="wrap_content"
-				android:layout_height="75dp"
+				android:layout_height="80dp"
 				android:focusable="true"
 				android:focusableInTouchMode="true"
 				android:gravity="right">
@@ -56,12 +56,12 @@
 					android:layout_centerVertical="false"
 					android:layout_marginEnd="8dp"
 					android:layout_marginTop="12dp"
+					android:layout_toLeftOf="@+id/showCustomCmd"
 					android:background="@android:color/transparent"
-					android:layout_toLeftOf="@+id/action_settings"
 					app:srcCompat="@drawable/ic_add_circle" />
 
 				<ImageButton
-					android:id="@+id/action_settings"
+					android:id="@+id/showCustomCmd"
 					android:layout_width="32dp"
 					android:layout_height="32dp"
 					android:layout_alignParentRight="true"
@@ -106,8 +106,8 @@
 
 	<com.github.clans.fab.FloatingActionButton
 		android:id="@+id/fab"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
+		android:layout_width="20dp"
+		android:layout_height="20dp"
 		android:layout_marginRight="16dp"
 		android:onClick="onFabClick"
 		android:src="@android:drawable/ic_menu_search"
@@ -165,7 +165,6 @@
 			android:layout_centerHorizontal="true"
 			android:gravity="right"
 			android:padding="8dp"
-			android:text="192.168.10.24\n Non LMFR &quot;SFR-4328', GW: 192.168.0.1/255.255.255.0\nVendor:Fonction non active"
 			android:textColor="@color/green" />
 
 

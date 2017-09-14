@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import su.sniff.cepter.Controller.CepterControl.IntercepterWrapper;
+import su.sniff.cepter.Controller.Network.Fingerprint;
+import su.sniff.cepter.Controller.Network.IPTables;
 import su.sniff.cepter.Controller.Network.IPv4CIDR;
 import su.sniff.cepter.Controller.Network.NetUtils;
 import su.sniff.cepter.Controller.System.Singleton;
@@ -39,7 +41,6 @@ import su.sniff.cepter.View.Adapter.HostScanAdapter;
 import su.sniff.cepter.View.Adapter.OSAdapter;
 import su.sniff.cepter.View.Dialog.RV_dialog;
 import su.sniff.cepter.View.Dialog.TIL_dialog;
-import su.sniff.cepter.globalVariable;
 
 /**
  * TODO:    + Add manual target
@@ -82,13 +83,14 @@ public class                        ScanActivity extends MyActivity {
 
     private void                    initXml() throws Exception {
         mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setButtonSize(FloatingActionButton.SIZE_MINI);
         mHost_RV = (RecyclerView) findViewById(R.id.recycler_view);
         mEmptyList = (TextView) findViewById(R.id.emptyList);
         mBottomMonitor = ((TextView) findViewById(R.id.Message));
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mAddHostBtn = (ImageButton) findViewById(R.id.action_add_host);
-        mSettingsBtn = (ImageButton) findViewById(R.id.action_settings);
+        mSettingsBtn = (ImageButton) findViewById(R.id.showCustomCmd);
         mOsFilterBtn = (TextView) findViewById(R.id.action_os_filter);
         mSelectAllBtn = (TextView) findViewById(R.id.action_select_all);
         mOfflineModeBtn = (TextView) findViewById(R.id.action_offline_mode);
@@ -107,8 +109,8 @@ public class                        ScanActivity extends MyActivity {
             initDialog();
             initMenu();
             initSearchView();
-            if (globalVariable.DEBUG) {
-                Log.d(TAG, "debug enabled, starting Scan automaticaly");
+            Log.d(TAG, "debug enabled, starting Scan automaticaly");
+            if (Singleton.getInstance().DebugMode) {
                 startNetworkScan();
             }
         }
@@ -120,7 +122,7 @@ public class                        ScanActivity extends MyActivity {
     private void                    initMonitor() {
         Log.d(TAG, "Init Monitor");
         WifiInfo wifiInfo = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
-        monitor = wifiInfo.getSSID().replace("\"", "") + ':' + getIntent().getExtras().getString("Key_String");
+        monitor = wifiInfo.getSSID().replace("\"", "") + " : " + Singleton.getInstance().network.myIp;
         if (!monitor.contains("WiFi")) {
             monitor += "\n" + "GW: " + Singleton.getInstance().network.gateway + "/" + Singleton.getInstance().network.netmask;
         } else {
@@ -216,7 +218,7 @@ public class                        ScanActivity extends MyActivity {
 
     private void                    initHostsRecyclerView() {
         mHosts = new ArrayList<>();
-        mHostAdapter = new HostScanAdapter(this);
+        mHostAdapter = new HostScanAdapter(this, mHost_RV);
         mHost_RV.setAdapter(mHostAdapter);
         mHost_RV.setHasFixedSize(true);
         mHost_RV.setLayoutManager(new LinearLayoutManager(mInstance));
@@ -298,11 +300,11 @@ public class                        ScanActivity extends MyActivity {
     private void                    progressAnimation() {
         mFab.setImageResource(android.R.drawable.ic_menu_search);
         mFab.setProgress(0, true);
-        mFab.setMax(4500);
+        mFab.setMax(5500);
         new Thread(new Runnable() {
             public void run() {
                 mProgress = 0;
-                while (mProgress <= 4500) {
+                while (mProgress <= 5500) {
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException e) {
@@ -330,7 +332,7 @@ public class                        ScanActivity extends MyActivity {
     public void                     onReachableScanOver(ArrayList<String> ipReachable) {
         NetUtils.dumpListHostFromARPTableInFile(mInstance, ipReachable);
         mProgress = 1500;
-        IntercepterWrapper.fillHostListWithCepterScan(mInstance);
+        Fingerprint.guessHostFingerprint(mInstance);
         mProgress = 2000;
     }
 
@@ -344,7 +346,7 @@ public class                        ScanActivity extends MyActivity {
                 mHostAdapter.updateHostList(mHosts);
                 inLoading = false;
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
-
+                mProgress = 5450;
                 final ArrayList<String> listOs = mHostAdapter.getOsList();
                 monitor += "\n" + listOs.size() +" Os détected";
                 mBottomMonitor.setText(monitor);
@@ -354,10 +356,6 @@ public class                        ScanActivity extends MyActivity {
         });
     }
 
-    /**
-     * Create a file "./targets" dumping the hostList than start the TabActivitys
-     * @throws IOException
-     */
     private void                    startAttack() throws IOException {
         ArrayList<Host> selectedHost = new ArrayList<>();
         boolean noTargetSelected = true;
@@ -389,22 +387,10 @@ public class                        ScanActivity extends MyActivity {
         if (keyCode == 4) {
             try {
                 openFileOutput("exits.id", 0).close();
-                Thread.sleep(100);
                 RootProcess.kill("cepter");
-                if (globalVariable.strip == 1) {
-                    new RootProcess("LEAVE APP")
-                         .exec("iptables -F;" +
-                            "iptables -X; " +
-                            "iptables -t nat -F;" +
-                            "iptables -t nat -X;" +
-                            "iptables -t mangle -F;" +
-                            "iptables -t mangle -X;" +
-                            "iptables -P INPUT ACCEPT;"+
-                            "iptables -P FORWARD ACCEPT;"+
-                            "iptables -P OUTPUT ACCEPT").closeProcess();
-                }
+                IPTables.stopIpTable();
                 finish();
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

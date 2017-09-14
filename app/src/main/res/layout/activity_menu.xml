@@ -9,8 +9,7 @@
     <RelativeLayout
         android:id="@+id/rootView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/material_blue_grey_100">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/LL_vertical"
@@ -37,18 +36,29 @@
                     app:cardElevation="8dp">
 
                     <RelativeLayout
+                        android:id="@+id/NmapButton"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/NmapButton"
+                            android:id="@+id/NmapTxt"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
                             android:gravity="center"
                             android:text="Nmap"
                             android:textColor="@color/material_light_white"
                             android:textSize="18sp" />
 
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_below="@+id/NmapTxt"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/nmap" />
+
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
 
@@ -62,17 +72,28 @@
                     app:cardElevation="8dp">
 
                     <RelativeLayout
+                        android:id="@+id/MitmButton"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/MitmButton"
+                            android:id="@+id/MitmTxt"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
                             android:gravity="center"
-                            android:text="Cepter\nMITM"
+                            android:text="Intercept"
                             android:textColor="@color/material_light_white"
                             android:textSize="18sp" />
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_below="@+id/MitmTxt"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/gallery" />
 
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
@@ -95,17 +116,28 @@
 
                     <RelativeLayout
 
+                        android:id="@+id/ArpButton"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/ArpButton"
+                            android:id="@+id/ArpTxt"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
                             android:gravity="center"
-                            android:text="ARP\nCAGE"
+                            android:text="Tcpdump"
                             android:textColor="@color/material_light_white"
                             android:textSize="18sp" />
+
+                        <ImageView
+                            android:id="@+id/imageView9"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_below="@+id/ArpTxt"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/cage" />
 
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
@@ -121,17 +153,28 @@
 
                     <RelativeLayout
 
+                        android:id="@+id/DnsButton"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/DnsButton"
+                            android:id="@+id/txtDNS"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
                             android:gravity="center"
-                            android:text="DNS\nSpoofing"
+                            android:text="DnsSpoof"
                             android:textColor="@color/material_light_white"
                             android:textSize="18sp" />
+
+                        <ImageView
+                            android:id="@+id/imageView8"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_below="@+id/txtDNS"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/dns" />
 
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
@@ -154,18 +197,31 @@
                     app:cardElevation="8dp">
 
                     <RelativeLayout
+                        android:id="@+id/WiresharkButton"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/WiresharkButton"
+
+                            android:id="@+id/WiresharkTxt"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center_horizontal"
                             android:text="Wireshark"
                             android:textColor="@color/material_light_white"
                             android:textSize="18sp" />
 
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_below="@+id/WiresharkTxt"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="8dp"
+                            android:padding="4dp"
+                            android:src="@drawable/wireshark" />
+
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
 
@@ -179,17 +235,31 @@
                     app:cardElevation="8dp">
 
                     <RelativeLayout
+                        android:id="@+id/DoraDiagnostic"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/DoraDiagnostic"
+                            android:id="@+id/DoraTxt"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="DORA\nDiagnostic"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center_horizontal"
+                            android:text="Dora Diag"
+
                             android:textColor="@color/material_light_white"
                             android:textSize="18sp" />
+
+                        <ImageView
+                            android:id="@+id/imageView10"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_below="@+id/DoraTxt"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/scan" />
 
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
@@ -213,18 +283,29 @@
 
                     <RelativeLayout
 
+                        android:id="@+id/Metasploit"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/Metasploit"
+                            android:id="@+id/MsfTxt"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
                             android:gravity="center"
                             android:text="Metasploit"
                             android:textColor="@color/material_light_white"
                             android:textSize="18sp" />
 
+                        <ImageView
+                            android:id="@+id/imageView4"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_below="@+id/MsfTxt"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/metasploit" />
+
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
 
@@ -238,17 +319,28 @@
                     app:cardElevation="8dp">
 
                     <RelativeLayout
+                        android:id="@+id/SettingsButton"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/SettingsButton"
+                            android:id="@+id/SettingsTxt"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
                             android:gravity="center"
                             android:text="Settings"
                             android:textColor="@color/material_light_white"
                             android:textSize="18sp" />
+
+                        <ImageView
+                            android:id="@+id/imageView5"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_below="@+id/SettingsTxt"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/settings" />
 
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>

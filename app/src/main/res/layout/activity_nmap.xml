@@ -31,7 +31,7 @@
                 android:id="@+id/topToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_toLeftOf="@+id/action_settings"
+                android:layout_toLeftOf="@+id/showCustomCmd"
                 android:layout_toRightOf="@+id/toolbar"
                 android:focusable="false"
                 android:focusableInTouchMode="false">
@@ -45,11 +45,11 @@
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="16dp"
-                android:layout_toStartOf="@+id/action_settings"
+                android:layout_toStartOf="@+id/showCustomCmd"
                 android:src="@android:drawable/ic_menu_info_details" />
 
             <ImageButton
-                android:id="@+id/action_settings"
+                android:id="@+id/showCustomCmd"
                 android:layout_width="32dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="false"
@@ -134,8 +134,7 @@
                 android:textSize="16sp"
                 android:typeface="serif" />
 
-            <EditText
-                android:id="@+id/binParamsEditText"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="16dp"
@@ -147,10 +146,19 @@
                 android:elevation="3dp"
                 android:maxLines="1"
                 android:paddingLeft="8dp"
-                android:text="-Pn -Sv -w -vv"
-                android:textColor="@color/primary_text"
-                android:textSize="16sp"
-                android:typeface="serif" />
+                app:hintEnabled="false">
+
+                <EditText
+                    android:id="@+id/binParamsEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="-Pn -Sv -w -vv"
+                    android:textColor="@color/primary_text"
+                    android:textSize="16sp"
+                    android:typeface="serif" />
+            </android.support.design.widget.TextInputLayout>
+
+
         </LinearLayout>
 
         <RelativeLayout
@@ -166,22 +174,23 @@
                 android:background="#111111"
                 android:elevation="2dp"
                 android:gravity="center_vertical"
+                android:maxLines="1"
                 android:paddingLeft="16dp"
                 android:text="nmap 192.168.0.1 -Pn -Sv -w -vv"
+                android:textColor="@color/material_light_white"
                 android:textStyle="italic"
-                android:typeface="monospace" />
+                android:typeface="normal" />
 
             <TextView
                 android:id="@+id/Output"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/Monitor"
                 android:background="@color/material_light_black"
                 android:maxLines="200"
                 android:padding="16dp"
                 android:scrollbars="vertical"
-                android:text="@string/nmapblabla"
-                android:textColor="@color/material_light_white"
+                android:textColor="#FFFFFF"
                 android:textSize="12sp" />
         </RelativeLayout>
 

@@ -3,14 +3,18 @@ package su.sniff.cepter.View.Adapter;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import su.sniff.cepter.R;
-import su.sniff.cepter.globalVariable;
 
+import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
+import su.sniff.cepter.R;
+
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class                ProtocolAdapter extends ArrayAdapter<String> {
@@ -19,6 +23,13 @@ public class                ProtocolAdapter extends ArrayAdapter<String> {
     public                  ProtocolAdapter(Context context, int textViewResourceId, ArrayList<String> objects) {
         super(context, textViewResourceId, objects);
         this.f1z = objects;
+        try {
+            Log.d("ProtocolAdapter", "whoami:" +
+                    new BufferedReader(new RootProcess("monProcess").exec("id").getInputStreamReader()).readLine());
+            RootProcess.kill("id");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @NonNull
@@ -29,7 +40,7 @@ public class                ProtocolAdapter extends ArrayAdapter<String> {
         }
         TextView tt = (TextView) convertView.findViewById(R.id.label);
         tt.setText( f1z.get(position));
-        tt.setTextSize(2, (float) globalVariable.raw_textsize);
+        tt.setTextSize(2, 9);
         tt.setBackgroundResource(R.color.ftp);
         if ((f1z.get(position)).indexOf("ARP") > 0) {
             tt.setBackgroundResource(R.color.arp);

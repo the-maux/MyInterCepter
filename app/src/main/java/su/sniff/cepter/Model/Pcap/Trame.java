@@ -16,11 +16,12 @@ public class               Trame {
     public String          time;
     public Protocol        protocol;
     public Ipv4            src, dest;
-    public String          StringSrc, StringDest, Errno;
+    public String          StringSrc, StringDest, Errno = null;
     public byte[]          bufferByte = null;
     public String          info;
     public int             backgroundColor;
-    public boolean         initialised = false;
+    public boolean         initialised = false, skipped = false;
+    public boolean         connectionOver = false;
 
     public                  Trame(String dump, int offsett, int verbose_lvl) {
         this.verbose = verbose_lvl;//0: Nothing; 1 => -v ; 2 -vv ; 3 -vvv ; 4 -X
@@ -53,8 +54,11 @@ public class               Trame {
             line.contains("listening on ") ||
                 line.contains("packets captured") ||
                 line.contains("packets received by filter") ||
-                line.contains("packets dropped by kernel"))
+                line.contains("packets dropped by kernel") ||
+                line.contains("Processus over")) {
+            skipped = true;
             return true;
+        }
         return false;
     }
 
@@ -248,7 +252,7 @@ public class               Trame {
         }
     }
 
-    private void            initColorBackground() {
+    private void           initColorBackground() {
         switch (protocol) {
             case ARP:
                 backgroundColor = R.color.arp;
@@ -285,6 +289,4 @@ public class               Trame {
                 break;
         }
     }
-
-
 }

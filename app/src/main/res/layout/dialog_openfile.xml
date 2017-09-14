@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:padding="5dp" android:layout_width="match_parent" android:layout_height="wrap_content">
-    <LinearLayout android:orientation="horizontal" android:id="@+id/ofd_top_bar" android:layout_width="match_parent" android:layout_height="wrap_content" android:weightSum="1.0">
-        <TextView  android:layout_width="wrap_content" android:textStyle="bold" android:textColor="#ffffff" android:id="@+id/ofd_current_path" android:paddingLeft="2dp"  android:layout_height="wrap_content" android:layout_weight="0.78" />
-        <Button  android:layout_width="wrap_content" android:layout_gravity="top|bottom|center_vertical|fill_vertical|center|fill" android:id="@+id/ofd_go_up"  android:layout_height="wrap_content" android:text="@string/ofd_go_up_text" android:layout_weight="0.22" />
-    </LinearLayout>
-    <ListView android:id="@+id/ofd_list" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_below="@+id/ofd_top_bar" />
-</RelativeLayout>

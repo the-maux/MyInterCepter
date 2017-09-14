@@ -4,38 +4,60 @@
                 android:id="@+id/rootView" android:background="@android:color/background_dark">
 
     <ProgressBar
-            style="@android:style/Widget.Material.Light.ProgressBar"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/progressBar"/>
+        android:id="@+id/progressBar"
+        style="@android:style/Widget.Material.Light.ProgressBar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/imageView6"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="false"
+        android:layout_marginTop="24dp" />
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:id="@+id/imageView6"/>
+
     <TextView
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/progressBar"
-            android:textColor="#20C20E"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/monitor"
-            android:textSize="16sp"
-            android:typeface="monospace"
-            />
+        android:id="@+id/monitor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progressBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:text="Text In haxor color de la mort"
+        android:textColor="#20C20E"
+        android:textSize="16sp"
+        android:typeface="monospace" />
     <Button
             android:text="Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true" android:id="@+id/button7" android:visibility="gone"/>
+
     <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp" android:layout_below="@+id/button7"
-            android:layout_centerHorizontal="true" android:layout_marginTop="85dp" android:id="@+id/imageView7"
-            android:elevation="5dp" android:src="@drawable/ico"/>
+        android:id="@+id/imageView7"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_below="@+id/button7"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:elevation="5dp"
+        android:src="@drawable/scylla_logo" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="4dp"
+        android:gravity="right"
+        android:text="&quot;Quand j'vois la normalité de l'homme, je m'dis que la folie doit etre une forme de sagesse&quot; \nS.c.y"
+        android:textColor="@color/material_light_white"
+        android:textSize="10sp"
+        android:textStyle="italic" />
 
 </RelativeLayout>

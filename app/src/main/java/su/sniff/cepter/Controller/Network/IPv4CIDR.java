@@ -6,11 +6,11 @@ import su.sniff.cepter.BuildConfig;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IPv4CIDR {
+public class                    IPv4CIDR {
     int                             baseIPnumeric;
     int                             netmaskNumeric;
 
-    public IPv4CIDR(String symbolicIP, String netmask) throws NumberFormatException {
+    public                          IPv4CIDR(String symbolicIP, String netmask) throws NumberFormatException {
         String[] st = symbolicIP.split("\\.");
         if (st.length != 4) {
             throw new NumberFormatException("Invalid IP address: " + symbolicIP);
@@ -54,7 +54,7 @@ public class IPv4CIDR {
         }
     }
 
-    public IPv4CIDR(String IPinCIDRFormat) throws NumberFormatException {
+    public                          IPv4CIDR(String IPinCIDRFormat) throws NumberFormatException {
         String[] st = IPinCIDRFormat.split("\\/");
         if (st.length != 2) {
             throw new NumberFormatException("Invalid CIDR format '" + IPinCIDRFormat + "', should be: xx.xx.xx.xx/xx");
@@ -99,24 +99,6 @@ public class IPv4CIDR {
         return sb.toString();
     }
 
-    public String                   getNetmask() {
-        StringBuffer sb = new StringBuffer(15);
-        for (int shift = 24; shift > 0; shift -= 8) {
-            sb.append(Integer.toString((this.netmaskNumeric >>> shift) & MotionEventCompat.ACTION_MASK));
-            sb.append('.');
-        }
-        sb.append(Integer.toString(this.netmaskNumeric & MotionEventCompat.ACTION_MASK));
-        return sb.toString();
-    }
-
-    public String                   getCIDR() {
-        int i = 0;
-        while (i < 32 && (this.netmaskNumeric << i) != 0) {
-            i++;
-        }
-        return convertNumericIpToSymbolic(this.baseIPnumeric & this.netmaskNumeric) + "/" + i;
-    }
-
     public List<String>             getAvailableIPs(Integer numberofIPs) {
         ArrayList result = new ArrayList();
         int numberOfBits = 0;
@@ -136,20 +118,6 @@ public class IPv4CIDR {
         return result;
     }
 
-    public String                   getHostAddressRange() {
-        int numberOfBits = 0;
-        while (numberOfBits < 32 && (this.netmaskNumeric << numberOfBits) != 0) {
-            numberOfBits++;
-        }
-        Integer numberOfIPs = 0;
-        for (int n = 0; n < 32 - numberOfBits; n++) {
-            numberOfIPs = numberOfIPs << 1 | 1;
-        }
-        Integer baseIP = this.baseIPnumeric & this.netmaskNumeric;
-        String firstIP = convertNumericIpToSymbolic(baseIP + 1);
-        return firstIP + " - " + convertNumericIpToSymbolic((baseIP + numberOfIPs) - 1);
-    }
-
     public Integer                  getNumberOfHosts() {
         int numberOfBits = 0;
         while (numberOfBits < 32 && (this.netmaskNumeric << numberOfBits) != 0) {
@@ -160,55 +128,6 @@ public class IPv4CIDR {
             x = 1.0d;
         }
         return x.intValue();
-    }
-
-    public String                   getWildcardMask() {
-        Integer wildcardMask = ~this.netmaskNumeric;
-        StringBuffer sb = new StringBuffer(15);
-        for (int shift = 24; shift > 0; shift -= 8) {
-            sb.append(Integer.toString((wildcardMask  >>> shift) & MotionEventCompat.ACTION_MASK));
-            sb.append('.');
-        }
-        sb.append(Integer.toString(wildcardMask  & MotionEventCompat.ACTION_MASK));
-        return sb.toString();
-    }
-
-    public String                   getBroadcastAddress() {
-        if (this.netmaskNumeric == -1) {
-            return "0.0.0.0";
-        }
-        int numberOfBits = 0;
-        while (numberOfBits < 32 && (this.netmaskNumeric << numberOfBits) != 0) {
-            numberOfBits++;
-        }
-        Integer numberOfIPs = 0;
-        for (int n = 0; n < 32 - numberOfBits; n++) {
-            numberOfIPs = numberOfIPs << 1 | 1;
-        }
-        return convertNumericIpToSymbolic((this.baseIPnumeric & this.netmaskNumeric) + numberOfIPs);
-    }
-
-    private String                  getBinary(Integer number) {
-        String result = BuildConfig.FLAVOR;
-        Integer ourMaskBitPattern = 1;
-        int i = 1;
-        while (i <= 32) {
-            if ((number  & ourMaskBitPattern ) != 0) {
-                result = "1" + result;
-            } else {
-                result = "0" + result;
-            }
-            if (!(i % 8 != 0 || i == 0 || i == 32)) {
-                result = "." + result;
-            }
-            ourMaskBitPattern = ourMaskBitPattern << 1;
-            i++;
-        }
-        return result;
-    }
-
-    public String                   getNetmaskInBinary() {
-        return getBinary(this.netmaskNumeric);
     }
 
     public boolean                  contains(String IPaddress) {

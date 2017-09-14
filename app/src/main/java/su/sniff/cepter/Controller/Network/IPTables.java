@@ -23,7 +23,6 @@ import android.util.Log;
 
 import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
-import su.sniff.cepter.globalVariable;
 
 public class                    IPTables {
     private static final String TAG = "IPTABLES";
@@ -81,7 +80,7 @@ public class                    IPTables {
     }
 
     public static void          InterceptWithoutSSL() {
-        RootProcess process = new RootProcess("IpTable::InterceptWithoutSSL");
+        RootProcess process = new RootProcess("IpTable::InitWithoutSSL");
         process.exec("iptables -F;")
                 .exec("iptables -X;")
                 .exec("iptables -t nat -F;")
@@ -92,15 +91,39 @@ public class                    IPTables {
                 .exec("iptables -P FORWARD ACCEPT;")
                 .exec("iptables -P OUTPUT ACCEPT")
                 .exec("echo '1' > /proc/sys/net/ipv4/ip_forward");
-        if (globalVariable.dnss == 1) {
+        if (Singleton.getInstance().isDnsSpoofActived()) {
             process.exec("iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053");
         }
         process.closeProcess();
     }
 
-    public static  void          InterceptWithSSlStrip() {
+    public static  void         InterceptWithSSlStrip() {
         InterceptWithoutSSL();
         new RootProcess("IpTable::InterceptWithSSlStrip")
                 .exec("iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8081");
+    }
+
+    public static void          stopIpTable() {
+        new RootProcess("IpTable stop")
+                .exec("iptables -F;")
+                .exec("iptables -X;")
+                .exec("iptables -t nat -F;")
+                .exec("iptables -t nat -X;")
+                .exec("iptables -t mangle -F;")
+                .exec("iptables -t mangle -X;")
+                .exec("iptables -P INPUT ACCEPT;")
+                .exec("iptables -P FORWARD ACCEPT;")
+                .exec("iptables -P OUTPUT ACCEPT")
+                .closeProcess();
+    }
+
+    public static void         sslConf() {
+        if (Singleton.getInstance().isSslStripModeActived()) {
+            Log.d(TAG, "iptables Conf as full striped");
+            IPTables.InterceptWithSSlStrip();
+        } else {
+            Log.d(TAG, "iptables Conf as partially striped");
+            IPTables.InterceptWithoutSSL();
+        }
     }
 }

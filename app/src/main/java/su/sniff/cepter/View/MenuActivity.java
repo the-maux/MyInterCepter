@@ -7,14 +7,12 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
-import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
 
 /**
- * Created by root on 03/08/17.
+ * Menu
  */
-
 public class                    MenuActivity extends MyActivity {
     private String              TAG = "MenuActivity";
     private MenuActivity        mInstance = this;
@@ -43,20 +41,22 @@ public class                    MenuActivity extends MyActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Class choice = TabActivitys.class;
+                Class choice = MenuActivity.class;
                 switch (clickChoice) {
                     case Nmap:
                         choice = NmapActivity.class;
-                        Snackbar.make(coordinatorLayout, "Fonctionnalité Nmap non implémenté", Snackbar.LENGTH_LONG).show();
                         break;
                     case CepterMitm:
-                        choice = TabActivitys.class;
+                        choice = null;
+                        Snackbar.make(coordinatorLayout, "Fonctionnalité Cepter non implémenté", Snackbar.LENGTH_LONG).show();
                         break;
                     case ARPCage:
-                        choice =  CageActivity.class;
+                        choice = CageActivity.class;
                         break;
                     case DnsSpoofing:
-                        choice = InjectHTTPActivity.class;
+                        //choice = DNSSpoofingActivity.class;
+                        choice = null;
+                        Snackbar.make(coordinatorLayout, "Fonctionnalité Dns Spoofing non implémenté", Snackbar.LENGTH_LONG).show();
                         break;
                     case Wireshark:
                         choice = WiresharkActivity.class;
@@ -73,10 +73,7 @@ public class                    MenuActivity extends MyActivity {
                         break;
                 }
                 if (choice != null) {
-                    String cmd = "-gw " + Singleton.getInstance().network.gateway;
                     Intent intent = new Intent(mInstance, choice);
-                    intent.putExtra("Key_String", cmd);
-                    intent.putExtra("Key_String_origin", "Oui tu venais de la");
                     startActivity(intent);
                 }
             }

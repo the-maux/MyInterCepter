@@ -1,5 +1,6 @@
 package su.sniff.cepter.View;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,8 +12,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CheckedTextView;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -21,25 +26,20 @@ import android.widget.TextView;
 import com.github.clans.fab.FloatingActionButton;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import su.sniff.cepter.Controller.System.Wrapper.ArpSpoof;
-import su.sniff.cepter.Controller.Network.IPTables;
-import su.sniff.cepter.Controller.Network.MyDNSMITM;
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
+import su.sniff.cepter.Controller.System.Wrapper.TcpdumpWrapper;
+import su.sniff.cepter.Model.Pcap.Protocol;
 import su.sniff.cepter.Model.Pcap.Trame;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.Adapter.TcpdumpHostCheckerADapter;
+import su.sniff.cepter.View.Adapter.HostSelectionAdapter;
 import su.sniff.cepter.View.Adapter.WiresharkAdapter;
 import su.sniff.cepter.View.Dialog.RV_dialog;
 
@@ -50,55 +50,48 @@ import su.sniff.cepter.View.Dialog.RV_dialog;
 public class                    WiresharkActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
     private WiresharkActivity   mInstance = this;
-    private CoordinatorLayout   coordinatorLayout;
-    private Map<String, String> params = new HashMap<>();
-    private AppBarLayout        appbar;
-    private RelativeLayout      targetSelectionner, nmapConfEditorLayout, filterPcapLayout;
-    private TextView            Monitor, cmd, monitorHost;
-    private ImageView           wiresharkMode;
-    private RecyclerView        RV_Wireshark;
+    private CoordinatorLayout   mCoordinatorLayout;
+    private Map<String, String> mParams = new HashMap<>();
+    private AppBarLayout        mAppbar;
+    private Toolbar             toolbar;
+    private RelativeLayout      mHeaderConfOFF, mHeaderConfON;
+    private TextView            mMonitorAgv, mMonitorCmd;
+    private ImageView           settings;
+    private ImageButton         action_settings;
+    private RecyclerView        mRV_Wireshark;
     private MaterialSpinner     spinner;
     private ProgressBar         progressBar;
     private FloatingActionButton fab;
-    private RootProcess         tcpDumpProcess;
-    private ArrayList<Trame>    listOfTrames = new ArrayList<>();
     private WiresharkAdapter    adapterWiresharkRV;
-    private String              actualParam = "", hostFilter = "", mTypeScan = "";
+    private String              mTypeScan = "No Filter";
     private List<Host>          listHostSelected = new ArrayList<>();
-    private boolean             isRunning = false;
+    private TcpdumpWrapper      tcpdump = new TcpdumpWrapper(this);
+    private boolean             autoscroll = true;
+    private CheckBox            Autoscroll;
+    private TextView            tcp_cb, dns_cb, arp_cb, https_cb, udp_cb, ip_cb;
+    private Singleton           singleton = Singleton.getInstance();
 
-    String INTERFACE = "-i wlan0 ";    //  Focus interfacte;
-    String STDOUT_BUFF = "-l ";        //  Make stdOUT line buffered.  Useful if you want to see  the  data in live
-    String VERBOSE_v1 = "-v ";          //  Verbose mode 1
-    String VERBOSE_v2 = "-vv  ";        //  Even more verbose output.
-    String VERBOSE_v3 = "-vvvx  ";      //  Print trame in HEXA<->ASCII
-    /*  -x When parsing and printing, in addition to printing  the  headers
-        of  each  packet,  print the data of each packet (minus its link
-        level header) in hex.*/
-    String SNARF = "-s 0 ";             //  Snarf snaplen bytes of data from each  packet , no idea what this mean
-
-    @Override
-    protected void              onCreate(@Nullable Bundle savedInstanceState) {
+    @Override protected void    onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tcpdump);
+        setContentView(R.layout.activity_wireshark);
         initXml();
         initSpinner();
         initRV();
+        initFilter();
     }
 
     private void                initXml() {
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
-        appbar = (AppBarLayout) findViewById(R.id.appbar);
-        monitorHost = (TextView) findViewById(R.id.monitorHost);
-        RV_Wireshark = (RecyclerView) findViewById(R.id.Output);
-        filterPcapLayout = (RelativeLayout) findViewById(R.id.filterPcapLayout);
-        Monitor = (TextView) findViewById(R.id.Monitor);
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
+        mAppbar = (AppBarLayout) findViewById(R.id.appbar);
+        mRV_Wireshark = (RecyclerView) findViewById(R.id.Output);
+        mHeaderConfON = (RelativeLayout) findViewById(R.id.filterPcapLayout);
+        mMonitorAgv = (TextView) findViewById(R.id.Monitor);
         spinner = (MaterialSpinner) findViewById(R.id.spinnerTypeScan);
-        nmapConfEditorLayout = (RelativeLayout) findViewById(R.id.nmapConfEditorLayout);
-        cmd = (TextView) findViewById(R.id.cmd);
+        mHeaderConfOFF = (RelativeLayout) findViewById(R.id.nmapConfEditorLayout);
+        mMonitorCmd = (TextView) findViewById(R.id.cmd);
+        settings = (ImageView) findViewById(R.id.settings);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        targetSelectionner = (RelativeLayout) findViewById(R.id.targetSelectionner);
-        wiresharkMode = (ImageView) findViewById(R.id.wiresharkMode);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,251 +99,282 @@ public class                    WiresharkActivity extends MyActivity {
                 fabBehavior();
             }
         });
-        targetSelectionner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickChoiceTarget();
-            }
-        });
-        monitorHost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickChoiceTarget();
-            }
-        });
-        monitorHost.setText(listHostSelected.size() + " target");
-        wiresharkMode.setOnClickListener(onWiresharkModeActivated());
+        Autoscroll = (CheckBox) findViewById(R.id.Autoscroll);
+        tcp_cb = (TextView) findViewById(R.id.tcp_cb);
+        dns_cb = (TextView) findViewById(R.id.dns_cb);
+        arp_cb = (TextView) findViewById(R.id.arp_cb);
+        https_cb = (TextView) findViewById(R.id.https_cb);
+        udp_cb = (TextView) findViewById(R.id.udp_cb);
+        ip_cb = (TextView) findViewById(R.id.ip_cb);
+        action_settings = (ImageButton) findViewById(R.id.showCustomCmd);
+        action_settings.setOnClickListener(onSwitchHeader());
+        settings.setOnClickListener(onSettingsClick());
     }
 
     private void                initRV() {
-        adapterWiresharkRV = new WiresharkAdapter(this, listOfTrames);
-        RV_Wireshark.setAdapter(adapterWiresharkRV);
-        RV_Wireshark.hasFixedSize();
-        RV_Wireshark.setLayoutManager(new LinearLayoutManager(mInstance));
+        adapterWiresharkRV = new WiresharkAdapter(this, tcpdump.listOfTrames);
+        mRV_Wireshark.setAdapter(adapterWiresharkRV);
+        mRV_Wireshark.hasFixedSize();
+        mRV_Wireshark.setLayoutManager(new LinearLayoutManager(mInstance));
     }
 
-    private View.OnClickListener onWiresharkModeActivated() {
+    private void                initFilter() {
+        Autoscroll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                autoscroll = b;
+            }
+        });
+        tcp_cb.setOnClickListener(onChangePermissionFilter(Protocol.TCP));
+        dns_cb.setOnClickListener(onChangePermissionFilter(Protocol.DNS));
+        https_cb.setOnClickListener(onChangePermissionFilter(Protocol.HTTP));
+        udp_cb.setOnClickListener(onChangePermissionFilter(Protocol.UDP));
+        arp_cb.setOnClickListener(onChangePermissionFilter(Protocol.ARP));
+        ip_cb.setOnClickListener(onChangePermissionFilter(Protocol.IP));
+    }
+
+    private View.OnClickListener onSettingsClick() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                spinner.setSelectedIndex(8);//No filter
-                fabBehavior();
+                AlertDialog.Builder dialog  = new AlertDialog.Builder(mInstance);
+                dialog.setCancelable(false);
+                View dialogView = mInstance.getLayoutInflater().inflate(R.layout.view_wireshark_settings, null);
+                dialog.setView(dialogView);
+                final CheckedTextView dumpInFileChkd, sslStripChkd, lockScreenChkd, DeepAnalChkd;
+                final CheckedTextView Port_redirect, Portfiltering, DnsSpoofing;
+                Port_redirect = (CheckedTextView) dialogView.findViewById(R.id.Portredirect);/**TODO**/
+                Portfiltering = (CheckedTextView) dialogView.findViewById(R.id.Portfiltering);/**TODO**/
+                DnsSpoofing = (CheckedTextView) dialogView.findViewById(R.id.DnsSpoofing);/**TODO**/
+                dumpInFileChkd = (CheckedTextView) dialogView.findViewById(R.id.dumpInFileChkd);
+                sslStripChkd = (CheckedTextView) dialogView.findViewById(R.id.sslStripChkd);/**TODO**/
+                lockScreenChkd = (CheckedTextView) dialogView.findViewById(R.id.lockScreenChkd);/**TODO**/
+                DeepAnalChkd = (CheckedTextView) dialogView.findViewById(R.id.DeepAnalChkd);
+
+                dumpInFileChkd.setChecked(tcpdump.isDumpingInFile);
+                dumpInFileChkd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tcpdump.isDumpingInFile = !tcpdump.isDumpingInFile;
+                        dumpInFileChkd.setChecked(tcpdump.isDumpingInFile);
+                    }
+                });
+                sslStripChkd.setChecked(singleton.isSslStripModeActived());
+                sslStripChkd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        singleton.setSslStripModeActived(!singleton.isSslStripModeActived());
+                        sslStripChkd.setChecked(singleton.isSslStripModeActived());
+                    }
+                });
+                lockScreenChkd.setChecked(singleton.isLockScreen());
+                lockScreenChkd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        singleton.setLockScreen(!singleton.isLockScreen());
+                        lockScreenChkd.setChecked(singleton.isLockScreen());
+                        Snackbar.make(mCoordinatorLayout, "Non implémenté", Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+                DeepAnalChkd.setChecked(tcpdump.isDeepAnalyseTrame());
+                DeepAnalChkd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tcpdump.setDeepAnalyseTrame(!tcpdump.isDeepAnalyseTrame());
+                        DeepAnalChkd.setChecked(tcpdump.isDeepAnalyseTrame());
+                        Snackbar.make(mCoordinatorLayout, "Non implémenté", Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+                Port_redirect.setOnClickListener(onPortMitm(true));
+                Portfiltering.setOnClickListener(onPortMitm(false));
+                DnsSpoofing.setOnClickListener(onDnsSpoof(DnsSpoofing));
+                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Snackbar.make(mCoordinatorLayout, "Settings set", Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+                dialog.show();
+            }
+        };
+    }
+
+    private View.OnClickListener onDnsSpoof(final CheckedTextView dnsSpoofing) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dnsSpoofing.setChecked(singleton.isDnsSpoofActived());
+                dnsSpoofing.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        singleton.setDnsSpoofActived(!singleton.isDnsSpoofActived());
+                        dnsSpoofing.setChecked(singleton.isDnsSpoofActived());
+                    }
+                });
+            }
+        };
+    }
+
+    private View.OnClickListener onPortMitm(final boolean flag) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (flag) { /** TODO: PortRedirect */
+
+                } else {    /** TODO: PortFiltering */
+
+                }
+                Snackbar.make(mCoordinatorLayout, "Non implémenté", Snackbar.LENGTH_SHORT).show();
+            }
+        };
+    }
+
+    private View.OnClickListener onSwitchHeader() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mHeaderConfOFF.getVisibility() == View.GONE) {
+                    mHeaderConfOFF.setVisibility(View.VISIBLE);
+                    mHeaderConfON.setVisibility(View.GONE);
+                } else {
+                    mHeaderConfOFF.setVisibility(View.GONE);
+                    mHeaderConfON.setVisibility(View.VISIBLE);
+                }
+            }
+        };
+    }
+
+    private View.OnClickListener onChangePermissionFilter(final Protocol protocol) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapterWiresharkRV.changePermissionFilter(protocol);
             }
         };
     }
 
     private void                onClickChoiceTarget() {
-        RecyclerView.Adapter adapter = new TcpdumpHostCheckerADapter(this, Singleton.getInstance().hostsList, listHostSelected);
         new RV_dialog(this)
-                .setAdapter(adapter)
+                .setAdapter(new HostSelectionAdapter(this, Singleton.getInstance().hostsList, listHostSelected))
                 .setTitle("Choix des cibles")
                 .onPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        monitorHost.setText(listHostSelected.size() + " target");
+                        if (listHostSelected.isEmpty())
+                            Snackbar.make(mCoordinatorLayout, "No target selected", Snackbar.LENGTH_LONG).show();
+                        else {
+                            toolbar.setSubtitle(listHostSelected.size() + " target" +
+                                    ((listHostSelected.size() <= 1) ? "" : "s") + " selected");
+                            fabBehavior();
+                        }
                     }
                 })
                 .show();
+        listHostSelected.clear();
     }
 
     private void                initSpinner() {
-        final ArrayList<String> cmds = new ArrayList<>();
-        cmds.add("Arp Filter");
-        params.put(cmds.get(0), INTERFACE + " \' arp ");
-        cmds.add("DNS Filter");
-        params.put(cmds.get(1), INTERFACE + "\' dst port 53 ");
-        cmds.add("DNS Intercepter");
-        params.put(cmds.get(2), INTERFACE + STDOUT_BUFF + VERBOSE_v2 + SNARF + VERBOSE_v3 + "\' dst port 53 ");
-        cmds.add("HTTP Filter");
-        params.put(cmds.get(3), INTERFACE + " \' (port 80 or port 443 or dst port 53) ");
-        cmds.add("Display Format");
-        params.put(cmds.get(4), INTERFACE + STDOUT_BUFF + VERBOSE_v2 + SNARF + VERBOSE_v3 + "\'");
-        cmds.add("TCP Filter");
-        params.put(cmds.get(5), INTERFACE  + " \' tcp ");
-        cmds.add("UDP Filter");
-        params.put(cmds.get(6), INTERFACE + " \' udp ");
-        cmds.add("Custom Filter");
-        params.put(cmds.get(7), INTERFACE + "\' ");
-        cmds.add("No Filter");
-        params.put(cmds.get(8), INTERFACE  + "\' ");
+        Iterator it = tcpdump.getCmdsWithArgsInMap().entrySet().iterator();
+        ArrayList<String> cmds = new ArrayList<>();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            mParams.put((String)pair.getKey(), (String)pair.getValue());
+            cmds.add((String)pair.getKey());
+            it.remove(); // avoids a ConcurrentModificationException
+        }
         spinner.setItems(cmds);
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, String typeScan) {
-                cmd.setText(params.get(typeScan));
+                mMonitorCmd.setText(mParams.get(typeScan));
                 mTypeScan = typeScan;
-                Monitor.setText("./tcpdump " + params.get(typeScan).replace("  ", " "));
+                mMonitorAgv.setText("./tcpdump " + mParams.get(typeScan).replace("  ", " "));
             }
         });
-
-        cmd.setText(params.get(cmds.get(0)));
-
+        mMonitorCmd.setText(mParams.get(cmds.get(0)));
     }
 
     public void                 fabBehavior() {
-        if (!isRunning) {
-            if (initParams()) {
+        if (!tcpdump.isRunning) {
+            if (startTcpdump()) {
+                mMonitorAgv.setVisibility(View.VISIBLE);
+                adapterWiresharkRV.clear();
                 progressBar.setVisibility(View.VISIBLE);
-                onTcpDumpStart();
-                nmapConfEditorLayout.setVisibility(View.GONE);
-                appbar.setVisibility(View.GONE);
-                filterPcapLayout.setVisibility(View.VISIBLE);
                 fab.setImageResource(android.R.drawable.ic_media_pause);
-                isRunning = true;
-            } else {
-                onClickChoiceTarget();
             }
         } else {
+            mMonitorAgv.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
-            filterPcapLayout.setVisibility(View.GONE);
-            appbar.setVisibility(View.VISIBLE);
-            nmapConfEditorLayout.setVisibility(View.VISIBLE);
-            onTcpDumpStop();
+            tcpdump.onTcpDumpStop();
+            fab.setImageResource(android.R.drawable.ic_media_play);
         }
     }
 
-    private boolean             initParams() {
-        actualParam = cmd.getText().toString();
-        cmd.setText(actualParam);
-        hostFilter = (mTypeScan.contains("No Filter")) ? " (" : " and (" ;//If no filter, no '&&' in expression
+    private boolean             startTcpdump() {
         if (listHostSelected.isEmpty()) {
-            Snackbar.make(coordinatorLayout, "Selectionner une target", Snackbar.LENGTH_SHORT).setActionTextColor(Color.RED).show();
-            return false;
+            if (Singleton.getInstance().hostsList.size() == 1) {//Automatic selection when 1 target only
+                listHostSelected.add(Singleton.getInstance().hostsList.get(0));
+                toolbar.setSubtitle(listHostSelected.size() + " target");
+            } else {
+                Snackbar.make(mCoordinatorLayout, "Selectionner une target", Snackbar.LENGTH_SHORT).setActionTextColor(Color.RED).show();
+                onClickChoiceTarget();
+                return false;
+            }
         }
+        String hostFilter = (mTypeScan.contains("No Filter") || mTypeScan.contains("Custom Filter")) ? " (" : " and (";//If no filter, no '&&' in expression
         for (int i = 0; i < listHostSelected.size(); i++) {
             if (i > 0)
                 hostFilter += " or ";
             hostFilter += " host " + listHostSelected.get(i).getIp();
         }
         hostFilter += ")\'";
-        return true;
-    }
-
-    /**
-     * Start ARPSpoof
-     * Bloque le port des trames DNS
-     * Inspect/Alter DNS Query
-     * Dispatch the DNS request on network
-     */
-    private void                onTcpDumpStart() {
-        final String cmd = Singleton.getInstance().FilesPath + "/tcpdump " + actualParam + hostFilter;
-        Monitor.setText(cmd.replace(Singleton.getInstance().FilesPath, ""));
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ArpSpoof.launchArpSpoof();
-                try {
-                    Thread.sleep(2000);//Wait a sec for ARP Catched for target
-                    if (actualParam.contains(STDOUT_BUFF) && actualParam.contains("dst port 53")) {
-                        Log.i(TAG, "DNS REQUEST MITM");
-                       new IPTables().discardForwardding2Port(53); //MITM DNS
-                     }
-
-                    listOfTrames.clear();
-                    tcpDumpProcess = new RootProcess("TcpDump::DNSSpoof").exec(cmd);
-                    BufferedReader reader = tcpDumpProcess.getReader();
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        final String finalLine = line;
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                onNewLineTcpDump(finalLine);
-                            }
-                        }).start();
-                    }
-                    Log.d(TAG, "./Tcpdump finish");
-                    onNewLineTcpDump("Quiting...");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    tcpDumpProcess.closeProcess();
-                }
-                Log.d(TAG, "onTcpDump start over");
-            }
-        }).start();
-    }
-
-    /**
-     * Le traitement + renvoie de la trame DNS
-     * doit avoir lieu avant le output
-     *
-     * @param line
-     */
-    private void                onNewLineTcpDump(String line) {
-        if (line.contains("Quiting...")) {
-            mInstance.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Snackbar.make(coordinatorLayout, "Mitm stopped", Snackbar.LENGTH_LONG).show();
-                }
-            });
-            return ;
-        }
-        if (actualParam.contains(STDOUT_BUFF) && actualParam.contains("dst port 53")) {
-            MITM_DNS(line);
-        }
-        Trame trame = new Trame(line, listOfTrames.size(), 0);
-        if (trame.initialised)
-            stdOUT(trame);
-        else {
-            Snackbar snackbar = Snackbar.make(coordinatorLayout, "Error:" + trame.Errno, Snackbar.LENGTH_LONG);
-            ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text))
-                    .setTextColor(ContextCompat.getColor(mInstance, R.color.material_red_400));
-            snackbar.show();
-            progressBar.setVisibility(View.GONE);
-            onTcpDumpStop();
-        }
-        // IF MITM DNS ACTIVATED
-    }
-
-    /**
-     * Renvoie la trame mais peut altérer la réponse
-     * @param line
-     */
-    private void                MITM_DNS(String line) {
-        StringBuilder reqdata = new StringBuilder();
-        String regex = "^.+length\\s+(\\d+)\\)\\s+([\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3})\\.[^\\s]+\\s+>\\s+([\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3})\\.[^\\:]+.*";
-        Matcher matcher = Pattern.compile(regex).matcher(line);
-        if (!matcher.find() && !line.contains("tcpdump")) {
-            line = line.substring(line.indexOf(":") + 1).trim().replace(" ", "");
-            reqdata.append(line);
-        } else {
-            if (reqdata.length() > 0) {
-
-            }
-            reqdata.delete(0, reqdata.length());
-        }
-        new MyDNSMITM(reqdata.toString());
-    }
-
-    private void                stdOUT(final Trame trame) {
+        tcpdump.start(mMonitorCmd.getText().toString(), hostFilter);
+        mMonitorAgv.setText("tcpdump " + mMonitorCmd.getText().toString() + hostFilter);
         mInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (trame.initialised) {
-                    listOfTrames.add(0, trame);
-                    trame.offsett = listOfTrames.size();
-                    if (progressBar.getVisibility() == View.VISIBLE)
-                        progressBar.setVisibility(View.GONE);
-                    if (RV_Wireshark.computeVerticalScrollOffset() == 0) {//Smart insert
-                        adapterWiresharkRV.notifyItemInserted(0);
-                        RV_Wireshark.smoothScrollToPosition(0);
-                    } else {
-                        adapterWiresharkRV.notifyItemInserted(0);
-                }
+                adapterWiresharkRV.notifyDataSetChanged();
             }
-        }});
+        });
+        mMonitorCmd.setText(tcpdump.actualParam);
+        return true;
     }
 
-    private void                onTcpDumpStop() {
-        ArpSpoof.stopArpSpoof();
-        RootProcess.kill("tcpdump");
-        isRunning = false;
-        fab.setImageResource(android.R.drawable.ic_media_play);
-        Snackbar.make(coordinatorLayout, "Mitm interupted", Snackbar.LENGTH_SHORT);
+    public void                 onNewTrame(final Trame trame) {
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (trame.connectionOver && trame.Errno == null) {
+
+                } else if (trame.initialised) {
+                    if (progressBar.getVisibility() == View.VISIBLE)
+                        progressBar.setVisibility(View.GONE);
+                    adapterWiresharkRV.addTrameOnAdapter(trame);
+                    mRV_Wireshark.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapterWiresharkRV.notifyDataSetChanged();
+                            autoscroll();
+                        }
+                    });
+                } else if (!trame.skipped) { /** Error Trame; Over**/
+                    Snackbar snackbar = Snackbar.make(mCoordinatorLayout, "Error:" + trame.Errno, Snackbar.LENGTH_LONG);
+                    ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text))
+                            .setTextColor(ContextCompat.getColor(mInstance, R.color.material_red_400));
+                    snackbar.show();
+                    progressBar.setVisibility(View.GONE);
+                    fab.setImageResource(android.R.drawable.ic_media_play);
+                } else {
+
+                }
+            }//else skipped do nothing
+        });
+    }
+
+    private void                autoscroll() {
+        if (autoscroll) {
+            mRV_Wireshark.smoothScrollToPosition(0);
+        }
     }
 
 }
