@@ -157,7 +157,6 @@ public class                    WiresharkActivity extends MyActivity {
                     public void onClick(View v) {
                         tcpdump.isDumpingInFile = !tcpdump.isDumpingInFile;
                         dumpInFileChkd.setChecked(tcpdump.isDumpingInFile);
-                        Snackbar.make(mCoordinatorLayout, "Non implémenté", Snackbar.LENGTH_SHORT).show();
                     }
                 });
                 sslStripChkd.setChecked(singleton.isSslStripModeActived());
@@ -183,11 +182,18 @@ public class                    WiresharkActivity extends MyActivity {
                     public void onClick(View v) {
                         tcpdump.setDeepAnalyseTrame(!tcpdump.isDeepAnalyseTrame());
                         DeepAnalChkd.setChecked(tcpdump.isDeepAnalyseTrame());
+                        Snackbar.make(mCoordinatorLayout, "Non implémenté", Snackbar.LENGTH_SHORT).show();
                     }
                 });
                 Port_redirect.setOnClickListener(onPortMitm(true));
                 Portfiltering.setOnClickListener(onPortMitm(false));
                 DnsSpoofing.setOnClickListener(onDnsSpoof(DnsSpoofing));
+                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Snackbar.make(mCoordinatorLayout, "Settings set", Snackbar.LENGTH_SHORT).show();
+                    }
+                });
                 dialog.show();
             }
         };
@@ -338,7 +344,7 @@ public class                    WiresharkActivity extends MyActivity {
         mInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (trame.connectionOver) {
+                if (trame.connectionOver && trame.Errno == null) {
 
                 } else if (trame.initialised) {
                     if (progressBar.getVisibility() == View.VISIBLE)
@@ -358,6 +364,8 @@ public class                    WiresharkActivity extends MyActivity {
                     snackbar.show();
                     progressBar.setVisibility(View.GONE);
                     fab.setImageResource(android.R.drawable.ic_media_play);
+                } else {
+
                 }
             }//else skipped do nothing
         });

@@ -4,9 +4,13 @@ import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,7 +38,7 @@ public class                TcpdumpWrapper {
     /*                           -x When parsing and printing, in addition to printing  the  headers
                                  of  each  packet,  print the data of each packet (minus its link
                                  level header) in hex.*/
-    private String           SNARF = "-s 0 ";             //  Snarf snaplen bytes of data from each  packet , no idea what this mean
+    private String          SNARF = "-s 0 ";             //  Snarf snaplen bytes of data from each  packet , no idea what this mean
 
     public                  TcpdumpWrapper(WiresharkActivity activity) {
         this.activity = activity;
@@ -52,6 +56,19 @@ public class                TcpdumpWrapper {
         cmds.put("UDP Filter", INTERFACE + " \' udp ");
         cmds.put("Arp Filter",  INTERFACE + " \' arp ");
     }
+    private String          buildCmd(String actualParam, String hostFilter) {
+        String date =  new SimpleDateFormat("MM_dd_HH_mm_ss", Locale.FRANCE).format(new Date());
+        String pcapFile = ((isDumpingInFile) ?
+                (" -w " + Singleton.getInstance().PcapPath + date + ".pcap ") : "");
+        return
+                Singleton.getInstance().FilesPath +
+                        "tcpdump " +
+                        pcapFile +
+                        actualParam +
+                        hostFilter;
+
+    }
+
     /**
      * Start ARPSpoof
      * Bloque le port des trames DNS
@@ -62,7 +79,7 @@ public class                TcpdumpWrapper {
         Log.i(TAG, "start");
         IPTables.InterceptWithoutSSL();
         this.actualParam = actualParam;
-        final String cmd = Singleton.getInstance().FilesPath + "tcpdump " + actualParam + hostFilter;
+        final String cmd = buildCmd(actualParam, hostFilter).replace("//", "/").replace("  ", " ");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -118,8 +135,10 @@ public class                TcpdumpWrapper {
             listOfTrames.add(0, trame);
             trame.offsett = listOfTrames.size();
             activity.onNewTrame(trame);
-        } else if (!trame.skipped)
+        } else if (!trame.skipped) {
+            activity.onNewTrame(trame);
             onTcpDumpStop();
+        }
     }
     public void             onTcpDumpStop() {
         ArpSpoof.stopArpSpoof();

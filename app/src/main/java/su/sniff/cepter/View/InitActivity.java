@@ -67,6 +67,7 @@ public class                    InitActivity extends MyActivity {
     private void                buildPath() {
         Singleton.getInstance().FilesPath = mInstance.getFilesDir().getPath() + '/';
         Singleton.getInstance().BinaryPath = Singleton.getInstance().FilesPath;//shouldn't be the same as FilesPath
+        Singleton.getInstance().PcapPath = Singleton.getInstance().FilesPath + "/"+ "Pcap" + "/";
         Log.d(TAG, "path:" + Singleton.getInstance().FilesPath);
         monitor("Building Path");
     }
@@ -205,6 +206,7 @@ public class                    InitActivity extends MyActivity {
                 .exec(Singleton.getInstance().BinaryPath + "/busybox unzip archive_nmap")
                 .exec("chmod 777 " + Singleton.getInstance().BinaryPath + "/nmap/*")
                 .exec("mount -o rw,remount /system")
+                .exec("mkdir " + Singleton.getInstance().FilesPath + "/"+ "Pcap")
                 .exec("cp ./ping /system/bin/")
                 .exec("echo \"nameserver `getprop net.dns1`\" > /etc/resolv.conf")
                 .exec("rm -f " + Singleton.getInstance().FilesPath + "/Raw/*;")

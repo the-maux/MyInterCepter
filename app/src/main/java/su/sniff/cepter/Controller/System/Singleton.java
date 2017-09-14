@@ -15,6 +15,7 @@ import su.sniff.cepter.Model.Target.NetworkInformation;
 public class                            Singleton {
     private static Singleton            mInstance = null;
 
+
     private                             Singleton() {}
     public static synchronized Singleton getInstance() {
         if(mInstance == null)
@@ -22,6 +23,7 @@ public class                            Singleton {
         return mInstance;
     }
 
+    public String                       PcapPath;
     public  String                      BinaryPath = null;
     public  String                      FilesPath = null;
     public  ArrayList<Host>             hostsList = null;

@@ -16,7 +16,7 @@ public class               Trame {
     public String          time;
     public Protocol        protocol;
     public Ipv4            src, dest;
-    public String          StringSrc, StringDest, Errno;
+    public String          StringSrc, StringDest, Errno = null;
     public byte[]          bufferByte = null;
     public String          info;
     public int             backgroundColor;

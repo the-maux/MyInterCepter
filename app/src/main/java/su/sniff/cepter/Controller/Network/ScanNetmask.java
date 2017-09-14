@@ -53,7 +53,7 @@ public class                        ScanNetmask {
                 try {
                     ++nbrHostScanned;
                     InetAddress host = InetAddress.getByName(ip);
-                    if (InetAddress.getByName(ip).isReachable(100)) {//Timeout 10s
+                    if (InetAddress.getByName(ip).isReachable(1000)) {//Timeout 10s
                         Log.d(TAG, ip + " is reachable");
                         NetworkInterface ni = NetworkInterface.getByInetAddress(host);
                         if (ni != null) {
