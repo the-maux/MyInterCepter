@@ -10,54 +10,56 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".Controller.System.ApplicationControl"
         android:allowBackup="true"
         android:excludeFromRecents="true"
         android:icon="@drawable/ico"
         android:label="@string/app_name"
-        android:name="su.sniff.cepter.Controller.System.ApplicationControl"
         android:theme="@style/AppTheme">
         <activity
-            android:name="su.sniff.cepter.View.InitActivity"
+            android:name=".View.InitActivity"
             android:label="@string/app_name"
             android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="su.sniff.cepter.View.DNSSpoofingActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
-            android:name="su.sniff.cepter.View.CageActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
-            android:name="su.sniff.cepter.View.ScanActivity"
+            android:name=".View.DNSSpoofingActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateHidden"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".View.CageActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".View.ScanActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/app_name"
             android:theme="@style/NoActionBar"
-            android:label="@string/app_name" />
+            android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="su.sniff.cepter.View.SettingsActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:name=".View.SettingsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="su.sniff.cepter.View.NmapActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:name=".View.NmapActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="su.sniff.cepter.View.MenuActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:name=".View.MenuActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="su.sniff.cepter.View.WiresharkActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:name=".View.WiresharkActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="su.sniff.cepter.View.DoraActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:name=".View.DoraActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden" />
     </application>
+
 </manifest>

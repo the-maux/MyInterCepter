@@ -67,7 +67,7 @@ public class                    InitActivity extends MyActivity {
     private void                buildPath() {
         Singleton.getInstance().FilesPath = mInstance.getFilesDir().getPath() + '/';
         Singleton.getInstance().BinaryPath = Singleton.getInstance().FilesPath;//shouldn't be the same as FilesPath
-        Singleton.getInstance().PcapPath = Singleton.getInstance().FilesPath + "/"+ "Pcap" + "/";
+        Singleton.getInstance().PcapPath = "/sdcard/Pcap/";
         Log.d(TAG, "path:" + Singleton.getInstance().FilesPath);
         monitor("Building Path");
     }
@@ -201,22 +201,20 @@ public class                    InitActivity extends MyActivity {
         buildFile("arpspoof", R.raw.arpspoof);
         buildFile("ettercap_archive", R.raw.ettercap_archive);
         buildFile("archive_nmap", R.raw.nmap);
-        RootProcess process = new RootProcess("UNZIP FILES", Singleton.getInstance().FilesPath);
-        process.exec(Singleton.getInstance().BinaryPath + "/busybox unzip ettercap_archive")
-                .exec(Singleton.getInstance().BinaryPath + "/busybox unzip archive_nmap")
-                .exec("chmod 777 " + Singleton.getInstance().BinaryPath + "/nmap/*")
-                .exec("mount -o rw,remount /system")
-                .exec("mkdir " + Singleton.getInstance().FilesPath + "/"+ "Pcap")
-                .exec("cp ./ping /system/bin/")
-                .exec("echo \"nameserver `getprop net.dns1`\" > /etc/resolv.conf")
-                .exec("rm -f " + Singleton.getInstance().FilesPath + "/Raw/*;")
-                .exec("rm -f " + Singleton.getInstance().FilesPath + "/dnss ;")
-                .exec("rm -f " + Singleton.getInstance().FilesPath + "/hostlist;")
-                .exec("rm -f " + Singleton.getInstance().FilesPath + "/*Activity")
-                .exec(Singleton.getInstance().BinaryPath + "busybox killall cepter")
-                .exec(Singleton.getInstance().BinaryPath + "busybox killall tcpdump")
-                .exec(Singleton.getInstance().BinaryPath + "busybox killall arpspoof")
-                .closeProcess();
+        new RootProcess("UNZIP FILES", Singleton.getInstance().FilesPath).exec(Singleton.getInstance().BinaryPath + "/busybox unzip ettercap_archive;").closeProcess();
+        new RootProcess("Install ").exec(Singleton.getInstance().BinaryPath + "/busybox unzip archive_nmap;").closeProcess();
+        new RootProcess("Install ").exec("chmod 777 " + Singleton.getInstance().BinaryPath + "/nmap/*;").closeProcess();
+        new RootProcess("Install ").exec("mount -o rw,remount /system;").closeProcess();
+        new RootProcess("Install ").exec("mkdir  -p /sdcard/Pcap;").closeProcess();
+        new RootProcess("Install ").exec("cp ./ping /system/bin/;").closeProcess();
+        new RootProcess("Install ").exec("echo \"nameserver `getprop net.dns1`\" > /etc/resolv.conf;").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + Singleton.getInstance().FilesPath + "/Raw/*;").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + Singleton.getInstance().FilesPath + "/dnss ;").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + Singleton.getInstance().FilesPath + "/hostlist;").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + Singleton.getInstance().FilesPath + "/*Activity;").closeProcess();
+        new RootProcess("Install ").exec(Singleton.getInstance().BinaryPath + "busybox killall cepter;").closeProcess();
+        new RootProcess("Install ").exec(Singleton.getInstance().BinaryPath + "busybox killall tcpdump;").closeProcess();
+        new RootProcess("Install ").exec(Singleton.getInstance().BinaryPath + "busybox killall arpspoof;").closeProcess();
     }
 
     private void                monitor(final String log) {

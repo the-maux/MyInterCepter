@@ -61,11 +61,13 @@ public class                    RootProcess {
         return pid;
     }
 
-    public void                 waitFor() {
+    public RootProcess          waitFor() {
         try {
             process.waitFor();
+            return this;
         } catch (InterruptedException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
