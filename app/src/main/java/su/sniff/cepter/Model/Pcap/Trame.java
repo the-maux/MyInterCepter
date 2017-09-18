@@ -93,13 +93,13 @@ public class               Trame {
                     Log.d(TAG, "SMB trame " + line);
                     SmbParsing(line);
                     break;
+                case ICMP:
+                    Log.d(TAG, "ICMP trame " + line);
+                    ICMPParsing(line);
+                    break;
                 case NBNS:
                     Log.d(TAG, "NBNS trame " + line);
                     NBNSParsing(line);
-                    break;
-                case ICMP:
-                    Log.d(TAG, "NBNS trame " + line);
-                    ICMPParsing(line);
                     break;
                 case IP:
                     Log.e(TAG, "UNKNOW IP trame " + line);

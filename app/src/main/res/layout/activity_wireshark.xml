@@ -159,7 +159,7 @@
                             android:gravity="center"
                             android:padding="4dp"
                             android:text="TCP"
-                            android:textColor="@color/material_light_white"
+                            android:textColor="@color/tcp"
                             android:textSize="14sp"
                             android:textStyle="bold" />
 
