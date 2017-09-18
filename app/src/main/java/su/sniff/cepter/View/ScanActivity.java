@@ -12,6 +12,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -68,6 +69,7 @@ public class                        ScanActivity extends MyActivity {
     private TextView                mOsFilterBtn, mSelectAllBtn, mOfflineModeBtn;
     private ImageButton             mAddHostBtn, mSettingsBtn;
     private SearchView              mSearchView;
+    private Toolbar                 toolbar2;
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +97,7 @@ public class                        ScanActivity extends MyActivity {
         mSelectAllBtn = (TextView) findViewById(R.id.action_select_all);
         mOfflineModeBtn = (TextView) findViewById(R.id.action_offline_mode);
         mSearchView = (SearchView) findViewById(R.id.filterText);
+        toolbar2 = (Toolbar) findViewById(R.id.toolbar2);
     }
 
     private void                    init()  throws Exception {
@@ -274,11 +277,13 @@ public class                        ScanActivity extends MyActivity {
             inLoading = true;
             initHostsRecyclerView();
             progressAnimation();
+            toolbar2.setSubtitle("Scanning network");
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     new ScanNetmask(new IPv4CIDR(Singleton.getInstance().network.myIp, Singleton.getInstance().network.netmask), mInstance);
                     mProgress = 1000;
+
                 }
             }).start();
         }
@@ -330,8 +335,20 @@ public class                        ScanActivity extends MyActivity {
     }
 
     public void                     onReachableScanOver(ArrayList<String> ipReachable) {
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                toolbar2.setSubtitle("Target Identification");
+            }
+        });
         NetUtils.dumpListHostFromARPTableInFile(mInstance, ipReachable);
         mProgress = 1500;
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                toolbar2.setSubtitle("Fingerprint scan");
+            }
+        });
         Fingerprint.guessHostFingerprint(mInstance);
         mProgress = 2000;
     }
@@ -341,6 +358,7 @@ public class                        ScanActivity extends MyActivity {
             @Override
             public void run() {
                 mHosts = hosts;
+                toolbar2.setSubtitle("Choose targets");
                 monitor = "GW: " + Singleton.getInstance().     network.gateway + ": " + mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": "") + " found";// oui je fais des ternaires pour faire le pluriel
                 mBottomMonitor.setText(monitor);
                 mHostAdapter.updateHostList(mHosts);
@@ -350,7 +368,6 @@ public class                        ScanActivity extends MyActivity {
                 final ArrayList<String> listOs = mHostAdapter.getOsList();
                 monitor += "\n" + listOs.size() +" Os détected";
                 mBottomMonitor.setText(monitor);
-
                 Log.d(TAG, "scan Over with " + mHosts.size() + " possible target");
             }
         });

@@ -1,6 +1,7 @@
 package su.sniff.cepter.View.Adapter;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -55,6 +56,13 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         holder.dest.setBackgroundColor(ContextCompat.getColor(activity, color));
         holder.proto.setBackgroundColor(ContextCompat.getColor(activity, color));
         holder.info.setBackgroundColor(ContextCompat.getColor(activity, color));
+        holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(activity, R.color.material_grey_700));
+        holder.No.setTypeface(null, Typeface.NORMAL);
+        holder.time.setTypeface(null, Typeface.NORMAL);
+        holder.source.setTypeface(null, Typeface.NORMAL);
+        holder.dest.setTypeface(null, Typeface.NORMAL);
+        holder.proto.setTypeface(null, Typeface.NORMAL);
+        holder.info.setTypeface(null, Typeface.NORMAL);
     }
 
     @Override

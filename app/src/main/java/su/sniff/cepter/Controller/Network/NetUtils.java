@@ -74,12 +74,12 @@ public class                NetUtils {
                     hostListFile.write((ip + ":" + matcher.group(1) + "\n").getBytes());
                 }
             }
+            Log.d(TAG, listOfIpsAlreadyIn.size() + " new host discovered in /proc/arp");
             boolean flag;
             for (String reachable : ipReachable) {
                 flag = false;
                 Log.d(TAG, "asking for:" + reachable);
                 for (String s : listOfIpsAlreadyIn) {
-
                     if ((reachable.substring(0, reachable.indexOf(":")) + "..").contains(s + "..")) {
                         Log.d(TAG, s + "-Alreadyin>" + reachable.substring(0, reachable.indexOf(":")));
                         flag = true;

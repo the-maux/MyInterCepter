@@ -62,7 +62,7 @@ public class               Trame {
         return false;
     }
 
-    private  void           dispatch(String line, Protocol protocol) {
+    private  void          dispatch(String line, Protocol protocol) {
         try {
             switch (protocol) {
                 case ARP:
@@ -180,7 +180,7 @@ public class               Trame {
         time = splitted[0].substring(0, splitted[0].indexOf("."));
         StringSrc = splitted[2];
         StringDest = splitted[4];
-        info = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
+        info = line.substring(line.indexOf(StringDest)+StringDest.length(), line.length()).replace("IP ", "");
     }
 
     /**
@@ -264,7 +264,7 @@ public class               Trame {
                 backgroundColor = R.color.http;
                 break;
             case TCP:
-                backgroundColor = R.color.http;
+                backgroundColor = R.color.ftp;
                 break;
             case UDP:
                 backgroundColor = R.color.udp;

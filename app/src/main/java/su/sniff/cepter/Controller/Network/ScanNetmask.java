@@ -25,6 +25,7 @@ public class                        ScanNetmask {
     private volatile boolean        alreadySend = false;
     private ArrayList<String>       ipReachable = new ArrayList<>();
     private ScanActivity            activity;
+    private boolean                 debuglog = true;
 
     public                          ScanNetmask(IPv4CIDR iPv4CIDR, ScanActivity activity) {
         this.activity = activity;
@@ -45,7 +46,6 @@ public class                        ScanNetmask {
     private void                    ScanOver() {
         alreadySend = true;
         activity.onReachableScanOver(ipReachable);
-        Log.d(TAG, "Scan over with " + ipReachable.size() + " host reached");
     }
 
     private void                    runnableReachable(ExecutorService service, final String ip, final int nbrHostScanned) {
@@ -54,7 +54,8 @@ public class                        ScanNetmask {
                 try {
                     InetAddress host = InetAddress.getByName(ip);
                     if (InetAddress.getByName(ip).isReachable(1000)) {//Timeout 10s
-                        Log.d(TAG, ip + " is reachable (" + nbrHostScanned + "/" + NumberOfHosts + ")");
+                        if (debuglog)
+                            Log.d(TAG, ip + " is reachable (" + nbrHostScanned + "/" + NumberOfHosts + ")");
                         NetworkInterface ni = NetworkInterface.getByInetAddress(host);// send always null
                         if (ni != null) {
                             byte[] mac = ni.getHardwareAddress();
@@ -69,7 +70,8 @@ public class                        ScanNetmask {
                                 Log.e(TAG, ip + " doesn't exist or is not accessible. (" + nbrHostScanned + "/" + NumberOfHosts + ")");
                             }
                         } else {
-                            Log.e(TAG, "Network Interface for " + ip + " is null (" + nbrHostScanned + "/" + NumberOfHosts + ")");
+                            if (debuglog)
+                                Log.e(TAG, "Network Interface for " + ip + " is null (" + nbrHostScanned + "/" + NumberOfHosts + ")");
                         }
                     }
                 }  catch (UnknownHostException e) {
