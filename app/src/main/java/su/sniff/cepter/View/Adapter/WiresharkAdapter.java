@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -19,7 +20,7 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
     private String          TAG = "WiresharkAdapter";
     private ArrayList<Trame> listOfTrame, originalListOfTrames;
     private Activity        activity;
-    public boolean          arp = true, http = true, tcp = true, dns = true, udp = true, ip = true;
+    public boolean          arp = true, http = true, https = true, tcp = true, dns = true, udp = true, ip = true;
 
     public                  WiresharkAdapter(Activity activity, ArrayList<Trame> trames) {
         this.listOfTrame = new ArrayList<>();
@@ -88,7 +89,7 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
                     addOnList(trame, reverse);
                 break;
             case HTTPS:
-                if (http)
+                if (https)
                     addOnList(trame, reverse);
                 break;
             case DNS:
@@ -107,6 +108,8 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
                 if (ip)
                     addOnList(trame, reverse);
                 break;
+            default:
+                Log.e(TAG, "Trame unknow:" + trame.toString());
         }
 
     }
@@ -122,6 +125,9 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
                 break;
             case HTTP:
                 http = !http;
+                break;
+            case HTTPS:
+                https = !https;
                 break;
             case DNS:
                 dns = !dns;

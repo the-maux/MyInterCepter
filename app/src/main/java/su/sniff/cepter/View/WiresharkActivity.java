@@ -68,7 +68,7 @@ public class                    WiresharkActivity extends MyActivity {
     private TcpdumpWrapper      tcpdump = new TcpdumpWrapper(this);
     private boolean             autoscroll = true;
     private CheckBox            Autoscroll;
-    private TextView            tcp_cb, dns_cb, arp_cb, https_cb, udp_cb, ip_cb;
+    private TextView            tcp_cb, dns_cb, arp_cb, https_cb, http_cb, udp_cb, ip_cb;
     private Singleton           singleton = Singleton.getInstance();
 
     @Override protected void    onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,6 +104,7 @@ public class                    WiresharkActivity extends MyActivity {
         dns_cb = (TextView) findViewById(R.id.dns_cb);
         arp_cb = (TextView) findViewById(R.id.arp_cb);
         https_cb = (TextView) findViewById(R.id.https_cb);
+        http_cb = (TextView) findViewById(R.id.http_cb);
         udp_cb = (TextView) findViewById(R.id.udp_cb);
         ip_cb = (TextView) findViewById(R.id.ip_cb);
         action_settings = (ImageButton) findViewById(R.id.showCustomCmd);
@@ -127,7 +128,8 @@ public class                    WiresharkActivity extends MyActivity {
         });
         tcp_cb.setOnClickListener(onChangePermissionFilter(Protocol.TCP));
         dns_cb.setOnClickListener(onChangePermissionFilter(Protocol.DNS));
-        https_cb.setOnClickListener(onChangePermissionFilter(Protocol.HTTP));
+        http_cb.setOnClickListener(onChangePermissionFilter(Protocol.HTTP));
+        https_cb.setOnClickListener(onChangePermissionFilter(Protocol.HTTPS));
         udp_cb.setOnClickListener(onChangePermissionFilter(Protocol.UDP));
         arp_cb.setOnClickListener(onChangePermissionFilter(Protocol.ARP));
         ip_cb.setOnClickListener(onChangePermissionFilter(Protocol.IP));

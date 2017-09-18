@@ -39,7 +39,7 @@
 
     <TextView
         android:id="@+id/Source"
-        android:layout_width="75dp"
+        android:layout_width="85dp"
         android:layout_height="match_parent"
         android:layout_marginLeft="1px"
         android:background="@color/material_light_white"
