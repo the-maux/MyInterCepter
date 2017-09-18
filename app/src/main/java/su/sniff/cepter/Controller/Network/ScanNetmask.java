@@ -82,12 +82,10 @@ public class                        ScanNetmask {
                     e.printStackTrace();
                     Log.e(TAG, "IOException: " + ip + " (" + nbrHostScanned + "/" + NumberOfHosts + ")");
                 } finally {
-                    if (nbrHostScanned >= NumberOfHosts && nbrHostScanned < NumberOfHosts && !alreadySend) {
+                    if (nbrHostScanned >= (NumberOfHosts-1) && nbrHostScanned < NumberOfHosts && !alreadySend) {
                         Log.e(TAG, "ScanOver: " + ip + " (" + nbrHostScanned + "/" + NumberOfHosts + ") with " + ipReachable.size() + " host reached");
                         ScanOver();
                     }
-                    if (nbrHostScanned >= NumberOfHosts - 1)
-                        Log.e(TAG, "ScanOver: " + ip + " (" + nbrHostScanned + "/" + NumberOfHosts + ") with " + ipReachable.size() + " host reached");
                 }
             }
         }).start();
