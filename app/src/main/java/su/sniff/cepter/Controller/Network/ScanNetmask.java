@@ -2,6 +2,7 @@ package su.sniff.cepter.Controller.Network;
 
 import android.util.Log;
 
+import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.View.ScanActivity;
 
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class                        ScanNetmask {
     private volatile boolean        alreadySend = false;
     private ArrayList<String>       ipReachable = new ArrayList<>();
     private ScanActivity            activity;
-    private boolean                 debuglog = true;
+    private boolean                 debuglog = Singleton.getInstance().DebugMode;
 
     public                          ScanNetmask(IPv4CIDR iPv4CIDR, ScanActivity activity) {
         this.activity = activity;

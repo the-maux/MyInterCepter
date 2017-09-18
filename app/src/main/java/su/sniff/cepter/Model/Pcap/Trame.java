@@ -233,19 +233,22 @@ public class               Trame {
 
     private void           IParsing(String line) {
         String[] splitted = line.split(" ");
+        String type = "";
         protocol = Protocol.TCP;
         Log.d(TAG, "IParsing::->"+ Arrays.toString(splitted));
         if (splitted.length >= 4) {
             time = splitted[0].substring(0, splitted[0].indexOf("."));
-            StringSrc = splitted[2];
-            StringDest = splitted[4];
+            StringSrc = splitted[2];//.substring(0, splitted[2].indexOf(".", 4));
+            StringDest = splitted[4].substring(0, splitted[4].indexOf(".", 4));
+            //type = splitted[4].substring(splitted[4].indexOf(".", 4), splitted[4].length());
+
         } else {
             time = "Quiting...";
             StringSrc = "  ";
             StringDest = "  ";
         }
         try {
-            info = line;
+            info = type + " " + line.substring(line.indexOf(StringDest)+StringDest.length(), line.length()).replace("IP ", "");
         } catch (StringIndexOutOfBoundsException e) {
             e.getStackTrace();
             info = line;
