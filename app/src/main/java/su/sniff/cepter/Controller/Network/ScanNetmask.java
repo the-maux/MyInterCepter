@@ -37,7 +37,8 @@ public class                        ScanNetmask {
         List<String> availableIPs = iPv4CIDR.getAvailableIPs(NumberOfHosts);
         Log.i(TAG, "NumberOfHosts:" + NumberOfHosts + " ipAvailable:" + availableIPs.size());
         for (final String ip : availableIPs) {
-            runnableReachable(service, ip);
+            nbrHostScanned = nbrHostScanned + 1;
+            runnableReachable(service, ip, nbrHostScanned);
         }
     }
 
@@ -47,15 +48,14 @@ public class                        ScanNetmask {
         Log.d(TAG, "Scan over with " + ipReachable.size() + " host reached");
     }
 
-    private void                    runnableReachable(ExecutorService service, final String ip) {
+    private void                    runnableReachable(ExecutorService service, final String ip, final int nbrHostScanned) {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    ++nbrHostScanned;
                     InetAddress host = InetAddress.getByName(ip);
                     if (InetAddress.getByName(ip).isReachable(1000)) {//Timeout 10s
-                        Log.d(TAG, ip + " is reachable");
-                        NetworkInterface ni = NetworkInterface.getByInetAddress(host);
+                        Log.d(TAG, ip + " is reachable (" + nbrHostScanned + "/" + NumberOfHosts + ")");
+                        NetworkInterface ni = NetworkInterface.getByInetAddress(host);// send always null
                         if (ni != null) {
                             byte[] mac = ni.getHardwareAddress();
                             String MAC = "";
@@ -66,26 +66,28 @@ public class                        ScanNetmask {
                                 Log.d(TAG, ip + ":" + MAC.replace("-", ":").toLowerCase());
                                 ipReachable.add(ip + ":" + MAC.replace("-", ":").toLowerCase());
                             } else {
-                                Log.e(TAG, ip + " doesn't exist or is not accessible.");
+                                Log.e(TAG, ip + " doesn't exist or is not accessible. (" + nbrHostScanned + "/" + NumberOfHosts + ")");
                             }
                         } else {
-                            Log.e(TAG, "Network Interface for " + ip);
+                            Log.e(TAG, "Network Interface for " + ip + " is null (" + nbrHostScanned + "/" + NumberOfHosts + ")");
                         }
-
                     }
                 }  catch (UnknownHostException e) {
-                    nbrHostScanned++;
+                    Log.e(TAG, "UnknownHostException: " + ip + " (" + nbrHostScanned + "/" + NumberOfHosts + ")");
                     e.printStackTrace();
                 } catch (SocketException e) {
-                    nbrHostScanned++;
+                    Log.e(TAG, "SocketException: " + ip + " (" + nbrHostScanned + "/" + NumberOfHosts + ")");
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    nbrHostScanned++;
+                    Log.e(TAG, "IOException: " + ip + " (" + nbrHostScanned + "/" + NumberOfHosts + ")");
                 } finally {
-                    if (nbrHostScanned >= NumberOfHosts - 3 && nbrHostScanned < NumberOfHosts &&
-                            !alreadySend)
+                    if (nbrHostScanned >= NumberOfHosts && nbrHostScanned < NumberOfHosts && !alreadySend) {
+                        Log.e(TAG, "ScanOver: " + ip + " (" + nbrHostScanned + "/" + NumberOfHosts + ") with " + ipReachable.size() + " host reached");
                         ScanOver();
+                    }
+                    if (nbrHostScanned >= NumberOfHosts - 1)
+                        Log.e(TAG, "ScanOver: " + ip + " (" + nbrHostScanned + "/" + NumberOfHosts + ") with " + ipReachable.size() + " host reached");
                 }
             }
         }).start();
