@@ -138,11 +138,16 @@ public class                    WiresharkActivity extends MyActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int pL = tv.getPaddingLeft();
+                int pT = tv.getPaddingTop();
+                int pR = tv.getPaddingRight();
+                int pB = tv.getPaddingBottom();
                 if (mAdapterWireshark.changePermissionFilter(protocol)) {
                     tv.setBackgroundResource(R.drawable.rounded_corner_on);
                 } else {
                     tv.setBackgroundResource(R.drawable.rounded_corner_off);
                 }
+                tv.setPadding(pL, pT, pR, pB);
             }
         };
     }

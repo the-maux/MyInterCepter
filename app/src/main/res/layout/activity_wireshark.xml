@@ -215,12 +215,12 @@
                             android:background="@drawable/rounded_corner_on"
                             android:elevation="2dp"
                             android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="8dp"
+                            android:paddingBottom="10dp"
+                            android:paddingTop="10dp"
                             android:singleLine="true"
                             android:text="HTTPS"
                             android:textColor="@color/http"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:textStyle="bold" />
 
                         <TextView
