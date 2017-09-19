@@ -1,6 +1,5 @@
 package su.sniff.cepter.View;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,8 +16,6 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -42,6 +39,7 @@ import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.HostSelectionAdapter;
 import su.sniff.cepter.View.Adapter.WiresharkAdapter;
 import su.sniff.cepter.View.Dialog.RV_dialog;
+import su.sniff.cepter.View.Dialog.Setting_dialog;
 
 /**
  * TODO:    + Add filter
@@ -51,22 +49,17 @@ public class                    WiresharkActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
     private WiresharkActivity   mInstance = this;
     private CoordinatorLayout   mCoordinatorLayout;
-    private Map<String, String> mParams = new HashMap<>();
-    private AppBarLayout        mAppbar;
-    private Toolbar             toolbar;
+    private Toolbar             mToolbar;
     private RelativeLayout      mHeaderConfOFF, mHeaderConfON;
     private TextView            mMonitorAgv, mMonitorCmd;
-    private ImageView           settings;
-    private ImageButton         action_settings;
     private RecyclerView        mRV_Wireshark;
-    private MaterialSpinner     spinner;
-    private ProgressBar         progressBar;
-    private FloatingActionButton fab;
-    private WiresharkAdapter    adapterWiresharkRV;
+    private MaterialSpinner     mSpiner;
+    private ProgressBar         mProgressBar;
+    private FloatingActionButton mFab;
+    private WiresharkAdapter    mAdapterWireshark;
     private String              mTypeScan = "No Filter";
-    private List<Host>          listHostSelected = new ArrayList<>();
-    private TcpdumpWrapper      tcpdump = new TcpdumpWrapper(this);
-    private boolean             autoscroll = true;
+    private List<Host>          mListHostSelected = new ArrayList<>();
+    private TcpdumpWrapper      mTcpdump = new TcpdumpWrapper(this);
     private CheckBox            Autoscroll;
     private TextView            tcp_cb, dns_cb, arp_cb, https_cb, http_cb, udp_cb, ip_cb;
     private Singleton           singleton = Singleton.getInstance();
@@ -82,18 +75,16 @@ public class                    WiresharkActivity extends MyActivity {
 
     private void                initXml() {
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
-        mAppbar = (AppBarLayout) findViewById(R.id.appbar);
         mRV_Wireshark = (RecyclerView) findViewById(R.id.Output);
         mHeaderConfON = (RelativeLayout) findViewById(R.id.filterPcapLayout);
         mMonitorAgv = (TextView) findViewById(R.id.Monitor);
-        spinner = (MaterialSpinner) findViewById(R.id.spinnerTypeScan);
+        mSpiner = (MaterialSpinner) findViewById(R.id.spinnerTypeScan);
         mHeaderConfOFF = (RelativeLayout) findViewById(R.id.nmapConfEditorLayout);
         mMonitorCmd = (TextView) findViewById(R.id.cmd);
-        settings = (ImageView) findViewById(R.id.settings);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fabBehavior();
@@ -107,128 +98,25 @@ public class                    WiresharkActivity extends MyActivity {
         http_cb = (TextView) findViewById(R.id.http_cb);
         udp_cb = (TextView) findViewById(R.id.udp_cb);
         ip_cb = (TextView) findViewById(R.id.ip_cb);
-        action_settings = (ImageButton) findViewById(R.id.showCustomCmd);
-        action_settings.setOnClickListener(onSwitchHeader());
-        settings.setOnClickListener(onSettingsClick());
+        findViewById(R.id.showCustomCmd).setOnClickListener(onSwitchHeader());
+        findViewById(R.id.settings).setOnClickListener(new Setting_dialog(this, mCoordinatorLayout, mTcpdump));
     }
 
     private void                initRV() {
-        adapterWiresharkRV = new WiresharkAdapter(this, tcpdump.listOfTrames);
-        mRV_Wireshark.setAdapter(adapterWiresharkRV);
+        mAdapterWireshark = new WiresharkAdapter(this, mTcpdump.listOfTrames);
+        mRV_Wireshark.setAdapter(mAdapterWireshark);
         mRV_Wireshark.hasFixedSize();
         mRV_Wireshark.setLayoutManager(new LinearLayoutManager(mInstance));
     }
 
     private void                initFilter() {
-        Autoscroll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                autoscroll = b;
-            }
-        });
-        tcp_cb.setOnClickListener(onChangePermissionFilter(Protocol.TCP));
-        dns_cb.setOnClickListener(onChangePermissionFilter(Protocol.DNS));
-        http_cb.setOnClickListener(onChangePermissionFilter(Protocol.HTTP));
-        https_cb.setOnClickListener(onChangePermissionFilter(Protocol.HTTPS));
-        udp_cb.setOnClickListener(onChangePermissionFilter(Protocol.UDP));
-        arp_cb.setOnClickListener(onChangePermissionFilter(Protocol.ARP));
-        ip_cb.setOnClickListener(onChangePermissionFilter(Protocol.IP));
-    }
-
-    private View.OnClickListener onSettingsClick() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder dialog  = new AlertDialog.Builder(mInstance);
-                dialog.setCancelable(false);
-                View dialogView = mInstance.getLayoutInflater().inflate(R.layout.view_wireshark_settings, null);
-                dialog.setView(dialogView);
-                final CheckedTextView dumpInFileChkd, sslStripChkd, lockScreenChkd, DeepAnalChkd;
-                final CheckedTextView Port_redirect, Portfiltering, DnsSpoofing;
-                Port_redirect = (CheckedTextView) dialogView.findViewById(R.id.Portredirect);/**TODO**/
-                Portfiltering = (CheckedTextView) dialogView.findViewById(R.id.Portfiltering);/**TODO**/
-                DnsSpoofing = (CheckedTextView) dialogView.findViewById(R.id.DnsSpoofing);/**TODO**/
-                dumpInFileChkd = (CheckedTextView) dialogView.findViewById(R.id.dumpInFileChkd);
-                sslStripChkd = (CheckedTextView) dialogView.findViewById(R.id.sslStripChkd);/**TODO**/
-                lockScreenChkd = (CheckedTextView) dialogView.findViewById(R.id.lockScreenChkd);/**TODO**/
-                DeepAnalChkd = (CheckedTextView) dialogView.findViewById(R.id.DeepAnalChkd);
-
-                dumpInFileChkd.setChecked(tcpdump.isDumpingInFile);
-                dumpInFileChkd.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        tcpdump.isDumpingInFile = !tcpdump.isDumpingInFile;
-                        dumpInFileChkd.setChecked(tcpdump.isDumpingInFile);
-                    }
-                });
-                sslStripChkd.setChecked(singleton.isSslStripModeActived());
-                sslStripChkd.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        singleton.setSslStripModeActived(!singleton.isSslStripModeActived());
-                        sslStripChkd.setChecked(singleton.isSslStripModeActived());
-                    }
-                });
-                lockScreenChkd.setChecked(singleton.isLockScreen());
-                lockScreenChkd.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        singleton.setLockScreen(!singleton.isLockScreen());
-                        lockScreenChkd.setChecked(singleton.isLockScreen());
-                        Snackbar.make(mCoordinatorLayout, "Non implémenté", Snackbar.LENGTH_SHORT).show();
-                    }
-                });
-                DeepAnalChkd.setChecked(tcpdump.isDeepAnalyseTrame());
-                DeepAnalChkd.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        tcpdump.setDeepAnalyseTrame(!tcpdump.isDeepAnalyseTrame());
-                        DeepAnalChkd.setChecked(tcpdump.isDeepAnalyseTrame());
-                        Snackbar.make(mCoordinatorLayout, "Non implémenté", Snackbar.LENGTH_SHORT).show();
-                    }
-                });
-                Port_redirect.setOnClickListener(onPortMitm(true));
-                Portfiltering.setOnClickListener(onPortMitm(false));
-                DnsSpoofing.setOnClickListener(onDnsSpoof(DnsSpoofing));
-                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Snackbar.make(mCoordinatorLayout, "Settings set", Snackbar.LENGTH_SHORT).show();
-                    }
-                });
-                dialog.show();
-            }
-        };
-    }
-
-    private View.OnClickListener onDnsSpoof(final CheckedTextView dnsSpoofing) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dnsSpoofing.setChecked(singleton.isDnsSpoofActived());
-                dnsSpoofing.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        singleton.setDnsSpoofActived(!singleton.isDnsSpoofActived());
-                        dnsSpoofing.setChecked(singleton.isDnsSpoofActived());
-                    }
-                });
-            }
-        };
-    }
-
-    private View.OnClickListener onPortMitm(final boolean flag) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (flag) { /** TODO: PortRedirect */
-
-                } else {    /** TODO: PortFiltering */
-
-                }
-                Snackbar.make(mCoordinatorLayout, "Non implémenté", Snackbar.LENGTH_SHORT).show();
-            }
-        };
+        tcp_cb.setOnClickListener(onChangePermissionFilter(Protocol.TCP, tcp_cb));
+        dns_cb.setOnClickListener(onChangePermissionFilter(Protocol.DNS, dns_cb));
+        http_cb.setOnClickListener(onChangePermissionFilter(Protocol.HTTP, http_cb));
+        https_cb.setOnClickListener(onChangePermissionFilter(Protocol.HTTPS, https_cb));
+        udp_cb.setOnClickListener(onChangePermissionFilter(Protocol.UDP, udp_cb));
+        arp_cb.setOnClickListener(onChangePermissionFilter(Protocol.ARP, arp_cb));
+        ip_cb.setOnClickListener(onChangePermissionFilter(Protocol.IP, ip_cb));
     }
 
     private View.OnClickListener onSwitchHeader() {
@@ -246,37 +134,42 @@ public class                    WiresharkActivity extends MyActivity {
         };
     }
 
-    private View.OnClickListener onChangePermissionFilter(final Protocol protocol) {
+    private View.OnClickListener onChangePermissionFilter(final Protocol protocol, final TextView tv) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapterWiresharkRV.changePermissionFilter(protocol);
+                if (mAdapterWireshark.changePermissionFilter(protocol)) {
+                    tv.setBackgroundResource(R.drawable.rounded_corner_on);
+                } else {
+                    tv.setBackgroundResource(R.drawable.rounded_corner_off);
+                }
             }
         };
     }
 
     private void                onClickChoiceTarget() {
         new RV_dialog(this)
-                .setAdapter(new HostSelectionAdapter(this, Singleton.getInstance().hostsList, listHostSelected))
+                .setAdapter(new HostSelectionAdapter(this, Singleton.getInstance().hostsList, mListHostSelected))
                 .setTitle("Choix des cibles")
                 .onPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (listHostSelected.isEmpty())
+                        if (mListHostSelected.isEmpty())
                             Snackbar.make(mCoordinatorLayout, "No target selected", Snackbar.LENGTH_LONG).show();
                         else {
-                            toolbar.setSubtitle(listHostSelected.size() + " target" +
-                                    ((listHostSelected.size() <= 1) ? "" : "s") + " selected");
+                            mToolbar.setSubtitle(mListHostSelected.size() + " target" +
+                                    ((mListHostSelected.size() <= 1) ? "" : "s") + " selected");
                             fabBehavior();
                         }
                     }
                 })
                 .show();
-        listHostSelected.clear();
+        mListHostSelected.clear();
     }
 
     private void                initSpinner() {
-        Iterator it = tcpdump.getCmdsWithArgsInMap().entrySet().iterator();
+        final Map<String, String> mParams = new HashMap<>();
+        Iterator it = mTcpdump.getCmdsWithArgsInMap().entrySet().iterator();
         ArrayList<String> cmds = new ArrayList<>();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
@@ -284,39 +177,39 @@ public class                    WiresharkActivity extends MyActivity {
             cmds.add((String)pair.getKey());
             it.remove(); // avoids a ConcurrentModificationException
         }
-        spinner.setItems(cmds);
-        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+        mSpiner.setItems(cmds);
+        mSpiner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, String typeScan) {
                 mMonitorCmd.setText(mParams.get(typeScan));
                 mTypeScan = typeScan;
-                mMonitorAgv.setText("./tcpdump " + mParams.get(typeScan).replace("  ", " "));
+                mMonitorAgv.setText("./mTcpdump " + mParams.get(typeScan).replace("  ", " "));
             }
         });
         mMonitorCmd.setText(mParams.get(cmds.get(0)));
     }
 
     public void                 fabBehavior() {
-        if (!tcpdump.isRunning) {
+        if (!mTcpdump.isRunning) {
             if (startTcpdump()) {
                 mMonitorAgv.setVisibility(View.VISIBLE);
-                adapterWiresharkRV.clear();
-                progressBar.setVisibility(View.VISIBLE);
-                fab.setImageResource(android.R.drawable.ic_media_pause);
+                mAdapterWireshark.clear();
+                mProgressBar.setVisibility(View.VISIBLE);
+                mFab.setImageResource(android.R.drawable.ic_media_pause);
             }
         } else {
             mMonitorAgv.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
-            tcpdump.onTcpDumpStop();
-            fab.setImageResource(android.R.drawable.ic_media_play);
+            mProgressBar.setVisibility(View.GONE);
+            mTcpdump.onTcpDumpStop();
+            mFab.setImageResource(android.R.drawable.ic_media_play);
         }
     }
 
     private boolean             startTcpdump() {
-        if (listHostSelected.isEmpty()) {
+        if (mListHostSelected.isEmpty()) {
             if (Singleton.getInstance().hostsList.size() == 1) {//Automatic selection when 1 target only
-                listHostSelected.add(Singleton.getInstance().hostsList.get(0));
-                toolbar.setSubtitle(listHostSelected.size() + " target");
+                mListHostSelected.add(Singleton.getInstance().hostsList.get(0));
+                mToolbar.setSubtitle(mListHostSelected.size() + " target");
             } else {
                 Snackbar.make(mCoordinatorLayout, "Selectionner une target", Snackbar.LENGTH_SHORT).setActionTextColor(Color.RED).show();
                 onClickChoiceTarget();
@@ -324,21 +217,21 @@ public class                    WiresharkActivity extends MyActivity {
             }
         }
         String hostFilter = (mTypeScan.contains("No Filter") || mTypeScan.contains("Custom Filter")) ? " (" : " and (";//If no filter, no '&&' in expression
-        for (int i = 0; i < listHostSelected.size(); i++) {
+        for (int i = 0; i < mListHostSelected.size(); i++) {
             if (i > 0)
                 hostFilter += " or ";
-            hostFilter += " host " + listHostSelected.get(i).getIp();
+            hostFilter += " host " + mListHostSelected.get(i).getIp();
         }
         hostFilter += ")\'";
-        tcpdump.start(mMonitorCmd.getText().toString(), hostFilter);
-        mMonitorAgv.setText("tcpdump " + mMonitorCmd.getText().toString() + hostFilter);
+        mTcpdump.start(mMonitorCmd.getText().toString(), hostFilter);
+        mMonitorAgv.setText("mTcpdump " + mMonitorCmd.getText().toString() + hostFilter);
         mInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                adapterWiresharkRV.notifyDataSetChanged();
+                mAdapterWireshark.notifyDataSetChanged();
             }
         });
-        mMonitorCmd.setText(tcpdump.actualParam);
+        mMonitorCmd.setText(mTcpdump.actualParam);
         return true;
     }
 
@@ -349,14 +242,16 @@ public class                    WiresharkActivity extends MyActivity {
                 if (trame.connectionOver && trame.Errno == null) {
 
                 } else if (trame.initialised) {
-                    if (progressBar.getVisibility() == View.VISIBLE)
-                        progressBar.setVisibility(View.GONE);
-                    adapterWiresharkRV.addTrameOnAdapter(trame);
+                    if (mProgressBar.getVisibility() == View.VISIBLE)
+                        mProgressBar.setVisibility(View.GONE);
+                    mAdapterWireshark.addTrameOnAdapter(trame);
                     mRV_Wireshark.post(new Runnable() {
                         @Override
                         public void run() {
-                            adapterWiresharkRV.notifyDataSetChanged();
-                            autoscroll();
+                            mAdapterWireshark.notifyDataSetChanged();
+                            if (Autoscroll.isChecked()) {
+                                mRV_Wireshark.smoothScrollToPosition(0);
+                            }
                         }
                     });
                 } else if (!trame.skipped) { /** Error Trame; Over**/
@@ -364,19 +259,13 @@ public class                    WiresharkActivity extends MyActivity {
                     ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text))
                             .setTextColor(ContextCompat.getColor(mInstance, R.color.material_red_400));
                     snackbar.show();
-                    progressBar.setVisibility(View.GONE);
-                    fab.setImageResource(android.R.drawable.ic_media_play);
+                    mProgressBar.setVisibility(View.GONE);
+                    mFab.setImageResource(android.R.drawable.ic_media_play);
                 } else {
 
                 }
             }//else skipped do nothing
         });
-    }
-
-    private void                autoscroll() {
-        if (autoscroll) {
-            mRV_Wireshark.smoothScrollToPosition(0);
-        }
     }
 
 }

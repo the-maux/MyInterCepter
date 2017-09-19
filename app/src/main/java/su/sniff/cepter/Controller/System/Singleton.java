@@ -1,5 +1,7 @@
 package su.sniff.cepter.Controller.System;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +49,8 @@ public class                            Singleton {
     }
     public void                         setDnsSpoofActived(boolean dnsSpoofActived) {
         DnsSpoofActived = dnsSpoofActived;
+        //TODO: DNSSoof
+        Log.i("setDnsSpoofActived", "Not implemented");
         IPTables.sslConf();
     }
     public boolean                      isLockScreen() {
@@ -54,5 +58,7 @@ public class                            Singleton {
     }
     public void                         setLockScreen(boolean lockScreen) {
         LockScreen = lockScreen;
+        //TODO: ockScreen
+        Log.i("setockScreenActived", "Not implemented");
     }
 }

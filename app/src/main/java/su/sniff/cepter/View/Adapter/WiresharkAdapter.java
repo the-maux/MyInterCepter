@@ -118,35 +118,46 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         originalListOfTrames.add(0, trame);
     }
 
-    public void             changePermissionFilter(Protocol protocol) {
+    public boolean          changePermissionFilter(Protocol protocol) {
+        boolean ret;
         switch (protocol) {
             case ARP:
                 arp = !arp;
+                ret = arp;
                 break;
             case HTTP:
                 http = !http;
+                ret = http;
                 break;
             case HTTPS:
                 https = !https;
+                ret = https;
                 break;
             case DNS:
                 dns = !dns;
+                ret = dns;
                 break;
             case TCP:
                 tcp = !tcp;
+                ret = tcp;
                 break;
             case UDP:
                 udp = !udp;
+                ret = udp;
                 break;
             case IP:
                 ip = !ip;
+                ret = ip;
                 break;
+            default:
+                ret = true;
         }
         listOfTrame.clear();
         for (Trame trame : originalListOfTrames) {
             addTrameFiltered(trame, false);
         }
         notifyDataSetChanged();
+        return ret;
     }
     public void             clear() {
         listOfTrame.clear();

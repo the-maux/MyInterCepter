@@ -161,14 +161,15 @@
 
                 <CheckedTextView
                     android:id="@+id/DeepAnalChkd"
+                    style="@android:style/Widget.Holo.Light.CheckedTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@+id/dumpInFileChkd"
                     android:layout_below="@+id/lockScreenChkd"
                     android:checkMark="?android:attr/textCheckMark"
                     android:checked="false"
-                    android:ems="10"
 
+                    android:ems="10"
                     android:gravity="center_vertical"
                     android:inputType="textPersonName"
                     android:paddingLeft="8dp"
