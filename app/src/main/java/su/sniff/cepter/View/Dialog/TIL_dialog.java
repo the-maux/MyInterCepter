@@ -37,7 +37,7 @@ public class                    TIL_dialog {
         return TIL_host.getEditText().getText().toString();
     }
 
-    public AlertDialog show() {
+    public AlertDialog          show() {
         return dialog.show();
     }
 }

@@ -56,7 +56,6 @@ public class                        ScanActivity extends MyActivity {
     private ScanActivity            mInstance = this;
     private CoordinatorLayout       mCoordinatorLayout;
     private List<Host>              mHosts;
-    private TIL_dialog              mAddHostDialog;
     private HostScanAdapter         mHostAdapter;
     private RecyclerView            mHost_RV;
     private String                  monitor;
@@ -108,7 +107,6 @@ public class                        ScanActivity extends MyActivity {
             IntercepterWrapper.initCepter(NetUtils.getMac(Singleton.getInstance().network.myIp, Singleton.getInstance().network.gateway));
             initMonitor();
             initSwipeRefresh();
-            initDialog();
             initMenu();
             initSearchView();
             Log.d(TAG, "debug enabled, starting Scan automaticaly");
@@ -155,23 +153,23 @@ public class                        ScanActivity extends MyActivity {
         });
     }
 
-    private void                    initDialog() {
-        mAddHostDialog = new TIL_dialog(mInstance)
+    private void                    showAddHostDialog() {
+        final TIL_dialog dialog = new TIL_dialog(mInstance)
                 .setTitle("Add host");
-        mAddHostDialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                onCheckAddedHost(mAddHostDialog.getText());
-            }
-        });
+        dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface d, int which) {
+                            onCheckAddedHost(dialog.getText());
+                        }
+                })
+                .show();
     }
 
     private void                    initMenu() {
         mAddHostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAddHostDialog.show();
-                //TODO: Faire le add Host
+                showAddHostDialog();
             }
         });
         mSettingsBtn.setOnClickListener(new View.OnClickListener() {
@@ -227,7 +225,7 @@ public class                        ScanActivity extends MyActivity {
     }
 
     private void                    onCheckAddedHost(String addedHost) {
-        Snackbar.make(mCoordinatorLayout, "Added host:" + addedHost, Toast.LENGTH_SHORT).show();
+        Snackbar.make(mCoordinatorLayout, "Fonctionnalité non implémenté: :" + addedHost, Toast.LENGTH_SHORT).show();
     }
 
     private View.OnClickListener    onClickTopMenu() {

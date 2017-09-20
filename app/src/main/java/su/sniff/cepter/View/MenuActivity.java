@@ -54,8 +54,7 @@ public class                    MenuActivity extends MyActivity {
                         choice = CageActivity.class;
                         break;
                     case DnsSpoofing:
-                        //choice = DNSSpoofingActivity.class;
-                        choice = null;
+                        choice = DNSSpoofingActivity.class;
                         Snackbar.make(coordinatorLayout, "Fonctionnalité Dns Spoofing non implémenté", Snackbar.LENGTH_LONG).show();
                         break;
                     case Wireshark:

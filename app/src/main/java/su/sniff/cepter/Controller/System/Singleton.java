@@ -7,6 +7,7 @@ import java.util.List;
 
 import su.sniff.cepter.Controller.Network.IPTables;
 import su.sniff.cepter.Controller.System.Wrapper.ArpSpoof;
+import su.sniff.cepter.Model.Pcap.DnsIntercept;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Model.Target.NetworkInformation;
 
@@ -16,8 +17,6 @@ import su.sniff.cepter.Model.Target.NetworkInformation;
 
 public class                            Singleton {
     private static Singleton            mInstance = null;
-
-
     private                             Singleton() {}
     public static synchronized Singleton getInstance() {
         if(mInstance == null)
@@ -26,12 +25,13 @@ public class                            Singleton {
     }
 
     public String                       PcapPath;
-    public  String                      BinaryPath = null;
-    public  String                      FilesPath = null;
-    public  ArrayList<Host>             hostsList = null;
-    public  List<ArpSpoof>              ArpSpoofProcessStack = new ArrayList<>();
-    public  NetworkInformation          network = null;
-    public  boolean                     DebugMode = true, UltraDebugMode = false;
+    public String                       BinaryPath = null;
+    public String                       FilesPath = null;
+    public ArrayList<DnsIntercept>      dnsSpoofed = new ArrayList<>();
+    public ArrayList<Host>              hostsList = null;
+    public List<ArpSpoof>               ArpSpoofProcessStack = new ArrayList<>();
+    public NetworkInformation           network = null;
+    public boolean                      DebugMode = true, UltraDebugMode = false;
     private boolean                     SslStripModeActived = false, DnsSpoofActived = false;
     private boolean                     LockScreen = false;
 
