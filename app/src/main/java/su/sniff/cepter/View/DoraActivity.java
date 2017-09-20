@@ -109,7 +109,7 @@ public class                    DoraActivity extends MyActivity {
             Log.d(TAG, "diagnose dora stopped");
         }
         Rv_Adapter.setRunning(running);
-        fab.setImageResource((!running) ? android.R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
+        fab.setImageResource((!running) ? R.mipmap.ic_play : R.mipmap.ic_pause);
     }
 
     private int                 REFRESH_TIME = 1000;// == 1seconde

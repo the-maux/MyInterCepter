@@ -303,7 +303,7 @@ public class                        ScanActivity extends MyActivity {
     }
 
     private void                    progressAnimation() {
-        mFab.setImageResource(android.R.drawable.ic_menu_search);
+        mFab.setImageResource(R.mipmap.ic_search);
         mFab.setProgress(0, true);
         mFab.setMax(5500);
         new Thread(new Runnable() {
@@ -325,7 +325,7 @@ public class                        ScanActivity extends MyActivity {
                 }
                 mInstance.runOnUiThread(new Runnable() {
                     public void run() {
-                        mFab.setImageResource(android.R.drawable.ic_media_play);
+                        mFab.setImageResource(R.mipmap.ic_play);
                         mHostLoaded = true;
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
@@ -359,7 +359,7 @@ public class                        ScanActivity extends MyActivity {
             public void run() {
                 mHosts = hosts;
                 toolbar2.setSubtitle("Choose targets");
-                monitor = "GW: " + Singleton.getInstance().     network.gateway + ": " + mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": "") + " found";// oui je fais des ternaires pour faire le pluriel
+                monitor = "GW: " + Singleton.getInstance().network.gateway + ": " + mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": "") + " found";// oui je fais des ternaires pour faire le pluriel
                 mBottomMonitor.setText(monitor);
                 mHostAdapter.updateHostList(mHosts);
                 inLoading = false;

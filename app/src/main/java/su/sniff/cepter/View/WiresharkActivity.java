@@ -200,13 +200,13 @@ public class                    WiresharkActivity extends MyActivity {
                 mMonitorAgv.setVisibility(View.VISIBLE);
                 mAdapterWireshark.clear();
                 mProgressBar.setVisibility(View.VISIBLE);
-                mFab.setImageResource(android.R.drawable.ic_media_pause);
+                mFab.setImageResource(R.mipmap.ic_pause);
             }
         } else {
             mMonitorAgv.setVisibility(View.GONE);
             mProgressBar.setVisibility(View.GONE);
             mTcpdump.onTcpDumpStop();
-            mFab.setImageResource(android.R.drawable.ic_media_play);
+            mFab.setImageResource(R.mipmap.ic_play);
         }
     }
 
@@ -265,7 +265,7 @@ public class                    WiresharkActivity extends MyActivity {
                             .setTextColor(ContextCompat.getColor(mInstance, R.color.material_red_400));
                     snackbar.show();
                     mProgressBar.setVisibility(View.GONE);
-                    mFab.setImageResource(android.R.drawable.ic_media_play);
+                    mFab.setImageResource(R.mipmap.ic_play);
                 } else {
 
                 }
