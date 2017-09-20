@@ -31,7 +31,7 @@
                 android:id="@+id/topToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_toLeftOf="@+id/showCustomCmd"
+                android:layout_toLeftOf="@+id/action_settingsBtn"
                 android:layout_toRightOf="@+id/toolbar"
                 android:focusable="false"
                 android:focusableInTouchMode="false">
@@ -45,11 +45,11 @@
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="16dp"
-                android:layout_toStartOf="@+id/showCustomCmd"
+                android:layout_toStartOf="@+id/action_settingsBtn"
                 android:src="@android:drawable/ic_menu_info_details" />
 
             <ImageButton
-                android:id="@+id/showCustomCmd"
+                android:id="@+id/action_settingsBtn"
                 android:layout_width="32dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="false"
@@ -203,10 +203,11 @@
             android:layout_marginBottom="16dp"
             android:id="@+id/fab"
             android:src="@android:drawable/ic_menu_search"
-            app:fab_progress="0"
             app:layout_anchorGravity="bottom|right|end"
             app:fab_colorPressed="@android:color/holo_blue_bright"
             app:fab_elevationCompat="4dp"
+            app:fab_progress_showBackground="false"
+            app:fab_showShadow="false"
             app:fab_colorNormal="@android:color/holo_blue_light"/>
 
     </RelativeLayout>

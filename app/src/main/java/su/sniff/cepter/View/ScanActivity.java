@@ -85,16 +85,15 @@ public class                        ScanActivity extends MyActivity {
 
     private void                    initXml() throws Exception {
         mFab = (FloatingActionButton) findViewById(R.id.fab);
-        mFab.setButtonSize(FloatingActionButton.SIZE_MINI);
         mHost_RV = (RecyclerView) findViewById(R.id.recycler_view);
         mEmptyList = (TextView) findViewById(R.id.emptyList);
         mBottomMonitor = ((TextView) findViewById(R.id.Message));
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mAddHostBtn = (ImageButton) findViewById(R.id.action_add_host);
-        mSettingsBtn = (ImageButton) findViewById(R.id.showCustomCmd);
-        mOsFilterBtn = (TextView) findViewById(R.id.action_os_filter);
-        mSelectAllBtn = (TextView) findViewById(R.id.action_select_all);
+        mSettingsBtn = (ImageButton) findViewById(R.id.action_settingsBtn);
+        mOsFilterBtn = (TextView) findViewById(R.id.action_deleteall);
+        mSelectAllBtn = (TextView) findViewById(R.id.action_import);
         mOfflineModeBtn = (TextView) findViewById(R.id.action_offline_mode);
         mSearchView = (SearchView) findViewById(R.id.filterText);
         toolbar2 = (Toolbar) findViewById(R.id.toolbar2);
@@ -242,7 +241,7 @@ public class                        ScanActivity extends MyActivity {
                     case R.id.action_offline_mode:
                         Snackbar.make(mCoordinatorLayout, "mOfflineModeBtn", Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.action_os_filter:
+                    case R.id.action_deleteall:
                         final RecyclerView.Adapter adapter = new OSAdapter(mInstance, mInstance.mHostAdapter.getOsList(), mListOS);
                         new RV_dialog(mInstance)
                                 .setAdapter(adapter)
@@ -257,7 +256,7 @@ public class                        ScanActivity extends MyActivity {
                                     }
                                 }).show();
                         break;
-                    case R.id.action_select_all:
+                    case R.id.action_import:
                         mInstance.mHostAdapter.selectAll();
                         break;
                     default:

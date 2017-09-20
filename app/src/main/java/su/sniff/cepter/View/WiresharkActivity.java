@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 
 import android.support.design.widget.Snackbar;
@@ -14,8 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CheckedTextView;
-import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -98,7 +95,7 @@ public class                    WiresharkActivity extends MyActivity {
         http_cb = (TextView) findViewById(R.id.http_cb);
         udp_cb = (TextView) findViewById(R.id.udp_cb);
         ip_cb = (TextView) findViewById(R.id.ip_cb);
-        findViewById(R.id.showCustomCmd).setOnClickListener(onSwitchHeader());
+        findViewById(R.id.action_settingsBtn).setOnClickListener(onSwitchHeader());
         findViewById(R.id.settings).setOnClickListener(new Setting_dialog(this, mCoordinatorLayout, mTcpdump));
     }
 

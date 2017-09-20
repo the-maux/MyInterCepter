@@ -18,7 +18,7 @@
 			<RelativeLayout
 				android:id="@+id/topToolbar"
 				android:layout_width="wrap_content"
-				android:layout_height="80dp"
+				android:layout_height="90dp"
 				android:focusable="true"
 				android:focusableInTouchMode="true"
 				android:gravity="right">
@@ -56,12 +56,12 @@
 					android:layout_centerVertical="false"
 					android:layout_marginEnd="8dp"
 					android:layout_marginTop="12dp"
-					android:layout_toLeftOf="@+id/showCustomCmd"
+					android:layout_toLeftOf="@+id/action_settingsBtn"
 					android:background="@android:color/transparent"
 					app:srcCompat="@drawable/ic_add_circle" />
 
 				<ImageButton
-					android:id="@+id/showCustomCmd"
+					android:id="@+id/action_settingsBtn"
 					android:layout_width="32dp"
 					android:layout_height="32dp"
 					android:layout_alignParentRight="true"
@@ -74,51 +74,30 @@
 
 			</RelativeLayout>
 
-			<android.support.design.widget.TabLayout
-				android:id="@+id/tabs"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_below="@+id/topToolbar"
-				android:visibility="gone"
-				app:tabMode="scrollable">
-
-				<android.support.design.widget.TabItem
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="SCAN" />
-
-				<android.support.design.widget.TabItem
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="ARPCage" />
-
-				<android.support.design.widget.TabItem
-					android:layout_width="wrap_content"
-
-					android:layout_height="wrap_content"
-					android:text="Scan port " />
-			</android.support.design.widget.TabLayout>
-
-        </RelativeLayout>
+		</RelativeLayout>
 
 	</android.support.design.widget.AppBarLayout>
 
-
 	<com.github.clans.fab.FloatingActionButton
-		android:id="@+id/fab"
-		android:layout_width="20dp"
-		android:layout_height="20dp"
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:layout_alignParentRight="true"
 		android:layout_marginRight="16dp"
-		android:onClick="onFabClick"
+		android:layout_marginBottom="16dp"
+		android:id="@+id/fab"
 		android:src="@android:drawable/ic_menu_search"
-		app:fab_colorNormal="@android:color/holo_blue_light"
+		app:fab_progress="0"
+		app:layout_anchor="@id/appbar"
+		app:layout_anchorGravity="bottom|right|end"
 		app:fab_colorPressed="@android:color/holo_blue_bright"
 		app:fab_elevationCompat="4dp"
+		android:onClick="onFabClick"
 		app:fab_progress_showBackground="false"
 		app:fab_showShadow="false"
-		app:fab_size="normal"
-		app:layout_anchor="@id/appbar"
-		app:layout_anchorGravity="bottom|right|end" />
+		app:fab_colorNormal="@android:color/holo_blue_light"/>
+
+
 
 	<RelativeLayout
 		android:id="@+id/layout"
@@ -174,6 +153,7 @@
 		android:id="@+id/clipper"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:background="#33000000"
 		android:elevation="5dp"
 		android:visibility="gone">
 
@@ -183,63 +163,59 @@
 			android:layout_height="wrap_content"
 			android:layout_alignParentEnd="true"
 			android:layout_marginEnd="20dp"
-			android:layout_marginTop="50dp"
-			android:background="?android:attr/colorBackground"
-			android:elevation="0dp"
+			android:layout_marginTop="8dp"
+			android:background="@color/material_grey_500"
+			android:elevation="7dp"
 			android:visibility="visible">
 
 			<TextView
-				android:id="@+id/action_os_filter"
+				android:id="@+id/action_deleteall"
 				android:layout_width="match_parent"
-				android:layout_height="30dp"
+				android:layout_height="wrap_content"
 				android:layout_alignParentTop="true"
-				android:layout_margin="8dp"
+				android:layout_marginTop="1px"
+				android:background="@color/material_light_white"
 				android:gravity="center_vertical"
+				android:paddingBottom="8dp"
+				android:paddingLeft="10dp"
+				android:paddingTop="8dp"
 				android:text="Filtrer par OS"
-				android:textSize="16sp"
+				android:textColor="@color/material_light_black"
+				android:textSize="14sp"
 				android:visibility="visible" />
 
-			<View
-				android:id="@+id/separator1"
-				android:layout_width="match_parent"
-				android:layout_height="1dp"
-				android:layout_below="@+id/action_os_filter"
-				android:background="@android:color/darker_gray" />
-
 			<TextView
-				android:id="@+id/action_select_all"
+				android:id="@+id/action_import"
 				android:layout_width="match_parent"
-				android:layout_height="30dp"
-				android:layout_below="@+id/separator1"
+				android:layout_height="wrap_content"
+				android:layout_below="@+id/action_deleteall"
 				android:layout_centerVertical="true"
-				android:layout_margin="8dp"
+				android:layout_marginTop="1dp"
+				android:background="@color/material_light_white"
 				android:gravity="center_vertical"
+				android:paddingBottom="8dp"
+				android:paddingLeft="10dp"
+				android:paddingTop="8dp"
 				android:text="Tout sélectionner"
-				android:textSize="16sp" />
-
-			<View
-				android:id="@+id/separator2"
-				android:layout_width="match_parent"
-				android:layout_height="1dp"
-				android:layout_below="@+id/action_select_all"
-				android:background="@android:color/darker_gray" />
+				android:textColor="@color/material_light_black"
+				android:textSize="14sp" />
 
 			<TextView
 				android:id="@+id/action_offline_mode"
 				android:layout_width="match_parent"
-				android:layout_height="30dp"
-				android:layout_below="@+id/separator2"
+				android:layout_height="wrap_content"
+				android:layout_below="@+id/action_import"
 				android:layout_centerVertical="true"
-				android:layout_margin="8dp"
+				android:layout_marginTop="1dp"
+				android:background="@color/material_light_white"
 				android:gravity="center_vertical"
+				android:paddingBottom="8dp"
+				android:paddingLeft="10dp"
+				android:paddingTop="8dp"
 				android:text="Mode hors ligne"
-				android:textSize="16sp" />
-
-			<View
-				android:layout_width="match_parent"
-				android:layout_height="1dp"
-				android:layout_below="@+id/action_offline_mode"
-				android:background="@android:color/darker_gray" />
+				android:textColor="@color/material_light_black"
+				android:textSize="14sp"
+				android:typeface="sans" />
 
 		</RelativeLayout>
 	</RelativeLayout>

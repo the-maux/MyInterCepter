@@ -23,8 +23,8 @@ public class                HostCheckBoxHolder extends RecyclerView.ViewHolder {
         super(v);
         itemView = v;
         relativeLayout = (RelativeLayout) itemView.findViewById(R.id.rootView);
-        checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
-        imageOS = (CircleImageView) itemView.findViewById(R.id.imageOS);
+        checkBox = (CheckBox) itemView.findViewById(R.id.deleteImage);
+        imageOS = (CircleImageView) itemView.findViewById(R.id.imageDNS);
         nameOS = (TextView) itemView.findViewById(R.id.nameOS);
     }
 }

@@ -19,7 +19,7 @@
         android:src="@mipmap/ic_dns" />
 
     <TextView
-        android:id="@+id/nameOS"
+        android:id="@+id/nameDNS"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
@@ -27,20 +27,19 @@
         android:layout_toLeftOf="@+id/deleteImage"
         android:layout_toRightOf="@+id/imageDNS"
         android:gravity="center_vertical"
+        android:maxLines="2"
         android:paddingLeft="8dp"
-        android:text="Android"
-        android:textColor="@color/material_light_white"
+        android:text="192.168.0.1 www.facebook.com facebook.com"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="12sp" />
 
-    <CheckBox
+    <ImageView
         android:id="@+id/deleteImage"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:checked="true"
-        android:paddingBottom="2dp"
         android:paddingRight="8dp"
-        android:paddingTop="2dp" />
+        android:src="@mipmap/ic_trash2" />
 
 </RelativeLayout>
