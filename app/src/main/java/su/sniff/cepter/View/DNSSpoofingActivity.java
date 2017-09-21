@@ -132,7 +132,8 @@ public class                            DNSSpoofingActivity extends MyActivity {
 
     private void                        onShowDialogAddHost() {
         final TIL_dialog dialog = new TIL_dialog(mInstance)
-                .setTitle("Add host");
+                .setTitle("Add host")
+                .setHint("IP:www.domain.fr");
         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface d, int which) {
@@ -149,8 +150,10 @@ public class                            DNSSpoofingActivity extends MyActivity {
     }
 
     private void                        onCheckAddedHost(String ip, String domain) {//ip:domain
-        singleton.dnsSpoofed.add(0, new DnsIntercept(ip, domain));
+        DnsIntercept dnsIntercept = new DnsIntercept(ip, domain);
+        singleton.dnsSpoofed.add(0, dnsIntercept);
         mDnsSpoofAdapter.notifyItemInserted(0);
+        Snackbar.make(mCoordinatorLayout, dnsIntercept.domainAsked + " -> " + dnsIntercept.domainSpoofed, Snackbar.LENGTH_LONG);
     }
 
     private void                        init() {

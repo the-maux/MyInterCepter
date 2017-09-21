@@ -155,14 +155,15 @@ public class                        ScanActivity extends MyActivity {
 
     private void                    showAddHostDialog() {
         final TIL_dialog dialog = new TIL_dialog(mInstance)
-                .setTitle("Add host");
+                .setTitle("Add target");
         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface d, int which) {
+
                             onCheckAddedHost(dialog.getText());
                         }
-                })
-                .show();
+                }).show();
+
     }
 
     private void                    initMenu() {
@@ -225,7 +226,7 @@ public class                        ScanActivity extends MyActivity {
     }
 
     private void                    onCheckAddedHost(String addedHost) {
-        Snackbar.make(mCoordinatorLayout, "Fonctionnalité non implémenté: :" + addedHost, Toast.LENGTH_SHORT).show();
+        Snackbar.make(mCoordinatorLayout, "Fonctionnalité non implémenté:" + addedHost, Toast.LENGTH_SHORT).show();
     }
 
     private View.OnClickListener    onClickTopMenu() {

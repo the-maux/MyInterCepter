@@ -31,7 +31,7 @@ public class                    Setting_dialog implements View.OnClickListener {
     
     @Override
     public void                 onClick(View v) {
-        AlertDialog.Builder dialog  = new AlertDialog.Builder(mActivity);
+        AlertDialog.Builder dialog  = new AlertDialog.Builder(mActivity, R.style.Theme_AppCompat_Light_Dialog_Alert);
         dialog.setCancelable(false);
         View dialogView = mActivity.getLayoutInflater().inflate(R.layout.view_wireshark_settings, null);
         dialog.setView(dialogView);

@@ -68,7 +68,10 @@ public class                    WiresharkActivity extends MyActivity {
         initSpinner();
         initRV();
         initFilter();
+        initSettings();
     }
+
+
 
     private void                initXml() {
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
@@ -96,7 +99,7 @@ public class                    WiresharkActivity extends MyActivity {
         udp_cb = (TextView) findViewById(R.id.udp_cb);
         ip_cb = (TextView) findViewById(R.id.ip_cb);
         findViewById(R.id.action_settingsBtn).setOnClickListener(onSwitchHeader());
-        findViewById(R.id.settings).setOnClickListener(new Setting_dialog(this, mCoordinatorLayout, mTcpdump));
+
     }
 
     private void                initRV() {
@@ -114,6 +117,10 @@ public class                    WiresharkActivity extends MyActivity {
         udp_cb.setOnClickListener(onChangePermissionFilter(Protocol.UDP, udp_cb));
         arp_cb.setOnClickListener(onChangePermissionFilter(Protocol.ARP, arp_cb));
         ip_cb.setOnClickListener(onChangePermissionFilter(Protocol.IP, ip_cb));
+    }
+
+    private void                initSettings() {
+        findViewById(R.id.settings).setOnClickListener(new Setting_dialog(this, mCoordinatorLayout, mTcpdump));
     }
 
     private View.OnClickListener onSwitchHeader() {

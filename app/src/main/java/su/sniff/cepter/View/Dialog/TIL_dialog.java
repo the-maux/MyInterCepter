@@ -2,9 +2,16 @@ package su.sniff.cepter.View.Dialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.design.widget.TextInputLayout;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import su.sniff.cepter.R;
 
@@ -13,6 +20,8 @@ import su.sniff.cepter.R;
  */
 public class                    TIL_dialog {
     private TextInputLayout     TIL_host;
+    private EditText            editText;
+
     protected AlertDialog.Builder dialog;
 
     public                      TIL_dialog(Activity activity) {
@@ -21,6 +30,8 @@ public class                    TIL_dialog {
         View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_ipaddress, null);
         dialog.setView(dialogView);
         TIL_host = (TextInputLayout) dialogView.findViewById(R.id.TIL_host);
+        editText = (EditText) dialogView.findViewById(R.id.editText);
+
     }
 
     public TIL_dialog            setTitle(String title) {
@@ -33,11 +44,47 @@ public class                    TIL_dialog {
         return this;
     }
 
+    public TIL_dialog           setHint(String hint) {
+        TIL_host.setHint(hint);
+        return this;
+    }
+
+
+
     public String               getText() {
-        return TIL_host.getEditText().getText().toString();
+        return editText.getText().toString();
     }
 
     public AlertDialog          show() {
-        return dialog.show();
+        final AlertDialog dial = dialog.create();
+        final InputMethodManager imm =
+                (InputMethodManager)editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        dial.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (imm.isActive())
+                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                dial.getWindow().setSoftInputMode(
+                        WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+            }
+        });
+        editText.requestFocus();
+
+        dial.getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        dial.show();
+        editText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    dial.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        return dial;
     }
+
 }
