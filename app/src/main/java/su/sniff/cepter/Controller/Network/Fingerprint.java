@@ -28,7 +28,7 @@ public class                         Fingerprint {
         final List<Host> hosts = new ArrayList<>();
         final RootProcess process = new RootProcess("Cepter Scan host", Singleton.getInstance().FilesPath);
         final BufferedReader bufferedReader = new BufferedReader(process.getInputStreamReader());
-        process.exec(Singleton.getInstance().FilesPath + "/cepter scan " + Singleton.getInstance().nbrInteface);
+        process.exec(Singleton.getInstance().FilesPath + "cepter scan " + Singleton.getInstance().nbrInteface);
         process.exec("exit");
         new Thread(new Runnable() {
             public void run() {

@@ -141,7 +141,7 @@ public class                    NmapActivity extends MyActivity {
             @Override
             public void onClick(View v) {
                 Output.setText("Wait...");
-                final String cmd = Singleton.getInstance().FilesPath + "/nmap/nmap " + host_et.getText() + " " + params_et.getText() + " ";
+                final String cmd = Singleton.getInstance().FilesPath + "nmap/nmap " + host_et.getText() + " " + params_et.getText() + " ";
                 Monitor.setText("nmap " + host_et.getText() + " " + params_et.getText() + " ");
                 new Thread(new Runnable() {
                     @Override

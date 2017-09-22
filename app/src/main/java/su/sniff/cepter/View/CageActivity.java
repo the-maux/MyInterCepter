@@ -44,7 +44,7 @@ public class                CageActivity extends MyActivity {
     public void             OnRun(View v) {
         if (run == 0) {
             run = 1;
-            File fDroidSheep = new File(Singleton.getInstance().FilesPath + "/exitc.id");
+            File fDroidSheep = new File(Singleton.getInstance().FilesPath + "exitc.id");
             if (fDroidSheep.exists()) {
                 fDroidSheep.delete();
             }
@@ -64,7 +64,7 @@ public class                CageActivity extends MyActivity {
                 RootProcess process = new RootProcess("onCage", Singleton.getInstance().FilesPath);
                 BufferedReader reader = new BufferedReader(process.getInputStreamReader());
                 try {
-                    process.exec(Singleton.getInstance().FilesPath + "/cepter " +
+                    process.exec(Singleton.getInstance().FilesPath + "cepter " +
                             Singleton.getInstance().nbrInteface +
                             " cage " + Singleton.getInstance().network.gateway)
                             .exec("exit");

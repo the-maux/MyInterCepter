@@ -111,8 +111,8 @@ public class                    InitActivity extends MyActivity {
         monitor("Get network Information Loading");
         RootProcess process = new RootProcess("getNetworkInfoByCept", Singleton.getInstance().FilesPath);
         monitor("Testing busybox... OK");
-        Log.d(TAG, "su " + Singleton.getInstance().FilesPath + "/cepter list; exit");
-        process.exec(Singleton.getInstance().FilesPath + "/cepter list");
+        Log.d(TAG, "su " + Singleton.getInstance().FilesPath + "cepter list; exit");
+        process.exec(Singleton.getInstance().FilesPath + "cepter list");
         process.exec("exit");
         monitor("Get network Information");
         process.waitFor();
@@ -121,17 +121,17 @@ public class                    InitActivity extends MyActivity {
 
     private void                clearingTmpFiles() {
         monitor("Clearing previous Data");
-        File force = new File(Singleton.getInstance().FilesPath + "/force");
+        File force = new File(Singleton.getInstance().FilesPath + "force");
         if (force.exists()) {
             Log.d(TAG, "Deleting /force");
             force.delete();
         }
-        File ck = new File(Singleton.getInstance().FilesPath + "/ck");
+        File ck = new File(Singleton.getInstance().FilesPath + "ck");
         if (ck.exists()) {
             Log.d(TAG, "Deleting /ck");
             ck.delete();
         }
-        File savepath = new File(Singleton.getInstance().FilesPath + "/savepath");
+        File savepath = new File(Singleton.getInstance().FilesPath + "savepath");
         if (savepath.exists()) {
             Log.d(TAG, "Deleting /savepath");
             savepath.delete();
@@ -153,16 +153,19 @@ public class                    InitActivity extends MyActivity {
     }
 
     private void                buildFile(String nameFile, int ressource) throws IOException, InterruptedException {
-        File file = new File(Singleton.getInstance().FilesPath + "/" + nameFile);
+        File file = new File(Singleton.getInstance().FilesPath + nameFile);
         file.delete();
         monitor("Building " + nameFile);
         int size;
         InputStream inputStream = getResources().openRawResource(ressource);
         int sizeOfInputStram = inputStream.available();
         byte[] bufferDroidSheep = new byte[sizeOfInputStram];
-        Arrays.fill( bufferDroidSheep, (byte) 0 );
+        Arrays.fill(bufferDroidSheep, (byte) 0 );
         size = inputStream.read(bufferDroidSheep, 0, sizeOfInputStram);
-        FileOutputStream out = openFileOutput(nameFile, Context.MODE_PRIVATE);
+        FileOutputStream out = new FileOutputStream(file);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
         out.write(bufferDroidSheep, 0, size);
         out.flush();
         out.close();
@@ -176,16 +179,20 @@ public class                    InitActivity extends MyActivity {
         FileOutputStream        out;
         byte[]                  bufferDroidSheep = new byte[64];
 
+        new RootProcess("Install ").exec("mkdir  -p /sdcard/Pcap;").closeProcess();
+        new RootProcess("Install ").exec("mkdir -p " + Singleton.getInstance().FilesPath + " ;").closeProcess();
+        new RootProcess("Install ").exec("chmod 777 " + Singleton.getInstance().FilesPath + " ;").closeProcess();
+
         clearingTmpFiles();
         InputStream cepter = getCepterRessource();
-        File cepterFile = new File(Singleton.getInstance().FilesPath + "/cepter");
+        File cepterFile = new File(Singleton.getInstance().FilesPath + "cepter");
         if (cepterFile.exists() && cepterFile.canExecute()) {
             Log.d(TAG, "cepter exist, nothing to do");
         } else {
             cepterFile.delete();
             monitor("Building cepter modules");
             Log.d(TAG, "Building cepter binary");
-            out = openFileOutput("cepter", 0);
+            out =  new FileOutputStream(cepterFile);
             while (cepter.read(bufferDroidSheep) > -1) {
                 out.write(bufferDroidSheep);
             }
@@ -194,6 +201,7 @@ public class                    InitActivity extends MyActivity {
             cepter.close();
         }
         cepterFile.setExecutable(true, false);
+
         buildFile("busybox", R.raw.busybox);
         buildFile("tcpdump", R.raw.tcpdump);
         buildFile("hydra", R.raw.hydra);
@@ -201,9 +209,6 @@ public class                    InitActivity extends MyActivity {
         buildFile("arpspoof", R.raw.arpspoof);
         buildFile("ettercap_archive", R.raw.ettercap_archive);
         buildFile("archive_nmap", R.raw.nmap);
-
-        new RootProcess("Install ").exec("mkdir  -p /sdcard/Pcap;").closeProcess();
-        new RootProcess("Install ").exec("mkdir -p " + Singleton.getInstance().FilesPath + " ;").closeProcess();
 
         new RootProcess("Install ").exec("rm -f " + Singleton.getInstance().FilesPath + "Raw/*;").closeProcess();
         new RootProcess("Install ").exec("rm -f " + Singleton.getInstance().FilesPath + "dnss ;").closeProcess();
