@@ -3,6 +3,7 @@ package su.sniff.cepter.View.Dialog;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.view.WindowManager.LayoutParams;
 import android.content.DialogInterface;
 import android.support.design.widget.TextInputLayout;
 import android.view.KeyEvent;
@@ -62,16 +63,12 @@ public class                    TIL_dialog {
         dial.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                if (imm.isActive())
-                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-                dial.getWindow().setSoftInputMode(
-                        WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
             }
         });
         editText.requestFocus();
 
-        dial.getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        dial.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dial.show();
         editText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override

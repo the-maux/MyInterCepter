@@ -17,9 +17,15 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Objects;
+
+import su.sniff.cepter.Controller.System.FilesUtil;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Model.Pcap.DnsIntercept;
+import su.sniff.cepter.Model.Pcap.MyObject;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.DnsSpoofAdapter;
 import su.sniff.cepter.View.Dialog.TIL_dialog;
@@ -91,7 +97,6 @@ public class                            DNSSpoofingActivity extends MyActivity {
             @Override
             public void onClick(View v) {
                 onShowDialogAddHost();
-                //TODO: Faire le add Host
             }
         });
         mSettingsBtn.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +110,7 @@ public class                            DNSSpoofingActivity extends MyActivity {
         action_import.setOnClickListener(onClickTopMenu());
         action_export.setOnClickListener(onClickTopMenu());
         clipper.setOnClickListener(onClickTopMenu());
+        toolbar.setTitle(singleton.dnsSpoofed.size() + " domain spoofed");
     }
 
     private View.OnClickListener        onClickTopMenu() {
@@ -114,13 +120,34 @@ public class                            DNSSpoofingActivity extends MyActivity {
                 mInstance.findViewById(R.id.clipper).setVisibility(View.GONE);
                 mFab.setVisibility(View.VISIBLE);
                 switch (v.getId()) {
-                    case R.id.action_offline_mode:
-                        Snackbar.make(mCoordinatorLayout, "Non implémenté", Toast.LENGTH_SHORT).show();
+                    case R.id.action_export:
+                        final TIL_dialog dialog = new TIL_dialog(mInstance)
+                                .setTitle("Exporter la liste des dns")
+                                .setHint("Name of file");
+                        dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface d, int which) {
+                                String nameOfFile = dialog.getText();
+                                if (nameOfFile.contains(".") || nameOfFile.length() < 4) {
+                                    Snackbar.make(mCoordinatorLayout, "Syntax incorrect", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    try {
+                                        FilesUtil.dumpDnsOnFile(Singleton.getInstance().dnsSpoofed, nameOfFile);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        })
+                                .show();
                         break;
                     case R.id.action_deleteall:
-                        Snackbar.make(mCoordinatorLayout, "Non implémenté", Toast.LENGTH_SHORT).show();
+                        Singleton.getInstance().dnsSpoofed.clear();
+                        mDnsSpoofAdapter.notifyDataSetChanged();
                         break;
                     case R.id.action_import:
+                        //TODO: Choose wich file
+                        //Singleton.getInstance().dnsSpoofed = FilesUtil.readDnsFromFile("NameOfFile");
                         Snackbar.make(mCoordinatorLayout, "Non implémenté", Toast.LENGTH_SHORT).show();
                         break;
                     default:
@@ -153,7 +180,8 @@ public class                            DNSSpoofingActivity extends MyActivity {
         DnsIntercept dnsIntercept = new DnsIntercept(ip, domain);
         singleton.dnsSpoofed.add(0, dnsIntercept);
         mDnsSpoofAdapter.notifyItemInserted(0);
-        Snackbar.make(mCoordinatorLayout, dnsIntercept.domainAsked + " -> " + dnsIntercept.domainSpoofed, Snackbar.LENGTH_LONG);
+        toolbar.setTitle(singleton.dnsSpoofed.size() + " domain spoofed");
+        Snackbar.make(mCoordinatorLayout,  dnsIntercept.domainSpoofed + " -> " + dnsIntercept.domainAsked, Snackbar.LENGTH_LONG);
     }
 
     private void                        init() {

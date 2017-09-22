@@ -34,7 +34,7 @@
                     android:minWidth="100dp"
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:subtitle="0 site spoofed"
-                    app:title="Intercepter">
+                    app:title="Dns Intercept">
 
                 </android.support.v7.widget.Toolbar>
 

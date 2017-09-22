@@ -10,7 +10,7 @@ import su.sniff.cepter.R;
  * Created by root on 02/08/17.
  */
 
-public class               Trame {
+public class               Trame extends MyObject{
     public String          TAG = "Trame";
     public int             offsett, verbose;
     public String          time;

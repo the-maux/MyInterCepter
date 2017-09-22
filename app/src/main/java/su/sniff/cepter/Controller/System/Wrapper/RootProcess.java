@@ -62,13 +62,15 @@ public class                    RootProcess {
     }
 
     public RootProcess          waitFor() {
-        try {
+        return this;
+        /*try {
+            Log.d(TAG, this.LogID + "::waitFor");
             process.waitFor();
             return this;
         } catch (InterruptedException e) {
             e.printStackTrace();
             return null;
-        }
+        }*/
     }
 
     public BufferedReader       getReader() {

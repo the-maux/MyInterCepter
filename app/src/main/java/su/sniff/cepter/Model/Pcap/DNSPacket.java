@@ -4,7 +4,7 @@ package su.sniff.cepter.Model.Pcap;
  * Created by maxim on 08/08/2017.
  */
 
-public class                    DNSPacket{
+public class                    DNSPacket extends MyObject{
     private String              TAG = getClass().getName();
     String                      request;	//Raw packet on Hex codification
     public byte[]               IP;		//IP Header

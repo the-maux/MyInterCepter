@@ -4,7 +4,7 @@ package su.sniff.cepter.Model.Pcap;
  * Created by maxim on 20/09/2017.
  */
 
-public class            DnsIntercept {
+public class            DnsIntercept extends MyObject{
     public String       domainAsked;
     public String       domainSpoofed;
     public boolean      actif;
@@ -20,5 +20,10 @@ public class            DnsIntercept {
 
     public boolean      isActif() {
         return actif;
+    }
+
+    @Override
+    public String       toString() {
+        return domainAsked +":"+domainSpoofed;
     }
 }

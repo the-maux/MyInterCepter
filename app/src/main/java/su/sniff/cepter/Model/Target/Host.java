@@ -212,4 +212,9 @@ public class                Host {
     public boolean          equals(Object obj) {
         return  ip.contains(((Host) obj).getIp()) && mac.contains(((Host) obj).getMac());
     }
+
+    @Override
+    public String           toString() {
+        return ip + ":" + mac;
+    }
 }
