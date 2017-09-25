@@ -396,7 +396,7 @@ public class                        ScanActivity extends MyActivity {
         }
         out.close();
         if (noTargetSelected) {
-            Toast.makeText(getApplicationContext(), "No target selected!", Toast.LENGTH_SHORT).show();
+            Snackbar.make(mCoordinatorLayout, "No target selected!", Toast.LENGTH_SHORT).show();
             return;
         }
         singleton.hostsList = selectedHost;
