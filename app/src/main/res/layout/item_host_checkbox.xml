@@ -4,41 +4,43 @@
     android:id="@id/rootView"
     android:layout_width="wrap_content"
     android:layout_height="40dp"
+    android:layout_marginTop="1px"
     android:background="@color/material_grey_700"
     android:elevation="1dp"
-    android:layout_marginLeft="2px"
-    android:paddingRight="6dp"
     android:paddingBottom="2dp"
+    android:paddingRight="6dp"
     android:paddingTop="2dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageOS"
+        android:id="@+id/imageDNS"
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:elevation="4dp"
-        android:src="@drawable/android" />
+        android:src="@mipmap/ic_dns" />
 
     <TextView
         android:id="@+id/nameOS"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:layout_marginRight="4dp"
-        android:layout_toEndOf="@+id/imageOS"
-        android:layout_toLeftOf="@+id/checkBox"
+        android:layout_toLeftOf="@+id/deleteImage"
+        android:layout_toRightOf="@+id/imageDNS"
         android:gravity="center_vertical"
+        android:paddingLeft="8dp"
         android:text="Android"
         android:textColor="@color/material_light_white"
         android:textSize="12sp" />
 
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/deleteImage"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:checked="true"
         android:paddingBottom="2dp"
+        android:paddingRight="8dp"
         android:paddingTop="2dp" />
 
 </RelativeLayout>

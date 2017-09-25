@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:animationCache="true">
 
 
     <android.support.design.widget.AppBarLayout
@@ -24,7 +25,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_toLeftOf="@+id/showCustomCmd"
+                android:layout_toLeftOf="@+id/settings"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:subtitle="Aucune cible selectionné"
                 app:title="Wireshark Mode">
@@ -32,13 +33,13 @@
             </android.support.v7.widget.Toolbar>
 
             <ImageButton
-                android:id="@+id/showCustomCmd"
+                android:id="@+id/settings"
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="false"
                 android:layout_alignParentRight="false"
                 android:layout_marginRight="12dp"
-                android:layout_toLeftOf="@+id/settings"
+                android:layout_toLeftOf="@+id/settingsMenu"
                 android:background="@android:color/transparent"
                 android:baselineAlignBottom="false"
                 android:paddingLeft="4dp"
@@ -46,7 +47,7 @@
                 android:src="@android:drawable/ic_menu_manage" />
 
             <ImageView
-                android:id="@+id/settings"
+                android:id="@+id/settingsMenu"
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
@@ -154,10 +155,12 @@
                             android:layout_margin="4dp"
                             android:layout_toRightOf="@+id/https_cb"
                             android:layout_weight="1"
-                            android:background="@drawable/rounded_corner"
+                            android:background="@drawable/rounded_corner_on"
                             android:elevation="2dp"
                             android:gravity="center"
-                            android:padding="4dp"
+                            android:paddingBottom="8dp"
+                            android:paddingTop="8dp"
+                            android:singleLine="true"
                             android:text="TCP"
                             android:textColor="@color/tcp"
                             android:textSize="14sp"
@@ -171,11 +174,13 @@
                             android:layout_margin="4dp"
                             android:layout_toRightOf="@+id/ip_cb"
                             android:layout_weight="1"
-                            android:background="@drawable/rounded_corner"
+                            android:background="@drawable/rounded_corner_on"
                             android:elevation="2dp"
 
                             android:gravity="center"
-                            android:padding="4dp"
+                            android:paddingBottom="8dp"
+                            android:paddingTop="8dp"
+                            android:singleLine="true"
                             android:text="DNS"
                             android:textColor="@color/dns"
                             android:textSize="13sp"
@@ -189,10 +194,12 @@
                             android:layout_below="@+id/titleProtocol"
                             android:layout_margin="4dp"
                             android:layout_weight="1"
-                            android:background="@drawable/rounded_corner"
+                            android:background="@drawable/rounded_corner_on"
                             android:elevation="2dp"
                             android:gravity="center"
-                            android:padding="4dp"
+                            android:paddingBottom="8dp"
+                            android:paddingTop="8dp"
+                            android:singleLine="true"
                             android:text="ARP"
                             android:textColor="@color/primary_text"
                             android:textSize="14sp"
@@ -206,10 +213,31 @@
                             android:layout_margin="4dp"
                             android:layout_toRightOf="@+id/arp_cb"
                             android:layout_weight="1"
-                            android:background="@drawable/rounded_corner"
+                            android:background="@drawable/rounded_corner_on"
                             android:elevation="2dp"
                             android:gravity="center"
-                            android:padding="4dp"
+                            android:paddingBottom="10dp"
+                            android:paddingTop="10dp"
+                            android:singleLine="true"
+                            android:text="HTTPS"
+                            android:textColor="@color/http"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/http_cb"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/arp_cb"
+                            android:layout_margin="4dp"
+                            android:layout_toRightOf="@+id/arp_cb"
+                            android:layout_weight="1"
+                            android:background="@drawable/rounded_corner_on"
+                            android:elevation="2dp"
+                            android:gravity="center"
+                            android:paddingBottom="8dp"
+                            android:paddingTop="8dp"
+                            android:singleLine="true"
                             android:text="HTTP"
                             android:textColor="@color/http"
                             android:textSize="14sp"
@@ -223,10 +251,12 @@
                             android:layout_margin="4dp"
                             android:layout_toRightOf="@+id/tcp_cb"
                             android:layout_weight="1"
-                            android:background="@drawable/rounded_corner"
+                            android:background="@drawable/rounded_corner_on"
                             android:elevation="2dp"
                             android:gravity="center"
-                            android:padding="4dp"
+                            android:paddingBottom="8dp"
+                            android:paddingTop="8dp"
+                            android:singleLine="true"
                             android:text="UDP"
                             android:textColor="@color/udp"
                             android:textSize="14sp"
@@ -240,14 +270,15 @@
                             android:layout_margin="4dp"
                             android:layout_toRightOf="@+id/udp_cb"
                             android:layout_weight="1"
-                            android:background="@drawable/rounded_corner"
+                            android:background="@drawable/rounded_corner_on"
                             android:elevation="2dp"
                             android:gravity="center"
                             android:padding="4dp"
                             android:text=" IP"
                             android:textColor="?attr/actionMenuTextColor"
                             android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:visibility="gone" />
                     </LinearLayout>
 
                 </RelativeLayout>
@@ -270,6 +301,7 @@
 
                     <CheckBox
                         android:id="@+id/Autoscroll"
+                        style="@android:style/Widget.Material.Light.CompoundButton.CheckBox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignTop="@+id/No_cb"
@@ -335,30 +367,33 @@
                 android:visibility="gone" />
 
 
-
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/material_light_white"
                 android:layout_below="@+id/Monitor"
+                android:background="@color/material_light_white"
                 android:scrollbars="horizontal">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:background="@color/material_light_white">
 
                     <include
                         android:id="@+id/topBar"
                         layout="@layout/item_tcpdump"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:elevation="2dp" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/Output"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignLeft="@+id/topBar"
+                        android:layout_alignRight="@+id/topBar"
                         android:layout_below="@+id/topBar"
-                        android:background="@color/material_grey_300"
+                        android:background="@color/cardview_shadow_start_color"
                         android:scrollbars="vertical"
                         tools:listitem="@layout/item_tcpdump" />
 

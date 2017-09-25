@@ -2,7 +2,7 @@ package su.sniff.cepter.View.TextView;
 
 import android.util.Log;
 
-import su.sniff.cepter.Model.Pcap.DNS;
+
 import su.sniff.cepter.Model.Pcap.Protocol;
 import su.sniff.cepter.Model.Pcap.Trame;
 

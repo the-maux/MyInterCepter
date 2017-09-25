@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -13,6 +14,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import su.sniff.cepter.Controller.System.Singleton;
 
 /**
  * Created by maxim on 29/06/2017.
@@ -58,7 +61,7 @@ public class                NetUtils {
         Log.i(TAG, "Dump list host from Arp Table");
         try {
             ArrayList<String> listOfIpsAlreadyIn = new ArrayList<>();
-            FileOutputStream hostListFile = context.openFileOutput("hostlist", 0);
+            FileOutputStream hostListFile = new FileOutputStream(new File(Singleton.getInstance().FilesPath + "hostlist"));
 
             BufferedReader bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"));
             String MAC_RE = "^%s\\s+0x1\\s+0x2\\s+([:0-9a-fA-F]+)\\s+\\*\\s+\\w+$";
@@ -74,12 +77,12 @@ public class                NetUtils {
                     hostListFile.write((ip + ":" + matcher.group(1) + "\n").getBytes());
                 }
             }
+            Log.d(TAG, listOfIpsAlreadyIn.size() + " new host discovered in /proc/arp");
             boolean flag;
             for (String reachable : ipReachable) {
                 flag = false;
                 Log.d(TAG, "asking for:" + reachable);
                 for (String s : listOfIpsAlreadyIn) {
-
                     if ((reachable.substring(0, reachable.indexOf(":")) + "..").contains(s + "..")) {
                         Log.d(TAG, s + "-Alreadyin>" + reachable.substring(0, reachable.indexOf(":")));
                         flag = true;

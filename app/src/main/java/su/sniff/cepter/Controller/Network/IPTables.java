@@ -119,10 +119,10 @@ public class                    IPTables {
 
     public static void         sslConf() {
         if (Singleton.getInstance().isSslStripModeActived()) {
-            Log.d(TAG, "iptables Conf as full striped");
+            Log.d(TAG, "Conf with SslStrip");
             IPTables.InterceptWithSSlStrip();
         } else {
-            Log.d(TAG, "iptables Conf as partially striped");
+            Log.d(TAG, "Conf without SslStrip");
             IPTables.InterceptWithoutSSL();
         }
     }

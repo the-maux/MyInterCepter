@@ -1,8 +1,10 @@
 package su.sniff.cepter.View.Adapter;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -18,7 +20,7 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
     private String          TAG = "WiresharkAdapter";
     private ArrayList<Trame> listOfTrame, originalListOfTrames;
     private Activity        activity;
-    public boolean          arp = true, http = true, tcp = true, dns = true, udp = true, ip = true;
+    public boolean          arp = true, http = true, https = true, tcp = true, dns = true, udp = true, ip = true;
 
     public                  WiresharkAdapter(Activity activity, ArrayList<Trame> trames) {
         this.listOfTrame = new ArrayList<>();
@@ -55,6 +57,13 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         holder.dest.setBackgroundColor(ContextCompat.getColor(activity, color));
         holder.proto.setBackgroundColor(ContextCompat.getColor(activity, color));
         holder.info.setBackgroundColor(ContextCompat.getColor(activity, color));
+        holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(activity, R.color.material_grey_700));
+        holder.No.setTypeface(null, Typeface.NORMAL);
+        holder.time.setTypeface(null, Typeface.NORMAL);
+        holder.source.setTypeface(null, Typeface.NORMAL);
+        holder.dest.setTypeface(null, Typeface.NORMAL);
+        holder.proto.setTypeface(null, Typeface.NORMAL);
+        holder.info.setTypeface(null, Typeface.NORMAL);
     }
 
     @Override
@@ -80,7 +89,7 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
                     addOnList(trame, reverse);
                 break;
             case HTTPS:
-                if (http)
+                if (https)
                     addOnList(trame, reverse);
                 break;
             case DNS:
@@ -99,6 +108,8 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
                 if (ip)
                     addOnList(trame, reverse);
                 break;
+            default:
+                Log.e(TAG, "Trame unknow:" + trame.toString());
         }
 
     }
@@ -107,32 +118,46 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         originalListOfTrames.add(0, trame);
     }
 
-    public void             changePermissionFilter(Protocol protocol) {
+    public boolean          changePermissionFilter(Protocol protocol) {
+        boolean ret;
         switch (protocol) {
             case ARP:
                 arp = !arp;
+                ret = arp;
                 break;
             case HTTP:
                 http = !http;
+                ret = http;
+                break;
+            case HTTPS:
+                https = !https;
+                ret = https;
                 break;
             case DNS:
                 dns = !dns;
+                ret = dns;
                 break;
             case TCP:
                 tcp = !tcp;
+                ret = tcp;
                 break;
             case UDP:
                 udp = !udp;
+                ret = udp;
                 break;
             case IP:
                 ip = !ip;
+                ret = ip;
                 break;
+            default:
+                ret = true;
         }
         listOfTrame.clear();
         for (Trame trame : originalListOfTrames) {
             addTrameFiltered(trame, false);
         }
         notifyDataSetChanged();
+        return ret;
     }
     public void             clear() {
         listOfTrame.clear();

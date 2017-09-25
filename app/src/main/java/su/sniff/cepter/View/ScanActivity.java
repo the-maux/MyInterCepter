@@ -8,10 +8,12 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabItem;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -53,9 +55,9 @@ import su.sniff.cepter.View.Dialog.TIL_dialog;
 public class                        ScanActivity extends MyActivity {
     private String                  TAG = "ScanActivity";
     private ScanActivity            mInstance = this;
+    private Singleton               singleton = Singleton.getInstance();
     private CoordinatorLayout       mCoordinatorLayout;
     private List<Host>              mHosts;
-    private TIL_dialog              mAddHostDialog;
     private HostScanAdapter         mHostAdapter;
     private RecyclerView            mHost_RV;
     private String                  monitor;
@@ -68,6 +70,8 @@ public class                        ScanActivity extends MyActivity {
     private TextView                mOsFilterBtn, mSelectAllBtn, mOfflineModeBtn;
     private ImageButton             mAddHostBtn, mSettingsBtn;
     private SearchView              mSearchView;
+    private Toolbar                 toolbar2;
+    private TabItem                 offlinemode;
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,40 +81,47 @@ public class                        ScanActivity extends MyActivity {
             init();
         } catch (Exception e) {
             Log.e(TAG, "Big error dans l'initXml");
+            Snackbar.make(mCoordinatorLayout, "Big error lors de l'init:", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
 
     private void                    initXml() throws Exception {
         mFab = (FloatingActionButton) findViewById(R.id.fab);
-        mFab.setButtonSize(FloatingActionButton.SIZE_MINI);
         mHost_RV = (RecyclerView) findViewById(R.id.recycler_view);
         mEmptyList = (TextView) findViewById(R.id.emptyList);
         mBottomMonitor = ((TextView) findViewById(R.id.Message));
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mAddHostBtn = (ImageButton) findViewById(R.id.action_add_host);
-        mSettingsBtn = (ImageButton) findViewById(R.id.showCustomCmd);
-        mOsFilterBtn = (TextView) findViewById(R.id.action_os_filter);
-        mSelectAllBtn = (TextView) findViewById(R.id.action_select_all);
+        mSettingsBtn = (ImageButton) findViewById(R.id.settings);
+        mOsFilterBtn = (TextView) findViewById(R.id.action_deleteall);
+        mSelectAllBtn = (TextView) findViewById(R.id.action_import);
         mOfflineModeBtn = (TextView) findViewById(R.id.action_offline_mode);
         mSearchView = (SearchView) findViewById(R.id.filterText);
+        toolbar2 = (Toolbar) findViewById(R.id.toolbar2);
+        offlinemode = (TabItem) findViewById(R.id.offlinemodeItem);
     }
 
     private void                    init()  throws Exception {
-        if (Singleton.getInstance().network == null || Singleton.getInstance().network.myIp == null) {
-            Toast.makeText(getApplicationContext(), "You need to be connected to a network",
-                    Toast.LENGTH_LONG).show();
+        if (singleton.network == null || singleton.network.myIp == null) {
+            Snackbar.make(mCoordinatorLayout, "You need to be connected to a network", Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            IntercepterWrapper.initCepter(NetUtils.getMac(Singleton.getInstance().network.myIp, Singleton.getInstance().network.gateway));
+            IntercepterWrapper.initCepter(NetUtils.getMac(singleton.network.myIp, singleton.network.gateway));
             initMonitor();
             initSwipeRefresh();
-            initDialog();
             initMenu();
             initSearchView();
-            Log.d(TAG, "debug enabled, starting Scan automaticaly");
-            if (Singleton.getInstance().DebugMode) {
+            if (offlinemode != null)//TODO: wtf is this null
+                offlinemode.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(mInstance, MenuActivity.class));
+                    }
+                });
+            if (singleton.DebugMode) {
+                Snackbar.make(mCoordinatorLayout, "debug enabled, starting Scan automaticaly", Toast.LENGTH_SHORT).show();
                 startNetworkScan();
             }
         }
@@ -122,9 +133,9 @@ public class                        ScanActivity extends MyActivity {
     private void                    initMonitor() {
         Log.d(TAG, "Init Monitor");
         WifiInfo wifiInfo = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
-        monitor = wifiInfo.getSSID().replace("\"", "") + " : " + Singleton.getInstance().network.myIp;
+        monitor = wifiInfo.getSSID().replace("\"", "") + " : " + singleton.network.myIp;
         if (!monitor.contains("WiFi")) {
-            monitor += "\n" + "GW: " + Singleton.getInstance().network.gateway + "/" + Singleton.getInstance().network.netmask;
+            monitor += "\n" + "GW: " + singleton.network.gateway + "/" + singleton.network.netmask;
         } else {
             monitor += "Not Connected";
         }
@@ -132,7 +143,6 @@ public class                        ScanActivity extends MyActivity {
     }
 
     private void                    initSwipeRefresh() {
-
         mSwipeRefreshLayout.setColorSchemeResources(
                 R.color.material_green_200,
                 R.color.material_green_500,
@@ -153,23 +163,24 @@ public class                        ScanActivity extends MyActivity {
         });
     }
 
-    private void                    initDialog() {
-        mAddHostDialog = new TIL_dialog(mInstance)
-                .setTitle("Add host");
-        mAddHostDialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                onCheckAddedHost(mAddHostDialog.getText());
-            }
-        });
+    private void                    showAddHostDialog() {
+        final TIL_dialog dialog = new TIL_dialog(mInstance)
+                .setTitle("Add target");
+        dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface d, int which) {
+
+                            onCheckAddedHost(dialog.getText());
+                        }
+                }).show();
+
     }
 
     private void                    initMenu() {
         mAddHostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAddHostDialog.show();
-                //TODO: Faire le add Host
+                showAddHostDialog();
             }
         });
         mSettingsBtn.setOnClickListener(new View.OnClickListener() {
@@ -225,7 +236,7 @@ public class                        ScanActivity extends MyActivity {
     }
 
     private void                    onCheckAddedHost(String addedHost) {
-        Snackbar.make(mCoordinatorLayout, "Added host:" + addedHost, Toast.LENGTH_SHORT).show();
+        Snackbar.make(mCoordinatorLayout, "Fonctionnalité non implémenté:" + addedHost, Toast.LENGTH_SHORT).show();
     }
 
     private View.OnClickListener    onClickTopMenu() {
@@ -239,7 +250,7 @@ public class                        ScanActivity extends MyActivity {
                     case R.id.action_offline_mode:
                         Snackbar.make(mCoordinatorLayout, "mOfflineModeBtn", Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.action_os_filter:
+                    case R.id.action_deleteall:
                         final RecyclerView.Adapter adapter = new OSAdapter(mInstance, mInstance.mHostAdapter.getOsList(), mListOS);
                         new RV_dialog(mInstance)
                                 .setAdapter(adapter)
@@ -254,7 +265,7 @@ public class                        ScanActivity extends MyActivity {
                                     }
                                 }).show();
                         break;
-                    case R.id.action_select_all:
+                    case R.id.action_import:
                         mInstance.mHostAdapter.selectAll();
                         break;
                     default:
@@ -274,11 +285,13 @@ public class                        ScanActivity extends MyActivity {
             inLoading = true;
             initHostsRecyclerView();
             progressAnimation();
+            toolbar2.setSubtitle("Scanning network");
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    new ScanNetmask(new IPv4CIDR(Singleton.getInstance().network.myIp, Singleton.getInstance().network.netmask), mInstance);
+                    new ScanNetmask(new IPv4CIDR(singleton.network.myIp, singleton.network.netmask), mInstance);
                     mProgress = 1000;
+
                 }
             }).start();
         }
@@ -330,8 +343,20 @@ public class                        ScanActivity extends MyActivity {
     }
 
     public void                     onReachableScanOver(ArrayList<String> ipReachable) {
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                toolbar2.setSubtitle("Target Identification");
+            }
+        });
         NetUtils.dumpListHostFromARPTableInFile(mInstance, ipReachable);
         mProgress = 1500;
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                toolbar2.setSubtitle("Fingerprint scan");
+            }
+        });
         Fingerprint.guessHostFingerprint(mInstance);
         mProgress = 2000;
     }
@@ -341,7 +366,8 @@ public class                        ScanActivity extends MyActivity {
             @Override
             public void run() {
                 mHosts = hosts;
-                monitor = "GW: " + Singleton.getInstance().     network.gateway + ": " + mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": "") + " found";// oui je fais des ternaires pour faire le pluriel
+                toolbar2.setSubtitle("Choose targets");
+                monitor = "GW: " + singleton.network.gateway + ": " + mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": "") + " found";// oui je fais des ternaires pour faire le pluriel
                 mBottomMonitor.setText(monitor);
                 mHostAdapter.updateHostList(mHosts);
                 inLoading = false;
@@ -350,7 +376,6 @@ public class                        ScanActivity extends MyActivity {
                 final ArrayList<String> listOs = mHostAdapter.getOsList();
                 monitor += "\n" + listOs.size() +" Os détected";
                 mBottomMonitor.setText(monitor);
-
                 Log.d(TAG, "scan Over with " + mHosts.size() + " possible target");
             }
         });
@@ -371,29 +396,10 @@ public class                        ScanActivity extends MyActivity {
         }
         out.close();
         if (noTargetSelected) {
-            Toast.makeText(getApplicationContext(), "No target selected!", Toast.LENGTH_SHORT).show();
+            Snackbar.make(mCoordinatorLayout, "No target selected!", Toast.LENGTH_SHORT).show();
             return;
         }
-        String cmd = "-gw " + Singleton.getInstance().network.gateway;
-        Intent i2 = new Intent(mInstance, MenuActivity.class);
-        Log.i(TAG, cmd);
-        i2.putExtra("Key_String", cmd);
-        Singleton.getInstance().hostsList = selectedHost;
-        startActivity(i2);
-    }
-
-    public boolean                  onKeyDown(int keyCode, KeyEvent event) {
-        Log.d(TAG, "onKeyDown: " + keyCode);
-        if (keyCode == 4) {
-            try {
-                openFileOutput("exits.id", 0).close();
-                RootProcess.kill("cepter");
-                IPTables.stopIpTable();
-                finish();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return super.onKeyDown(keyCode, event);
+        singleton.hostsList = selectedHost;
+        startActivity(new Intent(mInstance, MenuActivity.class));
     }
 }

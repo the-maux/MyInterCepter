@@ -145,6 +145,12 @@ public class                TcpdumpWrapper {
         RootProcess.kill("tcpdump");
         isRunning = false;
         IPTables.stopIpTable();
+        if (isDumpingInFile) {
+            new RootProcess("chmod Pcap files")
+                    .exec("chmod 666 " + Singleton.getInstance().PcapPath + "/*")
+                    .exec("chown sdcard_r:sdcard_r " + Singleton.getInstance().PcapPath + "/*")
+                    .closeProcess();
+        }
     }
     /**
      * Renvoie la trame mais peut altérer la réponse

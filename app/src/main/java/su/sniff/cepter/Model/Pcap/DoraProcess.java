@@ -12,7 +12,7 @@ import java.util.Locale;
 import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
 import su.sniff.cepter.Model.Target.Host;
 
-public class            DoraProcess {
+public class            DoraProcess extends MyObject {
     private String      TAG = getClass().getName();
     public boolean      running = false;
     public Host         host;

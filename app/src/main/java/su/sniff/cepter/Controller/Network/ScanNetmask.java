@@ -2,6 +2,7 @@ package su.sniff.cepter.Controller.Network;
 
 import android.util.Log;
 
+import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.View.ScanActivity;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ public class                        ScanNetmask {
     private volatile boolean        alreadySend = false;
     private ArrayList<String>       ipReachable = new ArrayList<>();
     private ScanActivity            activity;
+    private boolean                 debuglog = Singleton.getInstance().DebugMode;
 
     public                          ScanNetmask(IPv4CIDR iPv4CIDR, ScanActivity activity) {
         this.activity = activity;
@@ -37,25 +39,25 @@ public class                        ScanNetmask {
         List<String> availableIPs = iPv4CIDR.getAvailableIPs(NumberOfHosts);
         Log.i(TAG, "NumberOfHosts:" + NumberOfHosts + " ipAvailable:" + availableIPs.size());
         for (final String ip : availableIPs) {
-            runnableReachable(service, ip);
+            nbrHostScanned = nbrHostScanned + 1;
+            runnableReachable(service, ip, nbrHostScanned);
         }
     }
 
     private void                    ScanOver() {
         alreadySend = true;
         activity.onReachableScanOver(ipReachable);
-        Log.d(TAG, "Scan over with " + ipReachable.size() + " host reached");
     }
 
-    private void                    runnableReachable(ExecutorService service, final String ip) {
+    private void                    runnableReachable(ExecutorService service, final String ip, final int nbrHostScanned) {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    ++nbrHostScanned;
                     InetAddress host = InetAddress.getByName(ip);
                     if (InetAddress.getByName(ip).isReachable(1000)) {//Timeout 10s
-                        Log.d(TAG, ip + " is reachable");
-                        NetworkInterface ni = NetworkInterface.getByInetAddress(host);
+                        if (debuglog)
+                            Log.d(TAG, ip + " is reachable (" + nbrHostScanned + "/" + NumberOfHosts + ")");
+                        NetworkInterface ni = NetworkInterface.getByInetAddress(host);// send always null
                         if (ni != null) {
                             byte[] mac = ni.getHardwareAddress();
                             String MAC = "";
@@ -66,26 +68,27 @@ public class                        ScanNetmask {
                                 Log.d(TAG, ip + ":" + MAC.replace("-", ":").toLowerCase());
                                 ipReachable.add(ip + ":" + MAC.replace("-", ":").toLowerCase());
                             } else {
-                                Log.e(TAG, ip + " doesn't exist or is not accessible.");
+                                Log.e(TAG, ip + " doesn't exist or is not accessible. (" + nbrHostScanned + "/" + NumberOfHosts + ")");
                             }
                         } else {
-                            Log.e(TAG, "Network Interface for " + ip);
+                            if (debuglog)
+                                Log.e(TAG, "Network Interface for " + ip + " is null (" + nbrHostScanned + "/" + NumberOfHosts + ")");
                         }
-
                     }
                 }  catch (UnknownHostException e) {
-                    nbrHostScanned++;
+                    Log.e(TAG, "UnknownHostException: " + ip + " (" + nbrHostScanned + "/" + NumberOfHosts + ")");
                     e.printStackTrace();
                 } catch (SocketException e) {
-                    nbrHostScanned++;
+                    Log.e(TAG, "SocketException: " + ip + " (" + nbrHostScanned + "/" + NumberOfHosts + ")");
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    nbrHostScanned++;
+                    Log.e(TAG, "IOException: " + ip + " (" + nbrHostScanned + "/" + NumberOfHosts + ")");
                 } finally {
-                    if (nbrHostScanned >= NumberOfHosts - 3 && nbrHostScanned < NumberOfHosts &&
-                            !alreadySend)
+                    if (nbrHostScanned >= (NumberOfHosts-1) && nbrHostScanned < NumberOfHosts && !alreadySend) {
+                        Log.e(TAG, "ScanOver: " + ip + " (" + nbrHostScanned + "/" + NumberOfHosts + ") with " + ipReachable.size() + " host reached");
                         ScanOver();
+                    }
                 }
             }
         }).start();

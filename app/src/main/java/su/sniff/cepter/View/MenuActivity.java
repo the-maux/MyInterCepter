@@ -20,7 +20,6 @@ public class                    MenuActivity extends MyActivity {
 
     @Override protected void    onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String str = getIntent().getExtras().getString("Key_String");// I need to understand this
         setContentView(R.layout.activity_menu);
         initXml();
     }
@@ -51,11 +50,11 @@ public class                    MenuActivity extends MyActivity {
                         Snackbar.make(coordinatorLayout, "Fonctionnalité Cepter non implémenté", Snackbar.LENGTH_LONG).show();
                         break;
                     case ARPCage:
-                        choice = CageActivity.class;
+                        choice = null;
+                        Snackbar.make(coordinatorLayout, "Fonctionnalité Icmp non implémenté", Snackbar.LENGTH_LONG).show();
                         break;
                     case DnsSpoofing:
-                        //choice = DNSSpoofingActivity.class;
-                        choice = null;
+                        choice = DNSSpoofingActivity.class;
                         Snackbar.make(coordinatorLayout, "Fonctionnalité Dns Spoofing non implémenté", Snackbar.LENGTH_LONG).show();
                         break;
                     case Wireshark:

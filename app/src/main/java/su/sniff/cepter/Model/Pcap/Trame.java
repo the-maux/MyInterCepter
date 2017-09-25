@@ -10,7 +10,7 @@ import su.sniff.cepter.R;
  * Created by root on 02/08/17.
  */
 
-public class               Trame {
+public class               Trame extends MyObject{
     public String          TAG = "Trame";
     public int             offsett, verbose;
     public String          time;
@@ -38,12 +38,12 @@ public class               Trame {
             dispatch(dump, Protocol.HTTPS);
         } else if (dump.toLowerCase().contains("http")){
             dispatch(dump, Protocol.HTTP);
-        }  else if (dump.toLowerCase().contains("tcp")){
+        } else if (dump.toLowerCase().contains("icmp")){
+            dispatch(dump, Protocol.ICMP);
+        } else if (dump.toLowerCase().contains("tcp")){
             dispatch(dump, Protocol.TCP);
         } else if (dump.toLowerCase().contains("udp")){
             dispatch(dump, Protocol.UDP);
-        } else if (dump.toLowerCase().contains("icmp")){
-            dispatch(dump, Protocol.ICMP);
         } else {
             dispatch(dump, Protocol.IP);
         }
@@ -62,20 +62,20 @@ public class               Trame {
         return false;
     }
 
-    private  void           dispatch(String line, Protocol protocol) {
+    private  void          dispatch(String line, Protocol protocol) {
         try {
             switch (protocol) {
                 case ARP:
                     Log.d(TAG, "ARP trame: " + line);
                     ArpParsing(line);
                     break;
-                case HTTP:
-                    Log.d(TAG, "HTTP trame: " + line);
-                    HttpParsing(line);
-                    break;
                 case HTTPS:
                     Log.d(TAG, "HTTPS trame " + line);
                     HttpsParsing(line);
+                    break;
+                case HTTP:
+                    Log.d(TAG, "HTTP trame: " + line);
+                    HttpParsing(line);
                     break;
                 case TCP:
                     Log.d(TAG, "TCP trame " + line);
@@ -93,16 +93,16 @@ public class               Trame {
                     Log.d(TAG, "SMB trame " + line);
                     SmbParsing(line);
                     break;
+                case ICMP:
+                    Log.d(TAG, "ICMP trame " + line);
+                    ICMPParsing(line);
+                    break;
                 case NBNS:
                     Log.d(TAG, "NBNS trame " + line);
                     NBNSParsing(line);
                     break;
-                case ICMP:
-                    Log.d(TAG, "NBNS trame " + line);
-                    ICMPParsing(line);
-                    break;
                 case IP:
-                    Log.d(TAG, "IP trame " + line);
+                    Log.e(TAG, "UNKNOW IP trame " + line);
                     IParsing(line);
                     break;
                 default:
@@ -130,8 +130,10 @@ public class               Trame {
         protocol = Protocol.DNS;
         if (lineSub.length <= 9) {//if no verbose
             time = lineSub[0];
-            StringSrc = lineSub[2];
-            StringDest = lineSub[4].replace(".domain:", "").replace(".DOMAIN:", "");
+            String[] src = extractThePortOrProto(lineSub[2]);
+            String[] dest = extractThePortOrProto(lineSub[4]);
+            StringSrc = src[0];
+            StringDest = dest[0];
             info = lineSub[7] + " " + lineSub[8];
         } else {// if -vvv
             time = lineSub[0].substring(0, lineSub[0].indexOf("."));
@@ -153,9 +155,11 @@ public class               Trame {
         Log.d(TAG, "HttpParsing::->"+Arrays.toString(splitted));
         protocol = Protocol.HTTP;
         time = splitted[0].substring(0, splitted[0].indexOf("."));
-        StringSrc = splitted[2];
-        StringDest = splitted[4].replace("http", "");
-        info = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
+        String[] src = extractThePortOrProto(splitted[2]);
+        String[] dest = extractThePortOrProto(splitted[4]);
+        StringSrc = src[0];
+        StringDest = dest[0];
+        info = line.substring(line.indexOf(StringDest)+StringDest.length(), line.length()).replace("IP ", "");
     }
 
     private  void          HttpsParsing(String line) throws StringIndexOutOfBoundsException  {
@@ -163,9 +167,11 @@ public class               Trame {
         Log.d(TAG, "HttpsParsing::->"+Arrays.toString(splitted));
         protocol = Protocol.HTTPS;
         time = splitted[0].substring(0, splitted[0].indexOf("."));
-        StringSrc = splitted[2];
-        StringDest = splitted[4].replace("https", "");
-        info = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
+        String[] src = extractThePortOrProto(splitted[2]);
+        String[] dest = extractThePortOrProto(splitted[4]);
+        StringSrc = src[0];
+        StringDest = dest[0];
+        info = line.substring(line.indexOf(StringDest)+StringDest.length()+dest[1].length()+1, line.length()).replace("IP ", "");
     }
 
     /**
@@ -178,9 +184,11 @@ public class               Trame {
         Log.d(TAG, "TcpParsing::->"+Arrays.toString(splitted));
         protocol = Protocol.TCP;
         time = splitted[0].substring(0, splitted[0].indexOf("."));
-        StringSrc = splitted[2];
-        StringDest = splitted[4];
-        info = line.substring(line.indexOf(" ", 1), line.length()).replace("IP ", "");
+        String[] src = extractThePortOrProto(splitted[2]);
+        String[] dest = extractThePortOrProto(splitted[4]);
+        StringSrc = src[0];
+        StringDest = dest[0];
+        info = line.substring(line.indexOf(StringDest)+StringDest.length(), line.length()).replace("IP ", "");
     }
 
     /**
@@ -226,26 +234,32 @@ public class               Trame {
         protocol = Protocol.ICMP;
         Log.d(TAG, "ICMPParsing::->"+Arrays.toString(splitted));
         time = splitted[0].substring(0, splitted[0].indexOf("."));
-        StringSrc = splitted[2];
-        StringDest = splitted[4];
-        info = line.substring(line.indexOf("ICMP"), line.length()).replace("ICMP ", "");
+        String[] src = extractThePortOrProto(splitted[2]);
+        String[] dest = extractThePortOrProto(splitted[4]);
+        StringSrc = src[0];
+        StringDest = dest[0];
+        info = line.substring(line.indexOf(StringDest)+StringDest.length(), line.length()).replace("ICMP ", "");
     }
 
     private void           IParsing(String line) {
         String[] splitted = line.split(" ");
+        String type = "";
         protocol = Protocol.TCP;
         Log.d(TAG, "IParsing::->"+ Arrays.toString(splitted));
         if (splitted.length >= 4) {
             time = splitted[0].substring(0, splitted[0].indexOf("."));
-            StringSrc = splitted[2];
-            StringDest = splitted[4];
+            String[] src = extractThePortOrProto(splitted[2]);
+            String[] dest = extractThePortOrProto(splitted[4]);
+            StringSrc = src[0];
+            StringDest = dest[0];
+            type = dest[1];
         } else {
             time = "Quiting...";
             StringSrc = "  ";
             StringDest = "  ";
         }
         try {
-            info = line;
+            info = type + line.substring(line.indexOf(StringDest)+StringDest.length()+type.length()+1, line.length());
         } catch (StringIndexOutOfBoundsException e) {
             e.getStackTrace();
             info = line;
@@ -264,7 +278,7 @@ public class               Trame {
                 backgroundColor = R.color.http;
                 break;
             case TCP:
-                backgroundColor = R.color.http;
+                backgroundColor = R.color.ftp;
                 break;
             case UDP:
                 backgroundColor = R.color.udp;
@@ -288,5 +302,27 @@ public class               Trame {
                 backgroundColor = R.color.material_light_white;
                 break;
         }
+    }
+    private String[]       extractThePortOrProto(String ip) {
+        String[] extracted = new String[2];
+        extracted[0] = ip;
+        extracted[1] = "";
+        if (ip.length() - ip.replace(".", "").length() != 3) {//ex:10.10.10.10.8080
+            int rcx = 0, rax = 0;
+            while (rcx <= ip.length()) {
+                rcx = ip.indexOf(".", rcx+1);
+                if (++rax == 4) {
+                    extracted[0] = ip.substring(0, rcx);
+                    extracted[1] = ip.substring(rcx+1, ip.length()).toUpperCase();
+                    break;
+                }
+            }
+        }
+        return extracted;
+    }
+
+    @Override
+    public String           toString() {
+        return protocol.name() + ":" + StringSrc + ">" + StringDest + ": " + info;
     }
 }

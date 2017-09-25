@@ -21,7 +21,7 @@ public class                    RV_dialog {
         dialog.setCancelable(false);
         View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_hostchoice, null);
         dialog.setView(dialogView);
-        RV_host = (RecyclerView) dialogView.findViewById(R.id.RV_host);
+        RV_host = (RecyclerView) dialogView.findViewById(R.id.RL_host);
         RV_host.setHasFixedSize(true);
         RV_host.setLayoutManager(new LinearLayoutManager(activity));
     }

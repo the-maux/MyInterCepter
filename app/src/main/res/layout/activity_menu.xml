@@ -9,13 +9,15 @@
     <RelativeLayout
         android:id="@+id/rootView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/bg3">
 
         <LinearLayout
             android:id="@+id/LL_vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="32dp"
+            android:alpha="0.9"
             android:orientation="vertical"
             android:weightSum="4">
 
@@ -126,7 +128,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:gravity="center"
-                            android:text="Tcpdump"
+                            android:text="ICMP Attack"
                             android:textColor="@color/material_light_white"
                             android:textSize="18sp" />
 

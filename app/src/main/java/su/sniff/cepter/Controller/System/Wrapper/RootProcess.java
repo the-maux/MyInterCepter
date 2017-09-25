@@ -24,10 +24,19 @@ public class                    RootProcess {
         }
     }
 
-    public                      RootProcess(String LogID, String path) {
+    public                      RootProcess(String LogID, String workingDirectory) {
         this.LogID = LogID;
         try {
-            process = Runtime.getRuntime().exec("su", null, new File(path));
+            process = Runtime.getRuntime().exec("su", null, new File(workingDirectory));
+            os = new DataOutputStream(process.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public                      RootProcess(String LogID, boolean noRoot) {
+        this.LogID = LogID;
+        try {
+            process = Runtime.getRuntime().exec("ls\n", null, new File("/"));
             os = new DataOutputStream(process.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
@@ -36,6 +45,7 @@ public class                    RootProcess {
 
     public RootProcess          exec(String cmd) {
         try {
+            cmd = cmd.replace("//", "/");
             Log.d(TAG, LogID + "::" + cmd);
             os.writeBytes(cmd + " 2>&1 \n");
             os.flush();
@@ -61,11 +71,30 @@ public class                    RootProcess {
         return pid;
     }
 
-    public void                 waitFor() {
+    public RootProcess          waitFor() {
         try {
+            BufferedReader reader = new BufferedReader(getReader());
+            String line;
+            if (reader.ready()) {
+                while ((line = reader.readLine()) != null) {}
+            }
+            reader.close();
+            reader = new BufferedReader(getErrorStreamReader());
+            if (reader.ready()) {
+                while ((line = reader.readLine()) != null) {}
+            }
+
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+           // Log.d(TAG, this.LogID + "::waitFor");
             process.waitFor();
+            return this;
         } catch (InterruptedException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
@@ -86,15 +115,16 @@ public class                    RootProcess {
         waitFor();
     }
 
-    public void                 closeDontWait() {
+    public RootProcess          closeDontWait() {
         try {
-            Log.d(TAG, this.LogID + "::Close");
+            //Log.d(TAG, this.LogID + "::Close");
             os.writeBytes("exit\n");
             os.flush();
             os.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return this;
     }
     
     public Process              getActualProcess() {

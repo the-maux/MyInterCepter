@@ -32,7 +32,7 @@ public class                    IntercepterWrapper {
 
     private RootProcess         startCepter(String gateway) {
         RootProcess process = new RootProcess("Start ARP", Singleton.getInstance().FilesPath);
-        process.exec(Singleton.getInstance().FilesPath + "/cepter " + Singleton.getInstance().nbrInteface
+        process.exec(Singleton.getInstance().FilesPath + "cepter " + Singleton.getInstance().nbrInteface
                 + " " + "1" + " " + gateway);
         process.exec("exit").closeDontWait();
         return process;
@@ -64,8 +64,8 @@ public class                    IntercepterWrapper {
      * @param MAC
      */
     public static void          initCepter(String MAC) {
-        new RootProcess("/cepter getv", Singleton.getInstance().FilesPath) //Start Cepter Binary
-                .exec(Singleton.getInstance().FilesPath + "/cepter getv " + MAC)
+        new RootProcess("cepter getv", Singleton.getInstance().FilesPath) //Start Cepter Binary
+                .exec(Singleton.getInstance().FilesPath + "cepter getv " + MAC)
                 .exec("exit")
                 .closeProcess();
     }

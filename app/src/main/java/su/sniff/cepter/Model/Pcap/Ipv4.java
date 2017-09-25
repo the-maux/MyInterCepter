@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
  * Created by root on 02/08/17.
  */
 
-public class                Ipv4 {
+public class                Ipv4 extends MyObject{
     private String          TAG = "Ipv4";
     private String          ipString = "0.0.0.0";
     private int             ipInt = 0;
