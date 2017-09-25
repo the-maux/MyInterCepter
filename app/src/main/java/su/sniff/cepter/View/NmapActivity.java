@@ -10,7 +10,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -82,6 +85,19 @@ public class                    NmapActivity extends MyActivity {
         nmapConfEditorLayout = (RelativeLayout) findViewById(R.id.nmapConfEditorLayout);
         findViewById(R.id.fab).setOnClickListener(onStartCmd());
         settings.setOnClickListener(onSwitchHeader());
+        params_et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || event.getAction() == KeyEvent.ACTION_DOWN
+                        && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    onStartCmd();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private View.OnClickListener onSwitchHeader() {
@@ -91,6 +107,9 @@ public class                    NmapActivity extends MyActivity {
                 nmapConfEditorLayout.setVisibility(
                         (nmapConfEditorLayout.getVisibility() == View.VISIBLE) ?
                                 View.GONE : View.VISIBLE);
+                if (nmapConfEditorLayout.getVisibility() == View.GONE) {
+                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                }
             }
         };
     }

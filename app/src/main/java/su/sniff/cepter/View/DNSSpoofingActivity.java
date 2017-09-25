@@ -39,15 +39,15 @@ public class                            DNSSpoofingActivity extends MyActivity {
     private String                      TAG = "DNSSpoofingActivity";
     private DNSSpoofingActivity         mInstance = this;
     private CoordinatorLayout           mCoordinatorLayout;
-    private Toolbar                     toolbar;
-    private SearchView                  filterText;
-    private ImageButton                 action_add_host, mSettingsBtn;
+    private Toolbar                     mToolbar;
+    private SearchView                  mFilterText;
+    private ImageButton                 mAction_add_host, mSettingsBtn;
     private TabItem                     listSpoof, historique;
     private FloatingActionButton        mFab;
     private RecyclerView                mDnsSpoof_RV;
-    private RelativeLayout              clipper;
-    private TextView                    action_deleteall, action_import, action_export;
-    private Singleton                   singleton = Singleton.getInstance();
+    private RelativeLayout              mClipper;
+    private TextView                    mAction_deleteall, mAction_import, mAction_export;
+    private Singleton                   mSingleton = Singleton.getInstance();
     private DnsSpoofAdapter             mDnsSpoofAdapter;
 
     public void                         onCreate(Bundle savedInstanceState) {
@@ -60,18 +60,18 @@ public class                            DNSSpoofingActivity extends MyActivity {
 
     private void                        initXml() {
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
-        toolbar = (Toolbar) findViewById(R.id.toolbar2);
-        filterText = (SearchView) findViewById(R.id.filterText);
-        action_add_host = (ImageButton) findViewById(R.id.action_add_host);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar2);
+        mFilterText = (SearchView) findViewById(R.id.filterText);
+        mAction_add_host = (ImageButton) findViewById(R.id.action_add_host);
         mSettingsBtn = (ImageButton) findViewById(R.id.settings);
         listSpoof = (TabItem) findViewById(R.id.listSpoof);
         historique = (TabItem) findViewById(R.id.historique);
         mFab = (FloatingActionButton) findViewById(R.id.fab);
         mDnsSpoof_RV = (RecyclerView) findViewById(R.id.dnsSpoof_RV);
-        clipper = (RelativeLayout) findViewById(R.id.clipper);
-        action_deleteall = (TextView) findViewById(R.id.action_deleteall);
-        action_import = (TextView) findViewById(R.id.action_import);
-        action_export = (TextView) findViewById(R.id.action_export);
+        mClipper = (RelativeLayout) findViewById(R.id.clipper);
+        mAction_deleteall = (TextView) findViewById(R.id.action_deleteall);
+        mAction_import = (TextView) findViewById(R.id.action_import);
+        mAction_export = (TextView) findViewById(R.id.action_export);
         mFab.setOnClickListener(onFabClick());
     }
 
@@ -79,8 +79,8 @@ public class                            DNSSpoofingActivity extends MyActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                singleton.setDnsSpoofActived(!singleton.isDnsSpoofActived());
-                if (singleton.isDnsSpoofActived()) {
+                mSingleton.setDnsSpoofActived(!mSingleton.isDnsSpoofActived());
+                if (mSingleton.isDnsSpoofActived()) {
                     mFab.setImageResource(R.mipmap.ic_stop);
                 } else {
                     mFab.setImageResource(R.mipmap.ic_play);
@@ -90,7 +90,7 @@ public class                            DNSSpoofingActivity extends MyActivity {
     }
 
     private void                        initMenu() {
-        action_add_host.setOnClickListener(new View.OnClickListener() {
+        mAction_add_host.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onShowDialogAddHost();
@@ -103,11 +103,11 @@ public class                            DNSSpoofingActivity extends MyActivity {
                 mFab.setVisibility(View.GONE);
             }
         });
-        action_deleteall.setOnClickListener(onClickTopMenu());
-        action_import.setOnClickListener(onClickTopMenu());
-        action_export.setOnClickListener(onClickTopMenu());
-        clipper.setOnClickListener(onClickTopMenu());
-        toolbar.setTitle(singleton.dnsSpoofed.size() + " domain spoofed");
+        mAction_deleteall.setOnClickListener(onClickTopMenu());
+        mAction_import.setOnClickListener(onClickTopMenu());
+        mAction_export.setOnClickListener(onClickTopMenu());
+        mClipper.setOnClickListener(onClickTopMenu());
+        mToolbar.setTitle(mSingleton.dnsSpoofed.size() + " domain spoofed");
     }
 
     private View.OnClickListener        onClickTopMenu() {
@@ -175,21 +175,21 @@ public class                            DNSSpoofingActivity extends MyActivity {
 
     private void                        onCheckAddedHost(String ip, String domain) {//ip:domain
         DnsIntercept dnsIntercept = new DnsIntercept(ip, domain);
-        singleton.dnsSpoofed.add(0, dnsIntercept);
+        mSingleton.dnsSpoofed.add(0, dnsIntercept);
         mDnsSpoofAdapter.notifyItemInserted(0);
-        toolbar.setTitle(singleton.dnsSpoofed.size() + " domain spoofed");
+        mToolbar.setTitle(mSingleton.dnsSpoofed.size() + " domain spoofed");
         Snackbar.make(mCoordinatorLayout,  dnsIntercept.domainSpoofed + " -> " + dnsIntercept.domainAsked, Snackbar.LENGTH_LONG);
     }
 
     private void                        init() {
-        mDnsSpoofAdapter = new DnsSpoofAdapter(this, singleton.dnsSpoofed);
+        mDnsSpoofAdapter = new DnsSpoofAdapter(this, mSingleton.dnsSpoofed);
         mDnsSpoof_RV.setAdapter(mDnsSpoofAdapter);
         mDnsSpoof_RV.setHasFixedSize(true);
         mDnsSpoof_RV.setLayoutManager(new LinearLayoutManager(mInstance));
-        if (singleton.dnsSpoofed.isEmpty()) {
+        if (mSingleton.dnsSpoofed.isEmpty()) {
             Snackbar.make(mCoordinatorLayout, "Aucun dns enregistré", Snackbar.LENGTH_LONG);
         }
-        if (singleton.isDnsSpoofActived()) {
+        if (mSingleton.isDnsSpoofActived()) {
             mFab.setImageResource(R.mipmap.ic_stop);
         } else {
             mFab.setImageResource(R.mipmap.ic_play);

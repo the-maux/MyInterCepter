@@ -29,16 +29,16 @@ import su.sniff.cepter.View.Adapter.DoraAdapter;
 public class                    DoraActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
     private DoraActivity        mInstance = this;
-    private List<DoraProcess>   listOfHostDored;
-    private boolean             running = false;
+    private List<DoraProcess>   mListOfHostDored;
+    private boolean             mIsRunning = false;
 
-    private CoordinatorLayout   coordinatorLayout;
+    private CoordinatorLayout   mCoordinatorLayout;
     private SearchView          searchView;
     private TabItem             radar, signalQuality;
     private ImageView           add, more;
-    private RecyclerView        RV_dora;
-    private DoraAdapter         Rv_Adapter;
-    private FloatingActionButton fab;
+    private RecyclerView        mRV_dora;
+    private DoraAdapter         mRv_Adapter;
+    private FloatingActionButton mFab;
 
     @Override protected void    onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,15 +49,15 @@ public class                    DoraActivity extends MyActivity {
     }
 
     private void                initXml() {
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
         searchView = (SearchView) findViewById(R.id.searchView);
         radar = (TabItem) findViewById(R.id.radar);
         signalQuality = (TabItem) findViewById(R.id.signalQuality);
         add = (ImageView) findViewById(R.id.add);
         more = (ImageView) findViewById(R.id.more);
-        RV_dora = (RecyclerView) findViewById(R.id.RV_dora);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mRV_dora = (RecyclerView) findViewById(R.id.RV_dora);
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 launchDiagnose();
@@ -66,8 +66,8 @@ public class                    DoraActivity extends MyActivity {
         more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (DoraProcess doraProcess : listOfHostDored) {
-                    if (running) {
+                for (DoraProcess doraProcess : mListOfHostDored) {
+                    if (mIsRunning) {
                         doraProcess.reset();
                     }
                 }
@@ -76,45 +76,45 @@ public class                    DoraActivity extends MyActivity {
     }
 
     private void                initDoraList() {
-        listOfHostDored = new ArrayList<>();
+        mListOfHostDored = new ArrayList<>();
         if (Singleton.getInstance().hostsList == null) {
-            Snackbar.make(coordinatorLayout, "No target selected", Snackbar.LENGTH_LONG);
+            Snackbar.make(mCoordinatorLayout, "No target selected", Snackbar.LENGTH_LONG);
         } else {
             for (Host host : Singleton.getInstance().hostsList) {
-                listOfHostDored.add(new DoraProcess(host));
+                mListOfHostDored.add(new DoraProcess(host));
             }
         }
     }
 
     private void                initRV() {
-        Rv_Adapter = new DoraAdapter(mInstance, listOfHostDored);
-        RV_dora.setAdapter(Rv_Adapter);
-        RV_dora.setHasFixedSize(true);
-        RV_dora.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
+        mRv_Adapter = new DoraAdapter(mInstance, mListOfHostDored);
+        mRV_dora.setAdapter(mRv_Adapter);
+        mRV_dora.setHasFixedSize(true);
+        mRV_dora.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
     }
 
     private void                launchDiagnose() {
-        if (!running) {
-            running = true;
-            for (DoraProcess doraProcess : listOfHostDored) {
+        if (!mIsRunning) {
+            mIsRunning = true;
+            for (DoraProcess doraProcess : mListOfHostDored) {
                 doraProcess.exec();
             }
             adapterRefreshDeamon();
             Log.d(TAG, "diagnose dora started");
         } else {
-            running = false;
-            for (DoraProcess doraProcess : listOfHostDored) {
+            mIsRunning = false;
+            for (DoraProcess doraProcess : mListOfHostDored) {
                 RootProcess.kill(doraProcess.pingProcess.getPid());
             }
             Log.d(TAG, "diagnose dora stopped");
         }
-        Rv_Adapter.setRunning(running);
-        fab.setImageResource((!running) ? R.mipmap.ic_play : R.mipmap.ic_pause);
+        mRv_Adapter.setRunning(mIsRunning);
+        mFab.setImageResource((!mIsRunning) ? R.mipmap.ic_play : R.mipmap.ic_pause);
     }
 
     private int                 REFRESH_TIME = 1000;// == 1seconde
     private void                adapterRefreshDeamon() {
-        if (running) {
+        if (mIsRunning) {
             final Handler handler = new Handler();
             handler.postDelayed( new Runnable() {
 
@@ -123,8 +123,8 @@ public class                    DoraActivity extends MyActivity {
                     mInstance.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (running) {
-                                Rv_Adapter.notifyDataSetChanged();
+                            if (mIsRunning) {
+                                mRv_Adapter.notifyDataSetChanged();
                             }
                         }
                     });
@@ -136,7 +136,7 @@ public class                    DoraActivity extends MyActivity {
 
     @Override
     public void                 onBackPressed() {
-        running = false;
+        mIsRunning = false;
         RootProcess.kill("ping");
         super.onBackPressed();
     }

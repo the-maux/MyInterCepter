@@ -26,7 +26,7 @@ public class                    InitActivity extends MyActivity {
     private String              TAG = "InitActivity";
     private InitActivity        mInstance = this;
     private TextView            monitor;
-    private Singleton           singleton = Singleton.getInstance();
+    private Singleton           mSingleton = Singleton.getInstance();
 
     /*static {
         System.loadLibrary("native-lib");
@@ -67,10 +67,10 @@ public class                    InitActivity extends MyActivity {
     }
 
     private void                buildPath() {
-        singleton.FilesPath = mInstance.getFilesDir().getPath() + '/' + "Files/";
-        singleton.BinaryPath = singleton.FilesPath;//shouldn't be the same as FilesPath
-        singleton.PcapPath = "/sdcard/Pcap/";
-        Log.d(TAG, "path:" + singleton.FilesPath);
+        mSingleton.FilesPath = mInstance.getFilesDir().getPath() + '/' + "Files/";
+        mSingleton.BinaryPath = mSingleton.FilesPath;//shouldn't be the same as FilesPath
+        mSingleton.PcapPath = "/sdcard/Pcap/";
+        Log.d(TAG, "path:" + mSingleton.FilesPath);
         monitor("Building Path");
     }
 
@@ -104,17 +104,17 @@ public class                    InitActivity extends MyActivity {
         }
         if (res[netmask].contains("0.0.0.0"))
             res[netmask] = "255.255.255.0";
-        singleton.network = new NetworkInformation(dhcpInfo, NetUtils.getMac(res[ip], res[gw]));
+        mSingleton.network = new NetworkInformation(dhcpInfo, NetUtils.getMac(res[ip], res[gw]));
         startActivity(new Intent(this, ScanActivity.class));
         finish();
     }
 
     private RootProcess         getNetworkInfoByCept() throws IOException, InterruptedException {
         monitor("Get network Information Loading");
-        RootProcess process = new RootProcess("getNetworkInfoByCept", singleton.FilesPath);
+        RootProcess process = new RootProcess("getNetworkInfoByCept", mSingleton.FilesPath);
         monitor("Testing busybox... OK");
-        Log.d(TAG, "su " + singleton.FilesPath + "cepter list; exit");
-        process.exec(singleton.FilesPath + "cepter list");
+        Log.d(TAG, "su " + mSingleton.FilesPath + "cepter list; exit");
+        process.exec(mSingleton.FilesPath + "cepter list");
         process.exec("exit");
         monitor("Get network Information");
         process.waitFor();
@@ -136,7 +136,7 @@ public class                    InitActivity extends MyActivity {
 
     private void                buildFile(String nameFile, int ressource) throws IOException, InterruptedException {
         monitor("Building " + nameFile);
-        File file = new File(singleton.FilesPath + nameFile);
+        File file = new File(mSingleton.FilesPath + nameFile);
         file.delete();
         file.createNewFile();
         InputStream inputStream = (nameFile.contains("cepter")) ? //Choix architecture doit etre fait sur tout les binaires
@@ -152,14 +152,14 @@ public class                    InitActivity extends MyActivity {
         inputStream.close();
         out.close();
         Log.d(TAG, "buildFile " + nameFile + "(" + sizeOfInputStram + "octet) and write :" + size);
-        new RootProcess("Install ").exec("chmod 744 " + singleton.FilesPath + nameFile).closeProcess();
+        new RootProcess("Install ").exec("chmod 744 " + mSingleton.FilesPath + nameFile).closeProcess();
     }
 
     private void                install() throws IOException, InterruptedException {
         /*  Build directory    */
         new RootProcess("Install ").exec("mkdir -p /sdcard/Pcap").closeProcess();
-        new RootProcess("Install ").exec("mkdir -p " + singleton.FilesPath ).closeProcess();
-        new RootProcess("Install ").exec("chmod 777 " + singleton.FilesPath ).closeProcess();
+        new RootProcess("Install ").exec("mkdir -p " + mSingleton.FilesPath ).closeProcess();
+        new RootProcess("Install ").exec("chmod 777 " + mSingleton.FilesPath ).closeProcess();
 
         buildFile("busybox", R.raw.busybox);
         buildFile("cepter", R.raw.busybox);
@@ -170,11 +170,11 @@ public class                    InitActivity extends MyActivity {
 
 
         buildFile("ettercap_archive", R.raw.ettercap_archive);
-        new RootProcess("UNZIP FILES", singleton.FilesPath).exec(singleton.BinaryPath + "busybox unzip ettercap_archive").closeProcess();
+        new RootProcess("UNZIP FILES", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip ettercap_archive").closeProcess();
 
         buildFile("archive_nmap", R.raw.nmap);
-        new RootProcess("Install ", singleton.FilesPath).exec(singleton.BinaryPath + "busybox unzip archive_nmap").closeProcess();
-        new RootProcess("Install ").exec("chmod 744 " + singleton.BinaryPath + "/nmap/*").closeProcess();
+        new RootProcess("Install ", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip archive_nmap").closeProcess();
+        new RootProcess("Install ").exec("chmod 744 " + mSingleton.BinaryPath + "/nmap/*").closeProcess();
 
         /*  ping binary    */
         buildFile("ping", R.raw.arpspoof);
@@ -183,17 +183,17 @@ public class                    InitActivity extends MyActivity {
         /*  Dns Stuff    */
         new RootProcess("Install ").exec("echo \"nameserver `getprop net.dns1`\" > /etc/resolv.conf").closeProcess();
         /*  Clean    */
-        new RootProcess("Install ").exec("rm " + singleton.BinaryPath).closeProcess();
-        new RootProcess("Install ").exec(singleton.BinaryPath + "busybox killall cepter").closeProcess();
-        new RootProcess("Install ").exec(singleton.BinaryPath + "busybox killall tcpdump").closeProcess();
-        new RootProcess("Install ").exec(singleton.BinaryPath + "busybox killall arpspoof").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "Raw/*").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "dnss").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "hostlist").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "*Activity").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "archive_nmap").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "ettercap_archive").closeProcess();
-        new RootProcess("Install ").exec("echo '" + singleton.VERSION + "' > " + singleton.FilesPath + "version").closeProcess();
+        new RootProcess("Install ").exec("rm " + mSingleton.BinaryPath).closeProcess();
+        new RootProcess("Install ").exec(mSingleton.BinaryPath + "busybox killall cepter").closeProcess();
+        new RootProcess("Install ").exec(mSingleton.BinaryPath + "busybox killall tcpdump").closeProcess();
+        new RootProcess("Install ").exec(mSingleton.BinaryPath + "busybox killall arpspoof").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + mSingleton.FilesPath + "Raw/*").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + mSingleton.FilesPath + "dnss").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + mSingleton.FilesPath + "hostlist").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + mSingleton.FilesPath + "*Activity").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + mSingleton.FilesPath + "archive_nmap").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + mSingleton.FilesPath + "ettercap_archive").closeProcess();
+        new RootProcess("Install ").exec("echo '" + mSingleton.VERSION + "' > " + mSingleton.FilesPath + "version").closeProcess();
     }
 
     private void                monitor(final String log) {
@@ -206,7 +206,7 @@ public class                    InitActivity extends MyActivity {
     }
 
     public boolean              isItUpdated() {
-        return new File(singleton.FilesPath + "version").exists();//TODO: vérifier que les version concorde
+        return new File(mSingleton.FilesPath + "version").exists();//TODO: vérifier que les version concorde
     }
 
     //

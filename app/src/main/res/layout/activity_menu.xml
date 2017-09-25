@@ -9,13 +9,15 @@
     <RelativeLayout
         android:id="@+id/rootView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/bg3">
 
         <LinearLayout
             android:id="@+id/LL_vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="32dp"
+            android:alpha="0.9"
             android:orientation="vertical"
             android:weightSum="4">
 

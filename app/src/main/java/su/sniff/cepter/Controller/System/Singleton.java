@@ -58,7 +58,7 @@ public class                            Singleton {
     }
     public void                         setLockScreen(boolean lockScreen) {
         LockScreen = lockScreen;
-        //TODO: ockScreen
+        //TODO: LockScreen
         Log.i("setockScreenActived", "Not implemented");
     }
 }

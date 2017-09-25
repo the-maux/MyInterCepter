@@ -58,14 +58,6 @@ public class                    TIL_dialog {
 
     public AlertDialog          show() {
         final AlertDialog dial = dialog.create();
-        final InputMethodManager imm =
-                (InputMethodManager)editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        dial.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-
-            }
-        });
         editText.requestFocus();
 
         dial.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
