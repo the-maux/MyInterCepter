@@ -45,6 +45,7 @@ public class                    RootProcess {
 
     public RootProcess          exec(String cmd) {
         try {
+            cmd = cmd.replace("//", "/");
             Log.d(TAG, LogID + "::" + cmd);
             os.writeBytes(cmd + " 2>&1 \n");
             os.flush();
