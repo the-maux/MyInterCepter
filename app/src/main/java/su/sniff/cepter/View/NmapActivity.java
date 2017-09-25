@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ import su.sniff.cepter.View.Dialog.RV_dialog;
 public class                    NmapActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
     private NmapActivity        mInstance = this;
+    private Singleton           singleton = Singleton.getInstance();
     private CoordinatorLayout   coordinatorLayout;
     private MaterialSpinner     spinner;
     private Map<String, String> params =  new HashMap<>();
@@ -48,7 +50,6 @@ public class                    NmapActivity extends MyActivity {
     private RelativeLayout      nmapConfEditorLayout;
     private TextView            host_et, params_et, Output, Monitor, targetMonitor;
     private RelativeLayout      RL_host;
-    private FloatingActionButton fab;
     private Host                actualTarget = null;
     private List<Host>          listHostSelected = new ArrayList<>();
     private ImageView           settingsMenu;
@@ -63,6 +64,7 @@ public class                    NmapActivity extends MyActivity {
         initRecyHost();
         host_et.setText(Singleton.getInstance().hostsList.get(0).getIp());
         params_et.setText(params.get(cmd.get(0)));
+        targetMonitor.setText(listHostSelected.size() + " target");
     }
 
     private void                initXml() {
@@ -159,15 +161,15 @@ public class                    NmapActivity extends MyActivity {
             @Override
             public void onClick(View v) {
                 Output.setText("Wait...");
-                final String cmd = Singleton.getInstance().FilesPath + "nmap/nmap " + host_et.getText() + " " + params_et.getText() + " ";
+                final String cmd = singleton.FilesPath + "nmap/nmap " + host_et.getText() + " " + params_et.getText() + " ";
                 Monitor.setVisibility(View.VISIBLE);
-                Monitor.setText("nmap " + host_et.getText() + " " + params_et.getText() + " ");
+                Monitor.setText(cmd.replace("\n", "").replace(singleton.FilesPath, ""));
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
                             BufferedReader reader = new BufferedReader(new RootProcess("Nmap", Singleton.getInstance().FilesPath)//Exec and > in BufferedReader
-                                    .exec(cmd).exec("exit").getInputStreamReader());
+                                    .exec(cmd).getInputStreamReader());
                             String dumpOutput = "", tmp;
                             while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {
                                 dumpOutput += tmp + '\n';
@@ -182,7 +184,6 @@ public class                    NmapActivity extends MyActivity {
                                     Monitor.setVisibility(View.GONE);
                                 }
                             });
-                            Log.d(TAG, "output:" + dumpOutput);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

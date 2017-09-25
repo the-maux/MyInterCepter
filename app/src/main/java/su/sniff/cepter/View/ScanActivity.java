@@ -396,19 +396,4 @@ public class                        ScanActivity extends MyActivity {
         Singleton.getInstance().hostsList = selectedHost;
         startActivity(i2);
     }
-
-    public boolean                  onKeyDown(int keyCode, KeyEvent event) {
-        Log.d(TAG, "onKeyDown: " + keyCode);
-        if (keyCode == 4) {
-            try {
-                openFileOutput("exits.id", 0).close();
-                RootProcess.kill("cepter");
-                IPTables.stopIpTable();
-                finish();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 }

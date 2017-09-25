@@ -27,7 +27,7 @@ public class                    InitActivity extends MyActivity {
     private InitActivity        mInstance = this;
     private TextView            monitor;
     private Singleton           singleton = Singleton.getInstance();
-    
+
     /*static {
         System.loadLibrary("native-lib");
     }*/
@@ -52,7 +52,8 @@ public class                    InitActivity extends MyActivity {
                 @Override
                 public void run() {
                     try {
-                        buildFiles();
+                        if (!isItUpdated())
+                            install();
                         initInfo();
                     } catch (IOException e) {
                         monitor("Error IO");
@@ -120,26 +121,6 @@ public class                    InitActivity extends MyActivity {
         return process;
     }
 
-    private void                clearingTmpFiles() {
-        monitor("Clearing previous Data");
-        File force = new File(singleton.FilesPath + "force");
-        if (force.exists()) {
-            Log.d(TAG, "Deleting /force");
-            force.delete();
-        }
-        File ck = new File(singleton.FilesPath + "ck");
-        if (ck.exists()) {
-            Log.d(TAG, "Deleting /ck");
-            ck.delete();
-        }
-        File savepath = new File(singleton.FilesPath + "savepath");
-        if (savepath.exists()) {
-            Log.d(TAG, "Deleting /savepath");
-            savepath.delete();
-        }
-        monitor("Clearing previous Data over");
-    }
-
     private InputStream         getCepterRessource() {
         InputStream cepter;
         cepter = getResources().openRawResource(R.raw.cepter_android_21_armeabi);
@@ -154,88 +135,65 @@ public class                    InitActivity extends MyActivity {
     }
 
     private void                buildFile(String nameFile, int ressource) throws IOException, InterruptedException {
+        monitor("Building " + nameFile);
         File file = new File(singleton.FilesPath + nameFile);
         file.delete();
-        monitor("Building " + nameFile);
-        int size;
-        InputStream inputStream = getResources().openRawResource(ressource);
+        file.createNewFile();
+        InputStream inputStream = (nameFile.contains("cepter")) ? //Choix architecture doit etre fait sur tout les binaires
+                getCepterRessource() : getResources().openRawResource(ressource);
         int sizeOfInputStram = inputStream.available();
         byte[] bufferDroidSheep = new byte[sizeOfInputStram];
         Arrays.fill(bufferDroidSheep, (byte) 0 );
-        size = inputStream.read(bufferDroidSheep, 0, sizeOfInputStram);
+        int size = inputStream.read(bufferDroidSheep, 0, sizeOfInputStram);
         FileOutputStream out = new FileOutputStream(file);
-        if (!file.exists()) {
-            file.createNewFile();
-        } else {
-            Log.d(TAG, nameFile + " already exist");
-            return;
-        }
         out.write(bufferDroidSheep, 0, size);
         out.flush();
         out.close();
         inputStream.close();
         out.close();
         Log.d(TAG, "buildFile " + nameFile + "(" + sizeOfInputStram + "octet) and write :" + size);
-        file.setExecutable(true, false);
+        new RootProcess("Install ").exec("chmod 744 " + singleton.FilesPath + nameFile).closeProcess();
     }
 
-    private void                buildFiles() throws IOException, InterruptedException {
-        FileOutputStream        out;
-        byte[]                  bufferDroidSheep = new byte[64];
-
+    private void                install() throws IOException, InterruptedException {
+        /*  Build directory    */
         new RootProcess("Install ").exec("mkdir -p /sdcard/Pcap").closeProcess();
         new RootProcess("Install ").exec("mkdir -p " + singleton.FilesPath ).closeProcess();
         new RootProcess("Install ").exec("chmod 777 " + singleton.FilesPath ).closeProcess();
 
-        clearingTmpFiles();
-        InputStream cepter = getCepterRessource();
-        File cepterFile = new File(singleton.FilesPath + "cepter");
-        if (cepterFile.exists() && cepterFile.canExecute()) {
-            Log.d(TAG, "cepter exist, nothing to do");
-        } else {
-            cepterFile.delete();
-            cepterFile.createNewFile();
-            monitor("Building cepter module");
-            Log.d(TAG, "Building cepter binary");
-            out =  new FileOutputStream(cepterFile);
-            while (cepter.read(bufferDroidSheep) > -1) {
-                out.write(bufferDroidSheep);
-            }
-            out.flush();
-            out.close();
-            cepter.close();
-        }
-        cepterFile.setExecutable(true, false);
-
         buildFile("busybox", R.raw.busybox);
+        buildFile("cepter", R.raw.busybox);
         buildFile("tcpdump", R.raw.tcpdump);
-        buildFile("hydra", R.raw.hydra);
+        buildFile("macchanger", R.raw.arpspoof);
         buildFile("usernames", R.raw.usernames);
         buildFile("arpspoof", R.raw.arpspoof);
 
 
-
         buildFile("ettercap_archive", R.raw.ettercap_archive);
         new RootProcess("UNZIP FILES", singleton.FilesPath).exec(singleton.BinaryPath + "busybox unzip ettercap_archive").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "ettercap_archive").closeProcess();
 
         buildFile("archive_nmap", R.raw.nmap);
-        new RootProcess("Install ", singleton.FilesPath).exec(singleton.BinaryPath + "busybox unzip archive_nmap;").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "archive_nmap;").closeProcess();
+        new RootProcess("Install ", singleton.FilesPath).exec(singleton.BinaryPath + "busybox unzip archive_nmap").closeProcess();
+        new RootProcess("Install ").exec("chmod 744 " + singleton.BinaryPath + "/nmap/*").closeProcess();
 
-        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "Raw/*").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "dnss").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "hostlist").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "*Activity").closeProcess();
-
-        new RootProcess("Install ").exec("chmod 777 " + singleton.BinaryPath + "/nmap/*").closeProcess();
+        /*  ping binary    */
+        buildFile("ping", R.raw.arpspoof);
         new RootProcess("Install ").exec("mount -o rw,remount /system;").closeProcess();
         new RootProcess("Install ").exec("cp ./ping /system/bin/;").closeProcess();
+        /*  Dns Stuff    */
         new RootProcess("Install ").exec("echo \"nameserver `getprop net.dns1`\" > /etc/resolv.conf").closeProcess();
+        /*  Clean    */
         new RootProcess("Install ").exec("rm " + singleton.BinaryPath).closeProcess();
         new RootProcess("Install ").exec(singleton.BinaryPath + "busybox killall cepter").closeProcess();
         new RootProcess("Install ").exec(singleton.BinaryPath + "busybox killall tcpdump").closeProcess();
         new RootProcess("Install ").exec(singleton.BinaryPath + "busybox killall arpspoof").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "Raw/*").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "dnss").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "hostlist").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "*Activity").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "archive_nmap").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "ettercap_archive").closeProcess();
+        new RootProcess("Install ").exec("echo '" + singleton.VERSION + "' > " + singleton.FilesPath + "version").closeProcess();
     }
 
     private void                monitor(final String log) {
@@ -247,6 +205,10 @@ public class                    InitActivity extends MyActivity {
         });
     }
 
- //
+    public boolean              isItUpdated() {
+        return new File(singleton.FilesPath + "version").exists();//TODO: vérifier que les version concorde
+    }
+
+    //
     //   public native String        stringFromJNI();
 }

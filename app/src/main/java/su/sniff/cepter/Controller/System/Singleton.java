@@ -34,7 +34,7 @@ public class                            Singleton {
     public boolean                      DebugMode = true, UltraDebugMode = false;
     private boolean                     SslStripModeActived = false, DnsSpoofActived = false;
     private boolean                     LockScreen = false;
-
+    public  String                      VERSION = "0xDEADBEEF";
     public  int                         lock = 0, nbrInteface = 1;
 
     public boolean                      isSslStripModeActived() {
