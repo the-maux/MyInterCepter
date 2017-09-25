@@ -18,14 +18,11 @@ import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Objects;
 
 import su.sniff.cepter.Controller.System.FilesUtil;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Model.Pcap.DnsIntercept;
-import su.sniff.cepter.Model.Pcap.MyObject;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.DnsSpoofAdapter;
 import su.sniff.cepter.View.Dialog.TIL_dialog;
@@ -66,7 +63,7 @@ public class                            DNSSpoofingActivity extends MyActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar2);
         filterText = (SearchView) findViewById(R.id.filterText);
         action_add_host = (ImageButton) findViewById(R.id.action_add_host);
-        mSettingsBtn = (ImageButton) findViewById(R.id.action_settingsBtn);
+        mSettingsBtn = (ImageButton) findViewById(R.id.settings);
         listSpoof = (TabItem) findViewById(R.id.listSpoof);
         historique = (TabItem) findViewById(R.id.historique);
         mFab = (FloatingActionButton) findViewById(R.id.fab);

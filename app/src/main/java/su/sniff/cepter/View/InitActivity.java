@@ -166,6 +166,9 @@ public class                    InitActivity extends MyActivity {
         FileOutputStream out = new FileOutputStream(file);
         if (!file.exists()) {
             file.createNewFile();
+        } else {
+            Log.d(TAG, nameFile + " already exist");
+            return;
         }
         out.write(bufferDroidSheep, 0, size);
         out.flush();
@@ -180,9 +183,9 @@ public class                    InitActivity extends MyActivity {
         FileOutputStream        out;
         byte[]                  bufferDroidSheep = new byte[64];
 
-        new RootProcess("Install ").exec("mkdir  -p /sdcard/Pcap;").closeProcess();
-        new RootProcess("Install ").exec("mkdir -p " + singleton.FilesPath + " ;").closeProcess();
-        new RootProcess("Install ").exec("chmod 777 " + singleton.FilesPath + " ;").closeProcess();
+        new RootProcess("Install ").exec("mkdir -p /sdcard/Pcap").closeProcess();
+        new RootProcess("Install ").exec("mkdir -p " + singleton.FilesPath ).closeProcess();
+        new RootProcess("Install ").exec("chmod 777 " + singleton.FilesPath ).closeProcess();
 
         clearingTmpFiles();
         InputStream cepter = getCepterRessource();
@@ -191,7 +194,8 @@ public class                    InitActivity extends MyActivity {
             Log.d(TAG, "cepter exist, nothing to do");
         } else {
             cepterFile.delete();
-            monitor("Building cepter modules");
+            cepterFile.createNewFile();
+            monitor("Building cepter module");
             Log.d(TAG, "Building cepter binary");
             out =  new FileOutputStream(cepterFile);
             while (cepter.read(bufferDroidSheep) > -1) {
@@ -208,25 +212,30 @@ public class                    InitActivity extends MyActivity {
         buildFile("hydra", R.raw.hydra);
         buildFile("usernames", R.raw.usernames);
         buildFile("arpspoof", R.raw.arpspoof);
+
+
+
         buildFile("ettercap_archive", R.raw.ettercap_archive);
+        new RootProcess("UNZIP FILES", singleton.FilesPath).exec(singleton.BinaryPath + "busybox unzip ettercap_archive").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "ettercap_archive").closeProcess();
+
         buildFile("archive_nmap", R.raw.nmap);
-
-        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "Raw/*;").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "dnss ;").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "hostlist;").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "*Activity;").closeProcess();
-
-        new RootProcess("UNZIP FILES", singleton.FilesPath).exec(singleton.BinaryPath + "busybox unzip ettercap_archive;").closeProcess();
         new RootProcess("Install ", singleton.FilesPath).exec(singleton.BinaryPath + "busybox unzip archive_nmap;").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "archive_nmap;").closeProcess();
 
-        new RootProcess("Install ").exec("chmod 777 " + singleton.BinaryPath + "/nmap/*;").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "Raw/*").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "dnss").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "hostlist").closeProcess();
+        new RootProcess("Install ").exec("rm -f " + singleton.FilesPath + "*Activity").closeProcess();
+
+        new RootProcess("Install ").exec("chmod 777 " + singleton.BinaryPath + "/nmap/*").closeProcess();
         new RootProcess("Install ").exec("mount -o rw,remount /system;").closeProcess();
         new RootProcess("Install ").exec("cp ./ping /system/bin/;").closeProcess();
-        new RootProcess("Install ").exec("echo \"nameserver `getprop net.dns1`\" > /etc/resolv.conf;").closeProcess();
+        new RootProcess("Install ").exec("echo \"nameserver `getprop net.dns1`\" > /etc/resolv.conf").closeProcess();
         new RootProcess("Install ").exec("rm " + singleton.BinaryPath).closeProcess();
-        new RootProcess("Install ").exec(singleton.BinaryPath + "busybox killall cepter;").closeProcess();
-        new RootProcess("Install ").exec(singleton.BinaryPath + "busybox killall tcpdump;").closeProcess();
-        new RootProcess("Install ").exec(singleton.BinaryPath + "busybox killall arpspoof;").closeProcess();
+        new RootProcess("Install ").exec(singleton.BinaryPath + "busybox killall cepter").closeProcess();
+        new RootProcess("Install ").exec(singleton.BinaryPath + "busybox killall tcpdump").closeProcess();
+        new RootProcess("Install ").exec(singleton.BinaryPath + "busybox killall arpspoof").closeProcess();
     }
 
     private void                monitor(final String log) {

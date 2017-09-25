@@ -90,7 +90,7 @@ public class                        ScanActivity extends MyActivity {
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mAddHostBtn = (ImageButton) findViewById(R.id.action_add_host);
-        mSettingsBtn = (ImageButton) findViewById(R.id.action_settingsBtn);
+        mSettingsBtn = (ImageButton) findViewById(R.id.settings);
         mOsFilterBtn = (TextView) findViewById(R.id.action_deleteall);
         mSelectAllBtn = (TextView) findViewById(R.id.action_import);
         mOfflineModeBtn = (TextView) findViewById(R.id.action_offline_mode);

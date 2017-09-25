@@ -12,6 +12,9 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
@@ -42,11 +45,14 @@ public class                    NmapActivity extends MyActivity {
     private MaterialSpinner     spinner;
     private Map<String, String> params =  new HashMap<>();
     private ArrayList<String>   cmd = new ArrayList<>();
-    private TextView            host_et, params_et, Output, Monitor;
-    private RecyclerView        RV_host;
+    private RelativeLayout      nmapConfEditorLayout;
+    private TextView            host_et, params_et, Output, Monitor, targetMonitor;
+    private RelativeLayout      RL_host;
     private FloatingActionButton fab;
     private Host                actualTarget = null;
     private List<Host>          listHostSelected = new ArrayList<>();
+    private ImageView           settingsMenu;
+    private ImageButton         settings;
 
     @Override protected void    onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,11 +70,27 @@ public class                    NmapActivity extends MyActivity {
         spinner = (MaterialSpinner) findViewById(R.id.spinnerTypeScan);
         host_et = (EditText) findViewById(R.id.hostEditext);
         params_et = (EditText) findViewById(R.id.binParamsEditText);
-        RV_host = (RecyclerView) findViewById(R.id.RV_host);
+        RL_host = (RelativeLayout) findViewById(R.id.RL_host);
         Output = (TextView) findViewById(R.id.Output);
         Output.setMovementMethod(new ScrollingMovementMethod());
         Monitor = (TextView) findViewById(R.id.Monitor);
+        settingsMenu = (ImageView) findViewById(R.id.settingsMenu);
+        targetMonitor = (TextView) findViewById(R.id.targetMonitor);
+        settings = (ImageButton) findViewById(R.id.settings);
+        nmapConfEditorLayout = (RelativeLayout) findViewById(R.id.nmapConfEditorLayout);
         findViewById(R.id.fab).setOnClickListener(onStartCmd());
+        settings.setOnClickListener(onSwitchHeader());
+    }
+
+    private View.OnClickListener onSwitchHeader() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nmapConfEditorLayout.setVisibility(
+                        (nmapConfEditorLayout.getVisibility() == View.VISIBLE) ?
+                                View.GONE : View.VISIBLE);
+            }
+        };
     }
 
     private void                initSpinner() {
@@ -104,12 +126,7 @@ public class                    NmapActivity extends MyActivity {
     }
 
     private void                initRecyHost() {
-
-        NmapHostCheckerAdapter adapter = new NmapHostCheckerAdapter(this, Singleton.getInstance().hostsList);
-        RV_host.setAdapter(adapter);
-        RV_host.setHasFixedSize(true);
-        RV_host.setLayoutManager(new LinearLayoutManager(mInstance));
-        RV_host.setOnClickListener(new View.OnClickListener() {
+        RL_host.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new RV_dialog(mInstance)
@@ -122,6 +139,7 @@ public class                    NmapActivity extends MyActivity {
                                     Snackbar.make(coordinatorLayout, "No target selected", Snackbar.LENGTH_LONG).show();
                                 else {
                                     newTarget(listHostSelected.get(0));
+                                    targetMonitor.setText(listHostSelected.size() + " target");
                                     Snackbar.make(coordinatorLayout, listHostSelected.size() + " target", Snackbar.LENGTH_LONG).show();
                                 }
                             }
@@ -142,6 +160,7 @@ public class                    NmapActivity extends MyActivity {
             public void onClick(View v) {
                 Output.setText("Wait...");
                 final String cmd = Singleton.getInstance().FilesPath + "nmap/nmap " + host_et.getText() + " " + params_et.getText() + " ";
+                Monitor.setVisibility(View.VISIBLE);
                 Monitor.setText("nmap " + host_et.getText() + " " + params_et.getText() + " ");
                 new Thread(new Runnable() {
                     @Override
@@ -160,6 +179,7 @@ public class                    NmapActivity extends MyActivity {
                                 @Override
                                 public void run() {
                                     Output.setText(finalDumpOutput);
+                                    Monitor.setVisibility(View.GONE);
                                 }
                             });
                             Log.d(TAG, "output:" + dumpOutput);

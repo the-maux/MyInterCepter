@@ -16,13 +16,13 @@ import su.sniff.cepter.R;
  * Created by the-maux on 19/09/17.
  */
 
-public class                    Setting_dialog implements View.OnClickListener {
+public class                    GeneralSettings implements View.OnClickListener {
     private Activity            mActivity;
     private TcpdumpWrapper      tcpdump;
     private Singleton           singleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
 
-    public                      Setting_dialog(Activity activity, CoordinatorLayout coordinatorLayout, TcpdumpWrapper tcpdump) {
+    public                      GeneralSettings(Activity activity, CoordinatorLayout coordinatorLayout, TcpdumpWrapper tcpdump) {
         this.tcpdump = tcpdump;
         this.mActivity = activity;
         this.mCoordinatorLayout = coordinatorLayout;

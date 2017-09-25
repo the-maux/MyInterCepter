@@ -56,12 +56,12 @@
                     android:layout_centerVertical="false"
                     android:layout_marginEnd="8dp"
                     android:layout_marginTop="12dp"
-                    android:layout_toLeftOf="@+id/action_settingsBtn"
+                    android:layout_toLeftOf="@+id/settings"
                     android:background="@android:color/transparent"
                     app:srcCompat="@drawable/ic_add_circle" />
 
                 <ImageButton
-                    android:id="@+id/action_settingsBtn"
+                    android:id="@+id/settings"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_alignParentRight="true"

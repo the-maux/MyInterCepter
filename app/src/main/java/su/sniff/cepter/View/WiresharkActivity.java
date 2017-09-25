@@ -36,7 +36,7 @@ import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.HostSelectionAdapter;
 import su.sniff.cepter.View.Adapter.WiresharkAdapter;
 import su.sniff.cepter.View.Dialog.RV_dialog;
-import su.sniff.cepter.View.Dialog.Setting_dialog;
+import su.sniff.cepter.View.Dialog.GeneralSettings;
 
 /**
  * TODO:    + Add filter
@@ -98,7 +98,7 @@ public class                    WiresharkActivity extends MyActivity {
         http_cb = (TextView) findViewById(R.id.http_cb);
         udp_cb = (TextView) findViewById(R.id.udp_cb);
         ip_cb = (TextView) findViewById(R.id.ip_cb);
-        findViewById(R.id.action_settingsBtn).setOnClickListener(onSwitchHeader());
+        findViewById(R.id.settings).setOnClickListener(onSwitchHeader());
 
     }
 
@@ -120,7 +120,7 @@ public class                    WiresharkActivity extends MyActivity {
     }
 
     private void                initSettings() {
-        findViewById(R.id.settings).setOnClickListener(new Setting_dialog(this, mCoordinatorLayout, mTcpdump));
+        findViewById(R.id.settings).setOnClickListener(new GeneralSettings(this, mCoordinatorLayout, mTcpdump));
     }
 
     private View.OnClickListener onSwitchHeader() {
@@ -146,11 +146,9 @@ public class                    WiresharkActivity extends MyActivity {
                 int pT = tv.getPaddingTop();
                 int pR = tv.getPaddingRight();
                 int pB = tv.getPaddingBottom();
-                if (mAdapterWireshark.changePermissionFilter(protocol)) {
-                    tv.setBackgroundResource(R.drawable.rounded_corner_on);
-                } else {
-                    tv.setBackgroundResource(R.drawable.rounded_corner_off);
-                }
+                tv.setBackgroundResource(
+                        (mAdapterWireshark.changePermissionFilter(protocol)) ?
+                                R.drawable.rounded_corner_on : R.drawable.rounded_corner_off);
                 tv.setPadding(pL, pT, pR, pB);
             }
         };
