@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
 
 
     <android.support.design.widget.AppBarLayout
@@ -15,7 +16,9 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="56dp">
+            android:layout_height="56dp"
+            android:background="@color/primary_text"
+            android:elevation="4dp">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -78,8 +81,8 @@
             android:id="@+id/nmapConfLayout"
             android:layout_width="match_parent"
             android:layout_height="68dp"
-            android:background="@color/material_grey_800"
-            android:elevation="4dp"
+            android:background="@color/primary_text"
+            android:elevation="2dp"
             android:paddingBottom="8dp"
             android:paddingTop="8dp">
 
@@ -120,62 +123,69 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/nmapConfLayout"
-            android:background="@color/material_grey_800"
-            android:elevation="4dp"
+            android:background="@color/primary_text"
+            android:elevation="2dp"
             android:padding="8dp"
             android:visibility="gone"
             android:weightSum="2">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/hostEditextTI"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:elevation="3dp"
-                android:maxLines="1"
-                android:nextFocusDown="@id/hostEditextTI"
-                app:hintAnimationEnabled="true">
+                android:background="@color/primary_text"
+                android:elevation="2dp">
 
-                <EditText
-                    android:id="@+id/hostEditext"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/hostEditextTI"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_weight="1"
                     android:elevation="3dp"
-                    android:hint="Host(s)"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:lines="1"
                     android:maxLines="1"
-                    android:text="192.168.0.1"
-                    android:textColorHint="@color/material_light_white"
-                    android:textSize="16sp"
-                    android:typeface="serif" />
-            </android.support.design.widget.TextInputLayout>
+                    android:nextFocusDown="@id/hostEditextTI"
+                    app:hintAnimationEnabled="true">
 
-            <android.support.design.widget.TextInputLayout
-                style="@style/Widget.Design.TextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/hostEditextTI"
-                android:elevation="3dp"
-                android:maxLines="1"
-                app:hintAnimationEnabled="true">
+                    <EditText
+                        android:id="@+id/hostEditext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_weight="1"
+                        android:elevation="3dp"
+                        android:hint="Host(s)"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:text="192.168.0.1"
+                        android:textColorHint="@color/material_light_white"
+                        android:textSize="16sp"
+                        android:typeface="serif" />
+                </android.support.design.widget.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/binParamsEditText"
+                <android.support.design.widget.TextInputLayout
+                    style="@style/Widget.Design.TextInputLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Params"
-                    android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:lines="1"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/hostEditextTI"
+                    android:elevation="3dp"
                     android:maxLines="1"
-                    android:text="-Pn -Sv -w -vv"
-                    android:textColorHint="@color/material_light_white"
-                    android:textSize="16sp"
-                    android:typeface="serif" />
-            </android.support.design.widget.TextInputLayout>
+                    app:hintAnimationEnabled="true">
+
+                    <EditText
+                        android:id="@+id/binParamsEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Params"
+                        android:imeOptions="actionDone"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:text="-Pn -Sv -w -vv"
+                        android:textColorHint="@color/material_light_white"
+                        android:textSize="16sp"
+                        android:typeface="serif" />
+                </android.support.design.widget.TextInputLayout>
+            </RelativeLayout>
 
 
         </RelativeLayout>
@@ -204,9 +214,8 @@
             <TextView
                 android:id="@+id/Output"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentTop="true"
                 android:layout_below="@+id/Monitor"
                 android:background="@color/material_light_black"
                 android:maxLines="200"
@@ -217,20 +226,20 @@
         </RelativeLayout>
 
         <com.github.clans.fab.FloatingActionButton
-            android:layout_height="wrap_content"
+            android:id="@+id/fab"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
-            android:id="@+id/fab"
+            android:layout_marginRight="16dp"
             android:src="@android:drawable/ic_menu_search"
-            app:layout_anchorGravity="bottom|right|end"
+            app:fab_colorNormal="@android:color/holo_blue_light"
             app:fab_colorPressed="@android:color/holo_blue_bright"
             app:fab_elevationCompat="4dp"
             app:fab_progress_showBackground="false"
             app:fab_showShadow="false"
-            app:fab_colorNormal="@android:color/holo_blue_light"/>
+            app:layout_anchorGravity="bottom|right|end" />
 
     </RelativeLayout>
 

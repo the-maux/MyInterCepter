@@ -47,7 +47,8 @@
                             android:id="@+id/NmapTxt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="12dp"
                             android:gravity="center"
                             android:text="Nmap"
                             android:textColor="@color/material_light_white"
@@ -57,9 +58,9 @@
                             android:id="@+id/imageView"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_below="@+id/NmapTxt"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="12dp"
+                            android:elevation="2dp"
                             android:src="@drawable/nmap" />
 
                     </RelativeLayout>
@@ -84,7 +85,8 @@
                             android:id="@+id/MitmTxt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="12dp"
                             android:gravity="center"
                             android:text="Intercept"
                             android:textColor="@color/material_light_white"
@@ -94,10 +96,10 @@
                             android:id="@+id/imageView2"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_below="@+id/MitmTxt"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp"
-                            android:src="@drawable/gallery" />
+                            android:layout_marginTop="12dp"
+                            android:elevation="2dp"
+                            android:src="@mipmap/ic_spy" />
 
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
@@ -129,7 +131,8 @@
                             android:id="@+id/ArpTxt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="12dp"
                             android:gravity="center"
                             android:text="ICMP Attack"
                             android:textColor="@color/material_light_white"
@@ -139,9 +142,9 @@
                             android:id="@+id/imageView9"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_below="@+id/ArpTxt"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="12dp"
+                            android:elevation="2dp"
                             android:src="@drawable/cage" />
 
                     </RelativeLayout>
@@ -167,7 +170,8 @@
                             android:id="@+id/txtDNS"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="12dp"
                             android:gravity="center"
                             android:text="DnsSpoof"
                             android:textColor="@color/material_light_white"
@@ -175,12 +179,12 @@
 
                         <ImageView
                             android:id="@+id/imageView8"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_below="@+id/txtDNS"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp"
-                            android:src="@drawable/dns" />
+                            android:layout_marginTop="12dp"
+                            android:elevation="2dp"
+                            android:src="@mipmap/ic_dns" />
 
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
@@ -213,7 +217,8 @@
                             android:id="@+id/WiresharkTxt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="12dp"
                             android:gravity="center_horizontal"
                             android:text="Wireshark"
                             android:textColor="@color/material_light_white"
@@ -223,9 +228,9 @@
                             android:id="@+id/imageView3"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_below="@+id/WiresharkTxt"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="12dp"
+                            android:elevation="2dp"
                             android:padding="4dp"
                             android:src="@drawable/wireshark" />
 
@@ -251,12 +256,13 @@
                             android:id="@+id/DoraTxt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
                             android:layout_alignParentStart="true"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginTop="16dp"
+                            android:layout_alignParentTop="false"
+                            android:layout_marginBottom="12dp"
+
                             android:gravity="center_horizontal"
                             android:text="Dora Diag"
-
                             android:textColor="@color/material_light_white"
                             android:textSize="18sp" />
 
@@ -264,10 +270,9 @@
                             android:id="@+id/imageView10"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_below="@+id/DoraTxt"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp"
-                            android:src="@drawable/radar1600" />
+                            android:layout_marginTop="12dp"
+                            android:elevation="2dp" />
 
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
@@ -300,7 +305,8 @@
                             android:id="@+id/MsfTxt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="12dp"
                             android:gravity="center"
                             android:text="Metasploit"
                             android:textColor="@color/material_light_white"
@@ -310,9 +316,9 @@
                             android:id="@+id/imageView4"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_below="@+id/MsfTxt"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="12dp"
+                            android:elevation="2dp"
                             android:src="@drawable/metasploit" />
 
                     </RelativeLayout>
@@ -337,25 +343,35 @@
                             android:id="@+id/SettingsTxt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:gravity="center"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentStart="false"
+                            android:layout_marginBottom="12dp"
+                            android:gravity="center_horizontal"
                             android:text="Settings"
                             android:textColor="@color/material_light_white"
                             android:textSize="18sp" />
 
                         <ImageView
                             android:id="@+id/imageView5"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_below="@+id/SettingsTxt"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp"
-                            android:src="@drawable/settings" />
+                            android:layout_marginTop="12dp"
+                            android:elevation="2dp"
+                            android:src="@drawable/ic_settings_white_24dp" />
 
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
 
             </LinearLayout>
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/scylla"
+            android:layout_width="32dp"
+            android:layout_height="24dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            app:srcCompat="@drawable/scylla_transparent" />
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

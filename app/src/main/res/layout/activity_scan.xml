@@ -15,107 +15,109 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
 
-            <RelativeLayout
-                android:id="@+id/topToolbar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="right">
+			<RelativeLayout
+				android:id="@+id/topToolbar"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:background="@color/primary_text"
+				android:elevation="1dp"
+				android:focusable="true"
+				android:focusableInTouchMode="true"
+				android:gravity="right">
 
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_toLeftOf="@+id/searchView"
-                    android:addStatesFromChildren="true"
-                    android:minWidth="100dp"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    app:subtitle="Scannez votre réseau"
-                    app:title="Scanner">
+				<android.support.v7.widget.Toolbar
+					android:id="@+id/toolbar2"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentStart="true"
+					android:layout_alignParentTop="true"
+					android:layout_toLeftOf="@+id/searchView"
+					android:addStatesFromChildren="true"
+					android:minWidth="100dp"
+					app:layout_scrollFlags="scroll|enterAlways"
+					app:subtitle="Scannez votre réseau"
+					app:title="Scanner">
 
-                </android.support.v7.widget.Toolbar>
+				</android.support.v7.widget.Toolbar>
 
-                <android.support.v7.widget.SearchView
-                    android:id="@+id/searchView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerVertical="false"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_toLeftOf="@+id/action_add_host" />
+				<android.support.v7.widget.SearchView
+					android:id="@+id/searchView"
+					android:layout_width="wrap_content"
+					android:layout_height="32dp"
+					android:layout_alignParentTop="true"
+					android:layout_centerVertical="false"
+					android:layout_marginEnd="8dp"
+					android:layout_marginTop="12dp"
+					android:layout_toLeftOf="@+id/action_add_host" />
 
-                <ImageButton
-                    android:id="@+id/action_add_host"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerVertical="false"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_toLeftOf="@+id/settings"
-                    android:background="@android:color/transparent"
-                    app:srcCompat="@drawable/ic_add_circle" />
+				<ImageButton
+					android:id="@+id/action_add_host"
+					android:layout_width="32dp"
+					android:layout_height="32dp"
+					android:layout_alignParentTop="true"
+					android:layout_centerVertical="false"
+					android:layout_marginEnd="8dp"
+					android:layout_marginTop="12dp"
+					android:layout_toLeftOf="@+id/settings"
+					android:background="@android:color/transparent"
+					app:srcCompat="@drawable/ic_add_circle" />
 
-                <ImageButton
-                    android:id="@+id/settings"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerVertical="false"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="12dp"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_more_vert" />
+				<ImageButton
+					android:id="@+id/settings"
+					android:layout_width="32dp"
+					android:layout_height="32dp"
+					android:layout_alignParentRight="true"
+					android:layout_alignParentTop="true"
+					android:layout_centerVertical="false"
+					android:layout_marginEnd="8dp"
+					android:layout_marginTop="12dp"
+					android:background="@android:color/transparent"
+					android:src="@drawable/ic_more_vert" />
 
-            </RelativeLayout>
+			</RelativeLayout>
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/topToolbar"
-                app:tabMode="scrollable">
+			<android.support.design.widget.TabLayout
+				android:id="@+id/tabs"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_below="@+id/topToolbar"
+				android:background="@color/primary_text"
+				app:tabMode="scrollable">
 
-                <android.support.design.widget.TabItem
-                    android:id="@+id/subnetMode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Subnet" />
+				<android.support.design.widget.TabItem
+					android:id="@+id/subnetMode"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="icmp\ndiscovery" />
 
-                <android.support.design.widget.TabItem
-                    android:id="@+id/offlinemodeItem"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Offline mode " />
-            </android.support.design.widget.TabLayout>
+				<android.support.design.widget.TabItem
+					android:id="@+id/offlinemodeItem"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="NMAP\nDiscovery" />
+			</android.support.design.widget.TabLayout>
 
-        </RelativeLayout>
-    </android.support.design.widget.AppBarLayout>
+		</RelativeLayout>
+	</android.support.design.widget.AppBarLayout>
 
 	<com.github.clans.fab.FloatingActionButton
-		android:layout_height="wrap_content"
+		android:id="@+id/fab"
 		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
 		android:layout_alignParentBottom="true"
 		android:layout_alignParentRight="true"
-		android:layout_marginRight="16dp"
 		android:layout_marginBottom="16dp"
-		android:id="@+id/fab"
+		android:layout_marginRight="16dp"
+		android:onClick="onFabClick"
 		android:src="@android:drawable/ic_menu_search"
-		app:fab_progress="0"
-		app:layout_anchor="@id/appbar"
-		app:layout_anchorGravity="bottom|right|end"
+		app:fab_colorNormal="@android:color/holo_blue_light"
 		app:fab_colorPressed="@android:color/holo_blue_bright"
 		app:fab_elevationCompat="4dp"
-		android:onClick="onFabClick"
+		app:fab_progress="0"
 		app:fab_progress_showBackground="false"
 		app:fab_showShadow="false"
-		app:fab_colorNormal="@android:color/holo_blue_light"/>
-
+		app:layout_anchor="@id/appbar"
+		app:layout_anchorGravity="bottom|right|end" />
 
 
 	<RelativeLayout
@@ -138,7 +140,7 @@
 				android:layout_alignParentTop="true"
 				android:layout_marginTop="8dp"
 				android:scrollbars="vertical"
-				tools:listitem="@layout/adapter_host" >
+				tools:listitem="@layout/adapter_host">
 
 			</android.support.v7.widget.RecyclerView>
 		</android.support.v4.widget.SwipeRefreshLayout>

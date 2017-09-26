@@ -22,6 +22,8 @@
                 android:id="@+id/topToolbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@color/primary_text"
+                android:elevation="1dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:gravity="right">
@@ -82,13 +84,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/topToolbar"
+                android:background="@color/primary_text"
                 app:tabMode="scrollable">
 
                 <android.support.design.widget.TabItem
                     android:id="@+id/radar"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:icon="@drawable/radar1600" />
+                    android:layout_height="wrap_content" />
 
                 <android.support.design.widget.TabItem
                     android:id="@+id/signalQuality"

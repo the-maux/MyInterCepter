@@ -46,7 +46,7 @@ public class                            DNSSpoofingActivity extends MyActivity {
     private FloatingActionButton        mFab;
     private RecyclerView                mDnsSpoof_RV;
     private RelativeLayout              mClipper;
-    private TextView                    mAction_deleteall, mAction_import, mAction_export;
+    private TextView                    mAction_deleteall, mAction_import, mAction_export, textEmpty;
     private Singleton                   mSingleton = Singleton.getInstance();
     private DnsSpoofAdapter             mDnsSpoofAdapter;
 
@@ -72,6 +72,7 @@ public class                            DNSSpoofingActivity extends MyActivity {
         mAction_deleteall = (TextView) findViewById(R.id.action_deleteall);
         mAction_import = (TextView) findViewById(R.id.action_import);
         mAction_export = (TextView) findViewById(R.id.action_export);
+        textEmpty = (TextView) findViewById(R.id.textEmpty);
         mFab.setOnClickListener(onFabClick());
     }
 
@@ -178,6 +179,8 @@ public class                            DNSSpoofingActivity extends MyActivity {
         mSingleton.dnsSpoofed.add(0, dnsIntercept);
         mDnsSpoofAdapter.notifyItemInserted(0);
         mToolbar.setTitle(mSingleton.dnsSpoofed.size() + " domain spoofed");
+        if (textEmpty.getVisibility() == View.GONE)
+            textEmpty.setVisibility(View.GONE);
         Snackbar.make(mCoordinatorLayout,  dnsIntercept.domainSpoofed + " -> " + dnsIntercept.domainAsked, Snackbar.LENGTH_LONG);
     }
 
@@ -188,11 +191,13 @@ public class                            DNSSpoofingActivity extends MyActivity {
         mDnsSpoof_RV.setLayoutManager(new LinearLayoutManager(mInstance));
         if (mSingleton.dnsSpoofed.isEmpty()) {
             Snackbar.make(mCoordinatorLayout, "Aucun dns enregistré", Snackbar.LENGTH_LONG);
+        } else {
+            textEmpty.setVisibility(View.GONE);
         }
         if (mSingleton.isDnsSpoofActived()) {
             mFab.setImageResource(R.mipmap.ic_stop);
         } else {
-            mFab.setImageResource(R.mipmap.ic_play);
+            mFab.setImageResource(android.R.drawable.ic_media_play);
         }
     }
 }

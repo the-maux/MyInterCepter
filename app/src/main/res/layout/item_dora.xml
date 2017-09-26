@@ -13,15 +13,15 @@
 
     <RelativeLayout
         android:id="@+id/rootView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/material_light_black">
+        android:background="@color/primary_text">
 
         <RelativeLayout
             android:id="@+id/menuView"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:background="@color/cardview_dark_background"
+            android:background="@color/primary_text"
             android:elevation="2dp">
 
             <android.support.design.widget.FloatingActionButton
@@ -29,13 +29,15 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_centerVertical="true"
+                android:layout_marginBottom="2dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp"
                 android:clickable="true"
                 android:elevation="5dp"
                 android:padding="2dp"
                 app:borderWidth="0dp"
                 app:fabSize="mini"
-                app:srcCompat="@drawable/ic_media_play" />
+                app:srcCompat="@android:drawable/ic_media_play" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/stopFab"
@@ -49,17 +51,18 @@
                 android:padding="2dp"
                 app:borderWidth="0dp"
                 app:fabSize="mini"
-                app:srcCompat="@drawable/ic_stop" />
+                app:srcCompat="@mipmap/ic_stop" />
 
             <ImageButton
                 android:id="@+id/menuButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="8dp"
                 android:background="@android:color/transparent"
-                android:elevation="2dp"
-                app:srcCompat="@drawable/ic_chevron_right" />
+                android:elevation="0dp"
+                app:srcCompat="@drawable/ic_more_vert_white_18dp" />
 
         </RelativeLayout>
 
@@ -68,15 +71,15 @@
             android:layout_width="match_parent"
             android:layout_height="34dp"
             android:layout_below="@+id/menuView"
-            android:background="@color/material_light_black"
-            android:elevation="2dp">
+            android:background="@color/primary_text"
+            android:elevation="1dp">
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/diagnosPourcentage"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="6dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginRight="4dp"
                 android:fontFamily="serif"
                 android:gravity="center_vertical"
@@ -120,14 +123,15 @@
             android:layout_width="match_parent"
             android:layout_height="85dp"
             android:layout_below="@+id/topView"
-            android:background="@color/material_light_black">
+            android:background="@color/primary_text"
+            android:elevation="3dp">
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/diagnose"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
-                android:background="@color/cardview_dark_background"
+                android:background="@color/primary_text"
                 android:elegantTextHeight="false"
                 android:elevation="2dp"
                 android:ellipsize="start"
@@ -154,7 +158,7 @@
                 android:id="@+id/IP"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/cardview_dark_background"
+                android:background="@color/primary_text"
                 android:elevation="2dp"
                 android:fontFamily="serif-monospace"
                 android:gravity="center"

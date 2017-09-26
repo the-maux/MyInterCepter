@@ -114,6 +114,8 @@ public class            DoraProcess extends MyObject {
     public int          getVisu() {
         if (sent == 0 || rcv == 0)
             return 0;
+        if (sent - rcv < 0)
+            return 0;
         return sent - rcv;
     }
 }
