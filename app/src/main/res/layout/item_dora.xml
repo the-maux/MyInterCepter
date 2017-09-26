@@ -8,8 +8,8 @@
     android:layout_margin="8dp"
     android:layout_marginTop="8dp"
     android:background="@color/material_light_black"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="5dp">
+    app:cardCornerRadius="10dp"
+    app:cardElevation="12dp">
 
     <RelativeLayout
         android:id="@+id/rootView"
@@ -31,7 +31,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="8dp"
                 android:clickable="true"
-                android:elevation="2dp"
+                android:elevation="5dp"
+                android:padding="2dp"
                 app:borderWidth="0dp"
                 app:fabSize="mini"
                 app:srcCompat="@drawable/ic_media_play" />
@@ -45,6 +46,7 @@
                 android:layout_toEndOf="@+id/fab"
                 android:clickable="true"
                 android:elevation="2dp"
+                android:padding="2dp"
                 app:borderWidth="0dp"
                 app:fabSize="mini"
                 app:srcCompat="@drawable/ic_stop" />

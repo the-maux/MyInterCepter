@@ -123,7 +123,7 @@
             android:background="@color/material_grey_800"
             android:elevation="4dp"
             android:padding="8dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:weightSum="2">
 
             <android.support.design.widget.TextInputLayout
@@ -131,8 +131,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:elevation="3dp"
-                android:nextFocusDown="@id/hostEditextTI"
                 android:maxLines="1"
+                android:nextFocusDown="@id/hostEditextTI"
                 app:hintAnimationEnabled="true">
 
                 <EditText

@@ -99,7 +99,6 @@ public class                    WiresharkActivity extends MyActivity {
         udp_cb = (TextView) findViewById(R.id.udp_cb);
         ip_cb = (TextView) findViewById(R.id.ip_cb);
         findViewById(R.id.settings).setOnClickListener(onSwitchHeader());
-
     }
 
     private void                initRV() {
@@ -120,7 +119,7 @@ public class                    WiresharkActivity extends MyActivity {
     }
 
     private void                initSettings() {
-        findViewById(R.id.settings).setOnClickListener(new GeneralSettings(this, mCoordinatorLayout, mTcpdump));
+        findViewById(R.id.settingsMenu).setOnClickListener(new GeneralSettings(this, mCoordinatorLayout, mTcpdump));
     }
 
     private View.OnClickListener onSwitchHeader() {
@@ -227,7 +226,7 @@ public class                    WiresharkActivity extends MyActivity {
         for (int i = 0; i < mListHostSelected.size(); i++) {
             if (i > 0)
                 hostFilter += " or ";
-            hostFilter += " host " + mListHostSelected.get(i).getIp();
+            hostFilter += " mhost " + mListHostSelected.get(i).getIp();
         }
         hostFilter += ")\'";
         mTcpdump.start(mMonitorCmd.getText().toString(), hostFilter);

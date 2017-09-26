@@ -29,7 +29,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_toLeftOf="@+id/filterText"
+                    android:layout_toLeftOf="@+id/searchView"
                     android:addStatesFromChildren="true"
                     android:minWidth="100dp"
                     app:layout_scrollFlags="scroll|enterAlways"
@@ -39,7 +39,7 @@
                 </android.support.v7.widget.Toolbar>
 
                 <android.support.v7.widget.SearchView
-                    android:id="@+id/filterText"
+                    android:id="@+id/searchView"
                     android:layout_width="wrap_content"
                     android:layout_height="32dp"
                     android:layout_alignParentTop="true"

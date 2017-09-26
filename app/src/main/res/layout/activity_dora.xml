@@ -1,72 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/material_light_white"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:animateLayoutChanges="true"
+    android:animationCache="true"
+    android:background="@color/material_light_white">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <android.support.v7.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingRight="8dp">
+                android:id="@+id/topToolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="right">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@+id/searchView"
+                    android:addStatesFromChildren="true"
+                    android:minWidth="100dp"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    app:subtitle="Easy Q.O.S"
+                    app:title="Diagnostique D.O.R.A">
+
+                </android.support.v7.widget.Toolbar>
 
                 <android.support.v7.widget.SearchView
                     android:id="@+id/searchView"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="false"
-                    android:layout_toLeftOf="@+id/add" />
+                    android:layout_height="32dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="false"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_toLeftOf="@+id/action_add_host" />
 
-                <ImageView
-                    android:id="@+id/add"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="false"
-                    android:layout_marginRight="8dp"
-                    android:layout_toLeftOf="@+id/more"
-                    android:padding="2dp"
-                    android:src="@android:drawable/ic_menu_add" />
+                <ImageButton
+                    android:id="@+id/action_add_host"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="false"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_toLeftOf="@+id/settings"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/ic_add_circle" />
 
-                <ImageView
-                    android:id="@+id/more"
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"
+                <ImageButton
+                    android:id="@+id/settings"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:layout_alignParentRight="true"
-                    android:padding="2dp"
-                    android:src="@drawable/ic_cached_white_24dp" />
+                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="false"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_more_vert" />
+
             </RelativeLayout>
 
-        </android.support.v7.widget.Toolbar>
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabMode="scrollable">
-
-            <android.support.design.widget.TabItem
-                android:id="@+id/radar"
-                android:layout_width="wrap_content"
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:icon="@drawable/radar" />
+                android:layout_below="@+id/topToolbar"
+                app:tabMode="scrollable">
 
-            <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/signalQuality"
-                android:text="Signal Quality" />
-        </android.support.design.widget.TabLayout>
+                <android.support.design.widget.TabItem
+                    android:id="@+id/radar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/radar1600" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/signalQuality"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Host detail" />
+            </android.support.design.widget.TabLayout>
+
+        </RelativeLayout>
+
+
     </android.support.design.widget.AppBarLayout>
 
     <com.github.clans.fab.FloatingActionButton
@@ -87,9 +120,9 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/RV_dora"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:addStatesFromChildren="false"
-        android:background="@color/material_light_white"
+        android:background="@color/material_blue_grey_100"
         android:paddingBottom="8dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"

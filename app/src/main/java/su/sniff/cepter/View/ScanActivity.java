@@ -15,7 +15,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -30,11 +29,9 @@ import java.util.List;
 
 import su.sniff.cepter.Controller.CepterControl.IntercepterWrapper;
 import su.sniff.cepter.Controller.Network.Fingerprint;
-import su.sniff.cepter.Controller.Network.IPTables;
 import su.sniff.cepter.Controller.Network.IPv4CIDR;
 import su.sniff.cepter.Controller.Network.NetUtils;
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Controller.Network.ScanNetmask;
 import su.sniff.cepter.Controller.System.MyActivity;
@@ -98,7 +95,7 @@ public class                        ScanActivity extends MyActivity {
         mOsFilterBtn = (TextView) findViewById(R.id.action_deleteall);
         mSelectAllBtn = (TextView) findViewById(R.id.action_import);
         mOfflineModeBtn = (TextView) findViewById(R.id.action_offline_mode);
-        mSearchView = (SearchView) findViewById(R.id.filterText);
+        mSearchView = (SearchView) findViewById(R.id.searchView);
         toolbar2 = (Toolbar) findViewById(R.id.toolbar2);
         offlinemode = (TabItem) findViewById(R.id.offlinemodeItem);
     }
@@ -248,7 +245,7 @@ public class                        ScanActivity extends MyActivity {
                 mFab.setVisibility(View.VISIBLE);
                 switch (v.getId()) {
                     case R.id.action_offline_mode:
-                        Snackbar.make(mCoordinatorLayout, "mOfflineModeBtn", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(mInstance, MenuActivity.class));
                         break;
                     case R.id.action_deleteall:
                         final RecyclerView.Adapter adapter = new OSAdapter(mInstance, mInstance.mHostAdapter.getOsList(), mListOS);

@@ -33,7 +33,8 @@
                     android:layout_height="match_parent"
                     android:layout_margin="16dp"
                     android:layout_weight="1"
-                    android:background="@color/material_grey_700"
+                    android:background="#212121"
+                    android:elevation="4dp"
                     app:cardCornerRadius="6dp"
                     app:cardElevation="8dp">
 
@@ -69,7 +70,8 @@
                     android:layout_height="match_parent"
                     android:layout_margin="16dp"
                     android:layout_weight="1"
-                    android:background="@color/material_grey_700"
+                    android:background="#212121"
+                    android:elevation="4dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="8dp">
 
@@ -112,7 +114,8 @@
                     android:layout_height="match_parent"
                     android:layout_margin="16dp"
                     android:layout_weight="1"
-                    android:background="@color/material_grey_700"
+                    android:background="#212121"
+                    android:elevation="4dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="8dp">
 
@@ -149,7 +152,8 @@
                     android:layout_height="match_parent"
                     android:layout_margin="16dp"
                     android:layout_weight="1"
-                    android:background="@color/material_grey_700"
+                    android:background="#212121"
+                    android:elevation="4dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="8dp">
 
@@ -194,7 +198,8 @@
                     android:layout_height="match_parent"
                     android:layout_margin="16dp"
                     android:layout_weight="1"
-                    android:background="@color/material_grey_700"
+                    android:background="#212121"
+                    android:elevation="4dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="8dp">
 
@@ -232,7 +237,8 @@
                     android:layout_height="match_parent"
                     android:layout_margin="16dp"
                     android:layout_weight="1"
-                    android:background="@color/material_grey_700"
+                    android:background="#212121"
+                    android:elevation="4dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="8dp">
 
@@ -261,7 +267,7 @@
                             android:layout_below="@+id/DoraTxt"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
-                            android:src="@drawable/scan" />
+                            android:src="@drawable/radar1600" />
 
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
@@ -279,7 +285,8 @@
                     android:layout_height="match_parent"
                     android:layout_margin="16dp"
                     android:layout_weight="1"
-                    android:background="@color/material_grey_700"
+                    android:background="#212121"
+                    android:elevation="4dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="8dp">
 
@@ -316,7 +323,8 @@
                     android:layout_height="match_parent"
                     android:layout_margin="16dp"
                     android:layout_weight="1"
-                    android:background="@color/material_grey_700"
+                    android:background="#212121"
+                    android:elevation="4dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="8dp">
 

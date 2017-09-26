@@ -61,7 +61,7 @@ public class                            DNSSpoofingActivity extends MyActivity {
     private void                        initXml() {
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         mToolbar = (Toolbar) findViewById(R.id.toolbar2);
-        mFilterText = (SearchView) findViewById(R.id.filterText);
+        mFilterText = (SearchView) findViewById(R.id.searchView);
         mAction_add_host = (ImageButton) findViewById(R.id.action_add_host);
         mSettingsBtn = (ImageButton) findViewById(R.id.settings);
         listSpoof = (TabItem) findViewById(R.id.listSpoof);
@@ -156,7 +156,7 @@ public class                            DNSSpoofingActivity extends MyActivity {
 
     private void                        onShowDialogAddHost() {
         final TIL_dialog dialog = new TIL_dialog(mInstance)
-                .setTitle("Add host")
+                .setTitle("Add mhost")
                 .setHint("IP:www.domain.fr");
         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override

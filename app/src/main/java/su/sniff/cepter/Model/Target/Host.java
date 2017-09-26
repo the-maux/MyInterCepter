@@ -52,7 +52,7 @@ public class                Host {
     }
 
     /**
-     * Log host created in console
+     * Log mhost created in console
      * @param buffer buffer
      */
     private void            logHost(String buffer) {

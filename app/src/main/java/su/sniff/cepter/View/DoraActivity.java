@@ -54,7 +54,7 @@ public class                    DoraActivity extends MyActivity {
         radar = (TabItem) findViewById(R.id.radar);
         signalQuality = (TabItem) findViewById(R.id.signalQuality);
         add = (ImageView) findViewById(R.id.add);
-        more = (ImageView) findViewById(R.id.more);
+        more = (ImageView) findViewById(R.id.action_add_host);
         mRV_dora = (RecyclerView) findViewById(R.id.RV_dora);
         mFab = (FloatingActionButton) findViewById(R.id.fab);
         mFab.setOnClickListener(new View.OnClickListener() {
@@ -104,12 +104,12 @@ public class                    DoraActivity extends MyActivity {
         } else {
             mIsRunning = false;
             for (DoraProcess doraProcess : mListOfHostDored) {
-                RootProcess.kill(doraProcess.pingProcess.getPid());
+                RootProcess.kill(doraProcess.mProcess.getPid());
             }
             Log.d(TAG, "diagnose dora stopped");
         }
         mRv_Adapter.setRunning(mIsRunning);
-        mFab.setImageResource((!mIsRunning) ? R.mipmap.ic_play : R.mipmap.ic_pause);
+        mFab.setImageResource((!mIsRunning) ? android.R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
     }
 
     private int                 REFRESH_TIME = 1000;// == 1seconde
