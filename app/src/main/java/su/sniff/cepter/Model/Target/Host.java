@@ -117,7 +117,7 @@ public class                Host {
     }
 
     public boolean          isSelected() {
-        return this.selected;
+        return selected;
     }
 
     public void             setSelected(boolean selected) {

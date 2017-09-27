@@ -93,6 +93,8 @@ public class            DoraProcess extends MyObject {
             float a = (((float) (rcv - MARGE_ERREUR) / ((float)sent - MARGE_ERREUR) * 100));
             if (a < 0)
                 return 0;
+            if (a > 100)
+                return 100;
             return (int) a;
         }
     }

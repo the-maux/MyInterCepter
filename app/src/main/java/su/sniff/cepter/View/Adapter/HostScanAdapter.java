@@ -35,7 +35,6 @@ public class                    HostScanAdapter extends RecyclerView.Adapter<Hos
 
     @Override public void       onBindViewHolder(final HostScanHolder holder, final int position) {
         final Host host = mHosts.get(holder.getAdapterPosition());
-
         holder.ipHostname.setText(host.getIp() + " " + host.getName());
         holder.mac.setText(host.getMac());
         holder.os.setText(host.getOS());
@@ -45,7 +44,10 @@ public class                    HostScanAdapter extends RecyclerView.Adapter<Hos
         holder.selected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onHostChecked(holder, host, holder.getAdapterPosition());
+                if (buttonView.isPressed()) {
+                    host.setSelected(isChecked);
+                    Log.d(TAG, "onCheckedChanged");
+                }
             }
         });
         Host.setOsIcon(activity, mHosts.get(holder.getAdapterPosition()).getDumpInfo(), holder.osIcon);
@@ -61,7 +63,6 @@ public class                    HostScanAdapter extends RecyclerView.Adapter<Hos
                 notifyItemChanged(position);
             }
         });
-
     }
 
     /**
@@ -131,7 +132,6 @@ public class                    HostScanAdapter extends RecyclerView.Adapter<Hos
 
     public void                 updateHostList(List<Host> hosts) {
         mHosts = new ArrayList<>();
-
         mHosts.addAll(hosts);
         originalList = hosts;
         Log.d(TAG, "updateHostList mHost" + mHosts.size() + " and hosts:" + hosts.size());

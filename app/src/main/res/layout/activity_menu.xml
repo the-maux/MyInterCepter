@@ -272,7 +272,8 @@
                             android:layout_height="40dp"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="12dp"
-                            android:elevation="2dp" />
+                            android:elevation="2dp"
+                            android:src="@drawable/radar1600" />
 
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
