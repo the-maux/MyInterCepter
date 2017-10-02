@@ -22,7 +22,7 @@ import java.io.IOException;
 import su.sniff.cepter.Controller.System.FilesUtil;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Model.Pcap.DnsIntercept;
+import su.sniff.cepter.Model.Pcap.DNSSpoofItem;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.DnsSpoofAdapter;
 import su.sniff.cepter.View.Dialog.TIL_dialog;
@@ -108,7 +108,7 @@ public class                            DNSSpoofingActivity extends MyActivity {
         mAction_import.setOnClickListener(onClickTopMenu());
         mAction_export.setOnClickListener(onClickTopMenu());
         mClipper.setOnClickListener(onClickTopMenu());
-        mToolbar.setTitle(mSingleton.dnsSpoofed.size() + " domain spoofed");
+        mToolbar.setTitle(mSingleton.dnsSpoofed.listDomainSpoofed.size() + " domain spoofed");
     }
 
     private View.OnClickListener        onClickTopMenu() {
@@ -129,18 +129,14 @@ public class                            DNSSpoofingActivity extends MyActivity {
                                 if (nameOfFile.contains(".") || nameOfFile.length() < 4) {
                                     Snackbar.make(mCoordinatorLayout, "Syntax incorrect", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    try {
-                                        FilesUtil.dumpDnsOnFile(Singleton.getInstance().dnsSpoofed, nameOfFile);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
+                                    mSingleton.dnsSpoofed.dumpDomainList();
                                 }
                             }
                         })
                                 .show();
                         break;
                     case R.id.action_deleteall:
-                        Singleton.getInstance().dnsSpoofed.clear();
+                        mSingleton.dnsSpoofed.clear();
                         mDnsSpoofAdapter.notifyDataSetChanged();
                         break;
                     case R.id.action_import:
@@ -175,21 +171,21 @@ public class                            DNSSpoofingActivity extends MyActivity {
     }
 
     private void                        onCheckAddedHost(String ip, String domain) {//ip:domain
-        DnsIntercept dnsIntercept = new DnsIntercept(ip, domain);
-        mSingleton.dnsSpoofed.add(0, dnsIntercept);
+        DNSSpoofItem dnsIntercept = new DNSSpoofItem(ip, domain);
+        mSingleton.dnsSpoofed.listDomainSpoofed.add(0, dnsIntercept);
         mDnsSpoofAdapter.notifyItemInserted(0);
-        mToolbar.setTitle(mSingleton.dnsSpoofed.size() + " domain spoofed");
+        mToolbar.setTitle(mSingleton.dnsSpoofed.listDomainSpoofed.size() + " domain spoofed");
         if (textEmpty.getVisibility() == View.GONE)
             textEmpty.setVisibility(View.GONE);
         Snackbar.make(mCoordinatorLayout,  dnsIntercept.domainSpoofed + " -> " + dnsIntercept.domainAsked, Snackbar.LENGTH_LONG);
     }
 
     private void                        init() {
-        mDnsSpoofAdapter = new DnsSpoofAdapter(this, mSingleton.dnsSpoofed);
+        mDnsSpoofAdapter = new DnsSpoofAdapter(this, mSingleton.dnsSpoofed.listDomainSpoofed);
         mDnsSpoof_RV.setAdapter(mDnsSpoofAdapter);
         mDnsSpoof_RV.setHasFixedSize(true);
         mDnsSpoof_RV.setLayoutManager(new LinearLayoutManager(mInstance));
-        if (mSingleton.dnsSpoofed.isEmpty()) {
+        if (mSingleton.dnsSpoofed.listDomainSpoofed.isEmpty()) {
             Snackbar.make(mCoordinatorLayout, "Aucun dns enregistré", Snackbar.LENGTH_LONG);
         } else {
             textEmpty.setVisibility(View.GONE);

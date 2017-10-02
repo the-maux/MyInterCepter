@@ -4,12 +4,12 @@ package su.sniff.cepter.Model.Pcap;
  * Created by maxim on 20/09/2017.
  */
 
-public class            DnsIntercept extends MyObject{
+public class DNSSpoofItem extends MyObject{
     public String       domainAsked;
     public String       domainSpoofed;
     public boolean      actif;
 
-    public              DnsIntercept(String domainAsked, String domainIntecpted) {
+    public DNSSpoofItem(String domainAsked, String domainIntecpted) {
         this.domainAsked = domainAsked;
         this.domainSpoofed = domainIntecpted;
     }

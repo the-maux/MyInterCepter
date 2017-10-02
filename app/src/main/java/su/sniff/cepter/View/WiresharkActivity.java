@@ -226,7 +226,7 @@ public class                    WiresharkActivity extends MyActivity {
         for (int i = 0; i < mListHostSelected.size(); i++) {
             if (i > 0)
                 hostFilter += " or ";
-            hostFilter += " mhost " + mListHostSelected.get(i).getIp();
+            hostFilter += " host " + mListHostSelected.get(i).getIp();
         }
         hostFilter += ")\'";
         mTcpdump.start(mMonitorCmd.getText().toString(), hostFilter);

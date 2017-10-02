@@ -2,12 +2,18 @@ package su.sniff.cepter.Controller.System;
 
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import su.sniff.cepter.Controller.Network.IPTables;
 import su.sniff.cepter.Controller.System.Wrapper.ArpSpoof;
-import su.sniff.cepter.Model.Pcap.DnsIntercept;
+import su.sniff.cepter.Controller.System.Wrapper.DnsSpoof;
+import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
+import su.sniff.cepter.Model.Pcap.DNSSpoofItem;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Model.Target.NetworkInformation;
 
@@ -27,7 +33,8 @@ public class                            Singleton {
     public String                       PcapPath;
     public String                       BinaryPath = null;
     public String                       FilesPath = null;
-    public ArrayList<DnsIntercept>      dnsSpoofed = new ArrayList<>();
+    public DnsSpoof                     dnsSpoofed = new DnsSpoof();
+
     public ArrayList<Host>              hostsList = null;
     public List<ArpSpoof>               ArpSpoofProcessStack = new ArrayList<>();
     public NetworkInformation           network = null;
