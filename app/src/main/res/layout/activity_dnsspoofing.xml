@@ -142,7 +142,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/editText"
             android:layout_margin="8dp"
-            android:background="@color/material_grey_200"
+            android:background="@color/primary_text"
             android:clipChildren="true"
             android:clipToPadding="true"
             android:elevation="4dp"
@@ -161,7 +161,7 @@
             android:layout_marginBottom="16dp"
             android:elevation="5dp"
             android:text="No domain recorded"
-            android:textColor="@color/primary_text" />
+            android:textColor="@color/material_light_white" />
 
     </RelativeLayout>
 

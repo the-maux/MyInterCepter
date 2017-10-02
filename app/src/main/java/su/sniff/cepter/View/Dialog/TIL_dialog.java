@@ -50,7 +50,10 @@ public class                    TIL_dialog {
         return this;
     }
 
-
+    public TIL_dialog           setHintText(String hint) {
+        editText.setHint(hint);
+        return this;
+    }
 
     public String               getText() {
         return editText.getText().toString();

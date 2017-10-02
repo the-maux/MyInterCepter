@@ -250,10 +250,10 @@ public class                    WiresharkActivity extends MyActivity {
                 } else if (trame.initialised) {
                     if (mProgressBar.getVisibility() == View.VISIBLE)
                         mProgressBar.setVisibility(View.GONE);
-                    mAdapterWireshark.addTrameOnAdapter(trame);
                     mRV_Wireshark.post(new Runnable() {
                         @Override
                         public void run() {
+                            mAdapterWireshark.addTrameOnAdapter(trame);
                             mAdapterWireshark.notifyDataSetChanged();
                             if (Autoscroll.isChecked()) {
                                 mRV_Wireshark.smoothScrollToPosition(0);

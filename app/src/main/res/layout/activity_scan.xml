@@ -140,7 +140,7 @@
 				android:layout_alignParentTop="true"
 				android:layout_marginTop="8dp"
 				android:scrollbars="vertical"
-				tools:listitem="@layout/adapter_host">
+				tools:listitem="@layout/item_scan_host">
 
 			</android.support.v7.widget.RecyclerView>
 		</android.support.v4.widget.SwipeRefreshLayout>

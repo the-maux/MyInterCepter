@@ -178,7 +178,7 @@ public class                    InitActivity extends MyActivity {
 
         /*  ping binary    */
         buildFile("ping", R.raw.arpspoof);
-        new RootProcess("Install ").exec("mount -o rw,remount /system;").closeProcess();
+        new RootProcess("Install ").exec("mount -o rw,remount /system").closeProcess();
         new RootProcess("Install ").exec("cp ./ping /system/bin/;").closeProcess();
         /*  Dns Stuff    */
         new RootProcess("Install ").exec("echo \"nameserver `getprop net.dns1`\" > /etc/resolv.conf").closeProcess();

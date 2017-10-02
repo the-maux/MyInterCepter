@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import su.sniff.cepter.Model.Pcap.DNSSpoofItem;
+import su.sniff.cepter.Model.Wrap.ConsoleLog;
 
 /**
  * Created by the-maux on 02/10/17.
@@ -20,13 +21,17 @@ import su.sniff.cepter.Model.Pcap.DNSSpoofItem;
 public class                    DnsSpoof {
     private String              TAG = "DnsSpoof";
     public List<DNSSpoofItem>   listDomainSpoofed;
+    public List<ConsoleLog>     consoleLogList = new ArrayList<>();
     private String              PATH_HOST_FILE = "/etc/dnsmasq.hosts";
+
     public                      DnsSpoof() {
-        File file;
+        listDomainSpoofed = new ArrayList<>();
+        readDnsFromFile(new File(PATH_HOST_FILE));
+    }
+
+    public void                 readDnsFromFile(File file) {
         FileReader fileReader;
         try {
-            listDomainSpoofed = new ArrayList<>();
-            file = new File(PATH_HOST_FILE);
             fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
@@ -51,10 +56,10 @@ public class                    DnsSpoof {
         }
     }
 
-    public void                 dumpDomainList() {
+    public void                 dumpDomainList(String nameOfFile) {
         BufferedWriter output;
         try {
-            File file = new File(PATH_HOST_FILE);
+            File file = new File(nameOfFile);
             output = new BufferedWriter(new FileWriter(file));
             for (DNSSpoofItem dnsSpoofItem : listDomainSpoofed) {
                 output.write(dnsSpoofItem.domainAsked + " " + dnsSpoofItem.domainSpoofed + '\n');
@@ -72,5 +77,8 @@ public class                    DnsSpoof {
 
     public void                 clear() {
         listDomainSpoofed.clear();
+    }
+
+    public void                 readDomainList(String nameOfFile) {
     }
 }

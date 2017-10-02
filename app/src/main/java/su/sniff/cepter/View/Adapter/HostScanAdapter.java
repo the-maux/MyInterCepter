@@ -30,7 +30,7 @@ public class                    HostScanAdapter extends RecyclerView.Adapter<Hos
     }
 
     @Override public HostScanHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new HostScanHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_host, parent, false));
+        return new HostScanHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_scan_host, parent, false));
     }
 
     @Override public void       onBindViewHolder(final HostScanHolder holder, final int position) {

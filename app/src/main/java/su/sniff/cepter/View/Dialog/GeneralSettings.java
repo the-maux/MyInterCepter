@@ -33,7 +33,7 @@ public class                    GeneralSettings implements View.OnClickListener 
     public void                 onClick(View v) {
         AlertDialog.Builder dialog  = new AlertDialog.Builder(mActivity, R.style.Theme_AppCompat_Light_Dialog_Alert);
         dialog.setCancelable(false);
-        View dialogView = mActivity.getLayoutInflater().inflate(R.layout.view_wireshark_settings, null);
+        View dialogView = mActivity.getLayoutInflater().inflate(R.layout.menu_iptable_setting, null);
         dialog.setView(dialogView);
         final CheckedTextView dumpInFileChkd, sslStripChkd, lockScreenChkd, DeepAnalChkd;
         final CheckedTextView Port_redirect, Portfiltering, DnsSpoofing;
