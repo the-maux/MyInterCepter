@@ -1,6 +1,9 @@
 package su.sniff.cepter.Model.Wrap;
 
-import android.graphics.Color;
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
+
+import su.sniff.cepter.R;
 
 /**
  * Created by maxim on 02/10/2017.
@@ -8,6 +11,9 @@ import android.graphics.Color;
 
 public class            ConsoleLog {
     public String       line;
-    public String       type;
-    public Color        color;
+    public int          color = 0x00;
+
+    public              ConsoleLog(String line) {
+        this.line = line;
+    }
 }

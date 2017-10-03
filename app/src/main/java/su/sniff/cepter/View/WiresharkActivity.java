@@ -203,7 +203,7 @@ public class                    WiresharkActivity extends MyActivity {
                 mProgressBar.setVisibility(View.VISIBLE);
                 mFab.setImageResource(R.mipmap.ic_pause);
             }
-        } else {
+        } else {;
             mMonitorAgv.setVisibility(View.GONE);
             mProgressBar.setVisibility(View.GONE);
             mTcpdump.onTcpDumpStop();

@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import su.sniff.cepter.Controller.System.MyActivity;
+import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.R;
 
 /**
@@ -61,7 +62,11 @@ public class                    MenuActivity extends MyActivity {
                         choice = WiresharkActivity.class;
                         break;
                     case DoraDiagnostic:
-                        choice = DoraActivity.class;
+                        if (Singleton.getInstance().hostsList == null) {
+                            Snackbar.make(coordinatorLayout, "Dora need targets to work", Snackbar.LENGTH_LONG).show();
+                        } else {
+                            choice = DoraActivity.class;
+                        }
                         break;
                     case Metasploit:
                         Snackbar.make(coordinatorLayout, "Fonctionnalité Metasploit non implémenté", Snackbar.LENGTH_LONG).show();

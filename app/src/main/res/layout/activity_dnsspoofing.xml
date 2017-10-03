@@ -33,7 +33,7 @@
                     android:addStatesFromChildren="true"
                     android:minWidth="100dp"
                     app:layout_scrollFlags="scroll|enterAlways"
-                    app:subtitle="0 site spoofed"
+                    app:subtitle="0 request intecepted"
                     app:title="Dns Intercept">
 
                 </android.support.v7.widget.Toolbar>
@@ -85,13 +85,13 @@
                     android:id="@+id/listSpoof"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="en cours" />
+                    android:text="Domains" />
 
                 <android.support.design.widget.TabItem
                     android:id="@+id/historique"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Historique" />
+                    android:text="Console" />
 
             </android.support.design.widget.TabLayout>
 
@@ -126,7 +126,7 @@
 
 
         <TextView
-            android:id="@+id/editText"
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -140,7 +140,7 @@
             android:id="@+id/dnsSpoof_RV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/editText"
+            android:layout_below="@+id/title"
             android:layout_margin="8dp"
             android:background="@color/primary_text"
             android:clipChildren="true"

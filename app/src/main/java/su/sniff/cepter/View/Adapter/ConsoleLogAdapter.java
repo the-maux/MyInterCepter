@@ -26,7 +26,7 @@ public class                    ConsoleLogAdapter extends RecyclerView.Adapter<C
     }
     @Override
     public ConsoleLogHolder       onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ConsoleLogHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_dnsspoof, parent, false));
+        return new ConsoleLogHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_consolelog, parent, false));
     }
 
     @Override

@@ -13,15 +13,16 @@ import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.Model.Pcap.DNSSpoofItem;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.Holder.DnsSpoofHolder;
+import su.sniff.cepter.View.DNSSpoofingActivity;
 
 
 public class                    DnsSpoofAdapter extends RecyclerView.Adapter<DnsSpoofHolder> {
     private String              TAG = this.getClass().getName();
-    private Activity            activity;
+    private DNSSpoofingActivity activity;
     private List<DNSSpoofItem>  dnsIntercepts;
     private Singleton           singleton = Singleton.getInstance();
 
-    public                      DnsSpoofAdapter(Activity activity, List<DNSSpoofItem> dnsInterceptList) {
+    public                      DnsSpoofAdapter(DNSSpoofingActivity activity, List<DNSSpoofItem> dnsInterceptList) {
         this.dnsIntercepts = dnsInterceptList;
         this.activity = activity;
     }
@@ -42,7 +43,7 @@ public class                    DnsSpoofAdapter extends RecyclerView.Adapter<Dns
             @Override
             public void onClick(View view) {
                 singleton.dnsSpoofed.removeDomain(domainAsked);
-
+                activity.actualiseDomainspoofed();
                 notifyDataSetChanged();
             }
         };

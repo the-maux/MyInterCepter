@@ -2,15 +2,12 @@ package su.sniff.cepter.View.Dialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.view.WindowManager.LayoutParams;
 import android.content.DialogInterface;
 import android.support.design.widget.TextInputLayout;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -31,7 +28,7 @@ public class                    TIL_dialog {
         View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_ipaddress, null);
         dialog.setView(dialogView);
         TIL_host = (TextInputLayout) dialogView.findViewById(R.id.TIL_host);
-        editText = (EditText) dialogView.findViewById(R.id.editText);
+        editText = (EditText) dialogView.findViewById(R.id.title);
 
     }
 
