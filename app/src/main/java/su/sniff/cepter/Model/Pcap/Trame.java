@@ -66,11 +66,11 @@ public class               Trame extends MyObject{
         try {
             switch (protocol) {
                 case ARP:
-                    Log.d(TAG, "ARP trame: " + line);
+                    //Log.d(TAG, "ARP trame: " + line);
                     ArpParsing(line);
                     break;
                 case HTTPS:
-                    Log.d(TAG, "HTTPS trame " + line);
+                    //Log.d(TAG, "HTTPS trame " + line);
                     HttpsParsing(line);
                     break;
                 case HTTP:
@@ -78,35 +78,35 @@ public class               Trame extends MyObject{
                     HttpParsing(line);
                     break;
                 case TCP:
-                    Log.d(TAG, "TCP trame " + line);
+                    //Log.d(TAG, "TCP trame " + line);
                     TcpParsing(line);
                     break;
                 case UDP:
-                    Log.d(TAG, "UDP trame " + line);
+                    //Log.d(TAG, "UDP trame " + line);
                     UdpParsing(line);
                     break;
                 case DNS:
-                    Log.d(TAG, "DNS trame " + line);
+                    //Log.d(TAG, "DNS trame " + line);
                     DnsParsing(line);
                     break;
                 case SMB:
-                    Log.d(TAG, "SMB trame " + line);
+                    //Log.d(TAG, "SMB trame " + line);
                     SmbParsing(line);
                     break;
                 case ICMP:
-                    Log.d(TAG, "ICMP trame " + line);
+                    //Log.d(TAG, "ICMP trame " + line);
                     ICMPParsing(line);
                     break;
                 case NBNS:
-                    Log.d(TAG, "NBNS trame " + line);
+                    //Log.d(TAG, "NBNS trame " + line);
                     NBNSParsing(line);
                     break;
                 case IP:
-                    Log.e(TAG, "UNKNOW IP trame " + line);
+                    //Log.e(TAG, "UNKNOW IP trame " + line);
                     IParsing(line);
                     break;
                 default:
-                    Log.d(TAG, "Unknow trame " + line);
+                    Log.e(TAG, "Unknow trame " + line);
                     IParsing(line);
                     break;
             }
@@ -245,7 +245,7 @@ public class               Trame extends MyObject{
         String[] splitted = line.split(" ");
         String type = "";
         protocol = Protocol.TCP;
-        Log.d(TAG, "IParsing::->"+ Arrays.toString(splitted));
+        //Log.d(TAG, "IParsing::->"+ Arrays.toString(splitted));
         if (splitted.length >= 4) {
             time = splitted[0].substring(0, splitted[0].indexOf("."));
             String[] src = extractThePortOrProto(splitted[2]);

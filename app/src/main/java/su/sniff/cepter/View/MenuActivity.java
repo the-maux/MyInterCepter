@@ -7,6 +7,9 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
+import com.bumptech.glide.Glide;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.Controller.System.Singleton;
 import su.sniff.cepter.R;
@@ -18,11 +21,13 @@ public class                    MenuActivity extends MyActivity {
     private String              TAG = "MenuActivity";
     private MenuActivity        mInstance = this;
     private CoordinatorLayout   coordinatorLayout;
+    private Singleton           singleton = Singleton.getInstance();
 
     @Override protected void    onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         initXml();
+        initflags();
     }
 
     private void                initXml() {
@@ -35,6 +40,18 @@ public class                    MenuActivity extends MyActivity {
         findViewById(R.id.DoraDiagnostic).setOnClickListener(onClickButton(choice.DoraDiagnostic));
         findViewById(R.id.Metasploit).setOnClickListener(onClickButton(choice.Metasploit));
         findViewById(R.id.SettingsButton).setOnClickListener(onClickButton(choice.Settings));
+    }
+
+    private void                initflags() {
+        Glide.with(this)
+                .load((singleton.isDnsSpoofActived()) ? R.color.material_green_700 : R.color.material_red_700)
+                .into((CircleImageView)findViewById(R.id.monitorNmap));
+        Glide.with(this)
+                .load((singleton.isWiresharkActived) ? R.color.material_green_700 : R.color.material_red_700)
+                .into((CircleImageView)findViewById(R.id.monitorWireshark));
+        Glide.with(this)
+                .load((singleton.isDoraActived) ? R.color.material_green_700 : R.color.material_red_700)
+                .into((CircleImageView)findViewById(R.id.monitorDora));
     }
 
     private View.OnClickListener onClickButton(final choice clickChoice) {
