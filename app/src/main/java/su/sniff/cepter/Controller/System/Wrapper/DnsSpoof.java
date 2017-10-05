@@ -89,9 +89,13 @@ public class                    DnsSpoof {
 
 
     public DnsSpoof             start() {
-        consoleLogList.clear();
-        if (consoleAdapter != null)
-            consoleAdapter.notifyDataSetChanged();
+        consoleAdapter.getRecyclerview().post(new Runnable() {
+            @Override
+            public void run() {
+                consoleLogList.clear();
+                if (consoleAdapter != null)
+                    consoleAdapter.notifyDataSetChanged();            }
+        });
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -123,9 +127,13 @@ public class                    DnsSpoof {
 
     public void                 stop() {
         RootProcess.kill("dnsmasq");
-        consoleLogList.clear();
-        if (consoleAdapter != null)
-            consoleAdapter.notifyDataSetChanged();
+        consoleAdapter.getRecyclerview().post(new Runnable() {
+            @Override
+            public void run() {
+                consoleLogList.clear();
+                if (consoleAdapter != null)
+                    consoleAdapter.notifyDataSetChanged();          }
+        });
     }
 
     public void                 setConsoleAdapter(ConsoleLogAdapter consoleAdapter) {
