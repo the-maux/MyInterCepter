@@ -89,22 +89,28 @@ public class                    DnsSpoof {
 
 
     public DnsSpoof             start() {
+        consoleLogList.clear();
+        if (consoleAdapter != null)
+            consoleAdapter.notifyDataSetChanged();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 process = new RootProcess("Dnsmasq::");
                 process.exec("dnsmasq --no-daemon --log-queries");
                 BufferedReader reader = process.getReader();
-                process.getPid();
                 String read;
-                consoleLogList.clear();
                 try {
                     while ((read = reader.readLine()) != null) {
                         Log.d(TAG, read);
-                        ConsoleLog log = new ConsoleLog(read.replace("dnsmasq:", ""));
+                        final ConsoleLog log = new ConsoleLog(read.replace("dnsmasq:", ""));
                         consoleLogList.add(log);
-                        if (consoleAdapter != null)
-                            consoleAdapter.notifyItemInserted(consoleLogList.indexOf(log));
+                        consoleAdapter.getRecyclerview().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (consoleAdapter != null)
+                                    consoleAdapter.notifyItemInserted(consoleLogList.indexOf(log));
+                            }
+                        });
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -117,6 +123,9 @@ public class                    DnsSpoof {
 
     public void                 stop() {
         RootProcess.kill("dnsmasq");
+        consoleLogList.clear();
+        if (consoleAdapter != null)
+            consoleAdapter.notifyDataSetChanged();
     }
 
     public void                 setConsoleAdapter(ConsoleLogAdapter consoleAdapter) {

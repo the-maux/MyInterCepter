@@ -19,6 +19,7 @@ public class                    ConsoleLogAdapter extends RecyclerView.Adapter<C
     private Activity            activity;
     private List<ConsoleLog>    listConsole;
     private Singleton           singleton = Singleton.getInstance();
+    private RecyclerView        mRV;
 
     public                      ConsoleLogAdapter(Activity activity, List<ConsoleLog> dnsInterceptList) {
         this.listConsole = dnsInterceptList;
@@ -38,5 +39,15 @@ public class                    ConsoleLogAdapter extends RecyclerView.Adapter<C
     @Override
     public int                  getItemCount() {
         return listConsole.size();
+    }
+
+    @Override
+    public void                 onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mRV = recyclerView;
+    }
+
+    public RecyclerView          getRecyclerview() {
+        return mRV;
     }
 }

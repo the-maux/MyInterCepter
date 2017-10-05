@@ -294,6 +294,7 @@ public class                    WiresharkActivity extends MyActivity {
             mRV_Wireshark.setAdapter(mAdapterWireshark);
             mRV_Wireshark.hasFixedSize();
             mRV_Wireshark.setLayoutManager(new LinearLayoutManager(mInstance));
+            mAdapterWireshark.notifyDataSetChanged();
         }
     }
 
