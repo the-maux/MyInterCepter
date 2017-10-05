@@ -187,7 +187,7 @@
             <TextView
                 android:id="@+id/action_deleteall"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="1px"
                 android:background="@color/material_light_white"
@@ -203,7 +203,7 @@
             <TextView
                 android:id="@+id/action_import"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_below="@+id/action_deleteall"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="1dp"
@@ -219,7 +219,7 @@
             <TextView
                 android:id="@+id/action_export"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_below="@+id/action_import"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="1dp"

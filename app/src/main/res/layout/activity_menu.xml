@@ -51,7 +51,6 @@
                             android:layout_alignParentTop="true"
                             android:layout_marginRight="8dp"
                             android:layout_marginTop="8dp"
-                            android:background="@color/material_red_700"
                             android:elevation="-2dp" />
 
                         <TextView
@@ -100,7 +99,6 @@
                             android:layout_alignParentTop="true"
                             android:layout_marginRight="8dp"
                             android:layout_marginTop="8dp"
-                            android:background="@color/material_red_700"
                             android:elevation="-2dp" />
 
                         <TextView
@@ -157,7 +155,6 @@
                             android:layout_alignParentTop="true"
                             android:layout_marginRight="8dp"
                             android:layout_marginTop="8dp"
-                            android:background="@color/material_red_700"
                             android:elevation="-2dp" />
 
                         <TextView
@@ -207,7 +204,6 @@
                             android:layout_alignParentTop="true"
                             android:layout_marginRight="8dp"
                             android:layout_marginTop="8dp"
-                            android:background="@color/material_red_700"
                             android:elevation="-2dp" />
 
                         <TextView
@@ -264,7 +260,6 @@
                             android:layout_alignParentTop="true"
                             android:layout_marginRight="8dp"
                             android:layout_marginTop="8dp"
-                            android:background="@color/material_red_700"
                             android:elevation="-2dp" />
 
                         <TextView
@@ -315,7 +310,6 @@
                             android:layout_alignParentTop="true"
                             android:layout_marginRight="8dp"
                             android:layout_marginTop="8dp"
-                            android:background="@color/material_red_700"
                             android:elevation="-2dp" />
 
                         <TextView
@@ -376,7 +370,6 @@
                             android:layout_alignParentTop="true"
                             android:layout_marginRight="8dp"
                             android:layout_marginTop="8dp"
-                            android:background="@color/material_red_700"
                             android:elevation="-2dp" />
 
                         <TextView

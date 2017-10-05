@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
@@ -27,6 +28,11 @@ public class                    MenuActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         initXml();
+    }
+
+    @Override
+    protected void              onResume() {
+        super.onResume();
         initflags();
     }
 
@@ -45,10 +51,14 @@ public class                    MenuActivity extends MyActivity {
     private void                initflags() {
         Glide.with(this)
                 .load((singleton.isDnsSpoofActived()) ? R.color.material_green_700 : R.color.material_red_700)
-                .into((CircleImageView)findViewById(R.id.monitorNmap));
+                .into((CircleImageView)findViewById(R.id.monitorDNS));
+        Log.d(TAG, "DNSSpoof:" + singleton.isDnsSpoofActived());
+        Log.d(TAG, "Wireshark:" + singleton.isWiresharkActived);
+        Log.d(TAG, "DoraDiag:" + singleton.isDoraActived);
         Glide.with(this)
                 .load((singleton.isWiresharkActived) ? R.color.material_green_700 : R.color.material_red_700)
                 .into((CircleImageView)findViewById(R.id.monitorWireshark));
+
         Glide.with(this)
                 .load((singleton.isDoraActived) ? R.color.material_green_700 : R.color.material_red_700)
                 .into((CircleImageView)findViewById(R.id.monitorDora));

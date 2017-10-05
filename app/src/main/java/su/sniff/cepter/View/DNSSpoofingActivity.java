@@ -92,6 +92,7 @@ public class                            DNSSpoofingActivity extends MyActivity {
         } else {
             mFab.setImageResource(android.R.drawable.ic_media_play);
         }
+
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -242,11 +243,11 @@ public class                            DNSSpoofingActivity extends MyActivity {
         } else {
             textEmpty.setVisibility(View.GONE);
         }
+        mDnsConsoleAdapter = new ConsoleLogAdapter(this, mDnsSpoof.consoleLogList);
+        mDnsSpoof.setConsoleAdapter(mDnsConsoleAdapter);
     }
 
     private void                        initViewConsoleLogs() {
-        mDnsConsoleAdapter = new ConsoleLogAdapter(this, mDnsSpoof.consoleLogList);
-        mDnsSpoof.setConsoleAdapter(mDnsConsoleAdapter);
         mDnsSpoof_RV.setAdapter(mDnsConsoleAdapter);
         mDnsSpoof_RV.setHasFixedSize(true);
         mDnsSpoof_RV.setLayoutManager(new LinearLayoutManager(mInstance));

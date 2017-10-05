@@ -89,35 +89,49 @@ public class                    DnsSpoof {
 
 
     public DnsSpoof             start() {
-        consoleAdapter.getRecyclerview().post(new Runnable() {
-            @Override
-            public void run() {
-                consoleLogList.clear();
-                if (consoleAdapter != null)
-                    consoleAdapter.notifyDataSetChanged();            }
-        });
+        if (consoleAdapter.getRecyclerview() != null)
+            consoleAdapter.getRecyclerview().post(new Runnable() {
+                @Override
+                public void run() {
+                    consoleLogList.clear();
+                    if (consoleAdapter != null)
+                        consoleAdapter.notifyDataSetChanged();            }
+            });
         new Thread(new Runnable() {
             @Override
             public void run() {
                 process = new RootProcess("Dnsmasq::");
                 process.exec("dnsmasq --no-daemon --log-queries");
                 BufferedReader reader = process.getReader();
-                String read;
+                final boolean[] deprecatedStart = {false};
                 try {
-                    while ((read = reader.readLine()) != null) {
+                    String read;
+                    while (!deprecatedStart[0] && ((read = reader.readLine()) != null)) {
                         Log.d(TAG, read);
                         final ConsoleLog log = new ConsoleLog(read.replace("dnsmasq:", ""));
                         consoleLogList.add(log);
-                        consoleAdapter.getRecyclerview().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (consoleAdapter != null)
-                                    consoleAdapter.notifyItemInserted(consoleLogList.indexOf(log));
-                            }
-                        });
+                        if (consoleAdapter.getRecyclerview() != null)
+                            consoleAdapter.getRecyclerview().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (log.line.contains("failed to create listening socket: Address already in use")) {
+                                        deprecatedStart[0] = true;
+                                        consoleAdapter.notifyItemInserted(consoleLogList.indexOf(log));
+                                        final ConsoleLog log2 = new ConsoleLog("Restarting");
+                                        consoleLogList.add(log2);
+                                        consoleAdapter.notifyItemInserted(consoleLogList.indexOf(log2));
+                                    } else if (consoleAdapter != null)
+                                        consoleAdapter.notifyItemInserted(consoleLogList.indexOf(log));
+                                }
+                            });
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                } finally {
+                    if (deprecatedStart[0]) {
+                        stop();
+                        start();
+                    }
                 }
                 Log.d(TAG, "dnsmasq terminated");
             }
