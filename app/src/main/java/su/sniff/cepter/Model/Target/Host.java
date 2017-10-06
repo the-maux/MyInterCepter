@@ -52,7 +52,7 @@ public class                Host {
     }
 
     /**
-     * Log host created in console
+     * Log mhost created in console
      * @param buffer buffer
      */
     private void            logHost(String buffer) {
@@ -117,7 +117,7 @@ public class                Host {
     }
 
     public boolean          isSelected() {
-        return this.selected;
+        return selected;
     }
 
     public void             setSelected(boolean selected) {

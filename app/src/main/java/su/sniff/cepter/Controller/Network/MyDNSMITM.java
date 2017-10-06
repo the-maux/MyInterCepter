@@ -22,7 +22,7 @@ public class                        MyDNSMITM {
         parseRequest(packet);
     }
     /**
-     *  parse request, search on host file entries list
+     *  parse request, search on mhost file entries list
      *  and send the request
      * @param packet
      */
@@ -33,7 +33,7 @@ public class                        MyDNSMITM {
         String queriedHost = dns.getQueriedHost();    //get queried Host (Hex)
         String printableHost = removeNonPrintableChars(queriedHost);//get only printable chars of queried Host
         //found entry on hosts file
-        if ((dns.getQuerytype() == 1) && (findInEntriesList(printableHost) != null)) {//search on host file entries list
+        if ((dns.getQuerytype() == 1) && (findInEntriesList(printableHost) != null)) {//search on mhost file entries list
             //have to spoof the query
             String FakeDomain = findInEntriesList(printableHost);//get replacing domain
             String spoofedDNSReq = dns.getTransacionID() + "01000001000000000000" + FakeDomain + "00010001";//add common flags on type A request, A type and class 1
@@ -63,7 +63,7 @@ public class                        MyDNSMITM {
         }
     }
 
-    //finds domain on host File entries
+    //finds domain on mhost File entries
     private static String            findInEntriesList(String s){
         String fakeDomain = null;
         for (int i = 0; i < entries.size(); i++) {

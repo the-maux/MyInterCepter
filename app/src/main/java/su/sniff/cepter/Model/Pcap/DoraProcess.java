@@ -14,16 +14,17 @@ import su.sniff.cepter.Model.Target.Host;
 
 public class            DoraProcess extends MyObject {
     private String      TAG = getClass().getName();
-    public boolean      running = false;
-    public Host         host;
-    public RootProcess  pingProcess;
-    public Date         uptime;
-    public int          pid;
+    public boolean      mIsRunning = false;
+    public Host         mhost;
+    public RootProcess  mProcess;
+    public Date         mUptime;
+    public int          mPid;
     public volatile int rcv = 0x00, sent = 0x00, error = 0x00;
-    private int         MARGE_ERREUR = 19;//pour ne pas fausser les stats avec le debut du binaire
+    private int         MARGE_ERREUR = 21;//pour ne pas fausser les stats avec le debut du binaire
+
     public              DoraProcess(Host host) {
-        this.pingProcess = new RootProcess("Dora:" + host.getIp());
-        this.host = host;
+        this.mProcess = new RootProcess("Dora:" + host.getIp());
+        this.mhost = host;
         reset();
     }
     public void         exec() {
@@ -33,16 +34,16 @@ public class            DoraProcess extends MyObject {
             public void run() {
                 String buffer = "";
                 try {
-                    uptime = Calendar.getInstance().getTime();
-                    running = true;
-                    pingProcess.exec("ping -fi 0.2 " + host.getIp());
-                    pid = pingProcess.getPid();
-                    Log.d(TAG, "Dora:" + host.getIp() + " PID:" + pid);
-                    // find pid pour finir
+                    mUptime = Calendar.getInstance().getTime();
+                    mIsRunning = true;
+                    mProcess.exec("ping -fi 0.2 " + mhost.getIp());
+                    mPid = mProcess.getPid();
+                    Log.d(TAG, "Dora:" + mhost.getIp() + " PID:" + mPid);
+                    // find mPid pour finir
                     int tmpLine;
                     boolean over = false;
                     while (!over) {
-                        InputStreamReader reader = pingProcess.getInputStreamReader();
+                        InputStreamReader reader = mProcess.getInputStreamReader();
                         if (reader.ready()) {
                             while ((tmpLine = reader.read()) != -1) {//need to refrest the InputReader to know if process still alive
                                 if (tmpLine == '.'){//SENT {
@@ -67,11 +68,11 @@ public class            DoraProcess extends MyObject {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
-                    Log.d(TAG, "Dora::" + host.getIp() + "::Terminated->Dump::rcv:" + rcv + "&sent:" + sent);
+                    Log.d(TAG, "Dora::" + mhost.getIp() + "::Terminated->Dump::rcv:" + rcv + "&sent:" + sent);
                     Log.d(TAG, "with Buffer:" + buffer + "<-");
-                    running = false;
-                    pingProcess.closeProcess();
-                    Log.d(TAG, "Dora:" + host.getIp() + "");
+                    mIsRunning = false;
+                    mProcess.closeProcess();
+                    Log.d(TAG, "Dora:" + mhost.getIp() + "");
                 }
             }
         }).start();
@@ -79,11 +80,11 @@ public class            DoraProcess extends MyObject {
     public void         reset() {
         rcv = 0;
         sent = 0;
-        uptime = Calendar.getInstance().getTime();
+        mUptime = Calendar.getInstance().getTime();
     }
     public int          getPourcentage() {
         //Si not started, return 0
-        Log.d(TAG, "Dora::POURCENTAGE::" + host.getIp() + "::Terminated->Dump::rcv:" + rcv + "&sent:" + sent);
+        Log.d(TAG, "Dora::POURCENTAGE::" + mhost.getIp() + "::Terminated->Dump::rcv:" + rcv + "&sent:" + sent);
         if (rcv < MARGE_ERREUR+1 && sent < MARGE_ERREUR+1) {
             if (rcv > 0 && sent > 0)
                 Log.d(TAG, "%%::" + (rcv / sent) * 100);
@@ -92,26 +93,30 @@ public class            DoraProcess extends MyObject {
             float a = (((float) (rcv - MARGE_ERREUR) / ((float)sent - MARGE_ERREUR) * 100));
             if (a < 0)
                 return 0;
+            if (a > 100)
+                return 100;
             return (int) a;
         }
     }
 
-    public String       getUptime() {
-        if (running) {
+    public String       getmUptime() {
+        if (mIsRunning) {
             Date tmp = Calendar.getInstance().getTime();
             SimpleDateFormat sdf = new SimpleDateFormat("m:s", Locale.FRANCE);
-            tmp.setTime(tmp.getTime() - uptime.getTime());
+            tmp.setTime(tmp.getTime() - mUptime.getTime());
             return sdf.format(tmp);
         } else
             return "0:00:00";
     }
 
-    public void                 kill() {
+    public void         kill() {
 
     }
 
     public int          getVisu() {
         if (sent == 0 || rcv == 0)
+            return 0;
+        if (sent - rcv < 0)
             return 0;
         return sent - rcv;
     }

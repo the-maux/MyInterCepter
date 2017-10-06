@@ -57,7 +57,7 @@ public class                    NmapActivity extends MyActivity {
     private List<Host>          listHostSelected = new ArrayList<>();
     private ImageView           settingsMenu;
     private ImageButton         settings;
-
+    
     @Override protected void    onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nmap);
@@ -65,9 +65,13 @@ public class                    NmapActivity extends MyActivity {
         initXml();
         initSpinner();
         initRecyHost();
-        host_et.setText(Singleton.getInstance().hostsList.get(0).getIp());
-        params_et.setText(params.get(cmd.get(0)));
-        targetMonitor.setText(listHostSelected.size() + " target");
+        if (singleton.hostsList == null) {
+            targetMonitor.setText("no target");
+        } else {
+            host_et.setText(singleton.hostsList.get(0).getIp());
+            params_et.setText(params.get(cmd.get(0)));
+            targetMonitor.setText(listHostSelected.size() + " target");
+        }
     }
 
     private void                initXml() {
@@ -151,7 +155,7 @@ public class                    NmapActivity extends MyActivity {
             @Override
             public void onClick(View v) {
                 new RV_dialog(mInstance)
-                        .setAdapter(new HostSelectionAdapter(mInstance, Singleton.getInstance().hostsList, listHostSelected))
+                        .setAdapter(new HostSelectionAdapter(mInstance, singleton.hostsList, listHostSelected))
                         .setTitle("Choix des cibles")
                         .onPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
@@ -187,7 +191,7 @@ public class                    NmapActivity extends MyActivity {
                     @Override
                     public void run() {
                         try {
-                            BufferedReader reader = new BufferedReader(new RootProcess("Nmap", Singleton.getInstance().FilesPath)//Exec and > in BufferedReader
+                            BufferedReader reader = new BufferedReader(new RootProcess("Nmap", singleton.FilesPath)//Exec and > in BufferedReader
                                     .exec(cmd).getInputStreamReader());
                             String dumpOutput = "", tmp;
                             while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {

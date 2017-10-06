@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabItem;
+import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -17,20 +19,22 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 
-import java.io.IOException;
+import java.io.File;
 
-import su.sniff.cepter.Controller.System.FilesUtil;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Model.Pcap.DnsIntercept;
+import su.sniff.cepter.Controller.System.Wrapper.DnsSpoof;
+import su.sniff.cepter.Model.Pcap.DNSSpoofItem;
+import su.sniff.cepter.Model.Wrap.ConsoleLog;
 import su.sniff.cepter.R;
+import su.sniff.cepter.View.Adapter.ConsoleLogAdapter;
 import su.sniff.cepter.View.Adapter.DnsSpoofAdapter;
 import su.sniff.cepter.View.Dialog.TIL_dialog;
 
 /**
  * TODO:
  *      + Read ./files/dnsSpoof.conf
- *      + init in List
+ *      + initViewConf in List
  *      + displayt in RV
  *      + add to file
  * Good luck bra
@@ -43,25 +47,30 @@ public class                            DNSSpoofingActivity extends MyActivity {
     private SearchView                  mFilterText;
     private ImageButton                 mAction_add_host, mSettingsBtn;
     private TabItem                     listSpoof, historique;
+    private TabLayout                   tabs;
     private FloatingActionButton        mFab;
     private RecyclerView                mDnsSpoof_RV;
     private RelativeLayout              mClipper;
-    private TextView                    mAction_deleteall, mAction_import, mAction_export;
+    private TextView                    mAction_deleteall, mAction_import, mAction_export, textEmpty, title;
     private Singleton                   mSingleton = Singleton.getInstance();
+    private DnsSpoof                    mDnsSpoof = mSingleton.dnsSpoofed;
     private DnsSpoofAdapter             mDnsSpoofAdapter;
+    private ConsoleLogAdapter           mDnsConsoleAdapter;
 
     public void                         onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dnsspoofing);
         initXml();
+        initFabs();
         initMenu();
-        init();
+        initTabs();
+        initViewConf();
     }
 
     private void                        initXml() {
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         mToolbar = (Toolbar) findViewById(R.id.toolbar2);
-        mFilterText = (SearchView) findViewById(R.id.filterText);
+        mFilterText = (SearchView) findViewById(R.id.searchView);
         mAction_add_host = (ImageButton) findViewById(R.id.action_add_host);
         mSettingsBtn = (ImageButton) findViewById(R.id.settings);
         listSpoof = (TabItem) findViewById(R.id.listSpoof);
@@ -69,31 +78,63 @@ public class                            DNSSpoofingActivity extends MyActivity {
         mFab = (FloatingActionButton) findViewById(R.id.fab);
         mDnsSpoof_RV = (RecyclerView) findViewById(R.id.dnsSpoof_RV);
         mClipper = (RelativeLayout) findViewById(R.id.clipper);
+        title = (TextView) findViewById(R.id.title);
         mAction_deleteall = (TextView) findViewById(R.id.action_deleteall);
         mAction_import = (TextView) findViewById(R.id.action_import);
         mAction_export = (TextView) findViewById(R.id.action_export);
-        mFab.setOnClickListener(onFabClick());
+        textEmpty = (TextView) findViewById(R.id.textEmpty);
+        tabs = (TabLayout) findViewById(R.id.tabs);
     }
 
-    private View.OnClickListener        onFabClick() {
-        return new View.OnClickListener() {
+    private void                        initFabs() {
+        if (mSingleton.isDnsSpoofActived()) {
+            mFab.setImageResource(R.mipmap.ic_stop);
+        } else {
+            mFab.setImageResource(android.R.drawable.ic_media_play);
+        }
+
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mSingleton.setDnsSpoofActived(!mSingleton.isDnsSpoofActived());
                 if (mSingleton.isDnsSpoofActived()) {
+                    mDnsSpoof.start();
                     mFab.setImageResource(R.mipmap.ic_stop);
                 } else {
+                    mDnsSpoof.stop();
                     mFab.setImageResource(R.mipmap.ic_play);
                 }
             }
-        };
+        });
+    }
+
+    private void                        initTabs() {
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getText().toString()) {
+                    case "Domains":
+                        Log.d(TAG, "Loading View 1");
+                        title.setText("List of spoofed domain(s):");
+                        initViewConf();
+                        break;
+                    case "Console":
+                        Log.d(TAG, "Loading View 2");
+                        title.setText("Dns ouput:");
+                        initViewConsoleLogs();
+                        break;
+                }
+            }
+            @Override public void onTabUnselected(TabLayout.Tab tab) {}
+            @Override public void onTabReselected(TabLayout.Tab tab) {}
+        });
     }
 
     private void                        initMenu() {
         mAction_add_host.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onShowDialogAddHost();
+                onAddHostDialog();
             }
         });
         mSettingsBtn.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +148,7 @@ public class                            DNSSpoofingActivity extends MyActivity {
         mAction_import.setOnClickListener(onClickTopMenu());
         mAction_export.setOnClickListener(onClickTopMenu());
         mClipper.setOnClickListener(onClickTopMenu());
-        mToolbar.setTitle(mSingleton.dnsSpoofed.size() + " domain spoofed");
+        mToolbar.setTitle(mDnsSpoof.listDomainSpoofed.size() + " domain spoofed");
     }
 
     private View.OnClickListener        onClickTopMenu() {
@@ -120,6 +161,7 @@ public class                            DNSSpoofingActivity extends MyActivity {
                     case R.id.action_export:
                         final TIL_dialog dialog = new TIL_dialog(mInstance)
                                 .setTitle("Exporter la liste des dns")
+                                .setHintText("/etc/dnsmasq.hosts")
                                 .setHint("Name of file");
                         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
@@ -128,24 +170,32 @@ public class                            DNSSpoofingActivity extends MyActivity {
                                 if (nameOfFile.contains(".") || nameOfFile.length() < 4) {
                                     Snackbar.make(mCoordinatorLayout, "Syntax incorrect", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    try {
-                                        FilesUtil.dumpDnsOnFile(Singleton.getInstance().dnsSpoofed, nameOfFile);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
+                                    mDnsSpoof.readDnsFromFile(new File(nameOfFile));
                                 }
                             }
                         })
                                 .show();
                         break;
                     case R.id.action_deleteall:
-                        Singleton.getInstance().dnsSpoofed.clear();
+                        mDnsSpoof.clear();
                         mDnsSpoofAdapter.notifyDataSetChanged();
                         break;
                     case R.id.action_import:
-                        //TODO: Choose wich file
-                        //Singleton.getInstance().dnsSpoofed = FilesUtil.readDnsFromFile("NameOfFile");
-                        Snackbar.make(mCoordinatorLayout, "Non implémenté", Toast.LENGTH_SHORT).show();
+                        final TIL_dialog dialog2 = new TIL_dialog(mInstance)
+                                .setTitle("Exporter la liste des dns")
+                                .setHintText("/etc/dnsmasq.hosts")
+                                .setHint("Name of file");
+                        dialog2.onPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface d, int which) {
+                                String nameOfFile = dialog2.getText();
+                                if (nameOfFile.contains(".") || nameOfFile.length() < 4) {
+                                    Snackbar.make(mCoordinatorLayout, "Syntax incorrect", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    mDnsSpoof.dumpDomainList(nameOfFile);
+                                }
+                            }
+                        }).show();
                         break;
                     default:
                         break;
@@ -154,9 +204,9 @@ public class                            DNSSpoofingActivity extends MyActivity {
         };
     }
 
-    private void                        onShowDialogAddHost() {
+    private void                        onAddHostDialog() {
         final TIL_dialog dialog = new TIL_dialog(mInstance)
-                .setTitle("Add host")
+                .setTitle("Add mhost")
                 .setHint("IP:www.domain.fr");
         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -174,25 +224,36 @@ public class                            DNSSpoofingActivity extends MyActivity {
     }
 
     private void                        onCheckAddedHost(String ip, String domain) {//ip:domain
-        DnsIntercept dnsIntercept = new DnsIntercept(ip, domain);
-        mSingleton.dnsSpoofed.add(0, dnsIntercept);
+        DNSSpoofItem dnsIntercept = new DNSSpoofItem(ip, domain);
+        mDnsSpoof.listDomainSpoofed.add(0, dnsIntercept);
         mDnsSpoofAdapter.notifyItemInserted(0);
-        mToolbar.setTitle(mSingleton.dnsSpoofed.size() + " domain spoofed");
+        mToolbar.setTitle(mDnsSpoof.listDomainSpoofed.size() + " domain spoofed");
+        if (textEmpty.getVisibility() == View.GONE)
+            textEmpty.setVisibility(View.GONE);
         Snackbar.make(mCoordinatorLayout,  dnsIntercept.domainSpoofed + " -> " + dnsIntercept.domainAsked, Snackbar.LENGTH_LONG);
     }
 
-    private void                        init() {
-        mDnsSpoofAdapter = new DnsSpoofAdapter(this, mSingleton.dnsSpoofed);
+    private void                        initViewConf() {
+        mDnsSpoofAdapter = new DnsSpoofAdapter(this, mDnsSpoof.listDomainSpoofed);
         mDnsSpoof_RV.setAdapter(mDnsSpoofAdapter);
         mDnsSpoof_RV.setHasFixedSize(true);
         mDnsSpoof_RV.setLayoutManager(new LinearLayoutManager(mInstance));
-        if (mSingleton.dnsSpoofed.isEmpty()) {
+        if (mDnsSpoof.listDomainSpoofed.isEmpty()) {
             Snackbar.make(mCoordinatorLayout, "Aucun dns enregistré", Snackbar.LENGTH_LONG);
-        }
-        if (mSingleton.isDnsSpoofActived()) {
-            mFab.setImageResource(R.mipmap.ic_stop);
         } else {
-            mFab.setImageResource(R.mipmap.ic_play);
+            textEmpty.setVisibility(View.GONE);
         }
+        mDnsConsoleAdapter = new ConsoleLogAdapter(this, mDnsSpoof.consoleLogList);
+        mDnsSpoof.setConsoleAdapter(mDnsConsoleAdapter);
+    }
+
+    private void                        initViewConsoleLogs() {
+        mDnsSpoof_RV.setAdapter(mDnsConsoleAdapter);
+        mDnsSpoof_RV.setHasFixedSize(true);
+        mDnsSpoof_RV.setLayoutManager(new LinearLayoutManager(mInstance));
+    }
+
+    public void                         actualiseDomainspoofed() {
+        mToolbar.setTitle(mDnsSpoof.listDomainSpoofed.size() + " domain spoofed");
     }
 }

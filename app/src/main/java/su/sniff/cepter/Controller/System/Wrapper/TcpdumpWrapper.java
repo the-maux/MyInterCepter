@@ -1,5 +1,6 @@
 package su.sniff.cepter.Controller.System.Wrapper;
 
+import android.app.Activity;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -21,9 +22,10 @@ import su.sniff.cepter.Model.Pcap.Trame;
 import su.sniff.cepter.View.WiresharkActivity;
 
 public class                TcpdumpWrapper {
+    private String          TAG = "TcpdumpWrapper";
+    private static TcpdumpWrapper  mInstance = null;
     private LinkedHashMap<String, String> cmds;
     private RootProcess     tcpDumpProcess;
-    private String          TAG = "TcpdumpWrapper";
     private WiresharkActivity activity;
     public boolean          isRunning = false, isDumpingInFile = false;
     private boolean         deepAnalyseTrame = false;
@@ -40,10 +42,22 @@ public class                TcpdumpWrapper {
                                  level header) in hex.*/
     private String          SNARF = "-s 0 ";             //  Snarf snaplen bytes of data from each  packet , no idea what this mean
 
-    public                  TcpdumpWrapper(WiresharkActivity activity) {
+    private                  TcpdumpWrapper(WiresharkActivity activity) {
         this.activity = activity;
         initCmds();
     }
+
+    public static synchronized TcpdumpWrapper getTcpdump(WiresharkActivity activity) {
+        if (mInstance == null) {
+            mInstance = new TcpdumpWrapper(activity);
+        }
+        return mInstance;
+    }
+
+    public static synchronized TcpdumpWrapper getTcpdump(Activity activity) {
+        return mInstance;
+    }
+
     private void            initCmds() {
         cmds = new LinkedHashMap<>();
         cmds.put("No Filter", INTERFACE  + " \' ");
@@ -141,15 +155,17 @@ public class                TcpdumpWrapper {
         }
     }
     public void             onTcpDumpStop() {
-        ArpSpoof.stopArpSpoof();
-        RootProcess.kill("tcpdump");
-        isRunning = false;
-        IPTables.stopIpTable();
-        if (isDumpingInFile) {
-            new RootProcess("chmod Pcap files")
-                    .exec("chmod 666 " + Singleton.getInstance().PcapPath + "/*")
-                    .exec("chown sdcard_r:sdcard_r " + Singleton.getInstance().PcapPath + "/*")
-                    .closeProcess();
+        if (isRunning) {
+            ArpSpoof.stopArpSpoof();
+            RootProcess.kill("tcpdump");
+            isRunning = false;
+            IPTables.stopIpTable();
+            if (isDumpingInFile) {
+                new RootProcess("chmod Pcap files")
+                        .exec("chmod 666 " + Singleton.getInstance().PcapPath + "/*")
+                        .exec("chown sdcard_r:sdcard_r " + Singleton.getInstance().PcapPath + "/*")
+                        .closeProcess();
+            }
         }
     }
     /**

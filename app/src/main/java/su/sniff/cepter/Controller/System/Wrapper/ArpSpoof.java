@@ -64,7 +64,7 @@ public class                        ArpSpoof {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                RootProcess process = new RootProcess("ARPSpoof");
+                RootProcess process = new RootProcess("stopArpSpoof ARPSpoof");
                 process.exec("ps | grep arpspoof");
                 BufferedReader reader = new BufferedReader(process.getReader());
                 String line;

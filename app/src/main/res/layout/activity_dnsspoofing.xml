@@ -29,17 +29,17 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_toLeftOf="@+id/filterText"
+                    android:layout_toLeftOf="@+id/searchView"
                     android:addStatesFromChildren="true"
                     android:minWidth="100dp"
                     app:layout_scrollFlags="scroll|enterAlways"
-                    app:subtitle="0 site spoofed"
+                    app:subtitle="0 request intecepted"
                     app:title="Dns Intercept">
 
                 </android.support.v7.widget.Toolbar>
 
                 <android.support.v7.widget.SearchView
-                    android:id="@+id/filterText"
+                    android:id="@+id/searchView"
                     android:layout_width="wrap_content"
                     android:layout_height="32dp"
                     android:layout_alignParentTop="true"
@@ -85,13 +85,13 @@
                     android:id="@+id/listSpoof"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cibles " />
+                    android:text="Domains" />
 
                 <android.support.design.widget.TabItem
                     android:id="@+id/historique"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Historique" />
+                    android:text="Console" />
 
             </android.support.design.widget.TabLayout>
 
@@ -126,7 +126,7 @@
 
 
         <TextView
-            android:id="@+id/editText"
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -140,17 +140,29 @@
             android:id="@+id/dnsSpoof_RV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/editText"
+            android:layout_below="@+id/title"
             android:layout_margin="8dp"
-            android:background="@color/material_grey_200"
+            android:background="@color/primary_text"
             android:clipChildren="true"
             android:clipToPadding="true"
             android:elevation="4dp"
             android:padding="1dp"
             android:scrollbars="vertical"
-            tools:listitem="@layout/item_dns_checkbox">
+            tools:listitem="@layout/item_dnsspoof">
 
         </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/textEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:elevation="5dp"
+            android:text="No domain recorded"
+            android:textColor="@color/material_light_white" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -175,7 +187,7 @@
             <TextView
                 android:id="@+id/action_deleteall"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="1px"
                 android:background="@color/material_light_white"
@@ -191,7 +203,7 @@
             <TextView
                 android:id="@+id/action_import"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_below="@+id/action_deleteall"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="1dp"
@@ -207,7 +219,7 @@
             <TextView
                 android:id="@+id/action_export"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_below="@+id/action_import"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="1dp"

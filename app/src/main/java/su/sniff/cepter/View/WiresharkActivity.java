@@ -1,6 +1,7 @@
 package su.sniff.cepter.View;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
@@ -56,22 +58,26 @@ public class                    WiresharkActivity extends MyActivity {
     private WiresharkAdapter    mAdapterWireshark;
     private String              mTypeScan = "No Filter";
     private List<Host>          mListHostSelected = new ArrayList<>();
-    private TcpdumpWrapper      mTcpdump = new TcpdumpWrapper(this);
+    private TcpdumpWrapper      mTcpdump;
     private CheckBox            Autoscroll;
     private TextView            tcp_cb, dns_cb, arp_cb, https_cb, http_cb, udp_cb, ip_cb;
     private Singleton           singleton = Singleton.getInstance();
 
     @Override protected void    onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_wireshark);
         initXml();
+        mTcpdump = TcpdumpWrapper.getTcpdump(this);
         initSpinner();
-        initRV();
+
         initFilter();
         initSettings();
+        initRV();
+        if (mTcpdump.isRunning)
+            mFab.setImageResource(R.mipmap.ic_pause);
     }
-
-
 
     private void                initXml() {
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
@@ -87,7 +93,7 @@ public class                    WiresharkActivity extends MyActivity {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fabBehavior();
+                startWireshark(false);
             }
         });
         Autoscroll = (CheckBox) findViewById(R.id.Autoscroll);
@@ -99,7 +105,6 @@ public class                    WiresharkActivity extends MyActivity {
         udp_cb = (TextView) findViewById(R.id.udp_cb);
         ip_cb = (TextView) findViewById(R.id.ip_cb);
         findViewById(R.id.settings).setOnClickListener(onSwitchHeader());
-
     }
 
     private void                initRV() {
@@ -120,7 +125,7 @@ public class                    WiresharkActivity extends MyActivity {
     }
 
     private void                initSettings() {
-        findViewById(R.id.settings).setOnClickListener(new GeneralSettings(this, mCoordinatorLayout, mTcpdump));
+        findViewById(R.id.settingsMenu).setOnClickListener(new GeneralSettings(this, mCoordinatorLayout, mTcpdump));
     }
 
     private View.OnClickListener onSwitchHeader() {
@@ -156,7 +161,7 @@ public class                    WiresharkActivity extends MyActivity {
 
     private void                onClickChoiceTarget() {
         new RV_dialog(this)
-                .setAdapter(new HostSelectionAdapter(this, Singleton.getInstance().hostsList, mListHostSelected))
+                .setAdapter(new HostSelectionAdapter(this, singleton.hostsList, mListHostSelected))
                 .setTitle("Choix des cibles")
                 .onPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -166,7 +171,7 @@ public class                    WiresharkActivity extends MyActivity {
                         else {
                             mToolbar.setSubtitle(mListHostSelected.size() + " target" +
                                     ((mListHostSelected.size() <= 1) ? "" : "s") + " selected");
-                            fabBehavior();
+                            startWireshark(false);
                         }
                     }
                 })
@@ -184,19 +189,21 @@ public class                    WiresharkActivity extends MyActivity {
             cmds.add((String)pair.getKey());
             it.remove(); // avoids a ConcurrentModificationException
         }
-        mSpiner.setItems(cmds);
-        mSpiner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, String typeScan) {
-                mMonitorCmd.setText(mParams.get(typeScan));
-                mTypeScan = typeScan;
-                mMonitorAgv.setText("./mTcpdump " + mParams.get(typeScan).replace("  ", " "));
-            }
-        });
-        mMonitorCmd.setText(mParams.get(cmds.get(0)));
+        if (!cmds.isEmpty()) {
+            mSpiner.setItems(cmds);
+            mSpiner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+                @Override
+                public void onItemSelected(MaterialSpinner view, int position, long id, String typeScan) {
+                    mMonitorCmd.setText(mParams.get(typeScan));
+                    mTypeScan = typeScan;
+                    mMonitorAgv.setText("./tcpdump " + mParams.get(typeScan).replace("  ", " "));
+                }
+            });
+            mMonitorCmd.setText(mParams.get(cmds.get(0)));
+        }
     }
 
-    public void                 fabBehavior() {
+    public void                 startWireshark(boolean isResume) {
         if (!mTcpdump.isRunning) {
             if (startTcpdump()) {
                 mMonitorAgv.setVisibility(View.VISIBLE);
@@ -214,8 +221,8 @@ public class                    WiresharkActivity extends MyActivity {
 
     private boolean             startTcpdump() {
         if (mListHostSelected.isEmpty()) {
-            if (Singleton.getInstance().hostsList.size() == 1) {//Automatic selection when 1 target only
-                mListHostSelected.add(Singleton.getInstance().hostsList.get(0));
+            if (singleton.hostsList.size() == 1) {//Automatic selection when 1 target only
+                mListHostSelected.add(singleton.hostsList.get(0));
                 mToolbar.setSubtitle(mListHostSelected.size() + " target");
             } else {
                 Snackbar.make(mCoordinatorLayout, "Selectionner une target", Snackbar.LENGTH_SHORT).setActionTextColor(Color.RED).show();
@@ -231,7 +238,7 @@ public class                    WiresharkActivity extends MyActivity {
         }
         hostFilter += ")\'";
         mTcpdump.start(mMonitorCmd.getText().toString(), hostFilter);
-        mMonitorAgv.setText("mTcpdump " + mMonitorCmd.getText().toString() + hostFilter);
+        mMonitorAgv.setText("Tcpdump " + mMonitorCmd.getText().toString() + hostFilter);
         mInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -251,10 +258,10 @@ public class                    WiresharkActivity extends MyActivity {
                 } else if (trame.initialised) {
                     if (mProgressBar.getVisibility() == View.VISIBLE)
                         mProgressBar.setVisibility(View.GONE);
-                    mAdapterWireshark.addTrameOnAdapter(trame);
                     mRV_Wireshark.post(new Runnable() {
                         @Override
                         public void run() {
+                            mAdapterWireshark.addTrameOnAdapter(trame);
                             mAdapterWireshark.notifyDataSetChanged();
                             if (Autoscroll.isChecked()) {
                                 mRV_Wireshark.smoothScrollToPosition(0);
@@ -273,6 +280,11 @@ public class                    WiresharkActivity extends MyActivity {
                 }
             }//else skipped do nothing
         });
+    }
+
+    @Override protected void    onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause");
     }
 
 }

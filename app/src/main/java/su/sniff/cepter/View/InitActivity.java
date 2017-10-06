@@ -164,7 +164,7 @@ public class                    InitActivity extends MyActivity {
         buildFile("busybox", R.raw.busybox);
         buildFile("cepter", R.raw.busybox);
         buildFile("tcpdump", R.raw.tcpdump);
-        buildFile("macchanger", R.raw.arpspoof);
+        buildFile("macchanger", R.raw.macchanger);
         buildFile("usernames", R.raw.usernames);
         buildFile("arpspoof", R.raw.arpspoof);
 
@@ -178,7 +178,7 @@ public class                    InitActivity extends MyActivity {
 
         /*  ping binary    */
         buildFile("ping", R.raw.arpspoof);
-        new RootProcess("Install ").exec("mount -o rw,remount /system;").closeProcess();
+        new RootProcess("Install ").exec("mount -o rw,remount /system").closeProcess();
         new RootProcess("Install ").exec("cp ./ping /system/bin/;").closeProcess();
         /*  Dns Stuff    */
         new RootProcess("Install ").exec("echo \"nameserver `getprop net.dns1`\" > /etc/resolv.conf").closeProcess();
@@ -194,7 +194,7 @@ public class                    InitActivity extends MyActivity {
         new RootProcess("Install ").exec("rm -f " + mSingleton.FilesPath + "archive_nmap").closeProcess();
         new RootProcess("Install ").exec("rm -f " + mSingleton.FilesPath + "ettercap_archive").closeProcess();
         new RootProcess("Install ").exec("echo '" + mSingleton.VERSION + "' > " + mSingleton.FilesPath + "version").closeProcess();
-    }
+    }//10:68:3f:7a:65:ef ___ 10.16.186.54/23 brd 10.16.187.255
 
     private void                monitor(final String log) {
         mInstance.runOnUiThread(new Runnable() {

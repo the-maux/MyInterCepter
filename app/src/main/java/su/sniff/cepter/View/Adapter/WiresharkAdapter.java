@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import su.sniff.cepter.Model.Pcap.Protocol;
 import su.sniff.cepter.Model.Pcap.Trame;
