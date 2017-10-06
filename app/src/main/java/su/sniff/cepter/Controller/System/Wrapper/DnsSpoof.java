@@ -141,13 +141,14 @@ public class                    DnsSpoof {
 
     public void                 stop() {
         RootProcess.kill("dnsmasq");
-        consoleAdapter.getRecyclerview().post(new Runnable() {
-            @Override
-            public void run() {
-                consoleLogList.clear();
-                if (consoleAdapter != null)
-                    consoleAdapter.notifyDataSetChanged();          }
-        });
+        if (consoleAdapter.getRecyclerview() != null)
+            consoleAdapter.getRecyclerview().post(new Runnable() {
+                @Override
+                public void run() {
+                    consoleLogList.clear();
+                    if (consoleAdapter != null)
+                        consoleAdapter.notifyDataSetChanged();          }
+            });
     }
 
     public void                 setConsoleAdapter(ConsoleLogAdapter consoleAdapter) {

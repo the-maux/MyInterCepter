@@ -42,7 +42,7 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
     @Override
     public void                 onBindViewHolder(DoraHolder holder, int position) {
         final DoraProcess host = hosts.get(position);
-        holder.diagnose.setText(new String(new char[host.getVisu()]).replace("\0", "*"));
+        holder.diagnose.setText(new String(new char[host.getVisu()]).replace("\0", "#"));
         String IP = host.mhost.getIp() + (host.mhost.getName().contains("(-)") ? "" : (" - " + host.mhost.getName().replace("(", "[").replace(")", "]")));
         holder.IP.setText(IP);
         holder.uptime.setText("Uptime:    " + host.getmUptime());

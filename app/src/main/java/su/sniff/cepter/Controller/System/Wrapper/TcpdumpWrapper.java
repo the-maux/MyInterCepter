@@ -1,5 +1,6 @@
 package su.sniff.cepter.Controller.System.Wrapper;
 
+import android.app.Activity;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -50,6 +51,10 @@ public class                TcpdumpWrapper {
         if (mInstance == null) {
             mInstance = new TcpdumpWrapper(activity);
         }
+        return mInstance;
+    }
+
+    public static synchronized TcpdumpWrapper getTcpdump(Activity activity) {
         return mInstance;
     }
 

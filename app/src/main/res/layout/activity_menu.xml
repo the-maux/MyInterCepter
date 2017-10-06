@@ -45,13 +45,14 @@
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/monitorNmap"
-                            android:layout_width="5dp"
-                            android:layout_height="5dp"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentTop="true"
                             android:layout_marginRight="8dp"
                             android:layout_marginTop="8dp"
-                            android:elevation="-2dp" />
+
+                             />
 
                         <TextView
                             android:id="@+id/NmapTxt"
@@ -93,13 +94,15 @@
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/monitorIntecept"
-                            android:layout_width="5dp"
-                            android:layout_height="5dp"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentTop="true"
                             android:layout_marginRight="8dp"
                             android:layout_marginTop="8dp"
-                            android:elevation="-2dp" />
+                            app:civ_border_width="1px"
+                            app:civ_border_color="@color/primary_text"
+                            />
 
                         <TextView
                             android:id="@+id/MitmTxt"
@@ -149,13 +152,14 @@
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/monitorICMP"
-                            android:layout_width="5dp"
-                            android:layout_height="5dp"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentTop="true"
                             android:layout_marginRight="8dp"
                             android:layout_marginTop="8dp"
-                            android:elevation="-2dp" />
+
+                             />
 
                         <TextView
                             android:id="@+id/ArpTxt"
@@ -198,13 +202,14 @@
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/monitorDNS"
-                            android:layout_width="5dp"
-                            android:layout_height="5dp"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentTop="true"
                             android:layout_marginRight="8dp"
                             android:layout_marginTop="8dp"
-                            android:elevation="-2dp" />
+                            app:civ_border_color="@color/primary_text"
+                            app:civ_border_width="1px" />
 
                         <TextView
                             android:id="@+id/txtDNS"
@@ -254,13 +259,15 @@
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/monitorWireshark"
-                            android:layout_width="5dp"
-                            android:layout_height="5dp"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            app:civ_border_width="1px"
+                            app:civ_border_color="@color/primary_text"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentTop="true"
                             android:layout_marginRight="8dp"
                             android:layout_marginTop="8dp"
-                            android:elevation="-2dp" />
+                             />
 
                         <TextView
 
@@ -304,13 +311,16 @@
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/monitorDora"
-                            android:layout_width="5dp"
-                            android:layout_height="5dp"
+                            app:civ_border_width="1px"
+                            app:civ_border_color="@color/primary_text"
+
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentTop="true"
                             android:layout_marginRight="8dp"
                             android:layout_marginTop="8dp"
-                            android:elevation="-2dp" />
+                             />
 
                         <TextView
                             android:id="@+id/DoraTxt"
@@ -364,13 +374,15 @@
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/monitorMsf"
-                            android:layout_width="5dp"
-                            android:layout_height="5dp"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentTop="true"
                             android:layout_marginRight="8dp"
+                            app:civ_border_width="1px"
+                            app:civ_border_color="@color/primary_text"
                             android:layout_marginTop="8dp"
-                            android:elevation="-2dp" />
+                             />
 
                         <TextView
                             android:id="@+id/MsfTxt"

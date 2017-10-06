@@ -71,9 +71,12 @@ public class                    WiresharkActivity extends MyActivity {
         initXml();
         mTcpdump = TcpdumpWrapper.getTcpdump(this);
         initSpinner();
-        initRV();
+
         initFilter();
         initSettings();
+        initRV();
+        if (mTcpdump.isRunning)
+            mFab.setImageResource(R.mipmap.ic_pause);
     }
 
     private void                initXml() {
@@ -158,7 +161,7 @@ public class                    WiresharkActivity extends MyActivity {
 
     private void                onClickChoiceTarget() {
         new RV_dialog(this)
-                .setAdapter(new HostSelectionAdapter(this, Singleton.getInstance().hostsList, mListHostSelected))
+                .setAdapter(new HostSelectionAdapter(this, singleton.hostsList, mListHostSelected))
                 .setTitle("Choix des cibles")
                 .onPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -218,8 +221,8 @@ public class                    WiresharkActivity extends MyActivity {
 
     private boolean             startTcpdump() {
         if (mListHostSelected.isEmpty()) {
-            if (Singleton.getInstance().hostsList.size() == 1) {//Automatic selection when 1 target only
-                mListHostSelected.add(Singleton.getInstance().hostsList.get(0));
+            if (singleton.hostsList.size() == 1) {//Automatic selection when 1 target only
+                mListHostSelected.add(singleton.hostsList.get(0));
                 mToolbar.setSubtitle(mListHostSelected.size() + " target");
             } else {
                 Snackbar.make(mCoordinatorLayout, "Selectionner une target", Snackbar.LENGTH_SHORT).setActionTextColor(Color.RED).show();
@@ -284,22 +287,4 @@ public class                    WiresharkActivity extends MyActivity {
         Log.d(TAG, "onPause");
     }
 
-    @Override protected void    onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume::Tcpdump.isRunning:" + mTcpdump.isRunning);
-        if (mTcpdump.isRunning) {
-            mAdapterWireshark.notifyDataSetChanged();
-            mFab.setImageResource(R.mipmap.ic_pause);
-            mAdapterWireshark = new WiresharkAdapter(this, mTcpdump.listOfTrames);
-            mRV_Wireshark.setAdapter(mAdapterWireshark);
-            mRV_Wireshark.hasFixedSize();
-            mRV_Wireshark.setLayoutManager(new LinearLayoutManager(mInstance));
-            mAdapterWireshark.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public void                 onBackPressed() {
-        startActivity(new Intent(mInstance, MenuActivity.class));
-    }
 }

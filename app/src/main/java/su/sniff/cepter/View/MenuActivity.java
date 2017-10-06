@@ -1,10 +1,13 @@
 package su.sniff.cepter.View;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 
@@ -13,6 +16,8 @@ import com.bumptech.glide.Glide;
 import de.hdodenhof.circleimageview.CircleImageView;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.Controller.System.Singleton;
+import su.sniff.cepter.Controller.System.Wrapper.DoraWrapper;
+import su.sniff.cepter.Controller.System.Wrapper.TcpdumpWrapper;
 import su.sniff.cepter.R;
 
 /**
@@ -49,19 +54,18 @@ public class                    MenuActivity extends MyActivity {
     }
 
     private void                initflags() {
-        Glide.with(this)
-                .load((singleton.isDnsSpoofActived()) ? R.color.material_green_700 : R.color.material_red_700)
-                .into((CircleImageView)findViewById(R.id.monitorDNS));
-        Log.d(TAG, "DNSSpoof:" + singleton.isDnsSpoofActived());
-        Log.d(TAG, "Wireshark:" + singleton.isWiresharkActived);
-        Log.d(TAG, "DoraDiag:" + singleton.isDoraActived);
-        Glide.with(this)
-                .load((singleton.isWiresharkActived) ? R.color.material_green_700 : R.color.material_red_700)
-                .into((CircleImageView)findViewById(R.id.monitorWireshark));
+        ColorDrawable red = new ColorDrawable(ContextCompat.getColor(this, R.color.material_red_700));
+        ColorDrawable green = new ColorDrawable(ContextCompat.getColor(this, R.color.material_green_700));
+        ((CircleImageView) findViewById(R.id.monitorDNS)).setImageDrawable((singleton.isDnsSpoofActived()) ? green : red);
 
-        Glide.with(this)
-                .load((singleton.isDoraActived) ? R.color.material_green_700 : R.color.material_red_700)
-                .into((CircleImageView)findViewById(R.id.monitorDora));
+        if (TcpdumpWrapper.getTcpdump(this) != null)
+            ((CircleImageView) findViewById(R.id.monitorWireshark)).setImageDrawable((TcpdumpWrapper.getTcpdump(this).isRunning) ? green : red);
+        else
+            ((CircleImageView) findViewById(R.id.monitorWireshark)).setImageDrawable(red);
+        if (DoraWrapper.getDora(this) != null)
+            ((CircleImageView) findViewById(R.id.monitorDora)).setImageDrawable((DoraWrapper.getDora(this).isRunning()) ? green : red);
+        else
+            ((CircleImageView) findViewById(R.id.monitorDora)).setImageDrawable(red);
     }
 
     private View.OnClickListener onClickButton(final choice clickChoice) {
@@ -86,11 +90,15 @@ public class                    MenuActivity extends MyActivity {
                         Snackbar.make(coordinatorLayout, "Fonctionnalité Dns Spoofing non implémenté", Snackbar.LENGTH_LONG).show();
                         break;
                     case Wireshark:
-                        choice = WiresharkActivity.class;
+                        if (Singleton.getInstance().hostsList == null) {
+                            Snackbar.make(coordinatorLayout, "Wireshark needs target(s) to work", Snackbar.LENGTH_LONG).show();
+                        } else {
+                            choice = WiresharkActivity.class;
+                        }
                         break;
                     case DoraDiagnostic:
                         if (Singleton.getInstance().hostsList == null) {
-                            Snackbar.make(coordinatorLayout, "Dora need targets to work", Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(coordinatorLayout, "Dora needs target(s) to work", Snackbar.LENGTH_LONG).show();
                         } else {
                             choice = DoraActivity.class;
                         }
@@ -106,7 +114,7 @@ public class                    MenuActivity extends MyActivity {
                 if (choice != null) {
                     Intent intent = new Intent(mInstance, choice);
                     startActivity(intent);
-                }
+                    }
             }
         };
     }

@@ -35,7 +35,7 @@ public class                            Singleton {
     public boolean                      DebugMode = true, UltraDebugMode = false;
     private boolean                     SslStripModeActived = false;
     private boolean                     LockScreen = false;
-    public boolean                      isDnsSpoofActived = false, isWiresharkActived = false, isDoraActived = false;
+    public boolean                      isDnsSpoofActived = false, isWiresharkActived = false;
     public  String                      VERSION = "0xDEADBEEF";
     public  int                         lock = 0, nbrInteface = 1;
 

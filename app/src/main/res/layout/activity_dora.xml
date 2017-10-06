@@ -125,7 +125,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:addStatesFromChildren="false"
-        android:background="@color/material_blue_grey_100"
+        android:background="@color/material_grey_400"
         android:paddingBottom="8dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"

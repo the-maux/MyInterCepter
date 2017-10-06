@@ -176,7 +176,7 @@
 		android:layout_height="match_parent"
 		android:background="#33000000"
 		android:elevation="5dp"
-		android:visibility="visible">
+		android:visibility="gone">
 
 		<RelativeLayout
 			android:id="@+id/menuLayout"

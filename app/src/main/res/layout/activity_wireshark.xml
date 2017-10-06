@@ -162,7 +162,7 @@
                             android:paddingTop="8dp"
                             android:singleLine="true"
                             android:text="TCP"
-                            android:textColor="@color/tcp"
+                            android:textColor="@color/primary_text"
                             android:textSize="14sp"
                             android:textStyle="bold" />
 
@@ -182,7 +182,7 @@
                             android:paddingTop="8dp"
                             android:singleLine="true"
                             android:text="DNS"
-                            android:textColor="@color/dns"
+                            android:textColor="@color/primary_text"
                             android:textSize="13sp"
                             android:textStyle="bold" />
 
@@ -220,7 +220,7 @@
                             android:paddingTop="10dp"
                             android:singleLine="true"
                             android:text="HTTPS"
-                            android:textColor="@color/http"
+                            android:textColor="@color/primary_text"
                             android:textSize="12sp"
                             android:textStyle="bold" />
 
@@ -239,7 +239,7 @@
                             android:paddingTop="8dp"
                             android:singleLine="true"
                             android:text="HTTP"
-                            android:textColor="@color/http"
+                            android:textColor="@color/primary_text"
                             android:textSize="14sp"
                             android:textStyle="bold" />
 
@@ -258,7 +258,7 @@
                             android:paddingTop="8dp"
                             android:singleLine="true"
                             android:text="UDP"
-                            android:textColor="@color/udp"
+                            android:textColor="@color/primary_text"
                             android:textSize="14sp"
                             android:textStyle="bold" />
 
