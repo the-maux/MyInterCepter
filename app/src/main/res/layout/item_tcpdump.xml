@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lllayout"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="16dp"
     android:layout_marginTop="1dp"
     android:background="@color/material_light_black"
-    android:minWidth="550dp"
+    android:minWidth="650dp"
     android:orientation="horizontal">
 
     <TextView

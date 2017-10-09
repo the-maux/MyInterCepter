@@ -72,18 +72,23 @@ public class                        ScanActivity extends MyActivity {
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        try {
-            setContentView(R.layout.activity_scan);
-            initXml();
-            init();
-        } catch (Exception e) {
-            Log.e(TAG, "Big error dans l'initXml");
-            Snackbar.make(mCoordinatorLayout, "Big error lors de l'init:", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
+        setContentView(R.layout.activity_scan);
+        initXml();
     }
 
-    private void                    initXml() throws Exception {
+    @Override
+    protected void                  onResume() {
+    try {
+        super.onResume();
+        init();
+    } catch (Exception e) {
+        Log.e(TAG, "Big error dans l'initXml");
+        Snackbar.make(mCoordinatorLayout, "Big error lors de l'init:", Toast.LENGTH_SHORT).show();
+        e.printStackTrace();
+    }
+}
+
+    private void                    initXml() {
         mFab = (FloatingActionButton) findViewById(R.id.fab);
         mHost_RV = (RecyclerView) findViewById(R.id.recycler_view);
         mEmptyList = (TextView) findViewById(R.id.emptyList);
