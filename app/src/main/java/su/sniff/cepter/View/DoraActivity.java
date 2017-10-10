@@ -14,16 +14,16 @@ import android.view.View;
 import android.widget.ImageView;
 
 import su.sniff.cepter.Controller.System.MyActivity;
-import su.sniff.cepter.Controller.System.Wrapper.DoraWrapper;
+import su.sniff.cepter.Controller.System.BinaryWrapper.Dora;
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Model.Pcap.DoraProcess;
+import su.sniff.cepter.Model.Unix.DoraProcess;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.DoraAdapter;
 
 public class                    DoraActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
     private DoraActivity        mInstance = this;
-    private DoraWrapper         mDoraWrapper;
+    private Dora mDoraWrapper;
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
     private SearchView          searchView;
@@ -65,7 +65,7 @@ public class                    DoraActivity extends MyActivity {
     }
 
     private void                getDoraWrapper() {
-        mDoraWrapper = DoraWrapper.getDora(this);
+        mDoraWrapper = Dora.getDora(this);
         mFab.setImageResource((!mDoraWrapper.isRunning()) ? android.R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
         more.setOnClickListener(new View.OnClickListener() {
             @Override

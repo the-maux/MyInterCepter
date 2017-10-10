@@ -6,11 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import su.sniff.cepter.Controller.Network.IPTables;
-import su.sniff.cepter.Controller.System.Wrapper.ArpSpoof;
-import su.sniff.cepter.Controller.System.Wrapper.DnsSpoof;
-import su.sniff.cepter.Controller.System.Wrapper.TcpdumpWrapper;
+import su.sniff.cepter.Controller.System.BinaryWrapper.ArpSpoof;
+import su.sniff.cepter.Controller.System.BinaryWrapper.DnsSpoof;
 import su.sniff.cepter.Model.Target.Host;
-import su.sniff.cepter.Model.Target.NetworkInformation;
+import su.sniff.cepter.Model.Net.NetworkInformation;
 
 /**
  * Created by root on 03/08/17.

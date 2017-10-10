@@ -23,12 +23,11 @@ import java.io.File;
 
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.Wrapper.DnsSpoof;
-import su.sniff.cepter.Model.Pcap.DNSSpoofItem;
-import su.sniff.cepter.Model.Wrap.ConsoleLog;
+import su.sniff.cepter.Controller.System.BinaryWrapper.DnsSpoof;
+import su.sniff.cepter.Model.Target.DNSSpoofItem;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.ConsoleLogAdapter;
-import su.sniff.cepter.View.Adapter.DnsSpoofAdapter;
+import su.sniff.cepter.View.Adapter.DnsSpoofConfAdapter;
 import su.sniff.cepter.View.Dialog.TIL_dialog;
 
 /**
@@ -54,7 +53,7 @@ public class                            DNSSpoofingActivity extends MyActivity {
     private TextView                    mAction_deleteall, mAction_import, mAction_export, textEmpty, title;
     private Singleton                   mSingleton = Singleton.getInstance();
     private DnsSpoof                    mDnsSpoof = mSingleton.dnsSpoofed;
-    private DnsSpoofAdapter             mDnsSpoofAdapter;
+    private DnsSpoofConfAdapter mDnsSpoofAdapter;
     private ConsoleLogAdapter           mDnsConsoleAdapter;
 
     public void                         onCreate(Bundle savedInstanceState) {
@@ -234,7 +233,7 @@ public class                            DNSSpoofingActivity extends MyActivity {
     }
 
     private void                        initViewConf() {
-        mDnsSpoofAdapter = new DnsSpoofAdapter(this, mDnsSpoof.listDomainSpoofed);
+        mDnsSpoofAdapter = new DnsSpoofConfAdapter(this, mDnsSpoof.listDomainSpoofed);
         mDnsSpoof_RV.setAdapter(mDnsSpoofAdapter);
         mDnsSpoof_RV.setHasFixedSize(true);
         mDnsSpoof_RV.setLayoutManager(new LinearLayoutManager(mInstance));

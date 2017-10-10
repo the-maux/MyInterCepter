@@ -9,7 +9,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 
-import su.sniff.cepter.Model.Pcap.DNSPacket;
+import su.sniff.cepter.Model.Net.DNSPacket;
 
 
 

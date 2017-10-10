@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
+import su.sniff.cepter.Controller.System.BinaryWrapper.RootProcess;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.View.ScanActivity;
 
@@ -44,7 +44,7 @@ public class                         Fingerprint {
                                 for (Host host : hosts) {
                                     if (host.equals(hostObj)) {
                                         alreadyIn = true;
-                                        Log.d("IntercepterWrapper", host.getIp() + " is already in");
+                                        Log.d("Intercepter", host.getIp() + " is already in");
                                     }
                                 }
                                 if (!alreadyIn)

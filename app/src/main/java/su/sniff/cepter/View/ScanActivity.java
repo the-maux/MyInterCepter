@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import su.sniff.cepter.Controller.CepterControl.IntercepterWrapper;
+import su.sniff.cepter.Controller.System.BinaryWrapper.Intercepter;
 import su.sniff.cepter.Controller.Network.Fingerprint;
 import su.sniff.cepter.Controller.Network.IPv4CIDR;
 import su.sniff.cepter.Controller.Network.NetUtils;
@@ -36,7 +36,7 @@ import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Controller.Network.ScanNetmask;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.Adapter.HostScanAdapter;
+import su.sniff.cepter.View.Adapter.ScanHostAdapter;
 import su.sniff.cepter.View.Adapter.OSAdapter;
 import su.sniff.cepter.View.Dialog.RV_dialog;
 import su.sniff.cepter.View.Dialog.TIL_dialog;
@@ -55,14 +55,14 @@ public class                        ScanActivity extends MyActivity {
     private Singleton               singleton = Singleton.getInstance();
     private CoordinatorLayout       mCoordinatorLayout;
     private List<Host>              mHosts;
-    private HostScanAdapter         mHostAdapter;
+    private ScanHostAdapter mHostAdapter;
     private RecyclerView            mHost_RV;
     private String                  monitor;
     private FloatingActionButton    mFab;
     private TextView                mEmptyList, mBottomMonitor;
     private ArrayList<String>       mListOS = new ArrayList<>();
     private int                     mProgress = 0;
-    private boolean                 mHostLoaded = false, inLoading = false, isMenu = false;
+    private boolean                 mHostLoaded = false, inLoading = false;
     private SwipeRefreshLayout      mSwipeRefreshLayout;
     private TextView                mOsFilterBtn, mSelectAllBtn, mOfflineModeBtn;
     private ImageButton             mAddHostBtn, mSettingsBtn;
@@ -110,7 +110,7 @@ public class                        ScanActivity extends MyActivity {
             Snackbar.make(mCoordinatorLayout, "You need to be connected to a network", Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            IntercepterWrapper.initCepter(NetUtils.getMac(singleton.network.myIp, singleton.network.gateway));
+            Intercepter.initCepter(NetUtils.getMac(singleton.network.myIp, singleton.network.gateway));
             initMonitor();
             initSwipeRefresh();
             initMenu();
@@ -188,7 +188,6 @@ public class                        ScanActivity extends MyActivity {
         mSettingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isMenu = true;
                 mInstance.findViewById(R.id.clipper).setVisibility(View.VISIBLE);
                 mFab.setVisibility(View.GONE);
             }
@@ -231,7 +230,7 @@ public class                        ScanActivity extends MyActivity {
 
     private void                    initHostsRecyclerView() {
         mHosts = new ArrayList<>();
-        mHostAdapter = new HostScanAdapter(this, mHost_RV);
+        mHostAdapter = new ScanHostAdapter(this, mHost_RV);
         mHost_RV.setAdapter(mHostAdapter);
         mHost_RV.setHasFixedSize(true);
         mHost_RV.setLayoutManager(new LinearLayoutManager(mInstance));
@@ -245,7 +244,6 @@ public class                        ScanActivity extends MyActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isMenu = false;
                 mInstance.findViewById(R.id.clipper).setVisibility(View.GONE);
                 mFab.setVisibility(View.VISIBLE);
                 switch (v.getId()) {

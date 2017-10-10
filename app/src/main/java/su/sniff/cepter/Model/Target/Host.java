@@ -9,6 +9,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import su.sniff.cepter.Model.Net.Port;
+import su.sniff.cepter.Model.Unix.Os;
 import su.sniff.cepter.R;
 
 /**
@@ -25,7 +27,7 @@ public class                Host {
     private String          vendor = "Unknown";
     private boolean         selected = false;
     private String          dumpInfo;
-    private Os              osType;
+    private Os osType;
 
     /**
      * Format : 192.168.0.12 	(theMaux) : [E8-B1-FC-A6-CF-11] [Windows 7\8\10] ; Intel Corporate

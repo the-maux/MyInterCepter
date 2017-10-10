@@ -1,23 +1,19 @@
 package su.sniff.cepter.View;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
-
-import com.bumptech.glide.Glide;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.Wrapper.DoraWrapper;
-import su.sniff.cepter.Controller.System.Wrapper.TcpdumpWrapper;
+import su.sniff.cepter.Controller.System.BinaryWrapper.Dora;
+import su.sniff.cepter.Controller.System.BinaryWrapper.Tcpdump;
 import su.sniff.cepter.R;
 
 /**
@@ -58,12 +54,12 @@ public class                    MenuActivity extends MyActivity {
         ColorDrawable green = new ColorDrawable(ContextCompat.getColor(this, R.color.material_green_700));
         ((CircleImageView) findViewById(R.id.monitorDNS)).setImageDrawable((singleton.isDnsSpoofActived()) ? green : red);
 
-        if (TcpdumpWrapper.getTcpdump(this) != null)
-            ((CircleImageView) findViewById(R.id.monitorWireshark)).setImageDrawable((TcpdumpWrapper.getTcpdump(this).isRunning) ? green : red);
+        if (Tcpdump.getTcpdump(this) != null)
+            ((CircleImageView) findViewById(R.id.monitorWireshark)).setImageDrawable((Tcpdump.getTcpdump(this).isRunning) ? green : red);
         else
             ((CircleImageView) findViewById(R.id.monitorWireshark)).setImageDrawable(red);
-        if (DoraWrapper.getDora(this) != null)
-            ((CircleImageView) findViewById(R.id.monitorDora)).setImageDrawable((DoraWrapper.getDora(this).isRunning()) ? green : red);
+        if (Dora.getDora(this) != null)
+            ((CircleImageView) findViewById(R.id.monitorDora)).setImageDrawable((Dora.getDora(this).isRunning()) ? green : red);
         else
             ((CircleImageView) findViewById(R.id.monitorDora)).setImageDrawable(red);
     }

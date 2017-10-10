@@ -6,7 +6,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
+import su.sniff.cepter.Controller.System.BinaryWrapper.RootProcess;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
 
