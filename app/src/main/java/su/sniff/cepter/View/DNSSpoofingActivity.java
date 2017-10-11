@@ -27,6 +27,7 @@ import su.sniff.cepter.Controller.System.BinaryWrapper.DnsSpoof;
 import su.sniff.cepter.Model.Target.DNSSpoofItem;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.ConsoleLogAdapter;
+import su.sniff.cepter.View.Adapter.DnsLogsAdapter;
 import su.sniff.cepter.View.Adapter.DnsSpoofConfAdapter;
 import su.sniff.cepter.View.Dialog.TIL_dialog;
 
@@ -45,7 +46,6 @@ public class                            DNSSpoofingActivity extends MyActivity {
     private Toolbar                     mToolbar;
     private SearchView                  mFilterText;
     private ImageButton                 mAction_add_host, mSettingsBtn;
-    private TabItem                     listSpoof, historique;
     private TabLayout                   tabs;
     private FloatingActionButton        mFab;
     private RecyclerView                mDnsSpoof_RV;
@@ -53,8 +53,8 @@ public class                            DNSSpoofingActivity extends MyActivity {
     private TextView                    mAction_deleteall, mAction_import, mAction_export, textEmpty, title;
     private Singleton                   mSingleton = Singleton.getInstance();
     private DnsSpoof                    mDnsSpoof = mSingleton.dnsSpoofed;
-    private DnsSpoofConfAdapter mDnsSpoofAdapter;
-    private ConsoleLogAdapter           mDnsConsoleAdapter;
+    private DnsSpoofConfAdapter         mDnsSpoofAdapter;
+    private DnsLogsAdapter              mDnsConsoleAdapter;
 
     public void                         onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,8 +72,6 @@ public class                            DNSSpoofingActivity extends MyActivity {
         mFilterText = (SearchView) findViewById(R.id.searchView);
         mAction_add_host = (ImageButton) findViewById(R.id.action_add_host);
         mSettingsBtn = (ImageButton) findViewById(R.id.settings);
-        listSpoof = (TabItem) findViewById(R.id.listSpoof);
-        historique = (TabItem) findViewById(R.id.historique);
         mFab = (FloatingActionButton) findViewById(R.id.fab);
         mDnsSpoof_RV = (RecyclerView) findViewById(R.id.dnsSpoof_RV);
         mClipper = (RelativeLayout) findViewById(R.id.clipper);
@@ -242,8 +240,8 @@ public class                            DNSSpoofingActivity extends MyActivity {
         } else {
             textEmpty.setVisibility(View.GONE);
         }
-        mDnsConsoleAdapter = new ConsoleLogAdapter(this, mDnsSpoof.consoleLogList);
-        mDnsSpoof.setConsoleAdapter(mDnsConsoleAdapter);
+        mDnsConsoleAdapter = new DnsLogsAdapter(this, mDnsSpoof.mDomainLogs);
+        mDnsSpoof.setRV_Adapter(mDnsConsoleAdapter);
     }
 
     private void                        initViewConsoleLogs() {

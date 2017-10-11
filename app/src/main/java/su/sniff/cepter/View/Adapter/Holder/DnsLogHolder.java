@@ -2,6 +2,8 @@ package su.sniff.cepter.View.Adapter.Holder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import su.sniff.cepter.R;
@@ -9,13 +11,20 @@ import su.sniff.cepter.R;
 /**
  * Host holder
  */
-public class DnsLogHolder extends RecyclerView.ViewHolder {
+public class                DnsLogHolder extends RecyclerView.ViewHolder {
     public View             itemView;
-    public TextView         lineConsole;
+    public RelativeLayout   RV_layout;
+    public TextView         nameHost;
+    public ImageView        DNSTypeImg, viewFullLogsBtn;
+    public RecyclerView     DnsRVLogs;
 
-    public DnsLogHolder(View v) {
+    public                  DnsLogHolder(View v) {
         super(v);
         itemView = v;
-        lineConsole = (TextView) itemView.findViewById(R.id.line);
+        RV_layout = (RelativeLayout) itemView.findViewById(R.id.RV_layout);
+        nameHost = (TextView) itemView.findViewById(R.id.host);
+        DNSTypeImg = (ImageView) itemView.findViewById(R.id.DNSTypeImg);
+        viewFullLogsBtn = (ImageView) itemView.findViewById(R.id.viewFullLogsBtn);
+        DnsRVLogs = (RecyclerView) itemView.findViewById(R.id.DnsRVLogs);
     }
 }

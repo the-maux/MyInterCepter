@@ -1,51 +1,75 @@
 package su.sniff.cepter.Model.Unix;
 
+import android.support.v7.widget.RecyclerView;
+
+import java.util.ArrayList;
+
 import su.sniff.cepter.R;
+import su.sniff.cepter.View.Adapter.Holder.ConsoleLogHolder;
 
 /**
  * Created by maxim on 09/10/2017.
  */
 
-public class        DNSLog {
+public class                            DNSLog {
     public enum Type {
         Query,
         Forward,
         Reply,
         Other
     }
-    public Type     DNSType;
-    public String   host;
-    public String   data;
-    public int      color;
+    public Type                         currentType;
+    public String                       host;
+    public String                       data;
+    public ArrayList<DNSLog>            logs = new ArrayList<>();
+    public RecyclerView.Adapter<ConsoleLogHolder> adapter = null;
+    public int                          color;
 
-    public          DNSLog(String line) {
+    public                              DNSLog(String line) {
+        buildLog(line);
+        data = line;
+        logs.add(this);
+    }
+
+    private void                        buildLog(String line) {
         String[] splitted = line.split(" ");
         switch (splitted[0]) {
             case "query[A]":
                 color = R.color.material_green_600;
                 data = line.substring("query[A]".length()+1, line.length());
-                DNSType = Type.Query;
+                currentType = Type.Query;
                 break;
             case "forwarded":
                 color = R.color.material_amber_700;
                 data = line.substring("forwarded".length()+1, line.length());
-                DNSType = Type.Forward;
+                currentType = Type.Forward;
                 break;
             case "reply":
                 color = R.color.material_cyan_700;
                 data = line.substring("reply".length()+1, line.length());
-                DNSType = Type.Reply;
+                currentType = Type.Reply;
                 break;
             default:
                 color = R.color.material_light_white;
                 data = line;
-                DNSType = Type.Other;
+                currentType = Type.Other;
                 break;
         }
         host = splitted[1];
-        data = line;
     }
 
+    public boolean                      isSameDomain(DNSLog dnsLog) {
+        return dnsLog.host.contains(host);
+    }
+    public void                         setAdapter(RecyclerView.Adapter<ConsoleLogHolder> adapter) {
+
+    }
+    public void                         addLog(DNSLog dnsLog) {
+        logs.add(dnsLog);
+        this.currentType = dnsLog.currentType;
+        if (adapter != null)
+            adapter.notifyDataSetChanged();
+    }
 }
 /*
 reply uhf.microsoft.com.edgekey.net is <CNAME>

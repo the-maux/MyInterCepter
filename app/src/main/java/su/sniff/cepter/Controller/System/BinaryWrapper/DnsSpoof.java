@@ -12,8 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import su.sniff.cepter.Model.Target.DNSSpoofItem;
-import su.sniff.cepter.Model.Unix.ConsoleLog;
+import su.sniff.cepter.Model.Unix.DNSLog;
 import su.sniff.cepter.View.Adapter.ConsoleLogAdapter;
+import su.sniff.cepter.View.Adapter.DnsLogsAdapter;
 
 /**
  * Created by the-maux on 02/10/17.
@@ -22,10 +23,10 @@ import su.sniff.cepter.View.Adapter.ConsoleLogAdapter;
 public class                    DnsSpoof {
     private String              TAG = "DnsSpoof";
     public List<DNSSpoofItem>   listDomainSpoofed;
-    public List<ConsoleLog>     consoleLogList = new ArrayList<>();
+    public List<DNSLog>         mDomainLogs = new ArrayList<>();
     private String              PATH_HOST_FILE = "/etc/dnsmasq.hosts";
-    private RootProcess         process;
-    private ConsoleLogAdapter   consoleAdapter = null;
+    private RootProcess         mProcess;
+    private DnsLogsAdapter      mRV_Adapter = null;
 
     public                      DnsSpoof() {
         listDomainSpoofed = new ArrayList<>();
@@ -83,45 +84,35 @@ public class                    DnsSpoof {
     }
 
     public void                 readDomainList(String nameOfFile) {
+        //TODO: DNS readDomainList
     }
 
 
     public DnsSpoof             start() {
-        if (consoleAdapter.getRecyclerview() != null)
-            consoleAdapter.getRecyclerview().post(new Runnable() {
+        if (mRV_Adapter.getRecyclerview() != null)
+            mRV_Adapter.getRecyclerview().post(new Runnable() {
                 @Override
                 public void run() {
-                    consoleLogList.clear();
-                    if (consoleAdapter != null)
-                        consoleAdapter.notifyDataSetChanged();            }
+                    mDomainLogs.clear();
+                    if (mRV_Adapter != null)
+                        mRV_Adapter.notifyDataSetChanged();            }
             });
         new Thread(new Runnable() {
             @Override
             public void run() {
-                process = new RootProcess("Dnsmasq::");
-                process.exec("dnsmasq --no-daemon --log-queries");
-                BufferedReader reader = process.getReader();
+                DNSLog Domainlog;
+                mProcess = new RootProcess("Dnsmasq::");
+                mProcess.exec("dnsmasq --no-daemon --log-queries");
+                BufferedReader reader = mProcess.getReader();
                 final boolean[] deprecatedStart = {false};
                 try {
                     String read;
                     while (!deprecatedStart[0] && ((read = reader.readLine()) != null)) {
                         Log.d(TAG, read);
-                        final ConsoleLog log = new ConsoleLog(read.replace("dnsmasq:", ""));
-                        consoleLogList.add(log);
-                        if (consoleAdapter.getRecyclerview() != null)
-                            consoleAdapter.getRecyclerview().post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (log.line.contains("failed to create listening socket: Address already in use")) {
-                                        deprecatedStart[0] = true;
-                                        consoleAdapter.notifyItemInserted(consoleLogList.indexOf(log));
-                                        final ConsoleLog log2 = new ConsoleLog("Restarting");
-                                        consoleLogList.add(log2);
-                                        consoleAdapter.notifyItemInserted(consoleLogList.indexOf(log2));
-                                    } else if (consoleAdapter != null)
-                                        consoleAdapter.notifyItemInserted(consoleLogList.indexOf(log));
-                                }
-                            });
+                        read = read.replace("dnsmasq:", "");
+                        if ((Domainlog = buildLogs(read)) != null)
+                            mDomainLogs.add(Domainlog);
+                        putToFront(Domainlog, deprecatedStart);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -137,19 +128,44 @@ public class                    DnsSpoof {
         return this;
     }
 
-    public void                 stop() {
-        RootProcess.kill("dnsmasq");
-        if (consoleAdapter.getRecyclerview() != null)
-            consoleAdapter.getRecyclerview().post(new Runnable() {
+    private DNSLog              buildLogs(String line) {
+        DNSLog Domainlog = new DNSLog(line);
+        for (DNSLog domainLog : mDomainLogs) {
+            if (domainLog.isSameDomain(Domainlog)) {
+                domainLog.addLog(Domainlog);
+                return null;
+            }
+        }
+        return Domainlog;
+    }
+
+    private void                putToFront(final DNSLog log, final boolean[] deprecatedStart) {
+        if (mRV_Adapter.getRecyclerview() != null)
+            mRV_Adapter.getRecyclerview().post(new Runnable() {
                 @Override
                 public void run() {
-                    consoleLogList.clear();
-                    if (consoleAdapter != null)
-                        consoleAdapter.notifyDataSetChanged();          }
+                    if (log.data.contains("failed to create listening socket: Address already in use")) {
+                        deprecatedStart[0] = true;
+                    }
+                    if (mRV_Adapter != null)
+                        mRV_Adapter.notifyItemInserted(mDomainLogs.indexOf(log));
+                }
             });
     }
 
-    public void                 setConsoleAdapter(ConsoleLogAdapter consoleAdapter) {
-        this.consoleAdapter = consoleAdapter;
+    public void                 stop() {
+        RootProcess.kill("dnsmasq");
+        if (mRV_Adapter.getRecyclerview() != null)
+            mRV_Adapter.getRecyclerview().post(new Runnable() {
+                @Override
+                public void run() {
+                    mDomainLogs.clear();
+                    if (mRV_Adapter != null)
+                        mRV_Adapter.notifyDataSetChanged();          }
+            });
+    }
+
+    public void                 setRV_Adapter(DnsLogsAdapter mRV_Adapter) {
+        this.mRV_Adapter = mRV_Adapter;
     }
 }
