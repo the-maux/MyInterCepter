@@ -40,7 +40,7 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
     @Override
     public void                 onBindViewHolder(final DnsLogHolder holder, int position) {
         DNSLog dnslog = mListConsole.get(position);
-        holder.nameHost.setText(dnslog.data);
+        holder.nameHost.setText(dnslog.host);
         setCurrentTypeLogo(dnslog.currentType, holder.DNSTypeImg);
         holder.DnsRVLogs.setAdapter(setDetailLogsAdapter(dnslog));
         holder.DnsRVLogs.setHasFixedSize(true);
@@ -104,7 +104,7 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
             public void                 onBindViewHolder(ConsoleLogHolder holder, int position) {
                 DNSLog log = logs.logs.get(position);
                 holder.lineConsole.setText(log.data);
-                holder.lineConsole.setTextColor(log.color);
+                //holder.lineConsole.setTextColor(log.color);
             }
 
             @Override

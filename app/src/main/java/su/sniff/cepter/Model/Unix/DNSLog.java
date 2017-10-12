@@ -1,6 +1,7 @@
 package su.sniff.cepter.Model.Unix;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -12,6 +13,7 @@ import su.sniff.cepter.View.Adapter.Holder.ConsoleLogHolder;
  */
 
 public class                            DNSLog {
+    private String                      TAG = "DNSLog";
     public enum Type {
         Query,
         Forward,
@@ -26,6 +28,7 @@ public class                            DNSLog {
     public int                          color;
 
     public                              DNSLog(String line) {
+        Log.d(TAG, "DNSLog(" + line + ")");
         buildLog(line);
         data = line;
         logs.add(this);
@@ -33,25 +36,23 @@ public class                            DNSLog {
 
     private void                        buildLog(String line) {
         String[] splitted = line.split(" ");
+        Log.d(TAG, "splitted[0]:" + splitted[0]);
+        data = line;
         switch (splitted[0]) {
             case "query[A]":
                 color = R.color.material_green_600;
-                data = line.substring("query[A]".length()+1, line.length());
                 currentType = Type.Query;
                 break;
             case "forwarded":
                 color = R.color.material_amber_700;
-                data = line.substring("forwarded".length()+1, line.length());
                 currentType = Type.Forward;
                 break;
             case "reply":
                 color = R.color.material_cyan_700;
-                data = line.substring("reply".length()+1, line.length());
                 currentType = Type.Reply;
                 break;
             default:
                 color = R.color.material_light_white;
-                data = line;
                 currentType = Type.Other;
                 break;
         }
@@ -62,9 +63,10 @@ public class                            DNSLog {
         return dnsLog.host.contains(host);
     }
     public void                         setAdapter(RecyclerView.Adapter<ConsoleLogHolder> adapter) {
-
+        this.adapter = adapter;
     }
     public void                         addLog(DNSLog dnsLog) {
+        Log.d(TAG, "addLog:" + dnsLog.data + "] to [" + this.host + "]");
         logs.add(dnsLog);
         this.currentType = dnsLog.currentType;
         if (adapter != null)

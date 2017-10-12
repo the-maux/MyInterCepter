@@ -88,6 +88,7 @@ public class                    MenuActivity extends MyActivity {
                     case Wireshark:
                         if (Singleton.getInstance().hostsList == null) {
                             Snackbar.make(coordinatorLayout, "Wireshark needs target(s) to work", Snackbar.LENGTH_LONG).show();
+                            choice = null;
                         } else {
                             choice = WiresharkActivity.class;
                         }
@@ -95,6 +96,7 @@ public class                    MenuActivity extends MyActivity {
                     case DoraDiagnostic:
                         if (Singleton.getInstance().hostsList == null) {
                             Snackbar.make(coordinatorLayout, "Dora needs target(s) to work", Snackbar.LENGTH_LONG).show();
+                            choice = null;
                         } else {
                             choice = DoraActivity.class;
                         }

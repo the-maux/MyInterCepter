@@ -52,7 +52,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="8dp"
-                android:src="@drawable/ic_add_circle" />
+                android:src="@mipmap/ic_add_button" />
 
         </RelativeLayout>
 

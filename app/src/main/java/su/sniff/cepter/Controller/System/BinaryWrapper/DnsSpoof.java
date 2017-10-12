@@ -13,7 +13,6 @@ import java.util.List;
 
 import su.sniff.cepter.Model.Target.DNSSpoofItem;
 import su.sniff.cepter.Model.Unix.DNSLog;
-import su.sniff.cepter.View.Adapter.ConsoleLogAdapter;
 import su.sniff.cepter.View.Adapter.DnsLogsAdapter;
 
 /**
@@ -23,7 +22,7 @@ import su.sniff.cepter.View.Adapter.DnsLogsAdapter;
 public class                    DnsSpoof {
     private String              TAG = "DnsSpoof";
     public List<DNSSpoofItem>   listDomainSpoofed;
-    public List<DNSLog>         mDomainLogs = new ArrayList<>();
+    public ArrayList<DNSLog>    mDomainLogs = new ArrayList<>();
     private String              PATH_HOST_FILE = "/etc/dnsmasq.hosts";
     private RootProcess         mProcess;
     private DnsLogsAdapter      mRV_Adapter = null;
@@ -109,10 +108,16 @@ public class                    DnsSpoof {
                     String read;
                     while (!deprecatedStart[0] && ((read = reader.readLine()) != null)) {
                         Log.d(TAG, read);
-                        read = read.replace("dnsmasq:", "");
-                        if ((Domainlog = buildLogs(read)) != null)
-                            mDomainLogs.add(Domainlog);
-                        putToFront(Domainlog, deprecatedStart);
+                        read = read.replace("dnsmasq: ", "");
+                        if (!read.isEmpty() && !read.contains("compile time options: no-IPv6 GNU-getopt no-DBus no-I18N DHCP no-scripts no-TFTP") &&
+                                !read.contains("using nameserver 8.8.8.8#53") && !read.contains("using nameserver") && !read.contains("read /etc/dnsmasq.hosts") &&
+                                !read.contains("reading /etc/resolv.conf") && !read.contains("started, version 2.51 cachesize 150")) {
+                            DNSLog DomainlogTmp = new DNSLog(read);
+                            boolean isAnewDomain;
+                            if ((isAnewDomain = isANewDomain(DomainlogTmp)))
+                                mDomainLogs.add(0, DomainlogTmp);
+                            notifyAdapter(DomainlogTmp, deprecatedStart, isAnewDomain);
+                        }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -128,27 +133,28 @@ public class                    DnsSpoof {
         return this;
     }
 
-    private DNSLog              buildLogs(String line) {
-        DNSLog Domainlog = new DNSLog(line);
+    private boolean isANewDomain(DNSLog dnsLog) {
+
         for (DNSLog domainLog : mDomainLogs) {
-            if (domainLog.isSameDomain(Domainlog)) {
-                domainLog.addLog(Domainlog);
-                return null;
+            if (domainLog.isSameDomain(dnsLog)) {
+                domainLog.addLog(dnsLog);
+                return false;
             }
         }
-        return Domainlog;
+        return true;
     }
 
-    private void                putToFront(final DNSLog log, final boolean[] deprecatedStart) {
+    private void                notifyAdapter(final DNSLog log, final boolean[] deprecatedStart, final boolean isAnewDomain) {
         if (mRV_Adapter.getRecyclerview() != null)
             mRV_Adapter.getRecyclerview().post(new Runnable() {
                 @Override
                 public void run() {
                     if (log.data.contains("failed to create listening socket: Address already in use")) {
                         deprecatedStart[0] = true;
-                    }
-                    if (mRV_Adapter != null)
+                    } else if (mRV_Adapter != null && isAnewDomain)
                         mRV_Adapter.notifyItemInserted(mDomainLogs.indexOf(log));
+                    else if (mRV_Adapter != null && !isAnewDomain)
+                        mRV_Adapter.notifyDataSetChanged();
                 }
             });
     }
