@@ -12,9 +12,9 @@ import java.util.List;
 
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.Adapter.Holder.HostCheckBoxHolder;
+import su.sniff.cepter.View.Adapter.Holder.HostSelectionHolder;
 
-public class                    OSAdapter extends RecyclerView.Adapter<HostCheckBoxHolder> {
+public class                    OSAdapter extends RecyclerView.Adapter<HostSelectionHolder> {
     private String              TAG = this.getClass().getName();
     private Context             mCtx;
     private List<String>        mOsList, mOsListSelected;
@@ -25,11 +25,11 @@ public class                    OSAdapter extends RecyclerView.Adapter<HostCheck
         this.mOsListSelected = osListSelected;
     }
     @Override
-    public HostCheckBoxHolder   onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new HostCheckBoxHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_host_checkbox, parent, false));
+    public HostSelectionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new HostSelectionHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_host_checkbox, parent, false));
     }
 
-    @Override public void       onBindViewHolder(HostCheckBoxHolder holder, int position) {
+    @Override public void       onBindViewHolder(HostSelectionHolder holder, int position) {
         final String os = mOsList.get(position);
         holder.nameOS.setText(os.replace("_", "/"));
         Host.setOsIcon(mCtx, os, holder.imageOS);

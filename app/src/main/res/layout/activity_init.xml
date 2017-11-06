@@ -1,73 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rootView"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg1">
+    android:id="@+id/Coordonitor"
+    android:animateLayoutChanges="true"
+    android:animationCache="true"
+    android:background="@color/material_light_white">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="@android:style/Widget.Material.Light.ProgressBar"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerHorizontal="false"
-        android:layout_centerVertical="false"
-        android:layout_marginRight="12dp"
-        android:layout_marginTop="24dp" />
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg1">
 
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@android:style/Widget.Material.Light.ProgressBar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="false"
+            android:layout_centerVertical="false"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="24dp" />
 
-    <TextView
-        android:id="@+id/monitor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="12dp"
-        android:text="Installation"
-        android:textColor="#20C20E"
-        android:textSize="16sp"
-        android:typeface="monospace" />
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
 
-    <Button
-        android:id="@+id/button7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:text="Button"
-        android:visibility="gone" />
+        <TextView
+            android:id="@+id/monitor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="12dp"
+            android:text="Installation"
+            android:textColor="#20C20E"
+            android:textSize="16sp"
+            android:typeface="monospace" />
 
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_below="@+id/button7"
-        android:layout_centerHorizontal="false"
-        android:layout_centerVertical="false"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="180dp"
-        android:elevation="5dp"
-        android:src="@drawable/scylla_transparent" />
+        <Button
+            android:id="@+id/button7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:text="Button"
+            android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="4dp"
-        android:gravity="right"
-        android:textColor="@color/material_light_white"
-        android:textSize="10sp"
-        android:textStyle="italic" />
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_below="@+id/button7"
+            android:layout_centerHorizontal="false"
+            android:layout_centerVertical="false"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="180dp"
+            android:elevation="5dp"
+            android:src="@drawable/scylla_transparent" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="4dp"
+            android:gravity="right"
+            android:textColor="@color/material_light_white"
+            android:textSize="10sp"
+            android:textStyle="italic" />
+
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

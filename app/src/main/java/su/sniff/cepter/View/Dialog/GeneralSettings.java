@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.CheckedTextView;
 
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.Wrapper.TcpdumpWrapper;
+import su.sniff.cepter.Controller.System.BinaryWrapper.Tcpdump;
 import su.sniff.cepter.R;
 
 /**
@@ -18,11 +18,11 @@ import su.sniff.cepter.R;
 
 public class                    GeneralSettings implements View.OnClickListener {
     private Activity            mActivity;
-    private TcpdumpWrapper      tcpdump;
+    private Tcpdump tcpdump;
     private Singleton           singleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
 
-    public                      GeneralSettings(Activity activity, CoordinatorLayout coordinatorLayout, TcpdumpWrapper tcpdump) {
+    public                      GeneralSettings(Activity activity, CoordinatorLayout coordinatorLayout, Tcpdump tcpdump) {
         this.tcpdump = tcpdump;
         this.mActivity = activity;
         this.mCoordinatorLayout = coordinatorLayout;

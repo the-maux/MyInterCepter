@@ -9,7 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import su.sniff.cepter.Model.Pcap.DNSSpoofItem;
+import su.sniff.cepter.Model.Target.DNSSpoofItem;
 import su.sniff.cepter.Model.Target.Host;
 
 public class                            FilesUtil {

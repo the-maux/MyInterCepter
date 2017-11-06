@@ -8,10 +8,9 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Model.Wrap.ConsoleLog;
+import su.sniff.cepter.Model.Unix.ConsoleLog;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.Holder.ConsoleLogHolder;
-import su.sniff.cepter.View.Adapter.Holder.DnsSpoofHolder;
 
 
 public class                    ConsoleLogAdapter extends RecyclerView.Adapter<ConsoleLogHolder> {

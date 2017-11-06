@@ -10,14 +10,13 @@ import java.util.List;
 
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.NmapActivity;
-import su.sniff.cepter.View.Adapter.Holder.HostCheckBoxHolder;
+import su.sniff.cepter.View.Adapter.Holder.HostSelectionHolder;
 
 /**
  * Created by root on 04/08/17.
  */
 
-public class                    NmapHostCheckerAdapter extends RecyclerView.Adapter<HostCheckBoxHolder> {
+public class                    NmapHostCheckerAdapter extends RecyclerView.Adapter<HostSelectionHolder> {
     private String              TAG = this.getClass().getName();
     private Activity            activity;
     private List<Host>          hosts;
@@ -27,12 +26,12 @@ public class                    NmapHostCheckerAdapter extends RecyclerView.Adap
         this.activity = activity;
     }
     @Override
-    public HostCheckBoxHolder   onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new HostCheckBoxHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_host_checkbox, parent, false));
+    public HostSelectionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new HostSelectionHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_host_checkbox, parent, false));
     }
 
     @Override
-    public void                 onBindViewHolder(HostCheckBoxHolder holder, int position) {
+    public void                 onBindViewHolder(HostSelectionHolder holder, int position) {
         Host host = hosts.get(position);
         holder.itemView.setOnClickListener(onClickCard(host));
         holder.nameOS.setText(host.getIp());

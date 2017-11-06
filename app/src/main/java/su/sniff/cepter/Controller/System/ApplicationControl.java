@@ -2,8 +2,8 @@ package su.sniff.cepter.Controller.System;
 
 import android.app.Application;
 
-import su.sniff.cepter.Controller.System.Wrapper.ArpSpoof;
-import su.sniff.cepter.Controller.System.Wrapper.RootProcess;
+import su.sniff.cepter.Controller.System.BinaryWrapper.ArpSpoof;
+import su.sniff.cepter.Controller.System.BinaryWrapper.RootProcess;
 
 
 /**

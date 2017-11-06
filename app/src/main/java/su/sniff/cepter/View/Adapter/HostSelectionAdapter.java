@@ -11,10 +11,10 @@ import java.util.List;
 
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.Adapter.Holder.HostCheckBoxHolder;
+import su.sniff.cepter.View.Adapter.Holder.HostSelectionHolder;
 
 
-public class                    HostSelectionAdapter extends RecyclerView.Adapter<HostCheckBoxHolder> {
+public class                    HostSelectionAdapter extends RecyclerView.Adapter<HostSelectionHolder> {
     private String              TAG = this.getClass().getName();
     private Activity            activity;
     private List<Host>          hosts, listHostSelected;
@@ -25,12 +25,12 @@ public class                    HostSelectionAdapter extends RecyclerView.Adapte
         this.listHostSelected = hostsSelected;
     }
     @Override
-    public HostCheckBoxHolder   onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new HostCheckBoxHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_host_checkbox, parent, false));
+    public HostSelectionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new HostSelectionHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_host_checkbox, parent, false));
     }
 
     @Override
-    public void                 onBindViewHolder(HostCheckBoxHolder holder, int position) {
+    public void                 onBindViewHolder(HostSelectionHolder holder, int position) {
         final Host host = hosts.get(position);
         holder.nameOS.setText(host.getIp());
         Host.setOsIcon(activity, host.getDumpInfo(), holder.imageOS);

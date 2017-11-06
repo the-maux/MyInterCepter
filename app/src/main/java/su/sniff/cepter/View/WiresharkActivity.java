@@ -1,7 +1,6 @@
 package su.sniff.cepter.View;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,9 +28,9 @@ import java.util.List;
 import java.util.Map;
 
 import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.Wrapper.TcpdumpWrapper;
-import su.sniff.cepter.Model.Pcap.Protocol;
-import su.sniff.cepter.Model.Pcap.Trame;
+import su.sniff.cepter.Controller.System.BinaryWrapper.Tcpdump;
+import su.sniff.cepter.Model.Net.Protocol;
+import su.sniff.cepter.Model.Net.Trame;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Controller.System.MyActivity;
 import su.sniff.cepter.R;
@@ -58,7 +57,7 @@ public class                    WiresharkActivity extends MyActivity {
     private WiresharkAdapter    mAdapterWireshark;
     private String              mTypeScan = "No Filter";
     private List<Host>          mListHostSelected = new ArrayList<>();
-    private TcpdumpWrapper      mTcpdump;
+    private Tcpdump mTcpdump;
     private CheckBox            Autoscroll;
     private TextView            tcp_cb, dns_cb, arp_cb, https_cb, http_cb, udp_cb, ip_cb;
     private Singleton           singleton = Singleton.getInstance();
@@ -69,7 +68,7 @@ public class                    WiresharkActivity extends MyActivity {
         Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_wireshark);
         initXml();
-        mTcpdump = TcpdumpWrapper.getTcpdump(this);
+        mTcpdump = Tcpdump.getTcpdump(this);
         initSpinner();
 
         initFilter();

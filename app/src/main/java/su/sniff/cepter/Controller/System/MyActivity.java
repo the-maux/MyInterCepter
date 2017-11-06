@@ -5,7 +5,7 @@ import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import su.sniff.cepter.Controller.System.Wrapper.ArpSpoof;
+import su.sniff.cepter.Controller.System.BinaryWrapper.ArpSpoof;
 import su.sniff.cepter.R;
 
 

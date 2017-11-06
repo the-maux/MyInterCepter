@@ -85,7 +85,7 @@ public class                        ScanNetmask {
                     e.printStackTrace();
                     Log.e(TAG, "IOException: " + ip + " (" + nbrHostScanned + "/" + NumberOfHosts + ")");
                 } finally {
-                    if (nbrHostScanned >= (NumberOfHosts-1) && nbrHostScanned < NumberOfHosts && !alreadySend) {
+                    if (nbrHostScanned >= (NumberOfHosts-1) && nbrHostScanned < NumberOfHosts && !alreadySend) {//TODO: -1 you sure ?
                         Log.e(TAG, "ScanOver: " + ip + " (" + nbrHostScanned + "/" + NumberOfHosts + ") with " + ipReachable.size() + " host reached");
                         ScanOver();
                     }

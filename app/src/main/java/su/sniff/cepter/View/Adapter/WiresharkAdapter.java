@@ -9,10 +9,9 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
-import su.sniff.cepter.Model.Pcap.Protocol;
-import su.sniff.cepter.Model.Pcap.Trame;
+import su.sniff.cepter.Model.Net.Protocol;
+import su.sniff.cepter.Model.Net.Trame;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.Holder.WiresharkHolder;
 
