@@ -1,4 +1,4 @@
-package su.sniff.cepter.Controller.System.BinaryWrapper;
+package su.sniff.cepter.Controller.Core.BinaryWrapper;
 
 import android.app.Activity;
 import android.util.Log;
@@ -6,7 +6,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import su.sniff.cepter.Controller.System.Singleton;
+import su.sniff.cepter.Controller.Core.Singleton;
 import su.sniff.cepter.Model.Unix.DoraProcess;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.View.DoraActivity;

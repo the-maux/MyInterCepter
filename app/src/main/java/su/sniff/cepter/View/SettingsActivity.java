@@ -2,7 +2,7 @@ package su.sniff.cepter.View;
 
 import android.os.Bundle;
 
-import su.sniff.cepter.Controller.System.MyActivity;
+import su.sniff.cepter.Controller.Core.MyActivity;
 import su.sniff.cepter.R;
 
 /**

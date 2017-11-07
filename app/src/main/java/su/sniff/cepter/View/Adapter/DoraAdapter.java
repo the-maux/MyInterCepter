@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import su.sniff.cepter.Controller.System.BinaryWrapper.RootProcess;
+import su.sniff.cepter.Controller.Core.BinaryWrapper.RootProcess;
 import su.sniff.cepter.Model.Unix.DoraProcess;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.Holder.DoraHolder;

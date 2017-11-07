@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import su.sniff.cepter.Controller.System.Singleton;
+import su.sniff.cepter.Controller.Core.Singleton;
 
 /**
  * Created by maxim on 29/06/2017.

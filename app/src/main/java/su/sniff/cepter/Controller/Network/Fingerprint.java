@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.BinaryWrapper.RootProcess;
+import su.sniff.cepter.Controller.Core.Singleton;
+import su.sniff.cepter.Controller.Core.BinaryWrapper.RootProcess;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.View.ScanActivity;
 

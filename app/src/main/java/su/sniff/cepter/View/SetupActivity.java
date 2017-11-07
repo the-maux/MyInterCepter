@@ -17,9 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import su.sniff.cepter.Controller.Network.NetUtils;
-import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.BinaryWrapper.RootProcess;
-import su.sniff.cepter.Controller.System.MyActivity;
+import su.sniff.cepter.Controller.Core.Singleton;
+import su.sniff.cepter.Controller.Core.BinaryWrapper.RootProcess;
+import su.sniff.cepter.Controller.Core.MyActivity;
 import su.sniff.cepter.Model.Net.NetworkInformation;
 import su.sniff.cepter.R;
 

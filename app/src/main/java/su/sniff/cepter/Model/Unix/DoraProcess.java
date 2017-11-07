@@ -9,7 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import su.sniff.cepter.Controller.System.BinaryWrapper.RootProcess;
+import su.sniff.cepter.Controller.Core.BinaryWrapper.RootProcess;
 import su.sniff.cepter.Model.Target.MyObject;
 import su.sniff.cepter.Model.Target.Host;
 

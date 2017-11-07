@@ -1,11 +1,11 @@
-package su.sniff.cepter.Controller.System.BinaryWrapper;
+package su.sniff.cepter.Controller.Core.BinaryWrapper;
 
 import android.util.Log;
 
 import java.io.*;
 import java.lang.reflect.Field;
 
-import su.sniff.cepter.Controller.System.Singleton;
+import su.sniff.cepter.Controller.Core.Singleton;
 
 public class                    RootProcess {
     private String              TAG = "RootProcess";

@@ -1,4 +1,4 @@
-package su.sniff.cepter.Controller.System;
+package su.sniff.cepter.Controller.Core;
 
 import android.util.Log;
 
@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import su.sniff.cepter.Controller.Network.IPTables;
-import su.sniff.cepter.Controller.System.BinaryWrapper.ArpSpoof;
-import su.sniff.cepter.Controller.System.BinaryWrapper.DnsSpoof;
+import su.sniff.cepter.Controller.Core.BinaryWrapper.ArpSpoof;
+import su.sniff.cepter.Controller.Core.BinaryWrapper.Dns.DnsSpoof;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Model.Net.NetworkInformation;
 

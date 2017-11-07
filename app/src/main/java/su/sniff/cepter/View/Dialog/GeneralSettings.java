@@ -8,8 +8,8 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.CheckedTextView;
 
-import su.sniff.cepter.Controller.System.Singleton;
-import su.sniff.cepter.Controller.System.BinaryWrapper.Tcpdump;
+import su.sniff.cepter.Controller.Core.Singleton;
+import su.sniff.cepter.Controller.Core.BinaryWrapper.Tcpdump;
 import su.sniff.cepter.R;
 
 /**

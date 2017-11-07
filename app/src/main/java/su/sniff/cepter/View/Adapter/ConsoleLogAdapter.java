@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import su.sniff.cepter.Controller.System.Singleton;
+import su.sniff.cepter.Controller.Core.Singleton;
 import su.sniff.cepter.Model.Unix.ConsoleLog;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.Holder.ConsoleLogHolder;

@@ -1,11 +1,11 @@
-package su.sniff.cepter.Controller.System;
+package su.sniff.cepter.Controller.Core;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import su.sniff.cepter.Controller.System.BinaryWrapper.ArpSpoof;
+import su.sniff.cepter.Controller.Core.BinaryWrapper.ArpSpoof;
 import su.sniff.cepter.R;
 
 

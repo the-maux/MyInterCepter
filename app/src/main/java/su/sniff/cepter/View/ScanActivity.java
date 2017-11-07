@@ -27,14 +27,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import su.sniff.cepter.Controller.System.BinaryWrapper.Intercepter;
+import su.sniff.cepter.Controller.Core.BinaryWrapper.Intercepter;
 import su.sniff.cepter.Controller.Network.Fingerprint;
 import su.sniff.cepter.Controller.Network.IPv4CIDR;
 import su.sniff.cepter.Controller.Network.NetUtils;
-import su.sniff.cepter.Controller.System.Singleton;
+import su.sniff.cepter.Controller.Core.Singleton;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Controller.Network.ScanNetmask;
-import su.sniff.cepter.Controller.System.MyActivity;
+import su.sniff.cepter.Controller.Core.MyActivity;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.ScanHostAdapter;
 import su.sniff.cepter.View.Adapter.OSAdapter;

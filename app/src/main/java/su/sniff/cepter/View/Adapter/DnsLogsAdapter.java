@@ -10,10 +10,9 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import su.sniff.cepter.Controller.System.Singleton;
+import su.sniff.cepter.Controller.Core.Singleton;
 import su.sniff.cepter.Model.Unix.DNSLog;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.Holder.ConsoleLogHolder;

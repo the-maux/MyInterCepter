@@ -16,13 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with dSploit.  If not, see <http://www.gnu.org/licenses/>.
  */
-package su.sniff.cepter.Controller.System.BinaryWrapper;
+package su.sniff.cepter.Controller.Core.BinaryWrapper;
 import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import su.sniff.cepter.Controller.System.Singleton;
+import su.sniff.cepter.Controller.Core.Singleton;
 import su.sniff.cepter.Model.Target.Host;
 
 /**

@@ -2,7 +2,7 @@ package su.sniff.cepter.Controller.Network;
 
 import android.util.Log;
 
-import su.sniff.cepter.Controller.System.Singleton;
+import su.sniff.cepter.Controller.Core.Singleton;
 import su.sniff.cepter.View.ScanActivity;
 
 import java.io.IOException;

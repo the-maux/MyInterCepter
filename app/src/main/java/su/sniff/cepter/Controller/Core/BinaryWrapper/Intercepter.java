@@ -1,4 +1,4 @@
-package su.sniff.cepter.Controller.System.BinaryWrapper;
+package su.sniff.cepter.Controller.Core.BinaryWrapper;
 
 import android.app.Activity;
 import android.util.Log;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 import java.io.IOException;
 
 import su.sniff.cepter.Controller.Network.IPTables;
-import su.sniff.cepter.Controller.System.Singleton;
+import su.sniff.cepter.Controller.Core.Singleton;
 import su.sniff.cepter.R;
 
 /**
