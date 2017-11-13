@@ -5,7 +5,17 @@
     <CheckBox android:id="@+id/ForcedDL_CB" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Lock Screen" android:layout_below="@+id/SSLStrip_CB" android:layout_alignParentLeft="true" android:onClick="OnLock" />
     <TextView  android:gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" android:id="@+id/textView3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="v 2.0" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" />
     <Button android:id="@+id/clearButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Clear *.pcap" android:layout_toRightOf="@+id/DNSSpoofButton" android:layout_below="@+id/spinner3" android:onClick="OnClearPcap"  />
-    <TextView  android:autoLink="web|email|phone|map|all" android:id="@+id/monitor" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TextView" android:layout_below="@+id/imageView1" android:layout_alignParentLeft="true" />
+
+    <TextView
+        android:id="@+id/monitor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/imageView1"
+        android:layout_marginLeft="8dp"
+        android:autoLink="web|email|phone|map|all"
+        android:text="The quieter you become the more you are able to hear"
+        android:textSize="12sp" />
     <ImageView android:id="@+id/imageView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ico" android:layout_above="@+id/textView3" android:layout_centerHorizontal="true" android:onClick="OnLogo" />
     <Spinner android:id="@+id/spinner2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@+id/ForcedDL_CB" android:layout_alignLeft="@+id/ForcedDL_CB" />
     <Spinner android:id="@+id/spinner3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toRightOf="@+id/ForcedDL_CB" android:layout_below="@+id/ForcedDL_CB" />
