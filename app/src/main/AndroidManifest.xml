@@ -26,12 +26,12 @@
         </activity>
         <activity android:name=".View.DNSSpoofingActivity"/>
         <activity android:name=".View.CageActivity" />
-        <activity android:name=".View.ScanActivity" />
+        <activity android:name=".View.HostDiscovery.HostDiscoveryActivity" />
         <activity android:name=".View.SettingsActivity" />
         <activity android:name=".View.NmapActivity" />
         <activity android:name=".View.MenuActivity" />
         <activity android:name=".View.WiresharkActivity" />
-        <activity android:name=".View.DoraActivity" />
+        <activity android:name=".View.Dora.DoraActivity" />
     </application>
 
 </manifest>

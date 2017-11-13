@@ -9,7 +9,7 @@ import java.util.List;
 import su.sniff.cepter.Controller.Core.Singleton;
 import su.sniff.cepter.Model.Unix.DoraProcess;
 import su.sniff.cepter.Model.Target.Host;
-import su.sniff.cepter.View.DoraActivity;
+import su.sniff.cepter.View.Dora.DoraActivity;
 
 /**
  * Created by the-maux on 06/10/17.

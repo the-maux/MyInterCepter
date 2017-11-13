@@ -15,6 +15,7 @@ import su.sniff.cepter.Controller.Core.Singleton;
 import su.sniff.cepter.Controller.Core.BinaryWrapper.Dora;
 import su.sniff.cepter.Controller.Core.BinaryWrapper.Tcpdump;
 import su.sniff.cepter.R;
+import su.sniff.cepter.View.Dora.DoraActivity;
 
 /**
  * Menu

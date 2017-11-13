@@ -4,4 +4,19 @@
     </style>
     <style name="NoActionBar" parent="Theme.AppCompat.NoActionBar">
     </style>
+
+
+    <!-- Bottom Sheet -->
+    <style name="AppTheme.BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppTheme.BottomSheetStyle</item>
+    </style>
+    <style name="AppTheme.BottomSheetDialog.Custom" parent="AppTheme.BottomSheetDialog">
+        <item name="bottomSheetBuilderItemTextColor">@color/primary_dark</item>
+        <item name="bottomSheetBuilderBackgroundColor">@color/material_light_white</item>
+        <item name="bottomSheetBuilderTitleTextColor">@color/primary_light</item>
+    </style>
+    <style name="AppTheme.BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="behavior_hideable">true</item>
+        <item name="behavior_skipCollapsed">true</item>
+    </style>
 </resources>

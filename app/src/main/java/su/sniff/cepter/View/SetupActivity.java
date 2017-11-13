@@ -22,6 +22,7 @@ import su.sniff.cepter.Controller.Core.BinaryWrapper.RootProcess;
 import su.sniff.cepter.Controller.Core.MyActivity;
 import su.sniff.cepter.Model.Net.NetworkInformation;
 import su.sniff.cepter.R;
+import su.sniff.cepter.View.HostDiscovery.HostDiscoveryActivity;
 
 import java.io.*;
 import java.util.Arrays;
@@ -147,7 +148,7 @@ public class SetupActivity extends MyActivity {
         if (res[netmask].contains("0.0.0.0"))
             res[netmask] = "255.255.255.0";
         mSingleton.network = new NetworkInformation(dhcpInfo, NetUtils.getMac(res[ip], res[gw]));
-        startActivity(new Intent(this, ScanActivity.class));
+        startActivity(new Intent(this, HostDiscoveryActivity.class));
         finish();
     }
 

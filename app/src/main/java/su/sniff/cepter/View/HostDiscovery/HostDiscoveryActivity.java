@@ -1,4 +1,4 @@
-package su.sniff.cepter.View;
+package su.sniff.cepter.View.HostDiscovery;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -6,21 +6,27 @@ import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabItem;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
+import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
+import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -40,6 +46,7 @@ import su.sniff.cepter.View.Adapter.ScanHostAdapter;
 import su.sniff.cepter.View.Adapter.OSAdapter;
 import su.sniff.cepter.View.Dialog.RV_dialog;
 import su.sniff.cepter.View.Dialog.TIL_dialog;
+import su.sniff.cepter.View.MenuActivity;
 
 /**
  * TODO:    + Add manual target
@@ -49,13 +56,14 @@ import su.sniff.cepter.View.Dialog.TIL_dialog;
  *          + detect target onFly ?
  *          + better Os detection
  */
-public class                        ScanActivity extends MyActivity {
-    private String                  TAG = "ScanActivity";
-    private ScanActivity            mInstance = this;
+public class                        HostDiscoveryActivity extends MyActivity {
+    private String                  TAG = "HostDiscoveryActivity";
+    private HostDiscoveryActivity   mInstance = this;
     private Singleton               singleton = Singleton.getInstance();
     private CoordinatorLayout       mCoordinatorLayout;
+    private AppBarLayout            mAppbar;
     private List<Host>              mHosts;
-    private ScanHostAdapter mHostAdapter;
+    ScanHostAdapter                 mHostAdapter;
     private RecyclerView            mHost_RV;
     private String                  monitor;
     private FloatingActionButton    mFab;
@@ -64,7 +72,6 @@ public class                        ScanActivity extends MyActivity {
     private int                     mProgress = 0;
     private boolean                 mHostLoaded = false, inLoading = false;
     private SwipeRefreshLayout      mSwipeRefreshLayout;
-    private TextView                mOsFilterBtn, mSelectAllBtn, mOfflineModeBtn;
     private ImageButton             mAddHostBtn, mSettingsBtn;
     private SearchView              mSearchView;
     private Toolbar                 toolbar2;
@@ -72,7 +79,7 @@ public class                        ScanActivity extends MyActivity {
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scan);
+        setContentView(R.layout.activity_hostdiscovery);
         initXml();
     }
 
@@ -91,15 +98,13 @@ public class                        ScanActivity extends MyActivity {
     private void                    initXml() {
         mFab = (FloatingActionButton) findViewById(R.id.fab);
         mHost_RV = (RecyclerView) findViewById(R.id.recycler_view);
+        mAppbar = (AppBarLayout) findViewById(R.id.appbar);
         mEmptyList = (TextView) findViewById(R.id.emptyList);
         mBottomMonitor = ((TextView) findViewById(R.id.Message));
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mAddHostBtn = (ImageButton) findViewById(R.id.action_add_host);
         mSettingsBtn = (ImageButton) findViewById(R.id.settings);
-        mOsFilterBtn = (TextView) findViewById(R.id.action_deleteall);
-        mSelectAllBtn = (TextView) findViewById(R.id.action_import);
-        mOfflineModeBtn = (TextView) findViewById(R.id.action_offline_mode);
         mSearchView = (SearchView) findViewById(R.id.searchView);
         toolbar2 = (Toolbar) findViewById(R.id.toolbar2);
         offlinemode = (TabItem) findViewById(R.id.offlinemodeItem);
@@ -113,7 +118,7 @@ public class                        ScanActivity extends MyActivity {
             Intercepter.initCepter(NetUtils.getMac(singleton.network.myIp, singleton.network.gateway));
             initMonitor();
             initSwipeRefresh();
-            initMenu();
+
             initSearchView();
             if (offlinemode != null)//TODO: wtf is this null
                 offlinemode.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +132,7 @@ public class                        ScanActivity extends MyActivity {
                 startNetworkScan();
             }
         }
+        initToolbarButton();
     }
 
     /**
@@ -178,25 +184,48 @@ public class                        ScanActivity extends MyActivity {
 
     }
 
-    private void                    initMenu() {
+    private void                    initToolbarButton() {
+        final BottomSheetMenuDialog bottomSheet = new BottomSheetBuilder(mInstance)
+                .setMode(BottomSheetBuilder.MODE_LIST)
+                .setBackgroundColor(ContextCompat.getColor(mInstance, R.color.material_light_white))
+                .setAppBarLayout(mAppbar)
+                .addTitleItem("Settings")
+                .addItem(0, "Os filter", R.mipmap.ic_os_filter)
+                .addItem(1, "Select all", R.mipmap.ic_select_all)
+                .addItem(2, "Mode offline", R.mipmap.ic_leave)
+                .setItemClickListener(new BottomSheetItemClickListener() {
+                    @Override
+                    public void onBottomSheetItemClick(MenuItem menuItem) {
+                        Log.d(TAG, "STRING:"+menuItem.getTitle().toString());
+                        switch (menuItem.getTitle().toString()) {
+                            case "Os filter":
+                                osFilterDialog();
+                                break;
+                            case "Select all":
+                                mHostAdapter.selectAll();
+                                break;
+                            case "Mode offline":
+                                startActivity(new Intent(mInstance, MenuActivity.class));
+                                break;
+                        }
+                    }
+                })
+                .expandOnStart(true)
+                .createDialog();
+        mSettingsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "show settings");
+                bottomSheet.show();
+            }
+        });
         mAddHostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAddHostDialog();
             }
         });
-        mSettingsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mInstance.findViewById(R.id.clipper).setVisibility(View.VISIBLE);
-                mFab.setVisibility(View.GONE);
-            }
-        });
-        mBottomMonitor.setText("");
-        mOsFilterBtn.setOnClickListener(onClickTopMenu());
-        mSelectAllBtn.setOnClickListener(onClickTopMenu());
-        mOfflineModeBtn.setOnClickListener(onClickTopMenu());
-        findViewById(R.id.clipper).setOnClickListener(onClickTopMenu());
+
     }
 
     private void                    initSearchView() {
@@ -244,7 +273,7 @@ public class                        ScanActivity extends MyActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mInstance.findViewById(R.id.clipper).setVisibility(View.GONE);
+             /*   mInstance.findViewById(R.id.clipper).setVisibility(View.GONE);
                 mFab.setVisibility(View.VISIBLE);
                 switch (v.getId()) {
                     case R.id.action_offline_mode:
@@ -270,7 +299,7 @@ public class                        ScanActivity extends MyActivity {
                         break;
                     default:
                         break;
-                }
+                }*/
             }
         };
     }
@@ -401,5 +430,21 @@ public class                        ScanActivity extends MyActivity {
         }
         singleton.hostsList = selectedHost;
         startActivity(new Intent(mInstance, MenuActivity.class));
+    }
+
+    public void                     osFilterDialog() {
+        final RecyclerView.Adapter adapter = new OSAdapter(mInstance, mInstance.mHostAdapter.getOsList(), mListOS);
+        new RV_dialog(mInstance)
+                .setAdapter(adapter)
+                .setTitle("Choix des cibles")
+                .onPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (mListOS.size() > 0) {
+                            mInstance.mHostAdapter.filterByOs(mListOS);
+                            mListOS.clear();
+                        }
+                    }
+                }).show();
     }
 }

@@ -124,7 +124,12 @@ public class                    WiresharkActivity extends MyActivity {
     }
 
     private void                initSettings() {
-        findViewById(R.id.settingsMenu).setOnClickListener(new GeneralSettings(this, mCoordinatorLayout, mTcpdump));
+        findViewById(R.id.settingsMenu).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new GeneralSettings(mInstance, mCoordinatorLayout, mTcpdump).show();
+            }
+        });
     }
 
     private View.OnClickListener onSwitchHeader() {

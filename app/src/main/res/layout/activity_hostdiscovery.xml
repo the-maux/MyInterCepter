@@ -4,7 +4,8 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/coordinatorLayout"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+	android:layout_height="match_parent"
+	android:fitsSystemWindows="true">
 
 	<android.support.design.widget.AppBarLayout
 		android:id="@+id/appbar"
@@ -168,77 +169,6 @@
 			android:textColor="@color/green" />
 
 
-	</RelativeLayout>
-
-	<RelativeLayout
-		android:id="@+id/clipper"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:background="#33000000"
-		android:elevation="5dp"
-		android:visibility="gone">
-
-		<RelativeLayout
-			android:id="@+id/menuLayout"
-			android:layout_width="150dp"
-			android:layout_height="wrap_content"
-			android:layout_alignParentEnd="true"
-			android:layout_marginEnd="20dp"
-			android:layout_marginTop="8dp"
-			android:background="@color/material_grey_500"
-			android:elevation="7dp"
-			android:visibility="visible">
-
-			<TextView
-				android:id="@+id/action_deleteall"
-				android:layout_width="match_parent"
-				android:layout_height="40dp"
-				android:layout_alignParentTop="true"
-				android:layout_marginTop="1px"
-				android:background="@color/material_light_white"
-				android:gravity="center_vertical"
-				android:paddingBottom="8dp"
-				android:paddingLeft="10dp"
-				android:paddingTop="8dp"
-				android:text="Filtrer par OS"
-				android:textColor="@color/material_light_black"
-				android:textSize="14sp"
-				android:visibility="visible" />
-
-			<TextView
-				android:id="@+id/action_import"
-				android:layout_width="match_parent"
-				android:layout_height="40dp"
-				android:layout_below="@+id/action_deleteall"
-				android:layout_centerVertical="true"
-				android:layout_marginTop="1dp"
-				android:background="@color/material_light_white"
-				android:gravity="center_vertical"
-				android:paddingBottom="8dp"
-				android:paddingLeft="10dp"
-				android:paddingTop="8dp"
-				android:text="Tout sélectionner"
-				android:textColor="@color/material_light_black"
-				android:textSize="14sp" />
-
-			<TextView
-				android:id="@+id/action_offline_mode"
-				android:layout_width="match_parent"
-				android:layout_height="40dp"
-				android:layout_below="@+id/action_import"
-				android:layout_centerVertical="true"
-				android:layout_marginTop="1dp"
-				android:background="@color/material_light_white"
-				android:gravity="center_vertical"
-				android:paddingBottom="8dp"
-				android:paddingLeft="10dp"
-				android:paddingTop="8dp"
-				android:text="Mode hors ligne"
-				android:textColor="@color/material_light_black"
-				android:textSize="14sp"
-				android:typeface="sans" />
-
-		</RelativeLayout>
 	</RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
