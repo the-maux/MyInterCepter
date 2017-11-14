@@ -16,6 +16,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -84,10 +87,19 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
     protected void                  onResume() {
     try {
         super.onResume();
         init();
+        if (singleton.DebugMode && !mHostLoaded) {
+            Snackbar.make(mCoordinatorLayout, "debug enabled, starting Scan automaticaly", Toast.LENGTH_SHORT).show();
+            startNetworkScan();
+        }
     } catch (Exception e) {
         Log.e(TAG, "Big error dans l'initXml");
         Snackbar.make(mCoordinatorLayout, "Big error lors de l'init:", Toast.LENGTH_SHORT).show();
@@ -127,10 +139,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                         startActivity(new Intent(mInstance, MenuActivity.class));
                     }
                 });
-            if (singleton.DebugMode) {
-                Snackbar.make(mCoordinatorLayout, "debug enabled, starting Scan automaticaly", Toast.LENGTH_SHORT).show();
-                startNetworkScan();
-            }
+
         }
         initToolbarButton();
     }
@@ -267,41 +276,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     private void                    onCheckAddedHost(String addedHost) {
         Snackbar.make(mCoordinatorLayout, "Fonctionnalité non implémenté:" + addedHost, Toast.LENGTH_SHORT).show();
-    }
-
-    private View.OnClickListener    onClickTopMenu() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-             /*   mInstance.findViewById(R.id.clipper).setVisibility(View.GONE);
-                mFab.setVisibility(View.VISIBLE);
-                switch (v.getId()) {
-                    case R.id.action_offline_mode:
-                        startActivity(new Intent(mInstance, MenuActivity.class));
-                        break;
-                    case R.id.action_deleteall:
-                        final RecyclerView.Adapter adapter = new OSAdapter(mInstance, mInstance.mHostAdapter.getOsList(), mListOS);
-                        new RV_dialog(mInstance)
-                                .setAdapter(adapter)
-                                .setTitle("Choix des cibles")
-                                .onPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        if (mListOS.size() > 0) {
-                                            mInstance.mHostAdapter.filterByOs(mListOS);
-                                            mListOS.clear();
-                                        }
-                                    }
-                                }).show();
-                        break;
-                    case R.id.action_import:
-                        mInstance.mHostAdapter.selectAll();
-                        break;
-                    default:
-                        break;
-                }*/
-            }
-        };
     }
 
     /**
