@@ -29,9 +29,9 @@ import su.sniff.cepter.View.HostDiscovery.HostDiscoveryActivity;
 import java.io.*;
 import java.util.Arrays;
 
-public class SetupActivity extends MyActivity {
+public class                    SetupActivity extends MyActivity {
     private String              TAG = "SetupActivity";
-    private SetupActivity mInstance = this;
+    private SetupActivity       mInstance = this;
     private TextView            monitor;
     private Singleton           mSingleton = Singleton.getInstance();
     private final int           REQUEST_PERMISSION = 1;
@@ -42,14 +42,15 @@ public class SetupActivity extends MyActivity {
 
     public void                 onCreate(Bundle savedInstanceState) {
         View rootView = LayoutInflater.from(this).inflate(R.layout.activity_init, null);
+        this.splashscreen = false;
         super.onCreate(savedInstanceState);
         setContentView(rootView);
         initXml(rootView);
-        new RootProcess("Init").closeProcess();
     }
 
     @Override protected void    onResume() {
         super.onResume();
+        new RootProcess("Init").closeProcess();
         if (getPermission())
             initialisation();
     }
@@ -154,9 +155,9 @@ public class SetupActivity extends MyActivity {
             @Override
             public void run() {
                 startActivity(new Intent(mInstance, HostDiscoveryActivity.class));
+                finish();
             }
         });
-        finish();
     }
 
     private RootProcess         getNetworkInfoByCept() throws IOException, InterruptedException {

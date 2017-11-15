@@ -22,7 +22,7 @@ public class                    MyActivity extends AppCompatActivity {
     protected String            TAG = this.getClass().getName();
     protected MyActivity        mInstance = this;
     protected Bundle            bundle = null;
-
+    protected boolean           splashscreen = true;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         //overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
@@ -48,16 +48,16 @@ public class                    MyActivity extends AppCompatActivity {
     }
 
     protected void              setupWindowAnimations() {
-        Log.d(TAG, "setupWindowAnimations");
+/*        Log.d(TAG, "setupWindowAnimations");
         Fade out = new Fade(2);
         out.setDuration(1000);
         Fade fade = (Fade) TransitionInflater.from(this).inflateTransition(R.transition.myfade);
         Slide slide = (Slide) TransitionInflater.from(this).inflateTransition(R.transition.activity_slide);
-        getWindow().setEnterTransition(fade);
+        if (splashscreen)
+            getWindow().setEnterTransition(fade);
         getWindow().setExitTransition(out);
-
         Slide ret_slide = new Slide();
-        ret_slide.setDuration(1000);
+        ret_slide.setDuration(1000);*/
     }
 
     @Override
@@ -78,8 +78,9 @@ public class                    MyActivity extends AppCompatActivity {
     }
 
     @Override
-    public void                     startActivity(Intent intent) {
-        Log.d(TAG, "bundle Injected");
-        super.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+    public void                 startActivity(Intent intent) {
+//        Log.d(TAG, "bundle Injected");
+//        ActivityOptions.
+        super.startActivity(intent/*, ActivityOptions.makeSceneTransitionAnimation(this).toBundle()*/);
     }
 }
