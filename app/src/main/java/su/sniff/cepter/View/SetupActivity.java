@@ -159,7 +159,7 @@ public class SetupActivity extends MyActivity {
         process.exec(mSingleton.FilesPath + "cepter list");
         process.exec("exit");
         monitor("Get network Information");
-        process.waitFor();
+//        process.waitFor();
         return process;
     }
 

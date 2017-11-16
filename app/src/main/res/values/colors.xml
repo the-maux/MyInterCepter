@@ -8,6 +8,8 @@
     <color name="icmp">#75b6f7</color>
     <color name="smb">#fff999</color>
     <color name="udp">#29b6f6</color>
+    <color name="black_primary">#ff212121</color>
+    <color name="black_primary_light">#ff313131</color>
     <color name="primary">#607d8b</color>
     <color name="primary_dark">#455A64</color>
     <color name="primary_light">#CFD8DC</color>
