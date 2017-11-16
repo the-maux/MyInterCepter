@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.Comparator;
 import java.util.List;
@@ -19,15 +20,21 @@ import su.sniff.cepter.R;
 
 public class                Host {
     private String          TAG = "Host";
+    @SerializedName("ip")
     private String          ip = "Unknown";
+    @SerializedName("name")
     private String          name = "Unknown";
+    @SerializedName("mac")
     private String          mac = "Unknown";
+    @SerializedName("hostname")
     private String          hostname;
+    @SerializedName("os")
     private String          os = "Unknown";
+    @SerializedName("vendor")
     private String          vendor = "Unknown";
     private boolean         selected = false;
     private String          dumpInfo;
-    private Os osType;
+    private Os              osType;
 
     /**
      * Format : 192.168.0.12 	(theMaux) : [E8-B1-FC-A6-CF-11] [Windows 7\8\10] ; Intel Corporate
@@ -126,6 +133,10 @@ public class                Host {
         this.selected = selected;
     }
 
+    public String           getGenericId() {
+        return mac.replace(":", "");
+    }
+
     public String           getDumpInfo() {
         return dumpInfo;
     }
@@ -163,7 +174,7 @@ public class                Host {
                 .into(osImageView);
     }
 
-    private void                guessOsType(String InfoDevice) {
+    private void            guessOsType(String InfoDevice) {
         if (InfoDevice.contains("Bluebird")) {
             osType = Os.Bluebird;
         } else if (InfoDevice.contains("Windows 7")) {

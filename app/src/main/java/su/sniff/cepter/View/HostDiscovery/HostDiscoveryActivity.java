@@ -34,6 +34,7 @@ import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickList
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import su.sniff.cepter.Controller.Core.BinaryWrapper.Intercepter;
@@ -44,6 +45,7 @@ import su.sniff.cepter.Controller.Core.Singleton;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Controller.Network.ScanNetmask;
 import su.sniff.cepter.Controller.Core.MyActivity;
+import su.sniff.cepter.Model.Target.HostDiscoverySession;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.ScanHostAdapter;
 import su.sniff.cepter.View.Adapter.OSAdapter;
@@ -380,6 +382,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 monitor += "\n" + listOs.size() +" Os détected";
                 mBottomMonitor.setText(monitor);
                 Log.d(TAG, "scan Over with " + mHosts.size() + " possible target");
+                HostDiscoverySession session = new HostDiscoverySession(Calendar.getInstance().getTime(), mHosts);
+
             }
         });
     }

@@ -1,5 +1,7 @@
 package su.sniff.cepter.Model.Net;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.StringTokenizer;
 
 import su.sniff.cepter.Model.Target.MyObject;
@@ -10,7 +12,9 @@ import su.sniff.cepter.Model.Target.MyObject;
 
 public class                Ipv4 extends MyObject {
     private String          TAG = "Ipv4";
+    @SerializedName("ip_str")
     private String          ipString = "0.0.0.0";
+    @SerializedName("ip_int")
     private int             ipInt = 0;
 
     public                  Ipv4(String ip) {

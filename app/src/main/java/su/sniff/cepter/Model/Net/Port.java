@@ -1,8 +1,7 @@
 package su.sniff.cepter.Model.Net;
 
-/**
- * Created by the-maux on 07/07/17.
- */
+import com.google.gson.annotations.SerializedName;
+
 public class            Port {
     public enum         Protocol {
         TCP, UDP
@@ -10,8 +9,11 @@ public class            Port {
     public enum         State   {
         CLOSED, OPEN, FILTERED
     }
+    @SerializedName("port")
     private int         port;
+    @SerializedName("protocol")
     private Protocol    protocol;
+    @SerializedName("state")
     private State       state;
 
 }

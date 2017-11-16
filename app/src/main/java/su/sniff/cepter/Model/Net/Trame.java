@@ -2,14 +2,12 @@ package su.sniff.cepter.Model.Net;
 
 import android.util.Log;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Arrays;
 
 import su.sniff.cepter.Model.Target.MyObject;
 import su.sniff.cepter.R;
-
-/**
- * Created by root on 02/08/17.
- */
 
 public class               Trame extends MyObject {
     public String          TAG = "Trame";

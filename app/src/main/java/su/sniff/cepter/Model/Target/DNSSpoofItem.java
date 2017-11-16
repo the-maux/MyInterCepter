@@ -6,7 +6,7 @@ import su.sniff.cepter.Model.Target.MyObject;
  * Created by maxim on 20/09/2017.
  */
 
-public class DNSSpoofItem extends MyObject {
+public class            DNSSpoofItem extends MyObject {
     public String       domainAsked;
     public String       domainSpoofed;
     public boolean      actif;

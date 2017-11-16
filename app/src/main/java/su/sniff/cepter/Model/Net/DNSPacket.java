@@ -2,10 +2,6 @@ package su.sniff.cepter.Model.Net;
 
 import su.sniff.cepter.Model.Target.MyObject;
 
-/**
- * Created by maxim on 08/08/2017.
- */
-
 public class                    DNSPacket extends MyObject {
     private String              TAG = getClass().getName();
     String                      request;	//Raw packet on Hex codification

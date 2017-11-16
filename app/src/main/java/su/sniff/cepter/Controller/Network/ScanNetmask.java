@@ -72,7 +72,7 @@ public class                        ScanNetmask {
                             }
                         } else {
                             if (debuglog)
-                                Log.e(TAG, "Network Interface for " + ip + " is null (" + nbrHostScanned + "/" + NumberOfHosts + ")");
+                                Log.e(TAG, "ConfigurationBehavior Interface for " + ip + " is null (" + nbrHostScanned + "/" + NumberOfHosts + ")");
                         }
                     }
                 }  catch (UnknownHostException e) {

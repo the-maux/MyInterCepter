@@ -47,5 +47,6 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.github.clans:fab:1.6.4'
     compile 'com.github.rubensousa:bottomsheetbuilder:1.6.0'
+    compile 'com.google.code.gson:gson:2.7'
 
 }
