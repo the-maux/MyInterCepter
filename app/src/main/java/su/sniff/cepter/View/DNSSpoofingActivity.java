@@ -18,12 +18,9 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 
-import java.io.File;
-
-import su.sniff.cepter.Controller.Core.MyActivity;
-import su.sniff.cepter.Controller.Core.Singleton;
+import su.sniff.cepter.Controller.Misc.MyActivity;
+import su.sniff.cepter.Controller.Core.Conf.Singleton;
 import su.sniff.cepter.Controller.Core.BinaryWrapper.Dns.DnsSpoof;
-import su.sniff.cepter.Model.Target.DNSSpoofItem;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.DnsLogsAdapter;
 import su.sniff.cepter.View.Adapter.DnsSpoofConfAdapter;

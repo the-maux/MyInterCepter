@@ -27,12 +27,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import su.sniff.cepter.Controller.Core.Singleton;
+import su.sniff.cepter.Controller.Core.Conf.Singleton;
 import su.sniff.cepter.Controller.Core.BinaryWrapper.Tcpdump;
 import su.sniff.cepter.Model.Net.Protocol;
 import su.sniff.cepter.Model.Net.Trame;
 import su.sniff.cepter.Model.Target.Host;
-import su.sniff.cepter.Controller.Core.MyActivity;
+import su.sniff.cepter.Controller.Misc.MyActivity;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.HostSelectionAdapter;
 import su.sniff.cepter.View.Adapter.WiresharkAdapter;

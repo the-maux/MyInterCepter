@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 import su.sniff.cepter.Controller.Network.IPTables;
 import su.sniff.cepter.Controller.Network.MyDNSMITM;
-import su.sniff.cepter.Controller.Core.Singleton;
+import su.sniff.cepter.Controller.Core.Conf.Singleton;
 import su.sniff.cepter.Model.Net.Trame;
 import su.sniff.cepter.View.WiresharkActivity;
 

@@ -1,4 +1,4 @@
-package su.sniff.cepter.Controller.Core;
+package su.sniff.cepter.Controller.Core.Conf;
 
 import android.util.Log;
 

@@ -1,8 +1,6 @@
 package su.sniff.cepter.View.Dialog;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -10,13 +8,12 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckedTextView;
 
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
 
-import su.sniff.cepter.Controller.Core.Singleton;
+import su.sniff.cepter.Controller.Core.Conf.Singleton;
 import su.sniff.cepter.Controller.Core.BinaryWrapper.Tcpdump;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.MenuActivity;

@@ -5,7 +5,7 @@ import android.util.Log;
 import java.io.*;
 import java.lang.reflect.Field;
 
-import su.sniff.cepter.Controller.Core.Singleton;
+import su.sniff.cepter.Controller.Core.Conf.Singleton;
 
 public class                    RootProcess {
     private String              TAG = "RootProcess";

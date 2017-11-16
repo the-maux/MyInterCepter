@@ -1,4 +1,4 @@
-package su.sniff.cepter.Controller.Core;
+package su.sniff.cepter.Controller.Misc;
 
 import android.app.Application;
 

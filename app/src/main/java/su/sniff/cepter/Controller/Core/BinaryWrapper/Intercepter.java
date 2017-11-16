@@ -8,7 +8,7 @@ import android.widget.TextView;
 import java.io.IOException;
 
 import su.sniff.cepter.Controller.Network.IPTables;
-import su.sniff.cepter.Controller.Core.Singleton;
+import su.sniff.cepter.Controller.Core.Conf.Singleton;
 import su.sniff.cepter.R;
 
 /**

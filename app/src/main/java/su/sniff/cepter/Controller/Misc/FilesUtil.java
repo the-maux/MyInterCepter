@@ -1,4 +1,4 @@
-package su.sniff.cepter.Controller.Core;
+package su.sniff.cepter.Controller.Misc;
 
 import android.util.Log;
 
@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import su.sniff.cepter.Controller.Core.Conf.Singleton;
 import su.sniff.cepter.Model.Target.DNSSpoofItem;
 import su.sniff.cepter.Model.Target.Host;
 

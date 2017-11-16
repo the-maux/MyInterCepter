@@ -21,7 +21,7 @@ package su.sniff.cepter.Controller.Network;
 
 import android.util.Log;
 
-import su.sniff.cepter.Controller.Core.Singleton;
+import su.sniff.cepter.Controller.Core.Conf.Singleton;
 import su.sniff.cepter.Controller.Core.BinaryWrapper.RootProcess;
 
 public class                    IPTables {

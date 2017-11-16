@@ -10,8 +10,8 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import su.sniff.cepter.Controller.Core.MyActivity;
-import su.sniff.cepter.Controller.Core.Singleton;
+import su.sniff.cepter.Controller.Misc.MyActivity;
+import su.sniff.cepter.Controller.Core.Conf.Singleton;
 import su.sniff.cepter.Controller.Core.BinaryWrapper.Dora;
 import su.sniff.cepter.Controller.Core.BinaryWrapper.Tcpdump;
 import su.sniff.cepter.R;

@@ -2,7 +2,7 @@ package su.sniff.cepter.Controller.Network;
 
 import android.util.Log;
 
-import su.sniff.cepter.Controller.Core.Singleton;
+import su.sniff.cepter.Controller.Core.Conf.Singleton;
 import su.sniff.cepter.View.HostDiscovery.HostDiscoveryActivity;
 
 import java.io.IOException;
@@ -72,7 +72,7 @@ public class                        ScanNetmask {
                             }
                         } else {
                             if (debuglog)
-                                Log.e(TAG, "ConfigurationBehavior Interface for " + ip + " is null (" + nbrHostScanned + "/" + NumberOfHosts + ")");
+                                Log.e(TAG, "PersistanteConfiguration Interface for " + ip + " is null (" + nbrHostScanned + "/" + NumberOfHosts + ")");
                         }
                     }
                 }  catch (UnknownHostException e) {

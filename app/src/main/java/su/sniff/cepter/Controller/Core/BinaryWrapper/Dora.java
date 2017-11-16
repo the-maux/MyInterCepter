@@ -6,7 +6,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import su.sniff.cepter.Controller.Core.Singleton;
+import su.sniff.cepter.Controller.Core.Conf.Singleton;
 import su.sniff.cepter.Model.Unix.DoraProcess;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.View.Dora.DoraActivity;

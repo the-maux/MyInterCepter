@@ -22,7 +22,7 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import su.sniff.cepter.Controller.Core.Singleton;
+import su.sniff.cepter.Controller.Core.Conf.Singleton;
 import su.sniff.cepter.Model.Target.Host;
 
 /**

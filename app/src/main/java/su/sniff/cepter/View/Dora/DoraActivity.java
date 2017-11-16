@@ -13,9 +13,9 @@ import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.ImageView;
 
-import su.sniff.cepter.Controller.Core.MyActivity;
+import su.sniff.cepter.Controller.Misc.MyActivity;
 import su.sniff.cepter.Controller.Core.BinaryWrapper.Dora;
-import su.sniff.cepter.Controller.Core.Singleton;
+import su.sniff.cepter.Controller.Core.Conf.Singleton;
 import su.sniff.cepter.Model.Unix.DoraProcess;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.DoraAdapter;
