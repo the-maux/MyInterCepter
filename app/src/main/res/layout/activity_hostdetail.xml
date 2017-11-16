@@ -35,7 +35,6 @@
                 android:layout_marginLeft="-8dp"
                 android:layout_toLeftOf="@+id/settings"
                 android:layout_toRightOf="@+id/OsImg"
-                android:accessibilityTraversalAfter="@+id/Target name"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:subtitle="THE-MAUX PC"
                 app:title="192.168.124.124">

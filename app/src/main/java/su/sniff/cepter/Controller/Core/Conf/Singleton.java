@@ -62,4 +62,5 @@ public class                            Singleton {
         //TODO: LockScreen
         Log.i("setockScreenActived", "Not implemented");
     }
+
 }

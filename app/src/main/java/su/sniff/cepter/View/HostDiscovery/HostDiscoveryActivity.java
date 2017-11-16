@@ -83,28 +83,18 @@ public class                        HostDiscoveryActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hostdiscovery);
         initXml();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void                  onResume() {
-    try {
-        super.onResume();
-        init();
-        if (singleton.DebugMode && !mHostLoaded) {
-            Snackbar.make(mCoordinatorLayout, "debug enabled, starting Scan automaticaly", Toast.LENGTH_SHORT).show();
-            startNetworkScan();
+        try {
+            init();
+            if (singleton.DebugMode && !mHostLoaded) {
+                Snackbar.make(mCoordinatorLayout, "debug enabled, starting Scan automaticaly", Toast.LENGTH_SHORT).show();
+                startNetworkScan();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Big error dans l'initXml");
+            Snackbar.make(mCoordinatorLayout, "Big error lors de l'init:", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        Log.e(TAG, "Big error dans l'initXml");
-        Snackbar.make(mCoordinatorLayout, "Big error lors de l'init:", Toast.LENGTH_SHORT).show();
-        e.printStackTrace();
     }
-}
 
     private void                    initXml() {
         mFab = (FloatingActionButton) findViewById(R.id.fab);
@@ -155,7 +145,10 @@ public class                        HostDiscoveryActivity extends MyActivity {
         } else {
             monitor += "Not Connected";
         }
-        mBottomMonitor.setText(monitor);
+        if (Singleton.getInstance().network.isConnectedToNetwork())
+            mBottomMonitor.setText(monitor);
+        else
+            mBottomMonitor.setText("No connection");
     }
 
     private void                    initSwipeRefresh() {
@@ -284,18 +277,23 @@ public class                        HostDiscoveryActivity extends MyActivity {
      */
     private void                    startNetworkScan() {
         if (!inLoading) {
-            inLoading = true;
-            initHostsRecyclerView();
-            progressAnimation();
-            toolbar2.setSubtitle("Scanning network");
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    new ScanNetmask(new IPv4CIDR(singleton.network.myIp, singleton.network.netmask), mInstance);
-                    mProgress = 1000;
+            if (singleton.network.updateInfo().isConnectedToNetwork()) {
+                inLoading = true;
+                initHostsRecyclerView();
+                progressAnimation();
+                toolbar2.setSubtitle("Scanning network");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new ScanNetmask(new IPv4CIDR(singleton.network.myIp, singleton.network.netmask), mInstance);
+                        mProgress = 1000;
 
-                }
-            }).start();
+                    }
+                }).start();
+            } else {
+                Snackbar.make(mCoordinatorLayout, "You need to be connected", Toast.LENGTH_SHORT).show();
+                mEmptyList.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -380,7 +378,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 mBottomMonitor.setText(monitor);
                 Log.d(TAG, "scan Over with " + mHosts.size() + " possible target");
                 HostDiscoverySession session = new HostDiscoverySession(Calendar.getInstance().getTime(), mHosts);
-
+                //TODO: DUMP IT !
             }
         });
     }

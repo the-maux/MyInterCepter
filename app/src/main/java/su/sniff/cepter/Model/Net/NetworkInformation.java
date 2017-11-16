@@ -17,9 +17,18 @@ public class                NetworkInformation {
     public String           netmask = "";
     public String           dns1 = "", dns2 = "";
     public String           dhcp = "";
+    public DhcpInfo         dhcpInfo;
 
     public NetworkInformation(DhcpInfo dhcpInfo, String mac) {
+        this.dhcpInfo = dhcpInfo;
+        this.mac = mac;
+    }
 
+    public boolean          isConnectedToNetwork() {
+        return !(myIp.contains("0.0.0.0") || gateway.contains("0.0.0.0"));
+    }
+
+    private void            init() {
         myIp = NetUtils.intADDRtoStringHostname(dhcpInfo.ipAddress);
         gateway = NetUtils.intADDRtoStringHostname(dhcpInfo.gateway);
         netmask = NetUtils.intADDRtoStringHostname(dhcpInfo.netmask);
@@ -28,8 +37,11 @@ public class                NetworkInformation {
         dns1 = NetUtils.intADDRtoStringHostname(dhcpInfo.dns1);
         dns2 = NetUtils.intADDRtoStringHostname(dhcpInfo.dns2);
         dhcp = NetUtils.intADDRtoStringHostname(dhcpInfo.serverAddress);
-        this.mac = mac;
         Log.d(TAG, "IP:" + myIp + "&GW:" + gateway + "&netmask=" + netmask + "&mac="+mac);
     }
 
+    public NetworkInformation updateInfo() {
+        init();
+        return this;
+    }
 }
