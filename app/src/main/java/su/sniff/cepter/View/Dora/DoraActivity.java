@@ -1,4 +1,4 @@
-package su.sniff.cepter.View;
+package su.sniff.cepter.View.Dora;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,6 +32,7 @@ public class                    DoraActivity extends MyActivity {
     private RecyclerView        mRV_dora;
     private DoraAdapter         mRv_Adapter;
     private FloatingActionButton mFab;
+    private int                 REFRESH_TIME = 1000;// == 1seconde
 
     @Override protected void    onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +93,6 @@ public class                    DoraActivity extends MyActivity {
         mFab.setImageResource((!isStarting) ? android.R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
     }
 
-    private int                 REFRESH_TIME = 1000;// == 1seconde
     public void                 adapterRefreshDeamon() {
         if (mDoraWrapper.isRunning()) {
             final Handler handler = new Handler();

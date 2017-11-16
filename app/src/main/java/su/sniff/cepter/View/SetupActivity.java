@@ -10,6 +10,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.transition.Slide;
+import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,13 +24,14 @@ import su.sniff.cepter.Controller.Core.BinaryWrapper.RootProcess;
 import su.sniff.cepter.Controller.Core.MyActivity;
 import su.sniff.cepter.Model.Net.NetworkInformation;
 import su.sniff.cepter.R;
+import su.sniff.cepter.View.HostDiscovery.HostDiscoveryActivity;
 
 import java.io.*;
 import java.util.Arrays;
 
-public class SetupActivity extends MyActivity {
+public class                    SetupActivity extends MyActivity {
     private String              TAG = "SetupActivity";
-    private SetupActivity mInstance = this;
+    private SetupActivity       mInstance = this;
     private TextView            monitor;
     private Singleton           mSingleton = Singleton.getInstance();
     private final int           REQUEST_PERMISSION = 1;
@@ -39,16 +42,17 @@ public class SetupActivity extends MyActivity {
 
     public void                 onCreate(Bundle savedInstanceState) {
         View rootView = LayoutInflater.from(this).inflate(R.layout.activity_init, null);
+        this.splashscreen = false;
         super.onCreate(savedInstanceState);
         setContentView(rootView);
         initXml(rootView);
-        new RootProcess("Init").closeProcess();
     }
 
     @Override protected void    onResume() {
         super.onResume();
+        new RootProcess("Init").closeProcess();
         if (getPermission())
-            Install();
+            initialisation();
     }
 
     private boolean             getPermission() {
@@ -71,7 +75,7 @@ public class SetupActivity extends MyActivity {
         switch (requestCode) {
             case REQUEST_PERMISSION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Install();
+                    initialisation();
                 } else {
                     Snackbar.make(findViewById(R.id.Coordonitor), "Vous ne pouvez pas utiliser l'application sans ces permissions", Snackbar.LENGTH_LONG).show();
                     getPermission();
@@ -81,20 +85,20 @@ public class SetupActivity extends MyActivity {
         }
     }
 
-
     private void                initXml(View rootView) {
         monitor = (TextView) rootView.findViewById(R.id.monitor);
         monitor("Initialization");
     }
 
-    private void                Install() {
+    private void                initialisation() {
         buildPath();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    if (!isItUpdated())
+                    if (!isItUpdated()) {
                         install();
+                    }
                     initInfo();
                 } catch (IOException e) {
                     monitor("Error IO");
@@ -146,9 +150,15 @@ public class SetupActivity extends MyActivity {
         }
         if (res[netmask].contains("0.0.0.0"))
             res[netmask] = "255.255.255.0";
+        monitor("Discovering network architecture");
         mSingleton.network = new NetworkInformation(dhcpInfo, NetUtils.getMac(res[ip], res[gw]));
-        startActivity(new Intent(this, ScanActivity.class));
-        finish();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(mInstance, HostDiscoveryActivity.class));
+                finish();
+            }
+        });
     }
 
     private RootProcess         getNetworkInfoByCept() throws IOException, InterruptedException {
@@ -159,7 +169,7 @@ public class SetupActivity extends MyActivity {
         process.exec(mSingleton.FilesPath + "cepter list");
         process.exec("exit");
         monitor("Get network Information");
-//        process.waitFor();
+        //process.waitFor();
         return process;
     }
 
@@ -194,14 +204,14 @@ public class SetupActivity extends MyActivity {
         inputStream.close();
         out.close();
         Log.d(TAG, "buildFile " + nameFile + "(" + sizeOfInputStram + "octet) and write :" + size);
-        new RootProcess("Install ").exec("chmod 744 " + mSingleton.FilesPath + nameFile).closeProcess();
+        new RootProcess("initialisation ").exec("chmod 744 " + mSingleton.FilesPath + nameFile).closeProcess();
     }
 
     private void                install() throws IOException, InterruptedException {
         /*  Build directory    */
-        new RootProcess("Install ").exec("mkdir -p /sdcard/Pcap").closeProcess();
-        new RootProcess("Install ").exec("mkdir -p " + mSingleton.FilesPath ).closeProcess();
-        new RootProcess("Install ").exec("chmod 777 " + mSingleton.FilesPath).closeProcess();
+        new RootProcess("initialisation ").exec("mkdir -p /sdcard/Pcap").closeProcess();
+        new RootProcess("initialisation ").exec("mkdir -p " + mSingleton.FilesPath ).closeProcess();
+        new RootProcess("initialisation ").exec("chmod 777 " + mSingleton.FilesPath).closeProcess();
 
         buildFile("busybox", R.raw.busybox);
         buildFile("cepter", R.raw.busybox);
@@ -215,28 +225,28 @@ public class SetupActivity extends MyActivity {
         new RootProcess("UNZIP FILES", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip ettercap_archive").closeProcess();
 
         buildFile("archive_nmap", R.raw.nmap);
-        new RootProcess("Install ", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip archive_nmap").closeProcess();
-        new RootProcess("Install ").exec("chmod 744 " + mSingleton.BinaryPath + "/nmap/*").closeProcess();
+        new RootProcess("initialisation ", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip archive_nmap").closeProcess();
+        new RootProcess("initialisation ").exec("chmod 744 " + mSingleton.BinaryPath + "/nmap/*").closeProcess();
 
         /*  ping binary    */
         buildFile("ping", R.raw.arpspoof);
-        new RootProcess("Install ").exec("mount -o rw,remount /system").closeProcess();
-        new RootProcess("Install ").exec("cp ./ping /system/bin/;").closeProcess();
+        new RootProcess("initialisation ").exec("mount -o rw,remount /system").closeProcess();
+        new RootProcess("initialisation ").exec("cp ./ping /system/bin/;").closeProcess();
         /*  Dns Stuff    */
-        new RootProcess("Install ").exec("echo \"nameserver `getprop net.dns1`\" > /etc/resolv.conf").closeProcess();
+        new RootProcess("initialisation ").exec("echo \"nameserver `getprop net.dns1`\" > /etc/resolv.conf").closeProcess();
         /*  Clean    */
-        new RootProcess("Install ").exec("rm " + mSingleton.BinaryPath).closeProcess();
+        new RootProcess("initialisation ").exec("rm " + mSingleton.BinaryPath).closeProcess();
         monitor("Cleaning installation");
-        new RootProcess("Install ").exec(mSingleton.BinaryPath + "busybox killall cepter").closeProcess();
-        new RootProcess("Install ").exec(mSingleton.BinaryPath + "busybox killall tcpdump").closeProcess();
-        new RootProcess("Install ").exec(mSingleton.BinaryPath + "busybox killall arpspoof").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + mSingleton.FilesPath + "Raw/*").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + mSingleton.FilesPath + "dnss").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + mSingleton.FilesPath + "hostlist").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + mSingleton.FilesPath + "*Activity").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + mSingleton.FilesPath + "archive_nmap").closeProcess();
-        new RootProcess("Install ").exec("rm -f " + mSingleton.FilesPath + "ettercap_archive").closeProcess();
-        new RootProcess("Install ").exec("echo '" + mSingleton.VERSION + "' > " + mSingleton.FilesPath + "version").closeProcess();
+        new RootProcess("initialisation ").exec(mSingleton.BinaryPath + "busybox killall cepter").closeProcess();
+        new RootProcess("initialisation ").exec(mSingleton.BinaryPath + "busybox killall tcpdump").closeProcess();
+        new RootProcess("initialisation ").exec(mSingleton.BinaryPath + "busybox killall arpspoof").closeProcess();
+        new RootProcess("initialisation ").exec("rm -f " + mSingleton.FilesPath + "Raw/*").closeProcess();
+        new RootProcess("initialisation ").exec("rm -f " + mSingleton.FilesPath + "dnss").closeProcess();
+        new RootProcess("initialisation ").exec("rm -f " + mSingleton.FilesPath + "hostlist").closeProcess();
+        new RootProcess("initialisation ").exec("rm -f " + mSingleton.FilesPath + "*Activity").closeProcess();
+        new RootProcess("initialisation ").exec("rm -f " + mSingleton.FilesPath + "archive_nmap").closeProcess();
+        new RootProcess("initialisation ").exec("rm -f " + mSingleton.FilesPath + "ettercap_archive").closeProcess();
+        new RootProcess("initialisation ").exec("echo '" + mSingleton.VERSION + "' > " + mSingleton.FilesPath + "version").closeProcess();
     }//10:68:3f:7a:65:ef ___ 10.16.186.54/23 brd 10.16.187.255
 
     private void                monitor(final String log) {

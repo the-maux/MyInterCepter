@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.ScanActivity;
+import su.sniff.cepter.View.HostDiscovery.HostDiscoveryActivity;
 import su.sniff.cepter.View.Adapter.Holder.ScanHostHolder;
 
 import java.util.ArrayList;
@@ -19,12 +19,12 @@ import android.widget.CompoundButton;
 
 public class ScanHostAdapter extends RecyclerView.Adapter<ScanHostHolder> {
     private String              TAG = "ScanHostAdapter";
-    private ScanActivity        activity;
+    private HostDiscoveryActivity activity;
     private List<Host>          mHosts = null;
     private List<Host>          originalList;
     private RecyclerView        mHost_RV;
 
-    public ScanHostAdapter(ScanActivity context, RecyclerView Host_RV) {
+    public ScanHostAdapter(HostDiscoveryActivity context, RecyclerView Host_RV) {
         activity = context;
         mHost_RV = Host_RV;
     }

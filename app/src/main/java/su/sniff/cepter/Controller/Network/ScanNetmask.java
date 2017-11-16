@@ -3,7 +3,7 @@ package su.sniff.cepter.Controller.Network;
 import android.util.Log;
 
 import su.sniff.cepter.Controller.Core.Singleton;
-import su.sniff.cepter.View.ScanActivity;
+import su.sniff.cepter.View.HostDiscovery.HostDiscoveryActivity;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -25,10 +25,10 @@ public class                        ScanNetmask {
     private volatile int            nbrHostScanned = 0;
     private volatile boolean        alreadySend = false;
     private ArrayList<String>       ipReachable = new ArrayList<>();
-    private ScanActivity            activity;
+    private HostDiscoveryActivity activity;
     private boolean                 debuglog = Singleton.getInstance().DebugMode;
 
-    public                          ScanNetmask(IPv4CIDR iPv4CIDR, ScanActivity activity) {
+    public                          ScanNetmask(IPv4CIDR iPv4CIDR, HostDiscoveryActivity activity) {
         this.activity = activity;
         service = Executors.newCachedThreadPool();
         reachableLoop(iPv4CIDR, service);

@@ -11,7 +11,7 @@ import java.util.List;
 import su.sniff.cepter.Controller.Core.Singleton;
 import su.sniff.cepter.Controller.Core.BinaryWrapper.RootProcess;
 import su.sniff.cepter.Model.Target.Host;
-import su.sniff.cepter.View.ScanActivity;
+import su.sniff.cepter.View.HostDiscovery.HostDiscoveryActivity;
 
 /**
  * Created by root on 05/09/17.
@@ -24,7 +24,7 @@ public class                         Fingerprint {
      * @param scanActivity activity for callback
      * @return
      */
-    public static void              guessHostFingerprint(final ScanActivity scanActivity) {
+    public static void              guessHostFingerprint(final HostDiscoveryActivity scanActivity) {
         final List<Host> hosts = new ArrayList<>();
         final RootProcess process = new RootProcess("Cepter Scan host", Singleton.getInstance().FilesPath);
         final BufferedReader bufferedReader = new BufferedReader(process.getInputStreamReader());
