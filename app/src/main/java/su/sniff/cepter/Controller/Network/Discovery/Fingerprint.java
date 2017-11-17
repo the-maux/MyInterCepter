@@ -1,4 +1,4 @@
-package su.sniff.cepter.Controller.Network;
+package su.sniff.cepter.Controller.Network.Discovery;
 
 import android.util.Log;
 
@@ -40,7 +40,6 @@ public class                         Fingerprint {
                             alreadyIn = false;
                             Host hostObj = new Host(read);//Format : IP\t(HOSTNAME) \n [MAC] [OS] : VENDOR \n
                             if (!hosts.contains(hostObj)) {
-
                                 for (Host host : hosts) {
                                     if (host.equals(hostObj)) {
                                         alreadyIn = true;

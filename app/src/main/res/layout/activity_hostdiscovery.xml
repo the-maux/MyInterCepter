@@ -86,16 +86,23 @@
 				app:tabMode="scrollable">
 
 				<android.support.design.widget.TabItem
-					android:id="@+id/subnetMode"
+					android:id="@+id/ArpTab"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:text="icmp\ndiscovery" />
+					android:text="arp\ndiscovery" />
 
 				<android.support.design.widget.TabItem
-					android:id="@+id/offlinemodeItem"
+					android:id="@+id/IcmpTab"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="ICMP\nDiscovery" />
+
+				<android.support.design.widget.TabItem
+					android:id="@+id/NmapTab"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="NMAP\nDiscovery" />
+
 			</android.support.design.widget.TabLayout>
 
 		</RelativeLayout>

@@ -17,14 +17,14 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.CompoundButton;
 
 
-public class ScanHostAdapter extends RecyclerView.Adapter<ScanHostHolder> {
-    private String              TAG = "ScanHostAdapter";
+public class HostDiscoveryAdapter extends RecyclerView.Adapter<ScanHostHolder> {
+    private String              TAG = "HostDiscoveryAdapter";
     private HostDiscoveryActivity activity;
     private List<Host>          mHosts = null;
     private List<Host>          originalList;
     private RecyclerView        mHost_RV;
 
-    public ScanHostAdapter(HostDiscoveryActivity context, RecyclerView Host_RV) {
+    public HostDiscoveryAdapter(HostDiscoveryActivity context, RecyclerView Host_RV) {
         activity = context;
         mHost_RV = Host_RV;
     }
@@ -35,7 +35,9 @@ public class ScanHostAdapter extends RecyclerView.Adapter<ScanHostHolder> {
 
     @Override public void       onBindViewHolder(final ScanHostHolder holder, final int position) {
         final Host host = mHosts.get(holder.getAdapterPosition());
-        holder.ipHostname.setText(host.getIp() + " " + host.getName());
+        String ipHostname = host.getIp() + " " + host.getName() + ((host.isItMyDevice)
+                ? " - [YourDevice]" : "");
+        holder.ipHostname.setText(ipHostname);
         holder.mac.setText(host.getMac());
         holder.os.setText(host.getOS());
         holder.vendor.setText(host.getVendor());

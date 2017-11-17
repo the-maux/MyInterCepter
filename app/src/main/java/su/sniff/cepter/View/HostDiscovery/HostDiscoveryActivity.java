@@ -35,16 +35,14 @@ import java.util.Calendar;
 import java.util.List;
 
 import su.sniff.cepter.Controller.Core.BinaryWrapper.Intercepter;
-import su.sniff.cepter.Controller.Network.Fingerprint;
-import su.sniff.cepter.Controller.Network.IPv4CIDR;
+import su.sniff.cepter.Controller.Network.Discovery.ArpScan;
 import su.sniff.cepter.Controller.Network.NetUtils;
 import su.sniff.cepter.Controller.Core.Conf.Singleton;
 import su.sniff.cepter.Model.Target.Host;
-import su.sniff.cepter.Controller.Network.ScanNetmask;
 import su.sniff.cepter.Controller.Misc.MyActivity;
 import su.sniff.cepter.Model.Target.HostDiscoverySession;
 import su.sniff.cepter.R;
-import su.sniff.cepter.View.Adapter.ScanHostAdapter;
+import su.sniff.cepter.View.Adapter.HostDiscoveryAdapter;
 import su.sniff.cepter.View.Adapter.OSAdapter;
 import su.sniff.cepter.View.Dialog.RV_dialog;
 import su.sniff.cepter.View.Dialog.TIL_dialog;
@@ -65,7 +63,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private CoordinatorLayout       mCoordinatorLayout;
     private AppBarLayout            mAppbar;
     private List<Host>              mHosts;
-    ScanHostAdapter                 mHostAdapter;
+    private HostDiscoveryAdapter    mHostAdapter;
     private RecyclerView            mHost_RV;
     private String                  monitor;
     private FloatingActionButton    mFab;
@@ -133,9 +131,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
         initToolbarButton();
     }
 
-    /**
-     * Monitor is the basic network Information
-     */
     private void                    initMonitor() {
         Log.d(TAG, "Init Monitor");
         WifiInfo wifiInfo = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
@@ -148,7 +143,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         if (Singleton.getInstance().network.isConnectedToNetwork())
             mBottomMonitor.setText(monitor);
         else
-            mBottomMonitor.setText("No connection");
+            mBottomMonitor.setText(wifiInfo.getSSID() + ": No connection");
     }
 
     private void                    initSwipeRefresh() {
@@ -260,7 +255,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     private void                    initHostsRecyclerView() {
         mHosts = new ArrayList<>();
-        mHostAdapter = new ScanHostAdapter(this, mHost_RV);
+        mHostAdapter = new HostDiscoveryAdapter(this, mHost_RV);
         mHost_RV.setAdapter(mHostAdapter);
         mHost_RV.setHasFixedSize(true);
         mHost_RV.setLayoutManager(new LinearLayoutManager(mInstance));
@@ -270,11 +265,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
         Snackbar.make(mCoordinatorLayout, "Fonctionnalité non implémenté:" + addedHost, Toast.LENGTH_SHORT).show();
     }
 
-    /**
-     * BuildIPv4 objet to scan netmask
-     * Get list of potential target from arp table file
-     * get Cepter scan
-     */
     private void                    startNetworkScan() {
         if (!inLoading) {
             if (singleton.network.updateInfo().isConnectedToNetwork()) {
@@ -282,14 +272,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 initHostsRecyclerView();
                 progressAnimation();
                 toolbar2.setSubtitle("Scanning network");
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        new ScanNetmask(new IPv4CIDR(singleton.network.myIp, singleton.network.netmask), mInstance);
-                        mProgress = 1000;
-
-                    }
-                }).start();
+                new ArpScan(this);
+                mProgress = 1000;
             } else {
                 Snackbar.make(mCoordinatorLayout, "You need to be connected", Toast.LENGTH_SHORT).show();
                 mEmptyList.setVisibility(View.VISIBLE);
@@ -302,7 +286,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
             startNetworkScan();
         } else {
             try {
-                startAttack();
+                launchMenu();
             } catch (IOException e) {
                 Log.e(TAG, "Error in start attack");
                 e.getStackTrace();
@@ -342,25 +326,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
         }).start();
     }
 
-    public void                     onReachableScanOver(ArrayList<String> ipReachable) {
-        mInstance.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                toolbar2.setSubtitle("Target Identification");
-            }
-        });
-        NetUtils.dumpListHostFromARPTableInFile(mInstance, ipReachable);
-        mProgress = 1500;
-        mInstance.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                toolbar2.setSubtitle("Fingerprint scan");
-            }
-        });
-        Fingerprint.guessHostFingerprint(mInstance);
-        mProgress = 2000;
-    }
-
     public void                     onHostActualized(final List<Host> hosts) {
         runOnUiThread(new Runnable() {
             @Override
@@ -383,7 +348,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         });
     }
 
-    private void                    startAttack() throws IOException {
+    private void                    launchMenu() throws IOException {
         ArrayList<Host> selectedHost = new ArrayList<>();
         boolean noTargetSelected = true;
         FileOutputStream out = openFileOutput("targets", 0);
@@ -419,5 +384,18 @@ public class                        HostDiscoveryActivity extends MyActivity {
                         }
                     }
                 }).show();
+    }
+
+    public void                     monitor(final String msg) {
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                toolbar2.setSubtitle(msg);
+            }
+        });
+    }
+
+    public void                     setProgressState(int progress){
+        this.mProgress = progress;
     }
 }

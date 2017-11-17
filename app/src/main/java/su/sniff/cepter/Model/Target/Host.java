@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import su.sniff.cepter.Controller.Core.Conf.Singleton;
 import su.sniff.cepter.Model.Net.Port;
 import su.sniff.cepter.Model.Unix.Os;
 import su.sniff.cepter.R;
@@ -33,6 +34,7 @@ public class                Host {
     @SerializedName("vendor")
     private String          vendor = "Unknown";
     private boolean         selected = false;
+    public  boolean         isItMyDevice = false;
     private String          dumpInfo;
     private Os              osType;
 
@@ -54,9 +56,17 @@ public class                Host {
             //logHost(buffer);
             dumpInfo = buffer;
             guessOsType(dumpInfo);
+            isItMyDevice();
         } catch (StringIndexOutOfBoundsException e) {
             Log.e(TAG, buffer);
             e.getStackTrace();
+        }
+    }
+
+    private void            isItMyDevice() {
+        if (mac.contains(Singleton.getInstance().network.mac)) {
+            isItMyDevice = true;
+
         }
     }
 
