@@ -17,7 +17,7 @@ public class                        HostDiscoveryScan {
         this.mActivity = activity;
     }
 
-    private void                    run(typeScan typeOfScan) {
+    public void                    run(typeScan typeOfScan) {
         switch (typeOfScan) {
             case Arp:
                 startArpScan();
@@ -32,12 +32,7 @@ public class                        HostDiscoveryScan {
     }
 
     private void                    startIcmpScan() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                new ScanNetmask(new IPv4CIDR(mSingleton.network.myIp, mSingleton.network.netmask), mInstance);
-            }
-        }).start();
+        MapNetwork.getInstance(this, mSingleton.network.gateway);
     }
     private void                    startNmapScan() {
         new Thread(new Runnable() {

@@ -145,16 +145,17 @@ public class                        HostDiscoveryActivity extends MyActivity {
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                Log.d(TAG, "tab.getText().toString():" + tab.getText().toString());
                 switch (tab.getText().toString()) {
-                    case "NMAP\\nDiscovery":
+                    case "NMAP\nDiscovery":
                         Log.d(TAG, "Nmap Tab");
                         typeScan = HostDiscoveryScan.typeScan.Nmap;
                         break;
-                    case "arp\\ndiscovery":
+                    case "arp\ndiscovery":
                         Log.d(TAG, "ARP TAB");
                         typeScan = HostDiscoveryScan.typeScan.Arp;
                         break;
-                    case "ICMP\\nDiscovery":
+                    case "ICMP\nDiscovery":
                         Log.d(TAG, "ICMP TAB");
                         typeScan = HostDiscoveryScan.typeScan.Icmp;
                         break;
@@ -171,7 +172,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         WifiInfo wifiInfo = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
         monitor = wifiInfo.getSSID().replace("\"", "") + " : " + singleton.network.myIp;
         if (!monitor.contains("WiFi")) {
-            monitor += "\n" + "GW: " + singleton.network.gateway + "/" + singleton.network.netmask;
+            monitor += "\n" + "Gateway: " + singleton.network.gateway;
         } else {
             monitor += "Not Connected";
         }
@@ -307,7 +308,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 initHostsRecyclerView();
                 progressAnimation();
                 toolbar2.setSubtitle("Scanning network");
-                new HostDiscoveryScan(this);
+                new HostDiscoveryScan(this).run(typeScan);
                 mProgress = 1000;
             } else {
                 Snackbar.make(mCoordinatorLayout, "You need to be connected", Toast.LENGTH_SHORT).show();

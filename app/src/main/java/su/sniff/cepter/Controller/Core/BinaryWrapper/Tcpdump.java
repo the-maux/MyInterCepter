@@ -19,26 +19,26 @@ import su.sniff.cepter.Controller.Core.Conf.Singleton;
 import su.sniff.cepter.Model.Net.Trame;
 import su.sniff.cepter.View.WiresharkActivity;
 
-public class Tcpdump {
-    private String          TAG = "Tcpdump";
-    private static Tcpdump mInstance = null;
+public class                        Tcpdump {
+    private String                  TAG = "Tcpdump";
+    private static Tcpdump          mInstance = null;
     private LinkedHashMap<String, String> cmds;
-    private RootProcess     tcpDumpProcess;
-    private WiresharkActivity activity;
-    public boolean          isRunning = false, isDumpingInFile = false;
-    private boolean         deepAnalyseTrame = false;
-    public ArrayList<Trame> listOfTrames = new ArrayList<>();
-    public String           actualParam = "";
+    private RootProcess             tcpDumpProcess;
+    private WiresharkActivity       activity;
+    public boolean                  isRunning = false, isDumpingInFile = false;
+    private boolean                 deepAnalyseTrame = false;
+    public ArrayList<Trame>         listOfTrames = new ArrayList<>();
+    public String                   actualParam = "";
 
-    private String          INTERFACE = "-i wlan0 ";    //  Focus interfacte;
-    private String          STDOUT_BUFF = "-l ";        //  Make stdOUT line buffered.  Useful if you want to see  the  data in live
-    private String          VERBOSE_v1 = "-v ";          //  Verbose mode 1
-    private String          VERBOSE_v2 = "-vv  ";        //  Even more verbose output.
-    private String          VERBOSE_v3 = "-vvvx  ";      //  Print trame in HEXA<->ASCII
+    private String                  INTERFACE = "-i wlan0 ";    //  Focus interfacte;
+    private String                  STDOUT_BUFF = "-l ";        //  Make stdOUT line buffered.  Useful if you want to see  the  data in live
+    private String                  VERBOSE_v1 = "-v ";          //  Verbose mode 1
+    private String                  VERBOSE_v2 = "-vv  ";        //  Even more verbose output.
+    private String                  VERBOSE_v3 = "-vvvx  ";      //  Print trame in HEXA<->ASCII
     /*                           -x When parsing and printing, in addition to printing  the  headers
                                  of  each  packet,  print the data of each packet (minus its link
                                  level header) in hex.*/
-    private String          SNARF = "-s 0 ";             //  Snarf snaplen bytes of data from each  packet , no idea what this mean
+    private String                  SNARF = "-s 0 ";             //  Snarf snaplen bytes of data from each  packet , no idea what this mean
 
     private Tcpdump(WiresharkActivity activity) {
         this.activity = activity;
@@ -56,7 +56,7 @@ public class Tcpdump {
         return mInstance;
     }
 
-    private void            initCmds() {
+    private void                    initCmds() {
         cmds = new LinkedHashMap<>();
         cmds.put("No Filter", INTERFACE  + " \' ");
         cmds.put("Custom Filter", INTERFACE + " \' ");
@@ -68,7 +68,7 @@ public class Tcpdump {
         cmds.put("UDP Filter", INTERFACE + " \' udp ");
         cmds.put("Arp Filter",  INTERFACE + " \' arp ");
     }
-    private String          buildCmd(String actualParam, String hostFilter) {
+    private String                  buildCmd(String actualParam, String hostFilter) {
         String date =  new SimpleDateFormat("MM_dd_HH_mm_ss", Locale.FRANCE).format(new Date());
         String pcapFile = ((isDumpingInFile) ?
                 (" -w " + Singleton.getInstance().PcapPath + date + ".pcap ") : "");
@@ -87,7 +87,7 @@ public class Tcpdump {
      * Inspect/Alter DNS Query
      * Dispatch the DNS request on network
      */
-    public void             start(final String actualParam, String hostFilter) {
+    public void                     start(final String actualParam, String hostFilter) {
         Log.i(TAG, "start");
         IPTables.InterceptWithoutSSL();
         this.actualParam = actualParam;
@@ -132,7 +132,7 @@ public class Tcpdump {
             }
         }).start();
     }
-    private void            onNewLine(String line) {
+    private void                    onNewLine(String line) {
         if (line.contains("Quiting...")) {
             Trame trame = new Trame("Processus over", listOfTrames.size(), 0);
             trame.connectionOver = true;
@@ -152,7 +152,7 @@ public class Tcpdump {
             onTcpDumpStop();
         }
     }
-    public void             onTcpDumpStop() {
+    public void                     onTcpDumpStop() {
         if (isRunning) {
             ArpSpoof.stopArpSpoof();
             RootProcess.kill("tcpdump");
@@ -170,7 +170,7 @@ public class Tcpdump {
      * Renvoie la trame mais peut altérer la réponse
      * @param line
      */
-    private void            MITM_DNS(String line) {
+    private void                    MITM_DNS(String line) {
         StringBuilder reqdata = new StringBuilder();
         String regex = "^.+length\\s+(\\d+)\\)\\s+([\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3})\\.[^\\s]+\\s+>\\s+([\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3})\\.[^\\:]+.*";
         Matcher matcher = Pattern.compile(regex).matcher(line);
@@ -190,10 +190,10 @@ public class Tcpdump {
         return cmds;
     }
 
-    public boolean          isDeepAnalyseTrame() {
+    public boolean                  isDeepAnalyseTrame() {
         return deepAnalyseTrame;
     }
-    public void             setDeepAnalyseTrame(boolean deepAnalyseTrame) {
+    public void                     setDeepAnalyseTrame(boolean deepAnalyseTrame) {
         /** TODO: Restart App with dump Mode**/
         this.deepAnalyseTrame = deepAnalyseTrame;
     }

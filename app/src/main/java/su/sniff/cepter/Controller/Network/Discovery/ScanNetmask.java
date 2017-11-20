@@ -49,12 +49,35 @@ public class                        ScanNetmask {
         alreadySend = true;
         mScanner.onReachableScanOver(ipReachable);
     }
+    public boolean                  ping(String host) {
+        try {
+//            RootProcess pingProces = new RootProcess("ICMP SCAN")
+            Process  mIpAddrProcess = Runtime.getRuntime().exec(Singleton.getInstance().BinaryPath + "/busybox ping -c 1 " + host);
+            if( mIpAddrProcess.waitFor() == 0){
+                Log.d(TAG, "ping " + host + " TRUE");
+                return true;
+            } else {
+                Log.d(TAG, "ping " + host + " FALSE");
+                return false;
+            }
+        }
+        catch (InterruptedException ignore)        {
+            Log.w("MapNetwork", host + " not reachable interupted ");
+            ignore.printStackTrace();
+        }
+        catch (IOException e)        {
+            Log.w("MapNetwork", host + " not reachable IO ");
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     private void                    runnableReachable(ExecutorService service, final String ip, final int nbrHostScanned) {
         new Thread(new Runnable() {
             public void run() {
                 try {
                     InetAddress host = InetAddress.getByName(ip);
+                    ping(ip);
                     if (InetAddress.getByName(ip).isReachable(1000)) {//Timeout 10s
                         if (debuglog)
                             Log.d(TAG, ip + " is reachable (" + nbrHostScanned + "/" + NumberOfHosts + ")");
