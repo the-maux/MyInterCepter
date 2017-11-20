@@ -6,11 +6,13 @@ import android.util.Log;
 import com.bumptech.glide.Glide;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import su.sniff.cepter.Controller.Core.Conf.Singleton;
+import su.sniff.cepter.Controller.Network.BonjourService.Service;
 import su.sniff.cepter.Model.Net.Port;
 import su.sniff.cepter.Model.Unix.Os;
 import su.sniff.cepter.R;
@@ -33,6 +35,8 @@ public class                Host {
     private String          os = "Unknown";
     @SerializedName("vendor")
     private String          vendor = "Unknown";
+    private ArrayList<Service> ServiceActivOnHost = null;
+    private boolean         isServiceActiveOnHost = false;
     private boolean         selected = false;
     public  boolean         isItMyDevice = false;
     private String          dumpInfo;
@@ -226,6 +230,10 @@ public class                Host {
             osType = Os.Cisco;
         } else if (InfoDevice.contains("quanta")) {
             osType = Os.QUANTA;
+        } else if (InfoDevice.contains("android") || InfoDevice.contains("mobile") || InfoDevice.contains("samsung") ||
+                    InfoDevice.contains("murata") || InfoDevice.contains("huawei") || InfoDevice.contains("oneplus") ||
+                    InfoDevice.contains("lg") || InfoDevice.contains("motorola")) {
+            osType = Os.Android;
         } else if (InfoDevice.contains("windows 7")) {
             osType = Os.Windows7_8_10;
         } else if (InfoDevice.contains("windows 2000")) {
@@ -234,9 +242,6 @@ public class                Host {
             osType = Os.Windows10;
         } else if (InfoDevice.contains("apple")) {
             osType = Os.Apple;
-        } else if (InfoDevice.contains("android") || InfoDevice.contains("mobile") || InfoDevice.contains("samsung") ||
-                InfoDevice.contains("murata") || InfoDevice.contains("huawei") || InfoDevice.contains("oneplus") || InfoDevice.contains("lg")) {
-            osType = Os.Android;
         } else if (InfoDevice.contains("raspberry")) {
             osType = Os.Raspberry;
         }  else if (InfoDevice.contains("ios")) {
@@ -263,7 +268,19 @@ public class                Host {
             return 0;
         }
     };
-
+    public boolean          isServiceActiveOnHost() {
+        return isServiceActiveOnHost;
+    }
+    /**
+     * Update service by BonjourManager
+     */
+    public void             updateServiceHost(Service service) {
+        if (ServiceActivOnHost == null) {
+            ServiceActivOnHost = new ArrayList<>();
+            isServiceActiveOnHost = true;
+        }
+        ServiceActivOnHost.add(service);
+    }
 
     public Os               getOsType() {
         return osType;

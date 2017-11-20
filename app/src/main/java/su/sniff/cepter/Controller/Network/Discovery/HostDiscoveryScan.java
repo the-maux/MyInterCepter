@@ -1,14 +1,18 @@
 package su.sniff.cepter.Controller.Network.Discovery;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 import su.sniff.cepter.Controller.Core.Conf.Singleton;
+import su.sniff.cepter.Controller.Network.BonjourService.BonjourManager;
 import su.sniff.cepter.Controller.Network.IPv4CIDR;
 import su.sniff.cepter.Controller.Network.NetUtils;
 import su.sniff.cepter.View.HostDiscovery.HostDiscoveryActivity;
 
 public class                        HostDiscoveryScan {
-    public enum typeScan {          Arp, Icmp, Nmap }
+    private String                  TAG = "HostDiscoveryScan";
+    public enum typeScan {          Arp, Services, Nmap }
     private HostDiscoveryScan       mInstance = this;
     private Singleton               mSingleton = Singleton.getInstance();
     private HostDiscoveryActivity   mActivity;
@@ -22,8 +26,8 @@ public class                        HostDiscoveryScan {
             case Arp:
                 startArpScan();
                 break;
-            case Icmp:
-                startIcmpScan();
+            case Services:
+                startBonjourScan();
                 break;
             case Nmap:
                 startNmapScan();
@@ -31,9 +35,10 @@ public class                        HostDiscoveryScan {
         }
     }
 
-    private void                    startIcmpScan() {
-        MapNetwork.getInstance(this, mSingleton.network.gateway);
+    private void                    startBonjourScan() {
+        BonjourManager bonjourManager = new BonjourManager(mActivity, mSingleton.hostsList);
     }
+
     private void                    startNmapScan() {
         new Thread(new Runnable() {
             @Override
@@ -52,6 +57,7 @@ public class                        HostDiscoveryScan {
     }
 
     public void                     onReachableScanOver(ArrayList<String> ipReachable) {
+        Log.d(TAG, "onReachableScanOver");
         mActivity.monitor("Target Identification");
         NetUtils.dumpListHostFromARPTableInFile(mActivity, ipReachable);
         mActivity.setProgressState(1500);

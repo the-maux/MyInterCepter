@@ -155,10 +155,11 @@ public class                        HostDiscoveryActivity extends MyActivity {
                         Log.d(TAG, "ARP TAB");
                         typeScan = HostDiscoveryScan.typeScan.Arp;
                         break;
-                    case "ICMP\nDiscovery":
-                        Log.d(TAG, "ICMP TAB");
-                        typeScan = HostDiscoveryScan.typeScan.Icmp;
+                    case "Services\nDiscovery":
+                        Log.d(TAG, "Service TAB");
+                        typeScan = HostDiscoveryScan.typeScan.Services;
                         break;
+
                 }
                 startNetworkScan();
             }
@@ -422,5 +423,9 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     public void                     setProgressState(int progress){
         this.mProgress = progress;
+    }
+
+    public void                     notifiyServiceAllScaned() {
+        Snackbar.make(mCoordinatorLayout, "Scanning service on network finished", Toast.LENGTH_SHORT).show();
     }
 }

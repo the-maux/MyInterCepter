@@ -55,9 +55,10 @@ public class                        ScanNetmask {
             Process  mIpAddrProcess = Runtime.getRuntime().exec(Singleton.getInstance().BinaryPath + "/busybox ping -c 1 " + host);
             if( mIpAddrProcess.waitFor() == 0){
                 Log.d(TAG, "ping " + host + " TRUE");
+                mIpAddrProcess.destroy();
                 return true;
             } else {
-                Log.d(TAG, "ping " + host + " FALSE");
+                mIpAddrProcess.destroy();
                 return false;
             }
         }
@@ -81,8 +82,9 @@ public class                        ScanNetmask {
                     if (InetAddress.getByName(ip).isReachable(1000)) {//Timeout 10s
                         if (debuglog)
                             Log.d(TAG, ip + " is reachable (" + nbrHostScanned + "/" + NumberOfHosts + ")");
-                        NetworkInterface ni = NetworkInterface.getByInetAddress(host);// send always null
-                        if (ni != null) {
+                        ipReachable.add(ip + ":");
+                        //NetworkInterface ni = NetworkInterface.getByInetAddress(host);// send always null
+                        /*if (ni != null) {
                             byte[] mac = ni.getHardwareAddress();
                             String MAC = "";
                             if (mac != null) {
@@ -97,7 +99,7 @@ public class                        ScanNetmask {
                         } else {
                             if (debuglog)
                                 Log.e(TAG, "PersistanteConfiguration Interface for " + ip + " is null (" + nbrHostScanned + "/" + NumberOfHosts + ")");
-                        }
+                        }*/
                     }
                 }  catch (UnknownHostException e) {
                     Log.e(TAG, "UnknownHostException: " + ip + " (" + nbrHostScanned + "/" + NumberOfHosts + ")");

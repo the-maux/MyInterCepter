@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/coordinatorLayout"
@@ -32,7 +33,7 @@
 					android:layout_height="wrap_content"
 					android:layout_alignParentStart="true"
 					android:layout_alignParentTop="true"
-					android:layout_toLeftOf="@+id/searchView"
+					android:layout_toStartOf="@+id/searchView"
 					android:addStatesFromChildren="true"
 					android:minWidth="100dp"
 					app:layout_scrollFlags="scroll|enterAlways"
@@ -49,7 +50,7 @@
 					android:layout_centerVertical="false"
 					android:layout_marginEnd="8dp"
 					android:layout_marginTop="12dp"
-					android:layout_toLeftOf="@+id/action_add_host" />
+					android:layout_toStartOf="@+id/action_add_host" />
 
 				<ImageButton
 					android:id="@+id/action_add_host"
@@ -59,7 +60,7 @@
 					android:layout_centerVertical="false"
 					android:layout_marginEnd="8dp"
 					android:layout_marginTop="12dp"
-					android:layout_toLeftOf="@+id/settings"
+					android:layout_toStartOf="@+id/settings"
 					android:background="@android:color/transparent"
 					app:srcCompat="@drawable/ic_add_circle" />
 
@@ -67,7 +68,7 @@
 					android:id="@+id/settings"
 					android:layout_width="32dp"
 					android:layout_height="32dp"
-					android:layout_alignParentRight="true"
+					android:layout_alignParentEnd="true"
 					android:layout_alignParentTop="true"
 					android:layout_centerVertical="false"
 					android:layout_marginEnd="8dp"
@@ -92,17 +93,16 @@
 					android:text="arp\ndiscovery" />
 
 				<android.support.design.widget.TabItem
-					android:id="@+id/IcmpTab"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="ICMP\nDiscovery" />
-
-				<android.support.design.widget.TabItem
 					android:id="@+id/NmapTab"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="NMAP\nDiscovery" />
 
+                <android.support.design.widget.TabItem
+                    android:id="@+id/IcmpTab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Services\nDiscovery" />
 			</android.support.design.widget.TabLayout>
 
 		</RelativeLayout>
@@ -113,9 +113,9 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentBottom="true"
-		android:layout_alignParentRight="true"
+		android:layout_alignParentEnd="true"
 		android:layout_marginBottom="16dp"
-		android:layout_marginRight="16dp"
+		android:layout_marginEnd="16dp"
 		android:src="@android:drawable/ic_menu_search"
 		app:fab_colorNormal="@android:color/holo_blue_light"
 		app:fab_colorPressed="@android:color/holo_blue_bright"
@@ -168,7 +168,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="false"
+            android:layout_alignParentEnd="false"
             android:layout_centerHorizontal="true"
             android:background="@color/primary_text"
             android:elevation="2dp"

@@ -81,18 +81,18 @@ public class                NetUtils {
             boolean flag;
             for (String reachable : ipReachable) {
                 flag = false;
-                Log.d(TAG, "asking for:" + reachable);
+                //Log.d(TAG, "asking for:" + reachable);
                 for (String s : listOfIpsAlreadyIn) {
                     if ((reachable.substring(0, reachable.indexOf(":")) + "..").contains(s + "..")) {
-                        Log.d(TAG, s + "-Alreadyin>" + reachable.substring(0, reachable.indexOf(":")));
+                        //Log.d(TAG, "\t\t" + s + "-Alreadyin>" + reachable.substring(0, reachable.indexOf(":")));
                         flag = true;
                     }
                 }
                 if (!flag) {
-                    Log.d(TAG, "dumpHOSTFILE:" + reachable + "& flag == " + flag);
+                    //Log.d(TAG, "\t\t" + "dumpHOSTFILE:" + reachable + "& flag == false");
                     hostListFile.write((reachable + "\n").getBytes());
-                } else if (flag) {
-                    Log.d("ScanNetmask", "Detected but not added::" + reachable + "with flag at :"+flag);
+                } else {
+                    //Log.d(TAG, "\t\t" + "Detected but not added::" + reachable + "with flag at : true");
                 }
             }
             bufferedReader.close();
