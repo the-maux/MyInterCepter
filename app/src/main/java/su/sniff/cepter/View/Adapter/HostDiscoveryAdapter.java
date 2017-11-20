@@ -52,7 +52,7 @@ public class HostDiscoveryAdapter extends RecyclerView.Adapter<ScanHostHolder> {
                 }
             }
         });
-        Host.setOsIcon(activity, mHosts.get(holder.getAdapterPosition()).getDumpInfo(), holder.osIcon);
+        Host.setOsIcon(activity, mHosts.get(holder.getAdapterPosition()), holder.osIcon);
     }
 
     private void                 onHostChecked(final ScanHostHolder holder, Host host, final int position) {

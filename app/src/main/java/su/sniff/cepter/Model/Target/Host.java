@@ -151,31 +151,65 @@ public class                Host {
         return dumpInfo;
     }
 
-    public static void      setOsIcon(Context context, String InfoDevice, CircleImageView osImageView) {
+    public static void      setOsIcon(Context context, Host host, CircleImageView osImageView) {
         int                 ImageRessource;
 
-        if (InfoDevice == null) {
-            ImageRessource = R.drawable.monitor;
-        } else if (InfoDevice.contains("Windows")) {
-            ImageRessource = R.drawable.winicon;
-        } else if (InfoDevice.contains("Apple")) {
-            ImageRessource = R.drawable.ios;
-        } else if (InfoDevice.contains("Android") || InfoDevice.contains("Mobile") || InfoDevice.contains("Samsung")) {
-            ImageRessource = R.mipmap.ic_logo_android_trans_round;
-        } else if (InfoDevice.contains("Cisco")) {
-            ImageRessource = R.drawable.cisco;
-        } else if (InfoDevice.contains("Raspberry")) {
-            ImageRessource = R.drawable.rasp;
-        } else if (InfoDevice.contains("QUANTA")) {
-            ImageRessource = R.drawable.quanta;
-        } else if (InfoDevice.contains("Bluebird")) {
-            ImageRessource = R.drawable.bluebird;
-        } else if (InfoDevice.contains("Ios")) {
-            ImageRessource = R.drawable.ios;
-        } else if (!(!InfoDevice.contains("Unix") && !InfoDevice.contains("Linux") && !InfoDevice.contains("BSD"))) {
-            ImageRessource = R.drawable.linuxicon;
-        } else
-            ImageRessource = R.drawable.monitor;
+        switch (host.getOsType()) {
+            case Windows2000:
+                ImageRessource = R.drawable.winicon;
+                break;
+            case WindowsXP:
+                ImageRessource = R.drawable.winicon;
+                break;
+            case Windows10:
+                ImageRessource = R.mipmap.ic_windows_dix_round;
+                break;
+            case Windows7_8_10:
+                ImageRessource = R.drawable.winicon;
+                break;
+            case Cisco:
+                ImageRessource = R.drawable.cisco;
+                break;
+            case Raspberry:
+                ImageRessource = R.drawable.rasp;
+                break;
+            case QUANTA:
+                ImageRessource = R.drawable.quanta;
+                break;
+            case Bluebird:
+                ImageRessource = R.drawable.bluebird;
+                break;
+            case Apple:
+                ImageRessource = R.drawable.ios;
+                break;
+            case Ios:
+                ImageRessource = R.drawable.ios;
+                break;
+            case Unix:
+                ImageRessource = R.drawable.linuxicon;
+                break;
+            case Linux_Unix:
+                ImageRessource = R.drawable.linuxicon;
+                break;
+            case OpenBSD:
+                ImageRessource = R.drawable.linuxicon;
+                break;
+            case Android:
+                ImageRessource = R.mipmap.ic_logo_android_trans_round;
+                break;
+            case Mobile:
+                ImageRessource = R.mipmap.ic_logo_android_trans_round;
+                break;
+            case Samsung:
+                ImageRessource = R.mipmap.ic_logo_android_trans_round;
+                break;
+            case Unknow:
+                ImageRessource = R.drawable.monitor;
+                break;
+            default:
+                ImageRessource = R.drawable.monitor;
+                break;
+        }
         Glide.with(context)
                 .load(ImageRessource)
                 .override(100, 100)

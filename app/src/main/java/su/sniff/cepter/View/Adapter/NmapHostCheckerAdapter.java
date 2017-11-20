@@ -12,10 +12,6 @@ import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.R;
 import su.sniff.cepter.View.Adapter.Holder.HostSelectionHolder;
 
-/**
- * Created by root on 04/08/17.
- */
-
 public class                    NmapHostCheckerAdapter extends RecyclerView.Adapter<HostSelectionHolder> {
     private String              TAG = this.getClass().getName();
     private Activity            activity;
@@ -36,7 +32,7 @@ public class                    NmapHostCheckerAdapter extends RecyclerView.Adap
         holder.itemView.setOnClickListener(onClickCard(host));
         holder.nameOS.setText(host.getIp());
         holder.checkBox.setVisibility(View.INVISIBLE);
-        Host.setOsIcon(activity, host.getDumpInfo(), holder.imageOS);
+        Host.setOsIcon(activity, host, holder.imageOS);
     }
 
     private View.OnClickListener onClickCard(final Host host) {

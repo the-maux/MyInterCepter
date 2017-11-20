@@ -33,7 +33,7 @@ public class                    HostSelectionAdapter extends RecyclerView.Adapte
     public void                 onBindViewHolder(HostSelectionHolder holder, int position) {
         final Host host = hosts.get(position);
         holder.nameOS.setText(host.getIp());
-        Host.setOsIcon(activity, host.getDumpInfo(), holder.imageOS);
+        Host.setOsIcon(activity, host, holder.imageOS);
         holder.checkBox.setChecked(false);
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
