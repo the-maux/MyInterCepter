@@ -11,6 +11,11 @@ public class SplashscreenActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
         startActivity(new Intent(SplashscreenActivity.this, SetupActivity.class));
         Log.d("SplashscreenActivity ", "finish()");
         finish();

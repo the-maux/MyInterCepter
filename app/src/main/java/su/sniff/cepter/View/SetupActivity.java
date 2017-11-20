@@ -45,16 +45,14 @@ public class                    SetupActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         setContentView(rootView);
         initXml(rootView);
-    }
-
-    @Override protected void    onResume() {
-        super.onResume();
+        Log.d(TAG, "SetupActivity::onPostResume");
         new RootProcess("Init").closeProcess();
         if (getPermission())
             initialisation();
         else
             Snackbar.make(findViewById(R.id.Coordonitor), "You need to accept root permission to use the app", Snackbar.LENGTH_LONG).show();
     }
+
 
     private boolean             getPermission() {
         String[]     PERMISSION_STORAGE = {
@@ -93,6 +91,7 @@ public class                    SetupActivity extends MyActivity {
 
     private void                initialisation() {
         buildPath();
+        Log.d(TAG, "SetupActivity::initialisation");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -122,6 +121,7 @@ public class                    SetupActivity extends MyActivity {
 
     private void                initInfo() throws FileNotFoundException {
         monitor("Initialization...");
+        Log.d(TAG,"SetupActivity::initInfo" );
         try {
             //Log.d(TAG, "init Net infos");
             getNetworkInfoByCept();//Is it still usefull? need to test without

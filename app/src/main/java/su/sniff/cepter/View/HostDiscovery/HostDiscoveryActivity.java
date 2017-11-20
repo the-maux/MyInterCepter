@@ -10,6 +10,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabItem;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,7 +36,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import su.sniff.cepter.Controller.Core.BinaryWrapper.Intercepter;
-import su.sniff.cepter.Controller.Network.Discovery.ArpScan;
+import su.sniff.cepter.Controller.Network.Discovery.HostDiscoveryScan;
 import su.sniff.cepter.Controller.Network.NetUtils;
 import su.sniff.cepter.Controller.Core.Conf.Singleton;
 import su.sniff.cepter.Model.Target.Host;
@@ -75,7 +76,9 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private ImageButton             mAddHostBtn, mSettingsBtn;
     private SearchView              mSearchView;
     private Toolbar                 toolbar2;
-    private TabItem                 offlinemode;
+    private HostDiscoveryScan       scannerControler = new HostDiscoveryScan(this);
+    private TabLayout               tabs;
+    private HostDiscoveryScan.typeScan typeScan = HostDiscoveryScan.typeScan.Arp;
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +109,22 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mSettingsBtn = (ImageButton) findViewById(R.id.settings);
         mSearchView = (SearchView) findViewById(R.id.searchView);
         toolbar2 = (Toolbar) findViewById(R.id.toolbar2);
-        offlinemode = (TabItem) findViewById(R.id.offlinemodeItem);
+        tabs = (TabLayout) findViewById(R.id.tabs);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mHostLoaded) {
+                    startNetworkScan();
+                } else {
+                    try {
+                        launchMenu();
+                    } catch (IOException e) {
+                        Log.e(TAG, "Error in start attack");
+                        e.getStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     private void                    init()  throws Exception {
@@ -114,21 +132,38 @@ public class                        HostDiscoveryActivity extends MyActivity {
             Snackbar.make(mCoordinatorLayout, "You need to be connected to a network", Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            Intercepter.initCepter(NetUtils.getMac(singleton.network.myIp, singleton.network.gateway));
+            Intercepter.initCepter(singleton.network.mac);
             initMonitor();
             initSwipeRefresh();
-
+            initTabs();
             initSearchView();
-            if (offlinemode != null)//TODO: wtf is this null
-                offlinemode.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        startActivity(new Intent(mInstance, MenuActivity.class));
-                    }
-                });
-
         }
         initToolbarButton();
+    }
+
+    private void                    initTabs() {
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getText().toString()) {
+                    case "NMAP\\nDiscovery":
+                        Log.d(TAG, "Nmap Tab");
+                        typeScan = HostDiscoveryScan.typeScan.Nmap;
+                        break;
+                    case "arp\\ndiscovery":
+                        Log.d(TAG, "ARP TAB");
+                        typeScan = HostDiscoveryScan.typeScan.Arp;
+                        break;
+                    case "ICMP\\nDiscovery":
+                        Log.d(TAG, "ICMP TAB");
+                        typeScan = HostDiscoveryScan.typeScan.Icmp;
+                        break;
+                }
+                startNetworkScan();
+            }
+            @Override public void onTabUnselected(TabLayout.Tab tab) {}
+            @Override public void onTabReselected(TabLayout.Tab tab) {}
+        });
     }
 
     private void                    initMonitor() {
@@ -272,25 +307,14 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 initHostsRecyclerView();
                 progressAnimation();
                 toolbar2.setSubtitle("Scanning network");
-                new ArpScan(this);
+                new HostDiscoveryScan(this);
                 mProgress = 1000;
             } else {
                 Snackbar.make(mCoordinatorLayout, "You need to be connected", Toast.LENGTH_SHORT).show();
                 mEmptyList.setVisibility(View.VISIBLE);
             }
-        }
-    }
-
-    public void                     onFabClick(View v)  {
-        if (!mHostLoaded) {
-            startNetworkScan();
         } else {
-            try {
-                launchMenu();
-            } catch (IOException e) {
-                Log.e(TAG, "Error in start attack");
-                e.getStackTrace();
-            }
+            Snackbar.make(mCoordinatorLayout, "Patientez, loading en cours", Toast.LENGTH_SHORT).show();
         }
     }
 
