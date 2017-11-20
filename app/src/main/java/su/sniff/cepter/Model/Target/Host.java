@@ -235,7 +235,7 @@ public class                Host {
         } else if (InfoDevice.contains("apple")) {
             osType = Os.Apple;
         } else if (InfoDevice.contains("android") || InfoDevice.contains("mobile") || InfoDevice.contains("samsung") ||
-                InfoDevice.contains("murata") || InfoDevice.contains("huawei") || InfoDevice.contains("oneplus") || InfoDevice.contains("LG")) {
+                InfoDevice.contains("murata") || InfoDevice.contains("huawei") || InfoDevice.contains("oneplus") || InfoDevice.contains("lg")) {
             osType = Os.Android;
         } else if (InfoDevice.contains("raspberry")) {
             osType = Os.Raspberry;
