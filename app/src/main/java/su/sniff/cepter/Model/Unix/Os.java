@@ -7,6 +7,7 @@ package su.sniff.cepter.Model.Unix;
 public enum Os {
     Windows2000,
     WindowsXP,
+    Windows10,
     Windows7_8_10,
     Cisco,
     Raspberry,

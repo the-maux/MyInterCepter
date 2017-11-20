@@ -161,7 +161,7 @@ public class                Host {
         } else if (InfoDevice.contains("Apple")) {
             ImageRessource = R.drawable.ios;
         } else if (InfoDevice.contains("Android") || InfoDevice.contains("Mobile") || InfoDevice.contains("Samsung")) {
-            ImageRessource = R.drawable.android;
+            ImageRessource = R.mipmap.ic_logo_android_trans_round;
         } else if (InfoDevice.contains("Cisco")) {
             ImageRessource = R.drawable.cisco;
         } else if (InfoDevice.contains("Raspberry")) {
@@ -185,25 +185,29 @@ public class                Host {
     }
 
     private void            guessOsType(String InfoDevice) {
-        if (InfoDevice.contains("Bluebird")) {
+        InfoDevice = InfoDevice.toLowerCase();
+        if (InfoDevice.contains("bluebird")) {
             osType = Os.Bluebird;
-        } else if (InfoDevice.contains("Windows 7")) {
-            osType = Os.Windows7_8_10;
-        } else if (InfoDevice.contains("Windows 2000")) {
-            osType = Os.WindowsXP;
-        } else if (InfoDevice.contains("Apple")) {
-            osType = Os.Apple;
-        } else if (InfoDevice.contains("Android") || InfoDevice.contains("Mobile") || InfoDevice.contains("Samsung")) {
-            osType = Os.Android;
-        } else if (InfoDevice.contains("Cisco")) {
+        } else if (InfoDevice.contains("cisco")) {
             osType = Os.Cisco;
-        } else if (InfoDevice.contains("Raspberry")) {
-            osType = Os.Raspberry;
-        } else if (InfoDevice.contains("QUANTA")) {
+        } else if (InfoDevice.contains("quanta")) {
             osType = Os.QUANTA;
-        }  else if (InfoDevice.contains("Ios")) {
+        } else if (InfoDevice.contains("windows 7")) {
+            osType = Os.Windows7_8_10;
+        } else if (InfoDevice.contains("windows 2000")) {
+            osType = Os.WindowsXP;
+        } else if (InfoDevice.contains("windows")) {
+            osType = Os.Windows10;
+        } else if (InfoDevice.contains("apple")) {
+            osType = Os.Apple;
+        } else if (InfoDevice.contains("android") || InfoDevice.contains("mobile") || InfoDevice.contains("samsung") ||
+                InfoDevice.contains("murata") || InfoDevice.contains("huawei") || InfoDevice.contains("oneplus") || InfoDevice.contains("LG")) {
+            osType = Os.Android;
+        } else if (InfoDevice.contains("raspberry")) {
+            osType = Os.Raspberry;
+        }  else if (InfoDevice.contains("ios")) {
             osType = Os.Ios;
-        } else if (!(!InfoDevice.contains("Unix") && !InfoDevice.contains("Linux") && !InfoDevice.contains("BSD"))) {
+        } else if (!(!InfoDevice.contains("unix") && !InfoDevice.contains("linux") && !InfoDevice.contains("bsd"))) {
             osType = Os.Linux_Unix;
         } else
             osType = Os.Unknow;
