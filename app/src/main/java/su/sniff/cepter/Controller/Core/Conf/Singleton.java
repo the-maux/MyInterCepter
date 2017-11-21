@@ -11,10 +11,6 @@ import su.sniff.cepter.Controller.Core.BinaryWrapper.Dns.DnsSpoof;
 import su.sniff.cepter.Model.Target.Host;
 import su.sniff.cepter.Model.Net.NetworkInformation;
 
-/**
- * Created by root on 03/08/17.
- */
-
 public class                            Singleton {
     private static Singleton            mInstance = null;
     private                             Singleton() {}

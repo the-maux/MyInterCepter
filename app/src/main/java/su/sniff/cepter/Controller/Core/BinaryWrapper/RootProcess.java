@@ -71,7 +71,7 @@ public class                    RootProcess {
         return pid;
     }
 
-    public RootProcess          waitFor() {
+    public int                  waitFor() {
         try {
             BufferedReader reader = new BufferedReader(getReader());
             String line;
@@ -83,18 +83,17 @@ public class                    RootProcess {
             if (reader.ready()) {
                 while ((line = reader.readLine()) != null) {}
             }
-
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-           // Log.d(TAG, this.LogID + "::waitFor");
             process.waitFor();
-            return this;
+            int res = process.exitValue();
+            return res;
         } catch (InterruptedException e) {
             e.printStackTrace();
-            return null;
+            return -1;
         }
     }
 
@@ -110,9 +109,9 @@ public class                    RootProcess {
         return new InputStreamReader(process.getErrorStream());
     }
 
-    public void                 closeProcess() {
+    public int                 closeProcess() {
         closeDontWait();
-        waitFor();
+        return waitFor();
     }
 
     public RootProcess          closeDontWait() {

@@ -306,7 +306,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
         if (!inLoading) {
             if (singleton.network.updateInfo().isConnectedToNetwork()) {
                 inLoading = true;
-                initHostsRecyclerView();
+                if (typeScan != HostDiscoveryScan.typeScan.Services)
+                    initHostsRecyclerView();
                 progressAnimation();
                 toolbar2.setSubtitle("Scanning network");
                 new HostDiscoveryScan(this).run(typeScan);
@@ -427,5 +428,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     public void                     notifiyServiceAllScaned() {
         Snackbar.make(mCoordinatorLayout, "Scanning service on network finished", Toast.LENGTH_SHORT).show();
+        inLoading = false;
     }
 }
