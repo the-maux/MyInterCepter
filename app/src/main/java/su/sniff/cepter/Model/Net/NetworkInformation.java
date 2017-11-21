@@ -22,6 +22,7 @@ public class                NetworkInformation {
     public NetworkInformation(DhcpInfo dhcpInfo, String mac) {
         this.dhcpInfo = dhcpInfo;
         this.mac = mac;
+        init();
     }
 
     public boolean          isConnectedToNetwork() {

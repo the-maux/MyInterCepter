@@ -68,9 +68,8 @@ public class                Host {
     }
 
     private void            isItMyDevice() {
-        if (mac.contains(Singleton.getInstance().network.mac)) {
+        if (ip.contains(Singleton.getInstance().network.myIp)) {
             isItMyDevice = true;
-
         }
     }
 

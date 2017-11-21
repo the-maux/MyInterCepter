@@ -147,11 +147,11 @@ public class                        HostDiscoveryActivity extends MyActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 Log.d(TAG, "tab.getText().toString():" + tab.getText().toString());
                 switch (tab.getText().toString()) {
-                    case "NMAP\nDiscovery":
+                    case "arp\nDiscovery":
                         Log.d(TAG, "Nmap Tab");
                         typeScan = HostDiscoveryScan.typeScan.Nmap;
                         break;
-                    case "arp\ndiscovery":
+                    case "Icmp\ndiscovery":
                         Log.d(TAG, "ARP TAB");
                         typeScan = HostDiscoveryScan.typeScan.Arp;
                         break;
@@ -173,7 +173,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         WifiInfo wifiInfo = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
         monitor = wifiInfo.getSSID().replace("\"", "") + " : " + singleton.network.myIp;
         if (!monitor.contains("WiFi")) {
-            monitor += "\n" + "Gateway: " + singleton.network.gateway;
+            monitor += "\n" + " GW : " + singleton.network.gateway;
         } else {
             monitor += "Not Connected";
         }
@@ -320,15 +320,16 @@ public class                        HostDiscoveryActivity extends MyActivity {
             Snackbar.make(mCoordinatorLayout, "Patientez, loading en cours", Toast.LENGTH_SHORT).show();
         }
     }
-
+    final int MAXIMUM_PROGRESS = 6500;
     private void                    progressAnimation() {
+
         mFab.setImageResource(android.R.drawable.ic_menu_search);
         mFab.setProgress(0, true);
-        mFab.setMax(5500);
+        mFab.setMax(MAXIMUM_PROGRESS);
         new Thread(new Runnable() {
             public void run() {
                 mProgress = 0;
-                while (mProgress <= 5500) {
+                while (mProgress <= MAXIMUM_PROGRESS) {
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException e) {
@@ -358,13 +359,13 @@ public class                        HostDiscoveryActivity extends MyActivity {
             @Override
             public void run() {
                 mHosts = hosts;
+                mProgress = MAXIMUM_PROGRESS;
                 toolbar2.setSubtitle("Choose targets");
                 monitor = "GW: " + singleton.network.gateway + ": " + mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": "") + " found";// oui je fais des ternaires pour faire le pluriel
                 mBottomMonitor.setText(monitor);
                 mHostAdapter.updateHostList(mHosts);
                 inLoading = false;
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
-                mProgress = 5450;
                 final ArrayList<String> listOs = mHostAdapter.getOsList();
                 monitor += "\n" + listOs.size() +" Os détected";
                 mBottomMonitor.setText(monitor);

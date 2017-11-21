@@ -58,10 +58,11 @@ public class                        HostDiscoveryScan {
 
     public void                     onReachableScanOver(ArrayList<String> ipReachable) {
         Log.d(TAG, "onReachableScanOver");
-        mActivity.monitor("Target Identification");
+        mActivity.monitor(ipReachable.size() + " hosts detected");
         NetUtils.dumpListHostFromARPTableInFile(mActivity, ipReachable);
+        mActivity.monitor(ipReachable.size() + " hosts detected");
         mActivity.setProgressState(1500);
-        mActivity.monitor("Fingerprint scan");
+        mActivity.monitor("Scanning " + ipReachable.size() + " host");
         Fingerprint.guessHostFingerprint(mActivity);
         mActivity.setProgressState(2000);
     }

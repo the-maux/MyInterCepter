@@ -55,10 +55,13 @@ public class                        ScanNetmask {
 
     private void                    ScanOver() {
         alreadySend = true;
+        for (String ipReachable : mListIpReachable) {
+            Log.d(TAG, ipReachable + " reachable");
+        }
         mScanner.onReachableScanOver(mListIpReachable);
     }
 
-    public boolean                  ping(String host) {
+    /*public boolean                  ping(String host) {
         RootProcess pingProces = new RootProcess("ScanNetMaskPING");
         pingProces.exec(Singleton.getInstance().BinaryPath + "/busybox ping -c 1 " + host + "; exit");
         int res = pingProces.waitFor();
@@ -69,7 +72,7 @@ public class                        ScanNetmask {
         } else {
             return false;
         }
-    }
+    }*/
 
     private void                    runnableReachable(ExecutorService service, final String ip, final int nbrHostScanned) {
         new Thread(new Runnable() {
@@ -77,26 +80,7 @@ public class                        ScanNetmask {
                 try {
                     //ping(ip);
                     if (InetAddress.getByName(ip).isReachable(null, 64, 2000)) {//Timeout 2s
-                        if (debuglog)
-                            Log.d(TAG, ip + " is reachable (" + nbrHostScanned + "/" + mNumberOfHosts + ")");
                         mListIpReachable.add(ip + ":");
-                        //NetworkInterface ni = NetworkInterface.getByInetAddress(host);// send always null
-                        /*if (ni != null) {
-                            byte[] mac = ni.getHardwareAddress();
-                            String MAC = "";
-                            if (mac != null) {
-                                for (int i = 0; i < mac.length; i++) {
-                                    MAC += String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : "") + "";
-                                }
-                                Log.d(TAG, ip + ":" + MAC.replace("-", ":").toLowerCase());
-                                mListIpReachable.add(ip + ":" + MAC.replace("-", ":").toLowerCase());
-                            } else {
-                                Log.e(TAG, ip + " doesn't exist or is not accessible. (" + mNbrHostScanned + "/" + mNumberOfHosts + ")");
-                            }
-                        } else {
-                            if (debuglog)
-                                Log.e(TAG, "PersistanteConfiguration Interface for " + ip + " is null (" + mNbrHostScanned + "/" + mNumberOfHosts + ")");
-                        }*/
                     } else {
 
                     }

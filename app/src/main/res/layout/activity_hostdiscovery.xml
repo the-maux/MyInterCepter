@@ -90,7 +90,7 @@
 					android:id="@+id/ArpTab"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:text="arp\ndiscovery" />
+					android:text="Icmp\ndiscovery" />
 
 				<android.support.design.widget.TabItem
 					android:id="@+id/NmapTab"
@@ -163,18 +163,18 @@
 			android:typeface="monospace"
 			android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/Message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="false"
-            android:layout_centerHorizontal="true"
-            android:background="@color/primary_text"
-            android:elevation="2dp"
-            android:gravity="right"
-            android:padding="8dp"
-            android:textColor="@color/green" />
+		<TextView
+			android:id="@+id/Message"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentEnd="false"
+			android:layout_centerHorizontal="true"
+			android:background="@color/primary_text"
+			android:elevation="6dp"
+			android:gravity="right"
+			android:padding="8dp"
+			android:textColor="@color/green" />
 
 
 	</RelativeLayout>
