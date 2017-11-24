@@ -61,7 +61,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private String                  TAG = "HostDiscoveryActivity";
     private HostDiscoveryActivity   mInstance = this;
     private Singleton               singleton = Singleton.getInstance();
-    private CoordinatorLayout       mCoordinatorLayout;
+    public CoordinatorLayout       mCoordinatorLayout;
     private AppBarLayout            mAppbar;
     private List<Host>              mHosts;
     private HostDiscoveryAdapter    mHostAdapter;
@@ -361,16 +361,18 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 mHosts = hosts;
                 mProgress = MAXIMUM_PROGRESS;
                 toolbar2.setSubtitle("Choose targets");
-                monitor = "GW: " + singleton.network.gateway + ": " + mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": "") + " found";// oui je fais des ternaires pour faire le pluriel
+                monitor = "Gateway: " + singleton.network.gateway;// oui je fais des ternaires pour faire le pluriel
                 mBottomMonitor.setText(monitor);
                 mHostAdapter.updateHostList(mHosts);
                 inLoading = false;
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
                 final ArrayList<String> listOs = mHostAdapter.getOsList();
-                monitor += "\n" + listOs.size() +" Os détected";
+                monitor += "\n IP:" + singleton.network.myIp;
                 mBottomMonitor.setText(monitor);
                 Log.d(TAG, "scan Over with " + mHosts.size() + " possible target");
                 HostDiscoverySession session = new HostDiscoverySession(Calendar.getInstance().getTime(), mHosts);
+                toolbar2.setTitle(((WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getSSID().replace("\"", ""));
+                toolbar2.setSubtitle(mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": ""));
                 //TODO: DUMP IT !
             }
         });

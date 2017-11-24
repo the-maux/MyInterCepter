@@ -267,6 +267,7 @@ public class                Host {
             return 0;
         }
     };
+
     public boolean          isServiceActiveOnHost() {
         return isServiceActiveOnHost;
     }

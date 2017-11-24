@@ -61,17 +61,17 @@
     <RelativeLayout
         android:id="@+id/RV_layout"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/card_view"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:background="@android:drawable/editbox_dropdown_dark_frame"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/DnsRVLogs"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             tools:listitem="@layout/item_consolelog" />
     </RelativeLayout>
 

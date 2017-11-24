@@ -7,9 +7,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,7 +29,7 @@ public class                        Tcpdump {
     private WiresharkActivity       activity;
     public boolean                  isRunning = false, isDumpingInFile = false;
     private boolean                 deepAnalyseTrame = false;
-    public ArrayList<Trame>         listOfTrames = new ArrayList<>();
+    public CopyOnWriteArrayList<Trame> listOfTrames;
     public String                   actualParam = "";
 
     private String                  INTERFACE = "-i wlan0 ";    //  Focus interfacte;
@@ -42,6 +44,7 @@ public class                        Tcpdump {
 
     private Tcpdump(WiresharkActivity activity) {
         this.activity = activity;
+        listOfTrames = new CopyOnWriteArrayList<Trame>();
         initCmds();
     }
 

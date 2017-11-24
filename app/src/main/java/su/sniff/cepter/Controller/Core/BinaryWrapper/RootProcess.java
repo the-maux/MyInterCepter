@@ -117,8 +117,8 @@ public class                    RootProcess {
     public RootProcess          closeDontWait() {
         try {
             //Log.d(TAG, this.LogID + "::Close");
-            os.writeBytes("exit\n");
-            os.flush();
+            //os.writeBytes("exit\n");
+            //os.flush();
             os.close();
         } catch (IOException e) {
             e.printStackTrace();

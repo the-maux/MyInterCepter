@@ -1,5 +1,6 @@
 package su.sniff.cepter.Controller.Core.BinaryWrapper.Dns;
 
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -10,6 +11,7 @@ import su.sniff.cepter.Controller.Core.BinaryWrapper.RootProcess;
 import su.sniff.cepter.Model.Target.DNSSpoofItem;
 import su.sniff.cepter.Model.Unix.DNSLog;
 import su.sniff.cepter.View.Adapter.DnsLogsAdapter;
+import su.sniff.cepter.View.DNSSpoofingActivity;
 
 public class                    DnsSpoof {
     private String              TAG = "DnsSpoof";
@@ -17,7 +19,8 @@ public class                    DnsSpoof {
     private RootProcess         mProcess;
     private DnsLogsAdapter      mRV_Adapter = null;
     private DnsConf             dnsConf;
-    
+    private DNSSpoofingActivity mActivity;
+
     public                      DnsSpoof() {
         dnsConf = new DnsConf();
     }
@@ -28,6 +31,7 @@ public class                    DnsSpoof {
             @Override
             public void run() {
                 DNSLog Domainlog;
+                mDomainLogs.clear();
                 mProcess = new RootProcess("Dnsmasq::");
                 mProcess.exec("dnsmasq --no-daemon --log-queries");
                 BufferedReader reader = mProcess.getReader();
@@ -89,7 +93,7 @@ public class                    DnsSpoof {
             mRV_Adapter.getRecyclerview().post(new Runnable() {
                 @Override
                 public void run() {
-                    mDomainLogs.clear();
+                    //mDomainLogs.clear();
                     if (mRV_Adapter != null)
                         mRV_Adapter.notifyDataSetChanged();
                 }
@@ -117,6 +121,8 @@ public class                    DnsSpoof {
                         mRV_Adapter.notifyDataSetChanged();
                 }
             });
+        if (mActivity != null)
+            mActivity.titleToolbar(mDomainLogs.size() + " dns request");
     }
 
     /**
@@ -138,5 +144,9 @@ public class                    DnsSpoof {
 
     public DnsConf              getDnsConf() {
         return dnsConf;
+    }
+
+    public void                 setToolbar(DNSSpoofingActivity activity) {
+        this.mActivity = activity;
     }
 }

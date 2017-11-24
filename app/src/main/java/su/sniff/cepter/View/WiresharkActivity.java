@@ -107,7 +107,7 @@ public class                    WiresharkActivity extends MyActivity {
     }
 
     private void                initRV() {
-        mAdapterWireshark = new WiresharkAdapter(this, mTcpdump.listOfTrames);
+        mAdapterWireshark = new WiresharkAdapter(this, mTcpdump.listOfTrames, mRV_Wireshark);
         mRV_Wireshark.setAdapter(mAdapterWireshark);
         mRV_Wireshark.hasFixedSize();
         mRV_Wireshark.setLayoutManager(new LinearLayoutManager(mInstance));
@@ -284,11 +284,6 @@ public class                    WiresharkActivity extends MyActivity {
                 }
             }//else skipped do nothing
         });
-    }
-
-    @Override protected void    onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause");
     }
 
 }

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -67,9 +68,14 @@ public class                        BonjourManager {
         }
     }
     void                     stopServiceDiscovery(NsdManager.DiscoveryListener listene) {
+
         this.mNsdManager.stopServiceDiscovery(listene);
     }
     void                     resolveService(NsdServiceInfo service) {
         this.mNsdManager.resolveService(service,  this.ResolvServiceToClient);
+    }
+
+    public void             bingo(String hostAddress, String serviceName) {
+        Snackbar.make(mActivity.mCoordinatorLayout, "Service: " + serviceName + " on "+ hostAddress , Snackbar.LENGTH_LONG).show();
     }
 }

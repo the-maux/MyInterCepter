@@ -48,10 +48,11 @@ public class                            DNSSpoofingActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dnsspoofing);
         initXml();
-        initFabs();
+        initFab();
         initMenu();
         initTabs();
         initViewConf();
+        mDnsSpoof.setToolbar(this);
     }
 
     private void                        initXml() {
@@ -71,7 +72,7 @@ public class                            DNSSpoofingActivity extends MyActivity {
         tabs = (TabLayout) findViewById(R.id.tabs);
     }
 
-    private void                        initFabs() {
+    private void                        initFab() {
         if (mSingleton.isDnsSpoofActived()) {
             mFab.setImageResource(R.mipmap.ic_stop);
         } else {
@@ -99,13 +100,11 @@ public class                            DNSSpoofingActivity extends MyActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getText().toString()) {
                     case "Domains":
-                        Log.d(TAG, "Loading View 1");
-                        title.setText("List of spoofed domain(s):");
+                        title.setText("List of spoofable domain(s):");
                         initViewConf();
                         break;
                     case "Console":
-                        Log.d(TAG, "Loading View 2");
-                        title.setText("Dns ouput:");
+                        title.setText("Logs:");
                         initViewConsoleLogs();
                         break;
                 }
@@ -133,7 +132,7 @@ public class                            DNSSpoofingActivity extends MyActivity {
         mAction_import.setOnClickListener(onClickTopMenu());
         mAction_export.setOnClickListener(onClickTopMenu());
         mClipper.setOnClickListener(onClickTopMenu());
-        mToolbar.setTitle(mDnsSpoof.getDnsConf().listDomainSpoofed.size() + " domain spoofed");
+        mToolbar.setTitle(mDnsSpoof.getDnsConf().listDomainSpoofed.size() + " domain spoofable");
     }
 
     private View.OnClickListener        onClickTopMenu() {
@@ -232,5 +231,14 @@ public class                            DNSSpoofingActivity extends MyActivity {
 
     public void                         actualiseDomainspoofed() {
         mToolbar.setTitle(mDnsSpoof.getDnsConf().listDomainSpoofed.size() + " domain spoofed");
+    }
+
+    public void                         titleToolbar(final String subtitle) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mToolbar.setSubtitle(subtitle);
+            }
+        });
     }
 }

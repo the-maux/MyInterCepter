@@ -97,6 +97,7 @@ public class                    Setup {
         new RootProcess("initialisation ").exec("rm -f " + mSingleton.FilesPath + "archive_nmap").closeProcess();
         new RootProcess("initialisation ").exec("rm -f " + mSingleton.FilesPath + "ettercap_archive").closeProcess();
         new RootProcess("initialisation ").exec("echo '" + mSingleton.VERSION + "' > " + mSingleton.FilesPath + "version").closeProcess();
+        new RootProcess("DNS").exec("chmod 644 /etc/dnsmasq.hosts").closeProcess();
 
     }
 }

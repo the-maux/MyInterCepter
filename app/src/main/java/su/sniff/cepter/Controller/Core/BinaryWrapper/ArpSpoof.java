@@ -29,7 +29,7 @@ import su.sniff.cepter.Model.Target.Host;
  * Wrapper of ArpSpoof tool
  */
 public class                        ArpSpoof {
-    private static final String     TAG = "ARPSPOOF";
+    private static final String     TAG = "ArpSpoof";
     private ArpSpoof                mInstance = this;
     private Host                    target;
     private RootProcess             process;
@@ -49,7 +49,7 @@ public class                        ArpSpoof {
                     String read;
                     try {
                         while ((read = reader.readLine()) != null) {
-                            Log.d(TAG, target.getIp() + "::" + read);
+                            //Log.d(TAG, target.getIp() + "::" + read);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();

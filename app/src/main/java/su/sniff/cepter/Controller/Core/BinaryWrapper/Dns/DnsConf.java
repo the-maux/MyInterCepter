@@ -20,6 +20,7 @@ public class                    DnsConf {
 
     DnsConf() {
         listDomainSpoofed = new ArrayList<>();
+        readDnsFromFile();
     }
 
     public void                 readDnsFromFile() {
@@ -30,12 +31,11 @@ public class                    DnsConf {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                Log.d("DNS CONF", line);
+                Log.d("DNS CONF::readDnsconf", line);
                 listDomainSpoofed.add(new DNSSpoofItem(line.split(" ")[0], line.split(" ")[1]));
             }
         } catch (IOException e) {
             try {
-                new RootProcess("Install").exec("chmod 644 /etc/dnsmasq.hosts").closeProcess();
                 file = new File(PATH_CONF_FILE);
                 fileReader = new FileReader(file);
                 BufferedReader bufferedReader = new BufferedReader(fileReader);

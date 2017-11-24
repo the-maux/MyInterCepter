@@ -125,7 +125,7 @@ public class               Trame extends MyObject {
      */
     private  void          DnsParsing(String line)  throws StringIndexOutOfBoundsException {
         String[] lineSub = line.split(" ");
-        Log.d(TAG, "DnsParsing::->"+Arrays.toString(lineSub));
+        //Log.d(TAG, "DnsParsing::->"+Arrays.toString(lineSub));
         protocol = Protocol.DNS;
         if (lineSub.length <= 9) {//if no verbose
             time = lineSub[0];
@@ -151,7 +151,7 @@ public class               Trame extends MyObject {
     }
     private  void          HttpParsing(String line) throws StringIndexOutOfBoundsException  {
         String[] splitted = line.split(" ");
-        Log.d(TAG, "HttpParsing::->"+Arrays.toString(splitted));
+        //Log.d(TAG, "HttpParsing::->"+Arrays.toString(splitted));
         protocol = Protocol.HTTP;
         time = splitted[0].substring(0, splitted[0].indexOf("."));
         String[] src = extractThePortOrProto(splitted[2]);
@@ -163,7 +163,7 @@ public class               Trame extends MyObject {
 
     private  void          HttpsParsing(String line) throws StringIndexOutOfBoundsException  {
         String[] splitted = line.split(" ");
-        Log.d(TAG, "HttpsParsing::->"+Arrays.toString(splitted));
+        //Log.d(TAG, "HttpsParsing::->"+Arrays.toString(splitted));
         protocol = Protocol.HTTPS;
         time = splitted[0].substring(0, splitted[0].indexOf("."));
         String[] src = extractThePortOrProto(splitted[2]);
@@ -180,7 +180,7 @@ public class               Trame extends MyObject {
      */
     private  void          TcpParsing(String line) throws StringIndexOutOfBoundsException  {
         String[] splitted = line.split(" ");
-        Log.d(TAG, "TcpParsing::->"+Arrays.toString(splitted));
+        //Log.d(TAG, "TcpParsing::->"+Arrays.toString(splitted));
         protocol = Protocol.TCP;
         time = splitted[0].substring(0, splitted[0].indexOf("."));
         String[] src = extractThePortOrProto(splitted[2]);
@@ -197,7 +197,7 @@ public class               Trame extends MyObject {
      */
     private  void          UdpParsing(String line) throws StringIndexOutOfBoundsException  {
         String[] splitted = line.split(" ");
-        Log.d(TAG, "UdpParsing::->"+Arrays.toString(splitted));
+        //Log.d(TAG, "UdpParsing::->"+Arrays.toString(splitted));
         protocol = Protocol.UDP;
         time = splitted[0].substring(0, splitted[0].indexOf("."));
         StringSrc = splitted[2];
@@ -212,7 +212,7 @@ public class               Trame extends MyObject {
      */
     private  void          SmbParsing(String line) throws StringIndexOutOfBoundsException  {
         String[] splitted = line.split(" ");
-        Log.d(TAG, "SmbParsing::->"+Arrays.toString(splitted));
+    //    Log.d(TAG, "SmbParsing::->"+Arrays.toString(splitted));
         protocol = Protocol.SMB;
         time = splitted[0].substring(0, splitted[0].indexOf("."));
         StringSrc = splitted[2];
@@ -222,7 +222,7 @@ public class               Trame extends MyObject {
     private  void          NBNSParsing(String line) throws StringIndexOutOfBoundsException  {
         String[] splitted = line.split(" ");
         protocol = Protocol.NBNS;
-        Log.d(TAG, "NBNSParsing::->"+Arrays.toString(splitted));
+     //   Log.d(TAG, "NBNSParsing::->"+Arrays.toString(splitted));
         time = splitted[0].substring(0, splitted[0].indexOf("."));
         StringSrc = splitted[2];
         StringDest = splitted[4];
@@ -231,7 +231,7 @@ public class               Trame extends MyObject {
     private  void          ICMPParsing(String line) {
         String[] splitted = line.split(" ");
         protocol = Protocol.ICMP;
-        Log.d(TAG, "ICMPParsing::->"+Arrays.toString(splitted));
+     //   Log.d(TAG, "ICMPParsing::->"+Arrays.toString(splitted));
         time = splitted[0].substring(0, splitted[0].indexOf("."));
         String[] src = extractThePortOrProto(splitted[2]);
         String[] dest = extractThePortOrProto(splitted[4]);
@@ -321,7 +321,7 @@ public class               Trame extends MyObject {
     }
 
     @Override
-    public String           toString() {
+    public String          toString() {
         return protocol.name() + ":" + StringSrc + ">" + StringDest + ": " + info;
     }
 }

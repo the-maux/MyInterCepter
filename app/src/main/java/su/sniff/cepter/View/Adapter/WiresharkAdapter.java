@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import su.sniff.cepter.Model.Net.Protocol;
 import su.sniff.cepter.Model.Net.Trame;
@@ -18,15 +19,20 @@ import su.sniff.cepter.View.Adapter.Holder.WiresharkHolder;
 
 public class                WiresharkAdapter extends RecyclerView.Adapter<WiresharkHolder> {
     private String          TAG = "WiresharkAdapter";
-    private ArrayList<Trame> listOfTrame, originalListOfTrames;
+    private CopyOnWriteArrayList<Trame> originalListOfTrames;
+    private CopyOnWriteArrayList<Trame> listOfTrame;
     private Activity        activity;
-    public boolean          arp = true, http = true, https = true, tcp = true, dns = true, udp = true, ip = true;
+    public boolean          arp = true, http = true, https = true,
+                            tcp = true, dns = true, udp = true, ip = true;
+    public RecyclerView     mRV_Wireshark;
+    private boolean         mActualize = false;
 
-    public                  WiresharkAdapter(Activity activity, ArrayList<Trame> trames) {
-        this.listOfTrame = new ArrayList<>();
+    public                  WiresharkAdapter(Activity activity, CopyOnWriteArrayList<Trame> trames, RecyclerView recyclerView) {
+        this.listOfTrame = new CopyOnWriteArrayList<>();
         this.originalListOfTrames = trames;
         listOfTrame.addAll(originalListOfTrames);
         this.activity = activity;
+        this.mRV_Wireshark = recyclerView;
     }
 
     @Override
@@ -71,11 +77,25 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         return listOfTrame.size();
     }
 
-    private void            addOnList(Trame trame, boolean reverse) {
-        if (reverse) {
-            listOfTrame.add(0, trame);
+    private void            addOnList(final Trame trame, final boolean reverse) {
+        Log.d(TAG, "addOnList:trame:" + trame.offsett);
+        if (mActualize) {
+            if (reverse) {
+                listOfTrame.add(0, trame);
+            } else {
+                listOfTrame.add(trame);
+            }
         } else {
-            listOfTrame.add(trame);
+            this.mRV_Wireshark.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (reverse) {
+                        listOfTrame.add(0, trame);
+                    } else {
+                        listOfTrame.add(trame);
+                    }
+                }
+            });
         }
     }
     private void            addTrameFiltered(Trame trame, boolean reverse) {
@@ -109,7 +129,8 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
                     addOnList(trame, reverse);
                 break;
             default:
-                Log.e(TAG, "Trame unknow:" + trame.toString());
+                break;
+//                Log.e(TAG, "Trame unknow:" + trame.toString());
         }
 
     }
@@ -152,16 +173,37 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
             default:
                 ret = true;
         }
-        listOfTrame.clear();
-        for (Trame trame : originalListOfTrames) {
-            addTrameFiltered(trame, false);
-        }
-        notifyDataSetChanged();
+        this.mRV_Wireshark.post(new Runnable() {
+            @Override
+            public void run() {
+                mActualize = true;
+                listOfTrame.clear();
+                dump();
+                for (Trame trame : originalListOfTrames) {
+                    addTrameFiltered(trame, false);
+                }
+                notifyDataSetChanged();
+                mActualize = false;
+            }
+        });
         return ret;
     }
     public void             clear() {
-        listOfTrame.clear();
-        originalListOfTrames.clear();
-        notifyDataSetChanged();
+        this.mRV_Wireshark.post(new Runnable() {
+            @Override
+            public void run() {
+                listOfTrame.clear();
+                originalListOfTrames.clear();
+                notifyDataSetChanged();
+            }
+        });
+
+    }
+    private void            dump() {
+        Log.d(TAG, "--------------------------------");
+        for (Trame trame : originalListOfTrames) {
+            Log.d(TAG, "OFFSET:" + trame.offsett);
+        }
+        Log.d(TAG, "--------------------------------");
     }
 }

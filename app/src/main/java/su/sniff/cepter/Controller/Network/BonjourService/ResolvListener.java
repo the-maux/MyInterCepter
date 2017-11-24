@@ -58,6 +58,7 @@ public class ResolvListener implements NsdManager.ResolveListener {
                                 service.getServiceName(),
                                 service.getServiceType(),
                                 addr, service));
+                manager.bingo(addr.getHostAddress(), service.getServiceName());
             }
         }
     }
