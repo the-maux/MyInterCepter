@@ -25,6 +25,16 @@ public class                    DnsSpoof {
         dnsConf = new DnsConf();
     }
 
+    private boolean             isItALog(String read) {
+        return !read.isEmpty() && !read.contains("compile time options: no-IPv6 GNU-getopt no-DBus no-I18N DHCP no-scripts no-TFTP") &&
+                !read.contains("using nameserver 8.8.8.8#53") &&
+                !read.contains("using nameserver") &&
+                !read.contains("read /etc/dnsmasq.hosts") &&
+                !read.contains("read /etc/hosts") &&
+                !read.contains("reading ") &&
+                !read.contains("started, version 2.51 cachesize 150");
+    }
+
     public DnsSpoof             start() {
         initRVLink();
         new Thread(new Runnable() {
@@ -39,11 +49,9 @@ public class                    DnsSpoof {
                 try {
                     String read;
                     while (!deprecatedStart[0] && ((read = reader.readLine()) != null)) {
-                        Log.d(TAG, read);
+                        Log.d(TAG, "DNS_STDOUT::(" +read + ')');
                         read = read.replace("dnsmasq: ", "");
-                        if (!read.isEmpty() && !read.contains("compile time options: no-IPv6 GNU-getopt no-DBus no-I18N DHCP no-scripts no-TFTP") &&
-                                !read.contains("using nameserver 8.8.8.8#53") && !read.contains("using nameserver") && !read.contains("read /etc/dnsmasq.hosts") &&
-                                !read.contains("reading ") && !read.contains("started, version 2.51 cachesize 150")) {
+                        if (isItALog(read)) {
                             DNSLog DomainlogTmp = new DNSLog(read);
                             boolean isAnewDomain;
                             if ((isAnewDomain = isADomainConnu(DomainlogTmp)))
@@ -130,7 +138,7 @@ public class                    DnsSpoof {
      */
 
     public void                 saveDnsConf(String nameOfFile) {
-        dnsConf.saveConf(nameOfFile);
+        dnsConf.saveConf();
     }
 
     public void                 removeDomain(DNSSpoofItem domainAsked) {

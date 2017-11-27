@@ -15,7 +15,8 @@ import su.sniff.cepter.Controller.Core.BinaryWrapper.RootProcess;
 import su.sniff.cepter.Model.Target.DNSSpoofItem;
 
 public class                    DnsConf {
-    public String               PATH_CONF_FILE = "/etc/dnsmasq.hosts";
+    public static String        PATH_CONF_FILE = "/etc/dnsmasq.hosts";
+    public static String        PATH_RESOLV_FILE = "/etc/resolv.conf";
     public List<DNSSpoofItem>   listDomainSpoofed;
 
     DnsConf() {
@@ -23,7 +24,7 @@ public class                    DnsConf {
         readDnsFromFile();
     }
 
-    public void                 readDnsFromFile() {
+    private void                 readDnsFromFile() {
         FileReader fileReader;
         File file = new File(PATH_CONF_FILE);
         try {
@@ -54,7 +55,7 @@ public class                    DnsConf {
         listDomainSpoofed.clear();
     }
 
-    public void                 saveConf(String nameOfFile) {
+    public void                 saveConf() {
         BufferedWriter output;
         try {
             File file = new File(PATH_CONF_FILE);
@@ -63,7 +64,6 @@ public class                    DnsConf {
                 output.write(dnsSpoofItem.domainAsked + " " + dnsSpoofItem.domainSpoofed + '\n');
             }
             output.close();
-            PATH_CONF_FILE = nameOfFile;
         } catch ( IOException e ) {
             e.printStackTrace();
         }
