@@ -13,6 +13,7 @@ public class                    RootProcess {
     private DataOutputStream    os;
     private int                 pid;
     private String              LogID;
+    private boolean             debugLog = true;
 
     public                      RootProcess(String LogID) {
         this.LogID = LogID;
@@ -46,7 +47,8 @@ public class                    RootProcess {
     public RootProcess          exec(String cmd) {
         try {
             cmd = cmd.replace("//", "/");
-            Log.d(TAG, LogID + "::" + cmd);
+            if (debugLog)
+                Log.d(TAG, LogID + "::" + cmd);
             os.writeBytes(cmd + " 2>&1 \n");
             os.flush();
             Field f = process.getClass().getDeclaredField("pid");
@@ -64,6 +66,11 @@ public class                    RootProcess {
             e.printStackTrace();
             pid = -1;
         }
+        return this;
+    }
+
+    public RootProcess          noDebugOutput() {
+        debugLog = false;
         return this;
     }
 

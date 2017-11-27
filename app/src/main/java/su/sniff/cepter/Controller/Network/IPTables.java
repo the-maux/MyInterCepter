@@ -30,26 +30,31 @@ public class                    IPTables {
     public void                 trafficRedirect(String to) {
         Log.d(TAG, "Redirecting traffic to " + to);
         new RootProcess("IPTable::")
+                .noDebugOutput()
                 .exec("iptables " + "-t nat -A PREROUTING -j DNAT -p tcp --to " + to);
     }
 
     public void                 changeSource(String to) {
         new RootProcess("IPTable::")
+                .noDebugOutput()
                 .exec("iptables " + "-t nat -A POSTROUTING -j SNAT -p udp --dport 53 --to " + to);
     }
 
     public void                 flushNAT() {
         new RootProcess("IPTable::")
+                .noDebugOutput()
                 .exec("iptables " + "-t nat -F");
     }
     
     public void                 discardForwardding2Port(int port) {
         new RootProcess("IPTable::")
+                .noDebugOutput()
                 .exec("iptables " + "-A FORWARD --proto udp --dport " + String.valueOf(port) + " -j DROP");
     }
 
     public void                 allowForwardding2Port(int port) {
         new RootProcess("IPTable::allowForwardding2Port")
+                .noDebugOutput()
                 .exec("iptables " + "-A FORWARD --proto udp --dport " + String.valueOf(port) + " -j ACCEPT");
 
     }
@@ -57,12 +62,14 @@ public class                    IPTables {
     public void                 undoTrafficRedirect(String to) {
         Log.d(TAG, "Undoing traffic redirection");
         new RootProcess("IPTable::undoTrafficRedirect")
+                .noDebugOutput()
                 .exec("iptables " +"-t nat -D PREROUTING -j DNAT -p tcp --to " + to);
     }
 
     public void                 portRedirect(int from, int to) {
         Log.d(TAG, "Redirecting traffic from port " + from + " to port " + to);
         new RootProcess("IPTable::portRedirect")
+                .noDebugOutput()
                 .exec("iptables " + "-t nat -F")// clear nat
                 .exec("iptables " + "-F")// clear
                 .exec("iptables " + "-t nat -I POSTROUTING -s 0/0 -j MASQUERADE")// post route
@@ -73,6 +80,7 @@ public class                    IPTables {
     public void                 undoPortRedirect(int from, int to) {
         Log.d(TAG, "Undoing port redirection");
         new RootProcess("IPTable::undoPortRedirect")
+                .noDebugOutput()
                 .exec("iptables " + "-t nat -F") // clear nat
                 .exec("iptables " + "-F")// clear
                 .exec("iptables " + "-t nat -D POSTROUTING -s 0/0 -j MASQUERADE")  // remove post route
@@ -82,6 +90,7 @@ public class                    IPTables {
     public static void          InterceptWithoutSSL() {
         RootProcess process = new RootProcess("IpTable::InitWithoutSSL");
         process.exec("iptables -F;")
+                .noDebugOutput()
                 .exec("iptables -X;")
                 .exec("iptables -t nat -F;")
                 .exec("iptables -t nat -X;")
@@ -100,11 +109,13 @@ public class                    IPTables {
     public static  void         InterceptWithSSlStrip() {
         InterceptWithoutSSL();
         new RootProcess("IpTable::InterceptWithSSlStrip")
+                .noDebugOutput()
                 .exec("iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8081");
     }
 
     public static void          stopIpTable() {
         new RootProcess("IpTable stop")
+                .noDebugOutput()
                 .exec("iptables -F;")
                 .exec("iptables -X;")
                 .exec("iptables -t nat -F;")
