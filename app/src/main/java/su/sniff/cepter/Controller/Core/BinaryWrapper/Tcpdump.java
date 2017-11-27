@@ -120,7 +120,7 @@ public class                        Tcpdump {
                         }).start();
                     }
                     Log.d(TAG, "./Tcpdump finish");
-                    onNewLine("Quiting...");
+
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     Log.d(TAG, "InterruptedException");
@@ -130,6 +130,7 @@ public class                        Tcpdump {
                 } finally {
                     if (tcpDumpProcess != null)
                         tcpDumpProcess.closeProcess();
+                    onNewLine("Quiting...");
                 }
                 Log.d(TAG, "onTcpDump start over");
             }
@@ -140,6 +141,7 @@ public class                        Tcpdump {
             Trame trame = new Trame("Processus over", listOfTrames.size(), 0);
             trame.connectionOver = true;
             activity.onNewTrame(trame);
+            onTcpDumpStop();
             return;
         }
         if (actualParam.contains(STDOUT_BUFF) && actualParam.contains("dst port 53")) {

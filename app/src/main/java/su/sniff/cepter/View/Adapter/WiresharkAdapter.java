@@ -78,7 +78,7 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
     }
 
     private void            addOnList(final Trame trame, final boolean reverse) {
-        Log.d(TAG, "addOnList:trame:" + trame.offsett);
+        //Log.d(TAG, "addOnList:trame:" + trame.offsett);
         if (mActualize) {
             if (reverse) {
                 listOfTrame.add(0, trame);
