@@ -47,8 +47,8 @@ public class                    RootProcess {
     public RootProcess          exec(String cmd) {
         try {
             cmd = cmd.replace("//", "/");
-            if (debugLog)
-                Log.d(TAG, LogID + "::" + cmd);
+            //if (debugLog)
+            //    Log.d(TAG, LogID + "::" + cmd);
             os.writeBytes(cmd + " 2>&1 \n");
             os.flush();
             Field f = process.getClass().getDeclaredField("pid");
@@ -83,12 +83,12 @@ public class                    RootProcess {
             BufferedReader reader = new BufferedReader(getReader());
             String line;
             if (reader.ready()) {
-                while ((line = reader.readLine()) != null) {}
+                while (reader.readLine() != null) {}
             }
             reader.close();
             reader = new BufferedReader(getErrorStreamReader());
             if (reader.ready()) {
-                while ((line = reader.readLine()) != null) {}
+                while (reader.readLine() != null) {}
             }
             reader.close();
         } catch (IOException e) {
@@ -116,7 +116,7 @@ public class                    RootProcess {
         return new InputStreamReader(process.getErrorStream());
     }
 
-    public int                 closeProcess() {
+    public int                  closeProcess() {
         closeDontWait();
         return waitFor();
     }
