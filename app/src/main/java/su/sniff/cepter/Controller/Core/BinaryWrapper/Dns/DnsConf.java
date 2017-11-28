@@ -25,8 +25,10 @@ public class                    DnsConf {
     }
 
     private void                 readDnsFromFile() {
+
         FileReader fileReader;
         File file = new File(PATH_CONF_FILE);
+        clear();
         try {
             fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -50,7 +52,9 @@ public class                    DnsConf {
             }
         }
     }
-
+    public void                 flushFromFile() {
+        readDnsFromFile();
+    }
     public void                 clear() {
         listDomainSpoofed.clear();
     }

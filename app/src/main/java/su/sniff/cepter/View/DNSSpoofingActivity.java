@@ -40,7 +40,7 @@ public class                            DNSSpoofingActivity extends MyActivity {
     private RelativeLayout              mClipper;
     private TextView                    mAction_deleteall, mAction_import, mAction_export, textEmpty, title;
     private Singleton                   mSingleton = Singleton.getInstance();
-    private DnsSpoof                    mDnsSpoof = mSingleton.dnsSpoofed;
+    private DnsSpoof                    mDnsSpoof = mSingleton.getDnsControler();
     private DnsSpoofConfAdapter         mDnsSpoofAdapter;
     private DnsLogsAdapter              mDnsConsoleAdapter;
 

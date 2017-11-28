@@ -46,22 +46,42 @@ public class                    Setup {
     private void                buildDefaultDnsConf() {
         new RootProcess("initialisation ")
                 .exec("echo \"192.168.0.29 www.microsof.com microsoft.com\" > " + DnsConf.PATH_CONF_FILE + " && " +
-                "echo \"192.168.0.30 www.any.domain any.domain\" > " + DnsConf.PATH_CONF_FILE + " && " +
-                "echo \"192.168.0.30 www.test.fr test.fr\" > " + DnsConf.PATH_CONF_FILE + " && " +
+                "echo \"192.168.0.30 www.any.domain any.domain\" >> " + DnsConf.PATH_CONF_FILE + " && " +
+                "echo \"192.168.0.30 www.test.fr test.fr\" >> " + DnsConf.PATH_CONF_FILE + " && " +
                 "chmod 644 " + DnsConf.PATH_CONF_FILE).
                 closeProcess();
     }
 
+    private void                dumpBuildSystem() {
+        Log.i(TAG, "Build.FINGERPRINT::" + Build.FINGERPRINT);
+        Log.i(TAG, "Build.CPU_ABI::" + Build.CPU_ABI);
+        Log.i(TAG, "Build.CPU_ABI2::" + Build.CPU_ABI2);
+        Log.i(TAG, "BOARD::" + Build.BOARD);
+        for (String supported64BitAbi : Build.SUPPORTED_ABIS) {
+            Log.i(TAG, "Build.SUPPORTED_ABIS::" + supported64BitAbi);
+        }
+        for (String supported32BitAbi : Build.SUPPORTED_32_BIT_ABIS) {
+            Log.i(TAG, "Build.SUPPORTED_32_BIT_ABIS::" + supported32BitAbi);
+
+        }
+        for (String supported64BitAbi : Build.SUPPORTED_64_BIT_ABIS) {
+            Log.i(TAG, "Build.SUPPORTED_64_BIT_ABIS::" + supported64BitAbi);
+        }
+    }
+
     private InputStream         getCepterRessource() {
         InputStream cepter;
+        dumpBuildSystem();
         cepter = mActivity.getResources().openRawResource(R.raw.cepter_android_21_armeabi);
         if (Build.CPU_ABI.contains("x86")) {
-            cepter = mActivity.getResources().openRawResource(R.raw.cepter_android_21_x86);
+            Log.d(TAG, "GIVING X86 BINARI");
+            return mActivity.getResources().openRawResource(R.raw.cepter_android_21_x86);
         }
         if (Build.CPU_ABI.contains("arm64")) {
-            cepter = mActivity.getResources().openRawResource(R.raw.cepter_android_21_arm64_v8a);
+            Log.d(TAG, "GIVING arm64");
+            return mActivity.getResources().openRawResource(R.raw.cepter_android_21_arm64_v8a);
         }
-        Log.d(TAG, "Return Cepter ressource");
+        Log.d(TAG, "GIVING arm BINARI");
         return cepter;
     }
     
@@ -79,14 +99,13 @@ public class                    Setup {
         FileOutputStream out = new FileOutputStream(file);
         out.write(bufferDroidSheep, 0, size);
         out.flush();
-        out.close();
         inputStream.close();
         out.close();
-        Log.d(TAG, "buildFile " + nameFile + "(" + sizeOfInputStram + "octet) and write :" + size);
-        new RootProcess("initialisation ").exec("chmod 744 " + mSingleton.FilesPath + nameFile).closeProcess();
+        Log.d(TAG, "buildFile " + nameFile + "chmod::+x::" + file.setExecutable(true, false));
     }
 
     private void                buildFiles() throws IOException, InterruptedException  {
+        Log.d(TAG, "");
         buildFile("busybox", R.raw.busybox);
         buildFile("cepter", R.raw.busybox);
         buildFile("tcpdump", R.raw.tcpdump);
@@ -95,11 +114,14 @@ public class                    Setup {
         buildFile("arpspoof", R.raw.arpspoof);
 
         buildFile("ettercap_archive", R.raw.ettercap_archive);
-        new RootProcess("UNZIP FILES", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip ettercap_archive").closeProcess();
+        //new RootProcess("UNZIP FILES", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip ettercap_archive").closeProcess();
+        Log.d(TAG, "unzip ettercap -> " + new RootProcess("UNZIP FILES", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip ettercap_archive").closeProcess());
 
         buildFile("archive_nmap", R.raw.nmap);
-        new RootProcess("initialisation ", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip archive_nmap").closeProcess();
-        new RootProcess("initialisation ").exec("chmod 744 " + mSingleton.BinaryPath + "/nmap/*").closeProcess();
+        Log.d(TAG, "unzip nmap -> " + new RootProcess("initialisation ", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip archive_nmap").closeProcess());
+//        new RootProcess("initialisation ", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip archive_nmap").closeProcess();
+        Log.d(TAG, "chmod 744 " + mSingleton.BinaryPath + "/nmap/*" + " -> " + new RootProcess("initialisation ").exec("chmod 744 " + mSingleton.BinaryPath + "/nmap/*").closeProcess());
+//        new RootProcess("initialisation ").exec("chmod 744 " + mSingleton.BinaryPath + "/nmap/*").closeProcess();
 
         /*  ping binary    */
         buildFile("ping", R.raw.arpspoof);

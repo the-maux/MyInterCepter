@@ -40,7 +40,7 @@ public class DnsSpoofConfAdapter extends RecyclerView.Adapter<DnsSpoofConfHolder
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                singleton.dnsSpoofed.removeDomain(domainAsked);
+                singleton.getDnsControler().removeDomain(domainAsked);
                 activity.actualiseDomainspoofed();
                 notifyDataSetChanged();
             }

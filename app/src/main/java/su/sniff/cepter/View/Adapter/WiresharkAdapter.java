@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import su.sniff.cepter.Controller.Core.Conf.Singleton;
 import su.sniff.cepter.Model.Net.Protocol;
 import su.sniff.cepter.Model.Net.Trame;
 import su.sniff.cepter.R;
@@ -178,7 +179,8 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
             public void run() {
                 mActualize = true;
                 listOfTrame.clear();
-                dump();
+                if (Singleton.getInstance().UltraDebugMode)
+                    dump();
                 for (Trame trame : originalListOfTrames) {
                     addTrameFiltered(trame, false);
                 }

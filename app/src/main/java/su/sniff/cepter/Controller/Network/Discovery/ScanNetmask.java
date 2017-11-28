@@ -55,8 +55,10 @@ public class                        ScanNetmask {
 
     private void                    ScanOver() {
         alreadySend = true;
-        for (String ipReachable : mListIpReachable) {
-            Log.d(TAG, ipReachable + " reachable");
+        if (Singleton.getInstance().UltraDebugMode) {
+            for (String ipReachable : mListIpReachable) {
+                Log.d(TAG, ipReachable + " reachable");
+            }
         }
         mScanner.onReachableScanOver(mListIpReachable);
     }

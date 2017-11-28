@@ -23,7 +23,7 @@ public class                            Singleton {
     public String                       PcapPath;
     public String                       BinaryPath = null;
     public String                       FilesPath = null;
-    public DnsSpoof                     dnsSpoofed = new DnsSpoof();
+    private DnsSpoof                    dnsSpoofed = null;
     public ArrayList<Host>              hostsList = null;
     public List<ArpSpoof>               ArpSpoofProcessStack = new ArrayList<>();
     public NetworkInformation           network = null;
@@ -33,6 +33,13 @@ public class                            Singleton {
     public boolean                      isDnsSpoofActived = false, isWiresharkActived = false;
     public  String                      VERSION = "0xDEADBEEF";
     public  int                         lock = 0, nbrInteface = 1;
+
+    public DnsSpoof                     getDnsControler() {
+        if (dnsSpoofed == null) {
+            dnsSpoofed = new DnsSpoof();
+        }
+        return dnsSpoofed;
+    }
 
     public boolean                      isSslStripModeActived() {
         return SslStripModeActived;

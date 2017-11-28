@@ -170,7 +170,10 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     private void                    initMonitor() {
         Log.d(TAG, "Init Monitor");
-        WifiInfo wifiInfo = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
+        WifiInfo wifiInfo = null;
+        if (((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)) != null) {
+            wifiInfo = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
+        }
         monitor = wifiInfo.getSSID().replace("\"", "") + " : " + singleton.network.gateway;
         if (!monitor.contains("WiFi")) {
             monitor += "\n" + " MyIp : " + singleton.network.myIp;
