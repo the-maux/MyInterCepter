@@ -20,15 +20,16 @@ import com.github.clans.fab.FloatingActionButton;
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.BinaryWrapper.Dns.DnsSpoof;
+import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.DnsLogsAdapter;
 import fr.allycs.app.View.Adapter.DnsSpoofConfAdapter;
-import fr.allycs.app.View.Dialog.TIL_dialog;
+import fr.allycs.app.View.Dialog.AddDnsDialog;
 
 
-public class DnsActivity extends MyActivity {
+public class                            DnsActivity extends MyActivity {
     private String                      TAG = "DnsActivity";
-    private DnsActivity mInstance = this;
+    private DnsActivity                 mInstance = this;
     private CoordinatorLayout           mCoordinatorLayout;
     private Toolbar                     mToolbar;
     private SearchView                  mFilterText;
@@ -63,7 +64,7 @@ public class DnsActivity extends MyActivity {
         mFab = (FloatingActionButton) findViewById(R.id.fab);
         mDnsSpoof_RV = (RecyclerView) findViewById(R.id.dnsSpoof_RV);
         mClipper = (RelativeLayout) findViewById(R.id.clipper);
-        title = (TextView) findViewById(R.id.title);
+        title = (TextView) findViewById(R.id.host);
         mAction_deleteall = (TextView) findViewById(R.id.action_deleteall);
         mAction_import = (TextView) findViewById(R.id.action_import);
         mAction_export = (TextView) findViewById(R.id.action_export);
@@ -142,14 +143,14 @@ public class DnsActivity extends MyActivity {
                 mFab.setVisibility(View.VISIBLE);
                 switch (v.getId()) {
                     case R.id.action_export:
-                        final TIL_dialog dialog = new TIL_dialog(mInstance)
+                        final AddDnsDialog dialog = new AddDnsDialog(mInstance)
                                 .setTitle("Exporter la liste des dns")
                                 .setHintText(mDnsSpoof.getDnsConf().PATH_CONF_FILE)
                                 .setHint("Name of conf file");
                         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface d, int which) {
-                                String nameOfFile = dialog.getText();
+                                String nameOfFile = dialog.getHost();
                                 if (nameOfFile.contains(".") || nameOfFile.length() < 4) {
                                     Snackbar.make(mCoordinatorLayout, "Syntax incorrect", Toast.LENGTH_SHORT).show();
                                 } else {
@@ -164,14 +165,14 @@ public class DnsActivity extends MyActivity {
                         mDnsSpoofAdapter.notifyDataSetChanged();
                         break;
                     case R.id.action_import:
-                        final TIL_dialog dialog2 = new TIL_dialog(mInstance)
+                        final AddDnsDialog dialog2 = new AddDnsDialog(mInstance)
                                 .setTitle("Importez la liste des dns")
                                 .setHintText(mDnsSpoof.getDnsConf().PATH_CONF_FILE)
                                 .setHint("Name of file");
                         dialog2.onPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface d, int which) {
-                                String nameOfFile = dialog2.getText();
+                                String nameOfFile = dialog2.getHost();
                                 if (nameOfFile.contains(".") || nameOfFile.length() < 4) {
                                     Snackbar.make(mCoordinatorLayout, "Syntax incorrect", Toast.LENGTH_SHORT).show();
                                 } else {
@@ -188,21 +189,38 @@ public class DnsActivity extends MyActivity {
     }
 
     private void                        onAddHostDialog() {
-        final TIL_dialog dialog = new TIL_dialog(mInstance)
+        final AddDnsDialog dialog = new AddDnsDialog(mInstance)
                 .setTitle("Add mhost")
                 .setHint("IP:www.domain.fr");
         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface d, int which) {
-                String domain = dialog.getText();
-                if (domain.contains(":")) {
-                    String[] tmp = domain.split(":");
-                    mDnsSpoof.getDnsConf().addHost(tmp[0], tmp[1]);
-                    Snackbar.make(mCoordinatorLayout,  tmp[0] + " -> " + tmp[1], Snackbar.LENGTH_LONG);
-                    mDnsSpoofAdapter.notifyItemInserted(0);
+                String host = dialog.getHost(), ip = dialog.getIp();
+                Snackbar mySnackbar;
+                View.OnClickListener retryListene = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onAddHostDialog();
+                    }
+                };
+                if (host.isEmpty() || !host.contains(".") || host.length() <= 4) {
+                    mySnackbar = Snackbar.make(mCoordinatorLayout, "Host incorrect", Snackbar.LENGTH_LONG);
+                    mySnackbar.setAction("RETRY", retryListene);
+                } else if (ip.isEmpty() || Utils.count(ip, ".") != 4) {
+                    mySnackbar = Snackbar.make(mCoordinatorLayout, "Ip incorrect", Snackbar.LENGTH_LONG);
+                    mySnackbar.setAction("RETRY", retryListene);
                 } else {
-                    Snackbar.make(mCoordinatorLayout, "Format non respecté", Snackbar.LENGTH_LONG);
+                    mDnsSpoof.getDnsConf().addHost(ip, host);
+                    mDnsSpoofAdapter.notifyItemInserted(0);
+                    mySnackbar = Snackbar.make(mCoordinatorLayout,  ip + " -> " + host, Snackbar.LENGTH_LONG);
+                    mySnackbar.setAction("SAVE", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mDnsSpoof.getDnsConf().saveConf();
+                        }
+                    });
                 }
+                mySnackbar.show();
             }
         })
         .show();

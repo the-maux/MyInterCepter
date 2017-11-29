@@ -23,8 +23,7 @@ public class                    DnsConf {
         readDnsFromFile();
     }
 
-    private void                 readDnsFromFile() {
-
+    private void                readDnsFromFile() {
         FileReader fileReader;
         File file = new File(PATH_CONF_FILE);
         clear();
@@ -57,12 +56,10 @@ public class                    DnsConf {
     public void                 clear() {
         listDomainSpoofed.clear();
     }
-
     public void                 saveConf() {
-        BufferedWriter output;
         try {
             File file = new File(PATH_CONF_FILE);
-            output = new BufferedWriter(new FileWriter(file));
+            BufferedWriter output = new BufferedWriter(new FileWriter(file));
             for (DNSSpoofItem dnsSpoofItem : listDomainSpoofed) {
                 output.write(dnsSpoofItem.domainAsked + " " + dnsSpoofItem.domainSpoofed + '\n');
             }
@@ -71,7 +68,6 @@ public class                    DnsConf {
             e.printStackTrace();
         }
     }
-
     public void                 addHost(String ip, String domain) {
         listDomainSpoofed.add(0, new DNSSpoofItem(ip, domain));
     }

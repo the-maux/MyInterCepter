@@ -44,7 +44,7 @@ import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.HostDiscoveryAdapter;
 import fr.allycs.app.View.Adapter.OSAdapter;
 import fr.allycs.app.View.Dialog.RV_dialog;
-import fr.allycs.app.View.Dialog.TIL_dialog;
+import fr.allycs.app.View.Dialog.AddDnsDialog;
 import fr.allycs.app.View.MenuActivity;
 
 /**
@@ -143,7 +143,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Log.d(TAG, "tab.getText().toString():" + tab.getText().toString());
+                Log.d(TAG, "tab.getHost().toString():" + tab.getText().toString());
                 switch (tab.getText().toString()) {
                     case "arp\nDiscovery":
                         Log.d(TAG, "Nmap Tab");
@@ -206,13 +206,13 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     private void                    showAddHostDialog() {
-        final TIL_dialog dialog = new TIL_dialog(mInstance)
+        final AddDnsDialog dialog = new AddDnsDialog(mInstance)
                 .setTitle("Add target");
         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface d, int which) {
 
-                            onCheckAddedHost(dialog.getText());
+                            onCheckAddedHost(dialog.getHost());
                         }
                 }).show();
 
