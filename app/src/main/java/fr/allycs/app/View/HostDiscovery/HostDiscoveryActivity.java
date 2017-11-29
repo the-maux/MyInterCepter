@@ -266,14 +266,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (query.contains("cheat")) {
-                    for (Host host : mHosts) {
-                        host.setSelected(true);
-                    }
-                    mHostAdapter.notifyDataSetChanged();
-                } else {
-                    mHostAdapter.filterByString(query);
-                }
+                mHostAdapter.filterByString(query);
                 return false;
             }
 

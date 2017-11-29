@@ -33,7 +33,7 @@ public class                            DnsActivity extends MyActivity {
     private DnsActivity                 mInstance = this;
     private CoordinatorLayout           mCoordinatorLayout;
     private Toolbar                     mToolbar;
-    private SearchView                  mFilterText;
+    private SearchView                  mSearchView;
     private ImageButton                 mAction_add_host, mSettingsBtn;
     private TabLayout                   tabs;
     private FloatingActionButton        mFab;
@@ -53,13 +53,14 @@ public class                            DnsActivity extends MyActivity {
         initMenu();
         initTabs();
         initViewConf();
+        initSearchView();
         mDnsSpoof.setToolbar(this);
     }
 
     private void                        initXml() {
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         mToolbar = (Toolbar) findViewById(R.id.toolbar2);
-        mFilterText = (SearchView) findViewById(R.id.searchView);
+        mSearchView = (SearchView) findViewById(R.id.searchView);
         mAction_add_host = (ImageButton) findViewById(R.id.action_add_host);
         mSettingsBtn = (ImageButton) findViewById(R.id.settings);
         mFab = (FloatingActionButton) findViewById(R.id.fab);
@@ -237,6 +238,37 @@ public class                            DnsActivity extends MyActivity {
         }
         mDnsConsoleAdapter = new DnsLogsAdapter(this, mDnsSpoof.dnsLogs);
         mDnsSpoof.setRV_Adapter(mDnsConsoleAdapter);
+    }
+
+    private void                        initSearchView() {
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filtering(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                filtering("");
+                return false;
+            }
+        });
+    }
+
+    private void                        filtering(String query) {
+        int tab = tabs.getSelectedTabPosition();
+        if (tab == 0) {//CONF VIEW
+            mDnsSpoofAdapter.filtering(query);
+        } else {//Logs VIEW
+            mDnsConsoleAdapter.filtering(query);
+        }
     }
 
     private void                        initViewConsoleLogs() {

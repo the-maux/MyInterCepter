@@ -3,14 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@android:drawable/gallery_thumb"
     android:maxHeight="300dp">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/TIL_host"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
 
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
         app:hintAnimationEnabled="true">
 
         <EditText
@@ -31,7 +34,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/TIL_host"
 
-        android:layout_margin="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
         app:hintAnimationEnabled="true">
 
         <EditText
@@ -40,6 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:digits="0123456789."
             android:hint="IP: 192.168.0.42"
             android:imeOptions="actionDone"
             android:inputType="number" />
