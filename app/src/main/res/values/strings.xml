@@ -97,5 +97,7 @@ listening on eth3, link-type EN10MB (Ethernet), capture size 96 bytes\n
 00:14:49.737810 802.1d unknown version\n
 00:14:51.151290 arp reply 192.168.0.120 is-at 00:22:19:6d:23:82 (oui Unknown)\n
 00:14:51.780357 802.1d unknown version</string>
+    <string name="todo">TODO</string>
+    <string name="settings">Settings</string>
 
 </resources>

@@ -6,16 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/Coordonitor"
-    android:animateLayoutChanges="true"
-    android:animationCache="true"
-    android:background="@color/material_light_white">
+    android:background="@drawable/splashscreen">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg1">
+        >
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -26,14 +23,8 @@
             android:layout_centerHorizontal="false"
             android:layout_centerVertical="false"
             android:layout_marginRight="12dp"
-            android:layout_marginTop="24dp" />
-
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true" />
+            android:layout_marginTop="24dp"
+            android:indeterminate="true" />
 
         <TextView
             android:id="@+id/monitor"
@@ -46,40 +37,6 @@
             android:textColor="#20C20E"
             android:textSize="16sp"
             android:typeface="monospace" />
-
-        <Button
-            android:id="@+id/button7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:text="Button"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/imageView7"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_below="@+id/button7"
-            android:layout_centerHorizontal="false"
-            android:layout_centerVertical="false"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="180dp"
-            android:elevation="5dp"
-            android:src="@drawable/scylla_transparent" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="8dp"
-            android:layout_marginRight="4dp"
-            android:gravity="right"
-            android:textColor="@color/material_light_white"
-            android:textSize="10sp"
-            android:textStyle="italic" />
 
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -126,7 +126,7 @@
 
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/host"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -140,7 +140,7 @@
             android:id="@+id/dnsSpoof_RV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/title"
+            android:layout_below="@+id/host"
             android:layout_margin="8dp"
             android:background="@color/primary_text"
             android:clipChildren="true"

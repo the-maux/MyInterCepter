@@ -28,22 +28,42 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="8dp"
                 android:elevation="4dp"
-                android:src="@mipmap/ic_dns" />
+                android:padding="4dp"
+                android:src="@drawable/www" />
 
             <TextView
-                android:id="@+id/nameDNS"
+                android:id="@+id/domain"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="false"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_toLeftOf="@+id/deleteImage"
+                android:layout_toRightOf="@+id/imageDNS"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:paddingLeft="8dp"
+                android:text="www.facebook.com facebook.com"
+                android:textColor="@color/material_light_white"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/ip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerVertical="false"
+                android:layout_marginBottom="8dp"
                 android:layout_marginRight="4dp"
                 android:layout_toLeftOf="@+id/deleteImage"
                 android:layout_toRightOf="@+id/imageDNS"
                 android:gravity="center_vertical"
                 android:maxLines="2"
                 android:paddingLeft="8dp"
-                android:text="192.168.0.1 www.facebook.com facebook.com"
-                android:textColor="?android:attr/textColorPrimary"
-                android:textSize="12sp" />
+                android:text="192.168.0.1 "
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:typeface="normal" />
 
             <ImageView
                 android:id="@+id/deleteImage"
@@ -51,7 +71,8 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:paddingRight="8dp"
+                android:layout_marginRight="8dp"
+                android:padding="4dp"
                 android:src="@mipmap/ic_trash2" />
 
         </RelativeLayout>

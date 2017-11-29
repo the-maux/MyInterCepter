@@ -1,13 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="match_parent">
-    <CheckBox android:id="@+id/SSLStrip_CB" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Save .pcap session" android:onClick="OnSave" />
-    <CheckBox android:id="@+id/checkBox2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Autoscroll" android:layout_toRightOf="@+id/SSLStrip_CB" android:layout_below="@+id/SSLStrip_CB" android:onClick="OnRawScroll" />
-    <CheckBox android:id="@+id/ForcedDL_CB" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Lock Screen" android:layout_below="@+id/SSLStrip_CB" android:layout_alignParentLeft="true" android:onClick="OnLock" />
-    <TextView  android:gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" android:id="@+id/textView3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="v 2.0" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" />
-    <Button android:id="@+id/clearButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Clear *.pcap" android:layout_toRightOf="@+id/DNSSpoofButton" android:layout_below="@+id/spinner3" android:onClick="OnClearPcap"  />
-    <TextView  android:autoLink="web|email|phone|map|all" android:id="@+id/monitor" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TextView" android:layout_below="@+id/imageView1" android:layout_alignParentLeft="true" />
-    <ImageView android:id="@+id/imageView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ico" android:layout_above="@+id/textView3" android:layout_centerHorizontal="true" android:onClick="OnLogo" />
-    <Spinner android:id="@+id/spinner2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@+id/ForcedDL_CB" android:layout_alignLeft="@+id/ForcedDL_CB" />
-    <Spinner android:id="@+id/spinner3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toRightOf="@+id/ForcedDL_CB" android:layout_below="@+id/ForcedDL_CB" />
-    <CheckBox android:id="@+id/checkBox4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Show HTTP Reqs" android:layout_toRightOf="@+id/SSLStrip_CB" android:layout_alignParentTop="true" android:onClick="OnShowHTTP" />
-</RelativeLayout>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splashscreen">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/SSLStrip_CB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="OnSave"
+                android:text="Save .pcap session" />
+
+            <CheckBox
+                android:id="@+id/ForcedDL_CB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/SSLStrip_CB"
+                android:onClick="OnLock"
+                android:text="Lock Screen" />
+
+            <CheckBox
+                android:id="@+id/checkBox2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ForcedDL_CB"
+                android:onClick="OnRawScroll"
+                android:text="Autoscroll" />
+
+            <Button
+                android:id="@+id/clearButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/checkBox2"
+                android:onClick="OnClearPcap"
+                android:text="Clear *.pcap" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end"
+                android:text="v 2.0" />
+
+            <TextView
+                android:id="@+id/monitor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/imageView1"
+                android:layout_marginLeft="8dp"
+                android:autoLink="web|email|phone|map|all"
+                android:text="The quieter you become the more you are able to hear"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>
