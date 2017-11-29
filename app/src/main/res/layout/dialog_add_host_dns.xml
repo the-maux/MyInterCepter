@@ -42,6 +42,6 @@
             android:layout_marginStart="8dp"
             android:hint="IP: 192.168.0.42"
             android:imeOptions="actionDone"
-            android:inputType="text|textUri|textWebEmailAddress" />
+            android:inputType="number" />
     </android.support.design.widget.TextInputLayout>
 </RelativeLayout>

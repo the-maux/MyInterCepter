@@ -44,13 +44,13 @@ public class                    GeneralSettings {
                 .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.material_light_white));
         builder.addTitleItem("Behavior");
         builder.addItem(0, "Write in Pcap file", (tcpdump.isDumpingInFile) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp );
-        builder.addItem(1, "SslStrip Mode", (singleton.isSslStripModeActived()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp );
+        builder.addItem(1, "SslStrip Mode", (singleton.isSslstripMode()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp );
         builder.addItem(2, "Lockscreen", (singleton.isLockScreen()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp );
         builder.addItem(3, "Deep trame analyse", (tcpdump.isDeepAnalyseTrame()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp );
         builder.addDividerItem();
         builder.addItem(4, "Port redirect", R.drawable.ic_checkbox_blank_outline_grey600_24dp);
         builder.addItem(5, "Port filtering", R.drawable.ic_checkbox_blank_outline_grey600_24dp);
-        builder.addItem(6, "Dns Spoofing", (singleton.isDnsSpoofActived()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp )
+        builder.addItem(6, "Dns Spoofing", (singleton.isDnsControlstarted()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp )
                 .setItemClickListener(onClick())
                 .expandOnStart(true);
         bottomSheet = builder.createDialog();
@@ -66,7 +66,7 @@ public class                    GeneralSettings {
                         tcpdump.isDumpingInFile = !tcpdump.isDumpingInFile;
                         break;
                     case "SslStrip Mode":
-                        singleton.setSslStripModeActived(!singleton.isSslStripModeActived());
+                        singleton.setSslstripMode(!singleton.isSslstripMode());
                         break;
                     case "Lockscreen":
                         singleton.setLockScreen(!singleton.isLockScreen());
@@ -81,7 +81,7 @@ public class                    GeneralSettings {
                         onPortMitm(false);
                         break;
                     case "Dns Spoofing":
-                        singleton.setDnsSpoofActived(!singleton.isDnsSpoofActived());
+                        singleton.setDnsControlstarted(!singleton.isDnsControlstarted());
                         break;
                     default:
                         mActivity.startActivity(new Intent(mActivity, MenuActivity.class));

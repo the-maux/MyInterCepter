@@ -5,9 +5,9 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.allycs.app.Controller.Core.BinaryWrapper.Dns.DnsControl;
 import fr.allycs.app.Controller.Network.IPTables;
 import fr.allycs.app.Controller.Core.BinaryWrapper.ArpSpoof;
-import fr.allycs.app.Controller.Core.BinaryWrapper.Dns.DnsSpoof;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Net.NetworkInformation;
 
@@ -20,41 +20,43 @@ public class                            Singleton {
         return mInstance;
     }
 
-    public String                       PcapPath;
-    public String                       BinaryPath = null;
-    public String                       FilesPath = null;
-    private DnsSpoof                    dnsSpoofed = null;
+    private DnsControl                  dnsSpoofed = null;
     public ArrayList<Host>              hostsList = null;
     public List<ArpSpoof>               ArpSpoofProcessStack = new ArrayList<>();
     public NetworkInformation           network = null;
-    public boolean                      DebugMode = true, UltraDebugMode = false;
-    private boolean                     SslStripModeActived = false;
-    private boolean                     LockScreen = false;
-    public boolean                      isDnsSpoofActived = false, isWiresharkActived = false;
-    public  String                      VERSION = "0xDEADBEEF";
-    public  int                         lock = 0, nbrInteface = 1;
 
-    public DnsSpoof                     getDnsControler() {
+    private boolean                     sslstripMode = false, LockScreen = false;
+    private boolean                     DnsControlstarted = false, isTcpdumpStarted = false;
+
+    public  int                         nbrInteface = 1;
+    public boolean                      DebugMode = true, UltraDebugMode = false;
+    public String                       VERSION = "0xDEADBEEF";
+    public String                       PcapPath;
+    public String                       BinaryPath = null;
+    public String                       FilesPath = null;
+
+
+    public DnsControl                   getDnsControler() {
         if (dnsSpoofed == null) {
-            dnsSpoofed = new DnsSpoof();
+            dnsSpoofed = new DnsControl();
         }
         return dnsSpoofed;
     }
 
-    public boolean                      isSslStripModeActived() {
-        return SslStripModeActived;
+    public boolean                      isSslstripMode() {
+        return sslstripMode;
     }
-    public void                         setSslStripModeActived(boolean sslStripModeActived) {
-        SslStripModeActived = sslStripModeActived;
+    public void                         setSslstripMode(boolean sslstripMode) {
+        this.sslstripMode = sslstripMode;
         IPTables.sslConf();
     }
-    public boolean                      isDnsSpoofActived() {
-        return isDnsSpoofActived;
+    public boolean                      isDnsControlstarted() {
+        return DnsControlstarted;
     }
-    public void                         setDnsSpoofActived(boolean dnsSpoofActived) {
-        isDnsSpoofActived = dnsSpoofActived;
+    public void                         setDnsControlstarted(boolean dnsControlstarted) {
+        DnsControlstarted = dnsControlstarted;
         //TODO: DNSSoof
-        Log.i("setDnsSpoofActived", "Not implemented");
+        Log.i("setDnsControlstarted", "Not implemented");
         IPTables.sslConf();
     }
     public boolean                      isLockScreen() {

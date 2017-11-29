@@ -17,10 +17,11 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 
+import fr.allycs.app.Controller.Core.BinaryWrapper.Dns.DnsControl;
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Core.BinaryWrapper.Dns.DnsSpoof;
 import fr.allycs.app.Controller.Misc.Utils;
+import fr.allycs.app.Model.Target.DNSSpoofItem;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.DnsLogsAdapter;
 import fr.allycs.app.View.Adapter.DnsSpoofConfAdapter;
@@ -40,7 +41,7 @@ public class                            DnsActivity extends MyActivity {
     private RelativeLayout              mClipper;
     private TextView                    mAction_deleteall, mAction_import, mAction_export, textEmpty, title;
     private Singleton                   mSingleton = Singleton.getInstance();
-    private DnsSpoof                    mDnsSpoof = mSingleton.getDnsControler();
+    private DnsControl                  mDnsSpoof = mSingleton.getDnsControler();
     private DnsSpoofConfAdapter         mDnsSpoofAdapter;
     private DnsLogsAdapter              mDnsConsoleAdapter;
 
@@ -73,7 +74,7 @@ public class                            DnsActivity extends MyActivity {
     }
 
     private void                        initFab() {
-        if (mSingleton.isDnsSpoofActived()) {
+        if (mSingleton.isDnsControlstarted()) {
             mFab.setImageResource(R.mipmap.ic_stop);
         } else {
             mFab.setImageResource(android.R.drawable.ic_media_play);
@@ -82,8 +83,8 @@ public class                            DnsActivity extends MyActivity {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSingleton.setDnsSpoofActived(!mSingleton.isDnsSpoofActived());
-                if (mSingleton.isDnsSpoofActived()) {
+                mSingleton.setDnsControlstarted(!mSingleton.isDnsControlstarted());
+                if (mSingleton.isDnsControlstarted()) {
                     mDnsSpoof.start();
                     mFab.setImageResource(R.mipmap.ic_stop);
                 } else {
@@ -189,9 +190,7 @@ public class                            DnsActivity extends MyActivity {
     }
 
     private void                        onAddHostDialog() {
-        final AddDnsDialog dialog = new AddDnsDialog(mInstance)
-                .setTitle("Add mhost")
-                .setHint("IP:www.domain.fr");
+        final AddDnsDialog dialog = new AddDnsDialog(mInstance).setTitle("Ajouter un host");
         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface d, int which) {
@@ -206,13 +205,13 @@ public class                            DnsActivity extends MyActivity {
                 if (host.isEmpty() || !host.contains(".") || host.length() <= 4) {
                     mySnackbar = Snackbar.make(mCoordinatorLayout, "Host incorrect", Snackbar.LENGTH_LONG);
                     mySnackbar.setAction("RETRY", retryListene);
-                } else if (ip.isEmpty() || Utils.count(ip, ".") != 4) {
+                } else if (ip.isEmpty() || Utils.nbrSubstringOccurence(ip, ".") != 3) {
                     mySnackbar = Snackbar.make(mCoordinatorLayout, "Ip incorrect", Snackbar.LENGTH_LONG);
                     mySnackbar.setAction("RETRY", retryListene);
                 } else {
                     mDnsSpoof.getDnsConf().addHost(ip, host);
                     mDnsSpoofAdapter.notifyItemInserted(0);
-                    mySnackbar = Snackbar.make(mCoordinatorLayout,  ip + " -> " + host, Snackbar.LENGTH_LONG);
+                    mySnackbar = Snackbar.make(mCoordinatorLayout,  host + " -> " + ip, Snackbar.LENGTH_LONG);
                     mySnackbar.setAction("SAVE", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -236,7 +235,7 @@ public class                            DnsActivity extends MyActivity {
         } else {
             textEmpty.setVisibility(View.GONE);
         }
-        mDnsConsoleAdapter = new DnsLogsAdapter(this, mDnsSpoof.mDomainLogs);
+        mDnsConsoleAdapter = new DnsLogsAdapter(this, mDnsSpoof.dnsLogs);
         mDnsSpoof.setRV_Adapter(mDnsConsoleAdapter);
     }
 
@@ -246,8 +245,16 @@ public class                            DnsActivity extends MyActivity {
         mDnsSpoof_RV.setLayoutManager(new LinearLayoutManager(mInstance));
     }
 
-    public void                         actualiseDomainspoofed() {
+    public void                         updateToolbarTitle(DNSSpoofItem domain) {
         mToolbar.setTitle(mDnsSpoof.getDnsConf().listDomainSpoofed.size() + " domain spoofed");
+        Snackbar mySnackbar = Snackbar.make(mCoordinatorLayout, "Domain " + domain + " deleted", Snackbar.LENGTH_LONG);
+        mySnackbar.setAction("SAVE", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDnsSpoof.getDnsConf().saveConf();
+            }
+        });
+        mySnackbar.show();
     }
 
     public void                         titleToolbar(final String subtitle) {

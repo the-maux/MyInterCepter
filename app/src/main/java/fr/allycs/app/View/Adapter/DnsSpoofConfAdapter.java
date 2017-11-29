@@ -14,15 +14,15 @@ import fr.allycs.app.View.Adapter.Holder.DnsSpoofConfHolder;
 import fr.allycs.app.View.DnsActivity;
 
 
-public class DnsSpoofConfAdapter extends RecyclerView.Adapter<DnsSpoofConfHolder> {
+public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter<DnsSpoofConfHolder> {
     private String              TAG = this.getClass().getName();
-    private DnsActivity activity;
-    private List<DNSSpoofItem>  dnsIntercepts;
-    private Singleton           singleton = Singleton.getInstance();
+    private DnsActivity         mActivity;
+    private List<DNSSpoofItem>  mDnsIntercepts;
+    private Singleton           mSingleton = Singleton.getInstance();
 
     public DnsSpoofConfAdapter(DnsActivity activity, List<DNSSpoofItem> dnsInterceptList) {
-        this.dnsIntercepts = dnsInterceptList;
-        this.activity = activity;
+        this.mDnsIntercepts = dnsInterceptList;
+        this.mActivity = activity;
     }
     @Override
     public DnsSpoofConfHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -31,17 +31,18 @@ public class DnsSpoofConfAdapter extends RecyclerView.Adapter<DnsSpoofConfHolder
 
     @Override
     public void                 onBindViewHolder(DnsSpoofConfHolder holder, int position) {
-        DNSSpoofItem host = dnsIntercepts.get(position);
-        holder.nameDNS.setText(host.domainAsked + " -> "+ host.domainSpoofed);
+        DNSSpoofItem host = mDnsIntercepts.get(position);
+        holder.domain.setText("www." + host.domain + "  " + host.domain);
+        holder.ip.setText(host.ip);
         holder.deleteImage.setOnClickListener(onDeleteDns(host));
     }
 
-    private View.OnClickListener onDeleteDns(final DNSSpoofItem domainAsked) {
+    private View.OnClickListener onDeleteDns(final DNSSpoofItem domain) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                singleton.getDnsControler().removeDomain(domainAsked);
-                activity.actualiseDomainspoofed();
+                mSingleton.getDnsControler().removeDomain(domain);
+                mActivity.updateToolbarTitle(domain);
                 notifyDataSetChanged();
             }
         };
@@ -49,6 +50,6 @@ public class DnsSpoofConfAdapter extends RecyclerView.Adapter<DnsSpoofConfHolder
 
     @Override
     public int                  getItemCount() {
-        return dnsIntercepts.size();
+        return mDnsIntercepts.size();
     }
 }

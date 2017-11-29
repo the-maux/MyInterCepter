@@ -100,7 +100,7 @@ public class                    IPTables {
                 .exec("iptables -P FORWARD ACCEPT;")
                 .exec("iptables -P OUTPUT ACCEPT")
                 .exec("echo '1' > /proc/sys/net/ipv4/ip_forward");
-        if (Singleton.getInstance().isDnsSpoofActived()) {
+        if (Singleton.getInstance().isDnsControlstarted()) {
             process.exec("iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053");
         }
         process.closeProcess();
@@ -129,7 +129,7 @@ public class                    IPTables {
     }
 
     public static void         sslConf() {
-        if (Singleton.getInstance().isSslStripModeActived()) {
+        if (Singleton.getInstance().isSslstripMode()) {
             Log.d(TAG, "Conf with SslStrip");
             IPTables.InterceptWithSSlStrip();
         } else {

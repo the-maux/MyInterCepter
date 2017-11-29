@@ -12,16 +12,28 @@ import fr.allycs.app.Model.Unix.DNSLog;
 import fr.allycs.app.View.Adapter.DnsLogsAdapter;
 import fr.allycs.app.View.DnsActivity;
 
-public class                    DnsSpoof {
-    private String              TAG = "DnsSpoof";
-    public ArrayList<DNSLog>    mDomainLogs = new ArrayList<>();
+public class                    DnsControl {
+    private String              TAG = "DnsControl";
+    public ArrayList<DNSLog>    dnsLogs = new ArrayList<>();
     private RootProcess         mProcess;
     private DnsLogsAdapter      mRV_Adapter = null;
-    private DnsConf             dnsConf;
-    private DnsActivity mActivity;
+    private DnsConf             mDnsConf;
+    private DnsActivity         mActivity;
 
-    public                      DnsSpoof() {
-        dnsConf = new DnsConf();
+    public DnsControl() {
+        mDnsConf = new DnsConf();
+    }
+
+    private void                initRVLink() {
+        if (mRV_Adapter.getRecyclerview() != null)
+            mRV_Adapter.getRecyclerview().post(new Runnable() {
+                @Override
+                public void run() {
+                    dnsLogs.clear();
+                    if (mRV_Adapter != null)
+                        mRV_Adapter.notifyDataSetChanged();
+                }
+            });
     }
 
     private boolean             isItALog(String read) {
@@ -33,14 +45,23 @@ public class                    DnsSpoof {
                 !read.contains("reading ") &&
                 !read.contains("started, version 2.51 cachesize 150");
     }
+    private boolean             isADomainConnu(DNSLog dnsLog) {
+        for (DNSLog domainLog : dnsLogs) {
+            if (domainLog.isSameDomain(dnsLog)) {
+                domainLog.addLog(dnsLog);
+                return false;
+            }
+        }
+        return true;
+    }
 
-    public DnsSpoof             start() {
+    public DnsControl           start() {
         initRVLink();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 DNSLog Domainlog;
-                mDomainLogs.clear();
+                dnsLogs.clear();
                 mProcess = new RootProcess("Dnsmasq::");
                 mProcess.exec("dnsmasq --no-daemon --log-queries");
                 BufferedReader reader = mProcess.getReader();
@@ -54,7 +75,7 @@ public class                    DnsSpoof {
                             DNSLog DomainlogTmp = new DNSLog(read);
                             boolean isAnewDomain;
                             if ((isAnewDomain = isADomainConnu(DomainlogTmp)))
-                                mDomainLogs.add(0, DomainlogTmp);
+                                dnsLogs.add(0, DomainlogTmp);
                             notifyAdapter(DomainlogTmp, deprecatedStart, isAnewDomain);
                         }
                     }
@@ -71,36 +92,13 @@ public class                    DnsSpoof {
         }).start();
         return this;
     }
-
-    private void                initRVLink() {
-        if (mRV_Adapter.getRecyclerview() != null)
-            mRV_Adapter.getRecyclerview().post(new Runnable() {
-                @Override
-                public void run() {
-                    mDomainLogs.clear();
-                    if (mRV_Adapter != null)
-                        mRV_Adapter.notifyDataSetChanged();
-                }
-            });
-    }
-
-    private boolean             isADomainConnu(DNSLog dnsLog) {
-        for (DNSLog domainLog : mDomainLogs) {
-            if (domainLog.isSameDomain(dnsLog)) {
-                domainLog.addLog(dnsLog);
-                return false;
-            }
-        }
-        return true;
-    }
-
     public void                 stop() {
         RootProcess.kill("dnsmasq");
         if (mRV_Adapter.getRecyclerview() != null)
             mRV_Adapter.getRecyclerview().post(new Runnable() {
                 @Override
                 public void run() {
-                    //mDomainLogs.clear();
+                    //dnsLogs.clear();
                     if (mRV_Adapter != null)
                         mRV_Adapter.notifyDataSetChanged();
                 }
@@ -110,11 +108,9 @@ public class                    DnsSpoof {
     /**
      * RecyclerView Conf
      */
-
     public void                 setRV_Adapter(DnsLogsAdapter mRV_Adapter) {
         this.mRV_Adapter = mRV_Adapter;
     }
-
     private void                notifyAdapter(final DNSLog log, final boolean[] deprecatedStart, final boolean isAnewDomain) {
         if (mRV_Adapter.getRecyclerview() != null)
             mRV_Adapter.getRecyclerview().post(new Runnable() {
@@ -123,36 +119,30 @@ public class                    DnsSpoof {
                     if (log.data.contains("failed to create listening socket: Address already in use")) {
                         deprecatedStart[0] = true;
                     } else if (mRV_Adapter != null && isAnewDomain)
-                        mRV_Adapter.notifyItemInserted(mDomainLogs.indexOf(log));
+                        mRV_Adapter.notifyItemInserted(dnsLogs.indexOf(log));
                     else if (mRV_Adapter != null && !isAnewDomain)
                         mRV_Adapter.notifyDataSetChanged();
                 }
             });
         if (mActivity != null)
-            mActivity.titleToolbar(mDomainLogs.size() + " dns request");
+            mActivity.titleToolbar(dnsLogs.size() + " dns request");
     }
 
     /**
      * DnsConf
      */
-
     public void                 saveDnsConf(String nameOfFile) {
-        dnsConf.saveConf();
+        mDnsConf.saveConf();
     }
-
     public void                 removeDomain(DNSSpoofItem domainAsked) {
-        Log.d(TAG, "removing DNS spoofed nbr:" + dnsConf.listDomainSpoofed.indexOf(domainAsked));
-        dnsConf.listDomainSpoofed.remove(dnsConf.listDomainSpoofed.indexOf(domainAsked));
+        mDnsConf.listDomainSpoofed.remove(mDnsConf.listDomainSpoofed.indexOf(domainAsked));
     }
-
     public void                 clear() {
-        dnsConf.clear();
+        mDnsConf.clear();
     }
-
     public DnsConf              getDnsConf() {
-        return dnsConf;
+        return mDnsConf;
     }
-
     public void                 setToolbar(DnsActivity activity) {
         this.mActivity = activity;
     }

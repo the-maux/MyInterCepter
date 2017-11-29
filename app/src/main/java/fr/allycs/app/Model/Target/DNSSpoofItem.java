@@ -1,29 +1,24 @@
 package fr.allycs.app.Model.Target;
 
-/**
- * Created by maxim on 20/09/2017.
- */
-
 public class            DNSSpoofItem extends MyObject {
-    public String       domainAsked;
-    public String       domainSpoofed;
-    public boolean      actif;
+    public String       ip;
+    public String       domain;
+    private boolean     mActif;
 
-    public DNSSpoofItem(String domainAsked, String domainIntecpted) {
-        this.domainAsked = domainAsked;
-        this.domainSpoofed = domainIntecpted;
+    public DNSSpoofItem(String ip, String domain) {
+        this.ip = ip;
+        this.domain = domain.replace("www.", "");
     }
 
     public void         setActif(boolean actif) {
-        this.actif = actif;
+        this.mActif = actif;
     }
-
     public boolean      isActif() {
-        return actif;
+        return mActif;
     }
 
     @Override
     public String       toString() {
-        return domainAsked +":"+domainSpoofed;
+        return ip + ":" + domain;
     }
 }
