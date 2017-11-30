@@ -38,18 +38,26 @@ public class                    Setup {
         /*  Clean    */
         new RootProcess("initialisation ").exec("rm " + mSingleton.BinaryPath).closeProcess();
         buildDefaultDnsConf();
-        new RootProcess("initialisation ").exec("chmod 644 " + DnsConf.PATH_CONF_FILE).closeProcess();
+        new RootProcess("initialisation ").exec("chmod 644 " + DnsConf.PATH_HOST_FILE).closeProcess();
         mActivity.monitor("Cleaning installation");
         cleanTheKitchenBoy();
     }
 
     private void                buildDefaultDnsConf() {
-        new RootProcess("initialisation ")
-                .exec("echo \"192.168.0.29 www.microsof.com microsoft.com\" > " + DnsConf.PATH_CONF_FILE + " && " +
-                "echo \"192.168.0.30 www.any.domain any.domain\" >> " + DnsConf.PATH_CONF_FILE + " && " +
-                "echo \"192.168.0.30 www.test.fr test.fr\" >> " + DnsConf.PATH_CONF_FILE + " && " +
-                "chmod 644 " + DnsConf.PATH_CONF_FILE).
+        new RootProcess("DNS::" + DnsConf.PATH_CONF_FILE)
+                .exec("echo \"no-dhcp-interface=\" > " + DnsConf.PATH_CONF_FILE + " && " +
+                        "echo \"server=8.8.8.8\" >> " + DnsConf.PATH_CONF_FILE + " && " +
+                        "echo \"port=8053\" >> " + DnsConf.PATH_CONF_FILE + " && " +
+                        "echo \"no-hosts\" >> " + DnsConf.PATH_CONF_FILE + " && " +
+                        "echo \"addn-hosts=" + DnsConf.PATH_HOST_FILE + "\" >> " + DnsConf.PATH_CONF_FILE + " && " +
+                        "chmod 644 " + DnsConf.PATH_CONF_FILE).
                 closeProcess();
+        new RootProcess("DNS::" + DnsConf.PATH_HOST_FILE)
+                .exec("echo \"192.168.0.29 www.microsof.com microsoft.com\" > " + DnsConf.PATH_HOST_FILE + " && " +
+                        "echo \"192.168.0.30 www.any.domain any.domain\" >> " + DnsConf.PATH_HOST_FILE + " && " +
+                        "echo \"192.168.0.30 www.test.fr test.fr\" >> " + DnsConf.PATH_HOST_FILE + " && " +
+                        "chmod 644 " + DnsConf.PATH_HOST_FILE)
+                .closeProcess();
     }
 
     private void                dumpBuildSystem() {
