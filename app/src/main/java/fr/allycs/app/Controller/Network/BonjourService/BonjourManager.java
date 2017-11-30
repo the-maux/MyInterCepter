@@ -9,6 +9,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
@@ -16,12 +17,11 @@ import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
 public class                        BonjourManager {
     private String                  TAG = "BonjourManager";
     private NsdManager              mNsdManager;
-    private ResolvListener          ResolvServiceToClient;
     private HashMap<String, DiscoveryListenr> listDiscoveryListener = new HashMap<>();
     private BonjourManager          instance = this;
     private String[]                listServiceType;
     private int                     offsetServiceType = 0;
-    private ArrayList<Host>         listClient;
+    private List<Host>              listClient;
     private HostDiscoveryActivity   mActivity;
     private String[]                getAllType() {
         //all in mac _services._dns-sd._udp.local.
@@ -45,12 +45,11 @@ public class                        BonjourManager {
                 "_ssh._tcp"});
     }
 
-    public                          BonjourManager(HostDiscoveryActivity activity, ArrayList<Host> listClient) {
+    public                          BonjourManager(HostDiscoveryActivity activity, List<Host> listClient) {
         Log.d(TAG, "Bonjour Manager starting");
         mNsdManager = (NsdManager) activity.getSystemService(Context.NSD_SERVICE);
         mActivity = activity;
         this.listServiceType = getAllType();
-        this.ResolvServiceToClient = new ResolvListener(this, listClient);
         this.listClient = listClient;
         createListListener();
     }
@@ -71,7 +70,7 @@ public class                        BonjourManager {
         this.mNsdManager.stopServiceDiscovery(listene);
     }
     void                     resolveService(NsdServiceInfo service) {
-        this.mNsdManager.resolveService(service,  this.ResolvServiceToClient);
+        this.mNsdManager.resolveService(service,  new ResolvListener(this, listClient));
     }
 
     public void             bingo(String hostAddress, String serviceName) {

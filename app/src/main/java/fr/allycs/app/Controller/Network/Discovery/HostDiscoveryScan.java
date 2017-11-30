@@ -3,11 +3,13 @@ package fr.allycs.app.Controller.Network.Discovery;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Network.BonjourService.BonjourManager;
 import fr.allycs.app.Controller.Network.IPv4CIDR;
 import fr.allycs.app.Controller.Network.NetUtils;
+import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
 
 public class                        HostDiscoveryScan {
@@ -21,13 +23,13 @@ public class                        HostDiscoveryScan {
         this.mActivity = activity;
     }
 
-    public void                    run(typeScan typeOfScan) {
+    public void                    run(typeScan typeOfScan, List<Host> listOfHosts) {
         switch (typeOfScan) {
             case Arp:
                 startArpScan();
                 break;
             case Services:
-                startBonjourScan();
+                startBonjourScan(listOfHosts);
                 break;
             case Nmap:
                 startNmapScan();
@@ -35,8 +37,8 @@ public class                        HostDiscoveryScan {
         }
     }
 
-    private void                    startBonjourScan() {
-        BonjourManager bonjourManager = new BonjourManager(mActivity, mSingleton.hostsList);
+    private void                    startBonjourScan(List<Host> listOfHosts) {
+        new BonjourManager(mActivity, listOfHosts);
     }
 
     private void                    startNmapScan() {

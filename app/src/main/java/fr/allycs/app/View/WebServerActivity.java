@@ -92,7 +92,6 @@ public class                    WebServerActivity extends MyActivity {
         }
         return false;
     }
-
     private boolean             stopAndroidWebServer() {
         if (isStarted && androidWebServer != null) {
             androidWebServer.stop();

@@ -59,9 +59,9 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private String                  TAG = "HostDiscoveryActivity";
     private HostDiscoveryActivity   mInstance = this;
     private Singleton               singleton = Singleton.getInstance();
-    public CoordinatorLayout       mCoordinatorLayout;
+    public CoordinatorLayout        mCoordinatorLayout;
     private AppBarLayout            mAppbar;
-    private List<Host>              mHosts;
+    private List<Host>              mHosts = new ArrayList<>();
     private HostDiscoveryAdapter    mHostAdapter;
     private RecyclerView            mHost_RV;
     private String                  monitor;
@@ -285,7 +285,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     private void                    initHostsRecyclerView() {
-        mHosts = new ArrayList<>();
+        mHosts.clear();
         mHostAdapter = new HostDiscoveryAdapter(this, mHost_RV);
         mHost_RV.setAdapter(mHostAdapter);
         mHost_RV.setHasFixedSize(true);
@@ -304,7 +304,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                     initHostsRecyclerView();
                 progressAnimation();
                 toolbar2.setSubtitle("Scanning network");
-                new HostDiscoveryScan(this).run(typeScan);
+                new HostDiscoveryScan(this).run(typeScan, mHosts);
                 mProgress = 1000;
             } else {
                 Snackbar.make(mCoordinatorLayout, "You need to be connected", Toast.LENGTH_SHORT).show();
