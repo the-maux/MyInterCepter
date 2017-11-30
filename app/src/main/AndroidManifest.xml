@@ -10,12 +10,12 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name="fr.allycs.app.Controller.Misc.ApplicationControl"
+        android:name=".Controller.Misc.ApplicationControl"
         android:allowBackup="true"
         android:icon="@drawable/ico"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name="fr.allycs.app.View.SplashscreenActivity"
+        <activity android:name=".View.SplashscreenActivity"
             android:label="@string/app_name"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -24,14 +24,15 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="fr.allycs.app.View.SetupActivity"/>
-        <activity android:name="fr.allycs.app.View.DnsActivity"/>
-        <activity android:name="fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity" />
-        <activity android:name="fr.allycs.app.View.SettingsActivity" />
-        <activity android:name="fr.allycs.app.View.NmapActivity" />
-        <activity android:name="fr.allycs.app.View.MenuActivity" />
-        <activity android:name="fr.allycs.app.View.WiresharkActivity" />
-        <activity android:name="fr.allycs.app.View.Dora.DoraActivity" />
+        <activity android:name=".View.SetupActivity"/>
+        <activity android:name=".View.DnsActivity"/>
+        <activity android:name=".View.HostDiscovery.HostDiscoveryActivity" />
+        <activity android:name=".View.SettingsActivity" />
+        <activity android:name=".View.NmapActivity" />
+        <activity android:name=".View.MenuActivity" />
+        <activity android:name=".View.WiresharkActivity" />
+        <activity android:name=".View.Dora.DoraActivity" />
+        <activity android:name=".View.WebServerActivity" />
     </application>
 
 </manifest>
