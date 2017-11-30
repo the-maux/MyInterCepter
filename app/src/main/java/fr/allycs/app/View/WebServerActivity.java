@@ -39,7 +39,7 @@ public class                    WebServerActivity extends MyActivity {
 
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_webserver);
         init();
     }
 
