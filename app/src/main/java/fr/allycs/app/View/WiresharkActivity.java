@@ -57,20 +57,17 @@ public class                    WiresharkActivity extends MyActivity {
     private WiresharkAdapter    mAdapterWireshark;
     private String              mTypeScan = "No Filter";
     private List<Host>          mListHostSelected = new ArrayList<>();
-    private Tcpdump mTcpdump;
+    private Tcpdump             mTcpdump;
     private CheckBox            Autoscroll;
     private TextView            tcp_cb, dns_cb, arp_cb, https_cb, http_cb, udp_cb, ip_cb;
     private Singleton           singleton = Singleton.getInstance();
 
     @Override protected void    onCreate(@Nullable Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_wireshark);
         initXml();
         mTcpdump = Tcpdump.getTcpdump(this);
         initSpinner();
-
         initFilter();
         initSettings();
         initRV();
@@ -242,7 +239,7 @@ public class                    WiresharkActivity extends MyActivity {
         }
         hostFilter += ")\'";
         mTcpdump.start(mMonitorCmd.getText().toString(), hostFilter);
-        mMonitorAgv.setText("Tcpdump " + mMonitorCmd.getText().toString() + hostFilter);
+        mMonitorAgv.setText("./tcpdump " + mMonitorCmd.getText().toString() + hostFilter);
         mInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {

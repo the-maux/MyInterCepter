@@ -27,7 +27,7 @@ public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter
         this.mActivity = activity;
     }
     @Override
-    public DnsSpoofConfHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DnsSpoofConfHolder   onCreateViewHolder(ViewGroup parent, int viewType) {
         return new DnsSpoofConfHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_dnsspoof, parent, false));
     }
 

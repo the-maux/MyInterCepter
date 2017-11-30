@@ -147,7 +147,7 @@ public class                            DnsActivity extends MyActivity {
                     case R.id.action_export:
                         final AddDnsDialog dialog = new AddDnsDialog(mInstance)
                                 .setTitle("Exporter la liste des dns")
-                                .setHintText(mDnsSpoof.getDnsConf().PATH_CONF_FILE)
+                                .setHintText(mDnsSpoof.getDnsConf().PATH_HOST_FILE)
                                 .setHint("Name of conf file");
                         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
@@ -169,7 +169,7 @@ public class                            DnsActivity extends MyActivity {
                     case R.id.action_import:
                         final AddDnsDialog dialog2 = new AddDnsDialog(mInstance)
                                 .setTitle("Importez la liste des dns")
-                                .setHintText(mDnsSpoof.getDnsConf().PATH_CONF_FILE)
+                                .setHintText(mDnsSpoof.getDnsConf().PATH_HOST_FILE)
                                 .setHint("Name of file");
                         dialog2.onPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override

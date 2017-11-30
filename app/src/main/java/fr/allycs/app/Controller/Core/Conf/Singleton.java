@@ -55,9 +55,9 @@ public class                            Singleton {
     }
     public void                         setDnsControlstarted(boolean dnsControlstarted) {
         DnsControlstarted = dnsControlstarted;
-        //TODO: DNSSoof
-        Log.i("setDnsControlstarted", "Not implemented");
+        //TODO: CHECK IF TCPDUMP IS STARTED, IF YES RESTART IT
         IPTables.sslConf();
+
     }
     public boolean                      isLockScreen() {
         return LockScreen;
