@@ -23,8 +23,11 @@ import fr.allycs.app.View.Dora.DoraActivity;
 public class                    MenuActivity extends MyActivity {
     private String              TAG = "MenuActivity";
     private MenuActivity        mInstance = this;
-    private CoordinatorLayout   coordinatorLayout;
-    private Singleton           singleton = Singleton.getInstance();
+    private CoordinatorLayout   mCoordinatorLayout;
+    private Singleton           mSingleton = Singleton.getInstance();
+    private enum                choice {
+        Nmap, CepterMitm, ARPCage, DnsSpoofing, Wireshark, DoraDiagnostic, Metasploit, Settings
+    }
 
     @Override protected void    onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,14 +35,13 @@ public class                    MenuActivity extends MyActivity {
         initXml();
     }
 
-    @Override
-    protected void              onResume() {
+    @Override protected void    onResume() {
         super.onResume();
         initflags();
     }
 
     private void                initXml() {
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
         findViewById(R.id.NmapButton).setOnClickListener(onClickButton(choice.Nmap));
         findViewById(R.id.MitmButton).setOnClickListener(onClickButton(choice.CepterMitm));
         findViewById(R.id.ArpButton).setOnClickListener(onClickButton(choice.ARPCage));
@@ -53,7 +55,7 @@ public class                    MenuActivity extends MyActivity {
     private void                initflags() {
         ColorDrawable red = new ColorDrawable(ContextCompat.getColor(this, R.color.material_red_700));
         ColorDrawable green = new ColorDrawable(ContextCompat.getColor(this, R.color.material_green_700));
-        ((CircleImageView) findViewById(R.id.monitorDNS)).setImageDrawable((singleton.isDnsControlstarted()) ? green : red);
+        ((CircleImageView) findViewById(R.id.monitorDNS)).setImageDrawable((mSingleton.isDnsControlstarted()) ? green : red);
 
         if (Tcpdump.getTcpdump(this) != null)
             ((CircleImageView) findViewById(R.id.monitorWireshark)).setImageDrawable((Tcpdump.getTcpdump(this).isRunning) ? green : red);
@@ -76,19 +78,19 @@ public class                    MenuActivity extends MyActivity {
                         break;
                     case CepterMitm:
                         choice = null;
-                        Snackbar.make(coordinatorLayout, "Fonctionnalité Cepter non implémenté", Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(mCoordinatorLayout, "Fonctionnalité Cepter non implémenté", Snackbar.LENGTH_LONG).show();
                         break;
                     case ARPCage:
                         choice = null;
-                        Snackbar.make(coordinatorLayout, "Fonctionnalité Icmp non implémenté", Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(mCoordinatorLayout, "Fonctionnalité Icmp non implémenté", Snackbar.LENGTH_LONG).show();
                         break;
                     case DnsSpoofing:
                         choice = DnsActivity.class;
-                        Snackbar.make(coordinatorLayout, "Fonctionnalité Dns Spoofing non implémenté", Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(mCoordinatorLayout, "Fonctionnalité Dns Spoofing non implémenté", Snackbar.LENGTH_LONG).show();
                         break;
                     case Wireshark:
                         if (Singleton.getInstance().hostsList == null) {
-                            Snackbar.make(coordinatorLayout, "Wireshark needs target(s) to work", Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(mCoordinatorLayout, "Wireshark needs target(s) to work", Snackbar.LENGTH_LONG).show();
                             choice = null;
                         } else {
                             choice = WiresharkActivity.class;
@@ -96,15 +98,15 @@ public class                    MenuActivity extends MyActivity {
                         break;
                     case DoraDiagnostic:
                         if (Singleton.getInstance().hostsList == null) {
-                            Snackbar.make(coordinatorLayout, "Dora needs target(s) to work", Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(mCoordinatorLayout, "Dora needs target(s) to work", Snackbar.LENGTH_LONG).show();
                             choice = null;
                         } else {
                             choice = DoraActivity.class;
                         }
                         break;
                     case Metasploit:
-                        Snackbar.make(coordinatorLayout, "Fonctionnalité Metasploit non implémenté", Snackbar.LENGTH_LONG).show();
-                        choice = null;
+                        //Snackbar.make(mCoordinatorLayout, "Fonctionnalité Metasploit non implémenté", Snackbar.LENGTH_LONG).show();
+                        choice = WebServerActivity.class;
                         break;
                     case Settings:
                         choice = SettingsActivity.class;
@@ -113,13 +115,10 @@ public class                    MenuActivity extends MyActivity {
                 if (choice != null) {
                     Intent intent = new Intent(mInstance, choice);
                     startActivity(intent);
-                    }
+                }
             }
         };
     }
 
-    private enum                choice {
-        Nmap, CepterMitm, ARPCage, DnsSpoofing, Wireshark, DoraDiagnostic, Metasploit, Settings
-    }
 
 }
