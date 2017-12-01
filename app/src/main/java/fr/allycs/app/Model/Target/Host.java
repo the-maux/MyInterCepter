@@ -13,16 +13,14 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+
+import fr.allycs.app.Controller.Misc.GlideApp;
 import fr.allycs.app.Controller.Network.BonjourService.Service;
 import fr.allycs.app.Model.Net.Port;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
-
-/**
- * Created by AdeTek on 07/07/17.
- */
 
 public class                Host {
     private String          TAG = "Host";
@@ -168,7 +166,7 @@ public class                Host {
                 ImageRessource = R.drawable.winicon;
                 break;
             case Windows10:
-                ImageRessource = R.mipmap.ic_windows_dix_round;
+                ImageRessource = R.drawable.winicon;
                 break;
             case Windows7_8_10:
                 ImageRessource = R.drawable.winicon;
@@ -219,10 +217,10 @@ public class                Host {
         RequestOptions myOptions = new RequestOptions()
                 .fitCenter()
                 .override(100, 100);
-        Glide.with(context)
+        GlideApp.with(context)
                 .load(ImageRessource)
                 .apply(myOptions)
-                .transition(withCrossFade())
+                .placeholder(R.drawable.monitor)
                 .into(osImageView);
     }
 

@@ -35,8 +35,8 @@ import java.util.Calendar;
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.BinaryWrapper.Intercepter;
-import fr.allycs.app.Controller.Misc.Glide;
-import fr.allycs.app.Controller.Misc.Utils;
+
+import fr.allycs.app.Controller.Misc.MyLoader;
 import fr.allycs.app.Controller.Network.Discovery.HostDiscoveryScan;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Target.Host;
@@ -104,7 +104,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mEmptyList = (TextView) findViewById(R.id.emptyList);
         mBottomMonitor = ((TextView) findViewById(R.id.Message));
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
-        Glide.putGenericBackground(this, mCoordinatorLayout);
+        MyLoader.putGenericBackground(this, mCoordinatorLayout);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mAddHostBtn = (ImageButton) findViewById(R.id.action_add_host);
         mSettingsBtn = (ImageButton) findViewById(R.id.settings);

@@ -10,11 +10,12 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import fr.allycs.app.Controller.Misc.Glide;
+
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.BinaryWrapper.Dora;
 import fr.allycs.app.Controller.Core.BinaryWrapper.Tcpdump;
+import fr.allycs.app.Controller.Misc.MyLoader;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Dora.DoraActivity;
 
@@ -43,7 +44,7 @@ public class                    MenuActivity extends MyActivity {
 
     private void                initXml() {
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
-        Glide.putGenericBackground(this, mCoordinatorLayout);
+        MyLoader.putGenericBackground(this, mCoordinatorLayout);
         findViewById(R.id.NmapButton).setOnClickListener(onClickButton(choice.Nmap));
         findViewById(R.id.MitmButton).setOnClickListener(onClickButton(choice.CepterMitm));
         findViewById(R.id.ArpButton).setOnClickListener(onClickButton(choice.ARPCage));

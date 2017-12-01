@@ -13,10 +13,11 @@ import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.ImageView;
 
-import fr.allycs.app.Controller.Misc.Glide;
+
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Core.BinaryWrapper.Dora;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Misc.MyLoader;
 import fr.allycs.app.Model.Unix.DoraProcess;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.DoraAdapter;
@@ -50,7 +51,7 @@ public class                    DoraActivity extends MyActivity {
 
     private void                initXml() {
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
-        Glide.putGenericBackground(this, mCoordinatorLayout);
+        MyLoader.putGenericBackground(this, mCoordinatorLayout);
 
         searchView = (SearchView) findViewById(R.id.searchView);
         radar = (TabItem) findViewById(R.id.radar);

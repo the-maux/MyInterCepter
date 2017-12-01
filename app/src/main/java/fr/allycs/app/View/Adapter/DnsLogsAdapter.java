@@ -16,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Misc.GlideApp;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.DNSLog;
 import fr.allycs.app.R;
@@ -79,7 +80,7 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
             default:
                 TypeLogo = R.mipmap.ic_dns_text;
         }
-        Glide.with(activity)
+        GlideApp.with(activity)
                 .load(TypeLogo)
                 .apply(new RequestOptions()
                         .fitCenter()
