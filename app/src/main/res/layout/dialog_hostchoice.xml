@@ -15,8 +15,8 @@
         android:layout_centerInParent="false"
         android:layout_centerVertical="false"
         android:layout_margin="6dp"
-        android:background="@color/material_grey_700"
         android:elevation="4dp"
+
         android:padding="8dp"
         android:visibility="visible"
         tools:listitem="@layout/item_host_checkbox" />

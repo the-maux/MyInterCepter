@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,8 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.HostSelectionHolder;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 public class                    OSAdapter extends RecyclerView.Adapter<HostSelectionHolder> {
     private String              TAG = this.getClass().getName();
@@ -74,9 +77,10 @@ public class                    OSAdapter extends RecyclerView.Adapter<HostSelec
             ImageRessource = R.drawable.monitor;
         Glide.with(mCtx)
                 .load(ImageRessource)
-                .override(100, 100)
-                .fitCenter()
-                .crossFade()
+                .apply(new RequestOptions()
+                        .fitCenter()
+                        .override(100, 100))
+                .transition(withCrossFade())
                 .into(imageOS);
 
     }

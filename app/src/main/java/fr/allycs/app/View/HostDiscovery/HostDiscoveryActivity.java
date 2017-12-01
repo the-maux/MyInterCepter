@@ -35,6 +35,8 @@ import java.util.Calendar;
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.BinaryWrapper.Intercepter;
+import fr.allycs.app.Controller.Misc.Glide;
+import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.Controller.Network.Discovery.HostDiscoveryScan;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Target.Host;
@@ -58,7 +60,7 @@ import fr.allycs.app.View.MenuActivity;
 public class                        HostDiscoveryActivity extends MyActivity {
     private String                  TAG = "HostDiscoveryActivity";
     private HostDiscoveryActivity   mInstance = this;
-    private Singleton               singleton = Singleton.getInstance();
+    private Singleton               mSingleton = Singleton.getInstance();
     public CoordinatorLayout        mCoordinatorLayout;
     private AppBarLayout            mAppbar;
     private List<Host>              mHosts = new ArrayList<>();
@@ -73,9 +75,9 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private SwipeRefreshLayout      mSwipeRefreshLayout;
     private ImageButton             mAddHostBtn, mSettingsBtn;
     private SearchView              mSearchView;
-    private Toolbar                 toolbar2;
-    private HostDiscoveryScan       scannerControler = new HostDiscoveryScan(this);
-    private TabLayout               tabs;
+    private Toolbar                 mToolbar;
+    private HostDiscoveryScan       mScannerControler = new HostDiscoveryScan(this);
+    private TabLayout               mTabs;
     private HostDiscoveryScan.typeScan typeScan = HostDiscoveryScan.typeScan.Arp;
 
     public void                     onCreate(Bundle savedInstanceState) {
@@ -84,12 +86,12 @@ public class                        HostDiscoveryActivity extends MyActivity {
         initXml();
         try {
             init();
-            if (singleton.DebugMode && !mHostLoaded) {
+            if (mSingleton.DebugMode && !mHostLoaded) {
                 Snackbar.make(mCoordinatorLayout, "debug enabled, starting Scan automaticaly", Toast.LENGTH_SHORT).show();
                 startNetworkScan();
             }
         } catch (Exception e) {
-            Log.e(TAG, "Big error dans l'initXml");
+            Log.e(TAG, "onCreate::Error");
             Snackbar.make(mCoordinatorLayout, "Big error lors de l'init:", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
@@ -102,12 +104,13 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mEmptyList = (TextView) findViewById(R.id.emptyList);
         mBottomMonitor = ((TextView) findViewById(R.id.Message));
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+        Glide.putGenericBackground(this, mCoordinatorLayout);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mAddHostBtn = (ImageButton) findViewById(R.id.action_add_host);
         mSettingsBtn = (ImageButton) findViewById(R.id.settings);
         mSearchView = (SearchView) findViewById(R.id.searchView);
-        toolbar2 = (Toolbar) findViewById(R.id.toolbar2);
-        tabs = (TabLayout) findViewById(R.id.tabs);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar2);
+        mTabs = (TabLayout) findViewById(R.id.tabs);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,11 +129,11 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     private void                    init()  throws Exception {
-        if (singleton.network == null || singleton.network.myIp == null) {
+        if (mSingleton.network == null || mSingleton.network.myIp == null) {
             Snackbar.make(mCoordinatorLayout, "You need to be connected to a network", Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            Intercepter.initCepter(singleton.network.mac);
+            Intercepter.initCepter(mSingleton.network.mac);
             initMonitor();
             initSwipeRefresh();
             initTabs();
@@ -140,7 +143,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     private void                    initTabs() {
-        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 Log.d(TAG, "tab.getHost().toString():" + tab.getText().toString());
@@ -172,9 +175,9 @@ public class                        HostDiscoveryActivity extends MyActivity {
         if (((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)) != null) {
             wifiInfo = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
         }
-        monitor = wifiInfo.getSSID().replace("\"", "") + " : " + singleton.network.gateway;
+        monitor = wifiInfo.getSSID().replace("\"", "") + " : " + mSingleton.network.gateway;
         if (!monitor.contains("WiFi")) {
-            monitor += "\n" + " MyIp : " + singleton.network.myIp;
+            monitor += "\n" + " MyIp : " + mSingleton.network.myIp;
         } else {
             monitor += "Not Connected";
         }
@@ -298,12 +301,12 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     private void                    startNetworkScan() {
         if (!inLoading) {
-            if (singleton.network.updateInfo().isConnectedToNetwork()) {
+            if (mSingleton.network.updateInfo().isConnectedToNetwork()) {
                 inLoading = true;
                 if (typeScan != HostDiscoveryScan.typeScan.Services)
                     initHostsRecyclerView();
                 progressAnimation();
-                toolbar2.setSubtitle("Scanning network");
+                mToolbar.setSubtitle("Scanning network");
                 new HostDiscoveryScan(this).run(typeScan, mHosts);
                 mProgress = 1000;
             } else {
@@ -354,19 +357,19 @@ public class                        HostDiscoveryActivity extends MyActivity {
             public void run() {
                 mHosts = hosts;
                 mProgress = MAXIMUM_PROGRESS;
-                toolbar2.setSubtitle("Choose targets");
-                monitor = "Gateway: " + singleton.network.gateway;// oui je fais des ternaires pour faire le pluriel
+                mToolbar.setSubtitle("Choose targets");
+                monitor = "Gateway: " + mSingleton.network.gateway;// oui je fais des ternaires pour faire le pluriel
                 mBottomMonitor.setText(monitor);
                 mHostAdapter.updateHostList(mHosts);
                 inLoading = false;
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
                 final ArrayList<String> listOs = mHostAdapter.getOsList();
-                monitor += "\n IP:" + singleton.network.myIp;
+                monitor += "\n IP:" + mSingleton.network.myIp;
                 mBottomMonitor.setText(monitor);
                 Log.d(TAG, "scan Over with " + mHosts.size() + " possible target");
                 HostDiscoverySession session = new HostDiscoverySession(Calendar.getInstance().getTime(), mHosts);
-                toolbar2.setTitle(((WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getSSID().replace("\"", ""));
-                toolbar2.setSubtitle(mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": ""));
+                mToolbar.setTitle(((WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getSSID().replace("\"", ""));
+                mToolbar.setSubtitle(mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": ""));
                 //TODO: DUMP IT !
             }
         });
@@ -390,7 +393,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
             Snackbar.make(mCoordinatorLayout, "No target selected!", Toast.LENGTH_SHORT).show();
             return;
         }
-        singleton.hostsList = selectedHost;
+        mSingleton.hostsList = selectedHost;
         startActivity(new Intent(mInstance, MenuActivity.class));
     }
 
@@ -414,7 +417,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                toolbar2.setSubtitle(msg);
+                mToolbar.setSubtitle(msg);
             }
         });
     }

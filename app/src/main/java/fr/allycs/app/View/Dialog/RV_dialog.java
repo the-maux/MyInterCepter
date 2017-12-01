@@ -3,15 +3,13 @@ package fr.allycs.app.View.Dialog;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import fr.allycs.app.R;
 
-/**
- * Générique AlertDialog with RecyclerView
- */
 public class                    RV_dialog {
     private RecyclerView        RV_host;
     protected AlertDialog.Builder dialog;
@@ -23,7 +21,11 @@ public class                    RV_dialog {
         dialog.setView(dialogView);
         RV_host = (RecyclerView) dialogView.findViewById(R.id.RL_host);
         RV_host.setHasFixedSize(true);
-        RV_host.setLayoutManager(new LinearLayoutManager(activity));
+        LinearLayoutManager manager = new LinearLayoutManager(activity);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(RV_host.getContext(),
+                manager.getOrientation());
+        RV_host.addItemDecoration(dividerItemDecoration);
+        RV_host.setLayoutManager(manager);
     }
 
     public RV_dialog            setAdapter(RecyclerView.Adapter adapter) {

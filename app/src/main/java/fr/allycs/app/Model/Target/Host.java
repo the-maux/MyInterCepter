@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import fr.allycs.app.Controller.Network.BonjourService.Service;
 import fr.allycs.app.Model.Net.Port;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 /**
  * Created by AdeTek on 07/07/17.
@@ -213,11 +216,13 @@ public class                Host {
                 ImageRessource = R.drawable.monitor;
                 break;
         }
+        RequestOptions myOptions = new RequestOptions()
+                .fitCenter()
+                .override(100, 100);
         Glide.with(context)
                 .load(ImageRessource)
-                .override(100, 100)
-                .fitCenter()
-                .crossFade()
+                .apply(myOptions)
+                .transition(withCrossFade())
                 .into(osImageView);
     }
 

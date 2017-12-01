@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@id/rootView"
     android:layout_width="wrap_content"
-    android:layout_height="40dp"
+    android:layout_height="44dp"
     android:layout_marginTop="1px"
-    android:background="@color/material_grey_700"
+
     android:elevation="1dp"
     android:paddingBottom="2dp"
     android:paddingRight="6dp"
@@ -16,6 +16,8 @@
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:elevation="4dp"
+        android:paddingEnd="2dp"
+        android:paddingTop="2dp"
         android:src="@mipmap/ic_dns" />
 
     <TextView

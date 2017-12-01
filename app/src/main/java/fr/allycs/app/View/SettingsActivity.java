@@ -1,7 +1,9 @@
 package fr.allycs.app.View;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 
+import fr.allycs.app.Controller.Misc.Glide;
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.R;
 
@@ -18,6 +20,8 @@ public class                    SettingsActivity extends MyActivity {
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        Glide.putGenericBackground(this, (CoordinatorLayout) findViewById(R.id.coordinatorLayout));
+
     }
 
 }

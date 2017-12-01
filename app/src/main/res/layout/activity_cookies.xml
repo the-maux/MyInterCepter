@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" android:layout_width="wrap_content" android:layout_height="wrap_content">
-    <ListView android:id="@+id/listHosts" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@+id/monitor" android:layout_alignParentRight="true"
-              android:textSize="7dp"/>
-    <TextView android:id="@+id/monitor" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cookies" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" />
-    <Button android:id="@+id/DNSSpoofButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Clear all" android:layout_alignParentTop="true" android:layout_alignParentRight="true" android:onClick="OnClearCookie"  />
-    <Button android:id="@+id/clearButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Show More" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" android:onClick="OnShowMore"  />
-</RelativeLayout>

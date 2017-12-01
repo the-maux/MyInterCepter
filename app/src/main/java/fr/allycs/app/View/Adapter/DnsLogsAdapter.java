@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -19,6 +21,8 @@ import fr.allycs.app.Model.Unix.DNSLog;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.ConsoleLogHolder;
 import fr.allycs.app.View.Adapter.Holder.DnsLogHolder;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 
 public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsLogHolder> {
@@ -77,9 +81,10 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
         }
         Glide.with(activity)
                 .load(TypeLogo)
-                .override(100, 100)
-                .fitCenter()
-                .crossFade()
+                .apply(new RequestOptions()
+                        .fitCenter()
+                        .override(100, 100))
+                .transition(withCrossFade())
                 .into(DNSTypeImg);
     }
 

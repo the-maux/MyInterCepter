@@ -29,6 +29,7 @@ import java.util.Map;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.BinaryWrapper.Tcpdump;
+import fr.allycs.app.Controller.Misc.Glide;
 import fr.allycs.app.Model.Net.Protocol;
 import fr.allycs.app.Model.Net.Trame;
 import fr.allycs.app.Model.Target.Host;
@@ -77,6 +78,7 @@ public class                    WiresharkActivity extends MyActivity {
 
     private void                initXml() {
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
+        Glide.putGenericBackground(this, mCoordinatorLayout);
         mRV_Wireshark = (RecyclerView) findViewById(R.id.Output);
         mHeaderConfON = (RelativeLayout) findViewById(R.id.filterPcapLayout);
         mMonitorAgv = (TextView) findViewById(R.id.Monitor);
