@@ -81,7 +81,7 @@ public class                    OSAdapter extends RecyclerView.Adapter<HostSelec
                 .apply(new RequestOptions()
                         .fitCenter()
                         .override(100, 100))
-                .transition(withCrossFade())
+                .placeholder(R.drawable.monitor)
                 .into(imageOS);
 
     }
