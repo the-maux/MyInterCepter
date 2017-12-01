@@ -47,7 +47,9 @@ import fr.allycs.app.View.Adapter.HostDiscoveryAdapter;
 import fr.allycs.app.View.Adapter.OSAdapter;
 import fr.allycs.app.View.Dialog.RV_dialog;
 import fr.allycs.app.View.Dialog.AddDnsDialog;
+import fr.allycs.app.View.HostDetail.HostFocusActivity;
 import fr.allycs.app.View.MenuActivity;
+import fr.allycs.app.View.WiresharkActivity;
 
 /**
  * TODO:    + Add manual target
@@ -429,5 +431,15 @@ public class                        HostDiscoveryActivity extends MyActivity {
     public void                     notifiyServiceAllScaned() {
         Snackbar.make(mCoordinatorLayout, "Scanning service on network finished", Toast.LENGTH_SHORT).show();
         inLoading = false;
+    }
+
+    public void                     focusOneTarget(Host host) {
+        if (mSingleton.hostsList == null)
+            mSingleton.hostsList = new ArrayList<>();
+        else
+            mSingleton.hostsList.clear();
+        mSingleton.hostsList.add(host);
+        Intent intent = new Intent(mInstance, HostFocusActivity.class);
+        startActivity(intent);
     }
 }

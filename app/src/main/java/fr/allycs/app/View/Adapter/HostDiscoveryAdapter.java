@@ -44,6 +44,8 @@ public class HostDiscoveryAdapter extends RecyclerView.Adapter<ScanHostHolder> {
         holder.vendor.setText(host.getVendor());
         holder.selected.setChecked(host.isSelected());
         holder.relativeLayout.setOnClickListener(onCardClick(position, holder));
+        holder.relativeLayout.setOnLongClickListener(onCardLongClick(host));
+
         holder.selected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -81,7 +83,20 @@ public class HostDiscoveryAdapter extends RecyclerView.Adapter<ScanHostHolder> {
             }
         };
     }
-
+    private View.OnLongClickListener onCardLongClick(final Host host) {
+        return new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mActivity.focusOneTarget(host);
+                    }
+                });
+                return false;
+            }
+        };
+    }
     public void                 selectAll() {
         if (mHosts != null && mHosts.size() > 0) {
             for (Host host : mHosts) {
