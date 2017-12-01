@@ -5,7 +5,7 @@ import android.support.design.widget.CoordinatorLayout;
 
 
 import fr.allycs.app.Controller.Misc.MyActivity;
-import fr.allycs.app.Controller.Misc.MyLoader;
+import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.R;
 
 /**
@@ -21,7 +21,7 @@ public class                    SettingsActivity extends MyActivity {
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        MyLoader.putGenericBackground(this, (CoordinatorLayout) findViewById(R.id.coordinatorLayout));
+        MyGlideLoader.coordoBackground(this, (CoordinatorLayout) findViewById(R.id.coordinatorLayout));
     }
 
 }

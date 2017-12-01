@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
@@ -30,7 +29,7 @@ import java.util.Map;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.BinaryWrapper.Tcpdump;
 
-import fr.allycs.app.Controller.Misc.MyLoader;
+import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Model.Net.Protocol;
 import fr.allycs.app.Model.Net.Trame;
 import fr.allycs.app.Model.Target.Host;
@@ -79,7 +78,7 @@ public class                    WiresharkActivity extends MyActivity {
 
     private void                initXml() {
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
-        MyLoader.putGenericBackground(this, mCoordinatorLayout);
+        MyGlideLoader.coordoBackground(this, mCoordinatorLayout);
         mRV_Wireshark = (RecyclerView) findViewById(R.id.Output);
         mHeaderConfON = (RelativeLayout) findViewById(R.id.filterPcapLayout);
         mMonitorAgv = (TextView) findViewById(R.id.Monitor);

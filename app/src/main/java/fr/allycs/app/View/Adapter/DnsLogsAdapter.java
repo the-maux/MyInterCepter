@@ -17,6 +17,7 @@ import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Misc.GlideApp;
+import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.DNSLog;
 import fr.allycs.app.R;
@@ -80,13 +81,7 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
             default:
                 TypeLogo = R.mipmap.ic_dns_text;
         }
-        GlideApp.with(activity)
-                .load(TypeLogo)
-                .apply(new RequestOptions()
-                        .fitCenter()
-                        .override(100, 100))
-                .transition(withCrossFade())
-                .into(DNSTypeImg);
+        MyGlideLoader.loadDrawableInImageView(activity, TypeLogo, DNSTypeImg);
     }
 
     @Override

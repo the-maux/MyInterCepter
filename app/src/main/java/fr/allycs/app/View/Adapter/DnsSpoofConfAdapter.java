@@ -22,7 +22,7 @@ public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter
     private List<DNSSpoofItem>  mDnsIntercepts;
     private Singleton           mSingleton = Singleton.getInstance();
 
-    public DnsSpoofConfAdapter(DnsActivity activity, List<DNSSpoofItem> dnsInterceptList) {
+    public                      DnsSpoofConfAdapter(DnsActivity activity, List<DNSSpoofItem> dnsInterceptList) {
         this.mDnsIntercepts = dnsInterceptList;
         this.mActivity = activity;
     }

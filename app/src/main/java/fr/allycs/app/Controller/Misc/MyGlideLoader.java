@@ -1,20 +1,32 @@
 package fr.allycs.app.Controller.Misc;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.CoordinatorLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import fr.allycs.app.R;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
-public class MyLoader {
+public class                MyGlideLoader {
 
+    public static void      loadDrawableInImageView(Context context, int ressource, ImageView imageView) {
+        GlideApp.with(context)
+                .load(ressource)
+                .apply(new RequestOptions()
+                        .fitCenter()
+                        .override(100, 100))
+                .placeholder(R.mipmap.ic_dns_text)
+                .into(imageView);
+    }
 
-    public static void      putGenericBackground(Activity context, final CoordinatorLayout layout) {
+    public static void      coordoBackground(Activity context, final CoordinatorLayout layout) {
         GlideApp.with(context)
                 .load(R.drawable.splashscreen)
                 .transition(withCrossFade())
@@ -25,7 +37,7 @@ public class MyLoader {
                     }
                 });
     }
-    public static void      putGenericBackground(Activity context, final RelativeLayout layout) {
+    public static void      coordoBackground(Activity context, final RelativeLayout layout) {
         GlideApp.with(context)
                 .load(R.drawable.splashscreen)
                 .transition(withCrossFade())

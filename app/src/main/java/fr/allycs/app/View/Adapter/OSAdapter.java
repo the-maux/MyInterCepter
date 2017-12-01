@@ -15,6 +15,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.Misc.GlideApp;
+import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.HostSelectionHolder;
 
@@ -76,14 +77,7 @@ public class                    OSAdapter extends RecyclerView.Adapter<HostSelec
             ImageRessource = R.drawable.linuxicon;
         } else
             ImageRessource = R.drawable.monitor;
-        GlideApp.with(mCtx)
-                .load(ImageRessource)
-                .apply(new RequestOptions()
-                        .fitCenter()
-                        .override(100, 100))
-                .placeholder(R.drawable.monitor)
-                .into(imageOS);
-
+        MyGlideLoader.loadDrawableInImageView(mCtx, ImageRessource, imageOS);
     }
 
 

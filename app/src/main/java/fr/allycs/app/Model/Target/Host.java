@@ -15,6 +15,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 
 import fr.allycs.app.Controller.Misc.GlideApp;
+import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Controller.Network.BonjourService.Service;
 import fr.allycs.app.Model.Net.Port;
 import fr.allycs.app.Model.Unix.Os;
@@ -214,14 +215,7 @@ public class                Host {
                 ImageRessource = R.drawable.monitor;
                 break;
         }
-        RequestOptions myOptions = new RequestOptions()
-                .fitCenter()
-                .override(100, 100);
-        GlideApp.with(context)
-                .load(ImageRessource)
-                .apply(myOptions)
-                .placeholder(R.drawable.monitor)
-                .into(osImageView);
+        MyGlideLoader.loadDrawableInImageView(context, ImageRessource, osImageView);
     }
 
     private void            guessOsType(String InfoDevice) {
