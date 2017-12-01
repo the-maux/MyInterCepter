@@ -33,6 +33,7 @@
         <activity android:name=".View.WiresharkActivity" />
         <activity android:name=".View.Dora.DoraActivity" />
         <activity android:name=".View.WebServerActivity" />
+        <activity android:name=".View.HostDetail.HostFocusActivity" />
     </application>
 
 </manifest>
