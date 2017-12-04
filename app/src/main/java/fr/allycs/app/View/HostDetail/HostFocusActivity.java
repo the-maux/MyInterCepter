@@ -9,13 +9,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toolbar;
+import android.support.v7.widget.Toolbar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Misc.MyActivity;
-import fr.allycs.app.Controller.Misc.MyGlideLoader;
-import fr.allycs.app.Controller.Network.Discovery.HostDiscoveryScan;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.NmapActivity;

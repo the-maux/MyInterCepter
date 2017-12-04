@@ -36,6 +36,7 @@ import java.util.List;
 
 import fr.allycs.app.Controller.Core.BinaryWrapper.Intercepter;
 
+import fr.allycs.app.Controller.Core.Databse.DBManager;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Controller.Network.Discovery.HostDiscoveryScan;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
@@ -360,7 +361,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 mHosts = hosts;
                 mProgress = MAXIMUM_PROGRESS;
                 mToolbar.setSubtitle("Choose targets");
-                monitor = "Gateway: " + mSingleton.network.gateway;// oui je fais des ternaires pour faire le pluriel
+                monitor = "Gateway: " + mSingleton.network.gateway;
                 mBottomMonitor.setText(monitor);
                 mHostAdapter.updateHostList(mHosts);
                 inLoading = false;
@@ -369,10 +370,10 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 monitor += "\n IP:" + mSingleton.network.myIp;
                 mBottomMonitor.setText(monitor);
                 Log.d(TAG, "scan Over with " + mHosts.size() + " possible target");
-                HostDiscoverySession session = new HostDiscoverySession(Calendar.getInstance().getTime(), mHosts);
-                mToolbar.setTitle(((WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getSSID().replace("\"", ""));
+                String SSID = ((WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getSSID().replace("\"", "");
+                mToolbar.setTitle(SSID);
                 mToolbar.setSubtitle(mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": ""));
-                //TODO: DUMP IT !
+                HostDiscoverySession session = DBManager.saveCurrentSession(SSID, mSingleton.network.gateway, hosts);
             }
         });
     }

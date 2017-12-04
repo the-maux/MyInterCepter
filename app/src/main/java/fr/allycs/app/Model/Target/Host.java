@@ -3,6 +3,9 @@ package fr.allycs.app.Model.Target;
 import android.content.Context;
 import android.util.Log;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.annotations.SerializedName;
@@ -14,6 +17,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 
+import fr.allycs.app.Controller.Core.Databse.DBManager;
 import fr.allycs.app.Controller.Misc.GlideApp;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Controller.Network.BonjourService.Service;
@@ -23,19 +27,20 @@ import fr.allycs.app.R;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
-public class                Host {
+@Table(name = "Device", id = "_id")
+public class                Host extends Model {
     private String          TAG = "Host";
-    @SerializedName("ip")
+    @Column(name ="ip")
     private String          ip = "Unknown";
-    @SerializedName("name")
+    @Column(name ="name")
     private String          name = "Unknown";
-    @SerializedName("mac")
+    @Column(name ="mac")
     private String          mac = "Unknown";
-    @SerializedName("hostname")
+    @Column(name ="hostname")
     private String          hostname;
-    @SerializedName("os")
+    @Column(name ="os")
     private String          os = "Unknown";
-    @SerializedName("vendor")
+    @Column(name ="vendor")
     private String          vendor = "Unknown";
     private ArrayList<Service> ServiceActivOnHost = null;
     private boolean         isServiceActiveOnHost = false;
@@ -44,10 +49,7 @@ public class                Host {
     private String          dumpInfo;
     private Os              osType;
 
-    /**
-     * Format : 192.168.0.12 	(theMaux) : [E8-B1-FC-A6-CF-11] [Windows 7\8\10] ; Intel Corporate
-     * @param buffer buffer
-     */
+
     public                  Host(String buffer) {
         try {
             buffer = buffer.replace("\t", " ").replace("  ", " ");
@@ -59,7 +61,7 @@ public class                Host {
             mac = mid.substring(0, mid.indexOf(" ")).replace("\n", "");
             os = mid.substring(mid.indexOf(" ") + 1).replace("\n", "");
             vendor = end.replace("\n", "");
-            //logHost(buffer);
+            //dumpHost(buffer);
             dumpInfo = buffer;
             guessOsType(dumpInfo);
             isItMyDevice();
@@ -79,7 +81,7 @@ public class                Host {
      * Log mhost created in console
      * @param buffer buffer
      */
-    private void            logHost(String buffer) {
+    private void            dumpHost(String buffer) {
         Log.d(TAG, "buffer " + buffer + "");
         Log.d(TAG, "==> ip " + ip + "");
         Log.d(TAG, "==> name " + name + "");
@@ -291,5 +293,20 @@ public class                Host {
     @Override
     public String           toString() {
         return ip + ":" + mac;
+    }
+
+    public void             saveInDatabase() {
+        Host deviceFromDB = DBManager.getDevicesFromMAC(mac);
+
+        if (deviceFromDB == null) {
+            this.save();
+        } else {
+            deviceFromDB.ip = this.ip;
+            deviceFromDB.hostname = this.hostname;
+            deviceFromDB.save();
+        }
+    }
+    public                  Host() {
+        super();
     }
 }

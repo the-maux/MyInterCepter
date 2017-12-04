@@ -33,21 +33,24 @@ public class                         Fingerprint {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    String read;
+                    String buffer;
                     boolean alreadyIn;
-                    while ((read = bufferedReader.readLine()) != null) {//sanityzeCheck: at least 3 '.' for x.x.x.x : Ip
-                        if ((read.length() - read.replace(".", "").length()) >= 3 && !read.contains("wrong interface...")) { // wrong interface when no wifi
+                    while ((buffer = bufferedReader.readLine()) != null) {//sanityzeCheck: at least 3 '.' for x.x.x.x : Ip
+                        if ((buffer.length() - buffer.replace(".", "").length()) >= 3 &&
+                                !buffer.contains("wrong interface...")) { // wrong interface when no wifi
                             alreadyIn = false;
-                            Host hostObj = new Host(read);//Format : IP\t(HOSTNAME) \n [MAC] [OS] : VENDOR \n
-                            if (!hosts.contains(hostObj)) {
+                            Host newDevice = new Host(buffer);//Format : IP\t(HOSTNAME) \n [MAC] [OS] : VENDOR \n
+                            if (!hosts.contains(newDevice)) {
                                 for (Host host : hosts) {
-                                    if (host.equals(hostObj)) {
+                                    if (host.equals(newDevice)) {
                                         alreadyIn = true;
                                         Log.d("Intercepter", host.getIp() + " is already in");
                                     }
                                 }
-                                if (!alreadyIn)
-                                    hosts.add(hostObj);
+                                if (!alreadyIn) {
+                                    hosts.add(newDevice);
+                                    newDevice.saveInDatabase();
+                                }
                             }
                         }
                     }
