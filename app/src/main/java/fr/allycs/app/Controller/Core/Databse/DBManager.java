@@ -2,6 +2,7 @@ package fr.allycs.app.Controller.Core.Databse;
 
 import com.activeandroid.query.Select;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -50,7 +51,8 @@ public class                                DBManager {
             }
         }
         session.Date = Calendar.getInstance().getTime();
-        session.listDevices().addAll(devicesConnected);
+        session.listDevices = new ArrayList<>();
+        session.listDevices.addAll(devicesConnected);
         session.dumpSessions();
         session.save();
         return session;

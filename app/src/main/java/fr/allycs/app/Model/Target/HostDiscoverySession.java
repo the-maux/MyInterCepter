@@ -27,9 +27,7 @@ public class                HostDiscoverySession extends Model {
     @Column(name = "AccessPoint")
     public Host            AccessPoint;
 
-    public List<Host>       listDevices() {
-        return getMany(Host.class, "Device");
-    }
+    public List<Host>       listDevices;
 
     public void             dumpSessions() {
         if (Singleton.getInstance().DebugMode) {
@@ -37,8 +35,8 @@ public class                HostDiscoverySession extends Model {
             Log.d(TAG, "Dumping(" + Ssid +"):" + simpleDate.format(Date));
             Log.d(TAG, "\t Accesspoint : " + AccessPoint.getIp()+ "-[" + AccessPoint.getMac() + "]");
             Log.d(TAG, "\t Devices Connected :");
-            for (Host host : listDevices()) {
-                Log.d(TAG, "\t\t " + AccessPoint.getIp()+ "-[" + AccessPoint.getMac() + "]");
+            for (Host host : listDevices) {
+                Log.d(TAG, "\t\t " + host.getIp()+ "-[" + host.getMac() + "]");
             }
             Log.d(TAG, "END:--------------------------");
         }
