@@ -6,9 +6,6 @@ import android.util.Log;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -17,8 +14,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 
-import fr.allycs.app.Controller.Core.Databse.DBManager;
-import fr.allycs.app.Controller.Misc.GlideApp;
+import fr.allycs.app.Controller.Core.Databse.DBHost;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Controller.Network.BonjourService.Service;
 import fr.allycs.app.Model.Net.Port;
@@ -296,7 +292,7 @@ public class                Host extends Model {
     }
 
     public void             saveInDatabase() {
-        Host deviceFromDB = DBManager.getDevicesFromMAC(mac);
+        Host deviceFromDB = DBHost.getDevicesFromMAC(mac);
 
         if (deviceFromDB == null) {
             this.save();

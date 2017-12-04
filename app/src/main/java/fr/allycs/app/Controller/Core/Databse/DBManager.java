@@ -1,60 +1,14 @@
 package fr.allycs.app.Controller.Core.Databse;
 
-import com.activeandroid.query.Select;
-
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
+import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;
-import fr.allycs.app.Model.Target.HostDiscoverySession;
 
-public class                                DBManager {
-
-    public static Host                      getRandomDevices() {
-        return new Select()
-                .from(Host.class)
-                .orderBy("RANDOM()")
-                .executeSingle();
-    }
-
-    public static List<HostDiscoverySession> getAllSessionsRecorded() {
-        return new Select()
-                .from(HostDiscoverySession.class)
-                //.where("Category = ?", category.getId())
-                .orderBy("Name ASC")
-                .execute();
-    }
-
-    public static List<HostDiscoverySession> getAllSessionsRecordedWithSSID(String SSID) {
-        return new Select()
-                .from(HostDiscoverySession.class)
-                .where("Ssid = ?", SSID)
-                .orderBy("Name ASC")
-                .execute();
-    }
-
-    public static Host                      getDevicesFromMAC(String MAC) {
-        return new Select()
-                .from(Host.class)
-                .where("mac = ?", MAC)
-                .executeSingle();
-    }
-
-    public static HostDiscoverySession      saveCurrentSession(String SSID, String Gateway, List<Host> devicesConnected) {
-        HostDiscoverySession session = new HostDiscoverySession();
-        session.Ssid = SSID;
-        for (Host host : devicesConnected) {
-            if (host.getIp().contains(Gateway)) {
-                session.AccessPoint = host;
-                break;
-            }
-        }
-        session.Date = Calendar.getInstance().getTime();
-        session.listDevices = new ArrayList<>();
-        session.listDevices.addAll(devicesConnected);
-        session.dumpSessions();
-        session.save();
-        return session;
+public class                    DBManager {
+    public static AccessPoint   saveSession(String ssid, String gateway, List<Host> hosts) {
+        AccessPoint ap = DBAccessPoint.getAccessPoint(ssid);
+        DBAccessPoint.saveSession(ap, gateway, hosts);
+        return ap;
     }
 }

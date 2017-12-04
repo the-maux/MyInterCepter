@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;
-import fr.allycs.app.Model.Target.HostDiscoverySession;
 import fr.allycs.app.Model.Target.SniffSession;
 
 public class                                Network {
@@ -15,9 +15,9 @@ public class                                Network {
     @SerializedName("sniffingSessions")
     private List<SniffSession>              mSniffingSessions;
     @SerializedName("discoverySessions")
-    private ArrayList<HostDiscoverySession> mDiscoverySessions;
+    private ArrayList<AccessPoint> mDiscoverySessions;
 
-    public Network(String ssid, ArrayList<SniffSession> sniffSessions, ArrayList<HostDiscoverySession> discoverySessions) {
+    public Network(String ssid, ArrayList<SniffSession> sniffSessions, ArrayList<AccessPoint> discoverySessions) {
         this.mSSID = ssid;
         this.mSniffingSessions = sniffSessions;
         this.mDiscoverySessions = discoverySessions;

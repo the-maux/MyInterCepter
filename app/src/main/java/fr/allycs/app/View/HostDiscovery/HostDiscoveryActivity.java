@@ -31,18 +31,18 @@ import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickList
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.BinaryWrapper.Intercepter;
 
+import fr.allycs.app.Controller.Core.Databse.DBHost;
 import fr.allycs.app.Controller.Core.Databse.DBManager;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Controller.Network.Discovery.HostDiscoveryScan;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Controller.Misc.MyActivity;
-import fr.allycs.app.Model.Target.HostDiscoverySession;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.HostDiscoveryAdapter;
 import fr.allycs.app.View.Adapter.OSAdapter;
@@ -50,7 +50,6 @@ import fr.allycs.app.View.Dialog.RV_dialog;
 import fr.allycs.app.View.Dialog.AddDnsDialog;
 import fr.allycs.app.View.HostDetail.HostFocusActivity;
 import fr.allycs.app.View.MenuActivity;
-import fr.allycs.app.View.WiresharkActivity;
 
 /**
  * TODO:    + Add manual target
@@ -373,7 +372,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 String SSID = ((WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getSSID().replace("\"", "");
                 mToolbar.setTitle(SSID);
                 mToolbar.setSubtitle(mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": ""));
-                HostDiscoverySession session = DBManager.saveCurrentSession(SSID, mSingleton.network.gateway, hosts);
+                DBManager.saveSession(SSID, mSingleton.network.gateway, hosts);
             }
         });
     }
