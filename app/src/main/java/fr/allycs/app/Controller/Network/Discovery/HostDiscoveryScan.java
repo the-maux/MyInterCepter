@@ -60,11 +60,12 @@ public class                        HostDiscoveryScan {
 
     public void                     onReachableScanOver(ArrayList<String> ipReachable) {
         Log.d(TAG, "onReachableScanOver");
-        mActivity.monitor(ipReachable.size() + " hosts detected");
-        NetUtils.dumpListHostFromARPTableInFile(mActivity, ipReachable);
-        mActivity.monitor(ipReachable.size() + " hosts detected");
+        ArrayList<String> tmpAntiConcurentExecptionFFS = new ArrayList<>();
+        tmpAntiConcurentExecptionFFS.addAll(ipReachable);
+        NetUtils.dumpListHostFromARPTableInFile(mActivity, tmpAntiConcurentExecptionFFS);
+        mActivity.monitor(tmpAntiConcurentExecptionFFS.size() + " hosts detected");
         mActivity.setProgressState(1500);
-        mActivity.monitor("Scanning " + ipReachable.size() + " host");
+        mActivity.monitor("Scanning " + tmpAntiConcurentExecptionFFS.size() + " host");
         Fingerprint.guessHostFingerprint(mActivity);
         mActivity.setProgressState(2000);
     }

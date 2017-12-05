@@ -32,8 +32,6 @@ public class                Host extends Model {
     private String          name = "Unknown";
     @Column(name ="mac")
     private String          mac = "Unknown";
-    @Column(name ="hostname")
-    private String          hostname;
     @Column(name ="os")
     private String          os = "Unknown";
     @Column(name ="vendor")
@@ -42,6 +40,7 @@ public class                Host extends Model {
     private boolean         isServiceActiveOnHost = false;
     private boolean         selected = false;
     public  boolean         isItMyDevice = false;
+    @Column(name = "dumpInfo")
     private String          dumpInfo;
     private Os              osType;
 
@@ -54,7 +53,9 @@ public class                Host extends Model {
             String end = buffer.substring(buffer.indexOf(";") + 2);
             ip = beg.substring(0, beg.indexOf("(") - 1).replace("\n", "");
             name = beg.substring(beg.indexOf("(")).replace("\n", "");
-            mac = mid.substring(0, mid.indexOf(" ")).replace("\n", "");
+            mac = mid.substring(0, mid.indexOf(" ")).replace("\n", "")
+                    .replace("[", "").replace("]", "")
+                    .replace("-", ":");
             os = mid.substring(mid.indexOf(" ") + 1).replace("\n", "");
             vendor = end.replace("\n", "");
             //dumpHost(buffer);
@@ -66,7 +67,10 @@ public class                Host extends Model {
             e.getStackTrace();
         }
     }
-
+    public void             init() {
+        guessOsType(dumpInfo);
+        isItMyDevice();
+    }
     private void            isItMyDevice() {
         if (ip.contains(Singleton.getInstance().network.myIp)) {
             isItMyDevice = true;
