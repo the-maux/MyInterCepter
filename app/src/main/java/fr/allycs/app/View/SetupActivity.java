@@ -38,7 +38,7 @@ public class                    SetupActivity extends MyActivity {
     }*/
 
     public void                 onCreate(Bundle savedInstanceState) {
-        View rootView = LayoutInflater.from(this).inflate(R.layout.activity_init, null);
+        View rootView = LayoutInflater.from(this).inflate(R.layout.activity_setup, null);
         this.splashscreen = false;
         super.onCreate(savedInstanceState);
         setContentView(rootView);

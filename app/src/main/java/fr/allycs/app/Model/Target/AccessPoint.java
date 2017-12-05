@@ -26,8 +26,12 @@ public class               AccessPoint extends Model {
     public void             dumpSessions() {
         if (Singleton.getInstance().DebugMode) {
             for (Session session : Sessions) {
-                Log.d(TAG, "\t " + Ssid + " : " + session.Gateway.getIp()+ "-[" + session.Gateway.getMac() + "]");
-                Log.d(TAG, "\t\t" + new SimpleDateFormat("dd/MM/yyyy-hh:mm:ss", Locale.FRANCE).format(session.Date) + " Devices Connected : " +session.listDevices.size());
+                if (session.Gateway == null) {
+                    Log.d(TAG, "Session is empty");
+                } else {
+                    Log.d(TAG, "\t " + Ssid + " : " + session.Gateway.getIp() + "-[" + session.Gateway.getMac() + "]");
+                    Log.d(TAG, "\t\t" + session.toString());
+                }
             }
             Log.d(TAG, "END:--------------------------");
         }
@@ -37,4 +41,8 @@ public class               AccessPoint extends Model {
         super();
     }
 
+    @Override
+    public String           toString() {
+        return Ssid + " with " + Sessions.size() + " session recorded";
+    }
 }

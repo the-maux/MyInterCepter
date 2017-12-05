@@ -27,4 +27,19 @@ public class                                DBHost {
         return tmp;
     }
 
+    public static Host saveOrGetInDatabase(Host myDevice) {
+        Host deviceFromDB = DBHost.getDevicesFromMAC(myDevice.getMac());
+        if (deviceFromDB == null) {
+            Log.d(TAG, myDevice.toString() + " FIST MEET");
+            myDevice.save();
+            return myDevice;
+        } else {
+            deviceFromDB.setIp(myDevice.getIp());
+            deviceFromDB.setName(myDevice.getName());
+            deviceFromDB.save();
+            Log.d(TAG, deviceFromDB.toString() + " KNOW ON DATABASE");
+            return deviceFromDB;
+        }
+    }
+
 }

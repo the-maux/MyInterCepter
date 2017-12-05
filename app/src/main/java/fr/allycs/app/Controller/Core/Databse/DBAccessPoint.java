@@ -1,6 +1,8 @@
 package fr.allycs.app.Controller.Core.Databse;
 
 
+import android.util.Log;
+
 import com.activeandroid.query.Select;
 
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Session;
 
 public class                            DBAccessPoint {
+    private static String               TAG = "DBAccessPoint";
+
     public static List<AccessPoint>     getAllSessionsRecorded() {
         return new Select()
                 .from(AccessPoint.class)
@@ -25,13 +29,15 @@ public class                            DBAccessPoint {
         AccessPoint ap = new Select()
                 .from(AccessPoint.class)
                 .where("Ssid = ?", SSID)
-                .orderBy("Name ASC")
                 .executeSingle();
         if (ap == null) {
+            Log.d(TAG, "AccessPoint::" + SSID + " first meeting");
             ap = new AccessPoint();
             ap.Ssid = SSID;
             ap.Sessions = new ArrayList<>();
             ap.save();
+        } else {
+            Log.d(TAG, "AccessPoint::" + SSID + " already knew");
         }
         return ap;
     }
@@ -39,16 +45,21 @@ public class                            DBAccessPoint {
     public static Session               saveSession(AccessPoint ap, String Gateway,
                                                     List<Host> devicesConnected) {
         Session session = new Session();
+        Log.d(TAG, "SaveSession::" + ap.Ssid + ", new sesssion with " + devicesConnected.size() + " new devices");
+        session.Date = Calendar.getInstance().getTime();
+        session.typeScan = "Icmp";
+        session.listDevices = new ArrayList<>();
+        session.listDevices.addAll(devicesConnected);
+        session.listPcapRecorded = new ArrayList<>();
+        if (ap.Sessions == null)
+            ap.Sessions = new ArrayList<>();
         for (Host host : devicesConnected) {
             if (host.getIp().contains(Gateway)) {
                 session.Gateway = host;
                 break;
             }
         }
-        session.Date = Calendar.getInstance().getTime();
-        session.typeScan = "Icmp";
-        session.listDevices = new ArrayList<>();
-        session.listDevices.addAll(devicesConnected);
+        Log.d(TAG, "saveSession::" + session.toString());
         session.save();
         ap.Sessions.add(session);
         ap.save();

@@ -291,17 +291,6 @@ public class                Host extends Model {
         return ip + ":" + mac;
     }
 
-    public void             saveInDatabase() {
-        Host deviceFromDB = DBHost.getDevicesFromMAC(mac);
-
-        if (deviceFromDB == null) {
-            this.save();
-        } else {
-            deviceFromDB.ip = this.ip;
-            deviceFromDB.hostname = this.hostname;
-            deviceFromDB.save();
-        }
-    }
     public                  Host() {
         super();
     }

@@ -94,7 +94,7 @@ public class                    Setup {
     }
     
     private void                buildFile(String nameFile, int ressource) throws IOException, InterruptedException {
-        mActivity.monitor("Building " + nameFile);
+        mActivity.monitor("Build " + nameFile);
         File file = new File(mSingleton.FilesPath + nameFile);
         file.delete();
         file.createNewFile();
@@ -113,7 +113,6 @@ public class                    Setup {
     }
 
     private void                buildFiles() throws IOException, InterruptedException  {
-        Log.d(TAG, "");
         buildFile("busybox", R.raw.busybox);
         buildFile("cepter", R.raw.busybox);
         buildFile("tcpdump", R.raw.tcpdump);
@@ -122,14 +121,13 @@ public class                    Setup {
         buildFile("arpspoof", R.raw.arpspoof);
 
         buildFile("ettercap_archive", R.raw.ettercap_archive);
-        //new RootProcess("UNZIP FILES", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip ettercap_archive").closeProcess();
+
         Log.d(TAG, "unzip ettercap -> " + new RootProcess("UNZIP FILES", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip ettercap_archive").closeProcess());
 
         buildFile("archive_nmap", R.raw.nmap);
         Log.d(TAG, "unzip nmap -> " + new RootProcess("initialisation ", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip archive_nmap").closeProcess());
-//        new RootProcess("initialisation ", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip archive_nmap").closeProcess();
+
         Log.d(TAG, "chmod 744 " + mSingleton.BinaryPath + "/nmap/*" + " -> " + new RootProcess("initialisation ").exec("chmod 744 " + mSingleton.BinaryPath + "/nmap/*").closeProcess());
-//        new RootProcess("initialisation ").exec("chmod 744 " + mSingleton.BinaryPath + "/nmap/*").closeProcess();
 
         /*  ping binary    */
         buildFile("ping", R.raw.arpspoof);

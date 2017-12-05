@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -73,26 +74,21 @@ public class                NetUtils {
                 Matcher matcher = Pattern.compile(String.format(MAC_RE, objArr)).matcher(read);
                 if (matcher.matches()) {
                     listOfIpsAlreadyIn.add(ip);
-                    //Log.d(TAG, "dumpHOSTFILE:" + ip + ":" + matcher.group(1));
                     hostListFile.write((ip + ":" + matcher.group(1) + "\n").getBytes());
                 }
             }
             Log.d(TAG, listOfIpsAlreadyIn.size() + " new host discovered in /proc/arp");
-            boolean flag;
-            for (String reachable : ipReachable) {
-                flag = false;
-                //Log.d(TAG, "asking for:" + reachable);
+            boolean already;
+            for (Iterator<String> iterator = ipReachable.iterator(); iterator.hasNext(); ) {
+                String reachable = iterator.next();
+                already = false;
                 for (String s : listOfIpsAlreadyIn) {
                     if ((reachable.substring(0, reachable.indexOf(":")) + "..").contains(s + "..")) {
-                        //Log.d(TAG, "\t\t" + s + "-Alreadyin>" + reachable.substring(0, reachable.indexOf(":")));
-                        flag = true;
+                        already = true;
                     }
                 }
-                if (!flag) {
-                    //Log.d(TAG, "\t\t" + "dumpHOSTFILE:" + reachable + "& flag == false");
+                if (!already) {
                     hostListFile.write((reachable + "\n").getBytes());
-                } else {
-                    //Log.d(TAG, "\t\t" + "Detected but not added::" + reachable + "with flag at : true");
                 }
             }
             bufferedReader.close();

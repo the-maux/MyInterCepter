@@ -4,8 +4,10 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @Table(name = "Session", id = "_id")
 public class Session extends Model {
@@ -28,4 +30,8 @@ public class Session extends Model {
         super();
     }
 
+    @Override
+    public String toString() {
+        return new SimpleDateFormat("dd/MM/yyyy-hh:mm:ss", Locale.FRANCE).format(Date) + " Devices Connected : " + listDevices.size();
+    }
 }

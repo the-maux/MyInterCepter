@@ -35,7 +35,7 @@
         <activity android:name=".View.WebServerActivity" />
         <activity android:name=".View.HostDetail.HostFocusActivity" />
         <meta-data android:name="AA_MODELS"
-            android:value="fr.allycs.app.Model.Target.Host, fr.allycs.app.Model.Target.HostDiscoverySession" />
+            android:value="fr.allycs.app.Model.Target.Host, fr.allycs.app.Model.Target.AccessPoint, fr.allycs.app.Model.Target.Session" />
         <meta-data android:name="AA_DB_NAME" android:value="ScyllaDatabase" />
         <meta-data android:name="AA_DB_VERSION" android:value="5" />
     </application>
