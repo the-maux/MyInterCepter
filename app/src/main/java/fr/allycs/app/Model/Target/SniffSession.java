@@ -32,8 +32,8 @@ public class                            SniffSession extends File {
     public ArrayList<Os>                getListOsPresent() {
         ArrayList<Os> listOs = new ArrayList<>();
         for (Host device : mListDevices) {
-            if (!listOs.contains(device.getOsType()))
-                listOs.add(device.getOsType());
+            if (!listOs.contains(device.osType))
+                listOs.add(device.osType);
         }
         return listOs;
     }

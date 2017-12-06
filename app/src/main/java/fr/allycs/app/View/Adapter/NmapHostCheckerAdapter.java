@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import fr.allycs.app.Controller.Core.Databse.DBHost;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.HostSelectionHolder;
@@ -30,9 +31,9 @@ public class                    NmapHostCheckerAdapter extends RecyclerView.Adap
     public void                 onBindViewHolder(HostSelectionHolder holder, int position) {
         Host host = hosts.get(position);
         holder.itemView.setOnClickListener(onClickCard(host));
-        holder.nameOS.setText(host.getIp());
+        holder.nameOS.setText(host.ip);
         holder.checkBox.setVisibility(View.INVISIBLE);
-        Host.setOsIcon(activity, host, holder.imageOS);
+        Fingerprint.setOsIcon(activity, host, holder.imageOS);
     }
 
     private View.OnClickListener onClickCard(final Host host) {

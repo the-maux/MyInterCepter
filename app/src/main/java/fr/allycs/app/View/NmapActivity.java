@@ -65,7 +65,7 @@ public class                    NmapActivity extends MyActivity {
         if (mSingleton.hostsList == null) {
             targetMonitor.setText("no target");
         } else {
-            host_et.setText(mSingleton.hostsList.get(0).getIp());
+            host_et.setText(mSingleton.hostsList.get(0).ip);
             params_et.setText(mParams.get(mCmd.get(0)));
             targetMonitor.setText(mListHostSelected.size() + " target");
         }
@@ -180,7 +180,7 @@ public class                    NmapActivity extends MyActivity {
 
     public void                 newTarget(Host host) {
         mActualTarget = host;
-        host_et.setText(host.getIp());
+        host_et.setText(host.ip);
     }
 
     private void                execNmap() {

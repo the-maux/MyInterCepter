@@ -1,6 +1,5 @@
 package fr.allycs.app.Model.Target;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.activeandroid.Model;
@@ -11,39 +10,34 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
-
-import fr.allycs.app.Controller.Core.Databse.DBHost;
-import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Controller.Network.BonjourService.Service;
+import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
 import fr.allycs.app.Model.Net.Port;
 import fr.allycs.app.Model.Unix.Os;
-import fr.allycs.app.R;
-
-import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 @Table(name = "Device", id = "_id")
 public class                Host extends Model {
     private String          TAG = "Host";
     @Column(name ="ip")
-    private String          ip = "Unknown";
+    public String           ip = "Unknown";
     @Column(name ="name")
-    private String          name = "Unknown";
+    public String           name = "Unknown";
     @Column(name ="mac")
-    private String          mac = "Unknown";
+    public String           mac = "Unknown";
     @Column(name ="os")
-    private String          os = "Unknown";
+    public String           os = "Unknown";
     @Column(name ="vendor")
-    private String          vendor = "Unknown";
-    private ArrayList<Service> ServiceActivOnHost = null;
-    private boolean         isServiceActiveOnHost = false;
-    private boolean         selected = false;
-    public  boolean         isItMyDevice = false;
-    @Column(name = "dumpInfo")
-    private String          dumpInfo;
-    private Os              osType;
-
+    public String           vendor = "Unknown";
+    @Column(name = "dump")
+    public String           dumpInfo;
+    @Column(name = "Notes")
+    public ArrayList<String> Notes = new ArrayList<>();
+    public ArrayList<Service> ServiceActivOnHost = null;
+    public boolean          isServiceActiveOnHost = false;
+    public boolean          selected = false;
+    public boolean          isItMyDevice = false;
+    public Os               osType;
 
     public                  Host(String buffer) {
         try {
@@ -58,37 +52,14 @@ public class                Host extends Model {
                     .replace("-", ":");
             os = mid.substring(mid.indexOf(" ") + 1).replace("\n", "");
             vendor = end.replace("\n", "");
-            //dumpHost(buffer);
+            if (Singleton.getInstance().UltraDebugMode)
+                dumpHost();
             dumpInfo = buffer;
-            guessOsType(dumpInfo);
-            isItMyDevice();
+            Fingerprint.initHost(this);
         } catch (StringIndexOutOfBoundsException e) {
             Log.e(TAG, buffer);
             e.getStackTrace();
         }
-    }
-    public void             init() {
-        guessOsType(dumpInfo);
-        isItMyDevice();
-    }
-    private void            isItMyDevice() {
-        if (ip.contains(Singleton.getInstance().network.myIp)) {
-            isItMyDevice = true;
-        }
-    }
-
-    /**
-     * Log mhost created in console
-     * @param buffer buffer
-     */
-    private void            dumpHost(String buffer) {
-        Log.d(TAG, "buffer " + buffer + "");
-        Log.d(TAG, "==> ip " + ip + "");
-        Log.d(TAG, "==> name " + name + "");
-        Log.d(TAG, "==> mac " + mac + "");
-        Log.d(TAG, "==> os " + os + "");
-        Log.d(TAG, "==> vendor " + vendor + "");
-        Log.d(TAG, "----------------");
     }
 
     private List<Port>      portList;
@@ -106,155 +77,23 @@ public class                Host extends Model {
         this.os = os;
     }
 
-    public String           getIp() {
-        return ip;
-    }
-
-    public void             setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public String           getMac() {
-        return mac.replace("[", "").replace("]", "");
-    }
-
-    public String           getOS() {
-        return os;
-    }
-
-    public String           getVendor() {
-        return vendor;
-    }
-
-    public List<Port>       getPortList() {
-        return portList;
-    }
-
-    public void             setPortList(List<Port> portList) {
-        this.portList = portList;
-    }
-
     public String           getName() {
-        return (name.contains("Unknown") ? getIp() : name);
+        return (name.contains("Unknown") ? ip : name);
     }
 
     public void             setName(String name) {
         this.name = name;
     }
 
-    public boolean          isSelected() {
-        return selected;
-    }
-
-    public void             setSelected(boolean selected) {
-        this.selected = selected;
-    }
-
     public String           getGenericId() {
         return mac.replace(":", "");
-    }
-
-    public String           getDumpInfo() {
-        return dumpInfo;
-    }
-
-    public static void      setOsIcon(Context context, Host host, CircleImageView osImageView) {
-        int                 ImageRessource;
-
-        switch (host.getOsType()) {
-            case Windows2000:
-                ImageRessource = R.drawable.winicon;
-                break;
-            case WindowsXP:
-                ImageRessource = R.drawable.winicon;
-                break;
-            case Windows10:
-                ImageRessource = R.drawable.winicon;
-                break;
-            case Windows7_8_10:
-                ImageRessource = R.drawable.winicon;
-                break;
-            case Cisco:
-                ImageRessource = R.drawable.cisco;
-                break;
-            case Raspberry:
-                ImageRessource = R.drawable.rasp;
-                break;
-            case QUANTA:
-                ImageRessource = R.drawable.quanta;
-                break;
-            case Bluebird:
-                ImageRessource = R.drawable.bluebird;
-                break;
-            case Apple:
-                ImageRessource = R.drawable.ios;
-                break;
-            case Ios:
-                ImageRessource = R.drawable.ios;
-                break;
-            case Unix:
-                ImageRessource = R.drawable.linuxicon;
-                break;
-            case Linux_Unix:
-                ImageRessource = R.drawable.linuxicon;
-                break;
-            case OpenBSD:
-                ImageRessource = R.drawable.linuxicon;
-                break;
-            case Android:
-                ImageRessource = R.mipmap.ic_logo_android_trans_round;
-                break;
-            case Mobile:
-                ImageRessource = R.mipmap.ic_logo_android_trans_round;
-                break;
-            case Samsung:
-                ImageRessource = R.mipmap.ic_logo_android_trans_round;
-                break;
-            case Unknow:
-                ImageRessource = R.drawable.monitor;
-                break;
-            default:
-                ImageRessource = R.drawable.monitor;
-                break;
-        }
-        MyGlideLoader.loadDrawableInImageView(context, ImageRessource, osImageView);
-    }
-
-    private void            guessOsType(String InfoDevice) {
-        InfoDevice = InfoDevice.toLowerCase();
-        if (InfoDevice.contains("bluebird")) {
-            osType = Os.Bluebird;
-        } else if (InfoDevice.contains("cisco")) {
-            osType = Os.Cisco;
-        } else if (InfoDevice.contains("quanta")) {
-            osType = Os.QUANTA;
-        } else if (InfoDevice.contains("android") || InfoDevice.contains("mobile") || InfoDevice.contains("samsung") ||
-                    InfoDevice.contains("murata") || InfoDevice.contains("huawei") || InfoDevice.contains("oneplus") ||
-                    InfoDevice.contains("lg") || InfoDevice.contains("motorola")) {
-            osType = Os.Android;
-        } else if (InfoDevice.contains("windows 7")) {
-            osType = Os.Windows7_8_10;
-        } else if (InfoDevice.contains("windows 2000")) {
-            osType = Os.WindowsXP;
-        } else if (InfoDevice.contains("windows")) {
-            osType = Os.Windows10;
-        } else if (InfoDevice.contains("apple")) {
-            osType = Os.Apple;
-        } else if (InfoDevice.contains("raspberry")) {
-            osType = Os.Raspberry;
-        }  else if (InfoDevice.contains("ios")) {
-            osType = Os.Ios;
-        } else if (!(!InfoDevice.contains("unix") && !InfoDevice.contains("linux") && !InfoDevice.contains("bsd"))) {
-            osType = Os.Linux_Unix;
-        } else
-            osType = Os.Unknow;
     }
 
     public static Comparator<Host> comparator = new Comparator<Host>() {
         @Override
         public int compare(Host o1, Host o2) {
-            String ip1[] = o1.getIp().replace(".", "::").split("::");
-            String ip2[] = o2.getIp().replace(".", "::").split("::");
+            String ip1[] = o1.ip.replace(".", "::").split("::");
+            String ip2[] = o2.ip.replace(".", "::").split("::");
             if (Integer.parseInt(ip1[2]) > Integer.parseInt(ip2[2]))
                 return 1;
             else if (Integer.parseInt(ip1[2]) < Integer.parseInt(ip2[2]))
@@ -281,13 +120,30 @@ public class                Host extends Model {
         ServiceActivOnHost.add(service);
     }
 
-    public Os               getOsType() {
-        return osType;
+    public List<Port>       getPortList() {
+        return portList;
+    }
+
+    public void             setPortList(List<Port> portList) {
+        this.portList = portList;
+    }
+
+    /**
+     * Log mhost created in console
+     * @param buffer buffer
+     */
+    private void            dumpHost() {
+        Log.i(TAG, "Buffer Device: " + dumpInfo + "");
+        Log.i(TAG, "\t  ip " + ip + "");
+        Log.i(TAG, "\t  name " + name + "");
+        Log.i(TAG, "\t  mac " + mac + "");
+        Log.i(TAG, "\t  os " + os + "");
+        Log.i(TAG, "\t  vendor " + vendor + "");
     }
 
     @Override
     public boolean          equals(Object obj) {
-        return  ip.contains(((Host) obj).getIp()) && mac.contains(((Host) obj).getMac());
+        return  ip.equals(((Host) obj).ip) && mac.equals(((Host) obj).mac);
     }
 
     @Override

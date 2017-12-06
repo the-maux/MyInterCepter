@@ -66,7 +66,7 @@ public class                        HostDiscoveryScan {
         mActivity.monitor(tmpAntiConcurentExecptionFFS.size() + " hosts detected");
         mActivity.setProgressState(1500);
         mActivity.monitor("Scanning " + tmpAntiConcurentExecptionFFS.size() + " host");
-        Fingerprint.guessHostFingerprint(mActivity);
+        Fingerprint.getDevicesInfoFromCepter(mActivity);
         mActivity.setProgressState(2000);
     }
 

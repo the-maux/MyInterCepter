@@ -13,7 +13,9 @@ import android.support.v7.widget.Toolbar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Core.Databse.DBHost;
 import fr.allycs.app.Controller.Misc.MyActivity;
+import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.NmapActivity;
@@ -52,10 +54,10 @@ public class                    HostFocusActivity extends MyActivity {
         mFingerprint = findViewById(R.id.OsScanTxt);
         mMitm  = findViewById(R.id.MitmARPTxt);
         mTabs  = findViewById(R.id.tabs);
-        Host.setOsIcon(this, mFocusedHost, osHostImage);
-        mToolbar.setTitle(mFocusedHost.getIp());
+        Fingerprint.setOsIcon(this, mFocusedHost, osHostImage);
+        mToolbar.setTitle(mFocusedHost.ip);
         if (mFocusedHost.getName().contains("-")) {
-            mToolbar.setSubtitle(mFocusedHost.getMac());
+            mToolbar.setSubtitle(mFocusedHost.mac);
         } else {
             mToolbar.setSubtitle(mFocusedHost.getName());
         }
@@ -115,16 +117,16 @@ public class                    HostFocusActivity extends MyActivity {
     }
 
     private void            displayNotes() {
-        Log.d(TAG, "LOAD FROM BDD THE NOTES OF " + mFocusedHost.getIp());
+        Log.d(TAG, "LOAD FROM BDD THE NOTES OF " + mFocusedHost.ip);
         Snackbar.make(findViewById(R.id.Coordonitor), "Not implemented yet", Snackbar.LENGTH_LONG).show();
     }
 
     private void            displayHistoric() {
-        Log.d(TAG, "LOAD FROM BDD THE HISTORIC OF " + mFocusedHost.getIp());
+        Log.d(TAG, "LOAD FROM BDD THE HISTORIC OF " + mFocusedHost.ip);
         Snackbar.make(findViewById(R.id.Coordonitor), "Not implemented yet", Snackbar.LENGTH_LONG).show();
     }
     private void            displayServices() {
-        Log.d(TAG, "SHOW SERVICES OF " + mFocusedHost.getIp());
+        Log.d(TAG, "SHOW SERVICES OF " + mFocusedHost.ip);
         Snackbar.make(findViewById(R.id.Coordonitor), "Not implemented yet", Snackbar.LENGTH_LONG).show();
     }
 }

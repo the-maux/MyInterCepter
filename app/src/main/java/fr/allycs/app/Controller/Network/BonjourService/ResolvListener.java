@@ -28,7 +28,7 @@ public class                ResolvListener implements NsdManager.ResolveListener
 
     private Host            getclientNatifByIp(String ip) {
         for ( Object o : this.mListClient) {
-            if (((Host)o).getIp().contains(ip))
+            if (((Host)o).ip.contains(ip))
                 return (Host) o;
         }
         return null;

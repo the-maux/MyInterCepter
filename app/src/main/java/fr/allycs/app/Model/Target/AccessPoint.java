@@ -29,7 +29,7 @@ public class               AccessPoint extends Model {
                 if (session.Gateway == null) {
                     Log.d(TAG, "Session is empty");
                 } else {
-                    Log.d(TAG, "\t " + Ssid + " : " + session.Gateway.getIp() + "-[" + session.Gateway.getMac() + "]");
+                    Log.d(TAG, "\t " + Ssid + " : " + session.Gateway.ip + "-[" + session.Gateway.mac + "]");
                     Log.d(TAG, "\t\t" + session.toString());
                 }
             }

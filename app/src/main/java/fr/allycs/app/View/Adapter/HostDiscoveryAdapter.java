@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Core.Databse.DBHost;
+import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
@@ -37,36 +39,35 @@ public class HostDiscoveryAdapter extends RecyclerView.Adapter<ScanHostHolder> {
 
     @Override public void       onBindViewHolder(final ScanHostHolder holder, final int position) {
         final Host host = mHosts.get(position);
-        String ipHostname = host.getIp() + " " + host.getName();
+        String ipHostname = host.ip + " " + host.getName();
         holder.ipHostname.setText(ipHostname);
-        holder.mac.setText(host.getMac());
-        holder.os.setText(host.getOS());
-        holder.vendor.setText(host.getVendor());
-        holder.selected.setChecked(host.isSelected());
+        holder.mac.setText(host.mac);
+        holder.os.setText(host.os);
+        holder.vendor.setText(host.vendor);
+        holder.selected.setChecked(host.selected);
         holder.relativeLayout.setOnClickListener(onCardClick(position, holder));
         holder.relativeLayout.setOnLongClickListener(onCardLongClick(host));
-
         holder.selected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isPressed()) {
-                    host.setSelected(isChecked);
+                    host.selected = isChecked;
                 }
             }
         });
-        Host.setOsIcon(mActivity, host, holder.osIcon);
-        if (host.getIp().contains(Singleton.getInstance().network.myIp) &&
-                Singleton.getInstance().network.myIp.length() == host.getIp().length()) {
+        Fingerprint.setOsIcon(mActivity, host, holder.osIcon);
+        if (host.ip.contains(Singleton.getInstance().network.myIp) &&
+                Singleton.getInstance().network.myIp.length() == host.ip.length()) {
             holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.primary_dark));
-            holder.ipHostname.setText(host.getIp() + " " + host.getName() + " MY DEVICE");
+            holder.ipHostname.setText(host.ip + " " + host.getName() + " MY DEVICE");
         } else {
             holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.cardview_dark_background));
         }
     }
 
     private void                 onHostChecked(final ScanHostHolder holder, Host host, final int position) {
-        host.setSelected(!host.isSelected());
-        holder.selected.setSelected(host.isSelected());
+        host.selected = !host.selected;
+        holder.selected.setSelected(host.selected);
         mHost_RV.post(new Runnable() {
             @Override
             public void run() {
@@ -100,7 +101,7 @@ public class HostDiscoveryAdapter extends RecyclerView.Adapter<ScanHostHolder> {
     public void                 selectAll() {
         if (mHosts != null && mHosts.size() > 0) {
             for (Host host : mHosts) {
-                host.setSelected(true);
+                host.selected = true;
             }
             notifyDataSetChanged();
         }
@@ -114,8 +115,8 @@ public class HostDiscoveryAdapter extends RecyclerView.Adapter<ScanHostHolder> {
         ArrayList<String> listOs = new ArrayList<>();
         if (mOriginalList != null) {
             for (Host host : mOriginalList) {
-                if (host.getOsType() != null && !listOs.contains(host.getOsType().name()))
-                    listOs.add(host.getOsType().name());
+                if (host.osType != null && !listOs.contains(host.osType.name()))
+                    listOs.add(host.osType.name());
             }
         }
         return listOs;
@@ -125,7 +126,7 @@ public class HostDiscoveryAdapter extends RecyclerView.Adapter<ScanHostHolder> {
         mHosts.clear();
         for (Host host : mOriginalList) {
             for (String os : Os) {
-                if (os.contains(host.getOsType().name())) {
+                if (os.contains(host.osType.name())) {
                     mHosts.add(host);
                     break;
                 }
@@ -138,7 +139,7 @@ public class HostDiscoveryAdapter extends RecyclerView.Adapter<ScanHostHolder> {
         Log.d(TAG, "filterByString:" + query);
         mHosts.clear();
         for (Host host : mOriginalList) {
-            if (host.getDumpInfo().toLowerCase().contains(query.toLowerCase()))
+            if (host.dumpInfo.toLowerCase().contains(query.toLowerCase()))
                 mHosts.add(host);
         }
         notifyDataSetChanged();

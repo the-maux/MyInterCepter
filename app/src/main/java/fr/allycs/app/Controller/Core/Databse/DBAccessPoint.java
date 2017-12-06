@@ -54,7 +54,7 @@ public class                            DBAccessPoint {
         if (ap.Sessions == null)
             ap.Sessions = new ArrayList<>();
         for (Host host : devicesConnected) {
-            if (host.getIp().contains(Gateway)) {
+            if (host.ip.contains(Gateway)) {
                 session.Gateway = host;
                 break;
             }

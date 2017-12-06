@@ -382,10 +382,10 @@ public class                        HostDiscoveryActivity extends MyActivity {
         boolean noTargetSelected = true;
         FileOutputStream out = openFileOutput("targets", 0);
         for (Host host : mHosts) {
-            if (host.isSelected()) {
+            if (host.selected) {
                 selectedHost.add(host);
                 noTargetSelected = false;
-                String dumpHost = host.getIp() + ":" + host.getMac() + "\n";
+                String dumpHost = host.ip + ":" + host.mac + "\n";
                 Log.d(TAG, "Dumpin File(./targets):" + dumpHost);
                 out.write(dumpHost.getBytes());
             }

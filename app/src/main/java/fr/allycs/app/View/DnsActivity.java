@@ -195,7 +195,7 @@ public class                            DnsActivity extends MyActivity {
         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface d, int which) {
-                String host = dialog.getHost(), ip = dialog.getIp();
+                String host = dialog.getHost(), ip = dialog.ip;
                 Snackbar mySnackbar;
                 View.OnClickListener retryListene = new View.OnClickListener() {
                     @Override
