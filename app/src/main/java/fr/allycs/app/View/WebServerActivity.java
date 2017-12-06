@@ -70,9 +70,7 @@ public class                    WebServerActivity extends MyActivity {
                 }
             }
         });
-
-        // INIT BROADCAST RECEIVER TO LISTEN NETWORK STATE CHANGED
-        initBroadcastReceiverNetworkStateChanged();
+        initBroadcastReceiverNetworkStateChanged();// INIT BROADCAST RECEIVER TO LISTEN NETWORK STATE CHANGED
     }
 
     private boolean             startAndroidWebServer() {

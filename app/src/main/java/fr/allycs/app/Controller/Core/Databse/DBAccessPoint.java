@@ -42,15 +42,15 @@ public class                            DBAccessPoint {
         return ap;
     }
 
-    public static Session               saveSession(AccessPoint ap, String Gateway,
-                                                    List<Host> devicesConnected) {
+    static Session                      saveSession(AccessPoint ap, String Gateway,
+                                             List<Host> devicesConnected) {
         Session session = new Session();
         Log.d(TAG, "SaveSession::" + ap.Ssid + ", new sesssion with " + devicesConnected.size() + " new devices");
         session.Date = Calendar.getInstance().getTime();
         session.typeScan = "Icmp";
         session.listDevices = new ArrayList<>();
         session.listDevices.addAll(devicesConnected);
-        session.listPcapRecorded = new ArrayList<>();
+        session.sniffedSession= new ArrayList<>();
         if (ap.Sessions == null)
             ap.Sessions = new ArrayList<>();
         for (Host host : devicesConnected) {

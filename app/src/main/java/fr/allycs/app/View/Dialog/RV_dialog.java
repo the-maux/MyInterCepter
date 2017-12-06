@@ -16,7 +16,7 @@ public class                    RV_dialog {
 
     public                      RV_dialog(Activity activity) {
         dialog = new AlertDialog.Builder(activity);
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
         View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_hostchoice, null);
         dialog.setView(dialogView);
         RV_host = (RecyclerView) dialogView.findViewById(R.id.RL_host);

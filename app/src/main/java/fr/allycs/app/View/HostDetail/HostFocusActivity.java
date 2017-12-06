@@ -116,16 +116,17 @@ public class                    HostFocusActivity extends MyActivity {
         });
     }
 
-    private void            displayNotes() {
+    private void                displayNotes() {
         Log.d(TAG, "LOAD FROM BDD THE NOTES OF " + mFocusedHost.ip);
         Snackbar.make(findViewById(R.id.Coordonitor), "Not implemented yet", Snackbar.LENGTH_LONG).show();
     }
 
-    private void            displayHistoric() {
+    private void                displayHistoric() {
         Log.d(TAG, "LOAD FROM BDD THE HISTORIC OF " + mFocusedHost.ip);
         Snackbar.make(findViewById(R.id.Coordonitor), "Not implemented yet", Snackbar.LENGTH_LONG).show();
     }
-    private void            displayServices() {
+
+    private void                displayServices() {
         Log.d(TAG, "SHOW SERVICES OF " + mFocusedHost.ip);
         Snackbar.make(findViewById(R.id.Coordonitor), "Not implemented yet", Snackbar.LENGTH_LONG).show();
     }

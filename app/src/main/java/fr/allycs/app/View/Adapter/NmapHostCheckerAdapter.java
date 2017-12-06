@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.Databse.DBHost;
+import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.HostSelectionHolder;

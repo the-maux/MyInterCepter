@@ -33,7 +33,7 @@ public class               AccessPoint extends Model {
                     Log.d(TAG, "\t\t" + session.toString());
                 }
             }
-            Log.d(TAG, "END:--------------------------");
+            Log.d(TAG, "END SESSION:--------------------------");
         }
     }
 

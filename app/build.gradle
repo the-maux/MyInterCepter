@@ -11,7 +11,7 @@ allprojects {
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 25
     buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "fr.allycs.app"
@@ -57,8 +57,6 @@ dependencies {
     compile 'org.nanohttpd:nanohttpd:2.2.0'
     compile 'com.github.clans:fab:1.6.4'
     compile 'com.github.rubensousa:bottomsheetbuilder:1.6.0'
-
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
-
     implementation files('libs/jmdns.jar')
 }

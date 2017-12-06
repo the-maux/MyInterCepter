@@ -35,7 +35,7 @@ public class                            DnsActivity extends MyActivity {
     private Toolbar                     mToolbar;
     private SearchView                  mSearchView;
     private ImageButton                 mAction_add_host, mSettingsBtn;
-    private TabLayout                   tabs;
+    private TabLayout                   mTabs;
     private FloatingActionButton        mFab;
     private RecyclerView                mDnsSpoof_RV;
     private RelativeLayout              mClipper;
@@ -71,7 +71,7 @@ public class                            DnsActivity extends MyActivity {
         mAction_import = (TextView) findViewById(R.id.action_import);
         mAction_export = (TextView) findViewById(R.id.action_export);
         textEmpty = (TextView) findViewById(R.id.textEmpty);
-        tabs = (TabLayout) findViewById(R.id.tabs);
+        mTabs = (TabLayout) findViewById(R.id.tabs);
     }
 
     private void                        initFab() {
@@ -97,7 +97,7 @@ public class                            DnsActivity extends MyActivity {
     }
 
     private void                        initTabs() {
-        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getText().toString()) {
@@ -195,7 +195,7 @@ public class                            DnsActivity extends MyActivity {
         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface d, int which) {
-                String host = dialog.getHost(), ip = dialog.ip;
+                String host = dialog.getHost(), ip = dialog.getIp();
                 Snackbar mySnackbar;
                 View.OnClickListener retryListene = new View.OnClickListener() {
                     @Override
@@ -263,7 +263,7 @@ public class                            DnsActivity extends MyActivity {
     }
 
     private void                        filtering(String query) {
-        int tab = tabs.getSelectedTabPosition();
+        int tab = mTabs.getSelectedTabPosition();
         if (tab == 0) {//CONF VIEW
             mDnsSpoofAdapter.filtering(query);
         } else {//Logs VIEW

@@ -1,16 +1,18 @@
 package fr.allycs.app.Controller.Core.Databse;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.activeandroid.query.From;
 import com.activeandroid.query.Select;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-import fr.allycs.app.Controller.Misc.MyGlideLoader;
+import java.util.ArrayList;
+import java.util.List;
+
+import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
-import fr.allycs.app.R;
+import fr.allycs.app.Model.Target.Session;
+import fr.allycs.app.Model.Target.SniffSession;
 
 public class                                DBHost {
     private static String                   TAG = "DBHost";
@@ -26,12 +28,13 @@ public class                                DBHost {
         From from = new Select()
                 .from(Host.class)
                 .where("mac = \"" + MAC + "\"");
-        //Log.d(TAG, "SQL STRING [" + from.toSql() + "]");
         Host tmp = from.executeSingle();
-        if (tmp != null) {
-            Log.d(TAG, "SQL STRING [" + from.toSql() + "]: FOUND");
-        } else {
-            Log.d(TAG, "SQL STRING [" + from.toSql() + "]: NOT FOUND");
+        if (Singleton.getInstance().UltraDebugMode) {
+            if (tmp != null) {
+                Log.d(TAG, "SQL STRING [" + from.toSql() + "]: FOUND");
+            } else {
+                Log.d(TAG, "SQL STRING [" + from.toSql() + "]: NOT FOUND");
+            }
         }
         return tmp;
     }
@@ -43,13 +46,18 @@ public class                                DBHost {
             return myDevice;
         } else {
             deviceFromDB.ip = myDevice.ip;
-            deviceFromDB.setName(myDevice.getName());
+            if (!myDevice.getName().equals("(-)"))
+                deviceFromDB.setName(myDevice.getName());
             Fingerprint.initHost(deviceFromDB);
             deviceFromDB.save();
             return deviceFromDB;
         }
     }
 
-
-
+    public static List<Session>             getAllDiscovered() {
+        return new Select()
+                .all()
+                .from(Host.class)
+                .execute();
+    }
 }

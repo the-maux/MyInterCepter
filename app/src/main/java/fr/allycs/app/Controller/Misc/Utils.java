@@ -1,5 +1,8 @@
 package fr.allycs.app.Controller.Misc;
 
+import android.content.Context;
+import android.os.Vibrator;
+
 import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
 
 
@@ -16,5 +19,8 @@ public class                Utils {
         return new RootProcess("initialisation ").exec("mount -o rw,remount /system").closeProcess();
     }
 
-
+    public static void      vibrateDevice(Context context) {
+        Vibrator vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        vibe.vibrate(100);
+    }
 }

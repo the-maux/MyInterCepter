@@ -1,6 +1,7 @@
 package fr.allycs.app.Controller.Core.Databse;
 
 import android.util.Log;
+import android.view.View;
 
 import java.util.List;
 

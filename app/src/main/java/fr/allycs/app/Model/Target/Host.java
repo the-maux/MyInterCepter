@@ -42,6 +42,7 @@ public class                Host extends Model {
     public Os               osType;
 
     public                  Host(String buffer) {
+        super();
         try {
             buffer = buffer.replace("\t", " ").replace("  ", " ");
             String beg = buffer.substring(0, buffer.indexOf(":") - 1);

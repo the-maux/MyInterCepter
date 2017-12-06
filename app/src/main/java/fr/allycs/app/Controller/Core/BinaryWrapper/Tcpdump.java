@@ -169,10 +169,6 @@ public class                        Tcpdump {
             }
         }
     }
-    /**
-     * Renvoie la trame mais peut altérer la réponse
-     * @param line
-     */
     private void                    MITM_DNS(String line) {
         StringBuilder reqdata = new StringBuilder();
         String regex = "^.+length\\s+(\\d+)\\)\\s+([\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3})\\.[^\\s]+\\s+>\\s+([\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3})\\.[^\\:]+.*";
@@ -186,7 +182,7 @@ public class                        Tcpdump {
             }
             reqdata.delete(0, reqdata.length());
         }
-        new MyDNSMITM(reqdata.toString());
+        //new MyDNSMITM(reqdata.toString());
     }
 
     public LinkedHashMap<String, String> getCmdsWithArgsInMap() {

@@ -45,7 +45,6 @@ public class                         Fingerprint {
                             scanActivity.onHostActualized(hosts);
                         }
                         if (buffer == null) {
-                            Log.d(TAG, "BUFFER IS NULL");
                             over = true;
                         } else if ((buffer.length() - buffer.replace(".", "").length()) >= 3 &&
                                 !buffer.contains("wrong interface...")) {
@@ -63,7 +62,6 @@ public class                         Fingerprint {
                             }
                         }
                     }
-                    Log.d(TAG, "Nbr Host discovered:" + hosts.size());
                     Collections.sort(hosts, Host.comparator);
                     scanActivity.onHostActualized(hosts);
             }
