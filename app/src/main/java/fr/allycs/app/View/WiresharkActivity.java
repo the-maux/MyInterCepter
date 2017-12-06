@@ -237,7 +237,7 @@ public class                    WiresharkActivity extends MyActivity {
         for (int i = 0; i < mListHostSelected.size(); i++) {
             if (i > 0)
                 hostFilter += " or ";
-            hostFilter += " host " + mListHostSelected.get(i).ip;
+            hostFilter += " domain " + mListHostSelected.get(i).ip;
         }
         hostFilter += ")\'";
         mTcpdump.start(mMonitorCmd.getText().toString(), hostFilter);

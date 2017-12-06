@@ -3,6 +3,7 @@ package fr.allycs.app.Model.Target;
 public class            DNSSpoofItem extends MyObject {
     public String       ip;
     public String       domain;
+
     private boolean     mActif;
 
     public DNSSpoofItem(String ip, String domain) {

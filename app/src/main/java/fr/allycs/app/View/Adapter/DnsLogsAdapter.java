@@ -3,22 +3,15 @@ package fr.allycs.app.View.Adapter;
 import android.app.Activity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestOptions;
-
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Misc.GlideApp;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
-import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.DNSLog;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.ConsoleLogHolder;
@@ -47,7 +40,7 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
     @Override
     public void                 onBindViewHolder(final DnsLogHolder holder, int position) {
         DNSLog dnslog = mListConsole.get(position);
-        holder.nameHost.setText(dnslog.host);
+        holder.nameHost.setText(dnslog.domain);
         setCurrentTypeLogo(dnslog.currentType, holder.DNSTypeImg);
         holder.DnsRVLogs.setAdapter(setDetailLogsAdapter(dnslog));
         holder.DnsRVLogs.setHasFixedSize(true);
@@ -125,9 +118,9 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
     public void                 filtering(String query) {
         /*TODO:Log.d(TAG, "filterByString:" + query);
         mHosts.clear();
-        for (Host host : mOriginalList) {
-            if (host.getDumpInfo().toLowerCase().contains(query.toLowerCase()))
-                mHosts.add(host);
+        for (Host domain : mOriginalList) {
+            if (domain.getDumpInfo().toLowerCase().contains(query.toLowerCase()))
+                mHosts.add(domain);
         }
         notifyDataSetChanged();*/
     }

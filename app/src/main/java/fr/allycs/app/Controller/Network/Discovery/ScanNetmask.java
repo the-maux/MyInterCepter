@@ -62,13 +62,13 @@ public class                        ScanNetmask {
         mScanner.onReachableScanOver(mListIpReachable);
     }
 
-    /*public boolean                  ping(String host) {
+    /*public boolean                  ping(String domain) {
         RootProcess pingProces = new RootProcess("ScanNetMaskPING");
-        pingProces.exec(Singleton.getInstance().BinaryPath + "/busybox ping -c 1 " + host + "; exit");
+        pingProces.exec(Singleton.getInstance().BinaryPath + "/busybox ping -c 1 " + domain + "; exit");
         int res = pingProces.waitFor();
-        Log.d(TAG, host + " WAITFOR PING = " + res);
+        Log.d(TAG, domain + " WAITFOR PING = " + res);
         if (res == 0) {
-            Log.d(TAG, "ping " + host + " TRUE");
+            Log.d(TAG, "ping " + domain + " TRUE");
             return true;
         } else {
             return false;
@@ -96,7 +96,7 @@ public class                        ScanNetmask {
                     Log.e(TAG, "IOException: " + ip + " (" + nbrHostScanned + "/" + mNumberOfHosts + ")");
                 } finally {
                     if (nbrHostScanned >= (mNumberOfHosts -1) && nbrHostScanned < mNumberOfHosts && !alreadySend) {
-                        Log.e(TAG, "ScanOver: " + ip + " (" + nbrHostScanned + "/" + mNumberOfHosts + ") with " + mListIpReachable.size() + " host reached");
+                        Log.e(TAG, "ScanOver: " + ip + " (" + nbrHostScanned + "/" + mNumberOfHosts + ") with " + mListIpReachable.size() + " domain reached");
                         ScanOver();
                     }
                 }

@@ -1,45 +1,24 @@
 package fr.allycs.app.Model.Target;
 
-import android.support.annotation.NonNull;
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import fr.allycs.app.Model.Unix.Os;
+import fr.allycs.app.Model.Unix.DNSLog;
+import fr.allycs.app.Model.Unix.Pcap;
 
-public class                            SniffSession extends File {
-    @SerializedName("listDevices")
-    private ArrayList<Host>             mListDevices;
-    @SerializedName("accessPoint")
-    private Host                        mAccessPoint;
-    @SerializedName("date")
-    private Date                        mDate;
-
-    public SniffSession(@NonNull String pathname, ArrayList<Host> listDevices, Date date, Host accessPoint) {
-        super(pathname);
-        mDate = date;
-        mListDevices = listDevices;
-        mAccessPoint = accessPoint;
-    }
-
-    public int                          getNbrDevices() {
-        return mListDevices.size();
-    }
-
-    public ArrayList<Os>                getListOsPresent() {
-        ArrayList<Os> listOs = new ArrayList<>();
-        for (Host device : mListDevices) {
-            if (!listOs.contains(device.osType))
-                listOs.add(device.osType);
-        }
-        return listOs;
-    }
-
-    public ArrayList<Host>              getListDevices() {
-        return mListDevices;
-    }
-
+//TODO: Create when wireshark is started
+@Table(name = "SniffSession", id = "_id")
+public class                SniffSession extends Model {
+    @Column(name = "PcapRecorded")
+    public List<Pcap>       listPcapRecorded;
+    @Column(name = "ListDevices")
+    public List<Host>       listDevices;
+    @Column(name = "DnsLogs")
+    public List<DNSLog>     logDnsSpoofed;
+    @Column(name = "Date")
+    public Date             date;
 }

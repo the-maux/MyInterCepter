@@ -191,7 +191,7 @@ public class                            DnsActivity extends MyActivity {
     }
 
     private void                        onAddHostDialog() {
-        final AddDnsDialog dialog = new AddDnsDialog(mInstance).setTitle("Ajouter un host");
+        final AddDnsDialog dialog = new AddDnsDialog(mInstance).setTitle("Ajouter un domain");
         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface d, int which) {

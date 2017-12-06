@@ -65,7 +65,7 @@ public class                        HostDiscoveryScan {
         NetUtils.dumpListHostFromARPTableInFile(mActivity, tmpAntiConcurentExecptionFFS);
         mActivity.monitor(tmpAntiConcurentExecptionFFS.size() + " hosts detected");
         mActivity.setProgressState(1500);
-        mActivity.monitor("Scanning " + tmpAntiConcurentExecptionFFS.size() + " host");
+        mActivity.monitor("Scanning " + tmpAntiConcurentExecptionFFS.size() + " domain");
         Fingerprint.getDevicesInfoFromCepter(mActivity);
         mActivity.setProgressState(2000);
     }

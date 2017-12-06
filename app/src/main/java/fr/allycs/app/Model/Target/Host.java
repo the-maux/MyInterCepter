@@ -33,8 +33,10 @@ public class                Host extends Model {
     public String           dumpInfo;
     @Column(name = "Notes")
     public ArrayList<String> Notes = new ArrayList<>();
-    public ArrayList<Service> ServiceActivOnHost = null;
+
+    public ArrayList<Service> ServiceActivOnHost = new ArrayList<>();
     public boolean          isServiceActiveOnHost = false;
+    private List<Port>      portList;
     public boolean          selected = false;
     public boolean          isItMyDevice = false;
     public Os               osType;
@@ -60,21 +62,6 @@ public class                Host extends Model {
             Log.e(TAG, buffer);
             e.getStackTrace();
         }
-    }
-
-    private List<Port>      portList;
-
-    public                  Host(String ip, String mac, String os, String Vendor) {
-        this.ip = ip;
-        this.mac = mac;
-        this.os = os;
-        this.vendor = Vendor;
-    }
-
-    public                  Host(String ip, String mac, String os) {
-        this.ip = ip;
-        this.mac = mac;
-        this.os = os;
     }
 
     public String           getName() {
@@ -107,16 +94,12 @@ public class                Host extends Model {
     };
 
     public boolean          isServiceActiveOnHost() {
-        return isServiceActiveOnHost;
+        return !ServiceActivOnHost.isEmpty();
     }
     /**
      * Update service by BonjourManager
      */
     public void             updateServiceHost(Service service) {
-        if (ServiceActivOnHost == null) {
-            ServiceActivOnHost = new ArrayList<>();
-            isServiceActiveOnHost = true;
-        }
         ServiceActivOnHost.add(service);
     }
 
@@ -128,10 +111,6 @@ public class                Host extends Model {
         this.portList = portList;
     }
 
-    /**
-     * Log mhost created in console
-     * @param buffer buffer
-     */
     private void            dumpHost() {
         Log.i(TAG, "Buffer Device: " + dumpInfo + "");
         Log.i(TAG, "\t  ip " + ip + "");
@@ -141,13 +120,11 @@ public class                Host extends Model {
         Log.i(TAG, "\t  vendor " + vendor + "");
     }
 
-    @Override
-    public boolean          equals(Object obj) {
+    @Override public boolean equals(Object obj) {
         return  ip.equals(((Host) obj).ip) && mac.equals(((Host) obj).mac);
     }
 
-    @Override
-    public String           toString() {
+    @Override public String toString() {
         return ip + ":" + mac;
     }
 
