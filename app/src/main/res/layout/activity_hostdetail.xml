@@ -182,6 +182,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:id="@+id/RV_Historic"
                     android:layout_below="@+id/tabs">
 
                 </android.support.v7.widget.RecyclerView>

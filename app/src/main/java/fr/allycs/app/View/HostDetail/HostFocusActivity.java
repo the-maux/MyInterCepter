@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,6 +27,7 @@ import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.AccessPointAdapter;
+import fr.allycs.app.View.Adapter.SessionAdapter;
 import fr.allycs.app.View.NmapActivity;
 import fr.allycs.app.View.WiresharkActivity;
 
@@ -39,6 +42,7 @@ public class                    HostFocusActivity extends MyActivity {
     private TabLayout           mTabs;
     private Host                mFocusedHost;
     private List<AccessPoint>   HistoricAps;
+    private RecyclerView        RV_Historic;
 
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +61,9 @@ public class                    HostFocusActivity extends MyActivity {
     private void                init() {
         HistoricAps = DBSession.getAllAPWithDeviceIn(mFocusedHost);
         AccessPointAdapter adapter = new AccessPointAdapter(this, HistoricAps);
+        RV_Historic.setAdapter(adapter);
+        RV_Historic.setHasFixedSize(true);
+        RV_Historic.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void                initXml() {
@@ -67,6 +74,7 @@ public class                    HostFocusActivity extends MyActivity {
         mVulnerabilitys  = findViewById(R.id.VulnerabilityScan);
         mFingerprint = findViewById(R.id.OsScanTxt);
         mMitm  = findViewById(R.id.MitmARPTxt);
+        RV_Historic = findViewById(R.id.RV_Historic);
         mTabs  = findViewById(R.id.tabs);
         Fingerprint.setOsIcon(this, mFocusedHost, osHostImage);
         mToolbar.setTitle(mFocusedHost.ip);
@@ -154,6 +162,9 @@ public class                    HostFocusActivity extends MyActivity {
                 }
             }
         }
-
+        SessionAdapter adapter =  new SessionAdapter(this, allSessionWithDeviceIn);
+        RV_Historic.setAdapter(adapter);
+        RV_Historic.setHasFixedSize(true);
+        RV_Historic.setLayoutManager(new LinearLayoutManager(this));
     }
 }

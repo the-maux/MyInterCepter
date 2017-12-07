@@ -2,43 +2,36 @@ package fr.allycs.app.View.Adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Model.Target.AccessPoint;
+import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.AccessPointHolder;
 import fr.allycs.app.View.HostDetail.HostFocusActivity;
 
-public class                    AccessPointAdapter extends RecyclerView.Adapter<AccessPointHolder> {
+public class                    SessionAdapter extends RecyclerView.Adapter<AccessPointHolder> {
     private String              TAG = this.getClass().getName();
     private HostFocusActivity   mActivity;
-    private List<AccessPoint>   mSessions;
+    private List<Session>       mSessions;
     private Singleton           mSingleton = Singleton.getInstance();
 
-    public                      AccessPointAdapter(HostFocusActivity activity, List<AccessPoint> sessions) {
+    public                      SessionAdapter(HostFocusActivity activity, List<Session> sessions) {
         this.mActivity = activity;
         this.mSessions = sessions;
     }
 
     @Override
     public AccessPointHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new AccessPointHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_accesspoint, parent, false));
+        return new AccessPointHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_session, parent, false));
     }
 
     @Override
     public void                 onBindViewHolder(AccessPointHolder holder, int position) {
-        final AccessPoint ap = mSessions.get(position);
-        holder.ssid.setText(ap.Ssid);
-        holder.forward.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mActivity.onAccessPointFocus(ap);
-            }
-        });
+        Session ap = mSessions.get(position);
     }
 
     @Override
