@@ -11,13 +11,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.Databse.DBHost;
+import fr.allycs.app.Controller.Core.Databse.DBSession;
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
+import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;
+import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
+import fr.allycs.app.View.Adapter.AccessPointAdapter;
 import fr.allycs.app.View.NmapActivity;
 import fr.allycs.app.View.WiresharkActivity;
 
@@ -31,6 +38,7 @@ public class                    HostFocusActivity extends MyActivity {
     private TextView            mPortScan, mVulnerabilitys, mFingerprint, mMitm;
     private TabLayout           mTabs;
     private Host                mFocusedHost;
+    private List<AccessPoint>   HistoricAps;
 
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,8 +49,14 @@ public class                    HostFocusActivity extends MyActivity {
         } else {
             mFocusedHost = mSingleton.hostsList.get(0);
             initXml();
+            init();
             initMenu();
         }
+    }
+
+    private void                init() {
+        HistoricAps = DBSession.getAllAPWithDeviceIn(mFocusedHost);
+        AccessPointAdapter adapter = new AccessPointAdapter(this, HistoricAps);
     }
 
     private void                initXml() {
@@ -64,7 +78,6 @@ public class                    HostFocusActivity extends MyActivity {
     }
 
     private void                initMenu() {
-
         mPortScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,5 +142,18 @@ public class                    HostFocusActivity extends MyActivity {
     private void                displayServices() {
         Log.d(TAG, "SHOW SERVICES OF " + mFocusedHost.ip);
         Snackbar.make(findViewById(R.id.Coordonitor), "Not implemented yet", Snackbar.LENGTH_LONG).show();
+    }
+
+    public void                 onAccessPointFocus(AccessPoint ap) {
+        List<Session> allSessionWithDeviceIn = new ArrayList<>();
+        for (Session session : ap.Sessions) {
+            for (Host device : session.listDevices) {
+                if (device.mac.equals(mFocusedHost.mac)) {
+                    allSessionWithDeviceIn.add(session);
+                    break;
+                }
+            }
+        }
+
     }
 }
