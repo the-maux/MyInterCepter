@@ -118,45 +118,29 @@ public class                    SetupActivity extends MyActivity {
     }
 
     private void                initInfo() throws FileNotFoundException {
-        monitor("Initialization...");
-        Log.d(TAG,"SetupActivity::initInfo" );
         try {
+            monitor("Initialization...");
+            Log.d(TAG, "SetupActivity::initInfo");
             //Log.d(TAG, "init Net infos");
             getNetworkInfoByCept();//Is it still usefull? need to test without
+            monitor("Discovering network architecture");
+            if (!NetUtils.initNetworkInfo(this)) {
+                Toast.makeText(this, "Your not connected to a network", Toast.LENGTH_LONG).show();
+                finish();
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(mInstance, HostDiscoveryActivity.class));
+                        finish();
+                    }
+                });
+            }
         } catch (InterruptedException e2) {
             e2.getStackTrace();
         } catch (IOException e) {
             e.getStackTrace();
         }
-        DhcpInfo dhcpInfo = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getDhcpInfo();
-        String data = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getDhcpInfo().toString();
-        if (!data.contains("ipaddr") || !data.contains("gateway") || !data.contains("netmask") ) {
-            Toast.makeText(this, "Your not connected to a network", Toast.LENGTH_LONG).show();
-            finish();
-            return ;
-        }
-        String[] res = data.split(" ");
-        int ip = 0, gw = 0, netmask = 0;
-        for (int i = 0; i < res.length; i++) {
-            if (res[i].contains("ipaddr")) {
-                ip = i + 1;
-            } else if (res[i].contains("gateway")) {
-                gw = i + 1;
-            } else if (res[i].contains("netmask")) {
-                netmask = i + 1;
-            }
-        }
-        if (res[netmask].contains("0.0.0.0"))
-            res[netmask] = "255.255.255.0";
-        monitor("Discovering network architecture");
-        mSingleton.network = new NetworkInformation(dhcpInfo, NetUtils.getMac(res[ip], res[gw]));
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                startActivity(new Intent(mInstance, HostDiscoveryActivity.class));
-                finish();
-            }
-        });
     }
 
     private RootProcess         getNetworkInfoByCept() throws IOException, InterruptedException {

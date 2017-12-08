@@ -23,6 +23,10 @@ public class                Session extends Model {
     @Column(name = "typeScan")/* Arp, Icmp, Nmap*/
     public String          typeScan;
 
+    @Column(name = "name")/* Arp, Icmp, Nmap*/
+    public String          name;
+
+
     @Column(name = "sniffedSession")
     public List<SniffSession> sniffedSession;
 
@@ -32,7 +36,7 @@ public class                Session extends Model {
 
     @Override
     public String           toString() {
-        return new SimpleDateFormat("dd/MM/yyyy-hh:mm:ss", Locale.FRANCE)
+        return new SimpleDateFormat("dd/MM-hh:mm", Locale.FRANCE)
                 .format(Date) + " Devices Connected : " + listDevices.size();
     }
 }

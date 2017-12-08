@@ -162,9 +162,13 @@ public class                    HostFocusActivity extends MyActivity {
                 }
             }
         }
-        SessionAdapter adapter =  new SessionAdapter(this, allSessionWithDeviceIn);
+        SessionAdapter adapter = new SessionAdapter(this, allSessionWithDeviceIn);
         RV_Historic.setAdapter(adapter);
         RV_Historic.setHasFixedSize(true);
         RV_Historic.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    public void                 onSessionFocused(Session session) {
+
     }
 }

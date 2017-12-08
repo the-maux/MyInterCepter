@@ -181,8 +181,6 @@ public class                    NmapActivity extends MyActivity {
     }
 
     private void                execNmap() {
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         Output.setText("Wait...");
         final String cmd = mSingleton.FilesPath + "nmap/nmap " + host_et.getText() + " " + params_et.getText() + " ";
         Monitor.setVisibility(View.VISIBLE);
@@ -193,13 +191,14 @@ public class                    NmapActivity extends MyActivity {
                 try {
                     BufferedReader reader = new BufferedReader(new RootProcess("Nmap", mSingleton.FilesPath)//Exec and > in BufferedReader
                             .exec(cmd).getInputStreamReader());
-                    String dumpOutput = "", tmp;
+                    String dumpOutput, tmp;
+                    StringBuilder dumpOutputBuilder = new StringBuilder();
                     while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {
-                        dumpOutput += tmp + '\n';
+                        dumpOutputBuilder.append(tmp).append('\n');
                     }
-                    dumpOutput += tmp;
-                    Log.d(TAG, "Nmap final stdouT" + dumpOutput);
-                    final String finalDumpOutput = dumpOutput;
+                    dumpOutputBuilder.append(tmp);
+                    Log.d(TAG, "Nmap final stdouT" + dumpOutputBuilder.toString());
+                    final String finalDumpOutput = dumpOutputBuilder.toString();
                     mInstance.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

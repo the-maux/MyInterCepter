@@ -32,6 +32,7 @@ import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.Controller.Network.Discovery.HostDiscoveryScan;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Controller.Misc.MyActivity;
@@ -314,17 +316,26 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private void                    startNetworkScan() {
         mProgressBar.setVisibility(View.VISIBLE);
         if (!inLoading) {
-            if (mSingleton.network.updateInfo().isConnectedToNetwork()) {
-                inLoading = true;
-                if (typeScan != HostDiscoveryScan.typeScan.Services)
-                    initHostsRecyclerView();
-                progressAnimation();
-                mToolbar.setSubtitle("Scanning network");
-                new HostDiscoveryScan(this).run(typeScan, mHosts);
-                mProgress = 1000;
-            } else {
-                Snackbar.make(mCoordinatorLayout, "You need to be connected", Toast.LENGTH_SHORT).show();
-                mEmptyList.setVisibility(View.VISIBLE);
+            try {
+                if (mSingleton.network == null && !NetUtils.initNetworkInfo(this)) {
+                    Snackbar.make(mCoordinatorLayout, "You need to be connected", Toast.LENGTH_SHORT).show();
+                    mEmptyList.setVisibility(View.VISIBLE);
+                    return;
+                }
+                if (mSingleton.network.updateInfo().isConnectedToNetwork()) {
+                    inLoading = true;
+                    if (typeScan != HostDiscoveryScan.typeScan.Services)
+                        initHostsRecyclerView();
+                    progressAnimation();
+                    mToolbar.setSubtitle("Scanning network");
+                    new HostDiscoveryScan(this).run(typeScan, mHosts);
+                    mProgress = 1000;
+                } else {
+                    Snackbar.make(mCoordinatorLayout, "You need to be connected", Toast.LENGTH_SHORT).show();
+                    mEmptyList.setVisibility(View.VISIBLE);
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
         } else {
             Snackbar.make(mCoordinatorLayout, "Patientez, loading en cours", Toast.LENGTH_SHORT).show();
