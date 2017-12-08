@@ -37,6 +37,10 @@ public class                Session extends Model {
     @Override
     public String           toString() {
         return new SimpleDateFormat("dd/MM-hh:mm", Locale.FRANCE)
-                .format(Date) + " Devices Connected : " + listDevices.size();
+                .format(Date) +" " + listDevices.size() + " Devices Connected : ";
+    }
+
+    public String           getDateString() {
+        return new SimpleDateFormat("dd/MM-hh:mm", Locale.FRANCE).format(Date);
     }
 }

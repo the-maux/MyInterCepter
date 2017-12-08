@@ -48,6 +48,8 @@ public class                                DBSession {
     public static List<Session>             getSessionsWithDeviceIn(Host host) {
         List<Session> allSessions = DBSession.getAllSessions();
         List<Session> sessionWithDeviceIn = new ArrayList<>();
+        if (allSessions == null)
+            return sessionWithDeviceIn;
         for (Session session : allSessions) {
             for (Host device : session.listDevices) {
                 if (host.mac.equals(device.mac)) {//TODO: try with .contains instead of for loop
@@ -60,6 +62,8 @@ public class                                DBSession {
     }
 
     private static boolean                  isTheDeviceIn(Host host, List<Session> sessions) {
+        if (sessions == null)
+            return false;
         for (Session session : sessions) {
             for (Host device : session.listDevices) {
                 if (device.mac.equals(host.mac)) {

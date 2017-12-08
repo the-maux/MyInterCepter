@@ -23,7 +23,7 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/OsImg"
                 android:layout_width="52dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="4dp"
                 android:padding="2dp"
                 android:src="@drawable/winicon" />

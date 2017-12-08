@@ -64,7 +64,7 @@ public class                NetUtils {
      **  Guessing list of domain by reading ARP table and dump it in ./hostlist file
      **/
     public static void      dumpListHostFromARPTableInFile(Context context, ArrayList<String> ipReachable) {
-        Log.i(TAG, "Dump list domain from Arp Table");
+        Log.i(TAG, "Dump list devices from Arp Table");
         try {
             ArrayList<String> listOfIpsAlreadyIn = new ArrayList<>();
             FileOutputStream hostListFile = new FileOutputStream(new File(Singleton.getInstance().FilesPath + "hostlist"));

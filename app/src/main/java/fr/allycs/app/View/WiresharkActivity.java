@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
@@ -224,7 +225,8 @@ public class                    WiresharkActivity extends MyActivity {
                 mListHostSelected.add(singleton.hostsList.get(0));
                 mToolbar.setSubtitle(mListHostSelected.size() + " target");
             } else {
-                Snackbar.make(mCoordinatorLayout, "Selectionner une target", Snackbar.LENGTH_SHORT).setActionTextColor(Color.RED).show();
+                Snackbar.make(mCoordinatorLayout, "Selectionner une target", Snackbar.LENGTH_SHORT)
+                        .setActionTextColor(Color.RED).show();
                 onClickChoiceTarget();
                 return false;
             }
@@ -233,9 +235,12 @@ public class                    WiresharkActivity extends MyActivity {
         for (int i = 0; i < mListHostSelected.size(); i++) {
             if (i > 0)
                 hostFilter += " or ";
-            hostFilter += " domain " + mListHostSelected.get(i).ip;
+            hostFilter += " host " + mListHostSelected.get(i).ip;
         }
         hostFilter += ")\'";
+        Log.d(TAG, "mTcpdump.actualParam::" + mTcpdump.actualParam);
+        Log.d(TAG, "mMonitorCmd::" + mMonitorCmd.getText().toString());
+        mMonitorCmd.setText(mTcpdump.actualParam);
         mTcpdump.start(mMonitorCmd.getText().toString(), hostFilter);
         mMonitorAgv.setText("./tcpdump " + mMonitorCmd.getText().toString() + hostFilter);
         mInstance.runOnUiThread(new Runnable() {
@@ -244,7 +249,6 @@ public class                    WiresharkActivity extends MyActivity {
                 mAdapterWireshark.notifyDataSetChanged();
             }
         });
-        mMonitorCmd.setText(mTcpdump.actualParam);
         return true;
     }
 
