@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +18,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.ArrayList;
@@ -40,10 +40,6 @@ import fr.allycs.app.View.Adapter.WiresharkAdapter;
 import fr.allycs.app.View.Dialog.RV_dialog;
 import fr.allycs.app.View.Dialog.GeneralSettings;
 
-/**
- * TODO:    + Add filter
- *          + RecyclerView with addView(TextView.stdout())
- */
 public class                    WiresharkActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
     private WiresharkActivity   mInstance = this;

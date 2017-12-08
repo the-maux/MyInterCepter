@@ -106,18 +106,17 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <com.github.clans.fab.FloatingActionButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="16dp"
         android:elevation="3dp"
+        android:scaleType="fitCenter"
         android:src="@android:drawable/ic_media_play"
-        app:fab_colorNormal="@android:color/holo_blue_light"
-        app:fab_colorPressed="@android:color/holo_blue_bright"
+        app:backgroundTint="@color/material_blue_grey_400"
+        app:fabSize="normal"
         app:fab_elevationCompat="4dp"
-        app:fab_progress_showBackground="false"
-        app:fab_showShadow="false"
         app:layout_anchor="@id/appbar"
         app:layout_anchorGravity="bottom|right|end" />
 

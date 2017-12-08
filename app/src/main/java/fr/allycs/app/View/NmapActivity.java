@@ -36,9 +36,6 @@ import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.HostSelectionAdapter;
 import fr.allycs.app.View.Dialog.RV_dialog;
 
-/**
- * Created by maxim on 03/08/2017.
- */
 public class                    NmapActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
     private NmapActivity        mInstance = this;

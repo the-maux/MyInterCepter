@@ -4,8 +4,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import com.github.clans.fab.FloatingActionButton;
 
+
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabItem;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -43,7 +44,7 @@ public class                    DoraActivity extends MyActivity {
     }
 
     @Override
-    protected void onResume() {
+    protected void              onResume() {
         super.onResume();
         getDoraWrapper();
         initRV();

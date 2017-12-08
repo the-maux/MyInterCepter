@@ -11,7 +11,8 @@
 	<android.support.design.widget.AppBarLayout
 		android:id="@+id/appbar"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
+		android:layout_height="wrap_content"
+		app:elevation="4dp">
 
 		<RelativeLayout
 			android:layout_width="wrap_content"
@@ -79,42 +80,44 @@
 
 			</RelativeLayout>
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/topToolbar"
-                app:tabMode="scrollable">
+			<android.support.design.widget.TabLayout
+				android:id="@+id/tabs"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_below="@+id/topToolbar"
+				app:tabMode="scrollable">
 
-                <android.support.design.widget.TabItem
-                    android:id="@+id/ArpTab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Icmp\ndiscovery" />
+				<android.support.design.widget.TabItem
+					android:id="@+id/ArpTab"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Icmp\ndiscovery" />
 
-                <android.support.design.widget.TabItem
-                    android:id="@+id/NmapTab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="NMAP\nDiscovery" />
+				<android.support.design.widget.TabItem
+					android:id="@+id/NmapTab"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="NMAP\nDiscovery" />
 
-                <android.support.design.widget.TabItem
-                    android:id="@+id/IcmpTab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Services\nDiscovery" />
-            </android.support.design.widget.TabLayout>
+				<android.support.design.widget.TabItem
+					android:id="@+id/IcmpTab"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Services\nDiscovery" />
+			</android.support.design.widget.TabLayout>
 
 			<ProgressBar
 				android:id="@+id/progressBar"
 				style="?android:attr/progressBarStyleHorizontal"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_below="@+id/tabs" />
+				android:layout_below="@+id/tabs"
+				android:visibility="gone" />
 
 
 		</RelativeLayout>
 	</android.support.design.widget.AppBarLayout>
+
 	<android.support.design.widget.FloatingActionButton
 		android:id="@+id/fab"
 		android:layout_width="wrap_content"
@@ -123,10 +126,11 @@
 		android:layout_alignParentEnd="true"
 		android:layout_marginBottom="16dp"
 		android:layout_marginEnd="16dp"
-		android:src="@mipmap/ic_search_round"
 		android:scaleType="fitCenter"
-		app:rippleColor="@color/primary_dark"
+		android:src="?android:attr/actionModeWebSearchDrawable"
+		app:backgroundTint="@color/material_blue_grey_400"
 		app:fab_elevationCompat="4dp"
+		app:fabSize="normal"
 		app:layout_anchor="@id/appbar"
 		app:layout_anchorGravity="bottom|right|end" />
 	<!--com.github.clans.fab.FloatingActionButton

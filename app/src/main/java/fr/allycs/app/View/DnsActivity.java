@@ -3,6 +3,7 @@ package fr.allycs.app.View;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
+
 
 import fr.allycs.app.Controller.Core.BinaryWrapper.Dns.DnsControl;
 import fr.allycs.app.Controller.Misc.MyActivity;

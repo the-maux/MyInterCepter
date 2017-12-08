@@ -212,7 +212,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
                     Log.d(TAG, "clearing Refresh");
                     mHosts.clear();
                     mEmptyList.setVisibility(View.GONE);
-                    mHostAdapter.notifyDataSetChanged();
+                    if (mHostAdapter != null)
+                        mHostAdapter.notifyDataSetChanged();
                     initMonitor();
                     mProgress = 0;
                     startNetworkScan();
@@ -311,6 +312,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     private void                    startNetworkScan() {
+        mProgressBar.setVisibility(View.VISIBLE);
         if (!inLoading) {
             if (mSingleton.network.updateInfo().isConnectedToNetwork()) {
                 inLoading = true;
