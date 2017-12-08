@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
@@ -47,7 +48,8 @@ public class                    NmapActivity extends MyActivity {
     private RelativeLayout      mNmapConfEditorLayout;
     private TextView            host_et, params_et, Output, Monitor, targetMonitor;
     private RelativeLayout      mRL_host;
-    private Host mActualTarget = null;
+    private Host                mActualTarget = null;
+    private Toolbar             mToolbar;
     private List<Host>          mListHostSelected = new ArrayList<>();
     private ImageView           settingsMenu;
     private ImageButton         settings;
@@ -62,9 +64,7 @@ public class                    NmapActivity extends MyActivity {
         if (mSingleton.hostsList == null) {
             targetMonitor.setText("no target");
         } else {
-            host_et.setText(mSingleton.hostsList.get(0).ip);
-            params_et.setText(mParams.get(mCmd.get(0)));
-            targetMonitor.setText(mListHostSelected.size() + " target");
+            newTarget(mSingleton.hostsList.get(0));
         }
     }
 
@@ -74,6 +74,7 @@ public class                    NmapActivity extends MyActivity {
         host_et = (EditText) findViewById(R.id.hostEditext);
         params_et = (EditText) findViewById(R.id.binParamsEditText);
         mRL_host = (RelativeLayout) findViewById(R.id.RL_host);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         Output = (TextView) findViewById(R.id.Output);
         Output.setMovementMethod(new ScrollingMovementMethod());
         Monitor = (TextView) findViewById(R.id.Monitor);
@@ -165,7 +166,6 @@ public class                    NmapActivity extends MyActivity {
                                             Snackbar.make(mCoordinatorLayout, "No target selected", Snackbar.LENGTH_LONG).show();
                                         else {
                                             newTarget(mListHostSelected.get(0));
-                                            targetMonitor.setText(mListHostSelected.size() + " target");
                                             Snackbar.make(mCoordinatorLayout, mListHostSelected.size() + " target", Snackbar.LENGTH_LONG).show();
                                         }
                                     }
@@ -178,10 +178,15 @@ public class                    NmapActivity extends MyActivity {
     public void                 newTarget(Host host) {
         mActualTarget = host;
         host_et.setText(host.ip);
+        mListHostSelected.add(host);
+        mToolbar.setSubtitle(host.ip);
+        host_et.setText(host.ip);
+        params_et.setText(mParams.get(mCmd.get(0)));
+        targetMonitor.setText(mListHostSelected.size() + " target");
     }
 
     private void                execNmap() {
-        Output.setText("Wait...");
+        Output.setText("roo$Wait...");
         final String cmd = mSingleton.FilesPath + "nmap/nmap " + host_et.getText() + " " + params_et.getText() + " ";
         Monitor.setVisibility(View.VISIBLE);
         Monitor.setText(cmd.replace("nmap/nmap","nmap").replace("\n", "").replace(mSingleton.FilesPath, ""));

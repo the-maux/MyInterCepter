@@ -233,15 +233,16 @@ public class                    WiresharkActivity extends MyActivity {
                 return false;
             }
         }
-        String hostFilter = "\'" +
+        StringBuilder hostFilterBuilder = new StringBuilder("\'" +
                 ((mTypeScan.contains("No Filter") || mTypeScan.contains("Custom Filter")) ?
-                " (" : " and (");
+                        " (" : " and ("));
         for (int i = 0; i < mListHostSelected.size(); i++) {
             if (i > 0)
-                hostFilter += " or ";
-            hostFilter += " host " + mListHostSelected.get(i).ip;
+                hostFilterBuilder.append(" or ");
+            hostFilterBuilder.append(" host ").append(mListHostSelected.get(i).ip);
         }
-        hostFilter += ")\'";
+        hostFilterBuilder.append(")\'");
+        String hostFilter = hostFilterBuilder.toString();
         Log.d(TAG, "mTcpdump.actualParam::" + mTcpdump.actualParam);
         Log.d(TAG, "mMonitorCmd::" + mMonitorCmd.getText().toString());
         mMonitorCmd.setText(mTcpdump.actualParam);

@@ -24,6 +24,7 @@ public class                    HostSelectionAdapter extends RecyclerView.Adapte
     public                      HostSelectionAdapter(Activity activity, ArrayList<Host> hostsList, List<Host> hostsSelected) {
         this.hosts = hostsList;
         this.activity = activity;
+        listHostSelected.clear();
         this.listHostSelected = hostsSelected;
     }
     @Override
