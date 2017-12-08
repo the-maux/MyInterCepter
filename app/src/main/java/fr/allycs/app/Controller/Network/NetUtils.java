@@ -61,7 +61,7 @@ public class                NetUtils {
     }
 
     /**
-     **  Guessing list of domain by reading ARP table and dump it in ./hostlist file
+     **  Guessing list of host by reading ARP table and dump it in ./hostlist file
      **/
     public static void      dumpListHostFromARPTableInFile(Context context, ArrayList<String> ipReachable) {
         Log.i(TAG, "Dump list devices from Arp Table");
@@ -82,7 +82,7 @@ public class                NetUtils {
                     hostListFile.write((ip + ":" + matcher.group(1) + "\n").getBytes());
                 }
             }
-            Log.d(TAG, listOfIpsAlreadyIn.size() + " new domain discovered in /proc/arp");
+            Log.d(TAG, listOfIpsAlreadyIn.size() + " new host discovered in /proc/arp");
             boolean already;
             for (Iterator<String> iterator = ipReachable.iterator(); iterator.hasNext(); ) {
                 String reachable = iterator.next();

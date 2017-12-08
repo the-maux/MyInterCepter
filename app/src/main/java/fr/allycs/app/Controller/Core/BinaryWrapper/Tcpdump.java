@@ -89,7 +89,7 @@ public class                        Tcpdump {
      * Dispatch the DNS request on network
      */
     public void                     start(final String actualParam, String hostFilter) {
-        Log.i(TAG, "start");
+        Log.i(TAG, "start::" + actualParam);
         IPTables.InterceptWithoutSSL();
         this.actualParam = actualParam;
         final String cmd = buildCmd(actualParam, hostFilter).replace("//", "/").replace("  ", " ");
@@ -105,6 +105,7 @@ public class                        Tcpdump {
                         new IPTables().discardForwardding2Port(53); //MITM DNS
                     }
                     listOfTrames.clear();
+                    Log.d(TAG, cmd);
                     tcpDumpProcess = new RootProcess("Wireshark").exec(cmd);
                     BufferedReader reader = tcpDumpProcess.getReader();
                     String line;

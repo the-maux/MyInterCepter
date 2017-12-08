@@ -186,6 +186,7 @@ public class                    WiresharkActivity extends MyActivity {
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             mParams.put((String)pair.getKey(), (String)pair.getValue());
+            Log.d(TAG, "initspinner::add to cmds:" + pair.getKey());
             cmds.add((String)pair.getKey());
             it.remove(); // avoids a ConcurrentModificationException
         }
@@ -201,6 +202,7 @@ public class                    WiresharkActivity extends MyActivity {
             });
             mMonitorCmd.setText(mParams.get(cmds.get(0)));
         }
+        Log.d(TAG, "initSpinner:: monitor::" + mMonitorCmd.getText().toString());
     }
 
     public void                 startWireshark(boolean isResume) {
@@ -231,7 +233,9 @@ public class                    WiresharkActivity extends MyActivity {
                 return false;
             }
         }
-        String hostFilter = (mTypeScan.contains("No Filter") || mTypeScan.contains("Custom Filter")) ? " (" : " and (";//If no filter, no '&&' in expression
+        String hostFilter = "\'" +
+                ((mTypeScan.contains("No Filter") || mTypeScan.contains("Custom Filter")) ?
+                " (" : " and (");
         for (int i = 0; i < mListHostSelected.size(); i++) {
             if (i > 0)
                 hostFilter += " or ";
@@ -241,6 +245,7 @@ public class                    WiresharkActivity extends MyActivity {
         Log.d(TAG, "mTcpdump.actualParam::" + mTcpdump.actualParam);
         Log.d(TAG, "mMonitorCmd::" + mMonitorCmd.getText().toString());
         mMonitorCmd.setText(mTcpdump.actualParam);
+        Log.d(TAG, "starting tcpdump with monitor:[" + mMonitorCmd.getText().toString() + "]");
         mTcpdump.start(mMonitorCmd.getText().toString(), hostFilter);
         mMonitorAgv.setText("./tcpdump " + mMonitorCmd.getText().toString() + hostFilter);
         mInstance.runOnUiThread(new Runnable() {

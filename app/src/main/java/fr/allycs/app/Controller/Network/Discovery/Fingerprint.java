@@ -27,7 +27,7 @@ public class                         Fingerprint {
      */
     static void                      getDevicesInfoFromCepter(final HostDiscoveryActivity scanActivity) {
         final List<Host> hosts = new ArrayList<>();
-        final RootProcess process = new RootProcess("Cepter Scan domain", Singleton.getInstance().FilesPath);
+        final RootProcess process = new RootProcess("Cepter Scan device", Singleton.getInstance().FilesPath);
         //final BufferedReader bufferedReader = new BufferedReader(process.getInputStreamReader());
         final BufferedReader bufferedReader = process.getReader();
         process.exec(Singleton.getInstance().FilesPath + "cepter scan " + Singleton.getInstance().nbrInteface);
