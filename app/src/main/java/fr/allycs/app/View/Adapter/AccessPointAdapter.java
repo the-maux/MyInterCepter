@@ -11,16 +11,17 @@ import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.AccessPointHolder;
+import fr.allycs.app.View.HostDetail.HostDetailFragment;
 import fr.allycs.app.View.HostDetail.HostFocusActivity;
 
 public class                    AccessPointAdapter extends RecyclerView.Adapter<AccessPointHolder> {
     private String              TAG = this.getClass().getName();
-    private HostFocusActivity   mActivity;
+    private HostDetailFragment  mFragment;
     private List<AccessPoint>   mSessions;
     private Singleton           mSingleton = Singleton.getInstance();
 
-    public                      AccessPointAdapter(HostFocusActivity activity, List<AccessPoint> sessions) {
-        this.mActivity = activity;
+    public                      AccessPointAdapter(HostDetailFragment activity, List<AccessPoint> sessions) {
+        this.mFragment = activity;
         this.mSessions = sessions;
     }
 
@@ -36,7 +37,7 @@ public class                    AccessPointAdapter extends RecyclerView.Adapter<
         holder.forward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mActivity.onAccessPointFocus(ap);
+                mFragment.onAccessPointFocus(ap);
             }
         });
     }
