@@ -303,7 +303,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     private void                    initHostsRecyclerView() {
         mHosts.clear();
-        mHostAdapter = new HostDiscoveryAdapter(this, mHost_RV);
+        mHostAdapter = new HostDiscoveryAdapter(this, mHost_RV, false);
         mHost_RV.setAdapter(mHostAdapter);
         mHost_RV.setHasFixedSize(true);
         mHost_RV.setLayoutManager(new LinearLayoutManager(mInstance));

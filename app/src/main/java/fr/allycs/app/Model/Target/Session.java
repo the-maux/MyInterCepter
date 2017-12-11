@@ -15,22 +15,21 @@ public class                Session extends Model {
     public java.util.Date   Date;
 
     @Column(name = "Gateway")
-    public Host            Gateway;
+    public Host             Gateway;
 
     @Column(name = "Devices")
     public List<Host>       listDevices;
 
     @Column(name = "typeScan")/* Arp, Icmp, Nmap*/
-    public String          typeScan;
+    public String           typeScan;
 
     @Column(name = "name")/* Arp, Icmp, Nmap*/
-    public String          name;
-
+    public String           name;
 
     @Column(name = "sniffedSession")
     public List<SniffSession> sniffedSession;
 
-    public Session() {
+    public                  Session() {
         super();
     }
 

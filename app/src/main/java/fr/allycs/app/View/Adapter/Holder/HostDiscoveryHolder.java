@@ -12,7 +12,7 @@ import fr.allycs.app.R;
 /**
  * Host holder
  */
-public class ScanHostHolder extends RecyclerView.ViewHolder {
+public class HostDiscoveryHolder extends RecyclerView.ViewHolder {
     public View             itemView;
     public RelativeLayout   relativeLayout;
     public TextView         ipHostname;
@@ -22,7 +22,7 @@ public class ScanHostHolder extends RecyclerView.ViewHolder {
     public CheckBox         selected;
     public CircleImageView  osIcon;
 
-    public ScanHostHolder(View v) {
+    public HostDiscoveryHolder(View v) {
         super(v);
         itemView = v;
         relativeLayout = (RelativeLayout) itemView.findViewById(R.id.relative_layout);
