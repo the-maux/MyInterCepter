@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Core.Databse.DBSession;
-import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
+import fr.allycs.app.Controller.Core.Database.DBSession;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Session;

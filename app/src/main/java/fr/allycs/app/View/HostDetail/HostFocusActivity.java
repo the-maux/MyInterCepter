@@ -1,37 +1,20 @@
 package fr.allycs.app.View.HostDetail;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Adapter;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Core.Databse.DBSession;
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
-import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;
-import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Adapter.AccessPointAdapter;
-import fr.allycs.app.View.Adapter.HostDiscoveryAdapter;
-import fr.allycs.app.View.Adapter.SessionAdapter;
 import fr.allycs.app.View.NmapActivity;
 import fr.allycs.app.View.WiresharkActivity;
 

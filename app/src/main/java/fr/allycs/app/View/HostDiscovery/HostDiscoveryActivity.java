@@ -20,7 +20,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -40,15 +39,13 @@ import java.util.List;
 
 import fr.allycs.app.Controller.Core.BinaryWrapper.Intercepter;
 
-import fr.allycs.app.Controller.Core.Databse.DBHost;
-import fr.allycs.app.Controller.Core.Databse.DBManager;
+import fr.allycs.app.Controller.Core.Database.DBManager;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.Controller.Network.Discovery.HostDiscoveryScan;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.Model.Net.Service;
-import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Model.Target.Session;

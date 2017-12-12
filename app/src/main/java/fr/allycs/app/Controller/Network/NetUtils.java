@@ -60,9 +60,6 @@ public class                NetUtils {
         return "MAC INTROUVABLE";
     }
 
-    /**
-     **  Guessing list of host by reading ARP table and dump it in ./hostlist file
-     **/
     public static void      dumpListHostFromARPTableInFile(Context context, ArrayList<String> ipReachable) {
         Log.i(TAG, "Dump list devices from Arp Table");
         try {

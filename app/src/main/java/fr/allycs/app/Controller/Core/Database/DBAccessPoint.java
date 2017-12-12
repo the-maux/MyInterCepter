@@ -1,4 +1,4 @@
-package fr.allycs.app.Controller.Core.Databse;
+package fr.allycs.app.Controller.Core.Database;
 
 
 import android.util.Log;
