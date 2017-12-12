@@ -1,4 +1,4 @@
-package fr.allycs.app.Controller.Network.HTTPServer;
+package fr.allycs.app.Controller.Network.WebServer;
 
 import java.util.Map;
 
