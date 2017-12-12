@@ -4,9 +4,10 @@ import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
+import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Target.DNSSpoofItem;
 import fr.allycs.app.Model.Unix.DNSLog;
 import fr.allycs.app.View.Adapter.DnsLogsAdapter;
@@ -14,7 +15,7 @@ import fr.allycs.app.View.DnsActivity;
 
 public class                    DnsControl {
     private String              TAG = "DnsControl";
-    public ArrayList<DNSLog>    dnsLogs = new ArrayList<>();
+    public  List<DNSLog>        mDnsLogs = Singleton.getInstance().actualSniffSession.logDnsSpoofed;
     private RootProcess         mProcess;
     private DnsLogsAdapter      mRV_Adapter = null;
     private DnsConf             mDnsConf;
@@ -29,7 +30,7 @@ public class                    DnsControl {
             mRV_Adapter.getRecyclerview().post(new Runnable() {
                 @Override
                 public void run() {
-                    dnsLogs.clear();
+                    mDnsLogs.clear();
                     if (mRV_Adapter != null)
                         mRV_Adapter.notifyDataSetChanged();
                 }
@@ -46,7 +47,7 @@ public class                    DnsControl {
                 !read.contains("started, version 2.51 cachesize 150");
     }
     private boolean             isADomainConnu(DNSLog dnsLog) {
-        for (DNSLog domainLog : dnsLogs) {
+        for (DNSLog domainLog : mDnsLogs) {
             if (domainLog.isSameDomain(dnsLog)) {
                 domainLog.addLog(dnsLog);
                 return false;
@@ -61,7 +62,7 @@ public class                    DnsControl {
             @Override
             public void run() {
                 DNSLog Domainlog;
-                dnsLogs.clear();
+                mDnsLogs.clear();
                 mProcess = new RootProcess("Dnsmasq::");
                 mProcess.exec("dnsmasq --no-daemon --log-queries");
                 BufferedReader reader = mProcess.getReader();
@@ -74,8 +75,10 @@ public class                    DnsControl {
                         if (isItALog(read)) {
                             DNSLog DomainlogTmp = new DNSLog(read);
                             boolean isAnewDomain;
-                            if ((isAnewDomain = isADomainConnu(DomainlogTmp)))
-                                dnsLogs.add(0, DomainlogTmp);
+                            if ((isAnewDomain = isADomainConnu(DomainlogTmp))) {
+                                DomainlogTmp.save();
+                                mDnsLogs.add(0, DomainlogTmp);
+                            }
                             notifyAdapter(DomainlogTmp, deprecatedStart, isAnewDomain);
                         }
                     }
@@ -98,7 +101,7 @@ public class                    DnsControl {
             mRV_Adapter.getRecyclerview().post(new Runnable() {
                 @Override
                 public void run() {
-                    //dnsLogs.clear();
+                    //mDnsLogs.clear();
                     if (mRV_Adapter != null)
                         mRV_Adapter.notifyDataSetChanged();
                 }
@@ -119,13 +122,13 @@ public class                    DnsControl {
                     if (log.data.contains("failed to create listening socket: Address already in use")) {
                         deprecatedStart[0] = true;
                     } else if (mRV_Adapter != null && isAnewDomain)
-                        mRV_Adapter.notifyItemInserted(dnsLogs.indexOf(log));
+                        mRV_Adapter.notifyItemInserted(mDnsLogs.indexOf(log));
                     else if (mRV_Adapter != null && !isAnewDomain)
                         mRV_Adapter.notifyDataSetChanged();
                 }
             });
         if (mActivity != null)
-            mActivity.titleToolbar(dnsLogs.size() + " dns request");
+            mActivity.titleToolbar(mDnsLogs.size() + " dns request");
     }
 
     /**

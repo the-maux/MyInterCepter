@@ -7,7 +7,10 @@ import android.util.Log;
 import java.net.InetAddress;
 import java.util.List;
 
+import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Model.Net.Service;
 import fr.allycs.app.Model.Target.Host;
+import fr.allycs.app.Model.Target.Session;
 
 public class                ResolvListener implements NsdManager.ResolveListener {
     private String          TAG = "ResolvListener";
@@ -34,43 +37,35 @@ public class                ResolvListener implements NsdManager.ResolveListener
         return null;
     }
     @Override
-    public void             onServiceResolved(NsdServiceInfo service) {
-        Log.d(TAG, "Resolve Succeeded. " + service);
-        InetAddress addr = service.getHost();
+    public void             onServiceResolved(NsdServiceInfo nsdService) {
+        Log.d(TAG, "Resolve Succeeded. " + nsdService);
+        InetAddress addr = nsdService.getHost();
         if (addr != null) {
             Host client = getclientNatifByIp(addr.getHostAddress());
             if (client != null) {
-                Log.d(TAG, "addr HostAddress: " + addr.getHostAddress());
-                Log.d(TAG, "addr CanonicalHostName: " + addr.getCanonicalHostName());
-                Log.d(TAG, "addr Address: " + addr.getAddress());
-                Log.d(TAG, "addr HostName: " + addr.getHostName());
-                Log.d(TAG, "service.getHost: " + service.getHost());
-                Log.d(TAG, "service.getPort: " + service.getPort());
-                Log.d(TAG, "service.getServiceName: " + service.getServiceName());
-                Log.d(TAG, "service.getServiceType" + service.getServiceType());
-                Log.d(TAG, "service: " + service);
-                client.updateServiceHost(
-                        new Service(addr.getHostAddress(),
-                                addr.getCanonicalHostName(),
-                                addr.getAddress(),
-                                addr.getHostName(),
-                                "" + service.getPort(),
-                                service.getServiceName(),
-                                service.getServiceType(),
-                                addr, service));
-                manager.bingo(addr.getHostAddress(), service.getServiceName());
+                if (Singleton.getInstance().DebugMode) {
+                    Log.d(TAG, "addr HostAddress: " + addr.getHostAddress());
+                    Log.d(TAG, "addr CanonicalHostName: " + addr.getCanonicalHostName());
+                    Log.d(TAG, "addr Address: " + addr.getAddress());
+                    Log.d(TAG, "addr HostName: " + addr.getHostName());
+                    Log.d(TAG, "service.getHost: " + nsdService.getHost());
+                    Log.d(TAG, "service.getPort: " + nsdService.getPort());
+                    Log.d(TAG, "service.getServiceName: " + nsdService.getServiceName());
+                    Log.d(TAG, "service.getServiceType" + nsdService.getServiceType());
+                    Log.d(TAG, "service: " + nsdService);
+                }
+                Service service = new Service(addr.getHostAddress(),
+                        addr.getCanonicalHostName(),
+                        addr.getAddress(),
+                        addr.getHostName(),
+                        "" + nsdService.getPort(),
+                        nsdService.getServiceName(),
+                        nsdService.getServiceType(),
+                        addr, nsdService);
+                client.updateServiceHost(service);
+                manager.bingo(addr.getHostAddress(), nsdService.getServiceName(), service);
             }
         }
     }
-    /*
-    Log.d(TAG, "addr HostAddress: " + addr.getHostAddress());
-        Log.d(TAG, "addr CanonicalHostName: " + addr.getCanonicalHostName());
-        Log.d(TAG, "addr Address: " + addr.getAddress());
-        Log.d(TAG, "addr HostName: " + addr.getHostName());
-        Log.d(TAG, "service.getHost: " + service.getHost());
-        Log.d(TAG, "service.getPort: " + service.getPort());
-        Log.d(TAG, "service.getServiceName: " + service.getServiceName());
-        Log.d(TAG, "service.getServiceType" + service.getServiceType());
-        Log.d(TAG, "service: " + service);
-     */
+
 }

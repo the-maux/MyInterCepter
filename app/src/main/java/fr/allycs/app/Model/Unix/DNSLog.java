@@ -3,6 +3,7 @@ package fr.allycs.app.Model.Unix;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
@@ -13,7 +14,7 @@ import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.ConsoleLogHolder;
 
 @Table(name = "DnsLog", id = "_id")
-public class                            DNSLog {
+public class                            DNSLog extends Model {
     private String                      TAG = "DNSLog";
     public enum Type { Query, Forward, Reply, Other}
     public Type                         currentType;

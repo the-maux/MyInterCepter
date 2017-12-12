@@ -1,4 +1,6 @@
-package fr.allycs.app.Controller.Core.Databse;
+package fr.allycs.app.Controller.Core.Database;
+
+import android.util.Log;
 
 import com.activeandroid.query.Select;
 
@@ -11,7 +13,7 @@ import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.Model.Target.SniffSession;
 
 public class                                DBSession {
-
+    private static String                   TAG = "DBSession";
     public static List<AccessPoint>         getAllAccessPoint() {
         return new Select()
                 .all()
@@ -82,6 +84,7 @@ public class                                DBSession {
             if (isTheDeviceIn(host, accessPoint.Sessions))
                 AllApWithDeviceIn.add(accessPoint);
         }
+        Log.d(TAG, "getAllAPWithDeviceIn:: returning " + AllApWithDeviceIn.size() + " AccessPoin");
         return AllApWithDeviceIn;
     }
 

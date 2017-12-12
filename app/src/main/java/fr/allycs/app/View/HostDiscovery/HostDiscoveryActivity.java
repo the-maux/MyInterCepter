@@ -20,7 +20,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -40,16 +39,16 @@ import java.util.List;
 
 import fr.allycs.app.Controller.Core.BinaryWrapper.Intercepter;
 
-import fr.allycs.app.Controller.Core.Databse.DBHost;
-import fr.allycs.app.Controller.Core.Databse.DBManager;
+import fr.allycs.app.Controller.Core.Database.DBManager;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.Controller.Network.Discovery.HostDiscoveryScan;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Network.NetUtils;
-import fr.allycs.app.Model.Target.AccessPoint;
+import fr.allycs.app.Model.Net.Service;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Controller.Misc.MyActivity;
+import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.HostDiscoveryAdapter;
 import fr.allycs.app.View.Adapter.OSAdapter;
@@ -90,6 +89,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private ProgressBar             mProgressBar;
     final int                       MAXIMUM_PROGRESS = 6500;
     private HostDiscoveryScan.typeScan typeScan = HostDiscoveryScan.typeScan.Arp;
+    private Session                 mActualSession;
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -303,7 +303,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     private void                    initHostsRecyclerView() {
         mHosts.clear();
-        mHostAdapter = new HostDiscoveryAdapter(this, mHost_RV);
+        mHostAdapter = new HostDiscoveryAdapter(this, mHost_RV, false);
         mHost_RV.setAdapter(mHostAdapter);
         mHost_RV.setHasFixedSize(true);
         mHost_RV.setLayoutManager(new LinearLayoutManager(mInstance));
@@ -397,7 +397,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 mToolbar.setSubtitle(mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": ""));
                 new Thread(new Runnable() {
                     public void run() {
-                        DBManager.saveSession(SSID, mSingleton.network.gateway, hosts);
+                        mActualSession = DBManager.saveSession(SSID, mSingleton.network.gateway, hosts, "Icmp");
                     }
                 }).start();
             }
@@ -421,6 +421,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
             Snackbar.make(mCoordinatorLayout, "No target selected!", Toast.LENGTH_SHORT).show();
             return;
         }
+        mSingleton.actualSession = mActualSession;
         mSingleton.hostsList = selectedHost;
         startActivity(new Intent(mInstance, MenuActivity.class));
     }
@@ -454,9 +455,11 @@ public class                        HostDiscoveryActivity extends MyActivity {
         this.mProgress = progress;
     }
 
-    public void                     notifiyServiceAllScaned() {
+    public void                     notifiyServiceAllScaned(List<Service> listOfServiceFound) {
         Snackbar.make(mCoordinatorLayout, "Scanning service on network finished", Toast.LENGTH_SHORT).show();
         inLoading = false;
+        mActualSession.services = listOfServiceFound;
+        mActualSession.save();
     }
 
     public void                     focusOneTarget(Host host) {

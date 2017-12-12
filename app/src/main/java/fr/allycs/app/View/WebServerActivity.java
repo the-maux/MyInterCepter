@@ -20,7 +20,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import fr.allycs.app.Controller.Misc.MyActivity;
-import fr.allycs.app.Controller.Network.HTTPServer.GenericServer;
+import fr.allycs.app.Controller.Network.WebServer.GenericServer;
 import fr.allycs.app.R;
 
 public class                    WebServerActivity extends MyActivity {

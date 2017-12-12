@@ -11,16 +11,17 @@ import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.SessionHolder;
+import fr.allycs.app.View.HostDetail.HostDetailFragment;
 import fr.allycs.app.View.HostDetail.HostFocusActivity;
 
 public class                    SessionAdapter extends RecyclerView.Adapter<SessionHolder> {
     private String              TAG = this.getClass().getName();
-    private HostFocusActivity   mActivity;
+    private HostDetailFragment  mFragment;
     private List<Session>       mSessions;
     private Singleton           mSingleton = Singleton.getInstance();
 
-    public                      SessionAdapter(HostFocusActivity activity, List<Session> sessions) {
-        this.mActivity = activity;
+    public                      SessionAdapter(HostDetailFragment fragment, List<Session> sessions) {
+        this.mFragment = fragment;
         this.mSessions = sessions;
     }
 
@@ -37,7 +38,7 @@ public class                    SessionAdapter extends RecyclerView.Adapter<Sess
         holder.forward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mActivity.onSessionFocused(session);
+                mFragment.onSessionFocused(session);
             }
         });
     }

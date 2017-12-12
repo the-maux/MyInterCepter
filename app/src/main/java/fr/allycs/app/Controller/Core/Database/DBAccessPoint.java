@@ -1,14 +1,18 @@
-package fr.allycs.app.Controller.Core.Databse;
+package fr.allycs.app.Controller.Core.Database;
 
 
 import android.util.Log;
 
 import com.activeandroid.query.Select;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Session;
@@ -43,12 +47,16 @@ public class                            DBAccessPoint {
     }
 
     static Session                      saveSession(AccessPoint ap, String Gateway,
-                                             List<Host> devicesConnected) {
+                                             List<Host> devicesConnected, String TypeScan) {
         Session session = new Session();
-        Log.d(TAG, "SaveSession::" + ap.Ssid + ", new sesssion with " + devicesConnected.size() + " new devices");
+        if (Singleton.getInstance().DebugMode)
+            Log.d(TAG, "SaveSession::" + ap.Ssid + ", new sesssion with " + devicesConnected.size() + " new devices");
         session.Date = Calendar.getInstance().getTime();
-        session.typeScan = "Icmp";
+        session.typeScan = TypeScan;
+        session.Ap = ap;
+        session.name = ap.Ssid + "_" + new SimpleDateFormat("MM_dd_HH_mm_ss", Locale.FRANCE).format(new Date());
         session.listDevices = new ArrayList<>();
+        session.services = new ArrayList<>();
         session.listDevices.addAll(devicesConnected);
         session.sniffedSession= new ArrayList<>();
         if (ap.Sessions == null)
@@ -59,7 +67,6 @@ public class                            DBAccessPoint {
                 break;
             }
         }
-        Log.d(TAG, "saveSession::" + session.toString());
         session.save();
         ap.Sessions.add(session);
         ap.save();

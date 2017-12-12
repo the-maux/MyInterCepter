@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:background="@drawable/splashscreen">
 
 
     <android.support.design.widget.AppBarLayout
@@ -147,47 +149,14 @@
                     android:textColor="@color/material_light_white" />
 
             </LinearLayout>
-
-            <RelativeLayout
+            <FrameLayout
+                android:id="@+id/frame_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/settingsLayout">
+                android:layout_below="@+id/settingsLayout"
+                >
 
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/tabs"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/primary_text"
-                    app:tabMode="scrollable">
-
-                    <android.support.design.widget.TabItem
-                        android:id="@+id/offlinemodeItem2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Historic" />
-
-                    <android.support.design.widget.TabItem
-                        android:id="@+id/subnetMode"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Notes" />
-
-                    <android.support.design.widget.TabItem
-                        android:id="@+id/offlinemodeItem"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Services" />
-                </android.support.design.widget.TabLayout>
-
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/RV_Historic"
-                    android:layout_below="@+id/tabs">
-
-                </android.support.v7.widget.RecyclerView>
-
-            </RelativeLayout>
+            </FrameLayout>
         </RelativeLayout>
 
     </RelativeLayout>

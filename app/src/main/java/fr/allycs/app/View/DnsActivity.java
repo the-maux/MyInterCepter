@@ -237,7 +237,7 @@ public class                            DnsActivity extends MyActivity {
         } else {
             textEmpty.setVisibility(View.GONE);
         }
-        mDnsConsoleAdapter = new DnsLogsAdapter(this, mDnsSpoof.dnsLogs);
+        mDnsConsoleAdapter = new DnsLogsAdapter(this, mDnsSpoof.mDnsLogs);
         mDnsSpoof.setRV_Adapter(mDnsConsoleAdapter);
     }
 

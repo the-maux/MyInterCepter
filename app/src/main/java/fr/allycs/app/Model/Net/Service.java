@@ -1,18 +1,30 @@
-package fr.allycs.app.Controller.Network.BonjourService;
+package fr.allycs.app.Model.Net;
 
 import android.net.nsd.NsdServiceInfo;
 
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import java.net.InetAddress;
 
-public class Service {
-    private String      HostAddress;
-    private String      CanonicalHostName;
-    private byte[]      Address;
-    private String      HostName;
-    private String      Port;
-    private String      ServiceName;
-    private String      ServiceType;
-    private InetAddress addr;
+@Table(name = "ServiceDiscovery", id = "_id")
+public class            Service {
+    @Column(name ="HostAddress")
+    public String       HostAddress;
+    @Column(name ="CanonicalHostName")
+    public String       CanonicalHostName;
+    @Column(name ="Address")
+    public byte[]       Address;
+    @Column(name ="HostName")
+    public String       HostName;
+    @Column(name ="Port")
+    public String       Port;
+    @Column(name ="ServiceName")
+    public String       ServiceName;
+    @Column(name ="ServiceType")
+    public String       ServiceType;
+    public InetAddress  addr;
+
     private NsdServiceInfo service;
 
     public              Service(String hostAddr,
