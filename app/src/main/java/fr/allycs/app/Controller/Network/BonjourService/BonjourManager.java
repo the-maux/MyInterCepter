@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import fr.allycs.app.Model.Net.Service;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
 
@@ -23,6 +24,7 @@ public class                        BonjourManager {
     private int                     offsetServiceType = 0;
     private List<Host>              listClient;
     private HostDiscoveryActivity   mActivity;
+    private List<Service>           listOfServiceFound = new ArrayList<>();
     private String[]                getAllType() {
         //all in mac _services._dns-sd._udp.local.
         // _workstation._tcp.local.
@@ -62,18 +64,18 @@ public class                        BonjourManager {
                     NsdManager.PROTOCOL_DNS_SD, listener);
             listDiscoveryListener.put(type, listener);
         } else {
-            mActivity.notifiyServiceAllScaned();
+            mActivity.notifiyServiceAllScaned(listOfServiceFound);
         }
     }
     void                     stopServiceDiscovery(NsdManager.DiscoveryListener listene) {
-
         this.mNsdManager.stopServiceDiscovery(listene);
     }
     void                     resolveService(NsdServiceInfo service) {
         this.mNsdManager.resolveService(service,  new ResolvListener(this, listClient));
     }
 
-    public void             bingo(String hostAddress, String serviceName) {
+    public void             bingo(String hostAddress, String serviceName, Service service) {
+        listOfServiceFound.add(service);
         Snackbar.make(mActivity.mCoordinatorLayout, "Service: " + serviceName + " on "+ hostAddress , Snackbar.LENGTH_LONG).show();
     }
 }

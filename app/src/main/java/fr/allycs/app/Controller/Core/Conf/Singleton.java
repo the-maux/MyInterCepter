@@ -10,6 +10,8 @@ import fr.allycs.app.Controller.Network.IPTables;
 import fr.allycs.app.Controller.Core.BinaryWrapper.ArpSpoof;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Net.NetworkInformation;
+import fr.allycs.app.Model.Target.Session;
+import fr.allycs.app.Model.Target.SniffSession;
 
 public class                            Singleton {
     private static Singleton            mInstance = null;
@@ -24,7 +26,8 @@ public class                            Singleton {
     public ArrayList<Host>              hostsList = null;
     public List<ArpSpoof>               ArpSpoofProcessStack = new ArrayList<>();
     public NetworkInformation           network = null;
-
+    public SniffSession                 actualSniffSession = null;
+    public Session                      actualSession = null;
     private boolean                     sslstripMode = false, LockScreen = false;
     private boolean                     DnsControlstarted = false, isTcpdumpStarted = false;
 

@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import fr.allycs.app.Model.Net.Service;
+
 @Table(name = "HostDiscoverySession", id = "_id")
 public class                Session extends Model {
     @Column(name = "Date")
@@ -20,6 +22,9 @@ public class                Session extends Model {
     @Column(name = "Devices")
     public List<Host>       listDevices;
 
+    @Column(name = "OsNumber")
+    public int              nbrOs;
+
     @Column(name = "typeScan")/* Arp, Icmp, Nmap*/
     public String           typeScan;
 
@@ -28,6 +33,12 @@ public class                Session extends Model {
 
     @Column(name = "sniffedSession")
     public List<SniffSession> sniffedSession;
+
+    @Column(name = "service")
+    public List<Service>    services;
+
+    @Column(name = "AccessPoint")
+    public AccessPoint      Ap;
 
     public                  Session() {
         super();

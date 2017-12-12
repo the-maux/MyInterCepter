@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
@@ -17,6 +18,8 @@ import fr.allycs.app.Controller.Network.IPTables;
 import fr.allycs.app.Controller.Network.MyDNSMITM;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Net.Trame;
+import fr.allycs.app.Model.Target.Host;
+import fr.allycs.app.Model.Unix.Pcap;
 import fr.allycs.app.View.WiresharkActivity;
 
 public class                        Tcpdump {
@@ -29,6 +32,7 @@ public class                        Tcpdump {
     private boolean                 deepAnalyseTrame = false;
     public CopyOnWriteArrayList<Trame> listOfTrames;
     public String                   actualParam = "";
+    public List<Host>               hosts;
 
     private String                  INTERFACE = "-i wlan0 ";    //  Focus interfacte;
     private String                  STDOUT_BUFF = "-l ";        //  Make stdOUT line buffered.  Useful if you want to see  the  data in live
@@ -42,7 +46,7 @@ public class                        Tcpdump {
 
     private Tcpdump(WiresharkActivity activity) {
         this.activity = activity;
-        listOfTrames = new CopyOnWriteArrayList<Trame>();
+        listOfTrames = new CopyOnWriteArrayList<>();
         initCmds();
     }
 
@@ -71,15 +75,31 @@ public class                        Tcpdump {
     }
     private String                  buildCmd(String actualParam, String hostFilter) {
         String date =  new SimpleDateFormat("MM_dd_HH_mm_ss", Locale.FRANCE).format(new Date());
+        String nameFile = Singleton.getInstance().actualSession.Ap.Ssid + "_" + date;
         String pcapFile = ((isDumpingInFile) ?
-                (" -w " + Singleton.getInstance().PcapPath + date + ".pcap ") : "");
-        return
-                Singleton.getInstance().FilesPath +
+                (" -w " + Singleton.getInstance().PcapPath + nameFile + ".pcap ") : "");
+
+        Pcap pcap = new Pcap(Singleton.getInstance().PcapPath + nameFile + ".pcap ", hosts);
+        pcap.save();
+        Singleton.getInstance().actualSniffSession.listPcapRecorded.add(pcap);
+        return Singleton.getInstance().FilesPath +
                         "tcpdump " +
                         pcapFile +
                         actualParam +
                         hostFilter;
+    }
 
+    private String                  buildHostFilter(List<Host> hosts, String typeScan){
+        StringBuilder hostFilterBuilder = new StringBuilder("\'" +
+                ((typeScan.contains("No Filter") || typeScan.contains("Custom Filter")) ?
+        " (" : " and ("));
+        for (int i = 0; i < hosts.size(); i++) {
+            if (i > 0)
+                hostFilterBuilder.append(" or ");
+            hostFilterBuilder.append(" host ").append(hosts.get(i).ip);
+        }
+        hostFilterBuilder.append(")\'");
+        return hostFilterBuilder.toString();
     }
 
     /**
@@ -88,18 +108,20 @@ public class                        Tcpdump {
      * Inspect/Alter DNS Query
      * Dispatch the DNS request on network
      */
-    public void                     start(final String actualParam, String hostFilter) {
+    public String                   start(final String actualParam, List<Host> hosts, String typeScan) {
         Log.i(TAG, "start::" + actualParam);
+        this.hosts = hosts;
         IPTables.InterceptWithoutSSL();
         this.actualParam = actualParam;
-        final String cmd = buildCmd(actualParam, hostFilter).replace("//", "/").replace("  ", " ");
+        final String cmd = buildCmd(actualParam, buildHostFilter(hosts, typeScan))
+                .replace("//", "/").replace("  ", " ");
         new Thread(new Runnable() {
             @Override
             public void run() {
                 isRunning = true;
                 ArpSpoof.launchArpSpoof();
                 try {
-                    Thread.sleep(3000);//Wait a sec for ARP Catched for target
+                    //Thread.sleep(3000);//Wait a sec for ARP Catched for target
                     if (actualParam.contains(STDOUT_BUFF) && actualParam.contains("dst port 53")) {
                         Log.i(TAG, "DNS REQUEST MITM");
                         new IPTables().discardForwardding2Port(53); //MITM DNS
@@ -119,10 +141,6 @@ public class                        Tcpdump {
                         }).start();
                     }
                     Log.d(TAG, "./Tcpdump finish");
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    Log.d(TAG, "InterruptedException");
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.d(TAG, "Process Error");
@@ -134,6 +152,7 @@ public class                        Tcpdump {
                 Log.d(TAG, "onTcpDump start over");
             }
         }).start();
+        return cmd;
     }
     private void                    onNewLine(String line) {
         if (line.contains("Quiting...")) {

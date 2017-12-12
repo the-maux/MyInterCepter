@@ -233,22 +233,13 @@ public class                    WiresharkActivity extends MyActivity {
                 return false;
             }
         }
-        StringBuilder hostFilterBuilder = new StringBuilder("\'" +
-                ((mTypeScan.contains("No Filter") || mTypeScan.contains("Custom Filter")) ?
-                        " (" : " and ("));
-        for (int i = 0; i < mListHostSelected.size(); i++) {
-            if (i > 0)
-                hostFilterBuilder.append(" or ");
-            hostFilterBuilder.append(" host ").append(mListHostSelected.get(i).ip);
-        }
-        hostFilterBuilder.append(")\'");
-        String hostFilter = hostFilterBuilder.toString();
+
         Log.d(TAG, "mTcpdump.actualParam::" + mTcpdump.actualParam);
         Log.d(TAG, "mMonitorCmd::" + mMonitorCmd.getText().toString());
         mMonitorCmd.setText(mTcpdump.actualParam);
         Log.d(TAG, "starting tcpdump with monitor:[" + mMonitorCmd.getText().toString() + "]");
-        mTcpdump.start(mMonitorCmd.getText().toString(), hostFilter);
-        mMonitorAgv.setText("./tcpdump " + mMonitorCmd.getText().toString() + hostFilter);
+        ;
+        mMonitorAgv.setText(mTcpdump.start(mMonitorCmd.getText().toString(), mListHostSelected, mTypeScan));
         mInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {
