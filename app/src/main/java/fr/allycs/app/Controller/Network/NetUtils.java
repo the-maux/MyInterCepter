@@ -5,7 +5,6 @@ import android.content.Context;
 import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,7 +20,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Model.Net.NetworkInformation;
 
 /**
  * Created by maxim on 29/06/2017.

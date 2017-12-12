@@ -5,11 +5,11 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.allycs.app.Controller.Core.BinaryWrapper.ArpSpoof;
 import fr.allycs.app.Controller.Core.BinaryWrapper.Dns.DnsControl;
 import fr.allycs.app.Controller.Network.IPTables;
-import fr.allycs.app.Controller.Core.BinaryWrapper.ArpSpoof;
+import fr.allycs.app.Controller.Network.NetworkInformation;
 import fr.allycs.app.Model.Target.Host;
-import fr.allycs.app.Model.Net.NetworkInformation;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.Model.Target.SniffSession;
 

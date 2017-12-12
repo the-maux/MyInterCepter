@@ -11,9 +11,9 @@ import java.util.Comparator;
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Model.Net.Service;
 import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
 import fr.allycs.app.Model.Net.Port;
+import fr.allycs.app.Model.Net.Service;
 import fr.allycs.app.Model.Unix.Os;
 
 @Table(name = "Device", id = "_id")
@@ -122,7 +122,7 @@ public class                Host extends Model {
     }
 
     @Override public boolean equals(Object obj) {
-        return  ip.equals(((Host) obj).ip) && mac.equals(((Host) obj).mac);
+        return mac.equals(((Host) obj).mac);
     }
 
     @Override public String toString() {

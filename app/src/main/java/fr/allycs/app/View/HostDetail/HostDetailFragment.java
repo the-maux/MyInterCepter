@@ -21,9 +21,11 @@ import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.Database.DBSession;
+import fr.allycs.app.Controller.Network.BonjourService.ServicesController;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Session;
+import fr.allycs.app.Model.Target.SniffSession;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.AccessPointAdapter;
 import fr.allycs.app.View.Adapter.HostDiscoveryAdapter;
@@ -212,29 +214,38 @@ public class                    HostDetailFragment extends android.app.Fragment{
                 }
             });
         } else {
-            titleGateway.setText("Aucun device découvert sur ce reseau");
-            subtitleGateway.setText("No scan performed correctly");
+            titleDevices.setText("Aucun device découvert sur ce reseau");
+            subtitleDevices.setText("No scan performed correctly");
         }
     }
     private void                initViewSessionFocus_Wireshark(final Session session) {
-        if (session.sniffedSession != null) {
+        if (session.sniffedSession != null || session.sniffedSession.isEmpty()) {
             titleWireshark.setText(session.sniffedSession.size() + " sessions sniff realise");
-            subtitleWireshark.setText(session.sniffedSession.size() + " sniff avec ce device in");
+            int nbrSession = 0;
+            for (SniffSession sniffSession : session.sniffedSession) {
+                for (Host device : sniffSession.listDevices) {
+                    if (mFocusedHost.equals(device)) {
+                        nbrSession++;
+                        break;
+                    }
+                }
+            }
+            subtitleWireshark.setText(nbrSession + " sniff avec ce device in");
             forwardWireshark.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO: Faire un listing des wireshark
+                    //TODO: Faire un listing des Pcap
                 }
             });
         } else {
-            titleWireshark.setText("Acune sessions sniff realise");
+            titleWireshark.setText("Aucune sessions sniff realise");
             subtitleWireshark.setText("");
         }
     }
     private void                initViewSessionFocus_Services(final Session session) {
         if (session.services != null && session.services.isEmpty()) {
-            titleService.setText(session.services + " découvert sur ce réseau");
-            subtitleService.setText("Sur 3 devices différents");
+            titleService.setText(session.services.size() + " découvert sur ce réseau");
+            subtitleService.setText("Sur " + ServicesController.howManyHostTheServices(session.services) + " devices différents");
             forwardGateway.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

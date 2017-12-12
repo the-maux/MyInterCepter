@@ -26,7 +26,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
@@ -38,22 +37,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.BinaryWrapper.Intercepter;
-
+import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.Database.DBManager;
+import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.Controller.Network.Discovery.HostDiscoveryScan;
-import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.Model.Net.Service;
 import fr.allycs.app.Model.Target.Host;
-import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.HostDiscoveryAdapter;
 import fr.allycs.app.View.Adapter.OSAdapter;
-import fr.allycs.app.View.Dialog.RV_dialog;
 import fr.allycs.app.View.Dialog.AddDnsDialog;
+import fr.allycs.app.View.Dialog.RV_dialog;
 import fr.allycs.app.View.HostDetail.HostFocusActivity;
 import fr.allycs.app.View.MenuActivity;
 
@@ -398,6 +396,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 new Thread(new Runnable() {
                     public void run() {
                         mActualSession = DBManager.saveSession(SSID, mSingleton.network.gateway, hosts, "Icmp");
+                        mActualSession.nbrOs = mHostAdapter.getOsList().size();
+                        mActualSession.save();
                     }
                 }).start();
             }
