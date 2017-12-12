@@ -43,7 +43,7 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
     public void                 onBindViewHolder(DoraHolder holder, int position) {
         final DoraProcess host = hosts.get(position);
         holder.diagnose.setText(new String(new char[host.getVisu()]).replace("\0", "#"));
-        String IP = host.mhost.getIp() + (host.mhost.getName().contains("(-)") ? "" : (" - " + host.mhost.getName().replace("(", "[").replace(")", "]")));
+        String IP = host.mhost.ip + (host.mhost.getName().contains("(-)") ? "" : (" - " + host.mhost.getName().replace("(", "[").replace(")", "]")));
         holder.IP.setText(IP);
         holder.uptime.setText("Uptime:    " + host.getmUptime());
         holder.stat.setText("sent: " + host.sent + " / rcv: " + host.rcv);
@@ -90,13 +90,13 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
 
     private void                playProcess(int position, DoraHolder holder) {
         hosts.get(position).exec();
-        Log.d(TAG, "Play process:" + hosts.get(position).mhost.getIp());
+        Log.d(TAG, "Play process:" + hosts.get(position).mhost.ip);
         areRunning.set(position, true);
         holder.fab.setImageDrawable(activity.getDrawable(R.drawable.ic_pause));
     }
 
     private void                killProcess(int position, DoraHolder holder) {
-        Log.d(TAG, "kill process:" + hosts.get(position).mhost.getIp() + " mPid:" + hosts.get(position).mPid);
+        Log.d(TAG, "kill process:" + hosts.get(position).mhost.ip + " mPid:" + hosts.get(position).mPid);
         RootProcess.kill(hosts.get(position).mPid);
         areRunning.set(position, false);
         holder.fab.setImageDrawable(activity.getDrawable(R.drawable.ic_media_play));

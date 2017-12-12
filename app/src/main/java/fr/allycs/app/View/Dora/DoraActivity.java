@@ -4,8 +4,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import com.github.clans.fab.FloatingActionButton;
 
+
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabItem;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,9 +14,11 @@ import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.ImageView;
 
+
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Core.BinaryWrapper.Dora;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Model.Unix.DoraProcess;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.DoraAdapter;
@@ -41,7 +44,7 @@ public class                    DoraActivity extends MyActivity {
     }
 
     @Override
-    protected void onResume() {
+    protected void              onResume() {
         super.onResume();
         getDoraWrapper();
         initRV();
@@ -49,6 +52,8 @@ public class                    DoraActivity extends MyActivity {
 
     private void                initXml() {
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
+        MyGlideLoader.coordoBackground(this, mCoordinatorLayout);
+
         searchView = (SearchView) findViewById(R.id.searchView);
         radar = (TabItem) findViewById(R.id.radar);
         signalQuality = (TabItem) findViewById(R.id.signalQuality);

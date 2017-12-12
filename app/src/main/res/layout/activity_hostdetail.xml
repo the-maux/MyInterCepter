@@ -20,13 +20,13 @@
             android:background="@color/primary_text"
             android:elevation="4dp">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/OsImg"
                 android:layout_width="52dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="4dp"
                 android:padding="2dp"
-                app:srcCompat="@drawable/winicon" />
+                android:src="@drawable/winicon" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -41,29 +41,16 @@
 
             </android.support.v7.widget.Toolbar>
 
-            <ImageButton
-                android:id="@+id/settings"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="false"
-                android:layout_alignParentRight="false"
-                android:layout_marginRight="12dp"
-                android:layout_toLeftOf="@+id/settingsMenu"
-                android:background="@android:color/transparent"
-                android:baselineAlignBottom="false"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:src="@android:drawable/ic_menu_manage" />
-
             <ImageView
-                android:id="@+id/settingsMenu"
-                android:layout_width="40dp"
+                android:id="@+id/settings"
+                android:layout_width="32dp"
                 android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="8dp"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                app:srcCompat="@drawable/ic_more_vert_white_24dp" />
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_centerVertical="false"
+                android:layout_marginEnd="8dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/scylla_transparent" />
 
         </RelativeLayout>
 
@@ -85,12 +72,12 @@
             <LinearLayout
                 android:id="@+id/settingsLayout"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="200dp"
                 android:layout_margin="4dp"
                 android:background="@color/black_primary"
                 android:elevation="2dp"
                 android:orientation="vertical"
-                android:weightSum="7">
+                android:weightSum="4">
 
                 <TextView
                     android:id="@+id/PortScanTxt"
@@ -102,34 +89,16 @@
                     android:layout_weight="1"
                     android:background="@color/black_primary_light"
                     android:ems="10"
-                    android:textColor="@color/material_light_white"
                     android:gravity="center_vertical"
                     android:inputType="textPersonName"
                     android:paddingLeft="8dp"
-                    android:text="Port Scan" />
-
-                <TextView
-                    android:id="@+id/ServiceTxt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/material_light_white"
-                    android:layout_marginLeft="1dp"
-                    android:layout_marginRight="1dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_weight="1"
-                    android:background="@color/black_primary_light"
-                    android:ems="10"
-
-                    android:gravity="center_vertical"
-                    android:inputType="textPersonName"
-                    android:paddingLeft="8dp"
-                    android:text="Services" />
+                    android:text="Port Scan"
+                    android:textColor="@color/material_light_white" />
 
                 <TextView
                     android:id="@+id/VulnerabilityScan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/material_light_white"
                     android:layout_marginLeft="1dp"
                     android:layout_marginRight="1dp"
                     android:layout_marginTop="1dp"
@@ -139,13 +108,13 @@
                     android:gravity="center_vertical"
                     android:inputType="textPersonName"
                     android:paddingLeft="8dp"
-                    android:text="Vulnerability Scan" />
+                    android:text="Vulnerability Scanner"
+                    android:textColor="@color/material_light_white" />
 
                 <TextView
                     android:id="@+id/OsScanTxt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/material_light_white"
                     android:layout_marginLeft="1dp"
                     android:layout_marginRight="1dp"
                     android:layout_marginTop="1dp"
@@ -154,60 +123,29 @@
                     android:ems="10"
                     android:gravity="center_vertical"
                     android:inputType="textPersonName"
-
                     android:paddingLeft="8dp"
-                    android:text="Intrusive Os Scan" />
+
+                    android:text="Intrusive Fingerprint Scan"
+                    android:textColor="@color/material_light_white" />
 
                 <TextView
                     android:id="@+id/MitmARPTxt"
                     android:layout_width="match_parent"
-                    android:textColor="@color/material_light_white"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="1dp"
-                    android:layout_marginRight="1dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_weight="1"
-                    android:background="@color/black_primary_light"
-                    android:ems="10"
-                    android:gravity="center_vertical"
-
-                    android:inputType="textPersonName"
-                    android:paddingLeft="8dp"
-                    android:text="MITM ARP" />
-
-                <TextView
-                    android:id="@+id/SshConnection"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="1dp"
-                    android:textColor="@color/material_light_white"
-                    android:layout_marginRight="1dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_weight="1"
-                    android:background="@color/black_primary_light"
-                    android:ems="10"
-                    android:gravity="center_vertical"
-                    android:inputType="textPersonName"
-
-                    android:paddingLeft="8dp"
-                    android:text="SSH Connection" />
-
-                <TextView
-                    android:id="@+id/SearchSubnetTxt"
-                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="1dp"
                     android:layout_marginLeft="1dp"
-                    android:textColor="@color/material_light_white"
                     android:layout_marginRight="1dp"
                     android:layout_marginTop="1dp"
                     android:layout_weight="1"
                     android:background="@color/black_primary_light"
                     android:ems="10"
                     android:gravity="center_vertical"
+
                     android:inputType="textPersonName"
                     android:paddingLeft="8dp"
-                    android:text="Search Subnet intéraction (mResponder)" />
+                    android:text="MITM"
+                    android:textColor="@color/material_light_white" />
+
             </LinearLayout>
 
             <RelativeLayout
@@ -223,6 +161,12 @@
                     app:tabMode="scrollable">
 
                     <android.support.design.widget.TabItem
+                        android:id="@+id/offlinemodeItem2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Historic" />
+
+                    <android.support.design.widget.TabItem
                         android:id="@+id/subnetMode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -232,13 +176,16 @@
                         android:id="@+id/offlinemodeItem"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Historic" />
+                        android:text="Services" />
                 </android.support.design.widget.TabLayout>
 
-                <FrameLayout
+                <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@+id/tabs"></FrameLayout>
+                    android:id="@+id/RV_Historic"
+                    android:layout_below="@+id/tabs">
+
+                </android.support.v7.widget.RecyclerView>
 
             </RelativeLayout>
         </RelativeLayout>

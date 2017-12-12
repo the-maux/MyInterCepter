@@ -89,7 +89,7 @@ public class                        Tcpdump {
      * Dispatch the DNS request on network
      */
     public void                     start(final String actualParam, String hostFilter) {
-        Log.i(TAG, "start");
+        Log.i(TAG, "start::" + actualParam);
         IPTables.InterceptWithoutSSL();
         this.actualParam = actualParam;
         final String cmd = buildCmd(actualParam, hostFilter).replace("//", "/").replace("  ", " ");
@@ -105,6 +105,7 @@ public class                        Tcpdump {
                         new IPTables().discardForwardding2Port(53); //MITM DNS
                     }
                     listOfTrames.clear();
+                    Log.d(TAG, cmd);
                     tcpDumpProcess = new RootProcess("Wireshark").exec(cmd);
                     BufferedReader reader = tcpDumpProcess.getReader();
                     String line;
@@ -169,10 +170,6 @@ public class                        Tcpdump {
             }
         }
     }
-    /**
-     * Renvoie la trame mais peut altérer la réponse
-     * @param line
-     */
     private void                    MITM_DNS(String line) {
         StringBuilder reqdata = new StringBuilder();
         String regex = "^.+length\\s+(\\d+)\\)\\s+([\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3})\\.[^\\s]+\\s+>\\s+([\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3})\\.[^\\:]+.*";
@@ -186,7 +183,7 @@ public class                        Tcpdump {
             }
             reqdata.delete(0, reqdata.length());
         }
-        new MyDNSMITM(reqdata.toString());
+        //new MyDNSMITM(reqdata.toString());
     }
 
     public LinkedHashMap<String, String> getCmdsWithArgsInMap() {

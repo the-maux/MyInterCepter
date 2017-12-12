@@ -1,8 +1,17 @@
 package fr.allycs.app.Controller.Misc;
 
+import android.app.Activity;
+import android.content.Context;
+import android.os.Vibrator;
+import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
+
 import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
 
+
 public class                Utils {
+    private static String   TAG = "Utils";
+
     public static int       nbrSubstringOccurence(String text, String find) {
         int index = 0, count = 0, length = find.length();
         while( (index = text.indexOf(find, index)) != -1 ) {
@@ -13,5 +22,19 @@ public class                Utils {
     }
     public static int       ReadOnlyFileSystemOFF() {
         return new RootProcess("initialisation ").exec("mount -o rw,remount /system").closeProcess();
+    }
+
+    public static void      vibrateDevice(Context context) {
+        Vibrator vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        vibe.vibrate(100);
+    }
+
+    public static void      hideKeyboard(MyActivity activity) {
+        try {
+            InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+            Log.e(TAG, "hidding keyboard failed, cause no focus");
+        }
     }
 }

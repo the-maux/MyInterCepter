@@ -1,7 +1,11 @@
 package fr.allycs.app.Controller.Network;
 
+import android.app.Activity;
 import android.content.Context;
+import android.net.DhcpInfo;
+import android.net.wifi.WifiManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,10 +16,12 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Model.Net.NetworkInformation;
 
 /**
  * Created by maxim on 29/06/2017.
@@ -24,7 +30,7 @@ public class                NetUtils {
     private static String   TAG = "NetUtils";
     private static String   MAC = null;
 
-    public static String    getMac(String myIp, String gateway) throws FileNotFoundException {
+    private static String   getMac(String myIp, String gateway) throws FileNotFoundException {
         if (MAC == null) {
             Log.d(TAG, "Reading /proc/net/arp");
             BufferedReader bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"));
@@ -58,7 +64,7 @@ public class                NetUtils {
      **  Guessing list of host by reading ARP table and dump it in ./hostlist file
      **/
     public static void      dumpListHostFromARPTableInFile(Context context, ArrayList<String> ipReachable) {
-        Log.i(TAG, "Dump list host from Arp Table");
+        Log.i(TAG, "Dump list devices from Arp Table");
         try {
             ArrayList<String> listOfIpsAlreadyIn = new ArrayList<>();
             FileOutputStream hostListFile = new FileOutputStream(new File(Singleton.getInstance().FilesPath + "hostlist"));
@@ -73,26 +79,21 @@ public class                NetUtils {
                 Matcher matcher = Pattern.compile(String.format(MAC_RE, objArr)).matcher(read);
                 if (matcher.matches()) {
                     listOfIpsAlreadyIn.add(ip);
-                    //Log.d(TAG, "dumpHOSTFILE:" + ip + ":" + matcher.group(1));
                     hostListFile.write((ip + ":" + matcher.group(1) + "\n").getBytes());
                 }
             }
             Log.d(TAG, listOfIpsAlreadyIn.size() + " new host discovered in /proc/arp");
-            boolean flag;
-            for (String reachable : ipReachable) {
-                flag = false;
-                //Log.d(TAG, "asking for:" + reachable);
+            boolean already;
+            for (Iterator<String> iterator = ipReachable.iterator(); iterator.hasNext(); ) {
+                String reachable = iterator.next();
+                already = false;
                 for (String s : listOfIpsAlreadyIn) {
                     if ((reachable.substring(0, reachable.indexOf(":")) + "..").contains(s + "..")) {
-                        //Log.d(TAG, "\t\t" + s + "-Alreadyin>" + reachable.substring(0, reachable.indexOf(":")));
-                        flag = true;
+                        already = true;
                     }
                 }
-                if (!flag) {
-                    //Log.d(TAG, "\t\t" + "dumpHOSTFILE:" + reachable + "& flag == false");
+                if (!already) {
                     hostListFile.write((reachable + "\n").getBytes());
-                } else {
-                    //Log.d(TAG, "\t\t" + "Detected but not added::" + reachable + "with flag at : true");
                 }
             }
             bufferedReader.close();
@@ -112,5 +113,31 @@ public class                NetUtils {
         } catch (UnknownHostException e) {
             throw new AssertionError();
         }
+    }
+
+    public static boolean   initNetworkInfo(Activity activity) throws FileNotFoundException {
+        WifiManager wifiManager = (WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        if (wifiManager == null)
+            return false;
+        DhcpInfo dhcpInfo = wifiManager.getDhcpInfo();
+        String data = wifiManager.getDhcpInfo().toString();
+        if (!data.contains("ipaddr") || !data.contains("gateway") || !data.contains("netmask") ) {
+            return false;
+        }
+        String[] res = data.split(" ");
+        int ip = 0, gw = 0, netmask = 0;
+        for (int i = 0; i < res.length; i++) {
+            if (res[i].contains("ipaddr")) {
+                ip = i + 1;
+            } else if (res[i].contains("gateway")) {
+                gw = i + 1;
+            } else if (res[i].contains("netmask")) {
+                netmask = i + 1;
+            }
+        }
+        if (res[netmask].contains("0.0.0.0"))
+            res[netmask] = "255.255.255.0";
+        Singleton.getInstance().network = new NetworkInformation(dhcpInfo, NetUtils.getMac(res[ip], res[gw]));
+        return true;
     }
 }

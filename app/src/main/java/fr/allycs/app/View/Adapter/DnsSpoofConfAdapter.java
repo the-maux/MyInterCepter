@@ -1,6 +1,7 @@
 package fr.allycs.app.View.Adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Target.DNSSpoofItem;
+import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.DnsSpoofConfHolder;
 import fr.allycs.app.View.DnsActivity;
@@ -20,12 +22,12 @@ public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter
     private List<DNSSpoofItem>  mDnsIntercepts;
     private Singleton           mSingleton = Singleton.getInstance();
 
-    public DnsSpoofConfAdapter(DnsActivity activity, List<DNSSpoofItem> dnsInterceptList) {
+    public                      DnsSpoofConfAdapter(DnsActivity activity, List<DNSSpoofItem> dnsInterceptList) {
         this.mDnsIntercepts = dnsInterceptList;
         this.mActivity = activity;
     }
     @Override
-    public DnsSpoofConfHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DnsSpoofConfHolder   onCreateViewHolder(ViewGroup parent, int viewType) {
         return new DnsSpoofConfHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_dnsspoof, parent, false));
     }
 
@@ -51,5 +53,15 @@ public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter
     @Override
     public int                  getItemCount() {
         return mDnsIntercepts.size();
+    }
+
+    public void                 filtering(String query) {
+        /*TODO:Log.d(TAG, "filterByString:" + query);
+        mHosts.clear();
+        for (Host domain : mOriginalList) {
+            if (domain.getDumpInfo().toLowerCase().contains(query.toLowerCase()))
+                mHosts.add(domain);
+        }
+        notifyDataSetChanged();*/
     }
 }

@@ -14,7 +14,7 @@ import fr.allycs.app.Model.Net.DNSPacket;
 
 
 public class                        MyDNSMITM {
-    private static String           TAG = "MyDNSMITM";
+/*    private static String           TAG = "MyDNSMITM";
     static ArrayList<HostFileEntry> entries;
 
 
@@ -25,7 +25,7 @@ public class                        MyDNSMITM {
      *  parse request, search on mhost file entries list
      *  and send the request
      * @param packet
-     */
+     *
     public static void              parseRequest(String packet) {
         DNSPacket dns = new DNSPacket(packet);    //create new object DNSPacket
         new IPTables().changeSource(dns.getSRCIp());//change source IP to Dns message src IP
@@ -107,5 +107,5 @@ public class                        MyDNSMITM {
             this.HexfakeHost=FakeHost;
             this.host2Spoof=host2spoof;
         }
-    }
+    }*/
 }

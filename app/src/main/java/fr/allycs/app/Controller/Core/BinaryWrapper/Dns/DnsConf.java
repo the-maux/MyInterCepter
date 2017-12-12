@@ -15,7 +15,8 @@ import fr.allycs.app.Model.Target.DNSSpoofItem;
 
 public class                    DnsConf {
     private String              TAG = "DnsConf";
-    public static String        PATH_CONF_FILE = "/etc/dnsmasq.hosts";
+    public static String        PATH_CONF_FILE = "/etc/dnsmasq.conf ";
+    public static String        PATH_HOST_FILE = "/etc/dnsmasq.hosts";
     public static String        PATH_RESOLV_FILE = "/etc/resolv.conf";
     public List<DNSSpoofItem>   listDomainSpoofed;
 
@@ -26,7 +27,7 @@ public class                    DnsConf {
 
     private void                readDnsFromFile() {
         FileReader fileReader;
-        File file = new File(PATH_CONF_FILE);
+        File file = new File(PATH_HOST_FILE);
         clear();
         try {
             fileReader = new FileReader(file);
@@ -38,7 +39,7 @@ public class                    DnsConf {
             }
         } catch (IOException e) {
             try {
-                file = new File(PATH_CONF_FILE);
+                file = new File(PATH_HOST_FILE);
                 fileReader = new FileReader(file);
                 BufferedReader bufferedReader = new BufferedReader(fileReader);
                 String line;
@@ -70,7 +71,7 @@ public class                    DnsConf {
                             .append(" ")
                             .append(dnsSpoofItem.domain)
                             .append("\" > ")
-                            .append(DnsConf.PATH_CONF_FILE);
+                            .append(DnsConf.PATH_HOST_FILE);
                 } else {
                     tmp.append(" && echo \"")
                             .append(dnsSpoofItem.ip)
@@ -79,7 +80,7 @@ public class                    DnsConf {
                             .append(" ")
                             .append(dnsSpoofItem.domain)
                             .append("\" >> ")
-                            .append(DnsConf.PATH_CONF_FILE);
+                            .append(DnsConf.PATH_HOST_FILE);
                 }
                 rax++;
             }

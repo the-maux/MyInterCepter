@@ -3,11 +3,13 @@ package fr.allycs.app.Controller.Network.Discovery;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Network.BonjourService.BonjourManager;
 import fr.allycs.app.Controller.Network.IPv4CIDR;
 import fr.allycs.app.Controller.Network.NetUtils;
+import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
 
 public class                        HostDiscoveryScan {
@@ -21,13 +23,13 @@ public class                        HostDiscoveryScan {
         this.mActivity = activity;
     }
 
-    public void                    run(typeScan typeOfScan) {
+    public void                    run(typeScan typeOfScan, List<Host> listOfHosts) {
         switch (typeOfScan) {
             case Arp:
                 startArpScan();
                 break;
             case Services:
-                startBonjourScan();
+                startBonjourScan(listOfHosts);
                 break;
             case Nmap:
                 startNmapScan();
@@ -35,8 +37,8 @@ public class                        HostDiscoveryScan {
         }
     }
 
-    private void                    startBonjourScan() {
-        BonjourManager bonjourManager = new BonjourManager(mActivity, mSingleton.hostsList);
+    private void                    startBonjourScan(List<Host> listOfHosts) {
+        new BonjourManager(mActivity, listOfHosts);
     }
 
     private void                    startNmapScan() {
@@ -58,12 +60,13 @@ public class                        HostDiscoveryScan {
 
     public void                     onReachableScanOver(ArrayList<String> ipReachable) {
         Log.d(TAG, "onReachableScanOver");
-        mActivity.monitor(ipReachable.size() + " hosts detected");
-        NetUtils.dumpListHostFromARPTableInFile(mActivity, ipReachable);
-        mActivity.monitor(ipReachable.size() + " hosts detected");
+        ArrayList<String> tmpAntiConcurentExecptionFFS = new ArrayList<>();
+        tmpAntiConcurentExecptionFFS.addAll(ipReachable);
+        NetUtils.dumpListHostFromARPTableInFile(mActivity, tmpAntiConcurentExecptionFFS);
+        mActivity.monitor(tmpAntiConcurentExecptionFFS.size() + " hosts detected");
         mActivity.setProgressState(1500);
-        mActivity.monitor("Scanning " + ipReachable.size() + " host");
-        Fingerprint.guessHostFingerprint(mActivity);
+        mActivity.monitor("Scanning " + tmpAntiConcurentExecptionFFS.size() + " devices");
+        Fingerprint.getDevicesInfoFromCepter(mActivity);
         mActivity.setProgressState(2000);
     }
 

@@ -10,9 +10,9 @@
     <color name="udp">#29b6f6</color>
     <color name="black_primary">#ff212121</color>
     <color name="black_primary_light">#ff313131</color>
-    <color name="primary">#607d8b</color>
-    <color name="primary_dark">#455A64</color>
-    <color name="primary_light">#CFD8DC</color>
+    <color name="primary">@color/material_blue_grey_400</color>
+    <color name="primary_dark">@color/material_blue_grey_800</color>
+    <color name="primary_light">@color/material_blue_grey_100</color>
     <color name="accent">#8BC34A</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
@@ -20,4 +20,6 @@
     <color name="divider">#BDBDBD</color>
     <color name="tcp">#d50000</color>
     <color name="dns">#66bb6a</color>
+    <color name="accent_material_dark">#40ffff</color>
+    <color name="primary_material_dark">#313131</color>
 </resources>

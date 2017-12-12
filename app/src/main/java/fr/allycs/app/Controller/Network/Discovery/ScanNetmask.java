@@ -62,13 +62,13 @@ public class                        ScanNetmask {
         mScanner.onReachableScanOver(mListIpReachable);
     }
 
-    /*public boolean                  ping(String host) {
+    /*public boolean                  ping(String domain) {
         RootProcess pingProces = new RootProcess("ScanNetMaskPING");
-        pingProces.exec(Singleton.getInstance().BinaryPath + "/busybox ping -c 1 " + host + "; exit");
+        pingProces.exec(Singleton.getInstance().BinaryPath + "/busybox ping -c 1 " + domain + "; exit");
         int res = pingProces.waitFor();
-        Log.d(TAG, host + " WAITFOR PING = " + res);
+        Log.d(TAG, domain + " WAITFOR PING = " + res);
         if (res == 0) {
-            Log.d(TAG, "ping " + host + " TRUE");
+            Log.d(TAG, "ping " + domain + " TRUE");
             return true;
         } else {
             return false;

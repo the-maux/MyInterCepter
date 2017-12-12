@@ -24,7 +24,7 @@ public class            DoraProcess extends MyObject {
     private int         MARGE_ERREUR = 21;//pour ne pas fausser les stats avec le debut du binaire
 
     public              DoraProcess(Host host) {
-        this.mProcess = new RootProcess("Dora:" + host.getIp());
+        this.mProcess = new RootProcess("Dora:" + host.ip);
         this.mhost = host;
         reset();
     }
@@ -37,9 +37,9 @@ public class            DoraProcess extends MyObject {
                 try {
                     mUptime = Calendar.getInstance().getTime();
                     mIsRunning = true;
-                    mProcess.exec("ping -fi 0.2 " + mhost.getIp());
+                    mProcess.exec("ping -fi 0.2 " + mhost.ip);
                     mPid = mProcess.getPid();
-                    Log.d(TAG, "Dora:" + mhost.getIp() + " PID:" + mPid);
+                    Log.d(TAG, "Dora:" + mhost.ip + " PID:" + mPid);
                     // find mPid pour finir
                     int tmpLine;
                     boolean over = false;
@@ -69,11 +69,11 @@ public class            DoraProcess extends MyObject {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
-                    Log.d(TAG, "Dora::" + mhost.getIp() + "::Terminated->Dump::rcv:" + rcv + "&sent:" + sent);
+                    Log.d(TAG, "Dora::" + mhost.ip + "::Terminated->Dump::rcv:" + rcv + "&sent:" + sent);
                     Log.d(TAG, "with Buffer:" + buffer + "<-");
                     mIsRunning = false;
                     mProcess.closeProcess();
-                    Log.d(TAG, "Dora:" + mhost.getIp() + "");
+                    Log.d(TAG, "Dora:" + mhost.ip + "");
                 }
             }
         }).start();
@@ -85,7 +85,7 @@ public class            DoraProcess extends MyObject {
     }
     public int          getPourcentage() {
         //Si not started, return 0
-        Log.d(TAG, "Dora::POURCENTAGE::" + mhost.getIp() + "::Terminated->Dump::rcv:" + rcv + "&sent:" + sent);
+        Log.d(TAG, "Dora::POURCENTAGE::" + mhost.ip + "::Terminated->Dump::rcv:" + rcv + "&sent:" + sent);
         if (rcv < MARGE_ERREUR+1 && sent < MARGE_ERREUR+1) {
             if (rcv > 0 && sent > 0)
                 Log.d(TAG, "%%::" + (rcv / sent) * 100);

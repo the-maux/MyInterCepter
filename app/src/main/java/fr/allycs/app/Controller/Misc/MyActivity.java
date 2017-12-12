@@ -19,7 +19,7 @@ public class                    MyActivity extends AppCompatActivity {
     protected boolean           splashscreen = true;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+    public void                 onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         //overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
         super.onCreate(savedInstanceState, persistentState);
     }

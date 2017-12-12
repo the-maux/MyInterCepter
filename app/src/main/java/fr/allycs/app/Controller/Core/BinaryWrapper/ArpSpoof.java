@@ -41,15 +41,15 @@ public class                        ArpSpoof {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                process = new RootProcess("ARPSPoof::" + target.getIp());
-                process.exec(Singleton.getInstance().BinaryPath + "arpspoof -i wlan0 -t " + target.getIp() + " " + Singleton.getInstance().network.gateway);
+                process = new RootProcess("ARPSPoof::" + target.ip);
+                process.exec(Singleton.getInstance().BinaryPath + "arpspoof -i wlan0 -t " + target.ip + " " + Singleton.getInstance().network.gateway);
                 Singleton.getInstance().ArpSpoofProcessStack.add(mInstance);
                 if (Singleton.getInstance().DebugMode) {
                     BufferedReader reader = process.getReader();
                     String read;
                     try {
                         while ((read = reader.readLine()) != null) {
-                            //Log.d(TAG, target.getIp() + "::" + read);
+                            //Log.d(TAG, target.ip + "::" + read);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -85,7 +85,7 @@ public class                        ArpSpoof {
     }
     public static void              launchArpSpoof() {
         for (Host host : Singleton.getInstance().hostsList) {
-            if (host.isSelected()) {
+            if (host.selected) {
                 new ArpSpoof(host).start();
             }
         }

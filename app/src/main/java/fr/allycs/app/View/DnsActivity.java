@@ -3,6 +3,7 @@ package fr.allycs.app.View;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
+
 
 import fr.allycs.app.Controller.Core.BinaryWrapper.Dns.DnsControl;
 import fr.allycs.app.Controller.Misc.MyActivity;
@@ -33,9 +34,9 @@ public class                            DnsActivity extends MyActivity {
     private DnsActivity                 mInstance = this;
     private CoordinatorLayout           mCoordinatorLayout;
     private Toolbar                     mToolbar;
-    private SearchView                  mFilterText;
+    private SearchView                  mSearchView;
     private ImageButton                 mAction_add_host, mSettingsBtn;
-    private TabLayout                   tabs;
+    private TabLayout                   mTabs;
     private FloatingActionButton        mFab;
     private RecyclerView                mDnsSpoof_RV;
     private RelativeLayout              mClipper;
@@ -53,13 +54,14 @@ public class                            DnsActivity extends MyActivity {
         initMenu();
         initTabs();
         initViewConf();
+        initSearchView();
         mDnsSpoof.setToolbar(this);
     }
 
     private void                        initXml() {
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         mToolbar = (Toolbar) findViewById(R.id.toolbar2);
-        mFilterText = (SearchView) findViewById(R.id.searchView);
+        mSearchView = (SearchView) findViewById(R.id.searchView);
         mAction_add_host = (ImageButton) findViewById(R.id.action_add_host);
         mSettingsBtn = (ImageButton) findViewById(R.id.settings);
         mFab = (FloatingActionButton) findViewById(R.id.fab);
@@ -70,7 +72,7 @@ public class                            DnsActivity extends MyActivity {
         mAction_import = (TextView) findViewById(R.id.action_import);
         mAction_export = (TextView) findViewById(R.id.action_export);
         textEmpty = (TextView) findViewById(R.id.textEmpty);
-        tabs = (TabLayout) findViewById(R.id.tabs);
+        mTabs = (TabLayout) findViewById(R.id.tabs);
     }
 
     private void                        initFab() {
@@ -96,7 +98,7 @@ public class                            DnsActivity extends MyActivity {
     }
 
     private void                        initTabs() {
-        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getText().toString()) {
@@ -146,7 +148,7 @@ public class                            DnsActivity extends MyActivity {
                     case R.id.action_export:
                         final AddDnsDialog dialog = new AddDnsDialog(mInstance)
                                 .setTitle("Exporter la liste des dns")
-                                .setHintText(mDnsSpoof.getDnsConf().PATH_CONF_FILE)
+                                .setHintText(mDnsSpoof.getDnsConf().PATH_HOST_FILE)
                                 .setHint("Name of conf file");
                         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
@@ -168,7 +170,7 @@ public class                            DnsActivity extends MyActivity {
                     case R.id.action_import:
                         final AddDnsDialog dialog2 = new AddDnsDialog(mInstance)
                                 .setTitle("Importez la liste des dns")
-                                .setHintText(mDnsSpoof.getDnsConf().PATH_CONF_FILE)
+                                .setHintText(mDnsSpoof.getDnsConf().PATH_HOST_FILE)
                                 .setHint("Name of file");
                         dialog2.onPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
@@ -190,7 +192,7 @@ public class                            DnsActivity extends MyActivity {
     }
 
     private void                        onAddHostDialog() {
-        final AddDnsDialog dialog = new AddDnsDialog(mInstance).setTitle("Ajouter un host");
+        final AddDnsDialog dialog = new AddDnsDialog(mInstance).setTitle("Ajouter un domain");
         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface d, int which) {
@@ -237,6 +239,37 @@ public class                            DnsActivity extends MyActivity {
         }
         mDnsConsoleAdapter = new DnsLogsAdapter(this, mDnsSpoof.dnsLogs);
         mDnsSpoof.setRV_Adapter(mDnsConsoleAdapter);
+    }
+
+    private void                        initSearchView() {
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filtering(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                filtering("");
+                return false;
+            }
+        });
+    }
+
+    private void                        filtering(String query) {
+        int tab = mTabs.getSelectedTabPosition();
+        if (tab == 0) {//CONF VIEW
+            mDnsSpoofAdapter.filtering(query);
+        } else {//Logs VIEW
+            mDnsConsoleAdapter.filtering(query);
+        }
     }
 
     private void                        initViewConsoleLogs() {

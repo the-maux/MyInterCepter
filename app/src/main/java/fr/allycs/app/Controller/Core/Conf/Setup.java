@@ -38,18 +38,26 @@ public class                    Setup {
         /*  Clean    */
         new RootProcess("initialisation ").exec("rm " + mSingleton.BinaryPath).closeProcess();
         buildDefaultDnsConf();
-        new RootProcess("initialisation ").exec("chmod 644 " + DnsConf.PATH_CONF_FILE).closeProcess();
+        new RootProcess("initialisation ").exec("chmod 644 " + DnsConf.PATH_HOST_FILE).closeProcess();
         mActivity.monitor("Cleaning installation");
         cleanTheKitchenBoy();
     }
 
     private void                buildDefaultDnsConf() {
-        new RootProcess("initialisation ")
-                .exec("echo \"192.168.0.29 www.microsof.com microsoft.com\" > " + DnsConf.PATH_CONF_FILE + " && " +
-                "echo \"192.168.0.30 www.any.domain any.domain\" >> " + DnsConf.PATH_CONF_FILE + " && " +
-                "echo \"192.168.0.30 www.test.fr test.fr\" >> " + DnsConf.PATH_CONF_FILE + " && " +
-                "chmod 644 " + DnsConf.PATH_CONF_FILE).
+        new RootProcess("DNS::" + DnsConf.PATH_CONF_FILE)
+                .exec("echo \"no-dhcp-interface=\" > " + DnsConf.PATH_CONF_FILE + " && " +
+                        "echo \"server=8.8.8.8\" >> " + DnsConf.PATH_CONF_FILE + " && " +
+                        "echo \"port=8053\" >> " + DnsConf.PATH_CONF_FILE + " && " +
+                        "echo \"no-hosts\" >> " + DnsConf.PATH_CONF_FILE + " && " +
+                        "echo \"addn-hosts=" + DnsConf.PATH_HOST_FILE + "\" >> " + DnsConf.PATH_CONF_FILE + " && " +
+                        "chmod 644 " + DnsConf.PATH_CONF_FILE).
                 closeProcess();
+        new RootProcess("DNS::" + DnsConf.PATH_HOST_FILE)
+                .exec("echo \"192.168.0.29 www.microsof.com microsoft.com\" > " + DnsConf.PATH_HOST_FILE + " && " +
+                        "echo \"192.168.0.30 www.any.domain any.domain\" >> " + DnsConf.PATH_HOST_FILE + " && " +
+                        "echo \"192.168.0.30 www.test.fr test.fr\" >> " + DnsConf.PATH_HOST_FILE + " && " +
+                        "chmod 644 " + DnsConf.PATH_HOST_FILE)
+                .closeProcess();
     }
 
     private void                dumpBuildSystem() {
@@ -86,7 +94,7 @@ public class                    Setup {
     }
     
     private void                buildFile(String nameFile, int ressource) throws IOException, InterruptedException {
-        mActivity.monitor("Building " + nameFile);
+        mActivity.monitor("Build " + nameFile);
         File file = new File(mSingleton.FilesPath + nameFile);
         file.delete();
         file.createNewFile();
@@ -105,7 +113,6 @@ public class                    Setup {
     }
 
     private void                buildFiles() throws IOException, InterruptedException  {
-        Log.d(TAG, "");
         buildFile("busybox", R.raw.busybox);
         buildFile("cepter", R.raw.busybox);
         buildFile("tcpdump", R.raw.tcpdump);
@@ -114,14 +121,13 @@ public class                    Setup {
         buildFile("arpspoof", R.raw.arpspoof);
 
         buildFile("ettercap_archive", R.raw.ettercap_archive);
-        //new RootProcess("UNZIP FILES", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip ettercap_archive").closeProcess();
+
         Log.d(TAG, "unzip ettercap -> " + new RootProcess("UNZIP FILES", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip ettercap_archive").closeProcess());
 
         buildFile("archive_nmap", R.raw.nmap);
         Log.d(TAG, "unzip nmap -> " + new RootProcess("initialisation ", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip archive_nmap").closeProcess());
-//        new RootProcess("initialisation ", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip archive_nmap").closeProcess();
+
         Log.d(TAG, "chmod 744 " + mSingleton.BinaryPath + "/nmap/*" + " -> " + new RootProcess("initialisation ").exec("chmod 744 " + mSingleton.BinaryPath + "/nmap/*").closeProcess());
-//        new RootProcess("initialisation ").exec("chmod 744 " + mSingleton.BinaryPath + "/nmap/*").closeProcess();
 
         /*  ping binary    */
         buildFile("ping", R.raw.arpspoof);

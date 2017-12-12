@@ -8,15 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Model.Unix.DNSLog;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.ConsoleLogHolder;
 import fr.allycs.app.View.Adapter.Holder.DnsLogHolder;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 
 public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsLogHolder> {
@@ -39,7 +40,7 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
     @Override
     public void                 onBindViewHolder(final DnsLogHolder holder, int position) {
         DNSLog dnslog = mListConsole.get(position);
-        holder.nameHost.setText(dnslog.host);
+        holder.nameHost.setText(dnslog.domain);
         setCurrentTypeLogo(dnslog.currentType, holder.DNSTypeImg);
         holder.DnsRVLogs.setAdapter(setDetailLogsAdapter(dnslog));
         holder.DnsRVLogs.setHasFixedSize(true);
@@ -73,12 +74,7 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
             default:
                 TypeLogo = R.mipmap.ic_dns_text;
         }
-        Glide.with(activity)
-                .load(TypeLogo)
-                .override(100, 100)
-                .fitCenter()
-                .crossFade()
-                .into(DNSTypeImg);
+        MyGlideLoader.loadDrawableInImageView(activity, TypeLogo, DNSTypeImg);
     }
 
     @Override
@@ -115,7 +111,17 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
         return adapter;
     }
 
-    public RecyclerView          getRecyclerview() {
+    public RecyclerView         getRecyclerview() {
         return mRV;
+    }
+
+    public void                 filtering(String query) {
+        /*TODO:Log.d(TAG, "filterByString:" + query);
+        mHosts.clear();
+        for (Host domain : mOriginalList) {
+            if (domain.getDumpInfo().toLowerCase().contains(query.toLowerCase()))
+                mHosts.add(domain);
+        }
+        notifyDataSetChanged();*/
     }
 }

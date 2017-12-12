@@ -5,7 +5,7 @@
     android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splashscreen">
+    >
 
     <RelativeLayout
         android:id="@+id/rootView"
@@ -312,7 +312,6 @@
                             android:id="@+id/monitorDora"
                             android:layout_width="8dp"
                             android:layout_height="8dp"
-
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentTop="true"
                             android:layout_marginEnd="8dp"

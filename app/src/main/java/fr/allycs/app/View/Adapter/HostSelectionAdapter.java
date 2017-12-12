@@ -9,6 +9,8 @@ import android.widget.CompoundButton;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.allycs.app.Controller.Core.Databse.DBHost;
+import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.HostSelectionHolder;
@@ -22,6 +24,7 @@ public class                    HostSelectionAdapter extends RecyclerView.Adapte
     public                      HostSelectionAdapter(Activity activity, ArrayList<Host> hostsList, List<Host> hostsSelected) {
         this.hosts = hostsList;
         this.activity = activity;
+        listHostSelected.clear();
         this.listHostSelected = hostsSelected;
     }
     @Override
@@ -32,8 +35,8 @@ public class                    HostSelectionAdapter extends RecyclerView.Adapte
     @Override
     public void                 onBindViewHolder(HostSelectionHolder holder, int position) {
         final Host host = hosts.get(position);
-        holder.nameOS.setText(host.getIp());
-        Host.setOsIcon(activity, host, holder.imageOS);
+        holder.nameOS.setText(host.ip);
+        Fingerprint.setOsIcon(activity, host, holder.imageOS);
         holder.checkBox.setChecked(false);
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

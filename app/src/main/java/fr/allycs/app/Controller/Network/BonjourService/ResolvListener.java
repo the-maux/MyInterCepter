@@ -5,18 +5,18 @@ import android.net.nsd.NsdServiceInfo;
 import android.util.Log;
 
 import java.net.InetAddress;
-import java.util.ArrayList;
+import java.util.List;
 
 import fr.allycs.app.Model.Target.Host;
 
-public class ResolvListener implements NsdManager.ResolveListener {
+public class                ResolvListener implements NsdManager.ResolveListener {
     private String          TAG = "ResolvListener";
     private BonjourManager  manager;
-    private ArrayList<Host> listClient;
+    private List<Host>      mListClient;
 
-    public                  ResolvListener(BonjourManager manager, ArrayList<Host> listClient) {
+    public                  ResolvListener(BonjourManager manager, List<Host> listClient) {
         this.manager = manager;
-        this.listClient = listClient;
+        this.mListClient = listClient;
     }
 
     @Override
@@ -27,8 +27,8 @@ public class ResolvListener implements NsdManager.ResolveListener {
     }
 
     private Host            getclientNatifByIp(String ip) {
-        for ( Object o : this.listClient) {
-            if (((Host)o).getIp().contains(ip))
+        for ( Object o : this.mListClient) {
+            if (((Host)o).ip.contains(ip))
                 return (Host) o;
         }
         return null;

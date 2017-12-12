@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +19,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.ArrayList;
@@ -29,6 +29,8 @@ import java.util.Map;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.BinaryWrapper.Tcpdump;
+
+import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Model.Net.Protocol;
 import fr.allycs.app.Model.Net.Trame;
 import fr.allycs.app.Model.Target.Host;
@@ -39,10 +41,6 @@ import fr.allycs.app.View.Adapter.WiresharkAdapter;
 import fr.allycs.app.View.Dialog.RV_dialog;
 import fr.allycs.app.View.Dialog.GeneralSettings;
 
-/**
- * TODO:    + Add filter
- *          + RecyclerView with addView(TextView.stdout())
- */
 public class                    WiresharkActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
     private WiresharkActivity   mInstance = this;
@@ -57,20 +55,17 @@ public class                    WiresharkActivity extends MyActivity {
     private WiresharkAdapter    mAdapterWireshark;
     private String              mTypeScan = "No Filter";
     private List<Host>          mListHostSelected = new ArrayList<>();
-    private Tcpdump mTcpdump;
+    private Tcpdump             mTcpdump;
     private CheckBox            Autoscroll;
     private TextView            tcp_cb, dns_cb, arp_cb, https_cb, http_cb, udp_cb, ip_cb;
     private Singleton           singleton = Singleton.getInstance();
 
     @Override protected void    onCreate(@Nullable Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_wireshark);
         initXml();
         mTcpdump = Tcpdump.getTcpdump(this);
         initSpinner();
-
         initFilter();
         initSettings();
         initRV();
@@ -80,6 +75,7 @@ public class                    WiresharkActivity extends MyActivity {
 
     private void                initXml() {
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
+        MyGlideLoader.coordoBackground(this, mCoordinatorLayout);
         mRV_Wireshark = (RecyclerView) findViewById(R.id.Output);
         mHeaderConfON = (RelativeLayout) findViewById(R.id.filterPcapLayout);
         mMonitorAgv = (TextView) findViewById(R.id.Monitor);
@@ -190,6 +186,7 @@ public class                    WiresharkActivity extends MyActivity {
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             mParams.put((String)pair.getKey(), (String)pair.getValue());
+            Log.d(TAG, "initspinner::add to cmds:" + pair.getKey());
             cmds.add((String)pair.getKey());
             it.remove(); // avoids a ConcurrentModificationException
         }
@@ -205,6 +202,7 @@ public class                    WiresharkActivity extends MyActivity {
             });
             mMonitorCmd.setText(mParams.get(cmds.get(0)));
         }
+        Log.d(TAG, "initSpinner:: monitor::" + mMonitorCmd.getText().toString());
     }
 
     public void                 startWireshark(boolean isResume) {
@@ -229,27 +227,34 @@ public class                    WiresharkActivity extends MyActivity {
                 mListHostSelected.add(singleton.hostsList.get(0));
                 mToolbar.setSubtitle(mListHostSelected.size() + " target");
             } else {
-                Snackbar.make(mCoordinatorLayout, "Selectionner une target", Snackbar.LENGTH_SHORT).setActionTextColor(Color.RED).show();
+                Snackbar.make(mCoordinatorLayout, "Selectionner une target", Snackbar.LENGTH_SHORT)
+                        .setActionTextColor(Color.RED).show();
                 onClickChoiceTarget();
                 return false;
             }
         }
-        String hostFilter = (mTypeScan.contains("No Filter") || mTypeScan.contains("Custom Filter")) ? " (" : " and (";//If no filter, no '&&' in expression
+        StringBuilder hostFilterBuilder = new StringBuilder("\'" +
+                ((mTypeScan.contains("No Filter") || mTypeScan.contains("Custom Filter")) ?
+                        " (" : " and ("));
         for (int i = 0; i < mListHostSelected.size(); i++) {
             if (i > 0)
-                hostFilter += " or ";
-            hostFilter += " host " + mListHostSelected.get(i).getIp();
+                hostFilterBuilder.append(" or ");
+            hostFilterBuilder.append(" host ").append(mListHostSelected.get(i).ip);
         }
-        hostFilter += ")\'";
+        hostFilterBuilder.append(")\'");
+        String hostFilter = hostFilterBuilder.toString();
+        Log.d(TAG, "mTcpdump.actualParam::" + mTcpdump.actualParam);
+        Log.d(TAG, "mMonitorCmd::" + mMonitorCmd.getText().toString());
+        mMonitorCmd.setText(mTcpdump.actualParam);
+        Log.d(TAG, "starting tcpdump with monitor:[" + mMonitorCmd.getText().toString() + "]");
         mTcpdump.start(mMonitorCmd.getText().toString(), hostFilter);
-        mMonitorAgv.setText("Tcpdump " + mMonitorCmd.getText().toString() + hostFilter);
+        mMonitorAgv.setText("./tcpdump " + mMonitorCmd.getText().toString() + hostFilter);
         mInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mAdapterWireshark.notifyDataSetChanged();
             }
         });
-        mMonitorCmd.setText(mTcpdump.actualParam);
         return true;
     }
 
