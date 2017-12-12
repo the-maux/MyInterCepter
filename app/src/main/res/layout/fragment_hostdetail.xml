@@ -39,7 +39,8 @@
         android:layout_below="@+id/tabs"
         android:layout_margin="2dp"
         android:background="@color/primary_dark"
-        android:elevation="2dp">
+        android:elevation="2dp"
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/title"
@@ -48,9 +49,9 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="4dp"
-            android:text="Session de dourge"
             android:ellipsize="end"
             android:maxLines="1"
+            android:text="Session de dourge"
             android:textColor="@android:color/white"
             android:textSize="16sp" />
 
@@ -60,23 +61,23 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/title"
             android:layout_marginLeft="8dp"
-            android:text="Analysée le 04/12 à 13h42"
             android:ellipsize="end"
             android:maxLines="1"
+            android:text="Analysée le 04/12 à 13h42"
             android:textColor="@android:color/white"
             android:textSize="12sp" />
 
         <RelativeLayout
             android:id="@+id/gatewayLine"
             android:layout_width="match_parent"
-            android:layout_height="32dp"
+            android:layout_height="36dp"
             android:layout_below="@+id/dateSession"
             android:layout_marginTop="8dp">
 
             <ImageView
                 android:id="@+id/gateway_logo"
                 android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="8dp"
                 android:padding="2dp"
                 app:srcCompat="@drawable/router1" />
@@ -89,11 +90,11 @@
                 android:layout_toLeftOf="@+id/forwardGateway"
                 android:layout_toRightOf="@+id/gateway_logo"
                 android:ellipsize="end"
-                android:maxLines="1"
                 android:enabled="true"
                 android:gravity="center_vertical"
+                android:maxLines="1"
                 android:text="Gateway: 192.168.0.1"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/SubtitleGateway"
@@ -104,11 +105,11 @@
                 android:layout_toLeftOf="@+id/forwardGateway"
                 android:layout_toRightOf="@+id/gateway_logo"
                 android:ellipsize="end"
-                android:maxLines="1"
                 android:enabled="false"
                 android:gravity="center_vertical"
+                android:maxLines="1"
                 android:text="(NEUFBOX 4355) - AA:BB:CC:DD:EE:DD"
-                android:textSize="11sp" />
+                android:textSize="12sp" />
 
             <ImageView
                 android:id="@+id/forwardGateway"
@@ -125,14 +126,14 @@
         <RelativeLayout
             android:id="@+id/DevicesLine"
             android:layout_width="match_parent"
-            android:layout_height="32dp"
+            android:layout_height="36dp"
             android:layout_below="@+id/gatewayLine"
             android:layout_marginTop="8dp">
 
             <ImageView
                 android:id="@+id/radar_logo"
                 android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="8dp"
                 android:padding="1dp"
                 app:srcCompat="@drawable/prey" />
@@ -144,27 +145,27 @@
                 android:layout_marginLeft="8dp"
                 android:layout_toLeftOf="@+id/forwardDevice"
                 android:layout_toRightOf="@+id/radar_logo"
-                android:enabled="true"
                 android:ellipsize="end"
-                android:maxLines="1"
+                android:enabled="true"
                 android:gravity="center_vertical"
+                android:maxLines="1"
                 android:text="42 devices decouvert"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/SubtitleDevices"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
                 android:layout_below="@+id/titleDevices"
                 android:layout_marginLeft="8dp"
                 android:layout_toLeftOf="@+id/forwardDevice"
                 android:layout_toRightOf="@+id/radar_logo"
+                android:ellipsize="end"
                 android:enabled="false"
                 android:gravity="center_vertical"
+                android:maxLines="1"
                 android:text="6 Os découvert"
-                android:textSize="11sp" />
+                android:textSize="12sp" />
 
             <ImageView
                 android:id="@+id/forwardDevice"
@@ -181,14 +182,14 @@
         <RelativeLayout
             android:id="@+id/WiresharkLine"
             android:layout_width="match_parent"
-            android:layout_height="32dp"
+            android:layout_height="36dp"
             android:layout_below="@+id/DevicesLine"
             android:layout_marginTop="8dp">
 
             <ImageView
                 android:id="@+id/radar_Wireshark"
                 android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="8dp"
                 android:padding="3dp"
                 app:srcCompat="@drawable/wiresharklogo_trans" />
@@ -201,11 +202,11 @@
                 android:layout_toLeftOf="@+id/forwardWireshark"
                 android:layout_toRightOf="@+id/radar_Wireshark"
                 android:ellipsize="end"
-                android:maxLines="1"
                 android:enabled="true"
                 android:gravity="center_vertical"
+                android:maxLines="1"
                 android:text="4 sessions sniff realise"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/SubtitleWireshark"
@@ -213,14 +214,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/titleWireshark"
                 android:layout_marginLeft="8dp"
-                android:ellipsize="end"
-                android:maxLines="1"
                 android:layout_toLeftOf="@+id/forwardWireshark"
                 android:layout_toRightOf="@+id/radar_Wireshark"
+                android:ellipsize="end"
                 android:enabled="false"
                 android:gravity="center_vertical"
+                android:maxLines="1"
                 android:text="2 .pcap avec le device courant"
-                android:textSize="11sp" />
+                android:textSize="12sp" />
 
             <ImageView
                 android:id="@+id/forwardWireshark"
@@ -237,14 +238,14 @@
         <RelativeLayout
             android:id="@+id/ServicesLine"
             android:layout_width="match_parent"
-            android:layout_height="32dp"
+            android:layout_height="38dp"
             android:layout_below="@+id/WiresharkLine"
             android:layout_marginTop="8dp">
 
             <ImageView
                 android:id="@+id/radar_Services"
                 android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="8dp"
                 android:padding="3dp"
                 app:srcCompat="@drawable/scan" />
@@ -256,27 +257,27 @@
                 android:layout_marginLeft="8dp"
                 android:layout_toLeftOf="@+id/forwardServices"
                 android:layout_toRightOf="@+id/radar_Services"
+                android:ellipsize="end"
                 android:enabled="true"
                 android:gravity="center_vertical"
-                android:text="4 services découvert"
-                android:ellipsize="end"
                 android:maxLines="1"
-                android:textSize="12sp" />
+                android:text="4 services découvert"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/SubtitleServices"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_below="@+id/titleServices"
                 android:layout_marginLeft="8dp"
                 android:layout_toLeftOf="@+id/forwardServices"
                 android:layout_toRightOf="@+id/radar_Services"
-                android:ellipsize="end"
-                android:maxLines="1"
+                android:ellipsize="none"
                 android:enabled="false"
                 android:gravity="center_vertical"
+                android:maxLines="1"
                 android:text="worstation.__tcp__, video.__udp__, printer.__ipp__, nfs.__tcp__"
-                android:textSize="11sp" />
+                android:textSize="12sp" />
 
             <ImageView
                 android:id="@+id/forwardServices"
@@ -323,7 +324,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/tabs"
-        android:visibility="gone"
+        android:visibility="invisible"
         tools:listitem="@layout/item_hostdiscovery">
 
     </android.support.v7.widget.RecyclerView>

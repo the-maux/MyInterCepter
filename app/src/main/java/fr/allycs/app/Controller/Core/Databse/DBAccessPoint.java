@@ -56,6 +56,7 @@ public class                            DBAccessPoint {
         session.Ap = ap;
         session.name = ap.Ssid + "_" + new SimpleDateFormat("MM_dd_HH_mm_ss", Locale.FRANCE).format(new Date());
         session.listDevices = new ArrayList<>();
+        session.services = new ArrayList<>();
         session.listDevices.addAll(devicesConnected);
         session.sniffedSession= new ArrayList<>();
         if (ap.Sessions == null)

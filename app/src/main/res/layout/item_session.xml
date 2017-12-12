@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="42dp"
+    android:layout_height="50dp"
     android:layout_marginBottom="1dp"
     android:padding="16dp"
     app:cardBackgroundColor="@color/cardview_dark_background"
@@ -24,7 +24,8 @@
             android:layout_centerVertical="true"
             android:layout_margin="2dp"
             android:elevation="4dp"
-            android:src="@drawable/scan" />
+            android:padding="2dp"
+            android:src="@drawable/prey" />
 
         <TextView
             android:id="@+id/nameSession"
@@ -47,7 +48,7 @@
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_margin="2dp"
+            android:layout_margin="4dp"
             android:elevation="4dp"
             android:src="@mipmap/ic_forward" />
 

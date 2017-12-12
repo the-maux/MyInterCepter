@@ -70,6 +70,9 @@ public class                    HostDetailFragment extends android.app.Fragment{
         mTabs  = rootView.findViewById(R.id.tabs);
         mNoHistoric = rootView.findViewById(R.id.noHistoric);
 
+
+        name = rootView.findViewById(R.id.title);
+        date = rootView.findViewById(R.id.dateSession);
         gatewayLine = rootView.findViewById(R.id.gatewayLine);
         DevicesLine = rootView.findViewById(R.id.DevicesLine);
         WiresharkLine = rootView.findViewById(R.id.WiresharkLine);
@@ -164,6 +167,7 @@ public class                    HostDetailFragment extends android.app.Fragment{
                     }
                 }
             }
+            Log.d(TAG, "onAccessPointFocus:: returning " + allSessionWithDeviceIn.size() + " sessions");
             RV_AdapterSessions = new SessionAdapter(this, allSessionWithDeviceIn);
         }
         RV_Historic.setAdapter(RV_AdapterSessions);
@@ -200,9 +204,9 @@ public class                    HostDetailFragment extends android.app.Fragment{
     }
     private void                initViewSessionFocus_Devices(final Session session) {
         if (session.listDevices != null) {
-            titleGateway.setText(session.listDevices.size() + " devices decouvert");
-            subtitleGateway.setText(session.nbrOs + " Os découvert");
-            forwardGateway.setOnClickListener(new View.OnClickListener() {
+            titleDevices.setText(session.listDevices.size() + " devices decouvert");
+            subtitleDevices.setText(session.nbrOs + " Os découvert");
+            forwardListDevices.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     hostOfSessionsFocused(session);
@@ -210,28 +214,28 @@ public class                    HostDetailFragment extends android.app.Fragment{
             });
         } else {
             titleGateway.setText("Aucun device découvert sur ce reseau");
-            subtitleGateway.setText("");
+            subtitleGateway.setText("No scan performed correctly");
         }
     }
     private void                initViewSessionFocus_Wireshark(final Session session) {
         if (session.sniffedSession != null) {
-            titleGateway.setText(session.sniffedSession.size() + " sessions sniff realise");
-            subtitleGateway.setText(session.sniffedSession.size() + " sniff avec ce device in");
-            forwardGateway.setOnClickListener(new View.OnClickListener() {
+            titleWireshark.setText(session.sniffedSession.size() + " sessions sniff realise");
+            subtitleWireshark.setText(session.sniffedSession.size() + " sniff avec ce device in");
+            forwardWireshark.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //TODO: Faire un listing des wireshark
                 }
             });
         } else {
-            titleGateway.setText("Acune sessions sniff realise");
-            subtitleGateway.setText("");
+            titleWireshark.setText("Acune sessions sniff realise");
+            subtitleWireshark.setText("");
         }
     }
     private void                initViewSessionFocus_Services(final Session session) {
         if (session.services != null && session.services.isEmpty()) {
-            titleGateway.setText(session.services + " découvert sur ce réseau");
-            subtitleGateway.setText("Sur 3 devices différents");
+            titleService.setText(session.services + " découvert sur ce réseau");
+            subtitleService.setText("Sur 3 devices différents");
             forwardGateway.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -239,8 +243,8 @@ public class                    HostDetailFragment extends android.app.Fragment{
                 }
             });
         } else {
-            titleGateway.setText("Aucun service découvert");
-            subtitleGateway.setText("Scanned 2 times");
+            titleService.setText("Aucun service découvert");
+            subtitleService.setText("Scanned 1 time");
         }
     }
 

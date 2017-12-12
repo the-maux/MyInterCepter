@@ -122,7 +122,7 @@ public class                    HostFocusActivity extends MyActivity {
     }
 
     @Override public void       onBackPressed() {
-        if (mFragment.onBackPressed())
+        if (mFragment != null || mFragment.onBackPressed())
             super.onBackPressed();
     }
 }
