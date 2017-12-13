@@ -10,7 +10,6 @@ import java.util.List;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Net.Service;
 import fr.allycs.app.Model.Target.Host;
-import fr.allycs.app.Model.Target.Session;
 
 public class                ResolvListener implements NsdManager.ResolveListener {
     private String          TAG = "ResolvListener";
@@ -61,7 +60,7 @@ public class                ResolvListener implements NsdManager.ResolveListener
                         "" + nsdService.getPort(),
                         nsdService.getServiceName(),
                         nsdService.getServiceType(),
-                        addr, nsdService);
+                        addr, nsdService, mListClient);
                 client.updateServiceHost(service);
                 manager.bingo(addr.getHostAddress(), nsdService.getServiceName(), service);
             }

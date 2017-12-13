@@ -3,6 +3,7 @@ package fr.allycs.app.Controller.Network;
 import android.app.Activity;
 import android.content.Context;
 import android.net.DhcpInfo;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
@@ -133,6 +134,11 @@ public class                NetUtils {
         if (res[netmask].contains("0.0.0.0"))
             res[netmask] = "255.255.255.0";
         Singleton.getInstance().network = new NetworkInformation(dhcpInfo, NetUtils.getMac(res[ip], res[gw]));
+        WifiInfo wifiInfo = null;
+        if (((WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)) != null) {
+            wifiInfo = ((WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
+        }
+        Singleton.getInstance().network.Ssid = wifiInfo.getSSID().replace("\"", "");
         return true;
     }
 }

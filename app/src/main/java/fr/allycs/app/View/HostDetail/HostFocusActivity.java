@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
@@ -105,7 +105,7 @@ public class                    HostFocusActivity extends MyActivity {
     }
 
     @Override public void       onBackPressed() {
-        if (mFragment != null || mFragment.onBackPressed())
+        if (mFragment == null || mFragment.onBackPressed())
             super.onBackPressed();
     }
 }

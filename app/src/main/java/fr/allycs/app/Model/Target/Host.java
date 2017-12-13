@@ -15,6 +15,7 @@ import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
 import fr.allycs.app.Model.Net.Port;
 import fr.allycs.app.Model.Net.Service;
 import fr.allycs.app.Model.Unix.Os;
+import fr.allycs.app.Model.Unix.Pcap;
 
 @Table(name = "Device", id = "_id")
 public class                Host extends Model {
@@ -40,6 +41,8 @@ public class                Host extends Model {
     public boolean          selected = false;
     public boolean          isItMyDevice = false;
     public Os               osType;
+    @Column(name = "PcapRecorded")
+    public List<Pcap>       listPcapRecorded;
 
     public                  Host(String buffer) {
         super();
@@ -58,6 +61,7 @@ public class                Host extends Model {
             if (Singleton.getInstance().UltraDebugMode)
                 dumpHost();
             dumpInfo = buffer;
+            listPcapRecorded = new ArrayList<>();
             Fingerprint.initHost(this);
         } catch (StringIndexOutOfBoundsException e) {
             Log.e(TAG, buffer);

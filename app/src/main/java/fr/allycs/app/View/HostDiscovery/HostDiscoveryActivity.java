@@ -3,7 +3,6 @@ package fr.allycs.app.View.HostDiscovery;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -184,11 +183,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     private void                    initMonitor() {
-        WifiInfo wifiInfo = null;
-        if (((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)) != null) {
-            wifiInfo = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
-        }
-        monitor = wifiInfo.getSSID().replace("\"", "") + " : " + mSingleton.network.gateway;
+        monitor = mSingleton.network.Ssid + " : " + mSingleton.network.gateway;
         if (!monitor.contains("WiFi")) {
             monitor += "\n" + " MyIp : " + mSingleton.network.myIp;
         } else {
@@ -197,7 +192,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         if (Singleton.getInstance().network.isConnectedToNetwork())
             mBottomMonitor.setText(monitor);
         else
-            mBottomMonitor.setText(wifiInfo.getSSID() + ": No connection");
+            mBottomMonitor.setText(mSingleton.network.Ssid + ": No connection");
     }
 
     private void                    initSwipeRefresh() {

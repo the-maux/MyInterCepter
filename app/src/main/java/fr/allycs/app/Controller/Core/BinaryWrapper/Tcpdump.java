@@ -14,9 +14,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import fr.allycs.app.Controller.Network.IPTables;
-import fr.allycs.app.Controller.Network.MyDNSMITM;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Network.IPTables;
 import fr.allycs.app.Model.Net.Trame;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Pcap;
@@ -33,7 +32,7 @@ public class                        Tcpdump {
     public CopyOnWriteArrayList<Trame> listOfTrames;
     public String                   actualParam = "";
     public List<Host>               hosts;
-
+    private Singleton               mSingleton = Singleton.getInstance();
     private String                  INTERFACE = "-i wlan0 ";    //  Focus interfacte;
     private String                  STDOUT_BUFF = "-l ";        //  Make stdOUT line buffered.  Useful if you want to see  the  data in live
     private String                  VERBOSE_v1 = "-v ";          //  Verbose mode 1
@@ -75,14 +74,19 @@ public class                        Tcpdump {
     }
     private String                  buildCmd(String actualParam, String hostFilter) {
         String date =  new SimpleDateFormat("MM_dd_HH_mm_ss", Locale.FRANCE).format(new Date());
-        String nameFile = Singleton.getInstance().actualSession.Ap.Ssid + "_" + date;
+        String nameFile = ((mSingleton.actualSession == null) ?
+                mSingleton.network.Ssid : mSingleton.actualSession.Ap.Ssid) + "_" + date;
         String pcapFile = ((isDumpingInFile) ?
-                (" -w " + Singleton.getInstance().PcapPath + nameFile + ".pcap ") : "");
-
-        Pcap pcap = new Pcap(Singleton.getInstance().PcapPath + nameFile + ".pcap ", hosts);
+                (" -w " + mSingleton.PcapPath + nameFile + ".pcap ") : "");
+        Pcap pcap = new Pcap(mSingleton.PcapPath + nameFile + ".pcap ", hosts);
         pcap.save();
-        Singleton.getInstance().actualSniffSession.listPcapRecorded.add(pcap);
-        return Singleton.getInstance().FilesPath +
+        for (Host host : hosts) {
+            host.listPcapRecorded.add(pcap);
+            host.save();
+        }
+        if (mSingleton.actualSniffSession != null)
+            mSingleton.actualSniffSession.listPcapRecorded.add(pcap);
+        return mSingleton.FilesPath +
                         "tcpdump " +
                         pcapFile +
                         actualParam +
@@ -183,8 +187,8 @@ public class                        Tcpdump {
             IPTables.stopIpTable();
             if (isDumpingInFile) {
                 new RootProcess("chmod Pcap files")
-                        .exec("chmod 666 " + Singleton.getInstance().PcapPath + "/*")
-                        .exec("chown sdcard_r:sdcard_r " + Singleton.getInstance().PcapPath + "/*")
+                        .exec("chmod 666 " + mSingleton.PcapPath + "/*")
+                        .exec("chown sdcard_r:sdcard_r " + mSingleton.PcapPath + "/*")
                         .closeProcess();
             }
         }

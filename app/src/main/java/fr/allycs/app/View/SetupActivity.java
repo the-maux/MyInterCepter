@@ -154,7 +154,7 @@ public class                    SetupActivity extends MyActivity {
         new Setup(this).install();
     }//10:68:3f:7a:65:ef ___ 10.16.186.54/23 brd 10.16.187.255
 
-    public void                monitor(final String log) {
+    public void                 monitor(final String log) {
         mInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {

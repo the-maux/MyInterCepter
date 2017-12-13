@@ -1,6 +1,7 @@
 package fr.allycs.app.View.HostDetail;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -16,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
@@ -60,12 +60,23 @@ public class                    HostDetailFragment extends android.app.Fragment{
     @Override public View       onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_hostdetail, container, false);
         initXml(rootView);
+        if (mSingleton.hostsList == null) {
+            Snackbar.make(mCoordinatorLayout, "No target saved, You need to scan the network", Snackbar.LENGTH_LONG).show();
+            startActivity(new Intent(getActivity(), HostDiscoveryActivity.class));
+            getActivity().finish();
+        }
         mFocusedHost = mSingleton.hostsList.get(0);
+        if (RV_Historic.getVisibility() == View.GONE) {
+            mDetailSessionLayout.setVisibility(View.GONE);
+            RV_Historic.setVisibility(View.VISIBLE);
+        }
         initHistoricFromDB();
         return rootView;
     }
     
     private void                initXml(View rootView) {
+        mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
+
         mDetailSessionLayout = rootView.findViewById(R.id.detailSessionLayout);
         mDetailSessionLayout.setVisibility(View.GONE);
         mTabs  = rootView.findViewById(R.id.tabs);
@@ -141,6 +152,7 @@ public class                    HostDetailFragment extends android.app.Fragment{
     }
 
     public void                 initHistoricFromDB() {
+        Log.d(TAG, "initHistoricFromDB");
         HistoricAps = DBSession.getAllAPWithDeviceIn(mFocusedHost);
         if (HistoricAps.isEmpty()) {
             mActualMode = HostDetailFragment.HistoricMode.noHistoric;
@@ -157,17 +169,12 @@ public class                    HostDetailFragment extends android.app.Fragment{
     }
 
     public void                 onAccessPointFocus(AccessPoint ap) {
+        Log.d(TAG, "onAccessPointFocus");
         mActualMode = HostDetailFragment.HistoricMode.SessionsOfAp;
+        mDetailSessionLayout.setVisibility(View.GONE);
+        RV_Historic.setVisibility(View.VISIBLE);
         if (RV_AdapterSessions == null) {
-            List<Session> allSessionWithDeviceIn = new ArrayList<>();
-            for (Session session : ap.Sessions) {
-                for (Host device : session.listDevices) {
-                    if (device.mac.equals(mFocusedHost.mac)) {
-                        allSessionWithDeviceIn.add(session);
-                        break;
-                    }
-                }
-            }
+            List<Session> allSessionWithDeviceIn  = DBSession.getAllSessionFromApWithDeviceIn(ap.Sessions, mFocusedHost);
             Log.d(TAG, "onAccessPointFocus:: returning " + allSessionWithDeviceIn.size() + " sessions");
             RV_AdapterSessions = new SessionAdapter(this, allSessionWithDeviceIn);
         }
@@ -175,6 +182,7 @@ public class                    HostDetailFragment extends android.app.Fragment{
     }
 
     public void                 onSessionFocused(final Session session) {
+        Log.d(TAG, "onSessionFocused");
         mActualMode = HostDetailFragment.HistoricMode.detailSession;
         RV_Historic.setVisibility(View.GONE);
         mDetailSessionLayout.setVisibility(View.VISIBLE);
@@ -243,7 +251,7 @@ public class                    HostDetailFragment extends android.app.Fragment{
         }
     }
     private void                initViewSessionFocus_Services(final Session session) {
-        if (session.services != null && session.services.isEmpty()) {
+        if (session.services != null && !session.services.isEmpty()) {
             titleService.setText(session.services.size() + " découvert sur ce réseau");
             subtitleService.setText("Sur " + ServicesController.howManyHostTheServices(session.services) + " devices différents");
             forwardGateway.setOnClickListener(new View.OnClickListener() {
@@ -253,8 +261,7 @@ public class                    HostDetailFragment extends android.app.Fragment{
                 }
             });
         } else {
-            titleService.setText("Aucun service découvert");
-            subtitleService.setText("Scanned 1 time");
+            ServicesLine.setVisibility(View.GONE);
         }
     }
 

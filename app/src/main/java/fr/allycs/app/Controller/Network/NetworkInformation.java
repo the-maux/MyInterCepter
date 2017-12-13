@@ -12,6 +12,7 @@ public class                NetworkInformation {
     public String           netmask = "";
     public String           dns1 = "", dns2 = "";
     public String           dhcp = "";
+    public String           Ssid = "";
     public DhcpInfo         dhcpInfo;
 
     public                  NetworkInformation(DhcpInfo dhcpInfo, String mac) {

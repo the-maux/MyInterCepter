@@ -14,6 +14,6 @@ public class                    DBManager {
     public static Session       saveSession(String ssid, String gateway, List<Host> hosts, String typeScan) {
         AccessPoint ap = DBAccessPoint.getAccessPoint(ssid);
         Log.d(TAG, hosts.size() + " new client to save on this session");
-        return DBAccessPoint.saveSession(ap, gateway, hosts, typeScan);
+        return DBSession.saveSession(ap, gateway, hosts, typeScan);
     }
 }

@@ -4,9 +4,14 @@ import android.util.Log;
 
 import com.activeandroid.query.Select;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Session;
@@ -47,7 +52,7 @@ public class                                DBSession {
         return sniffedSessionWithDeviceIn;
     }
 
-    public static List<Session>             getSessionsWithDeviceIn(Host host) {
+    public static List<Session>             getAllSessionsWithDeviceIn(Host host) {
         List<Session> allSessions = DBSession.getAllSessions();
         List<Session> sessionWithDeviceIn = new ArrayList<>();
         if (allSessions == null)
@@ -86,6 +91,47 @@ public class                                DBSession {
         }
         Log.d(TAG, "getAllAPWithDeviceIn:: returning " + AllApWithDeviceIn.size() + " AccessPoin");
         return AllApWithDeviceIn;
+    }
+
+    static Session                          saveSession(AccessPoint ap, String Gateway,
+                                                    List<Host> devicesConnected, String TypeScan) {
+        Session session = new Session();
+        if (Singleton.getInstance().DebugMode)
+            Log.d(TAG, "SaveSession::" + ap.Ssid + ", new sesssion with " + devicesConnected.size() + " new devices");
+        session.Date = Calendar.getInstance().getTime();
+        session.typeScan = TypeScan;
+        session.Ap = ap;
+        session.name = ap.Ssid + " " + new SimpleDateFormat("dd MMMM k", Locale.FRANCE).format(new Date()) + "H";
+        session.listDevices = new ArrayList<>();
+        session.services = new ArrayList<>();
+        session.listDevices.addAll(devicesConnected);
+        session.sniffedSession= new ArrayList<>();
+        if (ap.Sessions == null)
+            ap.Sessions = new ArrayList<>();
+        for (Host host : devicesConnected) {
+            if (host.ip.contains(Gateway)) {
+                session.Gateway = host;
+                break;
+            }
+        }
+        session.save();
+        ap.Sessions.add(session);
+        ap.save();
+        ap.dumpSessions();
+        return session;
+    }
+
+    public static List<Session>             getAllSessionFromApWithDeviceIn(List<Session> sessions, Host mFocusedHost) {
+        List<Session> allSessionWithDeviceIn = new ArrayList<>();
+        for (Session session : sessions) {
+            for (Host device : session.listDevices) {
+                if (device.mac.equals(mFocusedHost.mac)) {
+                    allSessionWithDeviceIn.add(session);
+                    break;
+                }
+            }
+        }
+        return allSessionWithDeviceIn;
     }
 
 }

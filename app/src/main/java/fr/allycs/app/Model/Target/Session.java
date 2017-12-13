@@ -5,7 +5,6 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -46,15 +45,15 @@ public class                Session extends Model {
 
     @Override
     public String           toString() {
-        return new SimpleDateFormat("dd/MM", Locale.FRANCE)
+        return new SimpleDateFormat("dd/k", Locale.FRANCE)
                 .format(Date) +" " + listDevices.size() + " Devices Connected : ";
     }
 
     public String           getDateString() {
-        return new SimpleDateFormat("dd/MM-hh", Locale.FRANCE).format(Date) + "H";
+        return new SimpleDateFormat("dd/k-h", Locale.FRANCE).format(Date) + "H";
     }
 
     public String           getDateLongString() {
-        return new SimpleDateFormat("dd/MM-hh:mm", Locale.FRANCE).format(Date);
+        return new SimpleDateFormat("dd/k-h:mm", Locale.FRANCE).format(Date);
     }
 }
