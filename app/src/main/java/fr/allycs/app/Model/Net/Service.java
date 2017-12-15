@@ -25,6 +25,10 @@ public class            Service {
 
     private NsdServiceInfo service;
 
+    public              Service() {
+        super();
+    }
+
     public              Service(String hostAddr,
                                 String CanonicalHostname,
                                 byte[] Address,
@@ -34,6 +38,7 @@ public class            Service {
                                 String ServiceType,
                                 InetAddress addr,
                                 NsdServiceInfo service, List<Host> hostList) {
+        super();
         this.Port = Port;
         this.ServiceName = ServiceName;
         this.ServiceType = ServiceType;

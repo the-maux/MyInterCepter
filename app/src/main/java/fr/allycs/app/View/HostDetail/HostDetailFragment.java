@@ -55,7 +55,7 @@ public class                    HostDetailFragment extends android.app.Fragment{
     private TextView            titleGateway, titleWireshark, titleDevices, titleService;
     private TextView            subtitleGateway, subtitleWireshark, subtitleDevices, subtitleService;
     private ImageView           forwardGateway, forwardWireshark, forwardListDevices, forwardServices;
-
+    private Session             focusedSession = null;
 
     @Override public View       onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_hostdetail, container, false);
@@ -174,7 +174,7 @@ public class                    HostDetailFragment extends android.app.Fragment{
         mDetailSessionLayout.setVisibility(View.GONE);
         RV_Historic.setVisibility(View.VISIBLE);
         if (RV_AdapterSessions == null) {
-            List<Session> allSessionWithDeviceIn  = DBSession.getAllSessionFromApWithDeviceIn(ap.Sessions, mFocusedHost);
+            List<Session> allSessionWithDeviceIn  = DBSession.getAllSessionFromApWithDeviceIn(ap.sessions(), mFocusedHost);
             Log.d(TAG, "onAccessPointFocus:: returning " + allSessionWithDeviceIn.size() + " sessions");
             RV_AdapterSessions = new SessionAdapter(this, allSessionWithDeviceIn);
         }
@@ -186,15 +186,21 @@ public class                    HostDetailFragment extends android.app.Fragment{
         mActualMode = HostDetailFragment.HistoricMode.detailSession;
         RV_Historic.setVisibility(View.GONE);
         mDetailSessionLayout.setVisibility(View.VISIBLE);
-        date.setText(session.getDateString());
-        if (session.name == null || session.name.isEmpty())
+        if (session != null) {
+            focusedSession = session;
+        }
+        if (focusedSession == null) {
+            onBackPressed();
+        }
+        date.setText(focusedSession.getDateString());
+        if (focusedSession.name == null || focusedSession.name.isEmpty())
             name.setVisibility(View.GONE);
-        initViewSessionFocus_Gateway(session);
-        initViewSessionFocus_Devices(session);
-        initViewSessionFocus_Wireshark(session);
-        initViewSessionFocus_Services(session);
-        typeScan.setText("Realised with an " + session.typeScan + "scan");
-        nbrServiceDiscovered.setText(session.services.size() + " services discovered on network");
+        initViewSessionFocus_Gateway(focusedSession);
+        initViewSessionFocus_Devices(focusedSession);
+        initViewSessionFocus_Wireshark(focusedSession);
+        initViewSessionFocus_Services(focusedSession);
+        typeScan.setText("Realised with an " + focusedSession.typeScan + "scan");
+        nbrServiceDiscovered.setText(((focusedSession.services == null) ? "0" : focusedSession.services.size()) + " services discovered on network");
     }
 
     private void                initViewSessionFocus_Gateway(final Session session) {
@@ -212,8 +218,8 @@ public class                    HostDetailFragment extends android.app.Fragment{
         }
     }
     private void                initViewSessionFocus_Devices(final Session session) {
-        if (session.listDevices != null) {
-            titleDevices.setText(session.listDevices.size() + " devices decouvert");
+        if (session.listDevices() != null) {
+            titleDevices.setText(session.listDevices().size() + " devices decouvert");
             subtitleDevices.setText(session.nbrOs + " Os découvert");
             forwardListDevices.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -227,7 +233,7 @@ public class                    HostDetailFragment extends android.app.Fragment{
         }
     }
     private void                initViewSessionFocus_Wireshark(final Session session) {
-        if (session.sniffedSession != null || session.sniffedSession.isEmpty()) {
+        if (session.sniffedSession != null && !session.sniffedSession.isEmpty()) {
             titleWireshark.setText(session.sniffedSession.size() + " sessions sniff realise");
             int nbrSession = 0;
             for (SniffSession sniffSession : session.sniffedSession) {
@@ -246,8 +252,8 @@ public class                    HostDetailFragment extends android.app.Fragment{
                 }
             });
         } else {
-            titleWireshark.setText("Aucune sessions sniff realise");
-            subtitleWireshark.setText("");
+            titleWireshark.setText("Aucune sessions realised");
+            subtitleWireshark.setText("0 pcap recorded");
         }
     }
     private void                initViewSessionFocus_Services(final Session session) {
@@ -271,7 +277,7 @@ public class                    HostDetailFragment extends android.app.Fragment{
         if (RV_AdapterHostSession == null) {
             mActualMode = HostDetailFragment.HistoricMode.devicesOfSession;
             HostDiscoveryAdapter hostAdapter = new HostDiscoveryAdapter(getActivity(), RV_Historic, true);
-            hostAdapter.updateHostList(session.listDevices);
+            hostAdapter.updateHostList(session.listDevices());
             RV_AdapterHostSession = hostAdapter;
         }
         RV_Historic.setAdapter(RV_AdapterHostSession);

@@ -15,7 +15,7 @@ import fr.allycs.app.View.DnsActivity;
 
 public class                    DnsControl {
     private String              TAG = "DnsControl";
-    public  List<DNSLog>        mDnsLogs = Singleton.getInstance().actualSniffSession.logDnsSpoofed;
+    public  List<DNSLog>        mDnsLogs;
     private RootProcess         mProcess;
     private DnsLogsAdapter      mRV_Adapter = null;
     private DnsConf             mDnsConf;
@@ -23,6 +23,8 @@ public class                    DnsControl {
 
     public DnsControl() {
         mDnsConf = new DnsConf();
+        if (Singleton.getInstance().getActualSniffSession() != null)
+            mDnsLogs = Singleton.getInstance().getActualSniffSession().logDnsSpoofed;
     }
 
     private void                initRVLink() {
@@ -73,7 +75,8 @@ public class                    DnsControl {
                         Log.d(TAG, "DNS_STDOUT::(" +read + ')');
                         read = read.replace("dnsmasq: ", "");
                         if (isItALog(read)) {
-                            DNSLog DomainlogTmp = new DNSLog(read);
+                            DNSLog DomainlogTmp = new DNSLog();
+                            DomainlogTmp.init(read);
                             boolean isAnewDomain;
                             if ((isAnewDomain = isADomainConnu(DomainlogTmp))) {
                                 DomainlogTmp.save();

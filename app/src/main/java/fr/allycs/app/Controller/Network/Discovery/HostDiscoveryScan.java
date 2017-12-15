@@ -24,7 +24,7 @@ public class                        HostDiscoveryScan {
     }
 
     public void                    run(typeScan typeOfScan, List<Host> listOfHosts) {
-        mSingleton.actualSniffSession = null;
+        mSingleton.resetActualSniffSession();
         switch (typeOfScan) {
             case Arp:
                 startArpScan();

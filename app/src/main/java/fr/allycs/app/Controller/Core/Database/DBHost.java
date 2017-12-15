@@ -5,6 +5,7 @@ import android.util.Log;
 import com.activeandroid.query.From;
 import com.activeandroid.query.Select;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
@@ -19,6 +20,13 @@ public class                                DBHost {
         return new Select()
                 .from(Host.class)
                 .orderBy("RANDOM()")
+                .executeSingle();
+    }
+
+    public static Host                      findDeviceById(String id) {
+        return new Select()
+                .from(Host.class)
+                .where("_id = \"" + id + "\"")
                 .executeSingle();
     }
 
@@ -38,6 +46,7 @@ public class                                DBHost {
     }
 
     public static Host                      saveOrGetInDatabase(Host myDevice) {
+        //ActiveAndroid.beginTransaction();
         Host deviceFromDB = DBHost.getDevicesFromMAC(myDevice.mac);
         if (deviceFromDB == null) {
             myDevice.save();
@@ -48,6 +57,8 @@ public class                                DBHost {
                 deviceFromDB.setName(myDevice.getName());
             Fingerprint.initHost(deviceFromDB);
             deviceFromDB.save();
+//            ActiveAndroid.setTransactionSuccessful();
+//            ActiveAndroid.endTransaction();
             return deviceFromDB;
         }
     }
@@ -57,5 +68,23 @@ public class                                DBHost {
                 .all()
                 .from(Host.class)
                 .execute();
+    }
+
+    public static String                    SerializeListDevices(List<Host> hosts) {
+        StringBuilder dump = new StringBuilder("");
+        for (Host host : hosts) {
+            dump.append(host.getId());
+            dump.append(";");
+        }
+        return dump.toString();
+    }
+
+    public static List<Host>                getListFromSerialized(String list) {
+        List<Host> hosts = new ArrayList<>();
+        for (String id : list.split(";")) {
+            Host device = findDeviceById(id.replace(";", ""));
+            hosts.add(device);
+        }
+        return hosts;
     }
 }

@@ -25,7 +25,11 @@ public class                            DNSLog extends Model {
     public RecyclerView.Adapter<ConsoleLogHolder> adapter = null;
     public int                          color;
 
-    public                              DNSLog(String line) {
+    public                              DNSLog() {
+        super();
+    }
+
+    public void                         init(String line) {
         buildLog(line);
         data = line;
         logs.add(this);

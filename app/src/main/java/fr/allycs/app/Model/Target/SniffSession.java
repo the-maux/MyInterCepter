@@ -21,4 +21,8 @@ public class                SniffSession extends Model {
     public List<DNSLog>     logDnsSpoofed;
     @Column(name = "Date")
     public Date             date;
+
+    public SniffSession() {
+        super();
+    }
 }

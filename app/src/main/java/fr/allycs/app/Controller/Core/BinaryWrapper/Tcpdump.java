@@ -74,18 +74,17 @@ public class                        Tcpdump {
     }
     private String                  buildCmd(String actualParam, String hostFilter) {
         String date =  new SimpleDateFormat("MM_dd_HH_mm_ss", Locale.FRANCE).format(new Date());
-        String nameFile = ((mSingleton.actualSession == null) ?
-                mSingleton.network.Ssid : mSingleton.actualSession.Ap.Ssid) + "_" + date;
+        String nameFile = mSingleton.network.Ssid  + "_" + date;
         String pcapFile = ((isDumpingInFile) ?
                 (" -w " + mSingleton.PcapPath + nameFile + ".pcap ") : "");
         Pcap pcap = new Pcap(mSingleton.PcapPath + nameFile + ".pcap ", hosts);
         pcap.save();
         for (Host host : hosts) {
-            host.listPcapRecorded.add(pcap);
+            host.PcapRecorded.add(pcap);
             host.save();
         }
-        if (mSingleton.actualSniffSession != null)
-            mSingleton.actualSniffSession.listPcapRecorded.add(pcap);
+        if (mSingleton.getActualSniffSession() != null)
+            mSingleton.getActualSniffSession().listPcapRecorded.add(pcap);
         return mSingleton.FilesPath +
                         "tcpdump " +
                         pcapFile +

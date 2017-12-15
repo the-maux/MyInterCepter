@@ -33,7 +33,13 @@ public class                Host extends Model {
     @Column(name = "dump")
     public String           dumpInfo;
     @Column(name = "Notes")
-    public ArrayList<String> Notes = new ArrayList<>();
+    public List<String>     Notes = new ArrayList<>();
+    @Column(name = "PcapRecorded")
+    public List<Pcap>       PcapRecorded = new ArrayList<>();
+
+    public List<Session>    Session() {
+        return getMany(Session.class, "listDevices");
+    }
 
     public ArrayList<Service> ServiceActivOnHost = new ArrayList<>();
     public boolean          isServiceActiveOnHost = false;
@@ -41,8 +47,7 @@ public class                Host extends Model {
     public boolean          selected = false;
     public boolean          isItMyDevice = false;
     public Os               osType;
-    @Column(name = "PcapRecorded")
-    public List<Pcap>       listPcapRecorded;
+
 
     public                  Host(String buffer) {
         super();
@@ -61,7 +66,6 @@ public class                Host extends Model {
             if (Singleton.getInstance().UltraDebugMode)
                 dumpHost();
             dumpInfo = buffer;
-            listPcapRecorded = new ArrayList<>();
             Fingerprint.initHost(this);
         } catch (StringIndexOutOfBoundsException e) {
             Log.e(TAG, buffer);

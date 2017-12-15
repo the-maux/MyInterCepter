@@ -42,7 +42,7 @@ public class                    SessionAdapter extends RecyclerView.Adapter<Sess
             holder.title.setText(session.name);
             holder.subtitle.setText(date);
         }
-        holder.subtitle.setText(session.listDevices.size() + " devices decouvert");
+        holder.subtitle.setText(session.listDevices().size() + " devices decouvert");
         holder.forward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

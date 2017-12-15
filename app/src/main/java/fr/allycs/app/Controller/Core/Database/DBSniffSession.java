@@ -11,6 +11,8 @@ import fr.allycs.app.Model.Target.SniffSession;
 public class                    DBSniffSession {
 
     public static SniffSession  buildSniffSession() {
+//        ActiveAndroid.beginTransaction();
+        //TODO:: Make the ManyToMany
         Session session = Singleton.getInstance().actualSession;
         SniffSession sniffSession = new SniffSession();
         sniffSession.listDevices = Singleton.getInstance().hostsList;
@@ -20,7 +22,8 @@ public class                    DBSniffSession {
         sniffSession.save();
         session.sniffedSession.add(sniffSession);
         session.save();
-        Singleton.getInstance().actualSniffSession = sniffSession;
+//        ActiveAndroid.setTransactionSuccessful();
+//        ActiveAndroid.endTransaction();
         return sniffSession;
     }
 }
