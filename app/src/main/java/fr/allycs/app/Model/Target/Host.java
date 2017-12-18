@@ -15,7 +15,6 @@ import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
 import fr.allycs.app.Model.Net.Port;
 import fr.allycs.app.Model.Net.Service;
 import fr.allycs.app.Model.Unix.Os;
-import fr.allycs.app.Model.Unix.Pcap;
 
 @Table(name = "Device", id = "_id")
 public class                Host extends Model {
@@ -34,8 +33,6 @@ public class                Host extends Model {
     public String           dumpInfo;
     @Column(name = "Notes")
     public List<String>     Notes = new ArrayList<>();
-    @Column(name = "PcapRecorded")
-    public List<Pcap>       PcapRecorded = new ArrayList<>();
 
     public List<Session>    Session() {
         return getMany(Session.class, "listDevices");

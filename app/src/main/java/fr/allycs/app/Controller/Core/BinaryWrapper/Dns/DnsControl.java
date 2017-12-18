@@ -9,6 +9,7 @@ import java.util.List;
 import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Target.DNSSpoofItem;
+import fr.allycs.app.Model.Target.SniffSession;
 import fr.allycs.app.Model.Unix.DNSLog;
 import fr.allycs.app.View.Adapter.DnsLogsAdapter;
 import fr.allycs.app.View.DnsActivity;
@@ -20,11 +21,15 @@ public class                    DnsControl {
     private DnsLogsAdapter      mRV_Adapter = null;
     private DnsConf             mDnsConf;
     private DnsActivity         mActivity;
+    private SniffSession        sniffSession;
 
     public DnsControl() {
         mDnsConf = new DnsConf();
-        if (Singleton.getInstance().getActualSniffSession() != null)
-            mDnsLogs = Singleton.getInstance().getActualSniffSession().logDnsSpoofed;
+        if (Singleton.getInstance().getActualSniffSession() != null) {
+            sniffSession = Singleton.getInstance().getActualSniffSession();
+            mDnsLogs = sniffSession.logDnsSpoofed();
+        }
+
     }
 
     private void                initRVLink() {
@@ -79,6 +84,7 @@ public class                    DnsControl {
                             DomainlogTmp.init(read);
                             boolean isAnewDomain;
                             if ((isAnewDomain = isADomainConnu(DomainlogTmp))) {
+                                DomainlogTmp.sniffSession = sniffSession;
                                 DomainlogTmp.save();
                                 mDnsLogs.add(0, DomainlogTmp);
                             }

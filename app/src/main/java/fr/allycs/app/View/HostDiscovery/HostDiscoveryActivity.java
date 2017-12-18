@@ -458,6 +458,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     public void                     focusOneTarget(Host host) {
+        mSingleton.actualSession = mActualSession;
         if (mSingleton.hostsList == null)
             mSingleton.hostsList = new ArrayList<>();
         else

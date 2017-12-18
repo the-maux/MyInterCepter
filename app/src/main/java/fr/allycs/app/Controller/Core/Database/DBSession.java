@@ -43,7 +43,7 @@ public class                                DBSession {
         List<SniffSession>  sniffedsessions = DBSession.getAllSniffedSessions();
         List<SniffSession>  sniffedSessionWithDeviceIn = new ArrayList<>();
         for (SniffSession sniffedsession : sniffedsessions) {
-            for (Host device : sniffedsession.listDevices) {
+            for (Host device : sniffedsession.listDevices()) {
                 if (host.mac.equals(device.mac)) {//TODO: try with .contains instead of for loop
                     sniffedSessionWithDeviceIn.add(sniffedsession);
                     break;
@@ -91,8 +91,8 @@ public class                                DBSession {
         return AllApWithDeviceIn;
     }
 
-    static Session                          saveSession(AccessPoint ap, String Gateway,
-                                                    List<Host> devicesConnected, String TypeScan) {
+    static Session                          saveNewSession(AccessPoint ap, String Gateway,
+                                                List<Host> devicesConnected, String TypeScan) {
         ActiveAndroid.beginTransaction();
         Session session = new Session();
         if (Singleton.getInstance().DebugMode)
@@ -103,7 +103,6 @@ public class                                DBSession {
         session.name = ap.Ssid + " " + new SimpleDateFormat("dd MMMM k", Locale.FRANCE).format(new Date()) + "H";
         session.services = new ArrayList<>();
         session.listDevicesSerialized = DBHost.SerializeListDevices(devicesConnected);
-        session.sniffedSession= new ArrayList<>();
         for (Host host : devicesConnected) {
             if (host.ip.contains(Gateway)) {
                 session.Gateway = host;

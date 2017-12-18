@@ -32,8 +32,13 @@ public class                Session extends Model {
     @Column(name = "name")/* Arp, Icmp, Nmap*/
     public String           name;
 
-    @Column(name = "sniffedSession")
-    public List<SniffSession> sniffedSession;
+    /**
+     * Create the OneToMany relation
+     * @return
+     */
+    public List<SniffSession>    SniffSessions() {
+        return getMany(SniffSession.class, "Session");
+    }
 
     @Column(name = "service")
     public List<Service>    services;
@@ -47,12 +52,11 @@ public class                Session extends Model {
     private List<Host>      listDevices = null;
     /**
      * Create the ManyToMany relation
-     * @return
      */
     public List<Host>       listDevices() {
         if (listDevices == null) {
             listDevices = DBHost.getListFromSerialized(listDevicesSerialized);
-            Log.d(NAME_COLUMN, "liste Device of Session deserialized " + listDevices.size() + " devices");
+            Log.d(NAME_COLUMN, "liste Session deserialized " + listDevices.size() + " devices");
         }
         return listDevices;
     }/*192092*/

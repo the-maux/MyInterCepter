@@ -15,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Core.Database.DBHost;
 import fr.allycs.app.Controller.Network.IPTables;
 import fr.allycs.app.Model.Net.Trame;
 import fr.allycs.app.Model.Target.Host;
@@ -78,13 +79,11 @@ public class                        Tcpdump {
         String pcapFile = ((isDumpingInFile) ?
                 (" -w " + mSingleton.PcapPath + nameFile + ".pcap ") : "");
         Pcap pcap = new Pcap(mSingleton.PcapPath + nameFile + ".pcap ", hosts);
+        pcap.sniffSession = mSingleton.getActualSniffSession();
+        pcap.listDevicesSerialized = DBHost.SerializeListDevices(hosts);
         pcap.save();
-        for (Host host : hosts) {
-            host.PcapRecorded.add(pcap);
-            host.save();
-        }
         if (mSingleton.getActualSniffSession() != null)
-            mSingleton.getActualSniffSession().listPcapRecorded.add(pcap);
+            mSingleton.getActualSniffSession().listPcapRecorded().add(pcap);
         return mSingleton.FilesPath +
                         "tcpdump " +
                         pcapFile +

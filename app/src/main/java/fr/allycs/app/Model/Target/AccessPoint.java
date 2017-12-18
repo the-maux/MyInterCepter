@@ -17,9 +17,6 @@ public class               AccessPoint extends Model {
     @Column(name = "Ssid")
     public String          Ssid;
 
-/*    @Column(name = "Sessions", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
-    public ArrayList<Session>   Sessions = new ArrayList<>();
-*/
     /**
      * Create the OneToMany relation
      * @return

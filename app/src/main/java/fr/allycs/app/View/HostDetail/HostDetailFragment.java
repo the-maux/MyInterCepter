@@ -233,11 +233,11 @@ public class                    HostDetailFragment extends android.app.Fragment{
         }
     }
     private void                initViewSessionFocus_Wireshark(final Session session) {
-        if (session.sniffedSession != null && !session.sniffedSession.isEmpty()) {
-            titleWireshark.setText(session.sniffedSession.size() + " sessions sniff realise");
+        if (session.SniffSessions() != null && !session.SniffSessions().isEmpty()) {
+            titleWireshark.setText(session.SniffSessions().size() + " sessions sniff realise");
             int nbrSession = 0;
-            for (SniffSession sniffSession : session.sniffedSession) {
-                for (Host device : sniffSession.listDevices) {
+            for (SniffSession sniffSession : session.SniffSessions()) {
+                for (Host device : sniffSession.listDevices()) {
                     if (mFocusedHost.equals(device)) {
                         nbrSession++;
                         break;
