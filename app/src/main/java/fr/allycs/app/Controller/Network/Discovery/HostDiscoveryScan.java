@@ -18,6 +18,7 @@ public class                        HostDiscoveryScan {
     private HostDiscoveryScan       mInstance = this;
     private Singleton               mSingleton = Singleton.getInstance();
     private HostDiscoveryActivity   mActivity;
+    public boolean                  inLoading = false;
 
     public HostDiscoveryScan(final HostDiscoveryActivity activity) {
         this.mActivity = activity;
@@ -39,7 +40,7 @@ public class                        HostDiscoveryScan {
     }
 
     private void                    startBonjourScan(List<Host> listOfHosts) {
-        new BonjourManager(mActivity, listOfHosts);
+        new BonjourManager(mActivity, listOfHosts, this);
     }
 
     private void                    startNmapScan() {
@@ -64,10 +65,10 @@ public class                        HostDiscoveryScan {
         ArrayList<String> tmpAntiConcurentExecptionFFS = new ArrayList<>();
         tmpAntiConcurentExecptionFFS.addAll(ipReachable);
         NetUtils.dumpListHostFromARPTableInFile(mActivity, tmpAntiConcurentExecptionFFS);
-        mActivity.monitor(tmpAntiConcurentExecptionFFS.size() + " hosts detected");
+        mActivity.setToolbarTitle(null, tmpAntiConcurentExecptionFFS.size() + " hosts detected");
         mActivity.setProgressState(1500);
-        mActivity.monitor("Scanning " + tmpAntiConcurentExecptionFFS.size() + " devices");
-        Fingerprint.getDevicesInfoFromCepter(mActivity);
+        mActivity.setToolbarTitle(null,"Scanning " + tmpAntiConcurentExecptionFFS.size() + " devices");
+        Fingerprint.getDevicesInfoFromCepter(this);
         mActivity.setProgressState(2000);
     }
 

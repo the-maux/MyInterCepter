@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import fr.allycs.app.Controller.Network.Discovery.HostDiscoveryScan;
 import fr.allycs.app.Model.Net.Service;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
@@ -18,6 +19,7 @@ import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
 public class                        BonjourManager {
     private String                  TAG = "BonjourManager";
     private NsdManager              mNsdManager;
+    private HostDiscoveryScan       mScannerControler;
     private HashMap<String, DiscoveryListenr> listDiscoveryListener = new HashMap<>();
     private BonjourManager          instance = this;
     private String[]                listServiceType;
@@ -47,15 +49,16 @@ public class                        BonjourManager {
                 "_ssh._tcp"});
     }
 
-    public                          BonjourManager(HostDiscoveryActivity activity, List<Host> listClient) {
+    public                          BonjourManager(HostDiscoveryActivity activity, List<Host> listClient, HostDiscoveryScan scannerControler) {
         Log.d(TAG, "Bonjour Manager starting");
+        mScannerControler = scannerControler;
         mNsdManager = (NsdManager) activity.getSystemService(Context.NSD_SERVICE);
         mActivity = activity;
         this.listServiceType = getAllType();
         this.listClient = listClient;
         createListListener();
     }
-    void                     createListListener() {
+    void                            createListListener() {
         if (offsetServiceType < listServiceType.length) {
             String type = listServiceType[offsetServiceType++];
             //TODO:maybe cant be 1 DiscoveryListener for all Servicediscovery
@@ -65,16 +68,17 @@ public class                        BonjourManager {
             listDiscoveryListener.put(type, listener);
         } else {
             mActivity.notifiyServiceAllScaned(listOfServiceFound);
+            mScannerControler.inLoading = false;
         }
     }
-    void                     stopServiceDiscovery(NsdManager.DiscoveryListener listene) {
+    void                            stopServiceDiscovery(NsdManager.DiscoveryListener listene) {
         this.mNsdManager.stopServiceDiscovery(listene);
     }
-    void                     resolveService(NsdServiceInfo service) {
+    void                            resolveService(NsdServiceInfo service) {
         this.mNsdManager.resolveService(service,  new ResolvListener(this, listClient));
     }
 
-    public void             bingo(String hostAddress, String serviceName, Service service) {
+    public void                     bingo(String hostAddress, String serviceName, Service service) {
         listOfServiceFound.add(service);
         Snackbar.make(mActivity.mCoordinatorLayout, "Service: " + serviceName + " on "+ hostAddress , Snackbar.LENGTH_LONG).show();
     }

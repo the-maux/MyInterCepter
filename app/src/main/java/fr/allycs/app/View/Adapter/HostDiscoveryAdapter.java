@@ -2,36 +2,37 @@ package fr.allycs.app.View.Adapter;
 
 import android.app.Activity;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
-import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
 import fr.allycs.app.View.Adapter.Holder.HostDiscoveryHolder;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import android.support.v7.widget.RecyclerView;
-import android.widget.CompoundButton;
+import fr.allycs.app.View.HostDiscovery.FragmentHostDiscoveryScan;
 
 
-public class HostDiscoveryAdapter extends RecyclerView.Adapter<HostDiscoveryHolder> {
+public class                    HostDiscoveryAdapter extends RecyclerView.Adapter<HostDiscoveryHolder> {
     private String              TAG = "HostDiscoveryAdapter";
     private Activity            mActivity;
     private List<Host>          mHosts = null;
     private List<Host>          mOriginalList;
     private RecyclerView        mHost_RV;
+    private FragmentHostDiscoveryScan mFragment;
     private boolean             isHistoric = false;
 
-    public HostDiscoveryAdapter(Activity context, RecyclerView Host_RV, boolean isHistoric) {
-        mActivity = context;
+    public HostDiscoveryAdapter(FragmentHostDiscoveryScan fragment, RecyclerView Host_RV, boolean isHistoric) {
+        mActivity = fragment.getActivity();
         mHost_RV = Host_RV;
+        mFragment = fragment;
         this.isHistoric = isHistoric;
     }
 
@@ -102,7 +103,7 @@ public class HostDiscoveryAdapter extends RecyclerView.Adapter<HostDiscoveryHold
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((HostDiscoveryActivity)mActivity).focusOneTarget(host);
+                        mFragment.focusOneTarget(host);
                     }
                 });
                 return false;

@@ -10,14 +10,14 @@ import java.util.Collections;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
+import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.Database.DBHost;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;
-import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
+import fr.allycs.app.View.HostDiscovery.FragmentHostDiscoveryScan;
 
 public class                         Fingerprint {
     private static String            TAG = "Fingerprint";
@@ -25,7 +25,7 @@ public class                         Fingerprint {
      * Scan with the cepter binary the hostList
      * @param scanActivity activity for callback
      */
-    static void                      getDevicesInfoFromCepter(final HostDiscoveryActivity scanActivity) {
+    static void                      getDevicesInfoFromCepter(final FragmentHostDiscoveryScan scanActivity) {
         final List<Host> hosts = new ArrayList<>();
         final RootProcess process = new RootProcess("Cepter Scan device", Singleton.getInstance().FilesPath);
         //final BufferedReader bufferedReader = new BufferedReader(process.getInputStreamReader());

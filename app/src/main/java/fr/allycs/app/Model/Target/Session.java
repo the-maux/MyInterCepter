@@ -59,10 +59,6 @@ public class                Session extends Model {
             Log.d(NAME_COLUMN, "liste Session deserialized " + listDevices.size() + " devices");
         }
         return listDevices;
-    }/*192092*/
-
-    public                  Session() {
-        super();
     }
 
     @Override
@@ -77,5 +73,9 @@ public class                Session extends Model {
 
     public String           getDateLongString() {
         return new SimpleDateFormat("dd/k-h:mm", Locale.FRANCE).format(Date);
+    }
+
+    public                  Session() {
+        super();
     }
 }

@@ -27,8 +27,7 @@
                 android:layout_width="52dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="4dp"
-                android:padding="2dp"
-                android:src="@drawable/winicon" />
+                android:padding="4dp" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -154,6 +153,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/settingsLayout"
+                tools:layout="@layout/fragment_hostdetail"
                 >
 
             </FrameLayout>

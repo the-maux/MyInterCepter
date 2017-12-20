@@ -79,6 +79,16 @@ public class                                DBSession {
         return false;
     }
 
+    public static List<Session>             getAllSessionFromApWithDeviceIn(List<Session> sessions, Host mFocusedHost) {
+        List<Session> allSessionWithDeviceIn = new ArrayList<>();
+        for (Session session : sessions) {
+            if (session.listDevicesSerialized.contains("" + mFocusedHost.getId())) {
+                allSessionWithDeviceIn.add(session);
+            }
+        }
+        return allSessionWithDeviceIn;
+    }
+
     public static List<AccessPoint>         getAllAPWithDeviceIn(Host host) {
         List<AccessPoint> AllAp = DBSession.getAllAccessPoint();
         List<AccessPoint> AllApWithDeviceIn = new ArrayList<>();
@@ -119,14 +129,16 @@ public class                                DBSession {
         return session;
     }
 
-    public static List<Session>             getAllSessionFromApWithDeviceIn(List<Session> sessions, Host mFocusedHost) {
-        List<Session> allSessionWithDeviceIn = new ArrayList<>();
-        for (Session session : sessions) {
-            if (session.listDevicesSerialized.contains("" + mFocusedHost.getId())) {
-                allSessionWithDeviceIn.add(session);
-            }
-        }
-        return allSessionWithDeviceIn;
+    public static Session                   buildSession(final String SSID, final String gateway,
+                                                         final List<Host> hosts, String protoUsed,
+                                                         final ArrayList<String> osList) {
+//        new Thread(new Runnable() {
+//            public void run() {
+                Session mActualSession = DBManager.saveSession(SSID, gateway, hosts, protoUsed);
+                mActualSession.nbrOs = osList.size();
+                mActualSession.save();
+//            }
+//        }).start();
+        return mActualSession;
     }
-
 }
