@@ -71,10 +71,9 @@ public class                        HostDiscoveryActivity extends MyActivity {
         try {
             init();
             initFragment();
-
         } catch (Exception e) {
             Log.e(TAG, "onCreate::Error");
-            Snackbar.make(mCoordinatorLayout, "Big error lors de l'init:", Toast.LENGTH_SHORT).show();
+            showSnackbar("Big error lors de l'init:");
             e.printStackTrace();
         }
     }
@@ -103,7 +102,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     private void                    init()  throws Exception {
         if (mSingleton.network == null || mSingleton.network.myIp == null) {
-            Snackbar.make(mCoordinatorLayout, "You need to be connected to a network", Toast.LENGTH_SHORT).show();
+            showSnackbar("You need to be connected to a network");
             finish();
         } else {
             Intercepter.initCepter(mSingleton.network.mac);
@@ -162,7 +161,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         });
     }
 
-    void                            initMonitor() {
+    public void                     initMonitor() {
         String monitor = mSingleton.network.Ssid + " : " + mSingleton.network.gateway;
         if (!monitor.contains("WiFi")) {
             monitor += "\n" + " MyIp : " + mSingleton.network.myIp;
@@ -173,44 +172,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
             mBottomMonitor.setText(monitor);
         else
             mBottomMonitor.setText(mSingleton.network.Ssid + ": No connection");
-    }
-
-    public void                     setProgressState(int progress){
-        mProgressBar.setVisibility(View.VISIBLE);
-        if (progress != -1)
-            this.mProgress = progress;
-    }
-
-    public void                     setToolbarTitle(final String title, final String subtitle) {
-        mInstance.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (title != null)
-                    mToolbar.setTitle(title);
-                if (subtitle != null)
-                    mToolbar.setSubtitle(subtitle);
-            }
-        });
-    }
-
-    public void                     setBottombarTitle(final String title) {
-        mInstance.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mBottomMonitor.setText(title);
-            }
-        });
-    }
-
-    private void                    showAddHostDialog() {
-        final AddDnsDialog dialog = new AddDnsDialog(mInstance)
-                .setTitle("Add target");
-        dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface d, int which) {
-                mFragment.onCheckAddedHost(dialog.getHost());
-            }
-        }).show();
     }
 
     private void                    initToolbarButton() {
@@ -239,7 +200,21 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mAddHostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAddHostDialog();
+                switch (typeScan) {
+                    case Arp:
+                        final AddDnsDialog dialog = new AddDnsDialog(mInstance)
+                                .setTitle("Add target");
+                        dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface d, int which) {
+                                mFragment.onCheckAddedHost(dialog.getHost());
+                            }
+                        }).show();
+                        break;
+                    default:
+                        showSnackbar("Not implemented");
+                        break;
+                }
             }
         });
 
@@ -260,6 +235,33 @@ public class                        HostDiscoveryActivity extends MyActivity {
             default:
                 break;
         }
+    }
+
+    public void                     setProgressState(int progress){
+        mProgressBar.setVisibility(View.VISIBLE);
+        if (progress != -1)
+            this.mProgress = progress;
+    }
+
+    public void                     setToolbarTitle(final String title, final String subtitle) {
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (title != null)
+                    mToolbar.setTitle(title);
+                if (subtitle != null)
+                    mToolbar.setSubtitle(subtitle);
+            }
+        });
+    }
+
+    public void                     setBottombarTitle(final String title) {
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mBottomMonitor.setText(title);
+            }
+        });
     }
 
     public void                     progressAnimation() {
@@ -304,10 +306,14 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     public void                     notifiyServiceAllScaned(List<Service> listOfServiceFound) {
-        Snackbar.make(mCoordinatorLayout, "Scanning service on network finished", Toast.LENGTH_SHORT).show();
-
+        showSnackbar("Scanning service on network finished");
+        //TODO: Need to refacto this on ManyToMany link
         mActualSession.services = listOfServiceFound;
         mActualSession.save();
+    }
+
+    public void                     showSnackbar(String txt) {
+        Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
 
 }

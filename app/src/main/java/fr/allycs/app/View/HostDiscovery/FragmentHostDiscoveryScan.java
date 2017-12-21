@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -19,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
@@ -40,7 +38,6 @@ import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.HostDiscoveryAdapter;
 import fr.allycs.app.View.Adapter.OSAdapter;
 import fr.allycs.app.View.Dialog.RV_dialog;
-import fr.allycs.app.View.HostDetail.HostFocusActivity;
 import fr.allycs.app.View.MenuActivity;
 
 public class                        FragmentHostDiscoveryScan extends Fragment {
@@ -58,9 +55,9 @@ public class                        FragmentHostDiscoveryScan extends Fragment {
 
     @Override
     public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_screen_slide_page, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hostdiscovery_scan, container, false);
         if (mSingleton.DebugMode && !mHostLoaded) {
-            Snackbar.make(mActivity.mCoordinatorLayout, "debug enabled, starting Scan automaticaly", Toast.LENGTH_SHORT).show();
+            mActivity.showSnackbar("debug enabled, starting Scan automaticaly");
             startNetworkScan();
         }
         initSwipeRefresh();
@@ -69,7 +66,7 @@ public class                        FragmentHostDiscoveryScan extends Fragment {
 
     public void                     init(HostDiscoveryActivity activity) {
         this.mActivity = activity;
-        mScannerControler = new HostDiscoveryScan(activity);
+        mScannerControler = new HostDiscoveryScan(this);
     }
 
     private void                    initXml(View rootView) {
@@ -102,7 +99,7 @@ public class                        FragmentHostDiscoveryScan extends Fragment {
 
     private void                    initHostsRecyclerView() {
         mHosts.clear();
-        mHostAdapter = new HostDiscoveryAdapter(this, mHost_RV, false);
+        mHostAdapter = new HostDiscoveryAdapter(getActivity(), mHost_RV, false);
         mHost_RV.setAdapter(mHostAdapter);
         mHost_RV.setHasFixedSize(true);
         mHost_RV.setLayoutManager(new LinearLayoutManager(mActivity));
@@ -113,7 +110,7 @@ public class                        FragmentHostDiscoveryScan extends Fragment {
         if (!mScannerControler.inLoading) {
             try {
                 if (mSingleton.network == null && !NetUtils.initNetworkInfo(mActivity)) {
-                    Snackbar.make(mActivity.mCoordinatorLayout, "You need to be connected", Toast.LENGTH_SHORT).show();
+                    mActivity.showSnackbar("You need to be connected");
                     mEmptyList.setVisibility(View.VISIBLE);
                     return;
                 }
@@ -123,17 +120,17 @@ public class                        FragmentHostDiscoveryScan extends Fragment {
                         initHostsRecyclerView();
                     mActivity.progressAnimation();
                     mActivity.setToolbarTitle(null, "Scanning network");
-                    mScannerControler.run(typeScan, mHosts);
+                    mScannerControler.run(HostDiscoveryScan.typeScan.Arp, mHosts);
                     mActivity.setProgressState(1000);
                 } else {
-                    Snackbar.make(mActivity.mCoordinatorLayout, "You need to be connected", Toast.LENGTH_SHORT).show();
+                    mActivity.showSnackbar("You need to be connected");
                     mEmptyList.setVisibility(View.VISIBLE);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         } else {
-            Snackbar.make(mActivity.mCoordinatorLayout, "Patientez, loading en cours", Toast.LENGTH_SHORT).show();
+            mActivity.showSnackbar("Patientez, loading en cours");
         }
     }
 
@@ -187,19 +184,8 @@ public class                        FragmentHostDiscoveryScan extends Fragment {
                 }).show();
     }
 
-    public void                     focusOneTarget(Host host) {
-        mSingleton.actualSession = mActivity.mActualSession;
-        if (mSingleton.hostsList == null)
-            mSingleton.hostsList = new ArrayList<>();
-        else
-            mSingleton.hostsList.clear();
-        mSingleton.hostsList.add(host);
-        Intent intent = new Intent(mActivity, HostFocusActivity.class);
-        startActivity(intent);
-    }
-
     public void                     onCheckAddedHost(String addedHost) {
-        Snackbar.make(mActivity.mCoordinatorLayout, "Fonctionnalité non implémenté:" + addedHost, Toast.LENGTH_SHORT).show();
+        mActivity.showSnackbar("Fonctionnalité non implémenté:"+ addedHost);
     }
 
     public ArrayList<Host>          startSniffSession() throws IOException {
@@ -216,7 +202,7 @@ public class                        FragmentHostDiscoveryScan extends Fragment {
         }
         out.close();
         if (noTargetSelected) {
-            Snackbar.make(mActivity.mCoordinatorLayout, "No target selected!", Toast.LENGTH_SHORT).show();
+            mActivity.showSnackbar("No target selected!");
             return null;
         }
         return selectedHost;

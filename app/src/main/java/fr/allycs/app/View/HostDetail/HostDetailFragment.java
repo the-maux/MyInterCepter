@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
@@ -302,6 +303,17 @@ public class                    HostDetailFragment extends android.app.Fragment{
                 return true;
         }
 
+    }
+
+    public void                     focusOneTarget(Host host) {
+        mSingleton.actualSession = mActivity.mActualSession;
+        if (mSingleton.hostsList == null)
+            mSingleton.hostsList = new ArrayList<>();
+        else
+            mSingleton.hostsList.clear();
+        mSingleton.hostsList.add(host);
+        Intent intent = new Intent(mActivity, HostFocusActivity.class);
+        startActivity(intent);
     }
 
 }

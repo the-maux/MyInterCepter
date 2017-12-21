@@ -1,6 +1,7 @@
 package fr.allycs.app.View.Adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,7 +18,7 @@ import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.HostDiscoveryHolder;
-import fr.allycs.app.View.HostDiscovery.FragmentHostDiscoveryScan;
+import fr.allycs.app.View.HostDetail.HostFocusActivity;
 
 
 public class                    HostDiscoveryAdapter extends RecyclerView.Adapter<HostDiscoveryHolder> {
@@ -26,13 +27,12 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
     private List<Host>          mHosts = null;
     private List<Host>          mOriginalList;
     private RecyclerView        mHost_RV;
-    private FragmentHostDiscoveryScan mFragment;
+    private Singleton           mSingleton = Singleton.getInstance();
     private boolean             isHistoric = false;
 
-    public HostDiscoveryAdapter(FragmentHostDiscoveryScan fragment, RecyclerView Host_RV, boolean isHistoric) {
-        mActivity = fragment.getActivity();
+    public HostDiscoveryAdapter(Activity activity, RecyclerView Host_RV, boolean isHistoric) {
+        mActivity = activity;
         mHost_RV = Host_RV;
-        mFragment = fragment;
         this.isHistoric = isHistoric;
     }
 
@@ -51,7 +51,6 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         if (isHistoric)
             holder.selected.setVisibility(View.GONE);
         else {
-
             holder.selected.setChecked(host.selected);
             holder.relativeLayout.setOnClickListener(onCardClick(position, holder));
             holder.relativeLayout.setOnLongClickListener(onCardLongClick(host));
@@ -103,7 +102,13 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mFragment.focusOneTarget(host);
+                        if (mSingleton.hostsList == null)
+                            mSingleton.hostsList = new ArrayList<>();
+                        else
+                            mSingleton.hostsList.clear();
+                        mSingleton.hostsList.add(host);
+                        Intent intent = new Intent(mActivity, HostFocusActivity.class);
+                        mActivity.startActivity(intent);
                     }
                 });
                 return false;
