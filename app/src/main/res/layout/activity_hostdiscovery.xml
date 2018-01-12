@@ -142,18 +142,25 @@
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:layout_above="@+id/Message"></FrameLayout>
+
 		<TextView
 			android:id="@+id/Message"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
+			android:layout_height="42dp"
 			android:layout_alignParentBottom="true"
 			android:layout_alignParentEnd="false"
 			android:layout_centerHorizontal="true"
 			android:background="@color/primary_text"
 			android:elevation="6dp"
 			android:gravity="right"
-			android:padding="8dp"
-			android:textColor="@color/green" />
+			android:lines="2"
+
+			android:paddingBottom="2dp"
+			android:paddingRight="8dp"
+			android:paddingTop="4dp"
+			android:text="Gateway: x.x.x.x \n IP: x.x.x.x"
+			android:textColor="@color/green"
+			android:textSize="12sp" />
 
 
 

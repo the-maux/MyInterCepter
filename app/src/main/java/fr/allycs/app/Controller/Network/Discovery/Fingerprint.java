@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
@@ -25,7 +24,7 @@ public class                         Fingerprint {
      * @param scanActivity activity for callback
      */
     static void                      getDevicesInfoFromCepter(final FragmentHostDiscoveryScan scanActivity) {
-        final List<Host> hosts = new ArrayList<>();
+        final ArrayList<Host> hosts = new ArrayList<>();
         final RootProcess process = new RootProcess("Cepter Scan device", Singleton.getInstance().FilesPath);
         final BufferedReader bufferedReader = process.getReader();
         process.exec(Singleton.getInstance().FilesPath + "cepter scan " + Singleton.getInstance().nbrInteface);

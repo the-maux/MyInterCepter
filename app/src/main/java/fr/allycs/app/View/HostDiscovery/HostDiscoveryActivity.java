@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -172,9 +173,10 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     public void                     initMonitor() {
-        String monitor = mSingleton.network.Ssid + " : " + mSingleton.network.gateway;
+        String monitor = "";
         if (!monitor.contains("WiFi")) {
-            monitor += "\n" + " MyIp : " + mSingleton.network.myIp;
+            monitor += " Ip Adress : " + mSingleton.network.myIp;
+            monitor += "\n" + mSingleton.network.Ssid + " : " + mSingleton.network.gateway;
         } else {
             monitor += "Not Connected";
         }
@@ -188,7 +190,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         final BottomSheetMenuDialog bottomSheet;
         switch (typeScan) {
             case Arp:
-                bottomSheet = mFragment.onSettingsClick(mAppbar);
+                bottomSheet = mFragment.onSettingsClick(mAppbar, this);
                 break;
 //            case Nmap:
 //                bottomSheet = mFragment.onSettingsClick();
@@ -197,7 +199,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
 //                bottomSheet = mFragment.onSettingsClick();
 //                break;
             default:
-                bottomSheet = mFragment.onSettingsClick(mAppbar);
+                bottomSheet = mFragment.onSettingsClick(mAppbar, this);
                 break;
         }
         mSettingsBtn.setOnClickListener(new View.OnClickListener() {
@@ -207,24 +209,11 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 bottomSheet.show();
             }
         });
-        mAddHostBtn.setOnClickListener(mFragment.onAddButtonClick());
+        mFragment.onAddButtonClick(mAddHostBtn);
     }
 
     private void                    initSearchView() {
-        switch (typeScan) {
-            case Arp:
-                mSearchView.setOnQueryTextListener(mFragment.getOnQueryTextListener());
-                mSearchView.setOnCloseListener(mFragment.getOnCloseListener());
-                break;
-//            case Nmap:
-//                bottomSheet = mFragment.onSettingsClick();
-//                break;
-//            case Services:
-//                bottomSheet = mFragment.onSettingsClick();
-//                break;
-            default:
-                break;
-        }
+        mFragment.initSearchView(mSearchView);
     }
 
     public void                     setProgressState(int progress){
@@ -286,11 +275,36 @@ public class                        HostDiscoveryActivity extends MyActivity {
         }).start();
     }
 
+    private ArrayList<Host>         extractAndDumpSelectedHost(ArrayList<Host> hostList) {
+        ArrayList<Host> selectedHost = new ArrayList<>();
+        try {
+            boolean noTargetSelected = true;
+            FileOutputStream out = openFileOutput("targets", 0);
+            for (Host host : hostList) {
+                if (host.selected) {
+                    selectedHost.add(host);
+                    noTargetSelected = false;
+                    String dumpHost = host.ip + ":" + host.mac + "\n";
+                    out.write(dumpHost.getBytes());
+                }
+            }
+            out.close();
+            if (noTargetSelected) {
+                showSnackbar("No target selected!");
+                return null;
+            }
+            return selectedHost;
+        } catch (Exception e) {
+            e.getStackTrace();
+            return null;
+        }
+    }
+
     private void                    launchMenu() throws IOException {
-        ArrayList<Host> selectedHost;
-        if ((selectedHost = mFragment.startSniffSession()) != null) {
+        ArrayList<Host> selectedHost = mSingleton.hostsList;
+        mSingleton.hostsList = extractAndDumpSelectedHost(selectedHost);
+        if (selectedHost != null && !selectedHost.isEmpty()) {
             mSingleton.actualSession = mActualSession;
-            mSingleton.hostsList = selectedHost;
             startActivity(new Intent(mInstance, MenuActivity.class));
         }
     }

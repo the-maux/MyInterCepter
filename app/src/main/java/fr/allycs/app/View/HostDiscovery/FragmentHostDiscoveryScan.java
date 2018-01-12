@@ -1,5 +1,6 @@
 package fr.allycs.app.View.HostDiscovery;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,10 +25,7 @@ import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
 
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.Database.DBSession;
@@ -48,7 +46,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     private String                  TAG = "FragmentHostDiscoveryScan";
     private HostDiscoveryActivity   mActivity;
     private Singleton               mSingleton = Singleton.getInstance();
-    private List<Host>              mHosts = new ArrayList<>();
+    private ArrayList<Host>         mHosts = new ArrayList<>();
     private boolean                 mHostLoaded = false;
     private HostDiscoveryAdapter    mHostAdapter;
     private RecyclerView            mHost_RV;
@@ -142,27 +140,16 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         }
     }
 
-    public boolean                  start() {
-        if (!mHostLoaded) {
-            startNetworkScan();
-            return true;
-        }
-        return false;
-    }
-
-    public void                     onHostActualized(final List<Host> hosts) {
+    public void                     onHostActualized(final ArrayList<Host> hosts) {
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mHosts = hosts;
                 mActivity.setProgressState(mActivity.MAXIMUM_PROGRESS);
-                String monitor = "Gateway: " + mSingleton.network.gateway;
                 mHostAdapter.updateHostList(mHosts);
                 mScannerControler.inLoading = false;
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
                 final ArrayList<String> listOs = mHostAdapter.getOsList();
-                monitor += "\n IP:" + mSingleton.network.myIp;
-                mActivity.setBottombarTitle(monitor);
                 Log.d(TAG, "scan Over with " + mHosts.size() + " possible target");
                 final String SSID = ((WifiManager)mActivity.getApplicationContext().getSystemService(Context.WIFI_SERVICE))
                         .getConnectionInfo().getSSID().replace("\"", "");
@@ -171,6 +158,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                         SSID, mSingleton.network.gateway, hosts, "Icmp", mHostAdapter.getOsList());
                 mSwipeRefreshLayout.setRefreshing(false);
                 mHostLoaded = true;
+                mSingleton.hostsList = mHosts;
             }
         });
 
@@ -196,55 +184,34 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         mActivity.showSnackbar("Fonctionnalité non implémenté:"+ addedHost);
     }
 
-    public ArrayList<Host>          startSniffSession() throws IOException {
-        ArrayList<Host> selectedHost = new ArrayList<>();
-        boolean noTargetSelected = true;
-        FileOutputStream out = mActivity.openFileOutput("targets", 0);
-        for (Host host : mHosts) {
-            if (host.selected) {
-                selectedHost.add(host);
-                noTargetSelected = false;
-                String dumpHost = host.ip + ":" + host.mac + "\n";
-                out.write(dumpHost.getBytes());
+    public void                     onAddButtonClick(View mAddHostBtn) {
+        mAddHostBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (mActivity.typeScan) {
+                    case Arp:
+                        final AddDnsDialog dialog = new AddDnsDialog(mActivity)
+                                .setTitle("Add target");
+                        dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface d, int which) {
+                                onCheckAddedHost(dialog.getHost());
+                            }
+                        }).show();
+                        break;
+                    default:
+                        mActivity.showSnackbar("Not implemented");
+                        break;
+                }
             }
-        }
-        out.close();
-        if (noTargetSelected) {
-            mActivity.showSnackbar("No target selected!");
-            return null;
-        }
-        return selectedHost;
+        });
     }
 
-    public SearchView.OnQueryTextListener  getOnQueryTextListener() {
-        return new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                mHostAdapter.filterByString(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        };
-    }
-
-    public SearchView.OnCloseListener    getOnCloseListener() {
-        return new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                mHostAdapter.filterByString("");
-                return false;
-            }
-        };
-    }
-
-    public BottomSheetMenuDialog    onSettingsClick(final AppBarLayout mAppbar) {
-        return new BottomSheetBuilder(mActivity)
+    @Override
+    public BottomSheetMenuDialog    onSettingsClick(final AppBarLayout mAppbar, Activity activity) {
+        return new BottomSheetBuilder(activity)
                 .setMode(BottomSheetBuilder.MODE_LIST)
-                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.material_light_white))
+                .setBackgroundColor(ContextCompat.getColor(activity, R.color.material_light_white))
                 .setAppBarLayout(mAppbar)
                 .addTitleItem("Settings")
                 .addItem(0, "Os filter", R.mipmap.ic_os_filter)
@@ -271,35 +238,16 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 .createDialog();
     }
 
-    public View.OnClickListener     onAddButtonClick() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (mActivity.typeScan) {
-                    case Arp:
-                        final AddDnsDialog dialog = new AddDnsDialog(mActivity)
-                                .setTitle("Add target");
-                        dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface d, int which) {
-                                onCheckAddedHost(dialog.getHost());
-                            }
-                        }).show();
-                        break;
-                    default:
-                        mActivity.showSnackbar("Not implemented");
-                        break;
-                }
-            }
-        };
-    }
-
     @Override public void init() {
 
     }
 
-    @Override public void start() {
-
+    public boolean                  start() {
+        if (!mHostLoaded) {
+            startNetworkScan();
+            return true;
+        }
+        return false;
     }
 
     @Override public void stop() {
@@ -307,8 +255,26 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     }
 
     @Override
-    public BottomSheetMenuDialog onSettingsClick() {
-        return null;
+    public void                     initSearchView(SearchView mSearchView) {
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                mHostAdapter.filterByString(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                mHostAdapter.filterByString("");
+                return false;
+            }
+        });
     }
 }
 
