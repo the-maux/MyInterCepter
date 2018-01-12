@@ -93,9 +93,10 @@ public class                    HostFocusActivity extends MyActivity {
     private void                initFragment() {
         try {
             mFragment = new HostDetailFragment();
-            getFragmentManager()
+            getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.frame_container, mFragment)
+                    //.addToBackStack(null)
                     .commit();
         } catch (IllegalStateException e) {
             Log.w("Error MainActivity", "FragmentStack or FragmentManager corrupted");
@@ -107,5 +108,8 @@ public class                    HostFocusActivity extends MyActivity {
     @Override public void       onBackPressed() {
         if (mFragment == null || mFragment.onBackPressed())
             super.onBackPressed();
+        else {
+            Log.d(TAG, "Fragment mode: " + mFragment.mActualMode.name());
+        }
     }
 }

@@ -35,7 +35,7 @@ import fr.allycs.app.View.Dialog.HostDialogDetail;
 import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
 
 
-public class                    HostDetailFragment extends android.app.Fragment{
+public class                    HostDetailFragment extends  android.support.v4.app.Fragment {
     private String              TAG = "HostDetailFragment";
     private TabLayout           mTabs;
     private CoordinatorLayout   mCoordinatorLayout;

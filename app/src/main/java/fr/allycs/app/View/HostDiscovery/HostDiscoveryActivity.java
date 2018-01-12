@@ -1,6 +1,5 @@
 package fr.allycs.app.View.HostDiscovery;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -27,6 +26,7 @@ import java.util.List;
 import fr.allycs.app.Controller.Core.BinaryWrapper.Intercepter;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Misc.MyActivity;
+import fr.allycs.app.Controller.Misc.MyFragment;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.Controller.Network.Discovery.HostDiscoveryScan;
@@ -34,7 +34,6 @@ import fr.allycs.app.Model.Net.Service;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Dialog.AddDnsDialog;
 import fr.allycs.app.View.MenuActivity;
 
 /**
@@ -61,7 +60,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private ProgressBar             mProgressBar;
     final int                       MAXIMUM_PROGRESS = 6500;
     public Session                  mActualSession;
-    private FragmentHostDiscoveryScan mFragment;
+    private MyFragment mFragment;
     public HostDiscoveryScan.typeScan typeScan = HostDiscoveryScan.typeScan.Arp;
 
     public void                     onCreate(Bundle savedInstanceState) {
@@ -70,9 +69,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         initXml();
         try {
             init();
-            initFragment();
         } catch (Exception e) {
-            Log.e(TAG, "onCreate::Error");
             showSnackbar("Big error lors de l'init:");
             e.printStackTrace();
         }
@@ -93,11 +90,21 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mTabs = (TabLayout) findViewById(R.id.tabs);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         initFabs();
-
     }
 
-    private void                    initFragment() {
-
+    private void                    initFragment(MyFragment fragment) {
+        try {
+            mFragment = fragment;
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frame_container, mFragment)
+                    .commit();
+            mFragment.init();
+        } catch (IllegalStateException e) {
+            Snackbar.make(findViewById(R.id.Coordonitor), "Error in fragment", Snackbar.LENGTH_LONG).show();
+            e.getStackTrace();
+            super.onBackPressed();
+        }
     }
 
     private void                    init()  throws Exception {
@@ -107,11 +114,11 @@ public class                        HostDiscoveryActivity extends MyActivity {
         } else {
             Intercepter.initCepter(mSingleton.network.mac);
             initMonitor();
-
             initTabs();
+            initFragment(new FragmentHostDiscoveryScan());
             initSearchView();
         }
-        initToolbarButton();
+        //initToolbarButton();
     }
 
     private void                    initFabs() {
@@ -134,6 +141,9 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     private void                    initTabs() {
+        /*
+            TODO: Build the click to switchToNewFragment
+         */
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -142,7 +152,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                     case "arp\nDiscovery":
                         Log.d(TAG, "Nmap Tab");
                         typeScan = HostDiscoveryScan.typeScan.Nmap;
-                        mFragment.startNetworkScan();
+                        mFragment.start();
                         break;
                     case "Icmp\ndiscovery":
                         Log.d(TAG, "ARP TAB");
@@ -174,7 +184,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
             mBottomMonitor.setText(mSingleton.network.Ssid + ": No connection");
     }
 
-    private void                    initToolbarButton() {
+    public void                     initToolbarButton() {
         final BottomSheetMenuDialog bottomSheet;
         switch (typeScan) {
             case Arp:
@@ -193,31 +203,11 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mSettingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "show settings");
+                Log.d(TAG, "showing settings");
                 bottomSheet.show();
             }
         });
-        mAddHostBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (typeScan) {
-                    case Arp:
-                        final AddDnsDialog dialog = new AddDnsDialog(mInstance)
-                                .setTitle("Add target");
-                        dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface d, int which) {
-                                mFragment.onCheckAddedHost(dialog.getHost());
-                            }
-                        }).show();
-                        break;
-                    default:
-                        showSnackbar("Not implemented");
-                        break;
-                }
-            }
-        });
-
+        mAddHostBtn.setOnClickListener(mFragment.onAddButtonClick());
     }
 
     private void                    initSearchView() {

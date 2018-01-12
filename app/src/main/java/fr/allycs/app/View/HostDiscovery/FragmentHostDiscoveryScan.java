@@ -5,8 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,16 +31,20 @@ import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.Database.DBSession;
+import fr.allycs.app.Controller.Misc.MyFragment;
 import fr.allycs.app.Controller.Network.Discovery.HostDiscoveryScan;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.HostDiscoveryAdapter;
 import fr.allycs.app.View.Adapter.OSAdapter;
+import fr.allycs.app.View.Dialog.AddDnsDialog;
 import fr.allycs.app.View.Dialog.RV_dialog;
 import fr.allycs.app.View.MenuActivity;
 
-public class                        FragmentHostDiscoveryScan extends Fragment {
+import static fr.allycs.app.Controller.Network.Discovery.HostDiscoveryScan.typeScan.Arp;
+
+public class                        FragmentHostDiscoveryScan extends MyFragment {
     private String                  TAG = "FragmentHostDiscoveryScan";
     private HostDiscoveryActivity   mActivity;
     private Singleton               mSingleton = Singleton.getInstance();
@@ -56,6 +60,9 @@ public class                        FragmentHostDiscoveryScan extends Fragment {
     @Override
     public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hostdiscovery_scan, container, false);
+        initXml(rootView);
+        this.mActivity = (HostDiscoveryActivity) getActivity();
+        mScannerControler = new HostDiscoveryScan(this);
         if (mSingleton.DebugMode && !mHostLoaded) {
             mActivity.showSnackbar("debug enabled, starting Scan automaticaly");
             startNetworkScan();
@@ -64,9 +71,10 @@ public class                        FragmentHostDiscoveryScan extends Fragment {
         return rootView;
     }
 
-    public void                     init(HostDiscoveryActivity activity) {
-        this.mActivity = activity;
-        mScannerControler = new HostDiscoveryScan(this);
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mActivity.initToolbarButton();
     }
 
     private void                    initXml(View rootView) {
@@ -120,7 +128,7 @@ public class                        FragmentHostDiscoveryScan extends Fragment {
                         initHostsRecyclerView();
                     mActivity.progressAnimation();
                     mActivity.setToolbarTitle(null, "Scanning network");
-                    mScannerControler.run(HostDiscoveryScan.typeScan.Arp, mHosts);
+                    mScannerControler.run(Arp, mHosts);
                     mActivity.setProgressState(1000);
                 } else {
                     mActivity.showSnackbar("You need to be connected");
@@ -261,6 +269,46 @@ public class                        FragmentHostDiscoveryScan extends Fragment {
                 })
                 .expandOnStart(true)
                 .createDialog();
+    }
+
+    public View.OnClickListener     onAddButtonClick() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (mActivity.typeScan) {
+                    case Arp:
+                        final AddDnsDialog dialog = new AddDnsDialog(mActivity)
+                                .setTitle("Add target");
+                        dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface d, int which) {
+                                onCheckAddedHost(dialog.getHost());
+                            }
+                        }).show();
+                        break;
+                    default:
+                        mActivity.showSnackbar("Not implemented");
+                        break;
+                }
+            }
+        };
+    }
+
+    @Override public void init() {
+
+    }
+
+    @Override public void start() {
+
+    }
+
+    @Override public void stop() {
+
+    }
+
+    @Override
+    public BottomSheetMenuDialog onSettingsClick() {
+        return null;
     }
 }
 
