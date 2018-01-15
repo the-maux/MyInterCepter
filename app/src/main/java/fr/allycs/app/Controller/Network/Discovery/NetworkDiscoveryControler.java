@@ -60,7 +60,7 @@ public class                        NetworkDiscoveryControler {
     }
 
     public void                     onReachableScanOver(ArrayList<String> ipReachable) {
-        Log.d(TAG, "onReachableScanOver");
+        Log.d(TAG, "onReachableScanOver with : "+ ipReachable.size() + " ip(s) reachable");
         ArrayList<String> tmpAntiConcurentExecptionFFS = new ArrayList<>();
         tmpAntiConcurentExecptionFFS.addAll(ipReachable);
         NetUtils.dumpListHostFromARPTableInFile(mActivity, tmpAntiConcurentExecptionFFS);
