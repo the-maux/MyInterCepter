@@ -2,9 +2,6 @@ package fr.allycs.app.Controller.Network.Discovery;
 
 import android.util.Log;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Network.IPv4CIDR;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.SocketException;
@@ -13,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Network.IPv4CIDR;
 
 /**
  * Scan Netmask check the rechability of devices in file hostfile
@@ -24,9 +24,9 @@ public class                        ScanNetmask {
     private volatile boolean        alreadySend = false;
     private ArrayList<String>       mListIpReachable = new ArrayList<>();
     private boolean                 debuglog = Singleton.getInstance().DebugMode;
-    private HostDiscoveryScan       mScanner;
+    private NetworkDiscoveryControler mScanner;
 
-    ScanNetmask(IPv4CIDR iPv4CIDR, HostDiscoveryScan scanner) {
+    ScanNetmask(IPv4CIDR iPv4CIDR, NetworkDiscoveryControler scanner) {
         ExecutorService service = Executors.newCachedThreadPool();
         reachableLoop(iPv4CIDR, service);
         this.mScanner = scanner;

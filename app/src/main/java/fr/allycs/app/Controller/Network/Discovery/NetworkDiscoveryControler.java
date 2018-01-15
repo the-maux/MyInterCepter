@@ -13,16 +13,16 @@ import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.View.HostDiscovery.FragmentHostDiscoveryScan;
 import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
 
-public class                        HostDiscoveryScan {
-    private String                  TAG = "HostDiscoveryScan";
-    public enum typeScan {          Arp, Services, Nmap }
-    private HostDiscoveryScan       mInstance = this;
+public class                        NetworkDiscoveryControler {
+    private String                  TAG = "NetworkDiscoveryControler";
+    public enum typeScan {          Arp, Services, Historic }
+    private NetworkDiscoveryControler mInstance = this;
     private FragmentHostDiscoveryScan mFragment;
     private Singleton               mSingleton = Singleton.getInstance();
     private HostDiscoveryActivity   mActivity;
     public boolean                  inLoading = false;
 
-    public HostDiscoveryScan(final FragmentHostDiscoveryScan fragmentHostDiscoveryScan) {
+    public                          NetworkDiscoveryControler(final FragmentHostDiscoveryScan fragmentHostDiscoveryScan) {
         this.mActivity = (HostDiscoveryActivity) fragmentHostDiscoveryScan.getActivity();
         this.mFragment = fragmentHostDiscoveryScan;
     }
@@ -36,20 +36,12 @@ public class                        HostDiscoveryScan {
             case Services:
                 startBonjourScan(listOfHosts);
                 break;
-            case Nmap:
+/*            case Nmap:
                 startNmapScan();
-                break;
+                break;*/
         }
     }
 
-    private void                    startBonjourScan(List<Host> listOfHosts) {
-        new BonjourManager(mActivity, listOfHosts, this);
-    }
-
-    private void                    startNmapScan() {
-        mActivity.showSnackbar("Not implémented");
-        inLoading = false;
-    }
     private void                    startArpScan() {
         new Thread(new Runnable() {
             @Override
@@ -57,6 +49,14 @@ public class                        HostDiscoveryScan {
                 new ScanNetmask(new IPv4CIDR(mSingleton.network.myIp, mSingleton.network.netmask), mInstance);
             }
         }).start();
+    }
+    private void                    startBonjourScan(List<Host> listOfHosts) {
+        new BonjourManager(mActivity, listOfHosts, this);
+    }
+
+    private void                    startNmapScan() {
+        mActivity.showSnackbar("Not implémented");
+        inLoading = false;
     }
 
     public void                     onReachableScanOver(ArrayList<String> ipReachable) {

@@ -43,15 +43,15 @@ public class                ResolvListener implements NsdManager.ResolveListener
             Host client = getclientNatifByIp(addr.getHostAddress());
             if (client != null) {
                 if (Singleton.getInstance().DebugMode) {
-                    Log.d(TAG, "addr HostAddress: " + addr.getHostAddress());
-                    Log.d(TAG, "addr CanonicalHostName: " + addr.getCanonicalHostName());
-                    Log.d(TAG, "addr Address: " + addr.getAddress());
-                    Log.d(TAG, "addr HostName: " + addr.getHostName());
-                    Log.d(TAG, "service.getHost: " + nsdService.getHost());
-                    Log.d(TAG, "service.getPort: " + nsdService.getPort());
-                    Log.d(TAG, "service.getServiceName: " + nsdService.getServiceName());
-                    Log.d(TAG, "service.getServiceType" + nsdService.getServiceType());
-                    Log.d(TAG, "service: " + nsdService);
+                    Log.i(TAG, "addr HostAddress: " + addr.getHostAddress());
+                    Log.i(TAG, "addr CanonicalHostName: " + addr.getCanonicalHostName());
+                    Log.i(TAG, "addr Address: " + addr.getAddress());
+                    Log.i(TAG, "addr HostName: " + addr.getHostName());
+                    Log.i(TAG, "service.getHost: " + nsdService.getHost());
+                    Log.i(TAG, "service.getPort: " + nsdService.getPort());
+                    Log.i(TAG, "service.getServiceName: " + nsdService.getServiceName());
+                    Log.i(TAG, "service.getServiceType" + nsdService.getServiceType());
+                    Log.i(TAG, "service: " + nsdService);
                 }
                 Service service = new Service(addr.getHostAddress(),
                         addr.getCanonicalHostName(),

@@ -2,15 +2,22 @@ package fr.allycs.app.View.HostDiscovery;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
+import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
+import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
 
 import java.util.List;
 
@@ -31,7 +38,6 @@ import fr.allycs.app.View.Dialog.HostDialogDetail;
 
 public class                        FragmentHistoric extends MyFragment {
     private String                  TAG = "FragmentHistoric";
-    private Activity                mActivity;
     private Singleton               mSingleton = Singleton.getInstance();
     private Host                    mFocusedHost = null;//TODO need to be init
     private List<AccessPoint>       HistoricAps;
@@ -61,24 +67,23 @@ public class                        FragmentHistoric extends MyFragment {
         return rootView;
     }
 
-    @Override
-    public void                     init() {
-        this.mActivity = getActivity();
-        switch (getArguments().getString("mode")) {
-            case "HostDetail":
-                mFocusedHost = mSingleton.hostsList.get(0);
-                initHistoricFromDB(mFocusedHost);
-                break;
-            case "HistoricDB":
-                initHistoricFromDB();
-                break;
-            default:
-                
+    @Override public void           init() {
+        if (getArguments() != null && getArguments().getString("mode") != null) {
+            switch (getArguments().getString("mode")) {
+                case "HostDetail":
+                    mFocusedHost = mSingleton.hostsList.get(0);
+                    initHistoricFromDB(mFocusedHost);
+                    break;
+                case "HistoricDB":
+                    initHistoricFromDB();
+                    break;
+            }
+            mRV.setAdapter(RV_AdapterAp);
+            mRV.setHasFixedSize(true);
+            mRV.setLayoutManager(new LinearLayoutManager(getActivity()));
+        } else {
+            Log.d(TAG, "Historic Mode is not set (referer from User or Discovery)");
         }
-        mRV.setAdapter(RV_AdapterAp);
-        mRV.setHasFixedSize(true);
-        mRV.setLayoutManager(new LinearLayoutManager(mActivity));
-
     }
 
     private void                    initXml(View rootView) {
@@ -250,6 +255,24 @@ public class                        FragmentHistoric extends MyFragment {
             RV_AdapterHostSession = hostAdapter;
         }
         mRV.setAdapter(RV_AdapterHostSession);
+    }
+
+    @Override
+    public BottomSheetMenuDialog    onSettingsClick(final AppBarLayout mAppbar, Activity activity) {
+        return new BottomSheetBuilder(activity)
+                .setMode(BottomSheetBuilder.MODE_LIST)
+                .setBackgroundColor(ContextCompat.getColor(activity, R.color.material_light_white))
+                .setAppBarLayout(mAppbar)
+                .addTitleItem("Settings")
+                .addItem(0, "Purge BDD", R.mipmap.ic_os_filter)
+                .setItemClickListener(new BottomSheetItemClickListener() {
+                    @Override
+                    public void onBottomSheetItemClick(MenuItem menuItem) {
+                        Log.d(TAG, "STRING:"+menuItem.getTitle().toString());
+                    }
+                })
+                .expandOnStart(true)
+                .createDialog();
     }
 
     public boolean                  onBackPressed() {

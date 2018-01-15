@@ -22,7 +22,6 @@ import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import fr.allycs.app.Controller.Core.BinaryWrapper.Intercepter;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
@@ -30,8 +29,7 @@ import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Misc.MyFragment;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Controller.Misc.Utils;
-import fr.allycs.app.Controller.Network.Discovery.HostDiscoveryScan;
-import fr.allycs.app.Model.Net.Service;
+import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
@@ -49,7 +47,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private String                  TAG = "HostDiscoveryActivity";
     private HostDiscoveryActivity   mInstance = this;
     private Singleton               mSingleton = Singleton.getInstance();
-    public CoordinatorLayout        mCoordinatorLayout;
+    private CoordinatorLayout       mCoordinatorLayout;
     private AppBarLayout            mAppbar;
     private FloatingActionButton    mFab;
     private TextView                mBottomMonitor;
@@ -59,10 +57,10 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private Toolbar                 mToolbar;
     private TabLayout               mTabs;
     private ProgressBar             mProgressBar;
-    final int                       MAXIMUM_PROGRESS = 6500;
+    private MyFragment              mFragment;
+    public final int                MAXIMUM_PROGRESS = 6500;
     public Session                  mActualSession;
-    private MyFragment mFragment;
-    public HostDiscoveryScan.typeScan typeScan = HostDiscoveryScan.typeScan.Arp;
+    public NetworkDiscoveryControler.typeScan typeScan = NetworkDiscoveryControler.typeScan.Arp;
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,22 +88,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar2);
         mTabs = (TabLayout) findViewById(R.id.tabs);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        initFabs();
-    }
-
-    private void                    initFragment(MyFragment fragment) {
-        try {
-            mFragment = fragment;
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.frame_container, mFragment)
-                    .commit();
-            mFragment.init();
-        } catch (IllegalStateException e) {
-            Snackbar.make(findViewById(R.id.Coordonitor), "Error in fragment", Snackbar.LENGTH_LONG).show();
-            e.getStackTrace();
-            super.onBackPressed();
-        }
     }
 
     private void                    init()  throws Exception {
@@ -114,12 +96,50 @@ public class                        HostDiscoveryActivity extends MyActivity {
             finish();
         } else {
             Intercepter.initCepter(mSingleton.network.mac);
-            initMonitor();
             initTabs();
+            initFabs();
+            initMonitor();
             initFragment(new FragmentHostDiscoveryScan());
             initSearchView();
         }
-        //initToolbarButton();
+    }
+
+    private void                    initTabs() {
+        final String                ARP_TAB_NAME = "arp\nDiscovery",
+                SERVICES_TAB_NAME = "Icmp\ndiscovery",
+                HISTORIC_TAB_NAME = "Services\nDiscovery";
+
+        mTabs.addTab(mTabs.newTab().setText(ARP_TAB_NAME), 0);
+        mTabs.addTab(mTabs.newTab().setText(SERVICES_TAB_NAME), 1);
+        mTabs.addTab(mTabs.newTab().setText(HISTORIC_TAB_NAME), 2);
+
+        mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                MyFragment fragment;
+                Log.d(TAG, "onTabSelected:[" + tab.getText().toString() + "]");
+                switch (tab.getText().toString()) {
+                    case ARP_TAB_NAME:
+                        typeScan = NetworkDiscoveryControler.typeScan.Arp;
+                        fragment = new FragmentHostDiscoveryScan();
+                        break;
+                    case SERVICES_TAB_NAME:
+                        typeScan = NetworkDiscoveryControler.typeScan.Services;
+                        fragment = new FragmentHostDiscoveryScan();
+                        break;
+                    case HISTORIC_TAB_NAME:
+                        typeScan = NetworkDiscoveryControler.typeScan.Historic;
+                        fragment = new FragmentHistoric();
+                        break;
+                    default:
+                        return ;
+                }
+                initFragment(fragment);
+                initSearchView();
+            }
+            @Override public void onTabUnselected(TabLayout.Tab tab) {}
+            @Override public void onTabReselected(TabLayout.Tab tab) {}
+        });
     }
 
     private void                    initFabs() {
@@ -128,7 +148,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
             public void onClick(View v) {
                 Utils.vibrateDevice(mInstance);
                 mFab.startAnimation(AnimationUtils.loadAnimation(mInstance, R.anim.shake));
-                //if () TODO: CHECK POUR LE MODE HISTORIC
                 if (!mFragment.start()) {
                     try {
                         launchMenu();
@@ -141,35 +160,20 @@ public class                        HostDiscoveryActivity extends MyActivity {
         });
     }
 
-    private void                    initTabs() {
-        /*
-            TODO: Build the click to switchToNewFragment
-         */
-        mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                Log.d(TAG, "tab.getHost().toString():" + tab.getText().toString());
-                switch (tab.getText().toString()) {
-                    case "arp\nDiscovery":
-                        Log.d(TAG, "Nmap Tab");
-                        typeScan = HostDiscoveryScan.typeScan.Nmap;
-                        mFragment.start();
-                        break;
-                    case "Icmp\ndiscovery":
-                        Log.d(TAG, "ARP TAB");
-                        typeScan = HostDiscoveryScan.typeScan.Arp;
-                        break;
-                    case "Services\nDiscovery":
-                        Log.d(TAG, "Service TAB");
-                        typeScan = HostDiscoveryScan.typeScan.Services;
-                        break;
-
-                }
-                initSearchView();
-            }
-            @Override public void onTabUnselected(TabLayout.Tab tab) {}
-            @Override public void onTabReselected(TabLayout.Tab tab) {}
-        });
+    private void                    initFragment(MyFragment fragment) {
+        try {
+            mFragment = fragment;
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frame_container, mFragment)
+                    .commit();
+            mFragment.init();
+            mFragment.start();
+        } catch (IllegalStateException e) {
+            showSnackbar("Error in fragment");
+            e.getStackTrace();
+            super.onBackPressed();
+        }
     }
 
     public void                     initMonitor() {
@@ -192,12 +196,12 @@ public class                        HostDiscoveryActivity extends MyActivity {
             case Arp:
                 bottomSheet = mFragment.onSettingsClick(mAppbar, this);
                 break;
-//            case Nmap:
-//                bottomSheet = mFragment.onSettingsClick();
-//                break;
-//            case Services:
-//                bottomSheet = mFragment.onSettingsClick();
-//                break;
+            case Services:
+                bottomSheet = mFragment.onSettingsClick(mAppbar, this);
+                break;
+            case Historic:
+                bottomSheet = mFragment.onSettingsClick(mAppbar, this);
+                break;
             default:
                 bottomSheet = mFragment.onSettingsClick(mAppbar, this);
                 break;
@@ -205,8 +209,9 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mSettingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "showing settings");
-                bottomSheet.show();
+                Log.d(TAG, "Showing settings of fragment");
+                if (bottomSheet != null)
+                    bottomSheet.show();
             }
         });
         mFragment.onAddButtonClick(mAddHostBtn);
@@ -307,13 +312,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
             mSingleton.actualSession = mActualSession;
             startActivity(new Intent(mInstance, MenuActivity.class));
         }
-    }
-
-    public void                     notifiyServiceAllScaned(List<Service> listOfServiceFound) {
-        showSnackbar("Scanning service on network finished");
-        //TODO: Need to refacto this on ManyToMany link
-        mActualSession.services = listOfServiceFound;
-        mActualSession.save();
     }
 
     public void                     showSnackbar(String txt) {

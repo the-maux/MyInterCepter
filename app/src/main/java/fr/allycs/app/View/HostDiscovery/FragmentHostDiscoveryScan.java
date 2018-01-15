@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -30,7 +29,7 @@ import java.util.ArrayList;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.Database.DBSession;
 import fr.allycs.app.Controller.Misc.MyFragment;
-import fr.allycs.app.Controller.Network.Discovery.HostDiscoveryScan;
+import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
@@ -39,8 +38,6 @@ import fr.allycs.app.View.Adapter.OSAdapter;
 import fr.allycs.app.View.Dialog.AddDnsDialog;
 import fr.allycs.app.View.Dialog.RV_dialog;
 import fr.allycs.app.View.MenuActivity;
-
-import static fr.allycs.app.Controller.Network.Discovery.HostDiscoveryScan.typeScan.Arp;
 
 public class                        FragmentHostDiscoveryScan extends MyFragment {
     private String                  TAG = "FragmentHostDiscoveryScan";
@@ -53,14 +50,14 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     private TextView                mEmptyList;
     private SwipeRefreshLayout      mSwipeRefreshLayout;
     private ArrayList<String>       mListOS = new ArrayList<>();
-    private HostDiscoveryScan       mScannerControler;
+    private NetworkDiscoveryControler mScannerControler;
 
     @Override
     public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hostdiscovery_scan, container, false);
         initXml(rootView);
         this.mActivity = (HostDiscoveryActivity) getActivity();
-        mScannerControler = new HostDiscoveryScan(this);
+        mScannerControler = new NetworkDiscoveryControler(this);
         if (mSingleton.DebugMode && !mHostLoaded) {
             mActivity.showSnackbar("debug enabled, starting Scan automaticaly");
             startNetworkScan();
@@ -69,10 +66,16 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         return rootView;
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    @Override public void           init() {
         mActivity.initToolbarButton();
+    }
+
+    public boolean                  start() {
+        if (!mHostLoaded) {
+            startNetworkScan();
+            return true;
+        }
+        return false;
     }
 
     private void                    initXml(View rootView) {
@@ -122,11 +125,11 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 }
                 if (mSingleton.network.updateInfo().isConnectedToNetwork()) {
                     mScannerControler.inLoading = true;
-                    if (mActivity.typeScan != HostDiscoveryScan.typeScan.Services)
+                    if (mActivity.typeScan != NetworkDiscoveryControler.typeScan.Services)
                         initHostsRecyclerView();
                     mActivity.progressAnimation();
                     mActivity.setToolbarTitle(null, "Scanning network");
-                    mScannerControler.run(Arp, mHosts);
+                    mScannerControler.run(mActivity.typeScan, mHosts);
                     mActivity.setProgressState(1000);
                 } else {
                     mActivity.showSnackbar("You need to be connected");
@@ -238,19 +241,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 .createDialog();
     }
 
-    @Override public void init() {
-
-    }
-
-    public boolean                  start() {
-        if (!mHostLoaded) {
-            startNetworkScan();
-            return true;
-        }
-        return false;
-    }
-
-    @Override public void stop() {
+    @Override public void           stop() {
 
     }
 

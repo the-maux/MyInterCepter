@@ -4,14 +4,13 @@ package fr.allycs.app.Controller.Network.BonjourService;
 import android.content.Context;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import fr.allycs.app.Controller.Network.Discovery.HostDiscoveryScan;
+import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Model.Net.Service;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
@@ -19,7 +18,7 @@ import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
 public class                        BonjourManager {
     private String                  TAG = "BonjourManager";
     private NsdManager              mNsdManager;
-    private HostDiscoveryScan       mScannerControler;
+    private NetworkDiscoveryControler mScannerControler;
     private HashMap<String, DiscoveryListenr> listDiscoveryListener = new HashMap<>();
     private BonjourManager          instance = this;
     private String[]                listServiceType;
@@ -49,7 +48,7 @@ public class                        BonjourManager {
                 "_ssh._tcp"});
     }
 
-    public                          BonjourManager(HostDiscoveryActivity activity, List<Host> listClient, HostDiscoveryScan scannerControler) {
+    public                          BonjourManager(HostDiscoveryActivity activity, List<Host> listClient, NetworkDiscoveryControler scannerControler) {
         Log.d(TAG, "Bonjour Manager starting");
         mScannerControler = scannerControler;
         mNsdManager = (NsdManager) activity.getSystemService(Context.NSD_SERVICE);
@@ -67,10 +66,22 @@ public class                        BonjourManager {
                     NsdManager.PROTOCOL_DNS_SD, listener);
             listDiscoveryListener.put(type, listener);
         } else {
-            mActivity.notifiyServiceAllScaned(listOfServiceFound);
+            notifiyServiceAllScaned(listOfServiceFound);
             mScannerControler.inLoading = false;
         }
     }
+
+    private void                    notifiyServiceAllScaned(final List<Service> listOfServiceFound) {
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mActivity.showSnackbar("Scanning service on network finished");
+                mActivity.mActualSession.services = listOfServiceFound;
+                mActivity.mActualSession.save();
+            }
+        });
+    }
+
     void                            stopServiceDiscovery(NsdManager.DiscoveryListener listene) {
         this.mNsdManager.stopServiceDiscovery(listene);
     }
@@ -80,6 +91,6 @@ public class                        BonjourManager {
 
     public void                     bingo(String hostAddress, String serviceName, Service service) {
         listOfServiceFound.add(service);
-        Snackbar.make(mActivity.mCoordinatorLayout, "Service: " + serviceName + " on "+ hostAddress , Snackbar.LENGTH_LONG).show();
+        mActivity.showSnackbar("Service: " + serviceName + " on "+ hostAddress);
     }
 }
