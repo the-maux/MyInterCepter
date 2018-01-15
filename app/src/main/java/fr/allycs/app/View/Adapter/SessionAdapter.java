@@ -13,15 +13,15 @@ import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.SessionHolder;
-import fr.allycs.app.View.HostDetail.HostDetailFragment;
+import fr.allycs.app.View.HostDiscovery.FragmentHistoric;
 
 public class                    SessionAdapter extends RecyclerView.Adapter<SessionHolder> {
     private String              TAG = this.getClass().getName();
-    private HostDetailFragment  mFragment;
+    private FragmentHistoric    mFragment;
     private List<Session>       mSessions;
     private Singleton           mSingleton = Singleton.getInstance();
 
-    public                      SessionAdapter(HostDetailFragment fragment, List<Session> sessions) {
+    public                      SessionAdapter(FragmentHistoric fragment, List<Session> sessions) {
         this.mFragment = fragment;
         this.mSessions = sessions;
     }

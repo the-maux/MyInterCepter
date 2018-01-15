@@ -25,10 +25,10 @@
             <ImageView
                 android:id="@+id/imageDNS"
                 android:layout_width="50dp"
-                android:layout_height="match_parent"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="8dp"
                 android:elevation="4dp"
-                android:padding="4dp"
                 android:src="@drawable/www" />
 
             <TextView
@@ -40,11 +40,12 @@
                 android:layout_marginTop="8dp"
                 android:layout_toLeftOf="@+id/deleteImage"
                 android:layout_toRightOf="@+id/imageDNS"
+                android:enabled="true"
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:paddingLeft="8dp"
                 android:text="www.facebook.com facebook.com"
-                android:textColor="@color/material_light_white"
+                android:textColor="?android:attr/textColorTertiary"
                 android:textSize="14sp" />
 
             <TextView
@@ -61,18 +62,17 @@
                 android:maxLines="2"
                 android:paddingLeft="8dp"
                 android:text="192.168.0.1 "
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
+                android:textColor="?android:attr/textColorTertiary"
+                android:textSize="12sp"
                 android:typeface="normal" />
 
             <ImageView
                 android:id="@+id/deleteImage"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="40dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="8dp"
-                android:padding="4dp"
                 android:src="@mipmap/ic_trash2" />
 
         </RelativeLayout>

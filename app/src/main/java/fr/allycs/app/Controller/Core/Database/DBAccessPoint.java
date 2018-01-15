@@ -50,7 +50,7 @@ public class                            DBAccessPoint {
         return ap;
     }
 
-    public static List<AccessPoint>    getApIfAlreadyRecorded(AccessPoint ap) {
+    public static List<AccessPoint>     getApIfAlreadyRecorded(AccessPoint ap) {
         From request = new Select()
                 .from(AccessPoint.class)
                 .where("Ssid = \"" + ap.Ssid + "\"");
@@ -59,7 +59,7 @@ public class                            DBAccessPoint {
         return aps;
     }
 
-    public static List<AccessPoint>    getAllSessionsWithDevice(Host device) {
+    public static List<AccessPoint>     getAllSessionsWithDevice(Host device) {
         /*    return new Select()
                 .from(AccessPoint.class)
                 .where("Ssid = ?", SSID)

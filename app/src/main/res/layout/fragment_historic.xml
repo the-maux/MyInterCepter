@@ -8,15 +8,300 @@
     android:id="@+id/layout"
     app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
+    <RelativeLayout
+        android:id="@+id/detailSessionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="2dp"
+        android:background="@color/primary_dark"
+        android:elevation="2dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Session de dourge"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/dateSession"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_marginLeft="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Analysée le 04/12 à 13h42"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:id="@+id/gatewayLine"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_below="@+id/dateSession"
+            android:layout_marginTop="8dp">
+
+            <ImageView
+                android:id="@+id/gateway_logo"
+                android:layout_width="32dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:padding="2dp"
+                app:srcCompat="@drawable/router1" />
+
+            <TextView
+                android:id="@+id/titleGateway"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_toLeftOf="@+id/forwardGateway"
+                android:layout_toRightOf="@+id/gateway_logo"
+                android:ellipsize="end"
+                android:enabled="true"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="Gateway: 192.168.0.1"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/SubtitleGateway"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/titleGateway"
+                android:layout_marginLeft="8dp"
+                android:layout_toLeftOf="@+id/forwardGateway"
+                android:layout_toRightOf="@+id/gateway_logo"
+                android:ellipsize="end"
+                android:enabled="false"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="(NEUFBOX 4355) - AA:BB:CC:DD:EE:DD"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/forwardGateway"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="8dp"
+                android:padding="2dp"
+                app:srcCompat="@mipmap/ic_forward_round" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/DevicesLine"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_below="@+id/gatewayLine"
+            android:layout_marginTop="8dp">
+
+            <ImageView
+                android:id="@+id/radar_logo"
+                android:layout_width="32dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:padding="1dp"
+                app:srcCompat="@drawable/prey" />
+
+            <TextView
+                android:id="@+id/titleDevices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_toLeftOf="@+id/forwardDevice"
+                android:layout_toRightOf="@+id/radar_logo"
+                android:ellipsize="end"
+                android:enabled="true"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="42 devices decouvert"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/SubtitleDevices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/titleDevices"
+                android:layout_marginLeft="8dp"
+                android:layout_toLeftOf="@+id/forwardDevice"
+                android:layout_toRightOf="@+id/radar_logo"
+                android:ellipsize="end"
+                android:enabled="false"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="6 Os découvert"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/forwardDevice"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="8dp"
+                android:padding="2dp"
+                app:srcCompat="@mipmap/ic_forward_round" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/WiresharkLine"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_below="@+id/DevicesLine"
+            android:layout_marginTop="8dp">
+
+            <ImageView
+                android:id="@+id/radar_Wireshark"
+                android:layout_width="32dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:padding="3dp"
+                app:srcCompat="@drawable/wiresharklogo_trans" />
+
+            <TextView
+                android:id="@+id/titleWireshark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_toLeftOf="@+id/forwardWireshark"
+                android:layout_toRightOf="@+id/radar_Wireshark"
+                android:ellipsize="end"
+                android:enabled="true"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="4 sessions sniff realise"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/SubtitleWireshark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/titleWireshark"
+                android:layout_marginLeft="8dp"
+                android:layout_toLeftOf="@+id/forwardWireshark"
+                android:layout_toRightOf="@+id/radar_Wireshark"
+                android:ellipsize="end"
+                android:enabled="false"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="2 .pcap avec le device courant"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/forwardWireshark"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="8dp"
+                android:padding="2dp"
+                app:srcCompat="@mipmap/ic_forward_round" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/ServicesLine"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_below="@+id/WiresharkLine"
+            android:layout_marginTop="8dp">
+
+            <ImageView
+                android:id="@+id/radar_Services"
+                android:layout_width="32dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:padding="3dp"
+                app:srcCompat="@drawable/scan" />
+
+            <TextView
+                android:id="@+id/titleServices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_toLeftOf="@+id/forwardServices"
+                android:layout_toRightOf="@+id/radar_Services"
+                android:ellipsize="end"
+                android:enabled="true"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="4 services découvert"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/SubtitleServices"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/titleServices"
+                android:layout_marginLeft="8dp"
+                android:layout_toLeftOf="@+id/forwardServices"
+                android:layout_toRightOf="@+id/radar_Services"
+                android:ellipsize="none"
+                android:enabled="false"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="worstation.__tcp__, video.__udp__, printer.__ipp__, nfs.__tcp__"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/forwardServices"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="8dp"
+                android:padding="2dp"
+                app:srcCompat="@mipmap/ic_forward_round" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/nbrServiceDiscovered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="2dp"
+            android:layout_marginRight="4dp"
+            android:text="4 services discovered on network"
+            android:textColor="@color/primary_text"
+            android:textSize="12sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/TypeOfScan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/nbrServiceDiscovered"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="4dp"
+            android:text="Realised with an Icmp scan "
+            android:textColor="@color/primary_text"
+            android:textSize="12sp"
+            android:textStyle="italic" />
+
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        tools:listitem="@layout/item_accesspoint"
         android:layout_alignParentTop="true"
         android:layout_marginTop="8dp"
-        android:scrollbars="vertical"
-        tools:listitem="@layout/item_hostdiscovery">
+        android:scrollbars="vertical">
 
     </android.support.v7.widget.RecyclerView>
 

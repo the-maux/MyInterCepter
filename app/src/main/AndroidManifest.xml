@@ -34,7 +34,7 @@
         <activity android:name=".View.WiresharkActivity" />
         <activity android:name=".View.Dora.DoraActivity" />
         <activity android:name=".View.WebServerActivity" />
-        <activity android:name=".View.HostDetail.HostFocusActivity" />
+        <activity android:name=".View.HostDetail.HostDetailActivity" />
 
         <meta-data android:name="AA_MODELS"
             android:value="

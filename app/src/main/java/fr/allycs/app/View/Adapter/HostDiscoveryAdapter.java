@@ -18,7 +18,7 @@ import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.HostDiscoveryHolder;
-import fr.allycs.app.View.HostDetail.HostFocusActivity;
+import fr.allycs.app.View.HostDetail.HostDetailActivity;
 
 
 public class                    HostDiscoveryAdapter extends RecyclerView.Adapter<HostDiscoveryHolder> {
@@ -107,7 +107,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                         else
                             mSingleton.hostsList.clear();
                         mSingleton.hostsList.add(host);
-                        Intent intent = new Intent(mActivity, HostFocusActivity.class);
+                        Intent intent = new Intent(mActivity, HostDetailActivity.class);
                         mActivity.startActivity(intent);
                     }
                 });
