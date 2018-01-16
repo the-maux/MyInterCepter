@@ -10,21 +10,25 @@ import fr.allycs.app.Controller.Network.BonjourService.BonjourManager;
 import fr.allycs.app.Controller.Network.IPv4CIDR;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.Model.Target.Host;
+import fr.allycs.app.View.HostDiscovery.FragmentHostDiscoveryScan;
 import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
 
-public class                        HostDiscoveryScan {
-    private String                  TAG = "HostDiscoveryScan";
-    public enum typeScan {          Arp, Services, Nmap }
-    private HostDiscoveryScan       mInstance = this;
+public class                        NetworkDiscoveryControler {
+    private String                  TAG = "NetworkDiscoveryControler";
+    public enum typeScan {          Arp, Services, Historic }
+    private NetworkDiscoveryControler mInstance = this;
+    private FragmentHostDiscoveryScan mFragment;
     private Singleton               mSingleton = Singleton.getInstance();
     private HostDiscoveryActivity   mActivity;
+    public boolean                  inLoading = false;
 
-    public HostDiscoveryScan(final HostDiscoveryActivity activity) {
-        this.mActivity = activity;
+    public                          NetworkDiscoveryControler(final FragmentHostDiscoveryScan fragmentHostDiscoveryScan) {
+        this.mActivity = (HostDiscoveryActivity) fragmentHostDiscoveryScan.getActivity();
+        this.mFragment = fragmentHostDiscoveryScan;
     }
 
     public void                    run(typeScan typeOfScan, List<Host> listOfHosts) {
-        mSingleton.actualSniffSession = null;
+        mSingleton.resetActualSniffSession();
         switch (typeOfScan) {
             case Arp:
                 startArpScan();
@@ -32,24 +36,12 @@ public class                        HostDiscoveryScan {
             case Services:
                 startBonjourScan(listOfHosts);
                 break;
-            case Nmap:
+/*            case Nmap:
                 startNmapScan();
-                break;
+                break;*/
         }
     }
 
-    private void                    startBonjourScan(List<Host> listOfHosts) {
-        new BonjourManager(mActivity, listOfHosts);
-    }
-
-    private void                    startNmapScan() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                new ScanNetmask(new IPv4CIDR(mSingleton.network.myIp, mSingleton.network.netmask), mInstance);
-            }
-        }).start();
-    }
     private void                    startArpScan() {
         new Thread(new Runnable() {
             @Override
@@ -58,16 +50,24 @@ public class                        HostDiscoveryScan {
             }
         }).start();
     }
+    private void                    startBonjourScan(List<Host> listOfHosts) {
+        new BonjourManager(mActivity, listOfHosts, this);
+    }
+
+    private void                    startNmapScan() {
+        mActivity.showSnackbar("Not implémented");
+        inLoading = false;
+    }
 
     public void                     onReachableScanOver(ArrayList<String> ipReachable) {
-        Log.d(TAG, "onReachableScanOver");
+        Log.d(TAG, "onReachableScanOver with : "+ ipReachable.size() + " ip(s) reachable");
         ArrayList<String> tmpAntiConcurentExecptionFFS = new ArrayList<>();
         tmpAntiConcurentExecptionFFS.addAll(ipReachable);
         NetUtils.dumpListHostFromARPTableInFile(mActivity, tmpAntiConcurentExecptionFFS);
-        mActivity.monitor(tmpAntiConcurentExecptionFFS.size() + " hosts detected");
+        mActivity.setToolbarTitle(null, tmpAntiConcurentExecptionFFS.size() + " hosts detected");
         mActivity.setProgressState(1500);
-        mActivity.monitor("Scanning " + tmpAntiConcurentExecptionFFS.size() + " devices");
-        Fingerprint.getDevicesInfoFromCepter(mActivity);
+        mActivity.setToolbarTitle(null,"Scanning " + tmpAntiConcurentExecptionFFS.size() + " devices");
+        Fingerprint.getDevicesInfoFromCepter(mFragment);
         mActivity.setProgressState(2000);
     }
 

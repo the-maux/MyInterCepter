@@ -24,11 +24,11 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/OsImg"
-                android:layout_width="52dp"
-                android:layout_height="match_parent"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="4dp"
-                android:padding="2dp"
-                android:src="@drawable/winicon" />
+                android:padding="4dp" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -45,11 +45,11 @@
 
             <ImageView
                 android:id="@+id/settings"
-                android:layout_width="32dp"
-                android:layout_height="match_parent"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                android:layout_centerVertical="false"
+                android:layout_alignParentTop="false"
+                android:layout_centerVertical="true"
                 android:layout_marginEnd="8dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/scylla_transparent" />
@@ -149,11 +149,38 @@
                     android:textColor="@color/material_light_white" />
 
             </LinearLayout>
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/primary_text"
+                android:layout_below="@+id/settingsLayout"
+                app:tabMode="scrollable">
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/offlinemodeItem2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Historic" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/subnetMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Notes" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/offlinemodeItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pcap" />
+            </android.support.design.widget.TabLayout>
             <FrameLayout
                 android:id="@+id/frame_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/settingsLayout"
+                android:layout_below="@+id/tabs"
+                tools:layout="@layout/fragment_hostdetail"
                 >
 
             </FrameLayout>

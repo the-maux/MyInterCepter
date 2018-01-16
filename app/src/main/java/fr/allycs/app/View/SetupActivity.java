@@ -1,11 +1,8 @@
 package fr.allycs.app.View;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.DhcpInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -15,16 +12,17 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import fr.allycs.app.Controller.Core.Conf.Setup;
-import fr.allycs.app.Controller.Network.NetUtils;
-import fr.allycs.app.Controller.Core.Conf.Singleton;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
+import fr.allycs.app.Controller.Core.Conf.Setup;
+import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Misc.MyActivity;
-import fr.allycs.app.Model.Net.NetworkInformation;
+import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.R;
 import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
-
-import java.io.*;
 
 public class                    SetupActivity extends MyActivity {
     private String              TAG = "SetupActivity";
@@ -156,7 +154,7 @@ public class                    SetupActivity extends MyActivity {
         new Setup(this).install();
     }//10:68:3f:7a:65:ef ___ 10.16.186.54/23 brd 10.16.187.255
 
-    public void                monitor(final String log) {
+    public void                 monitor(final String log) {
         mInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {

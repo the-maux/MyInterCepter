@@ -9,20 +9,27 @@ import java.util.List;
 import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Target.DNSSpoofItem;
+import fr.allycs.app.Model.Target.SniffSession;
 import fr.allycs.app.Model.Unix.DNSLog;
 import fr.allycs.app.View.Adapter.DnsLogsAdapter;
 import fr.allycs.app.View.DnsActivity;
 
 public class                    DnsControl {
     private String              TAG = "DnsControl";
-    public  List<DNSLog>        mDnsLogs = Singleton.getInstance().actualSniffSession.logDnsSpoofed;
+    public  List<DNSLog>        mDnsLogs;
     private RootProcess         mProcess;
     private DnsLogsAdapter      mRV_Adapter = null;
     private DnsConf             mDnsConf;
     private DnsActivity         mActivity;
+    private SniffSession        sniffSession;
 
     public DnsControl() {
         mDnsConf = new DnsConf();
+        if (Singleton.getInstance().getActualSniffSession() != null) {
+            sniffSession = Singleton.getInstance().getActualSniffSession();
+            mDnsLogs = sniffSession.logDnsSpoofed();
+        }
+
     }
 
     private void                initRVLink() {
@@ -73,9 +80,11 @@ public class                    DnsControl {
                         Log.d(TAG, "DNS_STDOUT::(" +read + ')');
                         read = read.replace("dnsmasq: ", "");
                         if (isItALog(read)) {
-                            DNSLog DomainlogTmp = new DNSLog(read);
+                            DNSLog DomainlogTmp = new DNSLog();
+                            DomainlogTmp.init(read);
                             boolean isAnewDomain;
                             if ((isAnewDomain = isADomainConnu(DomainlogTmp))) {
+                                DomainlogTmp.sniffSession = sniffSession;
                                 DomainlogTmp.save();
                                 mDnsLogs.add(0, DomainlogTmp);
                             }

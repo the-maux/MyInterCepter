@@ -1,13 +1,8 @@
-package fr.allycs.app.Model.Net;
+package fr.allycs.app.Controller.Network;
 
 import android.net.DhcpInfo;
 import android.util.Log;
 
-import fr.allycs.app.Controller.Network.NetUtils;
-
-/**
- * Created by maxim on 10/08/2017.
- */
 
 public class                NetworkInformation {
     private String          TAG = "NetworkInformation";
@@ -17,9 +12,10 @@ public class                NetworkInformation {
     public String           netmask = "";
     public String           dns1 = "", dns2 = "";
     public String           dhcp = "";
+    public String           Ssid = "";
     public DhcpInfo         dhcpInfo;
 
-    public NetworkInformation(DhcpInfo dhcpInfo, String mac) {
+    public                  NetworkInformation(DhcpInfo dhcpInfo, String mac) {
         this.dhcpInfo = dhcpInfo;
         this.mac = mac;
         init();

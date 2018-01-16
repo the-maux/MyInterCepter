@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/material_light_white"
@@ -28,7 +27,7 @@
                 <ImageView
                     android:id="@+id/imageView11"
                     android:layout_width="40dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_alignBottom="@+id/dumpInFileChkd"
                     android:layout_alignParentStart="false"
                     android:layout_alignParentTop="false"
@@ -39,7 +38,7 @@
                 <ImageView
                     android:id="@+id/imageView12"
                     android:layout_width="40dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_alignBottom="@+id/sslStripChkd"
                     android:layout_alignParentStart="false"
                     android:layout_alignParentTop="false"
@@ -50,7 +49,7 @@
                 <ImageView
                     android:id="@+id/imageView13"
                     android:layout_width="40dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_alignBottom="@+id/lockScreenChkd"
                     android:layout_alignParentStart="false"
                     android:layout_alignParentTop="false"
@@ -61,7 +60,7 @@
                 <ImageView
                     android:id="@+id/imageView14"
                     android:layout_width="40dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_alignBottom="@+id/DeepAnalChkd"
                     android:layout_alignParentStart="false"
                     android:layout_alignParentTop="false"
@@ -72,7 +71,7 @@
                 <ImageView
                     android:id="@+id/imageView15"
                     android:layout_width="40dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_alignBottom="@+id/Portredirect"
                     android:layout_alignParentStart="false"
                     android:layout_alignParentTop="false"
@@ -83,7 +82,7 @@
                 <ImageView
                     android:id="@+id/imageView16"
                     android:layout_width="40dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_alignBottom="@+id/Portfiltering"
                     android:layout_alignParentStart="false"
                     android:layout_alignParentTop="false"
@@ -94,7 +93,7 @@
                 <ImageView
                     android:id="@+id/imageView17"
                     android:layout_width="40dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_alignBottom="@+id/DnsSpoofing"
                     android:layout_alignParentStart="false"
                     android:layout_alignParentTop="false"

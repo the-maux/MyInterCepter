@@ -387,7 +387,7 @@
                             android:layout_alignParentBottom="true"
                             android:layout_marginBottom="12dp"
                             android:gravity="center"
-                            android:text="Metasploit"
+                            android:text="Web Server"
                             android:textColor="@color/material_light_white"
                             android:textSize="18sp" />
 
@@ -397,8 +397,9 @@
                             android:layout_height="40dp"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
+                            android:contentDescription="TODO"
                             android:elevation="2dp"
-                            android:src="@drawable/metasploit" android:contentDescription="TODO"/>
+                            android:src="@drawable/www" />
 
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>

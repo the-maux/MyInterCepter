@@ -4,13 +4,13 @@ package fr.allycs.app.Controller.Network.BonjourService;
 import android.content.Context;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Model.Net.Service;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
@@ -18,6 +18,7 @@ import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
 public class                        BonjourManager {
     private String                  TAG = "BonjourManager";
     private NsdManager              mNsdManager;
+    private NetworkDiscoveryControler mScannerControler;
     private HashMap<String, DiscoveryListenr> listDiscoveryListener = new HashMap<>();
     private BonjourManager          instance = this;
     private String[]                listServiceType;
@@ -47,15 +48,16 @@ public class                        BonjourManager {
                 "_ssh._tcp"});
     }
 
-    public                          BonjourManager(HostDiscoveryActivity activity, List<Host> listClient) {
+    public                          BonjourManager(HostDiscoveryActivity activity, List<Host> listClient, NetworkDiscoveryControler scannerControler) {
         Log.d(TAG, "Bonjour Manager starting");
+        mScannerControler = scannerControler;
         mNsdManager = (NsdManager) activity.getSystemService(Context.NSD_SERVICE);
         mActivity = activity;
         this.listServiceType = getAllType();
         this.listClient = listClient;
         createListListener();
     }
-    void                     createListListener() {
+    void                            createListListener() {
         if (offsetServiceType < listServiceType.length) {
             String type = listServiceType[offsetServiceType++];
             //TODO:maybe cant be 1 DiscoveryListener for all Servicediscovery
@@ -64,18 +66,31 @@ public class                        BonjourManager {
                     NsdManager.PROTOCOL_DNS_SD, listener);
             listDiscoveryListener.put(type, listener);
         } else {
-            mActivity.notifiyServiceAllScaned(listOfServiceFound);
+            notifiyServiceAllScaned(listOfServiceFound);
+            mScannerControler.inLoading = false;
         }
     }
-    void                     stopServiceDiscovery(NsdManager.DiscoveryListener listene) {
+
+    private void                    notifiyServiceAllScaned(final List<Service> listOfServiceFound) {
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mActivity.showSnackbar("Scanning service on network finished");
+                mActivity.mActualSession.services = listOfServiceFound;
+                mActivity.mActualSession.save();
+            }
+        });
+    }
+
+    void                            stopServiceDiscovery(NsdManager.DiscoveryListener listene) {
         this.mNsdManager.stopServiceDiscovery(listene);
     }
-    void                     resolveService(NsdServiceInfo service) {
+    void                            resolveService(NsdServiceInfo service) {
         this.mNsdManager.resolveService(service,  new ResolvListener(this, listClient));
     }
 
-    public void             bingo(String hostAddress, String serviceName, Service service) {
+    public void                     bingo(String hostAddress, String serviceName, Service service) {
         listOfServiceFound.add(service);
-        Snackbar.make(mActivity.mCoordinatorLayout, "Service: " + serviceName + " on "+ hostAddress , Snackbar.LENGTH_LONG).show();
+        mActivity.showSnackbar("Service: " + serviceName + " on "+ hostAddress);
     }
 }

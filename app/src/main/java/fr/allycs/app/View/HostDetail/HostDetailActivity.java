@@ -4,10 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
@@ -15,19 +16,21 @@ import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
+import fr.allycs.app.View.HostDiscovery.FragmentHistoric;
 import fr.allycs.app.View.NmapActivity;
 import fr.allycs.app.View.WiresharkActivity;
 
-public class                    HostFocusActivity extends MyActivity {
-    private String              TAG = "HostFocusActivity";
-    private HostFocusActivity   mInstance = this;
+public class HostDetailActivity extends MyActivity {
+    private String              TAG = "HostDetailActivity";
+    private HostDetailActivity mInstance = this;
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinator;
     private Toolbar             mToolbar;
     private CircleImageView     osHostImage;
+    private TabLayout           mTabs;
     private TextView            mPortScan, mVulnerabilitys, mFingerprint, mMitm;
     private Host                mFocusedHost;
-    private HostDetailFragment  mFragment;
+    private FragmentHistoric    mFragmentHistoric;
 
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +57,7 @@ public class                    HostFocusActivity extends MyActivity {
         mMitm  = findViewById(R.id.MitmARPTxt);
         Fingerprint.setOsIcon(this, mFocusedHost, osHostImage);
         mToolbar.setTitle(mFocusedHost.ip);
+        mTabs  = findViewById(R.id.tabs);
         if (mFocusedHost.getName().contains("-")) {
             mToolbar.setSubtitle(mFocusedHost.mac);
         } else {
@@ -90,12 +94,53 @@ public class                    HostFocusActivity extends MyActivity {
         });
     }
 
+    private void                initTabs() {
+        mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                Log.d(TAG, "tab.getHost().toString():" + tab.getText().toString());
+                switch (tab.getText().toString()) {
+                    case "historic":
+                        displayHistoric();
+                        break;
+                    case "notes":
+                        displayNotes();
+                        break;
+                    case "services":
+                        displayServices();
+                        break;
+
+                }
+            }
+            @Override public void onTabUnselected(TabLayout.Tab tab) {}
+            @Override public void onTabReselected(TabLayout.Tab tab) {}
+        });
+    }
+
+    private void                displayNotes() {
+        Log.d(TAG, "LOAD FROM BDD THE NOTES OF " + mFocusedHost.ip);
+        Snackbar.make(mCoordinator, "Not implemented yet", Snackbar.LENGTH_LONG).show();
+    }
+
+    private void                displayHistoric() {
+        Log.d(TAG, "LOAD FROM BDD THE HISTORIC OF " + mFocusedHost.ip);
+        Snackbar.make(mCoordinator, "Not implemented yet", Snackbar.LENGTH_LONG).show();
+    }
+
+    private void                displayServices() {
+        Log.d(TAG, "SHOW SERVICES OF " + mFocusedHost.ip);
+        Snackbar.make(mCoordinator, "Not implemented yet", Snackbar.LENGTH_LONG).show();
+    }
+
     private void                initFragment() {
         try {
-            mFragment = new HostDetailFragment();
-            getFragmentManager()
+            mFragmentHistoric = new FragmentHistoric();
+            Bundle args = new Bundle();
+            args.putString("mode", FragmentHistoric.HOST_HISTORIC);
+            mFragmentHistoric.setArguments(args);
+            getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.frame_container, mFragment)
+                    .replace(R.id.frame_container, mFragmentHistoric)
                     .commit();
         } catch (IllegalStateException e) {
             Log.w("Error MainActivity", "FragmentStack or FragmentManager corrupted");
@@ -105,7 +150,10 @@ public class                    HostFocusActivity extends MyActivity {
     }
 
     @Override public void       onBackPressed() {
-        if (mFragment != null || mFragment.onBackPressed())
+        if (mFragmentHistoric == null || mFragmentHistoric.onBackPressed())
             super.onBackPressed();
+        else {
+            Log.d(TAG, "Fragment mode: " + mFragmentHistoric.mActualMode.name());
+        }
     }
 }

@@ -2,6 +2,7 @@ package fr.allycs.app.Controller.Misc;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.IBinder;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
@@ -26,13 +27,19 @@ public class                Utils {
 
     public static void      vibrateDevice(Context context) {
         Vibrator vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-        vibe.vibrate(100);
+        if (vibe != null) {
+            vibe.vibrate(50);
+        }
     }
 
     public static void      hideKeyboard(MyActivity activity) {
         try {
             InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+            if (inputMethodManager != null && activity.getCurrentFocus() != null) {
+                IBinder binder = activity.getCurrentFocus().getWindowToken();
+                if (binder != null)
+                    inputMethodManager.hideSoftInputFromWindow(binder, 0);
+            }
         } catch (Exception e) {
             Log.e(TAG, "hidding keyboard failed, cause no focus");
         }

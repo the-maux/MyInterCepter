@@ -10,6 +10,7 @@ import com.activeandroid.annotation.Table;
 import java.util.ArrayList;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Model.Target.SniffSession;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.ConsoleLogHolder;
 
@@ -20,12 +21,20 @@ public class                            DNSLog extends Model {
     public Type                         currentType;
     @Column(name = "Domain")
     public String                       domain;
+    @Column(name = "SniffSession")
+    public SniffSession                 sniffSession;
+
+
     public String                       data;
     public ArrayList<DNSLog>            logs = new ArrayList<>();
     public RecyclerView.Adapter<ConsoleLogHolder> adapter = null;
     public int                          color;
 
-    public                              DNSLog(String line) {
+    public                              DNSLog() {
+        super();
+    }
+
+    public void                         init(String line) {
         buildLog(line);
         data = line;
         logs.add(this);

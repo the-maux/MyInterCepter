@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:fab="http://schemas.android.com/tools"
     android:id="@+id/cardView"
-    android:layout_width="150dp"
+    android:layout_width="168dp"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     android:layout_marginTop="8dp"
-    android:background="@color/material_light_black"
+    android:background="@color/primary_text"
     app:cardCornerRadius="10dp"
     app:cardElevation="12dp">
 
@@ -15,6 +14,7 @@
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="4dp"
         android:background="@color/primary_text">
 
         <RelativeLayout
@@ -55,16 +55,33 @@
                 app:fabSize="mini"
                 app:srcCompat="@mipmap/ic_stop" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <TextView
                 android:id="@+id/IP"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:layout_toLeftOf="@+id/menuButton"
                 android:background="@color/primary_text"
                 android:elevation="2dp"
                 android:fontFamily="serif-monospace"
                 android:gravity="center"
-                android:text="127.42.42.1\nthe-maux"
+                android:text="127.42.42.1"
+                android:textColor="@color/material_light_white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:typeface="monospace" />
+
+            <TextView
+                android:id="@+id/ipHostname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/IP"
+                android:layout_toLeftOf="@+id/menuButton"
+                android:background="@color/primary_text"
+                android:elevation="2dp"
+                android:fontFamily="serif-monospace"
+                android:gravity="center"
+                android:text="the-maux"
                 android:textColor="@color/material_light_white"
                 android:textSize="12sp"
                 android:textStyle="bold"
@@ -86,12 +103,12 @@
         <RelativeLayout
             android:id="@+id/topView"
             android:layout_width="match_parent"
-            android:layout_height="34dp"
+            android:layout_height="42dp"
             android:layout_below="@+id/menuView"
             android:background="@color/primary_text"
             android:elevation="1dp">
 
-            <android.support.v7.widget.AppCompatTextView
+            <TextView
                 android:id="@+id/diagnosPourcentage"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -104,7 +121,7 @@
                 android:textColor="@color/material_light_white"
                 android:textStyle="bold" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <TextView
                 android:id="@+id/uptime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -115,23 +132,28 @@
                 android:gravity="right"
                 android:text="Uptime: 01h42m"
                 android:textColor="@color/material_light_white"
-                android:textSize="11sp" />
+                android:textSize="12sp"
+                android:textStyle="italic" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <TextView
                 android:id="@+id/stat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_below="@id/uptime"
-                android:layout_marginBottom="2dp"
+                android:layout_marginBottom="4dp"
                 android:layout_marginRight="8dp"
                 android:layout_toRightOf="@+id/diagnosPourcentage"
+                android:ellipsize="end"
                 android:fontFamily="sans-serif"
                 android:gravity="bottom|right"
+                android:lines="1"
+                android:maxLines="1"
                 android:text="sent: 454 / rcv: 434"
                 android:textColor="@color/material_light_white"
-                android:textSize="11sp" />
+                android:textSize="12sp"
+                android:textStyle="italic" />
 
         </RelativeLayout>
 
@@ -143,7 +165,7 @@
             android:background="@color/primary_text"
             android:elevation="3dp">
 
-            <android.support.v7.widget.AppCompatTextView
+            <TextView
                 android:id="@+id/diagnose"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

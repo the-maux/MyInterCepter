@@ -8,12 +8,13 @@ import android.widget.TextView;
 import fr.allycs.app.R;
 
 public class                SessionHolder extends RecyclerView.ViewHolder {
-    public TextView         nameSession;
+    public TextView         title, subtitle;
     public ImageView        forward;
 
     public                  SessionHolder(View itemView) {
         super(itemView);
-        nameSession = itemView.findViewById(R.id.nameSession);
+        title = itemView.findViewById(R.id.title);
+        subtitle = itemView.findViewById(R.id.subtitle);
         forward = itemView.findViewById(R.id.icon2);
     }
 }

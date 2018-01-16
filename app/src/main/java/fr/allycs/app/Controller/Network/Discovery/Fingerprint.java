@@ -1,23 +1,21 @@
 package fr.allycs.app.Controller.Network.Discovery;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
+import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.Database.DBHost;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;
-import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
+import fr.allycs.app.View.HostDiscovery.FragmentHostDiscoveryScan;
 
 public class                         Fingerprint {
     private static String            TAG = "Fingerprint";
@@ -25,10 +23,9 @@ public class                         Fingerprint {
      * Scan with the cepter binary the hostList
      * @param scanActivity activity for callback
      */
-    static void                      getDevicesInfoFromCepter(final HostDiscoveryActivity scanActivity) {
-        final List<Host> hosts = new ArrayList<>();
+    static void                      getDevicesInfoFromCepter(final FragmentHostDiscoveryScan scanActivity) {
+        final ArrayList<Host> hosts = new ArrayList<>();
         final RootProcess process = new RootProcess("Cepter Scan device", Singleton.getInstance().FilesPath);
-        //final BufferedReader bufferedReader = new BufferedReader(process.getInputStreamReader());
         final BufferedReader bufferedReader = process.getReader();
         process.exec(Singleton.getInstance().FilesPath + "cepter scan " + Singleton.getInstance().nbrInteface);
         process.exec("exit");
@@ -40,7 +37,6 @@ public class                         Fingerprint {
                         try {
                             buffer = bufferedReader.readLine();
                         } catch (IOException e) {
-                            Log.d(TAG, "ERROR INTRANET");
                             e.printStackTrace();
                             scanActivity.onHostActualized(hosts);
                         }

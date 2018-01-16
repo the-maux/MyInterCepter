@@ -8,20 +8,22 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.AccessPointHolder;
-import fr.allycs.app.View.HostDetail.HostDetailFragment;
-import fr.allycs.app.View.HostDetail.HostFocusActivity;
+import fr.allycs.app.View.HostDiscovery.FragmentHistoric;
 
 public class                    AccessPointAdapter extends RecyclerView.Adapter<AccessPointHolder> {
     private String              TAG = this.getClass().getName();
-    private HostDetailFragment  mFragment;
+    private FragmentHistoric    mFragment;
     private List<AccessPoint>   mSessions;
     private Singleton           mSingleton = Singleton.getInstance();
 
-    public                      AccessPointAdapter(HostDetailFragment activity, List<AccessPoint> sessions) {
-        this.mFragment = activity;
+    public enum typeFragment {  HostDetail, HistoricDB }
+
+    public                      AccessPointAdapter(FragmentHistoric fragment, List<AccessPoint> sessions) {
+        this.mFragment = fragment;
         this.mSessions = sessions;
     }
 
@@ -34,6 +36,8 @@ public class                    AccessPointAdapter extends RecyclerView.Adapter<
     public void                 onBindViewHolder(AccessPointHolder holder, int position) {
         final AccessPoint ap = mSessions.get(position);
         holder.ssid.setText(ap.Ssid);
+        MyGlideLoader.loadDrawableInImageView(mFragment.getContext(), R.mipmap.ic_wifi_round, holder.wifi_logo);
+        MyGlideLoader.loadDrawableInImageView(mFragment.getContext(), R.mipmap.ic_forward_round, holder.forward);
         holder.forward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

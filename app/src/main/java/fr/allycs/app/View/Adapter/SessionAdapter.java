@@ -5,22 +5,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.SessionHolder;
-import fr.allycs.app.View.HostDetail.HostDetailFragment;
-import fr.allycs.app.View.HostDetail.HostFocusActivity;
+import fr.allycs.app.View.HostDiscovery.FragmentHistoric;
 
 public class                    SessionAdapter extends RecyclerView.Adapter<SessionHolder> {
     private String              TAG = this.getClass().getName();
-    private HostDetailFragment  mFragment;
+    private FragmentHistoric    mFragment;
     private List<Session>       mSessions;
     private Singleton           mSingleton = Singleton.getInstance();
 
-    public                      SessionAdapter(HostDetailFragment fragment, List<Session> sessions) {
+    public                      SessionAdapter(FragmentHistoric fragment, List<Session> sessions) {
         this.mFragment = fragment;
         this.mSessions = sessions;
     }
@@ -34,7 +35,14 @@ public class                    SessionAdapter extends RecyclerView.Adapter<Sess
     @Override
     public void                 onBindViewHolder(SessionHolder holder, int position) {
         final Session session = mSessions.get(position);
-        holder.nameSession.setText(session.toString());
+        String date = new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE).format(session.Date);
+        if (session.name == null || session.name.isEmpty()) {
+            holder.title.setText(date);
+        } else {
+            holder.title.setText(session.name);
+            holder.subtitle.setText(date);
+        }
+        holder.subtitle.setText(session.listDevices().size() + " devices decouvert");
         holder.forward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

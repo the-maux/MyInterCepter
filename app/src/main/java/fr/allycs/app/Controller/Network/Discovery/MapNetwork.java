@@ -1,29 +1,32 @@
 package fr.allycs.app.Controller.Network.Discovery;
-        import android.util.Log;
 
-import javax.jmdns.JmDNS;
+import android.util.Log;
+
 import java.io.IOException;
-import java.net.*;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-        import fr.allycs.app.Controller.Core.Conf.Singleton;
+import javax.jmdns.JmDNS;
+
+import fr.allycs.app.Controller.Core.Conf.Singleton;
 
 public class                        MapNetwork {
     private String                  TAG = "MapNetwork";
     private ArrayList<String>       ipReachable;
     private String                  routerIp;
-    private HostDiscoveryScan       scannerControler;
+    private NetworkDiscoveryControler scannerControler;
     private static MapNetwork       instance = null;
     private String                  PATH_TO_PING_BINARY = Singleton.getInstance().FilesPath + "busybox ";
 
-    private                         MapNetwork(HostDiscoveryScan scannerControler, String routerIp) {
+    private                         MapNetwork(NetworkDiscoveryControler scannerControler, String routerIp) {
         this.scannerControler = scannerControler;
         this.routerIp = routerIp;
         this.ipReachable = new ArrayList<>();
         DiscoverNetwork();
     }
 
-    public static synchronized MapNetwork getInstance(HostDiscoveryScan scannerControler, String routerIp) {
+    public static synchronized MapNetwork getInstance(NetworkDiscoveryControler scannerControler, String routerIp) {
         if (instance == null) {
             instance = new MapNetwork(scannerControler, routerIp);
         }

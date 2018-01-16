@@ -5,11 +5,12 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.allycs.app.Controller.Core.BinaryWrapper.Dns.DnsControl;
-import fr.allycs.app.Controller.Network.IPTables;
 import fr.allycs.app.Controller.Core.BinaryWrapper.ArpSpoof;
+import fr.allycs.app.Controller.Core.BinaryWrapper.Dns.DnsControl;
+import fr.allycs.app.Controller.Core.Database.DBSniffSession;
+import fr.allycs.app.Controller.Network.IPTables;
+import fr.allycs.app.Controller.Network.NetworkInformation;
 import fr.allycs.app.Model.Target.Host;
-import fr.allycs.app.Model.Net.NetworkInformation;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.Model.Target.SniffSession;
 
@@ -26,7 +27,7 @@ public class                            Singleton {
     public ArrayList<Host>              hostsList = null;
     public List<ArpSpoof>               ArpSpoofProcessStack = new ArrayList<>();
     public NetworkInformation           network = null;
-    public SniffSession                 actualSniffSession = null;
+    private SniffSession                actualSniffSession = null;
     public Session                      actualSession = null;
     private boolean                     sslstripMode = false, LockScreen = false;
     private boolean                     DnsControlstarted = false, isTcpdumpStarted = false;
@@ -38,6 +39,13 @@ public class                            Singleton {
     public String                       BinaryPath = null;
     public String                       FilesPath = null;
 
+
+    public SniffSession                 getActualSniffSession() {
+        if (actualSniffSession == null) {
+            actualSniffSession = DBSniffSession.buildSniffSession();
+        }
+       return actualSniffSession;
+    }
 
     public DnsControl                   getDnsControler() {
         if (dnsSpoofed == null) {
@@ -71,4 +79,7 @@ public class                            Singleton {
         Log.i("setockScreenActived", "Not implemented");
     }
 
+    public void                         resetActualSniffSession() {
+        actualSniffSession = null;
+    }
 }
