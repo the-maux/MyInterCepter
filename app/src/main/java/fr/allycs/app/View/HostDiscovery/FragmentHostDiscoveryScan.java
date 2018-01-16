@@ -59,12 +59,22 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         this.mActivity = (HostDiscoveryActivity) getActivity();
         mScannerControler = new NetworkDiscoveryControler(this);
         if (mSingleton.DebugMode && !mHostLoaded) {
-            mActivity.showSnackbar("debug enabled, starting Scan automaticaly");
+            mActivity.showSnackbar("Debug mode: auto scan started");
             startNetworkScan();
         }
         initSwipeRefresh();
         mActivity.initToolbarButton();
         return rootView;
+    }
+
+    @Override
+    public void                     onResume() {
+        //TODO: prévoir quand on passe par la pour start le services discovery (si il n'a pas déjà était lancé)
+        super.onResume();
+        Log.d(TAG, "onResume");
+        mHost_RV.setAdapter(mHostAdapter);
+        mHost_RV.setHasFixedSize(true);
+        mHost_RV.setLayoutManager(new LinearLayoutManager(mActivity));
     }
 
     public boolean                  start() {
@@ -206,6 +216,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 mActivity.setToolbarTitle(SSID, mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": ""));
                 mActivity.mActualSession = DBSession.buildSession(
                         SSID, mSingleton.network.gateway, hosts, "Icmp", mHostAdapter.getOsList());
+                mSingleton.actualSession = mActivity.mActualSession;
                 mSwipeRefreshLayout.setRefreshing(false);
                 mHostLoaded = true;
                 mSingleton.hostsList = mHosts;

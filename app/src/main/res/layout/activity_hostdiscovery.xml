@@ -136,16 +136,12 @@
 			android:elevation="6dp"
 			android:gravity="right"
 			android:lines="2"
-
 			android:paddingBottom="2dp"
 			android:paddingRight="8dp"
 			android:paddingTop="4dp"
 			android:text="Gateway: x.x.x.x \n IP: x.x.x.x"
 			android:textColor="@color/green"
 			android:textSize="12sp" />
-
-
-
 
 	</RelativeLayout>
 

@@ -82,7 +82,7 @@ public class                                DBSession {
     public static List<Session>             getAllSessionFromApWithDeviceIn(List<Session> sessions, Host mFocusedHost) {
         List<Session> allSessionWithDeviceIn = new ArrayList<>();
         for (Session session : sessions) {
-            if (session.listDevicesSerialized.contains("" + mFocusedHost.getId())) {
+            if (mFocusedHost == null || session.listDevicesSerialized.contains("" + mFocusedHost.getId())) {
                 allSessionWithDeviceIn.add(session);
             }
         }
@@ -109,9 +109,9 @@ public class                                DBSession {
             Log.d(TAG, "SaveSession::" + ap.Ssid + ", new sesssion with " + devicesConnected.size() + " new devices");
         session.Date = Calendar.getInstance().getTime();
         session.typeScan = TypeScan;
-        //session.Ap = ap;
         session.name = ap.Ssid + " " + new SimpleDateFormat("dd MMMM k", Locale.FRANCE).format(new Date()) + "H";
         session.services = new ArrayList<>();
+        session.Ap = ap;
         session.listDevicesSerialized = DBHost.SerializeListDevices(devicesConnected);
         for (Host host : devicesConnected) {
             if (host.ip.contains(Gateway)) {
@@ -119,11 +119,11 @@ public class                                DBSession {
                 break;
             }
         }
-        session.Ap = ap;
         session.save();
         ap.sessions().add(session);
         ap.save();
-        ap.dumpSessions();
+        if (Singleton.getInstance().UltraDebugMode)
+            ap.dumpSessions();
         ActiveAndroid.setTransactionSuccessful();
         ActiveAndroid.endTransaction();
         return session;

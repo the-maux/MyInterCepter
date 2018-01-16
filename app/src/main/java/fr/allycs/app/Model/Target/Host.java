@@ -49,7 +49,9 @@ public class                Host extends Model {
     public                  Host(String buffer) {
         super();
         try {
-            buffer = buffer.replace("\t", " ").replace("  ", " ");
+
+            buffer = buffer.trim().replaceAll("\\p{Cntrl}", "?")
+                    .replace("\t", " ").replace("  ", " ");
             String beg = buffer.substring(0, buffer.indexOf(":") - 1);
             String mid = buffer.substring(buffer.indexOf(":") + 2, buffer.indexOf(";") - 1);
             String end = buffer.substring(buffer.indexOf(";") + 2);
@@ -85,8 +87,8 @@ public class                Host extends Model {
     public static Comparator<Host> comparator = new Comparator<Host>() {
         @Override
         public int compare(Host o1, Host o2) {
-            String ip1[] = o1.ip.replace(".", "::").split("::");
-            String ip2[] = o2.ip.replace(".", "::").split("::");
+            String ip1[] = o1.ip.replace(" ", "").replace(".", "::").split("::");
+            String ip2[] = o2.ip.replace(" ", "").replace(".", "::").split("::");
             if (Integer.parseInt(ip1[2]) > Integer.parseInt(ip2[2]))
                 return 1;
             else if (Integer.parseInt(ip1[2]) < Integer.parseInt(ip2[2]))

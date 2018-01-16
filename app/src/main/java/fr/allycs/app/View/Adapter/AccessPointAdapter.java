@@ -36,6 +36,7 @@ public class                    AccessPointAdapter extends RecyclerView.Adapter<
     public void                 onBindViewHolder(AccessPointHolder holder, int position) {
         final AccessPoint ap = mSessions.get(position);
         holder.ssid.setText(ap.Ssid);
+        holder.ssid_subtitle.setText(ap.sessions().size() + " session(s) recorded");
         MyGlideLoader.loadDrawableInImageView(mFragment.getContext(), R.mipmap.ic_wifi_round, holder.wifi_logo);
         MyGlideLoader.loadDrawableInImageView(mFragment.getContext(), R.mipmap.ic_forward_round, holder.forward);
         holder.forward.setOnClickListener(new View.OnClickListener() {

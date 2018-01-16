@@ -70,6 +70,10 @@ public class                         Fingerprint {
     }
 
     private static void              guessosType(String InfoDevice, Host host) {
+        if (InfoDevice == null) {
+            host.osType = Os.Unknow;
+            return;
+        }
         InfoDevice = InfoDevice.toLowerCase();
         if (InfoDevice.contains("bluebird")) {
             host.osType = Os.Bluebird;

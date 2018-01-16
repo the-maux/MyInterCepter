@@ -39,7 +39,7 @@ import fr.allycs.app.View.Dialog.HostDialogDetail;
 public class                        FragmentHistoric extends MyFragment {
     private String                  TAG = "FragmentHistoric";
     private Singleton               mSingleton = Singleton.getInstance();
-    private Host                    mFocusedHost = null;//TODO need to be init
+    private Host                    mFocusedHost = null;
     private List<AccessPoint>       HistoricAps;
     private Session                 focusedSession = null;
 
@@ -70,6 +70,7 @@ public class                        FragmentHistoric extends MyFragment {
 
     @Override public void           init() {
         if (getArguments() != null && getArguments().getString("mode") != null) {
+            Log.d(TAG, "init in mode:[" + getArguments().getString("mode") + "]");
             switch (getArguments().getString("mode")) {
                 case HOST_HISTORIC:
                     mFocusedHost = mSingleton.hostsList.get(0);

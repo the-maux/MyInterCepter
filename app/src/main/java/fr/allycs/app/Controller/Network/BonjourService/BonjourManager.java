@@ -61,7 +61,7 @@ public class                        BonjourManager {
         if (offsetServiceType < listServiceType.length) {
             String type = listServiceType[offsetServiceType++];
             //TODO:maybe cant be 1 DiscoveryListener for all Servicediscovery
-            DiscoveryListenr listener = new DiscoveryListenr(instance, type);
+            DiscoveryListenr listener = new DiscoveryListenr(instance, type, mActivity);
             mNsdManager.discoverServices(type,
                     NsdManager.PROTOCOL_DNS_SD, listener);
             listDiscoveryListener.put(type, listener);

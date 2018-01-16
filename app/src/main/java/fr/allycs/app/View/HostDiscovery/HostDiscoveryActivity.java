@@ -57,7 +57,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private Toolbar                 mToolbar;
     private TabLayout               mTabs;
     private ProgressBar             mProgressBar;
-    private MyFragment              mFragment;
+    private MyFragment              mFragment, HistoricFragment = null, NetDiscoveryFragment = null;
     public final int                MAXIMUM_PROGRESS = 6500;
     public Session                  mActualSession;
     public NetworkDiscoveryControler.typeScan typeScan = NetworkDiscoveryControler.typeScan.Arp;
@@ -99,37 +99,40 @@ public class                        HostDiscoveryActivity extends MyActivity {
             initTabs();
             initFabs();
             initMonitor();
-            initFragment(new FragmentHostDiscoveryScan());
+            mFragment = new FragmentHostDiscoveryScan();
+            NetDiscoveryFragment = mFragment;
+            initFragment(NetDiscoveryFragment);
             initSearchView();
         }
     }
 
     private void                    initTabs() {
-        final String                ARP_TAB_NAME = "arp\nDiscovery",
-                SERVICES_TAB_NAME = "Services\nDiscovery",
-                HISTORIC_TAB_NAME = "Historic";
+        final String                ARP_TAB_NAME = "Devices\nDiscovery",
+                                    SERVICES_TAB_NAME = "Services\nDiscovery",
+                                    HISTORIC_TAB_NAME = "Historic";
 
         mTabs.addTab(mTabs.newTab().setText(ARP_TAB_NAME), 0);
         mTabs.addTab(mTabs.newTab().setText(SERVICES_TAB_NAME), 1);
         mTabs.addTab(mTabs.newTab().setText(HISTORIC_TAB_NAME), 2);
-
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 MyFragment fragment;
-                Log.d(TAG, "onTabSelected:[" + tab.getText().toString() + "]");
+                Log.d(TAG, "onTabSelected:[" + tab.getText().toString().replace("\n", " ") + "]");
                 switch (tab.getText().toString()) {
                     case ARP_TAB_NAME:
                         typeScan = NetworkDiscoveryControler.typeScan.Arp;
-                        fragment = new FragmentHostDiscoveryScan();
+                        fragment = NetDiscoveryFragment;
                         break;
                     case SERVICES_TAB_NAME:
                         typeScan = NetworkDiscoveryControler.typeScan.Services;
-                        fragment = new FragmentHostDiscoveryScan();
+                        fragment = NetDiscoveryFragment;
                         break;
                     case HISTORIC_TAB_NAME:
                         typeScan = NetworkDiscoveryControler.typeScan.Historic;
-                        fragment = new FragmentHistoric();
+                        if (HistoricFragment == null)
+                            HistoricFragment = new FragmentHistoric();
+                        fragment = HistoricFragment;
                         Bundle args = new Bundle();
                         args.putString("mode", FragmentHistoric.DB_HISTORIC);
                         fragment.setArguments(args);
@@ -194,26 +197,25 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     public void                     initToolbarButton() {
         final BottomSheetMenuDialog bottomSheet;
-        switch (typeScan) {
-            case Arp:
-                bottomSheet = mFragment.onSettingsClick(mAppbar, this);
-                break;
-            case Services:
-                bottomSheet = mFragment.onSettingsClick(mAppbar, this);
-                break;
-            case Historic:
-                bottomSheet = mFragment.onSettingsClick(mAppbar, this);
-                break;
-            default:
-                bottomSheet = mFragment.onSettingsClick(mAppbar, this);
-                break;
-        }
+        bottomSheet = mFragment.onSettingsClick(mAppbar, this);
+//        switch (typeScan) {
+//            case Arp:
+//                bottomSheet = mFragment.onSettingsClick(mAppbar, this);
+//                break;
+//            case Services:
+//                bottomSheet = mFragment.onSettingsClick(mAppbar, this);
+//                break;
+//            case Historic:
+//                bottomSheet = mFragment.onSettingsClick(mAppbar, this);
+//                break;
+//            default:
+//                break;
+//        }
         mSettingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Showing settings of fragment");
                 if (bottomSheet != null)
-                    bottomSheet.show();
+                    mFragment.onSettingsClick(mAppbar, mInstance).show();
             }
         });
         mFragment.onAddButtonClick(mAddHostBtn);

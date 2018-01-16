@@ -20,7 +20,7 @@ public class                            DBAccessPoint {
         return new Select()
                 .from(AccessPoint.class)
                 //.where("Category = ?", category.getId())
-                .orderBy("Name ASC")
+                .orderBy("Ssid ASC")
                 .execute();
     }
 

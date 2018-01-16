@@ -58,13 +58,15 @@ public class                NetUtils {
             return MAC;
         return "MAC INTROUVABLE";
     }
+    public static boolean   isMyDeviceIn() {
+        return true;
+    }
 
     public static void      dumpListHostFromARPTableInFile(Context context, ArrayList<String> ipReachable) {
         Log.i(TAG, "Dump list devices from Arp Table");
         try {
             ArrayList<String> listOfIpsAlreadyIn = new ArrayList<>();
             FileOutputStream hostListFile = new FileOutputStream(new File(Singleton.getInstance().FilesPath + "hostlist"));
-
             BufferedReader bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"));
             String MAC_RE = "^%s\\s+0x1\\s+0x2\\s+([:0-9a-fA-F]+)\\s+\\*\\s+\\w+$";
             String read;
@@ -80,7 +82,7 @@ public class                NetUtils {
             }
             Log.d(TAG, listOfIpsAlreadyIn.size() + " new host discovered in /proc/arp");
             boolean already;
-            for (Iterator<String> iterator = ipReachable.iterator(); iterator.hasNext(); ) {
+            for (Iterator<String> iterator = ipReachable.iterator(); iterator.hasNext(); ) {//Don't Foreach
                 String reachable = iterator.next();
                 already = false;
                 for (String s : listOfIpsAlreadyIn) {
@@ -100,11 +102,11 @@ public class                NetUtils {
     }
 
     public static String    intADDRtoStringHostname(int hostAddress) {
-        byte[] addressBytes = { (byte)(0xff & hostAddress),
-                (byte)(0xff & (hostAddress >> 8)),
-                (byte)(0xff & (hostAddress >> 16)),
-                (byte)(0xff & (hostAddress >> 24)) };
         try {
+            byte[] addressBytes = {(byte) (0xff & hostAddress),
+                    (byte) (0xff & (hostAddress >> 8)),
+                    (byte) (0xff & (hostAddress >> 16)),
+                    (byte) (0xff & (hostAddress >> 24))};
             return InetAddress.getByAddress(addressBytes).getHostAddress();
         } catch (UnknownHostException e) {
             throw new AssertionError();
@@ -135,7 +137,7 @@ public class                NetUtils {
             res[netmask] = "255.255.255.0";
         Singleton.getInstance().network = new NetworkInformation(dhcpInfo, NetUtils.getMac(res[ip], res[gw]));
         WifiInfo wifiInfo = null;
-        if (((WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)) != null) {
+        if ((activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)) != null) {
             wifiInfo = ((WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
         }
         Singleton.getInstance().network.Ssid = wifiInfo.getSSID().replace("\"", "");

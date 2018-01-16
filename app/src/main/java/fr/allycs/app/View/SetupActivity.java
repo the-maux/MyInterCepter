@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -75,7 +76,6 @@ public class                    SetupActivity extends MyActivity {
                     Snackbar.make(findViewById(R.id.Coordonitor), "Vous ne pouvez pas utiliser l'application sans ces permissions", Snackbar.LENGTH_LONG).show();
                     getPermission();
                 }
-                return;
             }
         }
     }
@@ -110,7 +110,7 @@ public class                    SetupActivity extends MyActivity {
     private void                buildPath() {
         mSingleton.FilesPath = mInstance.getFilesDir().getPath() + '/';
         mSingleton.BinaryPath = mSingleton.FilesPath;//shouldn't be the same as FilesPath
-        mSingleton.PcapPath = "/sdcard/Pcap/";
+        mSingleton.PcapPath = Environment.getExternalStorageDirectory().getPath() + "/Pcap/";
         Log.d(TAG, "path:" + mSingleton.FilesPath);
         monitor("Building Path");
     }
