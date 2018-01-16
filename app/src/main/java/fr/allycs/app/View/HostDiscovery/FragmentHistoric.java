@@ -44,12 +44,13 @@ public class                        FragmentHistoric extends MyFragment {
     private Session                 focusedSession = null;
 
     private RecyclerView            mRV;
-    private TextView                mEmptyList, mNoHistoric;
+    private TextView                mEmptyList;
     private RecyclerView.Adapter    RV_AdapterAp = null, RV_AdapterSessions = null, RV_AdapterHostSession = null;
 
     public enum HistoricInitMode    {  HostDetail, HistoricDB }
     private AccessPointAdapter.typeFragment actualMode = null;
     public enum HistoricDetailMode  { ApHistoric, SessionsOfAp, devicesOfSession, detailSession, noHistoric}
+    public static final String      HOST_HISTORIC = "HostDetail", DB_HISTORIC = "HistoricDB";
     public HistoricDetailMode       mActualMode = HistoricDetailMode.noHistoric;
 
     private RelativeLayout          mDetailSessionLayout;
@@ -61,7 +62,7 @@ public class                        FragmentHistoric extends MyFragment {
     private ImageView               forwardGateway, forwardWireshark, forwardListDevices, forwardServices;
 
     @Override public View           onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hostdiscovery_scan, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_historic, container, false);
         initXml(rootView);
         init();
         return rootView;
@@ -70,11 +71,11 @@ public class                        FragmentHistoric extends MyFragment {
     @Override public void           init() {
         if (getArguments() != null && getArguments().getString("mode") != null) {
             switch (getArguments().getString("mode")) {
-                case "HostDetail":
+                case HOST_HISTORIC:
                     mFocusedHost = mSingleton.hostsList.get(0);
                     initHistoricFromDB(mFocusedHost);
                     break;
-                case "HistoricDB":
+                case DB_HISTORIC:
                     initHistoricFromDB();
                     break;
             }
@@ -88,7 +89,6 @@ public class                        FragmentHistoric extends MyFragment {
 
     private void                    initXml(View rootView) {
         mRV = (RecyclerView) rootView.findViewById(R.id.recycler_view);
-        mNoHistoric = rootView.findViewById(R.id.noHistoric);
         mEmptyList = (TextView) rootView.findViewById(R.id.emptyList);
         mDetailSessionLayout = rootView.findViewById(R.id.detailSessionLayout);
         mDetailSessionLayout.setVisibility(View.GONE);
@@ -121,16 +121,10 @@ public class                        FragmentHistoric extends MyFragment {
     }
 
     private void                    initHistoricFromDB() /* All Session, no filter*/{
-        DBAccessPoint.getAllSessionsRecorded();
-        RV_AdapterAp = new AccessPointAdapter(this, HistoricAps);
-
-    }
-    private void                    initHistoricFromDB(Host mFocusedHost) {/* Search With Device In*/
-        Log.d(TAG, "initHistoricFromDB for host :" + mFocusedHost.getName());
-        HistoricAps = DBSession.getAllAPWithDeviceIn(mFocusedHost);
+        HistoricAps = DBAccessPoint.getAllSessionsRecorded();
         if (HistoricAps.isEmpty()) {
             mActualMode = HistoricDetailMode.noHistoric;
-            mNoHistoric.setVisibility(View.VISIBLE);
+            mEmptyList.setVisibility(View.VISIBLE);
             mRV.setVisibility(View.GONE);
         } else {
             if (RV_AdapterAp == null) {
@@ -138,7 +132,23 @@ public class                        FragmentHistoric extends MyFragment {
             }
             mRV.setAdapter(RV_AdapterAp);
             mActualMode = HistoricDetailMode.ApHistoric;
-            mNoHistoric.setVisibility(View.GONE);
+            mEmptyList.setVisibility(View.GONE);
+        }
+    }
+    private void                    initHistoricFromDB(Host mFocusedHost) {/* Search With Device In*/
+        Log.d(TAG, "initHistoricFromDB for host :" + mFocusedHost.getName());
+        HistoricAps = DBSession.getAllAPWithDeviceIn(mFocusedHost);
+        if (HistoricAps.isEmpty()) {
+            mActualMode = HistoricDetailMode.noHistoric;
+            mEmptyList.setVisibility(View.VISIBLE);
+            mRV.setVisibility(View.GONE);
+        } else {
+            if (RV_AdapterAp == null) {
+                RV_AdapterAp = new AccessPointAdapter(this, HistoricAps);
+            }
+            mRV.setAdapter(RV_AdapterAp);
+            mActualMode = HistoricDetailMode.ApHistoric;
+            mEmptyList.setVisibility(View.GONE);
         }
     }
 

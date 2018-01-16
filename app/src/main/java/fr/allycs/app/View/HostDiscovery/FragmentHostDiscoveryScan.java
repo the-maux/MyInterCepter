@@ -63,11 +63,8 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
             startNetworkScan();
         }
         initSwipeRefresh();
-        return rootView;
-    }
-
-    @Override public void           init() {
         mActivity.initToolbarButton();
+        return rootView;
     }
 
     public boolean                  start() {

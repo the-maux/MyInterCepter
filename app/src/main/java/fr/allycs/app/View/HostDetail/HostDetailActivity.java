@@ -135,10 +135,12 @@ public class HostDetailActivity extends MyActivity {
     private void                initFragment() {
         try {
             mFragmentHistoric = new FragmentHistoric();
+            Bundle args = new Bundle();
+            args.putString("mode", FragmentHistoric.HOST_HISTORIC);
+            mFragmentHistoric.setArguments(args);
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.frame_container, mFragmentHistoric)
-                    //.addToBackStack(null)
                     .commit();
         } catch (IllegalStateException e) {
             Log.w("Error MainActivity", "FragmentStack or FragmentManager corrupted");

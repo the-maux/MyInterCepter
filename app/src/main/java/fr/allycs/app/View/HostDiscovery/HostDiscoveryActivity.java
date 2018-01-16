@@ -106,8 +106,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     private void                    initTabs() {
         final String                ARP_TAB_NAME = "arp\nDiscovery",
-                SERVICES_TAB_NAME = "Icmp\ndiscovery",
-                HISTORIC_TAB_NAME = "Services\nDiscovery";
+                SERVICES_TAB_NAME = "Services\nDiscovery",
+                HISTORIC_TAB_NAME = "Historic";
 
         mTabs.addTab(mTabs.newTab().setText(ARP_TAB_NAME), 0);
         mTabs.addTab(mTabs.newTab().setText(SERVICES_TAB_NAME), 1);
@@ -130,6 +130,9 @@ public class                        HostDiscoveryActivity extends MyActivity {
                     case HISTORIC_TAB_NAME:
                         typeScan = NetworkDiscoveryControler.typeScan.Historic;
                         fragment = new FragmentHistoric();
+                        Bundle args = new Bundle();
+                        args.putString("mode", FragmentHistoric.DB_HISTORIC);
+                        fragment.setArguments(args);
                         break;
                     default:
                         return ;
@@ -167,10 +170,9 @@ public class                        HostDiscoveryActivity extends MyActivity {
                     .beginTransaction()
                     .replace(R.id.frame_container, mFragment)
                     .commit();
-            mFragment.init();
-            mFragment.start();
+            //mFragment.start();
         } catch (IllegalStateException e) {
-            showSnackbar("Error in fragment");
+            showSnackbar("Error in fragment: " + e.getCause().getMessage());
             e.getStackTrace();
             super.onBackPressed();
         }
