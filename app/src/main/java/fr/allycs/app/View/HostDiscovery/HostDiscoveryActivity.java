@@ -59,7 +59,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private ProgressBar             mProgressBar;
     private MyFragment              mFragment, HistoricFragment = null, NetDiscoveryFragment = null;
     public final int                MAXIMUM_PROGRESS = 6500;
-    public Session                  mActualSession;
+    public Session                  actualSession;
     public NetworkDiscoveryControler.typeScan typeScan = NetworkDiscoveryControler.typeScan.Arp;
 
     public void                     onCreate(Bundle savedInstanceState) {
@@ -312,7 +312,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         ArrayList<Host> selectedHost = mSingleton.hostsList;
         mSingleton.hostsList = extractAndDumpSelectedHost(selectedHost);
         if (selectedHost != null && !selectedHost.isEmpty()) {
-            mSingleton.actualSession = mActualSession;
+            mSingleton.actualSession = actualSession;
             startActivity(new Intent(mInstance, MenuActivity.class));
         }
     }

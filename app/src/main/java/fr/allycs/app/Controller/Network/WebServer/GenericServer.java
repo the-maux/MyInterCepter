@@ -26,9 +26,8 @@ public class                    GenericServer extends NanoHTTPD {
         }
     }
 
-
     private Response            serveDefaultPage(IHTTPSession session) {
-        StringBuilder html = new StringBuilder("<html><body><h1>Hello server</h1>\n");
+        StringBuilder html = new StringBuilder("<html><body><h1>Man In The Middle HTTP REDIR</h1>\n");
         Map<String, String> sessionParams = session.getParms();
         if (sessionParams.get("username") == null) {
             html.append("<form action='?' method='get'>\n");

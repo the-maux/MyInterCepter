@@ -81,7 +81,7 @@ public class                    SetupActivity extends MyActivity {
     }
 
     private void                initXml(View rootView) {
-        monitor = (TextView) rootView.findViewById(R.id.monitor);
+        monitor = rootView.findViewById(R.id.monitor);
         monitor("Initialization");
     }
 

@@ -76,7 +76,7 @@ public class                    HostDetailFragment extends MyFragment {
 
 
     public void                 focusOneTarget(Host host) {
-        mSingleton.actualSession = mActivity.mActualSession;
+        mSingleton.actualSession = mActivity.actualSession;
         if (mSingleton.hostsList == null)
             mSingleton.hostsList = new ArrayList<>();
         else

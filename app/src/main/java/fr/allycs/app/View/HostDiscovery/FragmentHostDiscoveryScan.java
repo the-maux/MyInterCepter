@@ -206,13 +206,13 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 mScannerControler.inLoading = false;
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
                 mActivity.setToolbarTitle(null, mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": ""));
-                mActivity.mActualSession =
+                mActivity.actualSession =
                         DBSession.buildSession(mScannerControler.getSSID(),
                                 mSingleton.network.gateway,
                                 hosts,
                                 "Icmp",
                                 mHostAdapter.getOsList());
-                mSingleton.actualSession = mActivity.mActualSession;
+                mSingleton.actualSession = mActivity.actualSession;
                 mSwipeRefreshLayout.setRefreshing(false);
                 mHostLoaded = true;
                 mSingleton.hostsList = mHosts;

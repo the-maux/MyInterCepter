@@ -50,8 +50,8 @@ public class                    NmapActivity extends MyActivity {
     private Host                mActualTarget = null;
     private Toolbar             mToolbar;
     private List<Host>          mListHostSelected = new ArrayList<>();
-    private ImageView           settingsMenu;
-    private ImageButton         settings;
+    private ImageView           mSettingsMenu;
+    private ImageButton         mSettings;
     
     @Override protected void    onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,19 +68,19 @@ public class                    NmapActivity extends MyActivity {
     }
 
     private void                initXml() {
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
-        mSpinner = (MaterialSpinner) findViewById(R.id.spinnerTypeScan);
+        mCoordinatorLayout = findViewById(R.id.Coordonitor);
+        mSpinner = findViewById(R.id.spinnerTypeScan);
         host_et = (EditText) findViewById(R.id.hostEditext);
         params_et = (EditText) findViewById(R.id.binParamsEditText);
-        mRL_host = (RelativeLayout) findViewById(R.id.RL_host);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        Output = (TextView) findViewById(R.id.Output);
+        mRL_host = findViewById(R.id.RL_host);
+        mToolbar = findViewById(R.id.toolbar);
+        Output = findViewById(R.id.Output);
         Output.setMovementMethod(new ScrollingMovementMethod());
-        Monitor = (TextView) findViewById(R.id.Monitor);
-        settingsMenu = (ImageView) findViewById(R.id.settingsMenu);
-        targetMonitor = (TextView) findViewById(R.id.targetMonitor);
-        settings = (ImageButton) findViewById(R.id.settings);
-        mNmapConfEditorLayout = (RelativeLayout) findViewById(R.id.nmapConfEditorLayout);
+        Monitor = findViewById(R.id.Monitor);
+        mSettingsMenu = findViewById(R.id.settingsMenu);
+        targetMonitor = findViewById(R.id.targetMonitor);
+        mSettings = findViewById(R.id.settings);
+        mNmapConfEditorLayout = findViewById(R.id.nmapConfEditorLayout);
         findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,13 +88,12 @@ public class                    NmapActivity extends MyActivity {
                 execNmap();
             }
         });
-        settings.setOnClickListener(onSwitchHeader());
+        mSettings.setOnClickListener(onSwitchHeader());
         params_et.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 Log.d(TAG, "onEditorAction : " + actionId + " event:" + event);
-                if (actionId == EditorInfo.IME_ACTION_DONE
-                        /*|| event.getAction() == KeyEvent.ACTION_DOWN*/) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     execNmap();
                     return true;
                 }

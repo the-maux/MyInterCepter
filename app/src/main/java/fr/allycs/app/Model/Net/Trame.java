@@ -7,7 +7,7 @@ import fr.allycs.app.R;
 
 public class               Trame extends MyObject {
     public String          TAG = "Trame";
-    public int             offsett, verbose;
+    public int             offsett = 0, verbose;
     public String          time;
     public Protocol        protocol;
     public String          StringSrc, StringDest, Errno = null;
@@ -317,6 +317,10 @@ public class               Trame extends MyObject {
 
     @Override
     public String          toString() {
-        return protocol.name() + ":" + StringSrc + ">" + StringDest + ": " + info;
+        return  "Trame n°" + offsett + " " +
+                ((protocol != null) ? protocol.name() : "") + ":" +
+                ((StringSrc != null) ? StringSrc : "") + ">" +
+                ((StringDest != null) ? StringDest : "") + ": " +
+                ((info != null) ? info : "");
     }
 }
