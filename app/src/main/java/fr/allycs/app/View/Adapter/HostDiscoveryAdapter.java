@@ -2,7 +2,9 @@ package fr.allycs.app.View.Adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
@@ -53,7 +56,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         else {
             holder.selected.setChecked(host.selected);
             holder.relativeLayout.setOnClickListener(onCardClick(position, holder));
-            holder.relativeLayout.setOnLongClickListener(onCardLongClick(host));
+            holder.relativeLayout.setOnLongClickListener(onCardLongClick(host, holder));
             holder.selected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -91,24 +94,29 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.vibrateDevice(mActivity);
                 onHostChecked(holder, mHosts.get(position), position);
             }
         };
     }
-    private View.OnLongClickListener onCardLongClick(final Host host) {
+    private View.OnLongClickListener onCardLongClick(final Host host, final HostDiscoveryHolder holder) {
         return new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Utils.vibrateDevice(mActivity);
                         if (mSingleton.hostsList == null)
                             mSingleton.hostsList = new ArrayList<>();
                         else
                             mSingleton.hostsList.clear();
                         mSingleton.hostsList.add(host);
                         Intent intent = new Intent(mActivity, HostDetailActivity.class);
-                        mActivity.startActivity(intent);
+                        Pair<View, String> p1 = Pair.create((View)holder.osIcon, "hostPicture");
+                        Pair<View, String> p2 = Pair.create((View)holder.ipHostname, "hostTitle");
+                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mActivity, p1, p2);
+                        mActivity.startActivity(intent, options.toBundle());
                     }
                 });
                 return false;

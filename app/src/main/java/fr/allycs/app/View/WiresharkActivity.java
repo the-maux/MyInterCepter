@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -27,19 +26,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.BinaryWrapper.Tcpdump;
-
+import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
+import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.Model.Net.Protocol;
 import fr.allycs.app.Model.Net.Trame;
 import fr.allycs.app.Model.Target.Host;
-import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.HostSelectionAdapter;
 import fr.allycs.app.View.Adapter.WiresharkAdapter;
-import fr.allycs.app.View.Dialog.RV_dialog;
 import fr.allycs.app.View.Dialog.GeneralSettings;
+import fr.allycs.app.View.Dialog.RV_dialog;
 
 public class                    WiresharkActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
@@ -74,31 +73,32 @@ public class                    WiresharkActivity extends MyActivity {
     }
 
     private void                initXml() {
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
+        mCoordinatorLayout = findViewById(R.id.Coordonitor);
         MyGlideLoader.coordoBackground(this, mCoordinatorLayout);
-        mRV_Wireshark = (RecyclerView) findViewById(R.id.Output);
-        mHeaderConfON = (RelativeLayout) findViewById(R.id.filterPcapLayout);
-        mMonitorAgv = (TextView) findViewById(R.id.Monitor);
-        mSpiner = (MaterialSpinner) findViewById(R.id.spinnerTypeScan);
-        mHeaderConfOFF = (RelativeLayout) findViewById(R.id.nmapConfEditorLayout);
-        mMonitorCmd = (TextView) findViewById(R.id.cmd);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mRV_Wireshark = findViewById(R.id.Output);
+        mHeaderConfON = findViewById(R.id.filterPcapLayout);
+        mMonitorAgv =  findViewById(R.id.Monitor);
+        mSpiner =  findViewById(R.id.spinnerTypeScan);
+        mHeaderConfOFF = findViewById(R.id.nmapConfEditorLayout);
+        mMonitorCmd =  findViewById(R.id.cmd);
+        mProgressBar =  findViewById(R.id.progressBar);
+        mToolbar = findViewById(R.id.toolbar);
+        mFab =  findViewById(R.id.fab);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.vibrateDevice(mInstance);
                 startWireshark(false);
             }
         });
-        Autoscroll = (CheckBox) findViewById(R.id.Autoscroll);
-        tcp_cb = (TextView) findViewById(R.id.tcp_cb);
-        dns_cb = (TextView) findViewById(R.id.dns_cb);
-        arp_cb = (TextView) findViewById(R.id.arp_cb);
-        https_cb = (TextView) findViewById(R.id.https_cb);
-        http_cb = (TextView) findViewById(R.id.http_cb);
-        udp_cb = (TextView) findViewById(R.id.udp_cb);
-        ip_cb = (TextView) findViewById(R.id.ip_cb);
+        Autoscroll =  findViewById(R.id.Autoscroll);
+        tcp_cb =  findViewById(R.id.tcp_cb);
+        dns_cb =  findViewById(R.id.dns_cb);
+        arp_cb =  findViewById(R.id.arp_cb);
+        https_cb =  findViewById(R.id.https_cb);
+        http_cb =  findViewById(R.id.http_cb);
+        udp_cb =  findViewById(R.id.udp_cb);
+        ip_cb =  findViewById(R.id.ip_cb);
         findViewById(R.id.settings).setOnClickListener(onSwitchHeader());
     }
 
@@ -132,6 +132,10 @@ public class                    WiresharkActivity extends MyActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mHeaderConfOFF.getVisibility() == View.GONE &&
+                     mHeaderConfON.getVisibility() == View.GONE) {
+
+                }
                 if (mHeaderConfOFF.getVisibility() == View.GONE) {
                     mHeaderConfOFF.setVisibility(View.VISIBLE);
                     mHeaderConfON.setVisibility(View.GONE);
@@ -169,7 +173,7 @@ public class                    WiresharkActivity extends MyActivity {
                         if (mListHostSelected.isEmpty())
                             Snackbar.make(mCoordinatorLayout, "No target selected", Snackbar.LENGTH_LONG).show();
                         else {
-                            mToolbar.setSubtitle(mListHostSelected.size() + " target" +
+                            setToolbarTitle(null, mListHostSelected.size() + " target" +
                                     ((mListHostSelected.size() <= 1) ? "" : "s") + " selected");
                             startWireshark(false);
                         }
@@ -238,7 +242,6 @@ public class                    WiresharkActivity extends MyActivity {
         Log.d(TAG, "mMonitorCmd::" + mMonitorCmd.getText().toString());
         mMonitorCmd.setText(mTcpdump.actualParam);
         Log.d(TAG, "starting tcpdump with monitor:[" + mMonitorCmd.getText().toString() + "]");
-        ;
         mMonitorAgv.setText(mTcpdump.start(mMonitorCmd.getText().toString(), mListHostSelected, mTypeScan));
         mInstance.runOnUiThread(new Runnable() {
             @Override
@@ -279,6 +282,18 @@ public class                    WiresharkActivity extends MyActivity {
 
                 }
             }//else skipped do nothing
+        });
+    }
+
+    public void                 setToolbarTitle(final String title, final String subtitle) {
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (title != null)
+                    mToolbar.setTitle(title);
+                if (subtitle != null)
+                    mToolbar.setSubtitle(subtitle);
+            }
         });
     }
 

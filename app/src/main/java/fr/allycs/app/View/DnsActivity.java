@@ -16,11 +16,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-
 import fr.allycs.app.Controller.Core.BinaryWrapper.Dns.DnsControl;
-import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.Model.Target.DNSSpoofItem;
 import fr.allycs.app.R;
@@ -85,6 +83,7 @@ public class                            DnsActivity extends MyActivity {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Utils.vibrateDevice(mInstance);
                 mSingleton.setDnsControlstarted(!mSingleton.isDnsControlstarted());
                 if (mSingleton.isDnsControlstarted()) {
                     mDnsSpoof.start();

@@ -12,11 +12,10 @@ import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.Model.Target.SniffSession;
 
-public class                    DBSniffSession {
+public class                        DBSniffSession {
 
-    public static SniffSession  buildSniffSession() {
+    public static SniffSession      buildSniffSession() {
         Session session = Singleton.getInstance().actualSession;
-
         SniffSession sniffSession = new SniffSession();
         sniffSession.listDevicesSerialized = DBHost.SerializeListDevices(Singleton.getInstance().hostsList);
         sniffSession.date = Calendar.getInstance().getTime();
@@ -27,7 +26,7 @@ public class                    DBSniffSession {
         return sniffSession;
     }
 
-    public static String        SerializeSniffSessions(List<Host> hosts) {
+    public static String            SerializeSniffSessions(List<Host> hosts) {
         StringBuilder dump = new StringBuilder("");
         for (Host host : hosts) {
             dump.append(host.getId());
@@ -36,7 +35,7 @@ public class                    DBSniffSession {
         return dump.toString();
     }
 
-    public static SniffSession  findSniffSessionById(String id) {
+    public static SniffSession      findSniffSessionById(String id) {
         return new Select()
                 .from(Host.class)
                 .where("_id = \"" + id + "\"")

@@ -21,10 +21,22 @@
             android:layout_height="56dp"
             android:visibility="visible">
 
+            <ImageView
+                android:id="@+id/OsImg"
+                android:layout_width="40dp"
+                android:transitionName="wiresharkIcon"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:elevation="4dp"
+                android:padding="1dp"
+                android:src="@drawable/wireshark" />
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
+                android:layout_toRightOf="@+id/OsImg"
                 android:layout_toLeftOf="@+id/settings"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:subtitle="Aucune cible selectionné"
@@ -123,6 +135,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/material_grey_900"
                 android:elevation="4dp"
+                android:visibility="gone"
                 android:padding="8dp">
 
                 <RelativeLayout

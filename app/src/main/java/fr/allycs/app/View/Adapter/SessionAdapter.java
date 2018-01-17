@@ -43,12 +43,16 @@ public class                    SessionAdapter extends RecyclerView.Adapter<Sess
             holder.subtitle.setText(date);
         }
         holder.subtitle.setText(session.listDevices().size() + " devices decouvert");
-        holder.forward.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener onClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mFragment.onSessionFocused(session);
             }
-        });
+        };
+        holder.forward.setOnClickListener(onClick);
+        holder.card_view.setOnClickListener(onClick);
+        holder.relative_layout.setOnClickListener(onClick);
+
     }
 
     @Override

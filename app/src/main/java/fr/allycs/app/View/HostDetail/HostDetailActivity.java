@@ -149,9 +149,17 @@ public class HostDetailActivity extends MyActivity {
         }
     }
 
+/*    @Override
+    public void                 finish() {
+        super.finish();
+        supportFinishAfterTransition();
+    }*/
+
     @Override public void       onBackPressed() {
-        if (mFragmentHistoric == null || mFragmentHistoric.onBackPressed())
+        if (mFragmentHistoric == null || mFragmentHistoric.onBackPressed()) {
             super.onBackPressed();
+  //          supportFinishAfterTransition();
+        }
         else {
             Log.d(TAG, "Fragment mode: " + mFragmentHistoric.mActualMode.name());
         }

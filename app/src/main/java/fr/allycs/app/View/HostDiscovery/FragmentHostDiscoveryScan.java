@@ -1,10 +1,8 @@
 package fr.allycs.app.View.HostDiscovery;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
@@ -52,8 +50,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     private ArrayList<String>       mListOS = new ArrayList<>();
     private NetworkDiscoveryControler mScannerControler;
 
-    @Override
-    public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override public View           onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hostdiscovery_scan, container, false);
         initXml(rootView);
         this.mActivity = (HostDiscoveryActivity) getActivity();
@@ -67,8 +64,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         return rootView;
     }
 
-    @Override
-    public void                     onResume() {
+    @Override public void           onResume() {
         //TODO: prévoir quand on passe par la pour start le services discovery (si il n'a pas déjà était lancé)
         super.onResume();
         Log.d(TAG, "onResume");
@@ -209,20 +205,19 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 mHostAdapter.updateHostList(mHosts);
                 mScannerControler.inLoading = false;
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
-                final ArrayList<String> listOs = mHostAdapter.getOsList();
-                Log.d(TAG, "scan Over with " + mHosts.size() + " possible target");
-                final String SSID = ((WifiManager)mActivity.getApplicationContext().getSystemService(Context.WIFI_SERVICE))
-                        .getConnectionInfo().getSSID().replace("\"", "");
-                mActivity.setToolbarTitle(SSID, mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": ""));
-                mActivity.mActualSession = DBSession.buildSession(
-                        SSID, mSingleton.network.gateway, hosts, "Icmp", mHostAdapter.getOsList());
+                mActivity.setToolbarTitle(null, mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": ""));
+                mActivity.mActualSession =
+                        DBSession.buildSession(mScannerControler.getSSID(),
+                                mSingleton.network.gateway,
+                                hosts,
+                                "Icmp",
+                                mHostAdapter.getOsList());
                 mSingleton.actualSession = mActivity.mActualSession;
                 mSwipeRefreshLayout.setRefreshing(false);
                 mHostLoaded = true;
                 mSingleton.hostsList = mHosts;
             }
         });
-
     }
 
     public void                     osFilterDialog() {
@@ -238,7 +233,8 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                             mListOS.clear();
                         }
                     }
-                }).show();
+                })
+                .show();
     }
 
     public void                     onCheckAddedHost(String addedHost) {

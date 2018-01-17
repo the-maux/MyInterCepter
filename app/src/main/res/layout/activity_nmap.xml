@@ -19,10 +19,21 @@
             android:background="@color/primary_text"
             android:elevation="4dp">
 
+            <ImageView
+                android:id="@+id/OsImg"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:elevation="4dp"
+                android:src="@drawable/nmap"
+                android:transitionName="NmapIconTransition" />
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="200dp"
                 android:layout_height="56dp"
+                android:layout_toRightOf="@+id/OsImg"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:subtitle="v7.31"
                 app:title="Nmap">

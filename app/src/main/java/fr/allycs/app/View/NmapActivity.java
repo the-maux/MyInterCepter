@@ -1,24 +1,22 @@
 package fr.allycs.app.View;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
@@ -29,10 +27,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
-import fr.allycs.app.Model.Target.Host;
+import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Misc.MyActivity;
+import fr.allycs.app.Controller.Misc.Utils;
+import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.HostSelectionAdapter;
 import fr.allycs.app.View.Dialog.RV_dialog;
@@ -85,6 +84,7 @@ public class                    NmapActivity extends MyActivity {
         findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.vibrateDevice(mInstance);
                 execNmap();
             }
         });

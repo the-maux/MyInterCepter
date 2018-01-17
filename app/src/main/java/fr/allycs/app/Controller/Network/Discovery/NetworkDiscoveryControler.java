@@ -1,5 +1,7 @@
 package fr.allycs.app.Controller.Network.Discovery;
 
+import android.content.Context;
+import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -20,11 +22,14 @@ public class                        NetworkDiscoveryControler {
     private FragmentHostDiscoveryScan mFragment;
     private Singleton               mSingleton = Singleton.getInstance();
     private HostDiscoveryActivity   mActivity;
+    private String                  mSSID = null;
     public boolean                  inLoading = false;
 
     public                          NetworkDiscoveryControler(final FragmentHostDiscoveryScan fragmentHostDiscoveryScan) {
         this.mActivity = (HostDiscoveryActivity) fragmentHostDiscoveryScan.getActivity();
         this.mFragment = fragmentHostDiscoveryScan;
+        mSSID = ((WifiManager)mActivity.getApplicationContext().getSystemService(Context.WIFI_SERVICE))
+                .getConnectionInfo().getSSID().replace("\"", "");
     }
 
     public void                    run(typeScan typeOfScan, List<Host> listOfHosts) {
@@ -69,6 +74,10 @@ public class                        NetworkDiscoveryControler {
         mActivity.setToolbarTitle(null,"Scanning " + tmpAntiConcurentExecptionFFS.size() + " devices");
         Fingerprint.getDevicesInfoFromCepter(mFragment);
         mActivity.setProgressState(2000);
+    }
+
+    public String                   getSSID() {
+        return mSSID;
     }
 
 }

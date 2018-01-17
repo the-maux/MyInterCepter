@@ -19,7 +19,7 @@ public class                    RV_dialog {
         dialog.setCancelable(true);
         View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_hostchoice, null);
         dialog.setView(dialogView);
-        RV_host = (RecyclerView) dialogView.findViewById(R.id.RL_host);
+        RV_host = dialogView.findViewById(R.id.RL_host);
         RV_host.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(activity);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(RV_host.getContext(),

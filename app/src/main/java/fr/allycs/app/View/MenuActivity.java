@@ -6,16 +6,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.view.View;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import fr.allycs.app.Controller.Misc.MyActivity;
-import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.BinaryWrapper.Dora;
 import fr.allycs.app.Controller.Core.BinaryWrapper.Tcpdump;
+import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
+import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Dora.DoraActivity;
 
@@ -74,10 +76,16 @@ public class                    MenuActivity extends MyActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.vibrateDevice(mInstance);
                 Class choice = MenuActivity.class;
+                Intent intent;
+                Pair<View, String> p1, p2, p3, p4;
+                ActivityOptionsCompat options = null;
                 switch (clickChoice) {
                     case Nmap:
                         choice = NmapActivity.class;
+                        p1 = Pair.create(findViewById(R.id.imageView), "NmapIconTransition");
+                        options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1);
                         break;
                     case CepterMitm:
                         choice = null;
@@ -89,7 +97,8 @@ public class                    MenuActivity extends MyActivity {
                         break;
                     case DnsSpoofing:
                         choice = DnsActivity.class;
-                        Snackbar.make(mCoordinatorLayout, "Fonctionnalité Dns Spoofing non implémenté", Snackbar.LENGTH_LONG).show();
+                        p1 = Pair.create((View)findViewById(R.id.imageView8), "iconDNS");
+                        options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1);
                         break;
                     case Wireshark:
                         if (Singleton.getInstance().hostsList == null) {
@@ -97,6 +106,8 @@ public class                    MenuActivity extends MyActivity {
                             choice = null;
                         } else {
                             choice = WiresharkActivity.class;
+                            p1 = Pair.create(findViewById(R.id.imageView3), "wiresharkIcon");
+                            options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1);
                         }
                         break;
                     case DoraDiagnostic:
@@ -105,6 +116,8 @@ public class                    MenuActivity extends MyActivity {
                             choice = null;
                         } else {
                             choice = DoraActivity.class;
+//                            p1 = Pair.create((View)findViewById(R.id.imageView3), "");
+//                            options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1);
                         }
                         break;
                     case Metasploit:
@@ -116,8 +129,11 @@ public class                    MenuActivity extends MyActivity {
                         break;
                 }
                 if (choice != null) {
-                    Intent intent = new Intent(mInstance, choice);
-                    startActivity(intent);
+                    intent = new Intent(mInstance, choice);
+                    if (options == null)
+                        startActivity(intent);
+                    else
+                        startActivity(intent, options.toBundle());
                 }
             }
         };

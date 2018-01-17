@@ -109,8 +109,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private void                    initTabs() {
         final String                ARP_TAB_NAME = "Devices\nDiscovery",
                                     SERVICES_TAB_NAME = "Services\nDiscovery",
-                                    HISTORIC_TAB_NAME = "Historic";
-
+                                    HISTORIC_TAB_NAME = "Audit\nHistoric";
         mTabs.addTab(mTabs.newTab().setText(ARP_TAB_NAME), 0);
         mTabs.addTab(mTabs.newTab().setText(SERVICES_TAB_NAME), 1);
         mTabs.addTab(mTabs.newTab().setText(HISTORIC_TAB_NAME), 2);
@@ -322,4 +321,16 @@ public class                        HostDiscoveryActivity extends MyActivity {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
 
+    @Override public void           onBackPressed() {
+        if (HistoricFragment.isVisible()) {
+            Log.d(TAG, "onBackPressed custom on historic fragment");
+            if (HistoricFragment == null || ((FragmentHistoric) HistoricFragment).onBackPressed()) {
+                mTabs.getTabAt(0).select();
+            } else {
+                Log.d(TAG, "Fragment mode: " + ((FragmentHistoric) HistoricFragment).mActualMode.name());
+            }
+        } else {
+            onBackPressed();
+        }
+    }
 }

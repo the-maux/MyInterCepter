@@ -39,12 +39,15 @@ public class                    AccessPointAdapter extends RecyclerView.Adapter<
         holder.ssid_subtitle.setText(ap.sessions().size() + " session(s) recorded");
         MyGlideLoader.loadDrawableInImageView(mFragment.getContext(), R.mipmap.ic_wifi_round, holder.wifi_logo);
         MyGlideLoader.loadDrawableInImageView(mFragment.getContext(), R.mipmap.ic_forward_round, holder.forward);
-        holder.forward.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener onClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mFragment.onAccessPointFocus(ap);
             }
-        });
+        };
+        holder.forward.setOnClickListener(onClick);
+        holder.card_view.setOnClickListener(onClick);
+        holder.relative_layout.setOnClickListener(onClick);
     }
 
     @Override

@@ -111,62 +111,65 @@ public class                         Fingerprint {
 
     public static void               setOsIcon(Context context, Host host, CircleImageView osImageView) {
         int                 ImageRessource;
-
-        switch (host.osType) {
-            case Windows2000:
-                ImageRessource = R.drawable.winicon;
-                break;
-            case WindowsXP:
-                ImageRessource = R.drawable.winicon;
-                break;
-            case Windows10:
-                ImageRessource = R.drawable.winicon;
-                break;
-            case Windows7_8_10:
-                ImageRessource = R.drawable.winicon;
-                break;
-            case Cisco:
-                ImageRessource = R.drawable.cisco;
-                break;
-            case Raspberry:
-                ImageRessource = R.drawable.rasp;
-                break;
-            case QUANTA:
-                ImageRessource = R.drawable.quanta;
-                break;
-            case Bluebird:
-                ImageRessource = R.drawable.bluebird;
-                break;
-            case Apple:
-                ImageRessource = R.drawable.ios;
-                break;
-            case Ios:
-                ImageRessource = R.drawable.ios;
-                break;
-            case Unix:
-                ImageRessource = R.drawable.linuxicon;
-                break;
-            case Linux_Unix:
-                ImageRessource = R.drawable.linuxicon;
-                break;
-            case OpenBSD:
-                ImageRessource = R.drawable.linuxicon;
-                break;
-            case Android:
-                ImageRessource = R.mipmap.ic_logo_android_trans_round;
-                break;
-            case Mobile:
-                ImageRessource = R.mipmap.ic_logo_android_trans_round;
-                break;
-            case Samsung:
-                ImageRessource = R.mipmap.ic_logo_android_trans_round;
-                break;
-            case Unknow:
-                ImageRessource = R.drawable.monitor;
-                break;
-            default:
-                ImageRessource = R.drawable.monitor;
-                break;
+        if (host != null && host.osType != null) {
+            switch (host.osType) {
+                case Windows2000:
+                    ImageRessource = R.drawable.winicon;
+                    break;
+                case WindowsXP:
+                    ImageRessource = R.drawable.winicon;
+                    break;
+                case Windows10:
+                    ImageRessource = R.drawable.winicon;
+                    break;
+                case Windows7_8_10:
+                    ImageRessource = R.drawable.winicon;
+                    break;
+                case Cisco:
+                    ImageRessource = R.drawable.cisco;
+                    break;
+                case Raspberry:
+                    ImageRessource = R.drawable.rasp;
+                    break;
+                case QUANTA:
+                    ImageRessource = R.drawable.quanta;
+                    break;
+                case Bluebird:
+                    ImageRessource = R.drawable.bluebird;
+                    break;
+                case Apple:
+                    ImageRessource = R.drawable.ios;
+                    break;
+                case Ios:
+                    ImageRessource = R.drawable.ios;
+                    break;
+                case Unix:
+                    ImageRessource = R.drawable.linuxicon;
+                    break;
+                case Linux_Unix:
+                    ImageRessource = R.drawable.linuxicon;
+                    break;
+                case OpenBSD:
+                    ImageRessource = R.drawable.linuxicon;
+                    break;
+                case Android:
+                    ImageRessource = R.mipmap.ic_logo_android_trans_round;
+                    break;
+                case Mobile:
+                    ImageRessource = R.mipmap.ic_logo_android_trans_round;
+                    break;
+                case Samsung:
+                    ImageRessource = R.mipmap.ic_logo_android_trans_round;
+                    break;
+                case Unknow:
+                    ImageRessource = R.drawable.monitor;
+                    break;
+                default:
+                    ImageRessource = R.drawable.monitor;
+                    break;
+            }
+        } else {
+            ImageRessource = R.drawable.monitor;
         }
         MyGlideLoader.loadDrawableInImageView(context, ImageRessource, osImageView);
     }

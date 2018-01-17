@@ -28,7 +28,7 @@ public class                Utils {
     public static void      vibrateDevice(Context context) {
         Vibrator vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         if (vibe != null) {
-            vibe.vibrate(50);
+            vibe.vibrate(80);
         }
     }
 

@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import fr.allycs.app.Controller.Misc.MyActivity;
+import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.Controller.Network.WebServer.GenericServer;
 import fr.allycs.app.R;
 
@@ -53,6 +54,7 @@ public class                    WebServerActivity extends MyActivity {
         floatingActionButtonOnOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.vibrateDevice(mInstance);
                 if (isConnectedInWifi()) {
                     if (!isStarted && startAndroidWebServer()) {
                         isStarted = true;
