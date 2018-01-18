@@ -138,14 +138,15 @@ public class                        Tcpdump {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                onNewLine(finalLine);
+                                if (isRunning)
+                                    onNewLine(finalLine);
                             }
                         }).start();
                     }
-                    Log.d(TAG, "./Tcpdump finish");
+                    Log.d(TAG, "./Tcpdump is finish");
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Log.d(TAG, "Process Error");
+                    Log.d(TAG, "Process Error: " + e.getMessage());
                 } finally {
                     if (tcpDumpProcess != null)
                         tcpDumpProcess.closeProcess();

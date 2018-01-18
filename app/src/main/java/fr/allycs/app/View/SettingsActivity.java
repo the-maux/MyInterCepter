@@ -14,6 +14,13 @@ import fr.allycs.app.R;
  *          + Version
  *          + Credits
  *          + Github
+ *
+ *          Comprendre pourquoi les pcap sont pas bien renommé alors que le log est ok
+ *                      pk y a pas de sniffSession
+ *                      pk des fois le tcpdump marche pas (surtout lorsqu'il s'agit de relancer tcpdump)
+ *                      ajouter son propre device dans le scan
+ *                      faire le saveMyPreviousRecord on startUp
+ *
  */
 public class                    SettingsActivity extends MyActivity {
     private String              TAG = "SettingsActivity";

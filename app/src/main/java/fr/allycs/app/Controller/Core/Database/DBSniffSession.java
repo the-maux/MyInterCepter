@@ -1,6 +1,8 @@
 package fr.allycs.app.Controller.Core.Database;
 
 
+import android.util.Log;
+
 import com.activeandroid.query.Select;
 
 import java.util.ArrayList;
@@ -13,8 +15,10 @@ import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.Model.Target.SniffSession;
 
 public class                        DBSniffSession {
+    private static String           TAG = "DBSniffSession";
 
     public static SniffSession      buildSniffSession() {
+        Log.d(TAG, "buildSniffSession");
         Session session = Singleton.getInstance().actualSession;
         SniffSession sniffSession = new SniffSession();
         sniffSession.listDevicesSerialized = DBHost.SerializeListDevices(Singleton.getInstance().hostsList);
@@ -23,6 +27,7 @@ public class                        DBSniffSession {
         sniffSession.save();
         session.SniffSessions().add(sniffSession);
         session.save();
+        Log.d(TAG, sniffSession.toString());
         return sniffSession;
     }
 

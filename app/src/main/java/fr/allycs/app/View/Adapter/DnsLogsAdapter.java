@@ -42,7 +42,7 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
         DNSLog dnslog = mListConsole.get(position);
         holder.nameHost.setText(dnslog.domain);
         setCurrentTypeLogo(dnslog.currentType, holder.DNSTypeImg);
-        holder.DnsRVLogs.setAdapter(setDetailLogsAdapter(dnslog));
+        holder.DnsRVLogs.setAdapter(setDetailLogsAdapter(dnslog, holder.DnsRVLogs));
         holder.DnsRVLogs.setHasFixedSize(true);
         holder.DnsRVLogs.setLayoutManager(new LinearLayoutManager(activity));
         holder.viewFullLogsBtn.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +88,7 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
         mRV = recyclerView;
     }
 
-    private RecyclerView.Adapter<ConsoleLogHolder> setDetailLogsAdapter(final DNSLog logs) {
+    private RecyclerView.Adapter<ConsoleLogHolder> setDetailLogsAdapter(final DNSLog logs, RecyclerView dnsRVLogs) {
         RecyclerView.Adapter<ConsoleLogHolder> adapter =  new RecyclerView.Adapter<ConsoleLogHolder>() {
             @Override
             public ConsoleLogHolder     onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -107,11 +107,11 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
                 return logs.logs.size();
             }
         };
-        logs.setAdapter(adapter);
+        logs.setAdapter(adapter, dnsRVLogs);
         return adapter;
     }
 
-    public RecyclerView         getRecyclerview() {
+    public RecyclerView                 getRecyclerview() {
         return mRV;
     }
 
