@@ -220,6 +220,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mFragment.onAddButtonClick(mAddHostBtn);
     }
 
+
     private void                    initSearchView() {
         mFragment.initSearchView(mSearchView);
     }

@@ -83,6 +83,7 @@ public class                                DBHost {
         List<Host> hosts = new ArrayList<>();
         for (String id : list.split(";")) {
             Host device = findDeviceById(id.replace(";", ""));
+            Fingerprint.initHost(device);
             hosts.add(device);
         }
         return hosts;

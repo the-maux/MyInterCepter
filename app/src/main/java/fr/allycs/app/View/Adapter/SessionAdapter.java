@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Adapter.Holder.SessionHolder;
@@ -20,10 +21,12 @@ public class                    SessionAdapter extends RecyclerView.Adapter<Sess
     private FragmentHistoric    mFragment;
     private List<Session>       mSessions;
     private Singleton           mSingleton = Singleton.getInstance();
+    private AccessPoint         mAp;
 
-    public                      SessionAdapter(FragmentHistoric fragment, List<Session> sessions) {
+    public                      SessionAdapter(FragmentHistoric fragment, List<Session> sessions, AccessPoint ap) {
         this.mFragment = fragment;
         this.mSessions = sessions;
+        this.mAp = ap;
     }
 
     @Override
@@ -36,13 +39,8 @@ public class                    SessionAdapter extends RecyclerView.Adapter<Sess
     public void                 onBindViewHolder(SessionHolder holder, int position) {
         final Session session = mSessions.get(position);
         String date = new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE).format(session.Date);
-        if (session.name == null || session.name.isEmpty()) {
-            holder.title.setText(date);
-        } else {
-            holder.title.setText(session.name);
-            holder.subtitle.setText(date);
-        }
-        holder.subtitle.setText(session.listDevices().size() + " devices decouvert");
+        holder.title.setText(date);
+        holder.subtitle.setText(session.listDevicesSerialized.split(";").length + " devices decouvert");
         View.OnClickListener onClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,7 +50,6 @@ public class                    SessionAdapter extends RecyclerView.Adapter<Sess
         holder.forward.setOnClickListener(onClick);
         holder.card_view.setOnClickListener(onClick);
         holder.relative_layout.setOnClickListener(onClick);
-
     }
 
     @Override
@@ -68,5 +65,9 @@ public class                    SessionAdapter extends RecyclerView.Adapter<Sess
                 mHosts.add(domain);
         }
         notifyDataSetChanged();*/
+    }
+
+    public AccessPoint          getAccessPoint() {
+        return mAp;
     }
 }

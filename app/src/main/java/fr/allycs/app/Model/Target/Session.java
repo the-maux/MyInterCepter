@@ -68,7 +68,7 @@ public class                Session extends Model {
     }
 
     public String           getDateString() {
-        return new SimpleDateFormat("dd/k-h", Locale.FRANCE).format(Date) + "H";
+        return new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE).format(Date);
     }
 
     public String           getDateLongString() {

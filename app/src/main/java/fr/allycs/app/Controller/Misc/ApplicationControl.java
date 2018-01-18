@@ -1,6 +1,7 @@
 package fr.allycs.app.Controller.Misc;
 
-import fr.allycs.app.Controller.Core.BinaryWrapper.ArpSpoof;
+import com.activeandroid.ActiveAndroid;
+
 import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
 
 public class ApplicationControl extends com.activeandroid.app.Application {
@@ -10,6 +11,7 @@ public class ApplicationControl extends com.activeandroid.app.Application {
         RootProcess.kill("cepter");
         RootProcess.kill("ping");
         RootProcess.kill("arpspoof");
+        ActiveAndroid.endTransaction();
         super.onTerminate();
     }
 }

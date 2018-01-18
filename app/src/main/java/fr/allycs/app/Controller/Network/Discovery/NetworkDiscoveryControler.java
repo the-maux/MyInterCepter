@@ -18,20 +18,37 @@ import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
 public class                        NetworkDiscoveryControler {
     private String                  TAG = "NetworkDiscoveryControler";
     public enum typeScan {          Arp, Services, Historic }
-    private NetworkDiscoveryControler mInstance = this;
+ //   private NetworkDiscoveryControler mInstance = this;
     private FragmentHostDiscoveryScan mFragment;
     private Singleton               mSingleton = Singleton.getInstance();
     private HostDiscoveryActivity   mActivity;
     private String                  mSSID = null;
     public boolean                  inLoading = false;
 
-    public                          NetworkDiscoveryControler(final FragmentHostDiscoveryScan fragmentHostDiscoveryScan) {
-        this.mActivity = (HostDiscoveryActivity) fragmentHostDiscoveryScan.getActivity();
-        this.mFragment = fragmentHostDiscoveryScan;
-        mSSID = ((WifiManager) mActivity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)) != null ?
-                ((WifiManager) mActivity.getApplicationContext().getSystemService(Context.WIFI_SERVICE))
-                .getConnectionInfo().getSSID().replace("\"", "") : "NO SSID";
+    private static NetworkDiscoveryControler            mInstance = null;
+    private                             NetworkDiscoveryControler(final FragmentHostDiscoveryScan fragmentHostDiscoveryScan) {
+
     }
+    public static synchronized NetworkDiscoveryControler getInstance(final FragmentHostDiscoveryScan fragmentHostDiscoveryScan) {
+        if(mInstance == null)
+            mInstance = new NetworkDiscoveryControler(fragmentHostDiscoveryScan);
+        mInstance.mActivity = (HostDiscoveryActivity) fragmentHostDiscoveryScan.getActivity();
+        mInstance.mFragment = fragmentHostDiscoveryScan;
+        WifiManager wifiManager = (WifiManager) fragmentHostDiscoveryScan.getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        mInstance.mSSID = (wifiManager) != null ?
+                wifiManager.getConnectionInfo().getSSID().replace("\"", "") : "NO SSID";
+        return mInstance;
+    }
+    
+//    public                          NetworkDiscoveryControler(final FragmentHostDiscoveryScan fragmentHostDiscoveryScan) {
+//        this.mActivity = (HostDiscoveryActivity) fragmentHostDiscoveryScan.getActivity();
+//        this.mFragment = fragmentHostDiscoveryScan;
+//        mSSID = ((WifiManager) mActivity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)) != null ?
+//                ((WifiManager) mActivity.getApplicationContext().getSystemService(Context.WIFI_SERVICE))
+//                .getConnectionInfo().getSSID().replace("\"", "") : "NO SSID";
+//    }
+
+
 
     public void                    run(typeScan typeOfScan, List<Host> listOfHosts) {
         Log.d(TAG, "running: " + typeOfScan.name());

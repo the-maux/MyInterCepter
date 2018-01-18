@@ -42,7 +42,7 @@ public class                        FragmentHistoric extends MyFragment {
     private Host                    mFocusedHost = null;
     private List<AccessPoint>       HistoricAps;
     private Session                 focusedSession = null;
-
+    private HostDiscoveryActivity   mActivity = null;
     private RecyclerView            mRV;
     private TextView                mEmptyList;
     private RecyclerView.Adapter    RV_AdapterAp = null, RV_AdapterSessions = null, RV_AdapterHostSession = null;
@@ -60,13 +60,18 @@ public class                        FragmentHistoric extends MyFragment {
     private TextView                titleGateway, titleWireshark, titleDevices, titleService;
     private TextView                subtitleGateway, subtitleWireshark, subtitleDevices, subtitleService;
     private ImageView               forwardGateway, forwardWireshark, forwardListDevices, forwardServices;
+    private String                  mTitle = "Audit historic", mSubtitle = "";
 
     @Override public View           onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_historic, container, false);
+
         initXml(rootView);
         init();
+        pushToolbar();
         return rootView;
     }
+
+
 
     @Override public void           init() {
         if (getArguments() != null && getArguments().getString("mode") != null) {
@@ -77,6 +82,7 @@ public class                        FragmentHistoric extends MyFragment {
                     initHistoricFromDB(mFocusedHost);
                     break;
                 case DB_HISTORIC:
+                    this.mActivity = (HostDiscoveryActivity) getActivity();
                     initHistoricFromDB();
                     break;
             }
@@ -124,6 +130,7 @@ public class                        FragmentHistoric extends MyFragment {
     private void                    initHistoricFromDB() /* All Session, no filter*/{
         HistoricAps = DBAccessPoint.getAllSessionsRecorded();
         if (HistoricAps.isEmpty()) {
+            setTitleToolbar("Historic", "No historic");
             mActualMode = HistoricDetailMode.noHistoric;
             mEmptyList.setVisibility(View.VISIBLE);
             mRV.setVisibility(View.GONE);
@@ -131,6 +138,7 @@ public class                        FragmentHistoric extends MyFragment {
             if (RV_AdapterAp == null) {
                 RV_AdapterAp = new AccessPointAdapter(this, HistoricAps);
             }
+            setTitleToolbar("Historic", HistoricAps.size() + " wifi scanned");
             mRV.setAdapter(RV_AdapterAp);
             mActualMode = HistoricDetailMode.ApHistoric;
             mEmptyList.setVisibility(View.GONE);
@@ -154,15 +162,16 @@ public class                        FragmentHistoric extends MyFragment {
     }
 
     public void                     onAccessPointFocus(AccessPoint ap) {
-        Log.d(TAG, "onAccessPointFocus");
         mActualMode = HistoricDetailMode.SessionsOfAp;
+        if (ap != null) {
+            List<Session> allSessionWithDeviceIn  = DBSession.getAllSessionFromApWithDeviceIn(ap.sessions(), mFocusedHost);
+            RV_AdapterSessions = new SessionAdapter(this, allSessionWithDeviceIn, ap);
+        } else {
+            ap = ((SessionAdapter)RV_AdapterSessions).getAccessPoint();
+        }
+        setTitleToolbar(ap.Ssid, ap.nbrSession + " sessions found");
         mDetailSessionLayout.setVisibility(View.GONE);
         mRV.setVisibility(View.VISIBLE);
-        if (RV_AdapterSessions == null) {
-            List<Session> allSessionWithDeviceIn  = DBSession.getAllSessionFromApWithDeviceIn(ap.sessions(), mFocusedHost);
-            Log.d(TAG, "onAccessPointFocus:: returning " + allSessionWithDeviceIn.size() + " sessions");
-            RV_AdapterSessions = new SessionAdapter(this, allSessionWithDeviceIn);
-        }
         mRV.setAdapter(RV_AdapterSessions);
     }
 
@@ -184,6 +193,7 @@ public class                        FragmentHistoric extends MyFragment {
         initViewSessionFocus_Devices(focusedSession);
         initViewSessionFocus_Wireshark(focusedSession);
         initViewSessionFocus_Services(focusedSession);
+        setTitleToolbar(null, focusedSession.getDateString());
         typeScan.setText("Realised with an " + focusedSession.typeScan + "scan");
         nbrServiceDiscovered.setText(((focusedSession.services == null) ? "0" : focusedSession.services.size()) + " services discovered on network");
     }
@@ -259,13 +269,28 @@ public class                        FragmentHistoric extends MyFragment {
     public void                     hostOfSessionsFocused(Session session) {
         mDetailSessionLayout.setVisibility(View.GONE);
         mRV.setVisibility(View.VISIBLE);
+        mActualMode = HistoricDetailMode.devicesOfSession;
         if (RV_AdapterHostSession == null) {
-            mActualMode = HistoricDetailMode.devicesOfSession;
             HostDiscoveryAdapter hostAdapter = new HostDiscoveryAdapter(getActivity(), mRV, true);
             hostAdapter.updateHostList(session.listDevices());
             RV_AdapterHostSession = hostAdapter;
         }
+        setTitleToolbar(focusedSession.getDateString(),  session.listDevices().size() + " devices");
         mRV.setAdapter(RV_AdapterHostSession);
+    }
+
+    private void                    setTitleToolbar(String title, String subtitle) {
+        if (title != null)
+            mTitle = title;
+        if (subtitle != null)
+            mSubtitle = subtitle;
+        if (isVisible()) {
+            mActivity.setToolbarTitle(title, subtitle);
+        }
+    }
+
+    private void                    pushToolbar() {
+        mActivity.setToolbarTitle(mTitle, mSubtitle);
     }
 
     @Override

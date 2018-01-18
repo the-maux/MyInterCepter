@@ -42,6 +42,7 @@ public class                    AccessPointAdapter extends RecyclerView.Adapter<
         View.OnClickListener onClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Log.d(TAG, "Click for AccessPoint detail : " + ap);
                 mFragment.onAccessPointFocus(ap);
             }
         };

@@ -3,7 +3,6 @@ package fr.allycs.app.View.HostDiscovery;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
@@ -50,34 +49,29 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     private SwipeRefreshLayout      mSwipeRefreshLayout;
     private ArrayList<String>       mListOS = new ArrayList<>();
     private NetworkDiscoveryControler mScannerControler;
-
+    private String                  mTitle, mSubtitle;
 
     @Override public View           onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hostdiscovery_scan, container, false);
         initXml(rootView);
         this.mActivity = (HostDiscoveryActivity) getActivity();
-        mScannerControler = new NetworkDiscoveryControler(this);
+        mScannerControler = NetworkDiscoveryControler.getInstance(this);
         if (mSingleton.DebugMode && !mHostLoaded) {
             mActivity.showSnackbar("Debug mode: auto scan started");
             startNetworkScan();
         }
         initSwipeRefresh();
         mActivity.initToolbarButton();
+        pushToolbar();
         return rootView;
     }
 
     @Override public void           onResume() {
-        //TODO: prévoir quand on passe par la pour start le services discovery (si il n'a pas déjà était lancé)
         super.onResume();
         Log.d(TAG, "onResume");
         mHost_RV.setAdapter(mHostAdapter);
         mHost_RV.setHasFixedSize(true);
         mHost_RV.setLayoutManager(new LinearLayoutManager(mActivity));
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
     }
 
     public boolean                  start() {
@@ -187,7 +181,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                     if (mActivity.typeScan != NetworkDiscoveryControler.typeScan.Services)
                         initHostsRecyclerView();
                     mActivity.progressAnimation();
-                    mActivity.setToolbarTitle(null, "Scanning network");
+                    setTitleToolbar("Scanner", "Discovering network");
                     mScannerControler.run(mActivity.typeScan, mHosts);
                     mActivity.setProgressState(1000);
                 } else {
@@ -211,7 +205,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 mHostAdapter.updateHostList(mHosts);
                 mScannerControler.inLoading = false;
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
-                mActivity.setToolbarTitle(null, mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": ""));
+                setTitleToolbar(null, mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": ""));
                 mActivity.actualSession =
                         DBSession.buildSession(mScannerControler.getSSID(),
                                 mSingleton.network.gateway,
@@ -226,6 +220,18 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         });
     }
 
+    private void                    pushToolbar() {
+        mActivity.setToolbarTitle(mTitle, mSubtitle);
+    }
+    private void                    setTitleToolbar(String title, String subtitle) {
+        if (title != null)
+            mTitle = title;
+        if (subtitle != null)
+            mSubtitle = subtitle;
+        if (isVisible()) {
+            mActivity.setToolbarTitle(title, subtitle);
+        }
+    }
     public void                     osFilterDialog() {
         final RecyclerView.Adapter adapter = new OSAdapter(mActivity, mHostAdapter.getOsList(), mListOS);
         new RV_dialog(mActivity)
