@@ -48,7 +48,7 @@ public class                    WebServerActivity extends MyActivity {
         mTV_Message = findViewById(R.id.textViewMessage);
         mTV_IpAccess = findViewById(R.id.textViewIpAccess);
         mTV_IpAccess.setText("http://" + mSingleton.network.myIp + ":");
-        mFab = findViewById(R.id.floatingActionButtonOnOff);
+        mFab = findViewById(R.id.fab);
         mFab.setOnClickListener(onFabClick());
         initBroadcastReceiverNetworkStateChanged();// INIT BROADCAST RECEIVER TO LISTEN NETWORK STATE CHANGED
     }

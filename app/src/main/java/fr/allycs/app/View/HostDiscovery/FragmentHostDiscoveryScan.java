@@ -3,6 +3,7 @@ package fr.allycs.app.View.HostDiscovery;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
@@ -50,6 +51,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     private ArrayList<String>       mListOS = new ArrayList<>();
     private NetworkDiscoveryControler mScannerControler;
 
+
     @Override public View           onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hostdiscovery_scan, container, false);
         initXml(rootView);
@@ -73,12 +75,17 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         mHost_RV.setLayoutManager(new LinearLayoutManager(mActivity));
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
     public boolean                  start() {
-        if (!mHostLoaded) {
+        if (!mHostLoaded && !mScannerControler.inLoading) {
             startNetworkScan();
             return true;
         }
-        return false;
+        return mScannerControler.inLoading;
     }
 
     private void                    initXml(View rootView) {
@@ -177,7 +184,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                     return;
                 }
                 if (mSingleton.network.updateInfo().isConnectedToNetwork()) {
-                    mScannerControler.inLoading = true;
                     if (mActivity.typeScan != NetworkDiscoveryControler.typeScan.Services)
                         initHostsRecyclerView();
                     mActivity.progressAnimation();
@@ -262,10 +268,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 }
             }
         });
-    }
-
-    @Override public void           stop() {
-
     }
 
 }

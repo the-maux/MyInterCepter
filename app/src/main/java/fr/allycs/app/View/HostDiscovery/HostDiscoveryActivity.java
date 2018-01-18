@@ -224,10 +224,15 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mFragment.initSearchView(mSearchView);
     }
 
-    public void                     setProgressState(int progress){
-        mProgressBar.setVisibility(View.VISIBLE);
-        if (progress != -1)
-            this.mProgress = progress;
+    public void                     setProgressState(final int progress){
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mProgressBar.setVisibility(View.VISIBLE);
+                if (progress != -1)
+                    mProgress = progress;
+            }
+        });
     }
 
     public void                     setToolbarTitle(final String title, final String subtitle) {

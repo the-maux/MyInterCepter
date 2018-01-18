@@ -28,22 +28,26 @@ public class                        NetworkDiscoveryControler {
     public                          NetworkDiscoveryControler(final FragmentHostDiscoveryScan fragmentHostDiscoveryScan) {
         this.mActivity = (HostDiscoveryActivity) fragmentHostDiscoveryScan.getActivity();
         this.mFragment = fragmentHostDiscoveryScan;
-        mSSID = ((WifiManager)mActivity.getApplicationContext().getSystemService(Context.WIFI_SERVICE))
-                .getConnectionInfo().getSSID().replace("\"", "");
+        mSSID = ((WifiManager) mActivity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)) != null ?
+                ((WifiManager) mActivity.getApplicationContext().getSystemService(Context.WIFI_SERVICE))
+                .getConnectionInfo().getSSID().replace("\"", "") : "NO SSID";
     }
 
     public void                    run(typeScan typeOfScan, List<Host> listOfHosts) {
-        mSingleton.resetActualSniffSession();
-        switch (typeOfScan) {
-            case Arp:
-                startArpScan();
-                break;
-            case Services:
-                startBonjourScan(listOfHosts);
-                break;
-/*            case Nmap:
-                startNmapScan();
-                break;*/
+        Log.d(TAG, "running: " + typeOfScan.name());
+        if (!inLoading) {
+            inLoading = true;
+            mSingleton.resetActualSniffSession();
+            switch (typeOfScan) {
+                case Arp:
+                    startArpScan();
+                    break;
+                case Services:
+                    startBonjourScan(listOfHosts);
+                    break;
+            }
+        } else {
+            Log.e(TAG, "Trying to launch multiple scan at same time");
         }
     }
 
