@@ -6,8 +6,10 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import fr.allycs.app.Controller.Core.Database.DBHost;
 import fr.allycs.app.Model.Target.Host;
@@ -28,9 +30,6 @@ public class                Pcap extends Model {
     public String           listDevicesSerialized;
     private List<Host>      listDevices = null;
 
-    /**
-     * Create the ManyToMany relation
-     */
     public List<Host>       listDevices() {
         if (listDevices == null) {
             listDevices = DBHost.getListFromSerialized(listDevicesSerialized);
@@ -55,4 +54,9 @@ public class                Pcap extends Model {
         super();
     }
 
+
+    @Override public String toString() {
+        return "Pcap: create the [" + new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE)
+                .format(date)+ "] at [" + path + "]";
+    }
 }

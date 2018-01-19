@@ -31,10 +31,10 @@ import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.Model.Target.SniffSession;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Adapter.AccessPointAdapter;
-import fr.allycs.app.View.Adapter.HostDiscoveryAdapter;
-import fr.allycs.app.View.Adapter.SessionAdapter;
-import fr.allycs.app.View.Dialog.HostDialogDetail;
+import fr.allycs.app.View.Widget.Adapter.AccessPointAdapter;
+import fr.allycs.app.View.Widget.Adapter.HostDiscoveryAdapter;
+import fr.allycs.app.View.Widget.Adapter.SessionAdapter;
+import fr.allycs.app.View.Widget.Dialog.HostDialogDetail;
 
 public class                        FragmentHistoric extends MyFragment {
     private String                  TAG = "FragmentHistoric";

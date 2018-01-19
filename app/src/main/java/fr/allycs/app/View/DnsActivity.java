@@ -24,9 +24,9 @@ import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.Model.Target.DNSSpoofItem;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Adapter.DnsLogsAdapter;
-import fr.allycs.app.View.Adapter.DnsSpoofConfAdapter;
-import fr.allycs.app.View.Dialog.AddDnsDialog;
+import fr.allycs.app.View.Widget.Adapter.DnsLogsAdapter;
+import fr.allycs.app.View.Widget.Adapter.DnsSpoofConfAdapter;
+import fr.allycs.app.View.Widget.Dialog.AddDnsDialog;
 
 
 public class                            DnsActivity extends MyActivity {

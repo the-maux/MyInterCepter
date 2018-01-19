@@ -1,4 +1,4 @@
-package fr.allycs.app.View.Dialog;
+package fr.allycs.app.View.Widget.Dialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -11,7 +11,7 @@ import android.view.View;
 import fr.allycs.app.R;
 
 public class                    RV_dialog {
-    private RecyclerView        RV_host;
+    private RecyclerView        mRV_host;
     protected AlertDialog.Builder dialog;
 
     public                      RV_dialog(Activity activity) {
@@ -19,17 +19,17 @@ public class                    RV_dialog {
         dialog.setCancelable(true);
         View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_hostchoice, null);
         dialog.setView(dialogView);
-        RV_host = dialogView.findViewById(R.id.RL_host);
-        RV_host.setHasFixedSize(true);
+        mRV_host = dialogView.findViewById(R.id.RL_host);
+        mRV_host.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(activity);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(RV_host.getContext(),
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRV_host.getContext(),
                 manager.getOrientation());
-        RV_host.addItemDecoration(dividerItemDecoration);
-        RV_host.setLayoutManager(manager);
+        mRV_host.addItemDecoration(dividerItemDecoration);
+        mRV_host.setLayoutManager(manager);
     }
 
     public RV_dialog            setAdapter(RecyclerView.Adapter adapter) {
-        RV_host.setAdapter(adapter);
+        mRV_host.setAdapter(adapter);
         return this;
     }
 
@@ -48,7 +48,7 @@ public class                    RV_dialog {
     }
 
     public RV_dialog            setLayoutManager(RecyclerView.LayoutManager manager) {
-        RV_host.setLayoutManager(manager);
+        mRV_host.setLayoutManager(manager);
         return this;
     }
 

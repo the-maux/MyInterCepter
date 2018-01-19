@@ -55,7 +55,7 @@ public class                    RootProcess {
             //    Log.d(TAG, mLogID + "::" + cmd);
             mOutputStream.writeBytes(cmd + " 2>&1 \n");
             mOutputStream.flush();
-            Field f = mProcess.getClass().getDeclaredField("mPid");
+            Field f = mProcess.getClass().getDeclaredField("pid");
             f.setAccessible(true);
             mPid = f.getInt(mProcess);
             f.setAccessible(false);

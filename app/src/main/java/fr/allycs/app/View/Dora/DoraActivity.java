@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-
-
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabItem;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,14 +12,13 @@ import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.ImageView;
 
-
-import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Core.BinaryWrapper.Dora;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Model.Unix.DoraProcess;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Adapter.DoraAdapter;
+import fr.allycs.app.View.Widget.Adapter.DoraAdapter;
 
 public class                    DoraActivity extends MyActivity {
     private String              TAG = this.getClass().getName();

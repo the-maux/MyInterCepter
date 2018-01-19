@@ -1,4 +1,4 @@
-package fr.allycs.app.View.Adapter.Holder;
+package fr.allycs.app.View.Widget.Holder;
 
 import android.content.Context;
 

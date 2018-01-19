@@ -33,8 +33,8 @@ import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Adapter.HostSelectionAdapter;
-import fr.allycs.app.View.Dialog.RV_dialog;
+import fr.allycs.app.View.Widget.Adapter.HostSelectionAdapter;
+import fr.allycs.app.View.Widget.Dialog.RV_dialog;
 
 public class                    NmapActivity extends MyActivity {
     private String              TAG = this.getClass().getName();

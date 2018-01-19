@@ -1,4 +1,4 @@
-package fr.allycs.app.View.Adapter;
+package fr.allycs.app.View.Widget.Adapter;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +10,7 @@ import java.util.List;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Unix.ConsoleLog;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Adapter.Holder.ConsoleLogHolder;
+import fr.allycs.app.View.Widget.Holder.ConsoleLogHolder;
 
 
 public class                    ConsoleLogAdapter extends RecyclerView.Adapter<ConsoleLogHolder> {

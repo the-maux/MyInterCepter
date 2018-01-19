@@ -1,7 +1,6 @@
-package fr.allycs.app.View.Adapter;
+package fr.allycs.app.View.Widget.Adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +9,9 @@ import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Target.DNSSpoofItem;
-import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Adapter.Holder.DnsSpoofConfHolder;
 import fr.allycs.app.View.DnsActivity;
+import fr.allycs.app.View.Widget.Holder.DnsSpoofConfHolder;
 
 
 public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter<DnsSpoofConfHolder> {

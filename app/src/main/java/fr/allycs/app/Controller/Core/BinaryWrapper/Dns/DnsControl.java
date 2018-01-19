@@ -11,8 +11,8 @@ import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Target.DNSSpoofItem;
 import fr.allycs.app.Model.Target.SniffSession;
 import fr.allycs.app.Model.Unix.DNSLog;
-import fr.allycs.app.View.Adapter.DnsLogsAdapter;
 import fr.allycs.app.View.DnsActivity;
+import fr.allycs.app.View.Widget.Adapter.DnsLogsAdapter;
 
 public class                    DnsControl {
     private String              TAG = "DnsControl";

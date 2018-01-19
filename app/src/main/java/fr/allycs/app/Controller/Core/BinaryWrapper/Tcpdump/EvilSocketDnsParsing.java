@@ -1,19 +1,49 @@
-package fr.allycs.app.Controller.Network;
+package fr.allycs.app.Controller.Core.BinaryWrapper.Tcpdump;
+
 
 import android.util.Log;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import fr.allycs.app.Model.Net.DNSPacket;
+import fr.allycs.app.Controller.Network.IPTables;
 
+public class EvilSocketDnsParsing {
+    private String          TAG = "";
+    private ConfTcpdump     mTcpdumpConf;
 
+    EvilSocketDnsParsing(ConfTcpdump tcpdumpConf) {
+        this.mTcpdumpConf = tcpdumpConf;
+    }
 
-public class                        MyDNSMITM {
+    void                    init_mitm_dns_behavior(String actualParam) {
+        if (actualParam.contains(mTcpdumpConf.STDOUT_BUFF) && actualParam.contains("dst port 53")) {
+            Log.i(TAG, "DNS REQUEST MITM");
+            new IPTables().discardForwardding2Port(53); //MITM DNS
+        }
+    }
+
+    void                    mitm_dns_behavior(String actualParam, String line) {
+        if (actualParam.contains(mTcpdumpConf.STDOUT_BUFF) && actualParam.contains("dst port 53")) {
+            MITM_DNS(line);
+        }
+    }
+
+    private void                    MITM_DNS(String line) {
+        StringBuilder reqdata = new StringBuilder();
+        String regex = "^.+length\\s+(\\d+)\\)\\s+([\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3})\\.[^\\s]+\\s+>\\s+([\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3})\\.[^\\:]+.*";
+        Matcher matcher = Pattern.compile(regex).matcher(line);
+        if (!matcher.find() && !line.contains("tcpdump")) {
+            line = line.substring(line.indexOf(":") + 1).trim().replace(" ", "");
+            reqdata.append(line);
+        } else {
+            if (reqdata.length() > 0) {
+
+            }
+            reqdata.delete(0, reqdata.length());
+        }
+        //new MyDNSMITM(reqdata.toString());
+        /*public class                        MyDNSMITM {
 /*    private static String           TAG = "MyDNSMITM";
     static ArrayList<HostFileEntry> entries;
 
@@ -108,4 +138,5 @@ public class                        MyDNSMITM {
             this.host2Spoof=host2spoof;
         }
     }*/
+    }
 }

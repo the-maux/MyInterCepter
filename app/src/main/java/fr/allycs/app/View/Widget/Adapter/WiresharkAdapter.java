@@ -1,4 +1,4 @@
-package fr.allycs.app.View.Adapter;
+package fr.allycs.app.View.Widget.Adapter;
 
 import android.app.Activity;
 import android.graphics.Typeface;
@@ -14,7 +14,7 @@ import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Net.Protocol;
 import fr.allycs.app.Model.Net.Trame;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Adapter.Holder.WiresharkHolder;
+import fr.allycs.app.View.Widget.Holder.WiresharkHolder;
 
 
 public class                WiresharkAdapter extends RecyclerView.Adapter<WiresharkHolder> {

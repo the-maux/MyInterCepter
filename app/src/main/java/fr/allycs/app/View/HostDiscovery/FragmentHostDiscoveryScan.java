@@ -31,11 +31,11 @@ import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Adapter.HostDiscoveryAdapter;
-import fr.allycs.app.View.Adapter.OSAdapter;
-import fr.allycs.app.View.Dialog.AddDnsDialog;
-import fr.allycs.app.View.Dialog.RV_dialog;
 import fr.allycs.app.View.MenuActivity;
+import fr.allycs.app.View.Widget.Adapter.HostDiscoveryAdapter;
+import fr.allycs.app.View.Widget.Adapter.OSAdapter;
+import fr.allycs.app.View.Widget.Dialog.AddDnsDialog;
+import fr.allycs.app.View.Widget.Dialog.RV_dialog;
 
 public class                        FragmentHostDiscoveryScan extends MyFragment {
     private String                  TAG = "FragmentHostDiscoveryScan";

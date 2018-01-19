@@ -1,4 +1,4 @@
-package fr.allycs.app.View.Adapter.Holder;
+package fr.allycs.app.View.Widget.Holder;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;

@@ -58,12 +58,12 @@ public class                    MenuActivity extends MyActivity {
     }
 
     private void                initflags() {
-        ColorDrawable red = new ColorDrawable(ContextCompat.getColor(this, R.color.material_red_700));
+        ColorDrawable red = new ColorDrawable(ContextCompat.getColor(this, R.color.material_red_800));
         ColorDrawable green = new ColorDrawable(ContextCompat.getColor(this, R.color.material_green_700));
         ((CircleImageView) findViewById(R.id.monitorDNS)).setImageDrawable((mSingleton.isDnsControlstarted()) ? green : red);
-
-        if (Tcpdump.getTcpdump(this) != null)
-            ((CircleImageView) findViewById(R.id.monitorWireshark)).setImageDrawable((Tcpdump.getTcpdump(this).isRunning) ? green : red);
+        Tcpdump tcpdump = Tcpdump.getTcpdump(this, false);
+        if (tcpdump != null)
+            ((CircleImageView) findViewById(R.id.monitorWireshark)).setImageDrawable((tcpdump.isRunning) ? green : red);
         else
             ((CircleImageView) findViewById(R.id.monitorWireshark)).setImageDrawable(red);
         if (Dora.getDora(this) != null)

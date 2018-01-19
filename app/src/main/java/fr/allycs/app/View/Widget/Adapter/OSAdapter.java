@@ -1,4 +1,4 @@
-package fr.allycs.app.View.Adapter;
+package fr.allycs.app.View.Widget.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,19 +7,13 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import fr.allycs.app.Controller.Misc.GlideApp;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Adapter.Holder.HostSelectionHolder;
-
-import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+import fr.allycs.app.View.Widget.Holder.HostSelectionHolder;
 
 public class                    OSAdapter extends RecyclerView.Adapter<HostSelectionHolder> {
     private String              TAG = this.getClass().getName();

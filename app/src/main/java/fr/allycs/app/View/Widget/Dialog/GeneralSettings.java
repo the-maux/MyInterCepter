@@ -1,4 +1,4 @@
-package fr.allycs.app.View.Dialog;
+package fr.allycs.app.View.Widget.Dialog;
 
 import android.app.Activity;
 import android.content.Intent;

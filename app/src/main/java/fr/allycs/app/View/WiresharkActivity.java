@@ -35,10 +35,10 @@ import fr.allycs.app.Model.Net.Protocol;
 import fr.allycs.app.Model.Net.Trame;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Adapter.HostSelectionAdapter;
-import fr.allycs.app.View.Adapter.WiresharkAdapter;
-import fr.allycs.app.View.Dialog.GeneralSettings;
-import fr.allycs.app.View.Dialog.RV_dialog;
+import fr.allycs.app.View.Widget.Adapter.HostSelectionAdapter;
+import fr.allycs.app.View.Widget.Adapter.WiresharkAdapter;
+import fr.allycs.app.View.Widget.Dialog.GeneralSettings;
+import fr.allycs.app.View.Widget.Dialog.RV_dialog;
 
 public class                    WiresharkActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
@@ -63,7 +63,7 @@ public class                    WiresharkActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wireshark);
         initXml();
-        mTcpdump = Tcpdump.getTcpdump(this);
+        mTcpdump = Tcpdump.getTcpdump(this, true);
         initSpinner();
         initFilter();
         initSettings();
@@ -135,7 +135,6 @@ public class                    WiresharkActivity extends MyActivity {
             public void onClick(View v) {
                 if (mHeaderConfOFF.getVisibility() == View.GONE &&
                      mHeaderConfON.getVisibility() == View.GONE) {
-
                 }
                 if (mHeaderConfOFF.getVisibility() == View.GONE) {
                     mHeaderConfOFF.setVisibility(View.VISIBLE);
