@@ -1,4 +1,4 @@
-package fr.allycs.app.Controller.Core.BinaryWrapper.Tcpdump;
+package fr.allycs.app.Controller.Core.Tools.Tcpdump;
 
 import android.app.Activity;
 import android.util.Log;
@@ -9,9 +9,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import fr.allycs.app.Controller.Core.BinaryWrapper.ArpSpoof;
-import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Core.Tools.ArpSpoof;
+import fr.allycs.app.Controller.Core.Tools.RootProcess;
 import fr.allycs.app.Controller.Network.IPTables;
 import fr.allycs.app.Model.Net.Trame;
 import fr.allycs.app.Model.Target.Host;

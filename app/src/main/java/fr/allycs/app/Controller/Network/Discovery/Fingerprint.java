@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.Database.DBHost;
+import fr.allycs.app.Controller.Core.Tools.RootProcess;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Os;

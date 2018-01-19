@@ -12,8 +12,8 @@ import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.ImageView;
 
-import fr.allycs.app.Controller.Core.BinaryWrapper.Dora;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Core.Tools.Dora;
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Model.Unix.DoraProcess;

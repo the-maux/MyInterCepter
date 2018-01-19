@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
-import fr.allycs.app.Controller.Core.BinaryWrapper.Dns.DnsConf;
-import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
+import fr.allycs.app.Controller.Core.Tools.Dns.DnsConf;
+import fr.allycs.app.Controller.Core.Tools.RootProcess;
 import fr.allycs.app.R;
 import fr.allycs.app.View.SetupActivity;
 

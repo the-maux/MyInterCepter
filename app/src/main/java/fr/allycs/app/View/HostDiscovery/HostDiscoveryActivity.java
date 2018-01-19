@@ -23,8 +23,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import fr.allycs.app.Controller.Core.BinaryWrapper.Intercepter;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Core.Tools.Intercepter;
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Misc.MyFragment;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;

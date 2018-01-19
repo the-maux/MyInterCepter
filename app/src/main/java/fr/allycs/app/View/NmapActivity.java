@@ -27,8 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Core.Tools.RootProcess;
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.Model.Target.Host;

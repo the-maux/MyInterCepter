@@ -22,7 +22,7 @@ package fr.allycs.app.Controller.Network;
 import android.util.Log;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
+import fr.allycs.app.Controller.Core.Tools.RootProcess;
 
 public class                    IPTables {
     private static final String TAG = "IPTABLES";

@@ -17,9 +17,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
+import fr.allycs.app.Controller.Core.Conf.PreferenceControler;
 import fr.allycs.app.Controller.Core.Conf.Setup;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Core.Tools.RootProcess;
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.R;
@@ -111,6 +112,7 @@ public class                    SetupActivity extends MyActivity {
         mSingleton.FilesPath = mInstance.getFilesDir().getPath() + '/';
         mSingleton.BinaryPath = mSingleton.FilesPath;//shouldn't be the same as FilesPath
         mSingleton.PcapPath = Environment.getExternalStorageDirectory().getPath() + "/Pcap/";
+        mSingleton.userPreference = new PreferenceControler(mSingleton.FilesPath);
         Log.d(TAG, "path:" + mSingleton.FilesPath);
         monitor("Building Path");
     }

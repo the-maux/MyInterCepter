@@ -1,4 +1,4 @@
-package fr.allycs.app.Controller.Core.BinaryWrapper.Dns;
+package fr.allycs.app.Controller.Core.Tools.Dns;
 
 import android.util.Log;
 
@@ -6,8 +6,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
 
-import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Core.Tools.RootProcess;
 import fr.allycs.app.Model.Target.DNSSpoofItem;
 import fr.allycs.app.Model.Target.SniffSession;
 import fr.allycs.app.Model.Unix.DNSLog;

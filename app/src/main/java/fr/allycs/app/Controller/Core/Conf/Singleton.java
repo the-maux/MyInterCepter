@@ -5,9 +5,9 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.allycs.app.Controller.Core.BinaryWrapper.ArpSpoof;
-import fr.allycs.app.Controller.Core.BinaryWrapper.Dns.DnsControl;
 import fr.allycs.app.Controller.Core.Database.DBSniffSession;
+import fr.allycs.app.Controller.Core.Tools.ArpSpoof;
+import fr.allycs.app.Controller.Core.Tools.Dns.DnsControl;
 import fr.allycs.app.Controller.Network.IPTables;
 import fr.allycs.app.Controller.Network.NetworkInformation;
 import fr.allycs.app.Model.Target.Host;
@@ -16,13 +16,15 @@ import fr.allycs.app.Model.Target.SniffSession;
 
 public class                            Singleton {
     private static Singleton            mInstance = null;
-    private                             Singleton() {}
+    private                             Singleton() {
+
+    }
     public static synchronized Singleton getInstance() {
         if(mInstance == null)
             mInstance = new Singleton();
         return mInstance;
     }
-
+    public PreferenceControler          userPreference;
     private DnsControl                  dnsSpoofed = null;
     public ArrayList<Host>              hostsList = null;
     public List<ArpSpoof>               ArpSpoofProcessStack = new ArrayList<>();
@@ -38,7 +40,6 @@ public class                            Singleton {
     public String                       PcapPath;
     public String                       BinaryPath = null;
     public String                       FilesPath = null;
-
 
     public SniffSession                 getActualSniffSession() {
         if (actualSniffSession == null) {

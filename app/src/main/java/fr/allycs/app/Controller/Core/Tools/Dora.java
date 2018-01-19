@@ -1,4 +1,4 @@
-package fr.allycs.app.Controller.Core.BinaryWrapper;
+package fr.allycs.app.Controller.Core.Tools;
 
 import android.app.Activity;
 import android.util.Log;

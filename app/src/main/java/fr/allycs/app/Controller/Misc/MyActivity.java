@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 
-import fr.allycs.app.Controller.Core.BinaryWrapper.ArpSpoof;
+import fr.allycs.app.Controller.Core.Tools.ArpSpoof;
 
 
 public class                    MyActivity extends AppCompatActivity {

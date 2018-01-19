@@ -18,8 +18,8 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 
-import fr.allycs.app.Controller.Core.BinaryWrapper.Dns.DnsControl;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Core.Tools.Dns.DnsControl;
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.Model.Target.DNSSpoofItem;
