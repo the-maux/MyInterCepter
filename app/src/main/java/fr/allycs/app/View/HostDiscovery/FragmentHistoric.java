@@ -47,7 +47,6 @@ public class                        FragmentHistoric extends MyFragment {
     private TextView                mEmptyList;
     private RecyclerView.Adapter    RV_AdapterAp = null, RV_AdapterSessions = null, RV_AdapterHostSession = null;
 
-    public enum HistoricInitMode    {  HostDetail, HistoricDB }
     private AccessPointAdapter.typeFragment actualMode = null;
     public enum HistoricDetailMode  { ApHistoric, SessionsOfAp, devicesOfSession, detailSession, noHistoric}
     public static final String      HOST_HISTORIC = "HostDetail", DB_HISTORIC = "HistoricDB";
@@ -70,8 +69,6 @@ public class                        FragmentHistoric extends MyFragment {
         pushToolbar();
         return rootView;
     }
-
-
 
     @Override public void           init() {
         if (getArguments() != null && getArguments().getString("mode") != null) {

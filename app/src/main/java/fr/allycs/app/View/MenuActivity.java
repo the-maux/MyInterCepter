@@ -13,7 +13,7 @@ import android.view.View;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.Core.BinaryWrapper.Dora;
-import fr.allycs.app.Controller.Core.BinaryWrapper.Tcpdump;
+import fr.allycs.app.Controller.Core.BinaryWrapper.Tcpdump.Tcpdump;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;

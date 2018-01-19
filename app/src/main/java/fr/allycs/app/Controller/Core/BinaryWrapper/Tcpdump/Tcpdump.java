@@ -1,4 +1,4 @@
-package fr.allycs.app.Controller.Core.BinaryWrapper;
+package fr.allycs.app.Controller.Core.BinaryWrapper.Tcpdump;
 
 import android.app.Activity;
 import android.util.Log;
@@ -14,6 +14,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import fr.allycs.app.Controller.Core.BinaryWrapper.ArpSpoof;
+import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.Database.DBHost;
 import fr.allycs.app.Controller.Network.IPTables;
@@ -25,15 +27,16 @@ import fr.allycs.app.View.WiresharkActivity;
 public class                        Tcpdump {
     private String                  TAG = "Tcpdump";
     private static Tcpdump          mInstance = null;
-    private LinkedHashMap<String, String> cmds;
-    private RootProcess             tcpDumpProcess;
-    private WiresharkActivity       activity;
+    private Singleton               mSingleton = Singleton.getInstance();
+    private LinkedHashMap<String, String> mCmds;
+    private RootProcess             mTcpDumpProcess;
+    private WiresharkActivity       mActivity;
+
+    private boolean                 mAdvancedAnalyseTrame = false;
     public boolean                  isRunning = false, isDumpingInFile = false;
-    private boolean                 deepAnalyseTrame = false;
     public CopyOnWriteArrayList<Trame> listOfTrames;
     public String                   actualParam = "";
     public List<Host>               hosts;
-    private Singleton               mSingleton = Singleton.getInstance();
     private String                  INTERFACE = "-i wlan0 ";    //  Focus interfacte;
     private String                  STDOUT_BUFF = "-l ";        //  Make stdOUT line buffered.  Useful if you want to see  the  data in live
     private String                  VERBOSE_v1 = "-v ";          //  Verbose mode 1
@@ -44,8 +47,8 @@ public class                        Tcpdump {
                                  level header) in hex.*/
     private String                  SNARF = "-s 0 ";             //  Snarf snaplen bytes of data from each  packet , no idea what this mean
 
-    private Tcpdump(WiresharkActivity activity) {
-        this.activity = activity;
+    private                         Tcpdump(WiresharkActivity activity) {
+        this.mActivity = activity;
         listOfTrames = new CopyOnWriteArrayList<>();
         initCmds();
     }
@@ -62,16 +65,16 @@ public class                        Tcpdump {
     }
 
     private void                    initCmds() {
-        cmds = new LinkedHashMap<>();
-        cmds.put("No Filter", INTERFACE  + " \' ");
-        cmds.put("Custom Filter", INTERFACE + " \' ");
-        cmds.put("DNS Filter", INTERFACE + " \' dst port 53 ");
-        cmds.put("DNS Intercepter", INTERFACE + STDOUT_BUFF + VERBOSE_v2 + SNARF + VERBOSE_v3 + "\' dst port 53 ");
-        cmds.put("HTTP Filter",  INTERFACE + " \' (port 80 or port 443 or dst port 53) ");
-        cmds.put("Display Format", INTERFACE + STDOUT_BUFF + VERBOSE_v2 + SNARF + VERBOSE_v3 + "\'");
-        cmds.put("TCP Filter",  INTERFACE  + " \' tcp ");
-        cmds.put("UDP Filter", INTERFACE + " \' udp ");
-        cmds.put("Arp Filter",  INTERFACE + " \' arp ");
+        mCmds = new LinkedHashMap<>();
+        mCmds.put("No Filter", INTERFACE  + " \' ");
+        mCmds.put("Custom Filter", INTERFACE + " \' ");
+        mCmds.put("DNS Filter", INTERFACE + " \' dst port 53 ");
+        mCmds.put("DNS Intercepter", INTERFACE + STDOUT_BUFF + VERBOSE_v2 + SNARF + VERBOSE_v3 + "\' dst port 53 ");
+        mCmds.put("HTTP Filter",  INTERFACE + " \' (port 80 or port 443 or dst port 53) ");
+        mCmds.put("Display Format", INTERFACE + STDOUT_BUFF + VERBOSE_v2 + SNARF + VERBOSE_v3 + "\'");
+        mCmds.put("TCP Filter",  INTERFACE  + " \' tcp ");
+        mCmds.put("UDP Filter", INTERFACE + " \' udp ");
+        mCmds.put("Arp Filter",  INTERFACE + " \' arp ");
     }
     private String                  buildCmd(String actualParam, String hostFilter) {
         String date =  new SimpleDateFormat("MM_dd_HH_mm_ss", Locale.FRANCE).format(new Date());
@@ -130,8 +133,8 @@ public class                        Tcpdump {
                     }
                     listOfTrames.clear();
                     Log.d(TAG, cmd);
-                    tcpDumpProcess = new RootProcess("Wireshark").exec(cmd);
-                    BufferedReader reader = tcpDumpProcess.getReader();
+                    mTcpDumpProcess = new RootProcess("Wireshark").exec(cmd);
+                    BufferedReader reader = mTcpDumpProcess.getReader();
                     String line;
                     while ((line = reader.readLine()) != null) {
                         final String finalLine = line;
@@ -148,8 +151,8 @@ public class                        Tcpdump {
                     e.printStackTrace();
                     Log.d(TAG, "Process Error: " + e.getMessage());
                 } finally {
-                    if (tcpDumpProcess != null)
-                        tcpDumpProcess.closeProcess();
+                    if (mTcpDumpProcess != null)
+                        mTcpDumpProcess.closeProcess();
                     onNewLine("Quiting...");
                 }
                 Log.d(TAG, "onTcpDump start over");
@@ -161,7 +164,7 @@ public class                        Tcpdump {
         if (line.contains("Quiting...")) {
             Trame trame = new Trame("Processus over", listOfTrames.size(), 0);
             trame.connectionOver = true;
-            activity.onNewTrame(trame);
+            mActivity.onNewTrame(trame);
             onTcpDumpStop();
             return;
         }
@@ -172,9 +175,9 @@ public class                        Tcpdump {
         if (trame.initialised) {
             listOfTrames.add(0, trame);
             trame.offsett = listOfTrames.size();
-            activity.onNewTrame(trame);
+            mActivity.onNewTrame(trame);
         } else if (!trame.skipped) {
-            activity.onNewTrame(trame);
+            mActivity.onNewTrame(trame);
             onTcpDumpStop();
         }
     }
@@ -209,14 +212,14 @@ public class                        Tcpdump {
     }
 
     public LinkedHashMap<String, String> getCmdsWithArgsInMap() {
-        return cmds;
+        return mCmds;
     }
 
-    public boolean                  isDeepAnalyseTrame() {
-        return deepAnalyseTrame;
+    public boolean                  ismAdvancedAnalyseTrame() {
+        return mAdvancedAnalyseTrame;
     }
-    public void                     setDeepAnalyseTrame(boolean deepAnalyseTrame) {
+    public void                     setmAdvancedAnalyseTrame(boolean mAdvancedAnalyseTrame) {
         /** TODO: Restart App with dump Mode**/
-        this.deepAnalyseTrame = deepAnalyseTrame;
+        this.mAdvancedAnalyseTrame = mAdvancedAnalyseTrame;
     }
 }

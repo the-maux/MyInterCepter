@@ -4,9 +4,9 @@ import com.activeandroid.ActiveAndroid;
 
 import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
 
-public class ApplicationControl extends com.activeandroid.app.Application {
-    @Override
-    public void onTerminate() {
+public class                ApplicationControl extends com.activeandroid.app.Application {
+
+    @Override public void   onTerminate() {
         RootProcess.kill("tcpdump");
         RootProcess.kill("cepter");
         RootProcess.kill("ping");

@@ -7,26 +7,22 @@ import android.widget.TextView;
 
 import java.io.IOException;
 
-import fr.allycs.app.Controller.Network.IPTables;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Network.IPTables;
 import fr.allycs.app.R;
-
-/**
- * Created by maxim on 10/07/2017.
- */
 
 public class                    Intercepter {
     private String              TAG = "Intercepter";
-    private boolean             running = false;
-    private ImageView           runIcon;
-    private TextView            monitorIntercepter;
-    private Activity            activity;
-    private Singleton           singleton = Singleton.getInstance();
+    private boolean             mRunning = false;
+    private ImageView           mRunIcon;
+    private TextView            mMonitor;
+    private Activity            mActivity;
+    private Singleton           mSingleton = Singleton.getInstance();
 
     public Intercepter(Activity activity, RootProcess sniff_process, ImageView runIcon, TextView monitorIntercepter)  {
-        this.runIcon = runIcon;
-        this.activity = activity;
-        this.monitorIntercepter = monitorIntercepter;
+        this.mRunIcon = runIcon;
+        this.mActivity = activity;
+        this.mMonitor = monitorIntercepter;
     }
 
     private RootProcess         startCepter(String gateway) {
@@ -36,8 +32,6 @@ public class                    Intercepter {
         process.exec("exit").closeDontWait();
         return process;
     }
-
-
 
     /**
      * Créer le fichier exits.id
@@ -52,8 +46,8 @@ public class                    Intercepter {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        running = false;
-        runIcon.setImageResource(R.drawable.start);
+        mRunning = false;
+        mRunIcon.setImageResource(R.drawable.start);
         IPTables.stopIpTable();
         Log.d(TAG, "onInterceptorRunClick::typical over with strip");
     }

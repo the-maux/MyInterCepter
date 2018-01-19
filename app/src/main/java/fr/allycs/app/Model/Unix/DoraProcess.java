@@ -10,8 +10,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
-import fr.allycs.app.Model.Target.MyObject;
 import fr.allycs.app.Model.Target.Host;
+import fr.allycs.app.Model.Target.MyObject;
 
 public class            DoraProcess extends MyObject {
     private String      TAG = getClass().getName();
@@ -38,7 +38,7 @@ public class            DoraProcess extends MyObject {
                     mUptime = Calendar.getInstance().getTime();
                     mIsRunning = true;
                     mProcess.exec("ping -fi 0.2 " + mhost.ip);
-                    mPid = mProcess.getPid();
+                    mPid = mProcess.getmPid();
                     Log.d(TAG, "Dora:" + mhost.ip + " PID:" + mPid);
                     // find mPid pour finir
                     int tmpLine;

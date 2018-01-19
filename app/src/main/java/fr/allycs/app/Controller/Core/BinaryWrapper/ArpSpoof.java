@@ -1,21 +1,3 @@
-/*
- * This file is part of the dSploit.
- *
- * Copyleft of Simone Margaritelli aka evilsocket <evilsocket@gmail.com>
- *
- * dSploit is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * dSploit is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with dSploit.  If not, see <http://www.gnu.org/licenses/>.
- */
 package fr.allycs.app.Controller.Core.BinaryWrapper;
 import android.util.Log;
 
@@ -25,31 +7,29 @@ import java.io.IOException;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Target.Host;
 
-/**
- * Wrapper of ArpSpoof tool
- */
 public class                        ArpSpoof {
     private static final String     TAG = "ArpSpoof";
     private ArpSpoof                mInstance = this;
-    private Host                    target;
-    private RootProcess             process;
+    private Host                    mTarget;
+    private RootProcess             mProcess;
 
-    public                          ArpSpoof(Host target) {
-        this.target = target;
+    private                         ArpSpoof(Host target) {
+        this.mTarget = target;
     }
+
     public ArpSpoof                 start() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                process = new RootProcess("ARPSPoof::" + target.ip);
-                process.exec(Singleton.getInstance().BinaryPath + "arpspoof -i wlan0 -t " + target.ip + " " + Singleton.getInstance().network.gateway);
+                mProcess = new RootProcess("ARPSPoof::" + mTarget.ip);
+                mProcess.exec(Singleton.getInstance().BinaryPath + "arpspoof -i wlan0 -t " + mTarget.ip + " " + Singleton.getInstance().network.gateway);
                 Singleton.getInstance().ArpSpoofProcessStack.add(mInstance);
                 if (Singleton.getInstance().DebugMode) {
-                    BufferedReader reader = process.getReader();
+                    BufferedReader reader = mProcess.getReader();
                     String read;
                     try {
                         while ((read = reader.readLine()) != null) {
-                            //Log.d(TAG, target.ip + "::" + read);
+                            //Log.d(TAG, mTarget.ip + "::" + read);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -60,7 +40,7 @@ public class                        ArpSpoof {
         return this;
     }
 
-    public static void             stopArpSpoof() {
+    public static void              stopArpSpoof() {
         new Thread(new Runnable() {
             @Override
             public void run() {

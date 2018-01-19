@@ -2,43 +2,47 @@ package fr.allycs.app.Controller.Core.BinaryWrapper;
 
 import android.util.Log;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 
 public class                    RootProcess {
     private String              TAG = "RootProcess";
-    private Process             process;
-    private DataOutputStream    os;
-    private int                 pid;
-    private String              LogID;
-    private boolean             debugLog = true;
+    private Process             mProcess;
+    private DataOutputStream    mOutputStream;
+    private int                 mPid;
+    private String              mLogID;
+    private boolean             mDebugLog = true;
 
     public                      RootProcess(String LogID) {
-        this.LogID = LogID;
+        this.mLogID = LogID;
         try {
-            process = Runtime.getRuntime().exec("su");
-            os = new DataOutputStream(process.getOutputStream());
+            mProcess = Runtime.getRuntime().exec("su");
+            mOutputStream = new DataOutputStream(mProcess.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public                      RootProcess(String LogID, String workingDirectory) {
-        this.LogID = LogID;
+        this.mLogID = LogID;
         try {
-            process = Runtime.getRuntime().exec("su", null, new File(workingDirectory));
-            os = new DataOutputStream(process.getOutputStream());
+            mProcess = Runtime.getRuntime().exec("su", null, new File(workingDirectory));
+            mOutputStream = new DataOutputStream(mProcess.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     public                      RootProcess(String LogID, boolean noRoot) {
-        this.LogID = LogID;
+        this.mLogID = LogID;
         try {
-            process = Runtime.getRuntime().exec("ls\n", null, new File("/"));
-            os = new DataOutputStream(process.getOutputStream());
+            mProcess = Runtime.getRuntime().exec("ls\n", null, new File("/"));
+            mOutputStream = new DataOutputStream(mProcess.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,35 +51,31 @@ public class                    RootProcess {
     public RootProcess          exec(String cmd) {
         try {
             cmd = cmd.replace("//", "/");
-            //if (debugLog)
-            //    Log.d(TAG, LogID + "::" + cmd);
-            os.writeBytes(cmd + " 2>&1 \n");
-            os.flush();
-            Field f = process.getClass().getDeclaredField("pid");
+            //if (mDebugLog)
+            //    Log.d(TAG, mLogID + "::" + cmd);
+            mOutputStream.writeBytes(cmd + " 2>&1 \n");
+            mOutputStream.flush();
+            Field f = mProcess.getClass().getDeclaredField("mPid");
             f.setAccessible(true);
-            pid = f.getInt(process);
+            mPid = f.getInt(mProcess);
             f.setAccessible(false);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             Log.d(TAG, "IllegalAccessException PID");
             e.printStackTrace();
-            pid = -1;
+            mPid = -1;
         } catch (NoSuchFieldException e) {
             Log.d(TAG, "NoSuchFieldException PID");
             e.printStackTrace();
-            pid = -1;
+            mPid = -1;
         }
         return this;
     }
 
     public RootProcess          noDebugOutput() {
-        debugLog = false;
+        mDebugLog = false;
         return this;
-    }
-
-    public int                  getPid() {
-        return pid;
     }
 
     public int                  waitFor() {
@@ -95,8 +95,8 @@ public class                    RootProcess {
             e.printStackTrace();
         }
         try {
-            process.waitFor();
-            int res = process.exitValue();
+            mProcess.waitFor();
+            int res = mProcess.exitValue();
             return res;
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -105,15 +105,23 @@ public class                    RootProcess {
     }
 
     public BufferedReader       getReader() {
-        return new BufferedReader(new InputStreamReader(process.getInputStream()));
+        return new BufferedReader(new InputStreamReader(mProcess.getInputStream()));
     }
 
     public InputStreamReader    getInputStreamReader() {
-        return new InputStreamReader(process.getInputStream());
+        return new InputStreamReader(mProcess.getInputStream());
     }
 
     public InputStreamReader    getErrorStreamReader() {
-        return new InputStreamReader(process.getErrorStream());
+        return new InputStreamReader(mProcess.getErrorStream());
+    }
+
+    public Process              getActualProcess() {
+        return mProcess;
+    }
+
+    public int                  getmPid() {
+        return mPid;
     }
 
     public int                  closeProcess() {
@@ -123,18 +131,14 @@ public class                    RootProcess {
 
     public RootProcess          closeDontWait() {
         try {
-            //Log.d(TAG, this.LogID + "::Close");
-            //os.writeBytes("exit\n");
-            //os.flush();
-            os.close();
+            //Log.d(TAG, this.mLogID + "::Close");
+            //mOutputStream.writeBytes("exit\n");
+            //mOutputStream.flush();
+            mOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return this;
-    }
-    
-    public Process              getActualProcess() {
-        return process;
     }
 
     public static void          kill(int pid) {

@@ -16,6 +16,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.commons.lang3.StringUtils;
+
 import fr.allycs.app.Controller.Core.BinaryWrapper.Dns.DnsControl;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Misc.MyActivity;
@@ -206,7 +208,7 @@ public class                            DnsActivity extends MyActivity {
                 if (host.isEmpty() || !host.contains(".") || host.length() <= 4) {
                     mySnackbar = Snackbar.make(mCoordinatorLayout, "Host incorrect", Snackbar.LENGTH_LONG);
                     mySnackbar.setAction("RETRY", retryListene);
-                } else if (ip.isEmpty() || Utils.nbrSubstringOccurence(ip, ".") != 3) {
+                } else if (ip.isEmpty() || StringUtils.countMatches(ip, ".") != 3) {
                     mySnackbar = Snackbar.make(mCoordinatorLayout, "Ip incorrect", Snackbar.LENGTH_LONG);
                     mySnackbar.setAction("RETRY", retryListene);
                 } else {

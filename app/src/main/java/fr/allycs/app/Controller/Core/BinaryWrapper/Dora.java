@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Model.Unix.DoraProcess;
 import fr.allycs.app.Model.Target.Host;
+import fr.allycs.app.Model.Unix.DoraProcess;
 import fr.allycs.app.View.Dora.DoraActivity;
 
 /**
@@ -61,7 +61,7 @@ public class Dora {
         } else {
             running  = false;
             for (DoraProcess doraProcess : mListOfHostDored) {
-                RootProcess.kill(doraProcess.mProcess.getPid());
+                RootProcess.kill(doraProcess.mProcess.getmPid());
             }
             Log.d(TAG, "diagnose dora stopped");
         }

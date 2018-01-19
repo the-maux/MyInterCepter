@@ -13,14 +13,10 @@ import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
 
-import fr.allycs.app.Controller.Core.BinaryWrapper.Tcpdump;
+import fr.allycs.app.Controller.Core.BinaryWrapper.Tcpdump.Tcpdump;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.R;
 import fr.allycs.app.View.MenuActivity;
-
-/**
- * Created by the-maux on 19/09/17.
- */
 
 public class                    GeneralSettings {
     private String              TAG = "GeneralSettings";
@@ -33,7 +29,7 @@ public class                    GeneralSettings {
     private final String        PCAP_DUMP = "Write in Pcap file",
                                 SSLSTRIP_MODE = "SslStrip Mode",
                                 LOCKSCREEN = "Lockscreen",
-                                DEEP_SNIFF_ANAL = "Deep trame analyse",
+                                ADVANCED_SNIFF_ANAL = "Advanced trame analyse",
                                 PORT_REDIRECT = "Port redirect",
                                 PORT_FILTERING = "Port filtering",
                                 DNS_SPOOFING = "Dns Spoofing";
@@ -54,7 +50,7 @@ public class                    GeneralSettings {
         builder.addItem(0, PCAP_DUMP, (mTcpdump.isDumpingInFile) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp );
         builder.addItem(1, SSLSTRIP_MODE, (mSingleton.isSslstripMode()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp );
         builder.addItem(2, LOCKSCREEN, (mSingleton.isLockScreen()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp );
-        builder.addItem(3, DEEP_SNIFF_ANAL, (mTcpdump.isDeepAnalyseTrame()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp );
+        builder.addItem(3, ADVANCED_SNIFF_ANAL, (mTcpdump.ismAdvancedAnalyseTrame()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp );
         builder.addDividerItem();
         builder.addItem(4, PORT_REDIRECT, R.drawable.ic_checkbox_blank_outline_grey600_24dp);
         builder.addItem(5, PORT_FILTERING, R.drawable.ic_checkbox_blank_outline_grey600_24dp);
@@ -79,8 +75,8 @@ public class                    GeneralSettings {
                     case LOCKSCREEN:
                         mSingleton.setLockScreen(!mSingleton.isLockScreen());
                         break;
-                    case DEEP_SNIFF_ANAL:
-                        mTcpdump.setDeepAnalyseTrame(!mTcpdump.isDeepAnalyseTrame());
+                    case ADVANCED_SNIFF_ANAL:
+                        mTcpdump.setmAdvancedAnalyseTrame(!mTcpdump.ismAdvancedAnalyseTrame());
                         break;
                     case PORT_REDIRECT:
                         onPortMitm(true);
