@@ -24,13 +24,12 @@ public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter
         this.mDnsIntercepts = dnsInterceptList;
         this.mActivity = activity;
     }
-    @Override
+
     public DnsSpoofConfHolder   onCreateViewHolder(ViewGroup parent, int viewType) {
         return new DnsSpoofConfHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_dnsspoof, parent, false));
     }
 
-    @Override
     public void                 onBindViewHolder(DnsSpoofConfHolder holder, int position) {
         DNSSpoofItem host = mDnsIntercepts.get(position);
         holder.domain.setText("www." + host.domain + "  " + host.domain);
@@ -49,7 +48,6 @@ public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter
         };
     }
 
-    @Override
     public int                  getItemCount() {
         return mDnsIntercepts.size();
     }

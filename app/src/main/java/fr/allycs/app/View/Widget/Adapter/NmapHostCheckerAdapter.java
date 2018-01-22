@@ -22,13 +22,12 @@ public class                    NmapHostCheckerAdapter extends RecyclerView.Adap
         this.mHosts = hosts;
         this.mActivity = activity;
     }
-    @Override
+
     public HostSelectionHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
         return new HostSelectionHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_host_checkbox, parent, false));
     }
 
-    @Override
     public void                 onBindViewHolder(HostSelectionHolder holder, int position) {
         Host host = mHosts.get(position);
         holder.itemView.setOnClickListener(onClickCard(host));
@@ -46,7 +45,6 @@ public class                    NmapHostCheckerAdapter extends RecyclerView.Adap
         };
     }
 
-    @Override
     public int                  getItemCount() {
         return mHosts.size();
     }

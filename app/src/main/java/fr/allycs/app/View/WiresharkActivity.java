@@ -59,7 +59,7 @@ public class                    WiresharkActivity extends MyActivity {
     private Tcpdump             mTcpdump;
     private Singleton           mSingleton = Singleton.getInstance();
 
-    @Override protected void    onCreate(@Nullable Bundle savedInstanceState) {
+    protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wireshark);
         initXml();

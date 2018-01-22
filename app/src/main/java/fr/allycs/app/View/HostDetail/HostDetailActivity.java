@@ -155,7 +155,7 @@ public class HostDetailActivity extends MyActivity {
         supportFinishAfterTransition();
     }*/
 
-    @Override public void       onBackPressed() {
+    public void                 onBackPressed() {
         if (mFragmentHistoric == null || mFragmentHistoric.onBackPressed()) {
             super.onBackPressed();
   //          supportFinishAfterTransition();

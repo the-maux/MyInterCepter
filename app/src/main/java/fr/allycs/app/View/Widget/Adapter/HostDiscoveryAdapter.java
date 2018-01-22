@@ -39,12 +39,12 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         this.mIsHistoric = mIsHistoric;
     }
 
-    @Override public HostDiscoveryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public HostDiscoveryHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
         return new HostDiscoveryHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_hostdiscovery, parent, false));
     }
 
-    @Override public void       onBindViewHolder(final HostDiscoveryHolder holder, final int position) {
+    public void                 onBindViewHolder(final HostDiscoveryHolder holder, final int position) {
         final Host host = mHosts.get(position);
         String ipHostname = host.ip + " " + host.getName();
         holder.ipHostname.setText(ipHostname);
@@ -134,7 +134,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         }
     }
 
-    @Override public int        getItemCount() {
+    public int                  getItemCount() {
         return (mHosts == null) ? 0 : mHosts.size();
     }
 

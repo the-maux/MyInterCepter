@@ -94,6 +94,11 @@ public class                        FragmentHistoric extends MyFragment {
         }
     }
 
+    public void                     onResume() {
+        super.onResume();
+        pushToolbar();
+    }
+
     private void                    initXml(View rootView) {
         mRV = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         mEmptyList = (TextView) rootView.findViewById(R.id.emptyList);
@@ -297,7 +302,6 @@ public class                        FragmentHistoric extends MyFragment {
         mActivity.initToolbarButton();
     }
 
-    @Override
     public BottomSheetMenuDialog    onSettingsClick(final AppBarLayout mAppbar, Activity activity) {
         return new BottomSheetBuilder(activity)
                 .setMode(BottomSheetBuilder.MODE_LIST)
@@ -332,7 +336,7 @@ public class                        FragmentHistoric extends MyFragment {
     }
 
 
-    @Override public void           onAddButtonClick(ImageButton addHostBtn) {
+    public void                     onAddButtonClick(ImageButton addHostBtn) {
         MyGlideLoader.loadDrawableInImageView(mActivity, R.mipmap.ic_history, addHostBtn);
         addHostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -340,12 +344,6 @@ public class                        FragmentHistoric extends MyFragment {
                 initFullWiresharkFocus();
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        pushToolbar();
     }
 
     public boolean                  onBackPressed() {

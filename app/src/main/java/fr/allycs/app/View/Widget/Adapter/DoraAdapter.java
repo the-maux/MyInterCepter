@@ -53,12 +53,12 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
         holder.fab.setImageDrawable(mActivity.getDrawable(R.drawable.ic_media_play));
     }
 
-    @Override public DoraHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DoraHolder           onCreateViewHolder(ViewGroup parent, int viewType) {
         return new DoraHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_dora, parent, false));
     }
 
-    @Override public void       onBindViewHolder(DoraHolder holder, int position) {
+    public void                 onBindViewHolder(DoraHolder holder, int position) {
         final DoraProcess host = mHosts.get(position);
         holder.diagnose.setText(new String(new char[host.getVisu()]).replace("\0", "#"));
         String IP = host.mhost.ip + (host.mhost.getName().contains("(-)") ? "" : (" - " + host.mhost.getName().replace("(", "[").replace(")", "]")));
@@ -100,7 +100,7 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
         };
     }
 
-    @Override public int        getItemCount() {
+    public int                  getItemCount() {
         return mHosts.size();
     }
 

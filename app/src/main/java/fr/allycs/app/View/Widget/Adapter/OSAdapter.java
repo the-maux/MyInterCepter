@@ -25,13 +25,13 @@ public class                    OSAdapter extends RecyclerView.Adapter<HostSelec
         this.mCtx = activity;
         this.mOsListSelected = osListSelected;
     }
-    @Override
+
     public HostSelectionHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
         return new HostSelectionHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_host_checkbox, parent, false));
     }
 
-    @Override public void       onBindViewHolder(HostSelectionHolder holder, int position) {
+    public void                 onBindViewHolder(HostSelectionHolder holder, int position) {
         final String os = mOsList.get(position);
         holder.nameOS.setText(os.replace("_", "/"));
         setOsIcon(mCtx, os, holder.imageOS);
@@ -47,7 +47,7 @@ public class                    OSAdapter extends RecyclerView.Adapter<HostSelec
         });
     }
 
-    @Override public int        getItemCount() {
+    public int                  getItemCount() {
         return mOsList.size();
     }
 

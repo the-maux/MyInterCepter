@@ -114,11 +114,11 @@ public class                    WebServerActivity extends MyActivity {
         super.registerReceiver(broadcastReceiverNetworkState, filters);
     }
 
-    public void                  showSnackbar(String txt) {
+    public void                 showSnackbar(String txt) {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
 
-    @Override public void       onBackPressed() {
+    public void                 onBackPressed() {
         if (mIsStarted) {
             new AlertDialog.Builder(this)
                     .setTitle("Warning")
@@ -135,7 +135,7 @@ public class                    WebServerActivity extends MyActivity {
         }
     }
 
-    @Override protected void    onDestroy() {
+    protected void              onDestroy() {
         super.onDestroy();
         stopAndroidWebServer();
         mIsStarted = false;

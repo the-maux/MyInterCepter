@@ -35,13 +35,11 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         this.mRV_Wireshark = recyclerView;
     }
 
-    @Override
     public WiresharkHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
         return new WiresharkHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_tcpdump, parent, false));
     }
 
-    @Override
     public void             onBindViewHolder(WiresharkHolder holder, int position) {
         Trame trame = listOfTrame.get(position);
         holder.No.setText(trame.offsett + "");
@@ -73,7 +71,6 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         holder.info.setTypeface(null, Typeface.NORMAL);
     }
 
-    @Override
     public int              getItemCount() {
         return listOfTrame.size();
     }

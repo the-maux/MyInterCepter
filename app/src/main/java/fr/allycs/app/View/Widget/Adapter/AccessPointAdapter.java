@@ -26,13 +26,12 @@ public class                    AccessPointAdapter extends RecyclerView.Adapter<
         this.mSessions = sessions;
     }
 
-    @Override
     public AccessPointHolder    onCreateViewHolder(ViewGroup parent, int viewType) {
         return new AccessPointHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_accesspoint, parent, false));
     }
 
-    @Override public void       onBindViewHolder(AccessPointHolder holder, int position) {
+    public void                 onBindViewHolder(AccessPointHolder holder, int position) {
         final AccessPoint ap = mSessions.get(position);
         holder.ssid.setText(ap.Ssid);
         holder.ssid_subtitle.setText(ap.sessions().size() + " session(s) recorded");
@@ -50,7 +49,7 @@ public class                    AccessPointAdapter extends RecyclerView.Adapter<
         holder.relative_layout.setOnClickListener(onClick);
     }
 
-    @Override public int        getItemCount() {
+    public int                  getItemCount() {
         return mSessions.size();
     }
 

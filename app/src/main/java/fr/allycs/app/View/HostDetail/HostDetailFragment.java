@@ -45,7 +45,7 @@ public class                    HostDetailFragment extends MyFragment {
 
     private Session             focusedSession = null;
 
-    @Override public View       onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View                 onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_hostdetail, container, false);
         initXml(rootView);
         if (mSingleton.hostsList == null) {

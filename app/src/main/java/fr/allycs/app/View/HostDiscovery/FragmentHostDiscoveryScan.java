@@ -53,7 +53,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     private NetworkDiscoveryControler mScannerControler;
     private String                  mTitle, mSubtitle;
 
-    @Override public View           onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hostdiscovery_scan, container, false);
         initXml(rootView);
         this.mActivity = (HostDiscoveryActivity) getActivity();
@@ -67,7 +67,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         return rootView;
     }
 
-    @Override public void           onResume() {
+    public void                     onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
         mHost_RV.setAdapter(mHostAdapter);
@@ -118,7 +118,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         mHost_RV.setHasFixedSize(true);
         mHost_RV.setLayoutManager(new LinearLayoutManager(mActivity));
     }
-    @Override
+
     public BottomSheetMenuDialog    onSettingsClick(final AppBarLayout mAppbar, Activity activity) {
         return new BottomSheetBuilder(activity)
                 .setMode(BottomSheetBuilder.MODE_LIST)
@@ -148,7 +148,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 .expandOnStart(true)
                 .createDialog();
     }
-    @Override public void           initSearchView(SearchView mSearchView) {
+    public void                     initSearchView(SearchView mSearchView) {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

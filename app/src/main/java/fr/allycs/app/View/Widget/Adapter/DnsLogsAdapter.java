@@ -29,13 +29,12 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
         this.activity = activity;
     }
 
-    @Override
     public DnsLogHolder         onCreateViewHolder(ViewGroup parent, int viewType) {
         return new DnsLogHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_dnsmasqlog, parent, false));
     }
 
-    @Override public void       onBindViewHolder(final DnsLogHolder holder, int position) {
+    public void                 onBindViewHolder(final DnsLogHolder holder, int position) {
         DNSLog dnslog = mListConsole.get(position);
         holder.nameHost.setText(dnslog.domain);
         setCurrentTypeLogo(dnslog.currentType, holder.DNSTypeImg);
@@ -111,12 +110,12 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
         notifyDataSetChanged();*/
     }
 
-    @Override public void       onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void                 onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         mRV = recyclerView;
     }
 
-    @Override public int        getItemCount() {
+    public int                  getItemCount() {
         return mListConsole.size();
     }
 

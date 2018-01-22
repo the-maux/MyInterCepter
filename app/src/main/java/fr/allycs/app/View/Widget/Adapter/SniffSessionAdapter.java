@@ -26,13 +26,11 @@ public class SniffSessionAdapter extends RecyclerView.Adapter<SniffSessionHolder
         this.mSniffsession = sessions;
     }
 
-    @Override
     public SniffSessionHolder   onCreateViewHolder(ViewGroup parent, int viewType) {
         return new SniffSessionHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_sniffsession, parent, false));
     }
 
-    @Override
     public void                 onBindViewHolder(SniffSessionHolder holder, int position) {
         final SniffSession sniffSession = mSniffsession.get(position);
         holder.title.setText();
@@ -46,7 +44,6 @@ public class SniffSessionAdapter extends RecyclerView.Adapter<SniffSessionHolder
         holder.description.setText(description);
     }
 
-    @Override
     public int                  getItemCount() {
         return mSniffsession.size();
     }

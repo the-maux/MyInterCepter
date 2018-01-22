@@ -75,19 +75,19 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     private void                    initXml() {
-        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab = findViewById(R.id.fab);
         mFab.setUseCompatPadding(true);
         mFab.setSoundEffectsEnabled(true);
-        mAppbar = (AppBarLayout) findViewById(R.id.appbar);
-        mBottomMonitor = ((TextView) findViewById(R.id.Message));
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+        mAppbar = findViewById(R.id.appbar);
+        mBottomMonitor = ( findViewById(R.id.Message));
+        mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
         MyGlideLoader.coordoBackground(this, mCoordinatorLayout);
-        mAddHostBtn = (ImageButton) findViewById(R.id.action_add_host);
-        mSettingsBtn = (ImageButton) findViewById(R.id.settings);
-        mSearchView = (SearchView) findViewById(R.id.searchView);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar2);
-        mTabs = (TabLayout) findViewById(R.id.tabs);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mAddHostBtn = findViewById(R.id.action_add_host);
+        mSettingsBtn = findViewById(R.id.settings);
+        mSearchView = findViewById(R.id.searchView);
+        mToolbar = findViewById(R.id.toolbar2);
+        mTabs = findViewById(R.id.tabs);
+        mProgressBar = findViewById(R.id.progressBar);
     }
 
     private void                    init()  throws Exception {
@@ -106,7 +106,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         }
     }
 
-    private void                    initTabs() {
+    private void                    initTabs(){
         final String                ARP_TAB_NAME = "Devices\nDiscovery",
                                     SERVICES_TAB_NAME = "Services\nDiscovery",
                                     HISTORIC_TAB_NAME = "Audit\nHistoric";
@@ -114,7 +114,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mTabs.addTab(mTabs.newTab().setText(SERVICES_TAB_NAME), 1);
         mTabs.addTab(mTabs.newTab().setText(HISTORIC_TAB_NAME), 2);
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 MyFragment fragment;
                 Log.d(TAG, "onTabSelected:[" + tab.getText().toString().replace("\n", " ") + "]");
@@ -142,8 +141,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 initFragment(fragment);
                 initSearchView();
             }
-            @Override public void onTabUnselected(TabLayout.Tab tab) {}
-            @Override public void onTabReselected(TabLayout.Tab tab) {}
+            public void onTabUnselected(TabLayout.Tab tab) {}
+            public void onTabReselected(TabLayout.Tab tab) {}
         });
     }
 
@@ -313,7 +312,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
 
-    @Override public void           onBackPressed() {
+    public void                     onBackPressed() {
         if (HistoricFragment.isVisible()) {
             Log.d(TAG, "onBackPressed custom on historic fragment");
             if (HistoricFragment == null || ((FragmentHistoric) HistoricFragment).onBackPressed()) {

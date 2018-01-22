@@ -33,13 +33,13 @@ public class                    MenuActivity extends MyActivity {
         Nmap, CepterMitm, ARPCage, DnsSpoofing, Wireshark, DoraDiagnostic, Metasploit, Settings
     }
 
-    @Override protected void    onCreate(@Nullable Bundle savedInstanceState) {
+    protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         initXml();
     }
 
-    @Override protected void    onResume() {
+    protected void              onResume() {
         super.onResume();
         initflags();
     }

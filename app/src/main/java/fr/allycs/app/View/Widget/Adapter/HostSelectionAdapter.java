@@ -27,13 +27,13 @@ public class                    HostSelectionAdapter extends RecyclerView.Adapte
         mListHostSelected.clear();
         this.mListHostSelected = hostsSelected;
     }
-    @Override
+
     public HostSelectionHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
         return new HostSelectionHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_host_checkbox, parent, false));
     }
 
-    @Override public void       onBindViewHolder(HostSelectionHolder holder, int position) {
+    public void                 onBindViewHolder(HostSelectionHolder holder, int position) {
         final Host host = mHosts.get(position);
         holder.nameOS.setText(host.ip);
         Fingerprint.setOsIcon(mActivity, host, holder.imageOS);
@@ -49,7 +49,7 @@ public class                    HostSelectionAdapter extends RecyclerView.Adapte
         });
     }
 
-    @Override public int        getItemCount() {
+    public int                  getItemCount() {
         return mHosts.size();
     }
 }

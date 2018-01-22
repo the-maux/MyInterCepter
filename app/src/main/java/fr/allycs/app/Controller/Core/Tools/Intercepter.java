@@ -63,5 +63,11 @@ public class                    Intercepter {
                 .closeProcess();
     }
 
-
+    public static RootProcess   getNetworkInfoByCept() throws IOException, InterruptedException {
+        Log.d("Intercepter", "su " + Singleton.getInstance().FilesPath + "cepter list; exit");
+        RootProcess process = new RootProcess("getNetworkInfoByCept", Singleton.getInstance().FilesPath)
+                .exec(Singleton.getInstance().FilesPath + "cepter list")
+                .exec("exit");
+        return process;
+    }
 }

@@ -21,28 +21,26 @@ public class                    ConsoleLogAdapter extends RecyclerView.Adapter<C
     public                      ConsoleLogAdapter(List<ConsoleLog> dnsInterceptList) {
         this.listConsole = dnsInterceptList;
     }
-    @Override
-    public ConsoleLogHolder      onCreateViewHolder(ViewGroup parent, int viewType) {
+
+    public ConsoleLogHolder     onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ConsoleLogHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_consolelog, parent, false));
     }
 
-    @Override public void        onBindViewHolder(ConsoleLogHolder holder, int position) {
+    public void                 onBindViewHolder(ConsoleLogHolder holder, int position) {
         ConsoleLog line = listConsole.get(position);
         holder.lineConsole.setText(line.line);
     }
 
-    @Override
     public int                  getItemCount() {
         return listConsole.size();
     }
 
-    @Override
     public void                 onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         mRV = recyclerView;
     }
 
-    public RecyclerView          getRecyclerview() {
+    public RecyclerView         getRecyclerview() {
         return mRV;
     }
 }

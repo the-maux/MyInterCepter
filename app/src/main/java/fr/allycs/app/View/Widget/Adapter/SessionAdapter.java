@@ -28,13 +28,11 @@ public class                    SessionAdapter extends RecyclerView.Adapter<Sess
         this.mAp = ap;
     }
 
-    @Override
     public SessionHolder        onCreateViewHolder(ViewGroup parent, int viewType) {
         return new SessionHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_session, parent, false));
     }
 
-    @Override
     public void                 onBindViewHolder(SessionHolder holder, int position) {
         final Session session = mSessions.get(position);
         String date = new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE).format(session.Date);

@@ -20,6 +20,7 @@ import java.io.IOException;
 import fr.allycs.app.Controller.Core.Conf.PreferenceControler;
 import fr.allycs.app.Controller.Core.Conf.Setup;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Core.Tools.Intercepter;
 import fr.allycs.app.Controller.Core.Tools.RootProcess;
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Network.NetUtils;
@@ -50,7 +51,6 @@ public class                    SetupActivity extends MyActivity {
         else
             Snackbar.make(findViewById(R.id.Coordonitor), "You need to accept root permission to use the app", Snackbar.LENGTH_LONG).show();
     }
-
 
     private boolean             getPermission() {
         String[]     PERMISSION_STORAGE = {
@@ -93,9 +93,7 @@ public class                    SetupActivity extends MyActivity {
             @Override
             public void run() {
                 try {
-                    if (!isItUpdated()) {
-                        install();
-                    }
+                    install();
                     initInfo();
                 } catch (IOException e) {
                     monitor("Error IO");
@@ -122,7 +120,7 @@ public class                    SetupActivity extends MyActivity {
             monitor("Initialization...");
             Log.d(TAG, "SetupActivity::initInfo");
             //Log.d(TAG, "init Net infos");
-            getNetworkInfoByCept();//Is it still usefull? need to test without
+            Intercepter.getNetworkInfoByCept();//Is it still usefull? need to test without
             monitor("Discovering network architecture");
             if (!NetUtils.initNetworkInfo(this)) {
                 Toast.makeText(this, "Your not connected to a network", Toast.LENGTH_LONG).show();
@@ -143,15 +141,6 @@ public class                    SetupActivity extends MyActivity {
         }
     }
 
-    private RootProcess         getNetworkInfoByCept() throws IOException, InterruptedException {
-        Log.d(TAG, "su " + mSingleton.FilesPath + "cepter list; exit");
-        monitor("Get network Information");
-        RootProcess process = new RootProcess("getNetworkInfoByCept", mSingleton.FilesPath)
-                .exec(mSingleton.FilesPath + "cepter list")
-                .exec("exit");
-        return process;
-    }
-
     private void                install() throws IOException, InterruptedException {
         new Setup(this).install();
     }//10:68:3f:7a:65:ef ___ 10.16.186.54/23 brd 10.16.187.255
@@ -163,10 +152,6 @@ public class                    SetupActivity extends MyActivity {
                 monitor.setText(log);
             }
         });
-    }
-
-    public boolean              isItUpdated() {
-        return new File(mSingleton.FilesPath + "version").exists();//TODO: vérifier que les version concorde
     }
 
     //
