@@ -16,40 +16,40 @@ import fr.allycs.app.View.Widget.Holder.HostSelectionHolder;
 
 
 public class                    HostSelectionAdapter extends RecyclerView.Adapter<HostSelectionHolder> {
-    private String              TAG = this.getClass().getName();
-    private Activity            activity;
-    private List<Host>          hosts, listHostSelected;
+    private String              TAG = "HostSelectionAdapter";
+    private Activity            mActivity;
+    private List<Host>          mHosts, mListHostSelected;
 
-    public                      HostSelectionAdapter(Activity activity, ArrayList<Host> hostsList, List<Host> hostsSelected) {
-        this.hosts = hostsList;
-        this.activity = activity;
-        listHostSelected.clear();
-        this.listHostSelected = hostsSelected;
+    public                      HostSelectionAdapter(Activity activity, ArrayList<Host> hostsList,
+                                                     List<Host> hostsSelected) {
+        this.mHosts = hostsList;
+        this.mActivity = activity;
+        mListHostSelected.clear();
+        this.mListHostSelected = hostsSelected;
     }
     @Override
-    public HostSelectionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new HostSelectionHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_host_checkbox, parent, false));
+    public HostSelectionHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new HostSelectionHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_host_checkbox, parent, false));
     }
 
-    @Override
-    public void                 onBindViewHolder(HostSelectionHolder holder, int position) {
-        final Host host = hosts.get(position);
+    @Override public void       onBindViewHolder(HostSelectionHolder holder, int position) {
+        final Host host = mHosts.get(position);
         holder.nameOS.setText(host.ip);
-        Fingerprint.setOsIcon(activity, host, holder.imageOS);
+        Fingerprint.setOsIcon(mActivity, host, holder.imageOS);
         holder.checkBox.setChecked(false);
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked)
-                    listHostSelected.add(host);
+                    mListHostSelected.add(host);
                 else
-                    listHostSelected.remove(host);
+                    mListHostSelected.remove(host);
             }
         });
     }
 
-    @Override
-    public int                  getItemCount() {
-        return hosts.size();
+    @Override public int        getItemCount() {
+        return mHosts.size();
     }
 }

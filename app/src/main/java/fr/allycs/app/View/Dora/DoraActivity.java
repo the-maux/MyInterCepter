@@ -91,7 +91,7 @@ public class                    DoraActivity extends MyActivity {
 
     private void                launchDiagnose() {
         boolean isStarting = mDoraWrapper.onAction();
-        mRv_Adapter.setRunning(isStarting);
+        mRv_Adapter.setIsRunning(isStarting);
         mFab.setImageResource((!isStarting) ? android.R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
     }
 

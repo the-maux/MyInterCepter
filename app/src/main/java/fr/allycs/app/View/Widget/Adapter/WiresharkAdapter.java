@@ -21,23 +21,24 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
     private String          TAG = "WiresharkAdapter";
     private CopyOnWriteArrayList<Trame> originalListOfTrames;
     private CopyOnWriteArrayList<Trame> listOfTrame;
-    private Activity        activity;
-    public boolean          arp = true, http = true, https = true,
-                            tcp = true, dns = true, udp = true, ip = true;
-    public RecyclerView     mRV_Wireshark;
+    private Activity        mActivity;
     private boolean         mActualize = false;
+    private RecyclerView    mRV_Wireshark;
+    private boolean         arp = true, http = true, https = true,
+                            tcp = true, dns = true, udp = true, ip = true;
 
     public                  WiresharkAdapter(Activity activity, CopyOnWriteArrayList<Trame> trames, RecyclerView recyclerView) {
         this.listOfTrame = new CopyOnWriteArrayList<>();
         this.originalListOfTrames = trames;
         listOfTrame.addAll(originalListOfTrames);
-        this.activity = activity;
+        this.mActivity = activity;
         this.mRV_Wireshark = recyclerView;
     }
 
     @Override
     public WiresharkHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new WiresharkHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tcpdump, parent, false));
+        return new WiresharkHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_tcpdump, parent, false));
     }
 
     @Override
@@ -57,13 +58,13 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
     }
 
     private void            setBackgroundColor(int color, WiresharkHolder holder) {
-        holder.No.setBackgroundColor(ContextCompat.getColor(activity, color));
-        holder.time.setBackgroundColor(ContextCompat.getColor(activity, color));
-        holder.source.setBackgroundColor(ContextCompat.getColor(activity, color));
-        holder.dest.setBackgroundColor(ContextCompat.getColor(activity, color));
-        holder.proto.setBackgroundColor(ContextCompat.getColor(activity, color));
-        holder.info.setBackgroundColor(ContextCompat.getColor(activity, color));
-        holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(activity, R.color.material_grey_700));
+        holder.No.setBackgroundColor(ContextCompat.getColor(mActivity, color));
+        holder.time.setBackgroundColor(ContextCompat.getColor(mActivity, color));
+        holder.source.setBackgroundColor(ContextCompat.getColor(mActivity, color));
+        holder.dest.setBackgroundColor(ContextCompat.getColor(mActivity, color));
+        holder.proto.setBackgroundColor(ContextCompat.getColor(mActivity, color));
+        holder.info.setBackgroundColor(ContextCompat.getColor(mActivity, color));
+        holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.material_grey_700));
         holder.No.setTypeface(null, Typeface.NORMAL);
         holder.time.setTypeface(null, Typeface.NORMAL);
         holder.source.setTypeface(null, Typeface.NORMAL);

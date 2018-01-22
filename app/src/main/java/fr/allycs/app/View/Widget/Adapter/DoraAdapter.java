@@ -20,28 +20,46 @@ import fr.allycs.app.View.Widget.Holder.DoraHolder;
 
 
 public class                    DoraAdapter extends RecyclerView.Adapter<DoraHolder> {
-    private String              TAG = this.getClass().getName();
-    private Activity            activity;
-    private List<DoraProcess>   hosts;
-    private List<Boolean>       areRunning;
-    private boolean             running;
+    private String              TAG = "DoraAdapter";
+    private Activity            mActivity;
+    private List<DoraProcess>   mHosts;
+    private List<Boolean>       mListHostRunning;
+    private boolean             mIsRunning;
 
-
-    public                      DoraAdapter(Activity activity, List<DoraProcess> hostsSelected) {
-        this.hosts = hostsSelected;
-        this.activity = activity;
-        this.areRunning = new ArrayList<>(Arrays.asList(new Boolean[hostsSelected.size()]));
-        Collections.fill(areRunning, Boolean.FALSE);
+    public                      DoraAdapter(Activity mActivity, List<DoraProcess> hostsSelected) {
+        this.mHosts = hostsSelected;
+        this.mActivity = mActivity;
+        this.mListHostRunning = new ArrayList<>(Arrays.asList(new Boolean[hostsSelected.size()]));
+        Collections.fill(mListHostRunning, Boolean.FALSE);
     }
 
-    @Override
-    public DoraHolder           onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new DoraHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_dora, parent, false));
+    public void                 setIsRunning(boolean mIsRunning) {
+        this.mIsRunning = mIsRunning;
+        Collections.fill(mListHostRunning, mIsRunning);
+        notifyDataSetChanged();
     }
 
-    @Override
-    public void                 onBindViewHolder(DoraHolder holder, int position) {
-        final DoraProcess host = hosts.get(position);
+    private void                playProcess(int position, DoraHolder holder) {
+        mHosts.get(position).exec();
+        Log.d(TAG, "Play process:" + mHosts.get(position).mhost.ip);
+        mListHostRunning.set(position, true);
+        holder.fab.setImageDrawable(mActivity.getDrawable(R.drawable.ic_pause));
+    }
+
+    private void                killProcess(int position, DoraHolder holder) {
+        Log.d(TAG, "kill process:" + mHosts.get(position).mhost.ip + " mPid:" + mHosts.get(position).mPid);
+        RootProcess.kill(mHosts.get(position).mPid);
+        mListHostRunning.set(position, false);
+        holder.fab.setImageDrawable(mActivity.getDrawable(R.drawable.ic_media_play));
+    }
+
+    @Override public DoraHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new DoraHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_dora, parent, false));
+    }
+
+    @Override public void       onBindViewHolder(DoraHolder holder, int position) {
+        final DoraProcess host = mHosts.get(position);
         holder.diagnose.setText(new String(new char[host.getVisu()]).replace("\0", "#"));
         String IP = host.mhost.ip + (host.mhost.getName().contains("(-)") ? "" : (" - " + host.mhost.getName().replace("(", "[").replace(")", "]")));
         holder.IP.setText(IP);
@@ -49,24 +67,18 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
         holder.stat.setText("sent: " + host.sent + " / rcv: " + host.rcv);
         int pourc = host.getPourcentage();
         if (pourc == 0) {
-            holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(activity, R.color.material_light_white));
+            holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(mActivity, R.color.material_light_white));
         } else if (pourc <= 60) {
-            holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(activity, R.color.material_red_500));
+            holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(mActivity, R.color.material_red_500));
         } else if (pourc <= 90) {
-            holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(activity, R.color.material_deep_orange_500));
+            holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(mActivity, R.color.material_deep_orange_500));
         } else {
-            holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(activity, R.color.material_green_600));
+            holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(mActivity, R.color.material_green_600));
         }
         holder.diagnosPourcentage.setText(pourc + "%");
-        holder.fab.setImageDrawable(activity.getDrawable(host.mIsRunning ? R.drawable.ic_pause : R.drawable.ic_media_play));
+        holder.fab.setImageDrawable(mActivity.getDrawable(host.mIsRunning ? R.drawable.ic_pause : R.drawable.ic_media_play));
         holder.fab.setOnClickListener(onClickFab(position, holder));
         holder.stopFab.setOnClickListener(onClickStop(position, holder));
-    }
-
-    public void                setRunning(boolean running) {
-        this.running = running;
-        Collections.fill(areRunning, running);
-        notifyDataSetChanged();
     }
 
     private View.OnClickListener onClickStop(final int position, final DoraHolder holder) {
@@ -82,29 +94,14 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
        return  new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (running) killProcess(position, holder);
+                if (mIsRunning) killProcess(position, holder);
                 else playProcess(position, holder);
             }
         };
     }
 
-    private void                playProcess(int position, DoraHolder holder) {
-        hosts.get(position).exec();
-        Log.d(TAG, "Play process:" + hosts.get(position).mhost.ip);
-        areRunning.set(position, true);
-        holder.fab.setImageDrawable(activity.getDrawable(R.drawable.ic_pause));
-    }
-
-    private void                killProcess(int position, DoraHolder holder) {
-        Log.d(TAG, "kill process:" + hosts.get(position).mhost.ip + " mPid:" + hosts.get(position).mPid);
-        RootProcess.kill(hosts.get(position).mPid);
-        areRunning.set(position, false);
-        holder.fab.setImageDrawable(activity.getDrawable(R.drawable.ic_media_play));
-    }
-
-    @Override
-    public int                  getItemCount() {
-        return hosts.size();
+    @Override public int        getItemCount() {
+        return mHosts.size();
     }
 
 }

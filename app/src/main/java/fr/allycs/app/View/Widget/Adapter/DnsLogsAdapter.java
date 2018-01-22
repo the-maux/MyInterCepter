@@ -19,10 +19,9 @@ import fr.allycs.app.View.Widget.Holder.DnsLogHolder;
 
 
 public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsLogHolder> {
-    private String              TAG = this.getClass().getName();
+    private String              TAG = "DnsLogsAdapter";
     private Activity            activity;
     private List<DNSLog>        mListConsole;
-    private Singleton           mSingleton = Singleton.getInstance();
     private RecyclerView        mRV;
 
     public DnsLogsAdapter(Activity activity, List<DNSLog> dnsInterceptList) {
@@ -32,11 +31,11 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
 
     @Override
     public DnsLogHolder         onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new DnsLogHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_dnsmasqlog, parent, false));
+        return new DnsLogHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_dnsmasqlog, parent, false));
     }
 
-    @Override
-    public void                 onBindViewHolder(final DnsLogHolder holder, int position) {
+    @Override public void       onBindViewHolder(final DnsLogHolder holder, int position) {
         DNSLog dnslog = mListConsole.get(position);
         holder.nameHost.setText(dnslog.domain);
         setCurrentTypeLogo(dnslog.currentType, holder.DNSTypeImg);
@@ -75,17 +74,6 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
         MyGlideLoader.loadDrawableInImageView(activity, TypeLogo, DNSTypeImg);
     }
 
-    @Override
-    public int                  getItemCount() {
-        return mListConsole.size();
-    }
-
-    @Override
-    public void                 onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        mRV = recyclerView;
-    }
-
     private RecyclerView.Adapter<ConsoleLogHolder> setDetailLogsAdapter(final DNSLog logs, RecyclerView dnsRVLogs) {
         RecyclerView.Adapter<ConsoleLogHolder> adapter =  new RecyclerView.Adapter<ConsoleLogHolder>() {
             @Override
@@ -109,7 +97,7 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
         return adapter;
     }
 
-    public RecyclerView                 getRecyclerview() {
+    public RecyclerView         getRecyclerview() {
         return mRV;
     }
 
@@ -122,4 +110,14 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
         }
         notifyDataSetChanged();*/
     }
+
+    @Override public void       onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mRV = recyclerView;
+    }
+
+    @Override public int        getItemCount() {
+        return mListConsole.size();
+    }
+
 }

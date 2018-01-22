@@ -60,9 +60,9 @@ class                           ConfTcpdump {
 
     private String              buildForDumpingPcap(String nameFile, List<Host> hosts) {
         String pcapFile = mSingleton.PcapPath + nameFile + ".pcap ";
-        Pcap pcap = new Pcap(mSingleton.PcapPath + nameFile + ".pcap ", hosts);
+        Pcap pcap = new Pcap(nameFile + ".pcap ", hosts);
         pcap.sniffSession = mSingleton.getActualSniffSession();
-        pcap.listDevicesSerialized = DBHost.SerializeListDevices(hosts);
+
         pcap.save();
         if (mSingleton.getActualSniffSession() != null) {
             mSingleton.getActualSniffSession().listPcapRecorded().add(pcap);

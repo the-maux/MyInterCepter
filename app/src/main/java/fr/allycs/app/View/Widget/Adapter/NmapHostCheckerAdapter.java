@@ -15,38 +15,39 @@ import fr.allycs.app.View.Widget.Holder.HostSelectionHolder;
 
 public class                    NmapHostCheckerAdapter extends RecyclerView.Adapter<HostSelectionHolder> {
     private String              TAG = this.getClass().getName();
-    private Activity            activity;
-    private List<Host>          hosts;
+    private Activity mActivity;
+    private List<Host> mHosts;
 
     public                      NmapHostCheckerAdapter(Activity activity, List<Host> hosts) {
-        this.hosts = hosts;
-        this.activity = activity;
+        this.mHosts = hosts;
+        this.mActivity = activity;
     }
     @Override
-    public HostSelectionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new HostSelectionHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_host_checkbox, parent, false));
+    public HostSelectionHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new HostSelectionHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_host_checkbox, parent, false));
     }
 
     @Override
     public void                 onBindViewHolder(HostSelectionHolder holder, int position) {
-        Host host = hosts.get(position);
+        Host host = mHosts.get(position);
         holder.itemView.setOnClickListener(onClickCard(host));
         holder.nameOS.setText(host.ip);
         holder.checkBox.setVisibility(View.INVISIBLE);
-        Fingerprint.setOsIcon(activity, host, holder.imageOS);
+        Fingerprint.setOsIcon(mActivity, host, holder.imageOS);
     }
 
     private View.OnClickListener onClickCard(final Host host) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //((NmapActivity)activity).newTarget(domain);
+                //((NmapActivity)mActivity).newTarget(domain);
             }
         };
     }
 
     @Override
     public int                  getItemCount() {
-        return hosts.size();
+        return mHosts.size();
     }
 }

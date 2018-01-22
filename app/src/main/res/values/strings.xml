@@ -12,7 +12,7 @@
     <string name="sfd_new_dir_text">New. dir</string>
     <string name="sfd_save_text">OK</string>
     <string name="sfd_title">Save file</string>
-    <string name="dialog_exit_message">Android Web Server is currently running. If you exit the application we will stop it. Are sure you want to exit the application?</string>
+    <string name="dialog_exit_message">Android Web Server is currently mIsRunning. If you exit the application we will stop it. Are sure you want to exit the application?</string>
     <string name="message">You can now access the Android Web Server from a browser connected to the same wifi network.</string>
     <string name="nmapblabla"># Nmap 6.40 scan initiated Sat Nov  1 16:35:17 2014 as: nmap -O -sV -p 1-65535 -oN MetaTCP.txt 192.168.238.129
 Nmap scan report for 192.168.238.129

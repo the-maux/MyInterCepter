@@ -31,16 +31,17 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
     private List<Host>          mOriginalList;
     private RecyclerView        mHost_RV;
     private Singleton           mSingleton = Singleton.getInstance();
-    private boolean             isHistoric = false;
+    private boolean             mIsHistoric = false;
 
-    public HostDiscoveryAdapter(Activity activity, RecyclerView Host_RV, boolean isHistoric) {
+    public                      HostDiscoveryAdapter(Activity activity, RecyclerView Host_RV, boolean mIsHistoric) {
         mActivity = activity;
         mHost_RV = Host_RV;
-        this.isHistoric = isHistoric;
+        this.mIsHistoric = mIsHistoric;
     }
 
     @Override public HostDiscoveryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new HostDiscoveryHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_hostdiscovery, parent, false));
+        return new HostDiscoveryHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_hostdiscovery, parent, false));
     }
 
     @Override public void       onBindViewHolder(final HostDiscoveryHolder holder, final int position) {
@@ -51,7 +52,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         holder.os.setText(host.os);
         holder.vendor.setText(host.vendor);
         Fingerprint.setOsIcon(mActivity, host, holder.osIcon);
-        if (isHistoric)
+        if (mIsHistoric)
             holder.selected.setVisibility(View.GONE);
         else {
             holder.selected.setChecked(host.selected);
@@ -115,7 +116,8 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                         Intent intent = new Intent(mActivity, HostDetailActivity.class);
                         Pair<View, String> p1 = Pair.create((View)holder.osIcon, "hostPicture");
                         Pair<View, String> p2 = Pair.create((View)holder.ipHostname, "hostTitle");
-                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mActivity, p1, p2);
+                        ActivityOptionsCompat options = ActivityOptionsCompat
+                                .makeSceneTransitionAnimation(mActivity, p1, p2);
                         mActivity.startActivity(intent, options.toBundle());
                     }
                 });

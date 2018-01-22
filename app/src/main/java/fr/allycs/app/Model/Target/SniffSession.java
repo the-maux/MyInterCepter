@@ -28,9 +28,6 @@ public class                SniffSession extends Model {
     public String           listDevicesSerialized;
     private List<Host>      listDevices = null;
 
-    /**
-     * Create the ManyToMany relation
-     */
     public List<Host>       listDevices() {
         if (listDevices == null) {
             listDevices = DBHost.getListFromSerialized(listDevicesSerialized);
@@ -39,16 +36,10 @@ public class                SniffSession extends Model {
         return listDevices;
     }
 
-    /**
-     * Create the OneToMany relation
-     */
     public List<Pcap>       listPcapRecorded() {
         return getMany(Pcap.class, "SniffSession");
     }
 
-    /**
-     * Create the OneToMany relation
-     */
     public List<DNSLog>     logDnsSpoofed() {
         return getMany(DNSLog.class, "SniffSession");
     }

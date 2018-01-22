@@ -26,8 +26,9 @@ public class                    OSAdapter extends RecyclerView.Adapter<HostSelec
         this.mOsListSelected = osListSelected;
     }
     @Override
-    public HostSelectionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new HostSelectionHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_host_checkbox, parent, false));
+    public HostSelectionHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new HostSelectionHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_host_checkbox, parent, false));
     }
 
     @Override public void       onBindViewHolder(HostSelectionHolder holder, int position) {
@@ -46,7 +47,11 @@ public class                    OSAdapter extends RecyclerView.Adapter<HostSelec
         });
     }
 
-    private void setOsIcon(Context mCtx, String os, CircleImageView imageOS) {
+    @Override public int        getItemCount() {
+        return mOsList.size();
+    }
+
+    private void                setOsIcon(Context mCtx, String os, CircleImageView imageOS) {
         int                 ImageRessource;
 
         if (os == null) {
@@ -74,8 +79,4 @@ public class                    OSAdapter extends RecyclerView.Adapter<HostSelec
         MyGlideLoader.loadDrawableInImageView(mCtx, ImageRessource, imageOS);
     }
 
-
-    @Override public int         getItemCount() {
-        return mOsList.size();
-    }
 }

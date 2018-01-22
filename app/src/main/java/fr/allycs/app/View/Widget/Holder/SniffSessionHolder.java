@@ -13,7 +13,7 @@ public class SniffSessionHolder extends RecyclerView.ViewHolder {
     public CardView         card_view;
     public RelativeLayout   relative_layout;
     public ImageView        shareButton;
-    public TextView         title, susbtitle, description;
+    public TextView         title, subtitle, description;
     public TextView         ACTION1, ACTION2;
 
     public SniffSessionHolder(View itemView) {
@@ -21,7 +21,7 @@ public class SniffSessionHolder extends RecyclerView.ViewHolder {
         card_view = itemView.findViewById(R.id.card_view);
         relative_layout = itemView.findViewById(R.id.relative_layout);
         title = itemView.findViewById(R.id.title);
-        susbtitle = itemView.findViewById(R.id.susbtitle);
+        subtitle = itemView.findViewById(R.id.susbtitle);
         description = itemView.findViewById(R.id.description);
         shareButton = itemView.findViewById(R.id.shareButton);
         ACTION1 = itemView.findViewById(R.id.ACTION1);

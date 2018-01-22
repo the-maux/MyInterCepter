@@ -14,23 +14,19 @@ import fr.allycs.app.View.Widget.Holder.ConsoleLogHolder;
 
 
 public class                    ConsoleLogAdapter extends RecyclerView.Adapter<ConsoleLogHolder> {
-    private String              TAG = this.getClass().getName();
-    private Activity            activity;
+    private String              TAG = "ConsoleLogAdapter";
     private List<ConsoleLog>    listConsole;
-    private Singleton           singleton = Singleton.getInstance();
     private RecyclerView        mRV;
 
-    public                      ConsoleLogAdapter(Activity activity, List<ConsoleLog> dnsInterceptList) {
+    public                      ConsoleLogAdapter(List<ConsoleLog> dnsInterceptList) {
         this.listConsole = dnsInterceptList;
-        this.activity = activity;
     }
     @Override
-    public ConsoleLogHolder       onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ConsoleLogHolder      onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ConsoleLogHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_consolelog, parent, false));
     }
 
-    @Override
-    public void                 onBindViewHolder(ConsoleLogHolder holder, int position) {
+    @Override public void        onBindViewHolder(ConsoleLogHolder holder, int position) {
         ConsoleLog line = listConsole.get(position);
         holder.lineConsole.setText(line.line);
     }

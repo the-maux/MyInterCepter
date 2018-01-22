@@ -113,7 +113,7 @@ public class                    SetupActivity extends MyActivity {
         mSingleton.BinaryPath = mSingleton.FilesPath;//shouldn't be the same as FilesPath
         mSingleton.PcapPath = Environment.getExternalStorageDirectory().getPath() + "/Pcap/";
         mSingleton.userPreference = new PreferenceControler(mSingleton.FilesPath);
-        Log.d(TAG, "path:" + mSingleton.FilesPath);
+        Log.d(TAG, "nameFile:" + mSingleton.FilesPath);
         monitor("Building Path");
     }
 

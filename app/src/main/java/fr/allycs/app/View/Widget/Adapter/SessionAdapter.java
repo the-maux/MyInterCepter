@@ -17,10 +17,9 @@ import fr.allycs.app.View.HostDiscovery.FragmentHistoric;
 import fr.allycs.app.View.Widget.Holder.SessionHolder;
 
 public class                    SessionAdapter extends RecyclerView.Adapter<SessionHolder> {
-    private String              TAG = this.getClass().getName();
+    private String              TAG = "SessionAdapter";
     private FragmentHistoric    mFragment;
     private List<Session>       mSessions;
-    private Singleton           mSingleton = Singleton.getInstance();
     private AccessPoint         mAp;
 
     public                      SessionAdapter(FragmentHistoric fragment, List<Session> sessions, AccessPoint ap) {
@@ -30,7 +29,7 @@ public class                    SessionAdapter extends RecyclerView.Adapter<Sess
     }
 
     @Override
-    public SessionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SessionHolder        onCreateViewHolder(ViewGroup parent, int viewType) {
         return new SessionHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_session, parent, false));
     }
