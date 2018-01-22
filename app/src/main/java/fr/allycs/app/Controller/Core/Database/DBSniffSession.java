@@ -1,7 +1,10 @@
 package fr.allycs.app.Controller.Core.Database;
 
 
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.activeandroid.query.Select;
 
@@ -63,5 +66,27 @@ public class                        DBSniffSession {
             sniffSessions.add(sessionById);
         }
         return sniffSessions;
+    }
+
+    public void                     loadingFromDBB(final List<SniffSession> sniffSessions,
+                                                   final ProgressBar progressBar,
+                                                   final RecyclerView recyclerView) {
+        recyclerView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setMax(sniffSessions.size());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int rax = 0;
+                for (SniffSession session : sniffSessions) {
+                    session.listDevices();
+                    session.logDnsSpoofed();
+                    session.listPcapRecorded();
+                    progressBar.setProgress(++rax);
+                }
+                recyclerView.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+            }
+        }).start();
     }
 }

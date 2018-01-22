@@ -1,6 +1,8 @@
 package fr.allycs.app.View.HostDiscovery;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
@@ -26,6 +28,7 @@ import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.Database.DBAccessPoint;
 import fr.allycs.app.Controller.Core.Database.DBSession;
 import fr.allycs.app.Controller.Core.Database.DBSniffSession;
+import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Misc.MyFragment;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Controller.Network.BonjourService.ServicesController;
@@ -35,24 +38,28 @@ import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.Model.Target.SniffSession;
 import fr.allycs.app.Model.Unix.Pcap;
 import fr.allycs.app.R;
+import fr.allycs.app.View.HostDetail.HostDetailActivity;
+import fr.allycs.app.View.TargetMenu.TargetMenuActivity;
 import fr.allycs.app.View.Widget.Adapter.AccessPointAdapter;
 import fr.allycs.app.View.Widget.Adapter.HostDiscoveryAdapter;
 import fr.allycs.app.View.Widget.Adapter.SessionAdapter;
+import fr.allycs.app.View.Widget.Adapter.SniffSessionAdapter;
 import fr.allycs.app.View.Widget.Dialog.HostDialogDetail;
+import fr.allycs.app.View.Widget.Dialog.RV_dialog;
 
 public class                        FragmentHistoric extends MyFragment {
     private String                  TAG = "FragmentHistoric";
+    private FragmentHistoric        mInstance = this;
     private Singleton               mSingleton = Singleton.getInstance();
     private Host                    mFocusedHost = null;
     private List<AccessPoint>       HistoricAps;
     private Session                 focusedSession = null;
-    private HostDiscoveryActivity   mActivity = null;
+    private MyActivity mActivity = null;
     private RecyclerView            mRV;
     private TextView                mEmptyList;
     private RecyclerView.Adapter    RV_AdapterAp = null, RV_AdapterSessions = null, RV_AdapterHostSession = null;
 
-    private AccessPointAdapter.typeFragment actualMode = null;
-    public enum HistoricDetailMode  { ApHistoric, SessionsOfAp, devicesOfSession, detailSession, noHistoric}
+    public enum HistoricDetailMode  { ApHistoric, SessionsOfAp, devicesOfSession, detailSession, WiresharkHistoric, noHistoric}
     public static final String      HOST_HISTORIC = "HostDetail", DB_HISTORIC = "HistoricDB";
     public HistoricDetailMode       mActualMode = HistoricDetailMode.noHistoric;
 
@@ -63,26 +70,27 @@ public class                        FragmentHistoric extends MyFragment {
     private TextView                titleGateway, titleWireshark, titleDevices, titleService;
     private TextView                subtitleGateway, subtitleWireshark, subtitleDevices, subtitleService;
     private ImageView               forwardGateway, forwardWireshark, forwardListDevices, forwardServices;
-    private String                  mTitle = "Audit historic", mSubtitle = "";
+    private String                  mTitle = "Audit historic", mSubtitle = "", mHistoricMODE;
 
-    @Override public View           onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_historic, container, false);
         initXml(rootView);
         init();
-
         return rootView;
     }
 
-    @Override public void           init() {
+    public void                     init() {
         if (getArguments() != null && getArguments().getString("mode") != null) {
             Log.d(TAG, "init in mode:[" + getArguments().getString("mode") + "]");
+            this.mActivity = (MyActivity) getActivity();
             switch (getArguments().getString("mode")) {
                 case HOST_HISTORIC:
+                    mHistoricMODE = HOST_HISTORIC;
                     mFocusedHost = mSingleton.hostsList.get(0);
                     initHistoricFromDB(mFocusedHost);
                     break;
                 case DB_HISTORIC:
-                    this.mActivity = (HostDiscoveryActivity) getActivity();
+                    mHistoricMODE = DB_HISTORIC;
                     initHistoricFromDB();
                     break;
             }
@@ -96,7 +104,8 @@ public class                        FragmentHistoric extends MyFragment {
 
     public void                     onResume() {
         super.onResume();
-        pushToolbar();
+        if (mHistoricMODE.contains(DB_HISTORIC))
+            pushToolbar();
     }
 
     private void                    initXml(View rootView) {
@@ -307,12 +316,34 @@ public class                        FragmentHistoric extends MyFragment {
                 .setMode(BottomSheetBuilder.MODE_LIST)
                 .setBackgroundColor(ContextCompat.getColor(activity, R.color.material_light_white))
                 .setAppBarLayout(mAppbar)
-                .addTitleItem("Settings")
-                .addItem(0, "Purge BDD", R.mipmap.ic_os_filter)
+                .addTitleItem("Historic settings")
+                .addItem(0, "Purge all history", R.mipmap.ic_os_filter)
+                .addItem(1, "MITM Session", R.mipmap.ic_os_filter)
                 .setItemClickListener(new BottomSheetItemClickListener() {
                     @Override
                     public void onBottomSheetItemClick(MenuItem menuItem) {
                         Log.d(TAG, "STRING:"+menuItem.getTitle().toString());
+                        switch (menuItem.getTitle().toString()) {
+                            case "Purge all history":
+                               //osFilterDialog();
+                                break;
+                            case "MITM Session":
+                                SniffSessionAdapter adapter = new SniffSessionAdapter(mInstance, DBSniffSession.getAllSniffSession());
+                                new RV_dialog(mActivity)
+                                        .setAdapter(adapter, true)
+                                        .setTitle("Sniffing sessions recorded")
+                                        .onPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                            }
+                                        })
+                                        .show();
+                                break;
+                            case "Mode offline":
+                                startActivity(new Intent(mActivity, TargetMenuActivity.class));
+                                break;
+                        }
                     }
                 })
                 .expandOnStart(true)
@@ -360,6 +391,9 @@ public class                        FragmentHistoric extends MyFragment {
                 return false;
             case devicesOfSession:
                 onSessionFocused(null);
+                return false;
+            case WiresharkHistoric:
+                initHistoricFromDB();
                 return false;
             default:
                 return true;

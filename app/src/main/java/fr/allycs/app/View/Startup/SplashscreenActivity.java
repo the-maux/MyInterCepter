@@ -1,4 +1,4 @@
-package fr.allycs.app.View;
+package fr.allycs.app.View.Startup;
 
 import android.content.Intent;
 import android.os.Bundle;

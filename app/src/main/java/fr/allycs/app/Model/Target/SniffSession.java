@@ -21,6 +21,9 @@ public class                SniffSession extends Model {
     public String           TAG = "SniffSession";
     public String           NAME_COLUMN = "SniffSession";
 
+    @Column(name = "Date")
+    public Date             date;
+
     @Column(name = "Session")
     public Session          session;
 
@@ -44,14 +47,10 @@ public class                SniffSession extends Model {
         return getMany(DNSLog.class, "SniffSession");
     }
 
-    @Column(name = "Date")
-    public Date             date;
-
     public                  SniffSession() {
         super();
     }
 
-    @Override
     public String           toString() {
         List<Pcap> pcaps = listPcapRecorded();
         List<DNSLog> dnsLogs = logDnsSpoofed();

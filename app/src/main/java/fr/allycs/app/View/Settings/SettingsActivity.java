@@ -1,4 +1,4 @@
-package fr.allycs.app.View;
+package fr.allycs.app.View.Settings;
 
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;

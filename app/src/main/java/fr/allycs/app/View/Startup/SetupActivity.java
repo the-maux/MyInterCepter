@@ -1,4 +1,4 @@
-package fr.allycs.app.View;
+package fr.allycs.app.View.Startup;
 
 import android.Manifest;
 import android.content.Intent;
@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 

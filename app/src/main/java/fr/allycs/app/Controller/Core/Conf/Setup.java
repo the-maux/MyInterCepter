@@ -12,7 +12,7 @@ import java.util.Arrays;
 import fr.allycs.app.Controller.Core.Tools.Dns.DnsConf;
 import fr.allycs.app.Controller.Core.Tools.RootProcess;
 import fr.allycs.app.R;
-import fr.allycs.app.View.SetupActivity;
+import fr.allycs.app.View.Startup.SetupActivity;
 
 public class                    Setup {
     private String              TAG = "Setup";

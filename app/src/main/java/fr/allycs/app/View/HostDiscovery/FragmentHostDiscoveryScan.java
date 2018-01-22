@@ -33,7 +33,7 @@ import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
-import fr.allycs.app.View.MenuActivity;
+import fr.allycs.app.View.TargetMenu.TargetMenuActivity;
 import fr.allycs.app.View.Widget.Adapter.HostDiscoveryAdapter;
 import fr.allycs.app.View.Widget.Adapter.OSAdapter;
 import fr.allycs.app.View.Widget.Dialog.AddDnsDialog;
@@ -119,35 +119,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         mHost_RV.setLayoutManager(new LinearLayoutManager(mActivity));
     }
 
-    public BottomSheetMenuDialog    onSettingsClick(final AppBarLayout mAppbar, Activity activity) {
-        return new BottomSheetBuilder(activity)
-                .setMode(BottomSheetBuilder.MODE_LIST)
-                .setBackgroundColor(ContextCompat.getColor(activity, R.color.material_light_white))
-                .setAppBarLayout(mAppbar)
-                .addTitleItem("Settings")
-                .addItem(0, "Os filter", R.mipmap.ic_os_filter)
-                .addItem(1, "Select all", R.mipmap.ic_select_all)
-                .addItem(2, "Mode offline", R.mipmap.ic_leave)
-                .setItemClickListener(new BottomSheetItemClickListener() {
-                    @Override
-                    public void onBottomSheetItemClick(MenuItem menuItem) {
-                        Log.d(TAG, "STRING:"+menuItem.getTitle().toString());
-                        switch (menuItem.getTitle().toString()) {
-                            case "Os filter":
-                                osFilterDialog();
-                                break;
-                            case "Select all":
-                                mHostAdapter.selectAll();
-                                break;
-                            case "Mode offline":
-                                startActivity(new Intent(mActivity, MenuActivity.class));
-                                break;
-                        }
-                    }
-                })
-                .expandOnStart(true)
-                .createDialog();
-    }
     public void                     initSearchView(SearchView mSearchView) {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -239,7 +210,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     public void                     osFilterDialog() {
         final RecyclerView.Adapter adapter = new OSAdapter(mActivity, mHostAdapter.getOsList(), mListOS);
         new RV_dialog(mActivity)
-                .setAdapter(adapter)
+                .setAdapter(adapter, false)
                 .setTitle("Choix des cibles")
                 .onPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -278,6 +249,36 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 }
             }
         });
+    }
+
+    public BottomSheetMenuDialog    onSettingsClick(final AppBarLayout mAppbar, Activity activity) {
+        return new BottomSheetBuilder(activity)
+                .setMode(BottomSheetBuilder.MODE_LIST)
+                .setBackgroundColor(ContextCompat.getColor(activity, R.color.material_light_white))
+                .setAppBarLayout(mAppbar)
+                .addTitleItem("Settings")
+                .addItem(0, "Os filter", R.mipmap.ic_os_filter)
+                .addItem(1, "Select all", R.mipmap.ic_select_all)
+                .addItem(2, "Mode offline", R.mipmap.ic_leave)
+                .setItemClickListener(new BottomSheetItemClickListener() {
+                    @Override
+                    public void onBottomSheetItemClick(MenuItem menuItem) {
+                        Log.d(TAG, "STRING:"+menuItem.getTitle().toString());
+                        switch (menuItem.getTitle().toString()) {
+                            case "Os filter":
+                                osFilterDialog();
+                                break;
+                            case "Select all":
+                                mHostAdapter.selectAll();
+                                break;
+                            case "Mode offline":
+                                startActivity(new Intent(mActivity, TargetMenuActivity.class));
+                                break;
+                        }
+                    }
+                })
+                .expandOnStart(true)
+                .createDialog();
     }
 
 }

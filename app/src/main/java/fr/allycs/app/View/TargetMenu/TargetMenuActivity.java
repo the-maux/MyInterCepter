@@ -1,4 +1,4 @@
-package fr.allycs.app.View;
+package fr.allycs.app.View.TargetMenu;
 
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -19,14 +19,19 @@ import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.R;
+import fr.allycs.app.View.DnsSpoofing.DnsActivity;
 import fr.allycs.app.View.Dora.DoraActivity;
+import fr.allycs.app.View.Scan.NmapActivity;
+import fr.allycs.app.View.Settings.SettingsActivity;
+import fr.allycs.app.View.WebServer.WebServerActivity;
+import fr.allycs.app.View.Tcpdump.WiresharkActivity;
 
 /**
  * Menu
  */
-public class                    MenuActivity extends MyActivity {
-    private String              TAG = "MenuActivity";
-    private MenuActivity        mInstance = this;
+public class TargetMenuActivity extends MyActivity {
+    private String              TAG = "TargetMenuActivity";
+    private TargetMenuActivity mInstance = this;
     private CoordinatorLayout   mCoordinatorLayout;
     private Singleton           mSingleton = Singleton.getInstance();
     private enum                choice {
@@ -77,7 +82,7 @@ public class                    MenuActivity extends MyActivity {
             @Override
             public void onClick(View v) {
                 Utils.vibrateDevice(mInstance);
-                Class choice = MenuActivity.class;
+                Class choice = TargetMenuActivity.class;
                 Intent intent;
                 Pair<View, String> p1, p2, p3, p4;
                 ActivityOptionsCompat options = null;
@@ -138,6 +143,5 @@ public class                    MenuActivity extends MyActivity {
             }
         };
     }
-
 
 }

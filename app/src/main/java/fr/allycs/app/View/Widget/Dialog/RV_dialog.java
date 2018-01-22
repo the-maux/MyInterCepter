@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import fr.allycs.app.R;
+import fr.allycs.app.View.Widget.Adapter.SniffSessionAdapter;
 
 public class                    RV_dialog {
     private RecyclerView        mRV_host;
@@ -28,7 +29,7 @@ public class                    RV_dialog {
         mRV_host.setLayoutManager(manager);
     }
 
-    public RV_dialog            setAdapter(RecyclerView.Adapter adapter) {
+    public RV_dialog            setAdapter(RecyclerView.Adapter adapter, boolean isLoading) {
         mRV_host.setAdapter(adapter);
         return this;
     }

@@ -1,4 +1,4 @@
-package fr.allycs.app.View;
+package fr.allycs.app.View.Tcpdump;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -165,7 +165,7 @@ public class                    WiresharkActivity extends MyActivity {
 
     private void                onClickChoiceTarget() {
         new RV_dialog(this)
-                .setAdapter(new HostSelectionAdapter(this, mSingleton.hostsList, mListHostSelected))
+                .setAdapter(new HostSelectionAdapter(this, mSingleton.hostsList, mListHostSelected), false)
                 .setTitle("Choix des cibles")
                 .onPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override

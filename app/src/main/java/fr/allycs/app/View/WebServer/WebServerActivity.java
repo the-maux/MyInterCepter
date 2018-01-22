@@ -1,4 +1,4 @@
-package fr.allycs.app.View;
+package fr.allycs.app.View.WebServer;
 
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;

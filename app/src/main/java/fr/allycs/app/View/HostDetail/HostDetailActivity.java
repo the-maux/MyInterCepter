@@ -17,8 +17,8 @@ import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.HostDiscovery.FragmentHistoric;
-import fr.allycs.app.View.NmapActivity;
-import fr.allycs.app.View.WiresharkActivity;
+import fr.allycs.app.View.Scan.NmapActivity;
+import fr.allycs.app.View.Tcpdump.WiresharkActivity;
 
 public class HostDetailActivity extends MyActivity {
     private String              TAG = "HostDetailActivity";
@@ -154,6 +154,18 @@ public class HostDetailActivity extends MyActivity {
         super.finish();
         supportFinishAfterTransition();
     }*/
+
+    public void                     setToolbarTitle(final String title, final String subtitle) {
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (title != null)
+                    mToolbar.setTitle(title);
+                if (subtitle != null)
+                    mToolbar.setSubtitle(subtitle);
+            }
+        });
+    }
 
     public void                 onBackPressed() {
         if (mFragmentHistoric == null || mFragmentHistoric.onBackPressed()) {

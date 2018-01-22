@@ -33,7 +33,7 @@ import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
-import fr.allycs.app.View.MenuActivity;
+import fr.allycs.app.View.TargetMenu.TargetMenuActivity;
 
 /**
  * TODO:    + Add manual target
@@ -304,7 +304,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mSingleton.hostsList = extractAndDumpSelectedHost(selectedHost);
         if (selectedHost != null && !selectedHost.isEmpty()) {
             mSingleton.actualSession = actualSession;
-            startActivity(new Intent(mInstance, MenuActivity.class));
+            startActivity(new Intent(mInstance, TargetMenuActivity.class));
         }
     }
 

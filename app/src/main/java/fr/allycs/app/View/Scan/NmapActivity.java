@@ -1,4 +1,4 @@
-package fr.allycs.app.View;
+package fr.allycs.app.View.Scan;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -159,7 +159,7 @@ public class                    NmapActivity extends MyActivity {
                     @Override
                     public void onClick(View v) {
                         new RV_dialog(mInstance)
-                                .setAdapter(new HostSelectionAdapter(mInstance, mSingleton.hostsList, mListHostSelected))
+                                .setAdapter(new HostSelectionAdapter(mInstance, mSingleton.hostsList, mListHostSelected), false)
                                 .setTitle("Choix des cibles")
                                 .onPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override

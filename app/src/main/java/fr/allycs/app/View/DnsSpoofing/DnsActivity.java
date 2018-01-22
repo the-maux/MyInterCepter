@@ -1,4 +1,4 @@
-package fr.allycs.app.View;
+package fr.allycs.app.View.DnsSpoofing;
 
 import android.content.DialogInterface;
 import android.os.Bundle;

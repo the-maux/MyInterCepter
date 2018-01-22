@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
+
 import fr.allycs.app.Controller.Core.Tools.ArpSpoof;
 
 
@@ -18,25 +20,21 @@ public class                    MyActivity extends AppCompatActivity {
     protected Bundle            bundle = null;
     protected boolean           splashscreen = true;
 
-    @Override
     public void                 onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         //overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
         super.onCreate(savedInstanceState, persistentState);
     }
 
-    @Override
     public void                 setContentView(@LayoutRes int layoutResID) {
         super.setContentView(layoutResID);
         setupWindowAnimations();
     }
 
-    @Override
     public void                 setContentView(View view) {
         super.setContentView(view);
         setupWindowAnimations();
     }
 
-    @Override
     public void                 setContentView(View view, ViewGroup.LayoutParams params) {
         super.setContentView(view, params);
         setupWindowAnimations();
@@ -55,27 +53,27 @@ public class                    MyActivity extends AppCompatActivity {
         ret_slide.setDuration(1000);*/
     }
 
-    @Override
     public void                 onBackPressed() {
         super.onBackPressed();
     }
 
-    @Override
-    protected void              onDestroy() {
-        ArpSpoof.stopArpSpoof();
-        super.onDestroy();
-    }
-
-    @Override
     public void                 overridePendingTransition(int enterAnim, int exitAnim) {
 
         super.overridePendingTransition(enterAnim, exitAnim);
     }
 
-    @Override
     public void                 startActivity(Intent intent) {
 //        Log.d(TAG, "bundle Injected");
 //        ActivityOptions.
         super.startActivity(intent/*, ActivityOptions.makeSceneTransitionAnimation(this).toBundle()*/);
+    }
+
+    public void                 setToolbarTitle(final String title, final String subtitle) {}
+
+    public void                 initToolbarButton() {}
+
+    protected void              onDestroy() {
+        ArpSpoof.stopArpSpoof();
+        super.onDestroy();
     }
 }

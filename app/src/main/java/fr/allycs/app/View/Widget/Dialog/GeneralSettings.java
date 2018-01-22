@@ -16,7 +16,7 @@ import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickList
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.Tools.Tcpdump.Tcpdump;
 import fr.allycs.app.R;
-import fr.allycs.app.View.MenuActivity;
+import fr.allycs.app.View.TargetMenu.TargetMenuActivity;
 
 public class                    GeneralSettings {
     private String              TAG = "GeneralSettings";
@@ -88,7 +88,7 @@ public class                    GeneralSettings {
                         mSingleton.setDnsControlstarted(!mSingleton.isDnsControlstarted());
                         break;
                     default:
-                        mActivity.startActivity(new Intent(mActivity, MenuActivity.class));
+                        mActivity.startActivity(new Intent(mActivity, TargetMenuActivity.class));
                         break;
                 }
             }
