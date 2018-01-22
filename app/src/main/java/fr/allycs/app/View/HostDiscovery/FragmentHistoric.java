@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,12 +25,15 @@ import java.util.List;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.Database.DBAccessPoint;
 import fr.allycs.app.Controller.Core.Database.DBSession;
+import fr.allycs.app.Controller.Core.Database.DBSniffSession;
 import fr.allycs.app.Controller.Misc.MyFragment;
+import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Controller.Network.BonjourService.ServicesController;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.Model.Target.SniffSession;
+import fr.allycs.app.Model.Unix.Pcap;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Widget.Adapter.AccessPointAdapter;
 import fr.allycs.app.View.Widget.Adapter.HostDiscoveryAdapter;
@@ -63,10 +67,9 @@ public class                        FragmentHistoric extends MyFragment {
 
     @Override public View           onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_historic, container, false);
-
         initXml(rootView);
         init();
-        pushToolbar();
+
         return rootView;
     }
 
@@ -229,12 +232,15 @@ public class                        FragmentHistoric extends MyFragment {
             titleWireshark.setText(session.SniffSessions().size() + " sessions sniff realise");
             int nbrSession = 0;
             for (SniffSession sniffSession : session.SniffSessions()) {
-                for (Host device : sniffSession.listDevices()) {
-                    if (mFocusedHost.equals(device)) {
-                        nbrSession++;
-                        break;
+                if (mFocusedHost == null)
+                    nbrSession++;
+                else
+                    for (Host device : sniffSession.listDevices()) {
+                        if (mFocusedHost.equals(device)) {
+                            nbrSession++;
+                            break;
+                        }
                     }
-                }
             }
             subtitleWireshark.setText(nbrSession + " sniff avec ce device in");
             forwardWireshark.setOnClickListener(new View.OnClickListener() {
@@ -288,6 +294,7 @@ public class                        FragmentHistoric extends MyFragment {
 
     private void                    pushToolbar() {
         mActivity.setToolbarTitle(mTitle, mSubtitle);
+        mActivity.initToolbarButton();
     }
 
     @Override
@@ -306,6 +313,39 @@ public class                        FragmentHistoric extends MyFragment {
                 })
                 .expandOnStart(true)
                 .createDialog();
+    }
+
+    private void                    initFullWiresharkFocus() {
+        List<SniffSession> allsniffedSessions = DBSniffSession.getAllSniffSession();
+        for (SniffSession sniffSession : allsniffedSessions) {
+            Log.d(TAG, "SNIFFSESSION:\t:" + sniffSession);
+            Log.d(TAG, "SNIFFSESSION:\t:SESSION: " + sniffSession.session);
+            Log.d(TAG, "SNIFFSESSION:\t:SERIAL: " + sniffSession.listDevicesSerialized);
+            for (Host host : sniffSession.listDevices()) {
+                Log.d(TAG, "SNIFFSESSION:\t:CLIENT: " + host);
+            }
+            for (Pcap pcap : sniffSession.listPcapRecorded()) {
+                Log.d(TAG, "SNIFFSESSION:\t:PCAP: " + pcap);
+            }
+
+        }
+    }
+
+
+    @Override public void           onAddButtonClick(ImageButton addHostBtn) {
+        MyGlideLoader.loadDrawableInImageView(mActivity, R.mipmap.ic_history, addHostBtn);
+        addHostBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initFullWiresharkFocus();
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        pushToolbar();
     }
 
     public boolean                  onBackPressed() {

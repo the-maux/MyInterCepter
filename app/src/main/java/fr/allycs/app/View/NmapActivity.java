@@ -10,7 +10,6 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -44,9 +43,8 @@ public class                    NmapActivity extends MyActivity {
     private MaterialSpinner     mSpinner;
     private Map<String, String> mParams =  new HashMap<>();
     private ArrayList<String>   mCmd = new ArrayList<>();
-    private RelativeLayout      mNmapConfEditorLayout;
     private TextView            host_et, params_et, Output, Monitor, targetMonitor;
-    private RelativeLayout      mRL_host;
+    private RelativeLayout      mRL_host, mNmapConfEditorLayout, nmapConfLayout;
     private Host                mActualTarget = null;
     private Toolbar             mToolbar;
     private List<Host>          mListHostSelected = new ArrayList<>();
@@ -81,6 +79,7 @@ public class                    NmapActivity extends MyActivity {
         targetMonitor = findViewById(R.id.targetMonitor);
         mSettings = findViewById(R.id.settings);
         mNmapConfEditorLayout = findViewById(R.id.nmapConfEditorLayout);
+        nmapConfLayout = findViewById(R.id.nmapConfLayout);
         findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,11 +105,15 @@ public class                    NmapActivity extends MyActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mNmapConfEditorLayout.setVisibility(
-                        (mNmapConfEditorLayout.getVisibility() == View.VISIBLE) ?
-                                View.GONE : View.VISIBLE);
-                if (mNmapConfEditorLayout.getVisibility() == View.GONE) {
-                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                if (mNmapConfEditorLayout.getVisibility() == View.GONE &&
+                        nmapConfLayout.getVisibility() == View.GONE) {
+                    nmapConfLayout.setVisibility(View.VISIBLE);
+                } else if (mNmapConfEditorLayout.getVisibility() == View.GONE) {
+                    nmapConfLayout.setVisibility(View.GONE);
+                    mNmapConfEditorLayout.setVisibility(View.VISIBLE);
+                } else {
+                    nmapConfLayout.setVisibility(View.GONE);
+                    mNmapConfEditorLayout.setVisibility(View.GONE);
                 }
             }
         };

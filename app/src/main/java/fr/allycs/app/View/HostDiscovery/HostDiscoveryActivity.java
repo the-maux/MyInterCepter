@@ -197,19 +197,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
     public void                     initToolbarButton() {
         final BottomSheetMenuDialog bottomSheet;
         bottomSheet = mFragment.onSettingsClick(mAppbar, this);
-//        switch (typeScan) {
-//            case Arp:
-//                bottomSheet = mFragment.onSettingsClick(mAppbar, this);
-//                break;
-//            case Services:
-//                bottomSheet = mFragment.onSettingsClick(mAppbar, this);
-//                break;
-//            case Historic:
-//                bottomSheet = mFragment.onSettingsClick(mAppbar, this);
-//                break;
-//            default:
-//                break;
-//        }
         mSettingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -219,7 +206,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
         });
         mFragment.onAddButtonClick(mAddHostBtn);
     }
-
 
     private void                    initSearchView() {
         mFragment.initSearchView(mSearchView);

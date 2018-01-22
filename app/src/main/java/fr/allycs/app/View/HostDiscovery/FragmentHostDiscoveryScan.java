@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.Database.DBSession;
 import fr.allycs.app.Controller.Misc.MyFragment;
+import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.Model.Target.Host;
@@ -62,7 +64,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         }
         initSwipeRefresh();
         mActivity.initToolbarButton();
-        pushToolbar();
         return rootView;
     }
 
@@ -72,6 +73,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         mHost_RV.setAdapter(mHostAdapter);
         mHost_RV.setHasFixedSize(true);
         mHost_RV.setLayoutManager(new LinearLayoutManager(mActivity));
+        pushToolbar();
     }
 
     public boolean                  start() {
@@ -222,6 +224,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
 
     private void                    pushToolbar() {
         mActivity.setToolbarTitle(mTitle, mSubtitle);
+        mActivity.initToolbarButton();
     }
     private void                    setTitleToolbar(String title, String subtitle) {
         if (title != null)
@@ -232,6 +235,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
             mActivity.setToolbarTitle(title, subtitle);
         }
     }
+
     public void                     osFilterDialog() {
         final RecyclerView.Adapter adapter = new OSAdapter(mActivity, mHostAdapter.getOsList(), mListOS);
         new RV_dialog(mActivity)
@@ -253,14 +257,14 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         mActivity.showSnackbar("Fonctionnalité non implémenté:"+ addedHost);
     }
 
-    public void                     onAddButtonClick(View mAddHostBtn) {
-        mAddHostBtn.setOnClickListener(new View.OnClickListener() {
+    public void                     onAddButtonClick(ImageButton addHostBtn) {
+        MyGlideLoader.loadDrawableInImageViewNoOverride(mActivity, R.mipmap.ic_add_button, addHostBtn);
+        addHostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (mActivity.typeScan) {
                     case Arp:
-                        final AddDnsDialog dialog = new AddDnsDialog(mActivity)
-                                .setTitle("Add target");
+                        final AddDnsDialog dialog = new AddDnsDialog(mActivity).setTitle("Add target");
                         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface d, int which) {

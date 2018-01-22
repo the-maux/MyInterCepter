@@ -142,8 +142,6 @@
             android:layout_below="@+id/host"
             android:layout_margin="8dp"
             android:background="@color/primary_text"
-            android:clipChildren="true"
-            android:clipToPadding="true"
             android:elevation="4dp"
             android:padding="1dp"
             android:scrollbars="vertical"

@@ -58,6 +58,26 @@
             android:textSize="12sp" />
 
         <ImageView
+            android:id="@+id/wiresharkMiniLogo"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignBottom="@+id/subtitle"
+            android:layout_marginRight="4dp"
+            android:layout_toLeftOf="@+id/icon2"
+            android:visibility="gone"
+            app:srcCompat="@drawable/wireshark" />
+
+        <ImageView
+            android:id="@+id/doraMiniLogo"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignBottom="@+id/subtitle"
+            android:layout_marginRight="4dp"
+            android:layout_toLeftOf="@+id/wiresharkMiniLogo"
+            android:visibility="gone"
+            app:srcCompat="@drawable/radar1600" />
+
+        <ImageView
             android:id="@+id/icon2"
             android:layout_width="40dp"
             android:layout_height="40dp"

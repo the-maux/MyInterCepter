@@ -5,7 +5,7 @@ import android.app.Activity;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SearchView;
-import android.view.View;
+import android.widget.ImageButton;
 
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 
@@ -31,7 +31,7 @@ public class                        MyFragment extends Fragment implements MyFra
 
     }
 
-    public void                     onAddButtonClick(View mAddHostBtn) {
+    public void                     onAddButtonClick(ImageButton mAddHostBtn) {
 
     }
 }

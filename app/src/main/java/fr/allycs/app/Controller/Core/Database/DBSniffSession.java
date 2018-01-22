@@ -17,6 +17,14 @@ import fr.allycs.app.Model.Target.SniffSession;
 public class                        DBSniffSession {
     private static String           TAG = "DBSniffSession";
 
+
+    public static List<SniffSession> getAllSniffSession() {
+        return new Select()
+                .all()
+                .from(SniffSession.class)
+                .execute();
+    }
+
     public static SniffSession      buildSniffSession() {
         Log.d(TAG, "buildSniffSession");
         Session session = Singleton.getInstance().actualSession;
@@ -25,6 +33,7 @@ public class                        DBSniffSession {
         sniffSession.date = Calendar.getInstance().getTime();
         sniffSession.session = session;
         sniffSession.save();
+        session.isSniffed = true;
         session.SniffSessions().add(sniffSession);
         session.save();
         Log.d(TAG, sniffSession.toString());

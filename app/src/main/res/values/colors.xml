@@ -8,7 +8,7 @@
     <color name="icmp">#75b6f7</color>
     <color name="smb">#fff999</color>
     <color name="udp">#29b6f6</color>
-    <color name="black_primary">#ff212121</color>
+    <color name="black_primary">#f7000000</color>
     <color name="black_primary_light">#ff313131</color>
     <color name="primary">@color/material_blue_grey_400</color>
     <color name="primary_dark">@color/material_blue_grey_800</color>

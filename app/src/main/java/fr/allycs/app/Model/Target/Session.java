@@ -26,19 +26,14 @@ public class                Session extends Model {
     @Column(name = "OsNumber")
     public int              nbrOs;
 
-    @Column(name = "typeScan")/* Arp, Icmp, Nmap*/
+    @Column(name = "typeScan")
     public String           typeScan;
 
-    @Column(name = "name")/* Arp, Icmp, Nmap*/
+    @Column(name = "name")
     public String           name;
 
-    /**
-     * Create the OneToMany relation
-     * @return
-     */
-    public List<SniffSession>    SniffSessions() {
-        return getMany(SniffSession.class, "Session");
-    }
+    @Column(name = "isSniffed")
+    public boolean           isSniffed = false;
 
     @Column(name = "service")
     public List<Service>    services;
@@ -59,6 +54,14 @@ public class                Session extends Model {
             Log.d(NAME_COLUMN, "liste Session deserialized " + listDevices.size() + " devices");
         }
         return listDevices;
+    }
+
+    /**
+     * Create the OneToMany relation
+     * @return
+     */
+    public List<SniffSession> SniffSessions() {
+        return getMany(SniffSession.class, "Session");
     }
 
     @Override

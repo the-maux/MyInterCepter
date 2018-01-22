@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+
 import fr.allycs.app.R;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
@@ -23,6 +24,14 @@ public class                MyGlideLoader {
                         .fitCenter()
                         .override(100, 100))
                 .placeholder(R.mipmap.ic_dns_text)
+                .into(imageView);
+    }
+
+
+    public static void      loadDrawableInImageViewNoOverride(Context context, int ressource, ImageView imageView) {
+        GlideApp.with(context)
+                .load(ressource)
+                .placeholder(R.mipmap.ic_add_button)
                 .into(imageView);
     }
 

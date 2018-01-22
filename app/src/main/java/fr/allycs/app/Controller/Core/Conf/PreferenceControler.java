@@ -20,7 +20,7 @@ public class                PreferenceControler {
     private File            PATH_TO_PREFERENCES_FILE;
     private Preferences     userPreferences = null;
 
-    public PreferenceControler(String FilesPath) {
+    public                  PreferenceControler(String FilesPath) {
         if (FilesPath == null) {
             Log.e(TAG, "ERROR NO FILE_PATH ON LOADING USER PREFERENCE");
         } else {
@@ -30,30 +30,31 @@ public class                PreferenceControler {
     }
 
     public void             dump() {
-        if (userPreferences != null) {
-            FileOutputStream stream = null;
-            try {
-                stream = new FileOutputStream(PATH_TO_PREFERENCES_FILE);
-                stream.write(new JSONObject((new Gson()).toJson(userPreferences)).toString().getBytes());
-            } catch (FileNotFoundException e) {
-                Log.e(TAG, "user preference file not found");
-                e.printStackTrace();
-            } catch (IOException e) {
-                Log.e(TAG, "File write failed: " + e.toString());
-                e.printStackTrace();
-            } catch (JSONException e) {
-                Log.e(TAG, "JSON Error failed: " + e.toString());
-                e.printStackTrace();
-            } finally {
-                if (stream != null)
-                    try {
-                        stream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-            }
-        } else {
+        if (userPreferences == null) {
             Log.e(TAG, "No user Preference file found");
+            Log.e(TAG, "Generating default one");
+            userPreferences = new Preferences();
+        }
+        FileOutputStream stream = null;
+        try {
+            stream = new FileOutputStream(PATH_TO_PREFERENCES_FILE);
+            stream.write(new JSONObject((new Gson()).toJson(userPreferences)).toString().getBytes());
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "user preference file not found");
+            e.printStackTrace();
+        } catch (IOException e) {
+            Log.e(TAG, "File write failed: " + e.toString());
+            e.printStackTrace();
+        } catch (JSONException e) {
+            Log.e(TAG, "JSON Error failed: " + e.toString());
+            e.printStackTrace();
+        } finally {
+            if (stream != null)
+                try {
+                    stream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
         }
     }
 
@@ -66,8 +67,12 @@ public class                PreferenceControler {
             if (in.read(bytes) > 0)
                 userPreferences = new Gson().fromJson(new String(bytes), Preferences.class);
             Log.d(TAG, "userPreference loaded");
-        }  catch (IOException e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+            Log.e(TAG, "userPreference No file, so create one");
+            dump();
+        } catch (IOException e2) {
+            e2.printStackTrace();
             Log.e(TAG, "userPreference loading error");
         } finally {
             try {

@@ -13,7 +13,7 @@ public class                SessionHolder extends RecyclerView.ViewHolder {
     public CardView         card_view;
     public RelativeLayout   relative_layout;
     public TextView         title, subtitle;
-    public ImageView        forward;
+    public ImageView        forward, wiresharkMiniLogo, doraMiniLogo;
 
     public                  SessionHolder(View itemView) {
         super(itemView);
@@ -22,5 +22,7 @@ public class                SessionHolder extends RecyclerView.ViewHolder {
         title = itemView.findViewById(R.id.title);
         subtitle = itemView.findViewById(R.id.subtitle);
         forward = itemView.findViewById(R.id.icon2);
+        wiresharkMiniLogo = itemView.findViewById(R.id.wiresharkMiniLogo);
+        doraMiniLogo = itemView.findViewById(R.id.doraMiniLogo);
     }
 }

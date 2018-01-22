@@ -48,6 +48,8 @@ public class                    SessionAdapter extends RecyclerView.Adapter<Sess
             }
         };
         holder.forward.setOnClickListener(onClick);
+        if (session.isSniffed)
+            holder.wiresharkMiniLogo.setVisibility(View.VISIBLE);
         holder.card_view.setOnClickListener(onClick);
         holder.relative_layout.setOnClickListener(onClick);
     }
@@ -58,7 +60,7 @@ public class                    SessionAdapter extends RecyclerView.Adapter<Sess
     }
 
     public void                 filtering(String query) {
-        /*TODO:Log.d(TAG, "filterByString:" + query);
+/*
         mHosts.clear();
         for (Host domain : mOriginalList) {
             if (domain.getDumpInfo().toLowerCase().contains(query.toLowerCase()))
