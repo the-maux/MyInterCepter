@@ -311,6 +311,20 @@ public class                        FragmentHistoric extends MyFragment {
         mActivity.initToolbarButton();
     }
 
+    private void                    showSniffSessionList() {
+        SniffSessionAdapter adapter = new SniffSessionAdapter(mInstance, DBSniffSession.getAllSniffSession());
+        new RV_dialog(mActivity)
+                .setAdapter(adapter, true)
+                .setTitle("Sniffing sessions recorded")
+                .onPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .show();
+    }
+
     public BottomSheetMenuDialog    onSettingsClick(final AppBarLayout mAppbar, Activity activity) {
         return new BottomSheetBuilder(activity)
                 .setMode(BottomSheetBuilder.MODE_LIST)
@@ -328,17 +342,7 @@ public class                        FragmentHistoric extends MyFragment {
                                //osFilterDialog();
                                 break;
                             case "MITM Session":
-                                SniffSessionAdapter adapter = new SniffSessionAdapter(mInstance, DBSniffSession.getAllSniffSession());
-                                new RV_dialog(mActivity)
-                                        .setAdapter(adapter, true)
-                                        .setTitle("Sniffing sessions recorded")
-                                        .onPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                                            }
-                                        })
-                                        .show();
+                                showSniffSessionList();
                                 break;
                             case "Mode offline":
                                 startActivity(new Intent(mActivity, TargetMenuActivity.class));
@@ -362,10 +366,9 @@ public class                        FragmentHistoric extends MyFragment {
             for (Pcap pcap : sniffSession.listPcapRecorded()) {
                 Log.d(TAG, "SNIFFSESSION:\t:PCAP: " + pcap);
             }
-
+            showSniffSessionList();
         }
     }
-
 
     public void                     onAddButtonClick(ImageButton addHostBtn) {
         MyGlideLoader.loadDrawableInImageView(mActivity, R.mipmap.ic_history, addHostBtn);
