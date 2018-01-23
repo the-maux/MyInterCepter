@@ -8,7 +8,6 @@ import android.widget.ProgressBar;
 
 import com.activeandroid.query.Select;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -19,14 +18,6 @@ import fr.allycs.app.Model.Target.SniffSession;
 
 public class                        DBSniffSession {
     private static String           TAG = "DBSniffSession";
-
-
-    public static List<SniffSession> getAllSniffSession() {
-        return new Select()
-                .all()
-                .from(SniffSession.class)
-                .execute();
-    }
 
     public static SniffSession      buildSniffSession() {
         Log.d(TAG, "buildSniffSession");
@@ -43,6 +34,13 @@ public class                        DBSniffSession {
         return sniffSession;
     }
 
+    public static List<SniffSession> getAllSniffSession() {
+        return new Select()
+                .all()
+                .from(SniffSession.class)
+                .execute();
+    }
+
     public static String            SerializeSniffSessions(List<Host> hosts) {
         StringBuilder dump = new StringBuilder("");
         for (Host host : hosts) {
@@ -50,22 +48,6 @@ public class                        DBSniffSession {
             dump.append(";");
         }
         return dump.toString();
-    }
-
-    public static SniffSession      findSniffSessionById(String id) {
-        return new Select()
-                .from(Host.class)
-                .where("_id = \"" + id + "\"")
-                .executeSingle();
-    }
-
-    public static List<SniffSession> getListFromSerialized(String listSniffSessionSerialized) {
-        List<SniffSession> sniffSessions = new ArrayList<>();
-        for (String id : listSniffSessionSerialized.split(";")) {
-            SniffSession sessionById = findSniffSessionById(id.replace(";", ""));
-            sniffSessions.add(sessionById);
-        }
-        return sniffSessions;
     }
 
     public void                     loadingFromDBB(final List<SniffSession> sniffSessions,

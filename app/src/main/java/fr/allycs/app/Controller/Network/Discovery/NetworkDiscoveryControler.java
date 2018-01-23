@@ -39,16 +39,6 @@ public class                        NetworkDiscoveryControler {
                 wifiManager.getConnectionInfo().getSSID().replace("\"", "") : "NO SSID";
         return mInstance;
     }
-    
-//    public                          NetworkDiscoveryControler(final FragmentHostDiscoveryScan fragmentHostDiscoveryScan) {
-//        this.mActivity = (HostDiscoveryActivity) fragmentHostDiscoveryScan.getActivity();
-//        this.mFragment = fragmentHostDiscoveryScan;
-//        mSSID = ((WifiManager) mActivity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)) != null ?
-//                ((WifiManager) mActivity.getApplicationContext().getSystemService(Context.WIFI_SERVICE))
-//                .getConnectionInfo().getSSID().replace("\"", "") : "NO SSID";
-//    }
-
-
 
     public void                    run(typeScan typeOfScan, List<Host> listOfHosts) {
         Log.d(TAG, "running: " + typeOfScan.name());

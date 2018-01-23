@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -16,10 +15,8 @@ import android.widget.Toast;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import fr.allycs.app.Controller.Core.Conf.PreferenceControler;
 import fr.allycs.app.Controller.Core.Conf.Setup;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Core.Tools.Intercepter;
 import fr.allycs.app.Controller.Core.Tools.RootProcess;
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Network.NetUtils;
@@ -86,7 +83,7 @@ public class                    SetupActivity extends MyActivity {
     }
 
     private void                initialisation() {
-        buildPath();
+        Setup.buildPath(this);
         Log.d(TAG, "SetupActivity::initialisation");
         new Thread(new Runnable() {
             @Override
@@ -105,21 +102,14 @@ public class                    SetupActivity extends MyActivity {
         }).start();
     }
 
-    private void                buildPath() {
-        mSingleton.FilesPath = mInstance.getFilesDir().getPath() + '/';
-        mSingleton.BinaryPath = mSingleton.FilesPath;//shouldn't be the same as FilesPath
-        mSingleton.PcapPath = Environment.getExternalStorageDirectory().getPath() + "/Pcap/";
-        mSingleton.userPreference = new PreferenceControler(mSingleton.FilesPath);
-        Log.d(TAG, "nameFile:" + mSingleton.FilesPath);
-        monitor("Building Path");
-    }
+
 
     private void                initInfo() throws FileNotFoundException {
         try {
             monitor("Initialization...");
             Log.d(TAG, "SetupActivity::initInfo");
             //Log.d(TAG, "init Net infos");
-            Intercepter.getNetworkInfoByCept();//Is it still usefull? need to test without
+            //Intercepter.getNetworkInfoByCept();//Is it still usefull? need to test without
             monitor("Discovering network architecture");
             if (!NetUtils.initNetworkInfo(this)) {
                 Toast.makeText(this, "Your not connected to a network", Toast.LENGTH_LONG).show();
@@ -133,16 +123,14 @@ public class                    SetupActivity extends MyActivity {
                     }
                 });
             }
-        } catch (InterruptedException e2) {
-            e2.getStackTrace();
-        } catch (IOException e) {
+        }  catch (IOException e) {
             e.getStackTrace();
         }
     }
 
     private void                install() throws IOException, InterruptedException {
         new Setup(this).install();
-    }//10:68:3f:7a:65:ef ___ 10.16.186.54/23 brd 10.16.187.255
+    }
 
     public void                 monitor(final String log) {
         mInstance.runOnUiThread(new Runnable() {

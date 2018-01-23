@@ -6,6 +6,8 @@
 <item>
 <bitmap
     android:gravity="center"
+    android:id="@+id/iconScylla"
+    android:transitionName="icone"
     android:src="@drawable/ico" />
 </item>
 

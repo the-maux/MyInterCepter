@@ -235,7 +235,9 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
             public void onClick(View v) {
                 switch (mActivity.typeScan) {
                     case Arp:
-                        final AddDnsDialog dialog = new AddDnsDialog(mActivity).setTitle("Add target");
+                        final AddDnsDialog dialog = new AddDnsDialog(mActivity)
+                                .setIcon(R.drawable.cyber_security5_rounded)
+                                .setTitle("Add target");
                         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface d, int which) {

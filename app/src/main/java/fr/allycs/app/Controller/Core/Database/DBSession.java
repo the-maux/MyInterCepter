@@ -16,77 +16,36 @@ import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Session;
-import fr.allycs.app.Model.Target.SniffSession;
 
 public class                                DBSession {
     private static String                   TAG = "DBSession";
+
+    public static Session                   buildSession(final String SSID, final String gateway,
+                                                         final List<Host> hosts, String protoUsed,
+                                                         final ArrayList<String> osList) {
+//        new Thread(new Runnable() {
+//            public void run() {
+        Session mActualSession = DBManager.saveSession(SSID, gateway, hosts, protoUsed);
+        mActualSession.nbrOs = osList.size();
+        mActualSession.save();
+//            }
+//        }).start();
+        return mActualSession;
+    }
+
     public static List<AccessPoint>         getAllAccessPoint() {
         return new Select()
                 .all()
                 .from(AccessPoint.class)
                 .execute();
     }
-    public static List<Session>             getAllSessions() {
-        return new Select()
-                .all()
-                .from(Session.class)
-                .execute();
-    }
-    public static List<SniffSession>        getAllSniffedSessions() {
-        return new Select()
-                .all()
-                .from(SniffSession.class)
-                .execute();
-    }
-
-    public static List<SniffSession>        getSniffedSessionsWithDeviceIn(Host host) {
-        List<SniffSession>  sniffedsessions = DBSession.getAllSniffedSessions();
-        List<SniffSession>  sniffedSessionWithDeviceIn = new ArrayList<>();
-        for (SniffSession sniffedsession : sniffedsessions) {
-            for (Host device : sniffedsession.listDevices()) {
-                if (host.mac.equals(device.mac)) {//TODO: try with .contains instead of for loop
-                    sniffedSessionWithDeviceIn.add(sniffedsession);
-                    break;
-                }
-            }
-        }
-        return sniffedSessionWithDeviceIn;
-    }
-
-    public static List<Session>             getAllSessionsWithDeviceIn(Host host) {
-        List<Session> allSessions = DBSession.getAllSessions();
-        List<Session> sessionWithDeviceIn = new ArrayList<>();
-        if (allSessions == null)
-            return sessionWithDeviceIn;
-        for (Session session : allSessions) {
-            for (Host device : session.listDevices()) {
-                if (host.mac.equals(device.mac)) {//TODO: try with .contains instead of for loop
-                    sessionWithDeviceIn.add(session);
-                    break;
-                }
-            }
-        }
-        return sessionWithDeviceIn;
-    }
-
     private static boolean                  isTheDeviceIn(Host host, List<Session> sessions) {
-        if (sessions == null)
-            return false;
-        for (Session session : sessions) {
-            if (session.listDevicesSerialized.contains("" + host.getId()))
-                return true;
-        }
-        return false;
-    }
-
-    public static List<Session>             getAllSessionFromApWithDeviceIn(List<Session> sessions, Host mFocusedHost) {
-        List<Session> allSessionWithDeviceIn = new ArrayList<>();
-        for (Session session : sessions) {
-            if (mFocusedHost == null || session.listDevicesSerialized.contains("" + mFocusedHost.getId())) {
-                allSessionWithDeviceIn.add(session);
+        if (sessions != null)
+            for (Session session : sessions) {
+                if (session.listDevicesSerialized.contains("" + host.getId()))
+                    return true;
             }
-        }
-        return allSessionWithDeviceIn;
+        return false;
     }
 
     public static List<AccessPoint>         getAllAPWithDeviceIn(Host host) {
@@ -97,8 +56,18 @@ public class                                DBSession {
             if (isTheDeviceIn(host, accessPoint.sessions()))
                 AllApWithDeviceIn.add(accessPoint);
         }
-        Log.d(TAG, "getAllAPWithDeviceIn:: returning " + AllApWithDeviceIn.size() + " AccessPoin");
+        Log.i(TAG, "getAllAPWithDeviceIn:: returning " + AllApWithDeviceIn.size() + " AccessPoint");
         return AllApWithDeviceIn;
+    }
+
+    public static List<Session>             getAllSessionFromApWithDeviceIn(List<Session> sessions, Host mFocusedHost) {
+        List<Session> allSessionWithDeviceIn = new ArrayList<>();
+        for (Session session : sessions) {
+            if (mFocusedHost == null || session.listDevicesSerialized.contains("" + mFocusedHost.getId())) {
+                allSessionWithDeviceIn.add(session);
+            }
+        }
+        return allSessionWithDeviceIn;
     }
 
     static Session                          saveNewSession(AccessPoint ap, String Gateway,
@@ -129,16 +98,4 @@ public class                                DBSession {
         return session;
     }
 
-    public static Session                   buildSession(final String SSID, final String gateway,
-                                                         final List<Host> hosts, String protoUsed,
-                                                         final ArrayList<String> osList) {
-//        new Thread(new Runnable() {
-//            public void run() {
-                Session mActualSession = DBManager.saveSession(SSID, gateway, hosts, protoUsed);
-                mActualSession.nbrOs = osList.size();
-                mActualSession.save();
-//            }
-//        }).start();
-        return mActualSession;
-    }
 }

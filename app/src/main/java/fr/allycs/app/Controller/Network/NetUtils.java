@@ -75,7 +75,7 @@ public class                NetUtils {
                 Object[] objArr = new Object[1];
                 objArr[0] = ip.replace(".", "\\.");
                 Matcher matcher = Pattern.compile(String.format(MAC_RE, objArr)).matcher(read);
-                if (matcher.matches()) {
+                if (matcher.matches() && !ip.contains(Singleton.getInstance().network.myIp)) {
                     listOfIpsAlreadyIn.add(ip);
                     hostListFile.write((ip + ":" + matcher.group(1) + "\n").getBytes());
                 }
@@ -91,9 +91,12 @@ public class                NetUtils {
                     }
                 }
                 if (!already) {
-                    hostListFile.write((reachable + "\n").getBytes());
+                    if (!reachable.contains(Singleton.getInstance().network.myIp))
+                        hostListFile.write((reachable + "\n").getBytes());
                 }
             }
+            String dumpMyDevice = Singleton.getInstance().network.myIp + ":" + Singleton.getInstance().network.mac + '\n';
+            hostListFile.write(dumpMyDevice.getBytes());
             bufferedReader.close();
             hostListFile.close();
         } catch (IOException e) {
@@ -117,11 +120,15 @@ public class                NetUtils {
         WifiManager wifiManager = (WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if (wifiManager == null)
             return false;
+
         DhcpInfo dhcpInfo = wifiManager.getDhcpInfo();
+
+
         String data = wifiManager.getDhcpInfo().toString();
         if (!data.contains("ipaddr") || !data.contains("gateway") || !data.contains("netmask") ) {
             return false;
         }
+
         String[] res = data.split(" ");
         int ip = 0, gw = 0, netmask = 0;
         for (int i = 0; i < res.length; i++) {
@@ -135,8 +142,8 @@ public class                NetUtils {
         }
         if (res[netmask].contains("0.0.0.0"))
             res[netmask] = "255.255.255.0";
-        Singleton.getInstance().network = new NetworkInformation(dhcpInfo, NetUtils.getMac(res[ip], res[gw]));
-        WifiInfo wifiInfo = null;
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        Singleton.getInstance().network = new NetworkInformation(dhcpInfo, wifiInfo.getMacAddress());
         if ((activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)) != null) {
             wifiInfo = ((WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
         }

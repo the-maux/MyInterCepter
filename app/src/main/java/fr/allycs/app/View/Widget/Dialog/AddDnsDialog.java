@@ -23,12 +23,17 @@ public class                    AddDnsDialog {
         dialog.setCancelable(true);
         View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_add_host_dns, null);
         dialog.setView(dialogView);
-        mTIL_host = (TextInputLayout) dialogView.findViewById(R.id.TIL_host);
-        mHost = (EditText) dialogView.findViewById(R.id.host);
-        mTIL_ip = (TextInputLayout) dialogView.findViewById(R.id.TIL_ip);
-        mIp = (EditText) dialogView.findViewById(R.id.ip);
+
+        mTIL_host = dialogView.findViewById(R.id.TIL_host);
+        mHost = dialogView.findViewById(R.id.host);
+        mTIL_ip = dialogView.findViewById(R.id.TIL_ip);
+        mIp = dialogView.findViewById(R.id.ip);
     }
 
+    public AddDnsDialog         setIcon(int ressource) {
+        dialog.setIcon(ressource);
+        return this;
+    }
     public AddDnsDialog         setTitle(String title) {
         dialog.setTitle(title);
         return this;

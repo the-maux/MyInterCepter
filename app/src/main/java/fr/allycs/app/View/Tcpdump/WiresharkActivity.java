@@ -37,7 +37,7 @@ import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Widget.Adapter.HostSelectionAdapter;
 import fr.allycs.app.View.Widget.Adapter.WiresharkAdapter;
-import fr.allycs.app.View.Widget.Dialog.GeneralSettings;
+import fr.allycs.app.View.Widget.Dialog.BottomSheet.GeneralSettings;
 import fr.allycs.app.View.Widget.Dialog.RV_dialog;
 
 public class                    WiresharkActivity extends MyActivity {

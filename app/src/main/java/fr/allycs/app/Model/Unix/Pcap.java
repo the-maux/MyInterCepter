@@ -6,6 +6,7 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +21,8 @@ public class                Pcap extends Model {
     private String          TAG = "Pcap";
     private String          NAME_COLUMN = "Pcap";
 
+    @Column(name ="Date")
+    public Date             date;
 
     @Column(name ="NameFile")
     public String           nameFile;
@@ -37,9 +40,9 @@ public class                Pcap extends Model {
         return listDevices;
     }
 
-
-    @Column(name ="Date")
-    public Date             date;
+    public                  Pcap() {
+        super();
+    }
 
     public                  Pcap(String nameFile, List<Host> sniffedDevice) {
         super();
@@ -48,12 +51,15 @@ public class                Pcap extends Model {
         this.date = new Date();
         Log.d(TAG, "New PCAP FILE(" + nameFile + ") with " + sniffedDevice.size() + "devices");
     }
-    public                  Pcap() {
-        super();
-    }
 
     public String           getFullNamePath() {
         return Singleton.getInstance().PcapPath + nameFile;
+    }
+    public String           getDate() {
+        return new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE).format(date);
+    }
+    public File             getFile() {
+        return new File(Singleton.getInstance().PcapPath + nameFile);
     }
 
     @Override public String toString() {

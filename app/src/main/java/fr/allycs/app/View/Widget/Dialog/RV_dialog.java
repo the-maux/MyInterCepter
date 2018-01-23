@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import fr.allycs.app.R;
-import fr.allycs.app.View.Widget.Adapter.SniffSessionAdapter;
 
 public class                    RV_dialog {
     private RecyclerView        mRV_host;
@@ -20,6 +19,7 @@ public class                    RV_dialog {
         dialog.setCancelable(true);
         View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_hostchoice, null);
         dialog.setView(dialogView);
+        dialog.setIcon(R.drawable.ico);
         mRV_host = dialogView.findViewById(R.id.RL_host);
         mRV_host.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(activity);

@@ -1,6 +1,8 @@
 package fr.allycs.app.Controller.Core.Conf;
 
+import android.app.Activity;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
@@ -91,6 +93,14 @@ public class                    Setup {
         }
         Log.d(TAG, "GIVING arm BINARI");
         return cepter;
+    }
+
+    public static void          buildPath(Activity activity) {
+        Singleton mSingleton = Singleton.getInstance();
+        mSingleton.FilesPath = activity.getFilesDir().getPath() + '/';
+        mSingleton.BinaryPath = mSingleton.FilesPath;
+        mSingleton.PcapPath = Environment.getExternalStorageDirectory().getPath() + "/Pcap/";
+        mSingleton.userPreference = new PreferenceControler(mSingleton.FilesPath);
     }
     
     private void                buildFile(String nameFile, int ressource) throws IOException, InterruptedException {

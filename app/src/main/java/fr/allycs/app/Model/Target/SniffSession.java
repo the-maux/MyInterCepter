@@ -47,6 +47,10 @@ public class                SniffSession extends Model {
         return getMany(DNSLog.class, "SniffSession");
     }
 
+    public String           getDate() {
+        return new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE).format(date);
+    }
+
     public                  SniffSession() {
         super();
     }

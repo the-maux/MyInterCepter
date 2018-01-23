@@ -1,4 +1,4 @@
-package fr.allycs.app.View.Widget.Dialog;
+package fr.allycs.app.View.Widget.Dialog.BottomSheet;
 
 import android.app.Activity;
 import android.content.Intent;

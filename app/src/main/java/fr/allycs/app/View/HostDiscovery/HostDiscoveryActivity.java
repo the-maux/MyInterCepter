@@ -24,12 +24,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Core.Tools.Intercepter;
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Misc.MyFragment;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
+import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
@@ -91,11 +91,12 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     private void                    init()  throws Exception {
+        NetUtils.initNetworkInfo(this);
         if (mSingleton.network == null || mSingleton.network.myIp == null) {
             showSnackbar("You need to be connected to a network");
             finish();
         } else {
-            Intercepter.initCepter(mSingleton.network.mac);
+            //Intercepter.initCepter(mSingleton.network.mac);
             initTabs();
             initFabs();
             initMonitor();
@@ -321,7 +322,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 Log.d(TAG, "Fragment mode: " + ((FragmentHistoric) HistoricFragment).mActualMode.name());
             }
         } else {
-            onBackPressed();
+            super.onBackPressed();
         }
     }
 }

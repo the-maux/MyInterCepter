@@ -1,26 +1,28 @@
 package fr.allycs.app.View.Widget.Adapter;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
-import java.io.IOException;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Misc.MyFragment;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.SniffSession;
 import fr.allycs.app.Model.Unix.Pcap;
 import fr.allycs.app.R;
+import fr.allycs.app.View.Widget.Dialog.QuestionDialog;
 import fr.allycs.app.View.Widget.Holder.SniffSessionHolder;
 
-public class SniffSessionAdapter extends RecyclerView.Adapter<SniffSessionHolder> {
-    private String              TAG = this.getClass().getName();
+public class                    SniffSessionAdapter extends RecyclerView.Adapter<SniffSessionHolder> {
+    private String              TAG = "SniffSessionAdapter";
     private MyFragment          mFragment;
     private List<SniffSession>  mSniffsession;
 
@@ -49,6 +51,63 @@ public class SniffSessionAdapter extends RecyclerView.Adapter<SniffSessionHolder
                 ((pcaps != null && !pcaps.isEmpty()) ?
                     "Sauvegardant " + pcaps.size() + " pcap " : "");
         holder.description.setText(description);
+        if (sniffSession.listPcapRecorded() != null && !sniffSession.listPcapRecorded().isEmpty())
+            holder.shareButton.setOnClickListener(onShareSession(sniffSession));
+        else
+            holder.shareButton.setVisibility(View.GONE);
+        holder.ACTION1.setOnClickListener(onClickDetail(sniffSession));
+        holder.ACTION2.setOnClickListener(onClickDelete(sniffSession));
+    }
+
+    private View.OnClickListener    onShareSession(final SniffSession sniffSession) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("application/vnd.tcpdump.pcap");
+                final File photoFile = sniffSession.listPcapRecorded().get(0).getFile();
+                shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(photoFile));
+                Intent intent = Intent.createChooser(shareIntent,
+                        "Send .pcap saved the " + sniffSession.listPcapRecorded().get(0).getDate());
+                mFragment.getActivity().startActivity(intent);
+            }
+        };
+    }
+
+    private View.OnClickListener    onClickDetail(SniffSession sniffSession) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new QuestionDialog(mFragment.getActivity())
+                        .setTitle("Non implementé")
+                        .setText("")
+                        .onPositiveButton("Je vais le faire", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
+            }
+        };
+    }
+
+    private View.OnClickListener    onClickDelete(final SniffSession session) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new QuestionDialog(mFragment.getActivity())
+                        .setTitle("Supprimer la session ?")
+                        .setText("Cette action est irreversible, etes vous sur d\'etre certains de vouloir supprimer cette record.")
+                        .onPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                session.delete();
+                                mSniffsession.remove(session);
+                                notifyDataSetChanged();
+                            }
+                        })
+                        .show();
+            }
+        };
     }
 
     public int                  getItemCount() {

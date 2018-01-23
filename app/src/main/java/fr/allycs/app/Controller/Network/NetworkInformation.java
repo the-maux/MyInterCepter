@@ -25,6 +25,11 @@ public class                NetworkInformation {
         return !(myIp.contains("0.0.0.0") || gateway.contains("0.0.0.0"));
     }
 
+    public NetworkInformation updateInfo() {
+        init();
+        return this;
+    }
+
     private void            init() {
         myIp = NetUtils.intADDRtoStringHostname(dhcpInfo.ipAddress);
         gateway = NetUtils.intADDRtoStringHostname(dhcpInfo.gateway);
@@ -37,8 +42,5 @@ public class                NetworkInformation {
         Log.d(TAG, "IP:" + myIp + "&GW:" + gateway + "&netmask=" + netmask + "&mac="+mac);
     }
 
-    public NetworkInformation updateInfo() {
-        init();
-        return this;
-    }
+
 }

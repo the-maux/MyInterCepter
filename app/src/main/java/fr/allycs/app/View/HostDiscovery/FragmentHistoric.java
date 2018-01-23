@@ -38,7 +38,6 @@ import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.Model.Target.SniffSession;
 import fr.allycs.app.Model.Unix.Pcap;
 import fr.allycs.app.R;
-import fr.allycs.app.View.HostDetail.HostDetailActivity;
 import fr.allycs.app.View.TargetMenu.TargetMenuActivity;
 import fr.allycs.app.View.Widget.Adapter.AccessPointAdapter;
 import fr.allycs.app.View.Widget.Adapter.HostDiscoveryAdapter;
@@ -99,6 +98,7 @@ public class                        FragmentHistoric extends MyFragment {
             mRV.setLayoutManager(new LinearLayoutManager(getActivity()));
         } else {
             Log.d(TAG, "Historic Mode is not set (referer from User or Discovery)");
+            onBackPressed();
         }
     }
 

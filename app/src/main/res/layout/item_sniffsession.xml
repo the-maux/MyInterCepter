@@ -7,6 +7,7 @@
     android:layout_margin="8dp"
     android:layout_marginTop="8dp"
     android:background="@color/primary_text"
+    android:minWidth="250dp"
     app:cardCornerRadius="10dp"
     app:cardElevation="12dp">
 
@@ -15,7 +16,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/primary_text"
-        android:padding="8dp">
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp">
 
         <RelativeLayout
             android:id="@+id/topView"
@@ -80,8 +83,8 @@
             android:layout_height="31dp"
             android:layout_alignWithParentIfMissing="false"
             android:layout_below="@+id/middleView"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:elevation="2dp"
             android:visibility="visible">
 
@@ -94,7 +97,7 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="4dp"
                 android:paddingRight="8dp"
-                android:text="Delete"
+                android:text="Detail"
                 android:textAllCaps="true"
                 android:textColor="@color/accent_material_dark"
                 android:textStyle="bold" />
@@ -106,7 +109,7 @@
                 android:layout_centerVertical="false"
                 android:layout_toRightOf="@+id/ACTION1"
                 android:gravity="center_vertical"
-                android:text="Detail"
+                android:text="Delete"
                 android:textAllCaps="true"
                 android:textColor="@color/accent_material_dark"
                 android:textStyle="bold" />

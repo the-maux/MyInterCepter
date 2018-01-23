@@ -23,15 +23,15 @@ import fr.allycs.app.View.DnsSpoofing.DnsActivity;
 import fr.allycs.app.View.Dora.DoraActivity;
 import fr.allycs.app.View.Scan.NmapActivity;
 import fr.allycs.app.View.Settings.SettingsActivity;
-import fr.allycs.app.View.WebServer.WebServerActivity;
 import fr.allycs.app.View.Tcpdump.WiresharkActivity;
+import fr.allycs.app.View.WebServer.WebServerActivity;
 
 /**
  * Menu
  */
 public class TargetMenuActivity extends MyActivity {
     private String              TAG = "TargetMenuActivity";
-    private TargetMenuActivity mInstance = this;
+    private TargetMenuActivity  mInstance = this;
     private CoordinatorLayout   mCoordinatorLayout;
     private Singleton           mSingleton = Singleton.getInstance();
     private enum                choice {
@@ -50,7 +50,7 @@ public class TargetMenuActivity extends MyActivity {
     }
 
     private void                initXml() {
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
+        mCoordinatorLayout = findViewById(R.id.Coordonitor);
         MyGlideLoader.coordoBackground(this, mCoordinatorLayout);
         findViewById(R.id.NmapButton).setOnClickListener(onClickButton(choice.Nmap));
         findViewById(R.id.MitmButton).setOnClickListener(onClickButton(choice.CepterMitm));

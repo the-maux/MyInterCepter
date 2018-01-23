@@ -148,6 +148,7 @@ public class                            DnsActivity extends MyActivity {
                 switch (v.getId()) {
                     case R.id.action_export:
                         final AddDnsDialog dialog = new AddDnsDialog(mInstance)
+                                .setIcon(R.drawable.dns)
                                 .setTitle("Exporter la liste des dns")
                                 .setHintText(mDnsSpoof.getDnsConf().PATH_HOST_FILE)
                                 .setHint("Name of conf file");
@@ -170,6 +171,7 @@ public class                            DnsActivity extends MyActivity {
                         break;
                     case R.id.action_import:
                         final AddDnsDialog dialog2 = new AddDnsDialog(mInstance)
+                                .setIcon(R.drawable.dns)
                                 .setTitle("Importez la liste des dns")
                                 .setHintText(mDnsSpoof.getDnsConf().PATH_HOST_FILE)
                                 .setHint("Name of file");
@@ -193,7 +195,9 @@ public class                            DnsActivity extends MyActivity {
     }
 
     private void                        onAddHostDialog() {
-        final AddDnsDialog dialog = new AddDnsDialog(mInstance).setTitle("Ajouter un domain");
+        final AddDnsDialog dialog = new AddDnsDialog(mInstance)
+                .setIcon(R.drawable.dns)
+                .setTitle("Ajouter un domain");
         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface d, int which) {

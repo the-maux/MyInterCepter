@@ -57,7 +57,8 @@ public class                    Intercepter {
      * @param MAC
      */
     public static void          initCepter(String MAC) {
-        new RootProcess("cepter getv", Singleton.getInstance().FilesPath) //Start Cepter Binary
+        Log.e("Intercepter", Singleton.getInstance().FilesPath + "cepter getv " + MAC);
+        new RootProcess("cepter getv", Singleton.getInstance().FilesPath)
                 .exec(Singleton.getInstance().FilesPath + "cepter getv " + MAC)
                 .exec("exit")
                 .closeProcess();
