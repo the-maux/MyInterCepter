@@ -28,7 +28,7 @@ public class                    Setup {
     public void                 install() throws IOException, InterruptedException {
        /*  Build directory    */
         new RootProcess("initialisation ").exec("mkdir -p /sdcard/Pcap").closeProcess();
-        new RootProcess("initialisation ").exec("mkdir -p " + mSingleton.FilesPath ).closeProcess();
+        new RootProcess("initialisation ").exec("mkdir -p " + mSingleton.FilesPath).closeProcess();
         new RootProcess("initialisation ").exec("chmod 777 " + mSingleton.FilesPath).closeProcess();
 
         buildFiles();
@@ -96,11 +96,11 @@ public class                    Setup {
     }
 
     public static void          buildPath(Activity activity) {
-        Singleton mSingleton = Singleton.getInstance();
-        mSingleton.FilesPath = activity.getFilesDir().getPath() + '/';
-        mSingleton.BinaryPath = mSingleton.FilesPath;
-        mSingleton.PcapPath = Environment.getExternalStorageDirectory().getPath() + "/Pcap/";
-        mSingleton.userPreference = new PreferenceControler(mSingleton.FilesPath);
+        Singleton singleton = Singleton.getInstance();
+        singleton.FilesPath = activity.getFilesDir().getPath() + '/';
+        singleton.BinaryPath = singleton.FilesPath;
+        singleton.PcapPath = Environment.getExternalStorageDirectory().getPath() + "Pcap/";
+        singleton.userPreference = new PreferenceControler(singleton.FilesPath);
     }
     
     private void                buildFile(String nameFile, int ressource) throws IOException, InterruptedException {
@@ -137,7 +137,7 @@ public class                    Setup {
         buildFile("archive_nmap", R.raw.nmap);
         Log.d(TAG, "unzip nmap -> " + new RootProcess("initialisation ", mSingleton.FilesPath).exec(mSingleton.BinaryPath + "busybox unzip archive_nmap").closeProcess());
 
-        Log.d(TAG, "chmod 744 " + mSingleton.BinaryPath + "/nmap/*" + " -> " + new RootProcess("initialisation ").exec("chmod 744 " + mSingleton.BinaryPath + "/nmap/*").closeProcess());
+        Log.d(TAG, "chmod 744 " + mSingleton.BinaryPath + "nmap/*" + " -> " + new RootProcess("initialisation ").exec("chmod 744 " + mSingleton.BinaryPath + "nmap/*").closeProcess());
 
         /*  ping binary    */
         buildFile("ping", R.raw.arpspoof);
