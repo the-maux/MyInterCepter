@@ -21,7 +21,7 @@ public class                        NmapControler {
     private ArrayList<String>       mMenuCommand = new ArrayList<>();
     private Singleton               mSingleton = Singleton.getInstance();
     private List<Host>              mHost = null;
-    private boolean                 mOneByOnExecution = false;
+    private boolean mIsOneByOnExecuted = false;
     private String                  actualItemMenu = "Ping scan";//Default
     private NmapParser              mNmapParser = null;
 
@@ -55,7 +55,6 @@ public class                        NmapControler {
     public ArrayList<String>        getMenuCommmands() {
         return mMenuCommand;
     }
-
 
     public String                   getNmapParamFromMenuItem(String itemMenu) {
         return mNmapParams.get(itemMenu);
@@ -127,7 +126,10 @@ public class                        NmapControler {
     }
 
     public void                     setExecAllHostInOnceExecution(boolean execAllHostInOnceExecution) {
-        this.mOneByOnExecution = execAllHostInOnceExecution;
+        this.mIsOneByOnExecuted = execAllHostInOnceExecution;
     }
 
+    public boolean                  ismOneByOnExecuted() {
+        return mIsOneByOnExecuted;
+    }
 }

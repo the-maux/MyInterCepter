@@ -57,26 +57,13 @@ public class                    NmapActivity extends MyActivity {
         initXml();
         initSpinner();
         initRecyHost();
-        if (mSingleton.hostsList == null) {
+        if (mSingleton.selectedHostsList == null || mSingleton.selectedHostsList.isEmpty()) {
             MonitorInoptionTheTarget.setText("No target selected");
         } else {
-            mListHostSelected = mSingleton.hostsList;
+            mListHostSelected = mSingleton.selectedHostsList;
             initTabswithTargets(mListHostSelected);
             monitorNmapParam.setText(nmapControler.getNmapParamFromMenuItem(nmapControler.getMenuCommmands().get(0)));
-        }
-    }
-
-    private void                initFragment() {
-        try {
-            nmapOutputFragment = new NmapOutputFragment();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.frame_container, nmapOutputFragment)
-                    .commit();
-        } catch (IllegalStateException e) {
-            showSnackbar("Error in fragment: " + e.getCause().getMessage());
-            e.getStackTrace();
-            super.onBackPressed();
+            initUIWithTarget(mListHostSelected.get(0));
         }
     }
 
@@ -101,7 +88,7 @@ public class                    NmapActivity extends MyActivity {
             }
         });
 
-        mSettings.setOnClickListener(onSwitchHeader());
+        mSettings.setOnClickListener(onClickSettingsBtn());
         monitorNmapParam.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -115,22 +102,18 @@ public class                    NmapActivity extends MyActivity {
         });
     }
 
-    private View.OnClickListener onSwitchHeader() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mNmapConfEditorLayout.getVisibility() == View.GONE &&
-                        nmapConfLayout.getVisibility() == View.GONE) {
-                    nmapConfLayout.setVisibility(View.VISIBLE);
-                } else if (mNmapConfEditorLayout.getVisibility() == View.GONE) {
-                    nmapConfLayout.setVisibility(View.GONE);
-                    mNmapConfEditorLayout.setVisibility(View.VISIBLE);
-                } else {
-                    nmapConfLayout.setVisibility(View.GONE);
-                    mNmapConfEditorLayout.setVisibility(View.GONE);
-                }
-            }
-        };
+    private void                initFragment() {
+        try {
+            nmapOutputFragment = new NmapOutputFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frame_container, nmapOutputFragment)
+                    .commit();
+        } catch (IllegalStateException e) {
+            showSnackbar("Error in fragment: " + e.getCause().getMessage());
+            e.getStackTrace();
+            super.onBackPressed();
+        }
     }
 
     private void                initSpinner() {
@@ -138,19 +121,20 @@ public class                    NmapActivity extends MyActivity {
         mNmapParamMenu.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
             @Override public void onItemSelected(MaterialSpinner view, int position, long id, String typeScan) {
                 monitorNmapParam.setText(nmapControler.getNmapParamFromMenuItem(typeScan));
+                nmapControler.setActualItemMenu(nmapControler.getNmapParamFromMenuItem(typeScan));
             }
         });
     }
 
     private void                initRecyHost() {
-        if (mSingleton.hostsList == null || mSingleton.hostsList.isEmpty()) {
-            Snackbar.make(mCoordinatorLayout, "Vous n'avez pas de targets selectionne", Snackbar.LENGTH_SHORT).show();
+        if (mSingleton.selectedHostsList == null || mSingleton.selectedHostsList.isEmpty()) {
+            Snackbar.make(mCoordinatorLayout, "Vous n'avez aucun device selectionne", Snackbar.LENGTH_SHORT).show();
         } else  {
             MonitorInoptionTheTarget.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         new RV_dialog(mInstance)
-                                .setAdapter(new HostSelectionAdapter(mInstance, mSingleton.hostsList, mListHostSelected), false)
+                                .setAdapter(new HostSelectionAdapter(mInstance, mSingleton.selectedHostsList, mListHostSelected), false)
                                 .setTitle("Choix des cibles")
                                 .onPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
@@ -193,17 +177,48 @@ public class                    NmapActivity extends MyActivity {
     }
 
     public void                 initUIWithTarget(Host host) {
-        mToolbar.setSubtitle(host.getName());
+        String subtitle = ((nmapControler.ismOneByOnExecuted()) ?
+                host.getName() :
+                mListHostSelected.size() + " device"  + ((mListHostSelected.size() >= 2) ? "s" : ""));
+        setToolbarTitle("Nmap v6.40", subtitle);
         List<Host> TmpHost = new ArrayList<>();
+        TmpHost.add(host);
         nmapControler.setHosts(TmpHost);
         MonitorInoptionTheTarget.setText(host.ip);
         monitorHostTargeted.setText(host.ip);
     }
 
+    private View.OnClickListener onClickSettingsBtn() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mNmapConfEditorLayout.getVisibility() == View.GONE &&
+                        nmapConfLayout.getVisibility() == View.GONE) {
+                    nmapConfLayout.setVisibility(View.VISIBLE);
+                } else if (mNmapConfEditorLayout.getVisibility() == View.GONE) {
+                    nmapConfLayout.setVisibility(View.GONE);
+                    mNmapConfEditorLayout.setVisibility(View.VISIBLE);
+                } else {
+                    nmapConfLayout.setVisibility(View.GONE);
+                    mNmapConfEditorLayout.setVisibility(View.GONE);
+                }
+            }
+        };
+    }
 
+    public void                 setToolbarTitle(final String title, final String subtitle) {
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (title != null)
+                    mToolbar.setTitle(title);
+                if (subtitle != null)
+                    mToolbar.setSubtitle(subtitle);
+            }
+        });
+    }
 
     public void                 showSnackbar(String txt) {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
-
 }
