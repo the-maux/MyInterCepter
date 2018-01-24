@@ -28,7 +28,6 @@ import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
 
 public class                    HostDetailFragment extends MyFragment {
     private String              TAG = "HostDetailFragment";
-
     private CoordinatorLayout   mCoordinatorLayout;
     private List<AccessPoint>   HistoricAps;
     private Singleton           mSingleton = Singleton.getInstance();

@@ -108,7 +108,7 @@ public class                    Setup {
         File file = new File(mSingleton.FilesPath + nameFile);
         file.delete();
         file.createNewFile();
-        InputStream inputStream = (nameFile.contains("cepter")) ? //Choix architecture doit etre fait sur tout les binaires
+        InputStream inputStream = (nameFile.contains("cepter")) ?
                 getCepterRessource() : mActivity.getResources().openRawResource(ressource);
         int sizeOfInputStram = inputStream.available();
         byte[] bufferDroidSheep = new byte[sizeOfInputStram];

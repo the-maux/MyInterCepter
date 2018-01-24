@@ -23,7 +23,7 @@ public class                MyGlideLoader {
                 .apply(new RequestOptions()
                         .fitCenter()
                         .override(100, 100))
-                .placeholder(R.mipmap.ic_dns_text)
+                .placeholder(R.drawable.ico)
                 .into(imageView);
     }
 

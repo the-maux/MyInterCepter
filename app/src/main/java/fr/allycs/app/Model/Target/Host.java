@@ -49,7 +49,6 @@ public class                Host extends Model {
     public                  Host(String buffer) {
         super();
         try {
-
             buffer = buffer.trim().replaceAll("\\p{Cntrl}", "?")
                     .replace("\t", " ").replace("  ", " ");
             String beg = buffer.substring(0, buffer.indexOf(":") - 1);

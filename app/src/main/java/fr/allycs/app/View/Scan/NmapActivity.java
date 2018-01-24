@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -16,18 +17,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Core.Tools.RootProcess;
+import fr.allycs.app.Controller.Core.Tools.Nmap.NmapControler;
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.Model.Target.Host;
@@ -36,47 +34,55 @@ import fr.allycs.app.View.Widget.Adapter.HostSelectionAdapter;
 import fr.allycs.app.View.Widget.Dialog.RV_dialog;
 
 public class                    NmapActivity extends MyActivity {
-    private String              TAG = this.getClass().getName();
+    private String              TAG = "NmapActivity";
     private NmapActivity        mInstance = this;
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
-    private MaterialSpinner     mSpinner;
-    private Map<String, String> mParams =  new HashMap<>();
-    private ArrayList<String>   mCmd = new ArrayList<>();
-    private TextView            host_et, params_et, Output, Monitor, targetMonitor;
-    private RelativeLayout      mRL_host, mNmapConfEditorLayout, nmapConfLayout;
-    private Host                mActualTarget = null;
+    private MaterialSpinner     mNmapParamMenu;
+    private NmapOutputFragment  nmapOutputFragment;
+    private TextView            monitorHostTargeted, monitorNmapParam;
+    private TextView            Output, MonitorInoptionTheTarget;
+    private RelativeLayout      mNmapConfEditorLayout, nmapConfLayout;
     private Toolbar             mToolbar;
     private List<Host>          mListHostSelected = new ArrayList<>();
+    private TabLayout           mTabs;
     private ImageView           mSettingsMenu;
     private ImageButton         mSettings;
-    
+    private NmapControler       nmapControler;
+
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nmap);
-        initParams();
+        nmapControler = new NmapControler();
         initXml();
         initSpinner();
         initRecyHost();
         if (mSingleton.hostsList == null) {
-            targetMonitor.setText("no target");
+            MonitorInoptionTheTarget.setText("No target selected");
         } else {
-            newTarget(mSingleton.hostsList.get(0));
+            initTabswithTargets(mSingleton.hostsList);
+            initFragment();
+            monitorNmapParam.setText(nmapControler.getNmapParamFromMenuItem(nmapControler.getMenuCommmands().get(0)));
         }
+    }
+
+    private void                initFragment() {
+        //TODO: FAIRE LE LIEN
+        // Passez le (RV + TextView Output) dans le fragment
+        // Faire le mode sans Target
     }
 
     private void                initXml() {
         mCoordinatorLayout = findViewById(R.id.Coordonitor);
-        mSpinner = findViewById(R.id.spinnerTypeScan);
-        host_et = (EditText) findViewById(R.id.hostEditext);
-        params_et = (EditText) findViewById(R.id.binParamsEditText);
-        mRL_host = findViewById(R.id.RL_host);
+        mNmapParamMenu = findViewById(R.id.spinnerTypeScan);
+        monitorHostTargeted = (EditText) findViewById(R.id.hostEditext);
+        monitorNmapParam = (EditText) findViewById(R.id.nmapMonitorParameter);
+        mTabs = findViewById(R.id.tabs);
         mToolbar = findViewById(R.id.toolbar);
         Output = findViewById(R.id.Output);
         Output.setMovementMethod(new ScrollingMovementMethod());
-        Monitor = findViewById(R.id.Monitor);
         mSettingsMenu = findViewById(R.id.settingsMenu);
-        targetMonitor = findViewById(R.id.targetMonitor);
+        MonitorInoptionTheTarget = findViewById(R.id.targetMonitor);
         mSettings = findViewById(R.id.settings);
         mNmapConfEditorLayout = findViewById(R.id.nmapConfEditorLayout);
         nmapConfLayout = findViewById(R.id.nmapConfLayout);
@@ -84,16 +90,16 @@ public class                    NmapActivity extends MyActivity {
             @Override
             public void onClick(View v) {
                 Utils.vibrateDevice(mInstance);
-                execNmap();
+                nmapControler.start(Output, mInstance);
             }
         });
         mSettings.setOnClickListener(onSwitchHeader());
-        params_et.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+        monitorNmapParam.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 Log.d(TAG, "onEditorAction : " + actionId + " event:" + event);
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    execNmap();
+                    nmapControler.start(Output, mInstance);
                     return true;
                 }
                 return false;
@@ -120,42 +126,19 @@ public class                    NmapActivity extends MyActivity {
     }
 
     private void                initSpinner() {
-        mSpinner.setItems(mCmd);
-        mSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+        mNmapParamMenu.setItems(nmapControler.getMenuCommmands());
+        mNmapParamMenu.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
             @Override public void onItemSelected(MaterialSpinner view, int position, long id, String typeScan) {
-                params_et.setText(mParams.get(typeScan));
+                monitorNmapParam.setText(nmapControler.getNmapParamFromMenuItem(typeScan));
             }
         });
-    }
-
-    private void                initParams() {
-        mCmd.add("Ping scan");
-        mCmd.add("Quick scan");
-        mCmd.add("Quick scan plus");
-        mCmd.add("Quick traceroute");
-        mCmd.add("Regular scan");
-        mCmd.add("Intrusive scan");
-        mCmd.add("Intense Scan");
-        mCmd.add("Intense scan plus UDP");
-        mCmd.add("Intense scan, all TCP ports");
-        mCmd.add("Intense scan, no ping");
-        mParams.put(mCmd.get(0), " -sn");
-        mParams.put(mCmd.get(1), " -T4 -F");
-        mParams.put(mCmd.get(2), " -sV -T4 -O -F --version-light");
-        mParams.put(mCmd.get(3), " -sn --traceroute");
-        mParams.put(mCmd.get(4), " ");
-        mParams.put(mCmd.get(5), " -sS -sU -T4 -A -v -PE -PP -PS80,443 -PA3389 -PU40125 -PY -g 53 ");
-        mParams.put(mCmd.get(6), " -T4 -A -v");
-        mParams.put(mCmd.get(7), " -sS -sU -T4 -A -v");
-        mParams.put(mCmd.get(8), " -p 1-65535 -T4 -A -v");
-        mParams.put(mCmd.get(9), " -T4 -A -v -Pn");
     }
 
     private void                initRecyHost() {
         if (mSingleton.hostsList == null || mSingleton.hostsList.isEmpty()) {
             Snackbar.make(mCoordinatorLayout, "Vous n'avez pas de targets selectionne", Snackbar.LENGTH_SHORT).show();
         } else  {
-                mRL_host.setOnClickListener(new View.OnClickListener() {
+            MonitorInoptionTheTarget.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         new RV_dialog(mInstance)
@@ -167,7 +150,7 @@ public class                    NmapActivity extends MyActivity {
                                         if (mListHostSelected.isEmpty())
                                             Snackbar.make(mCoordinatorLayout, "No target selected", Snackbar.LENGTH_LONG).show();
                                         else {
-                                            newTarget(mListHostSelected.get(0));
+                                            initTabswithTargets(mListHostSelected);
                                             Snackbar.make(mCoordinatorLayout, mListHostSelected.size() + " target", Snackbar.LENGTH_LONG).show();
                                         }
                                     }
@@ -177,46 +160,49 @@ public class                    NmapActivity extends MyActivity {
             }
         }
 
-    public void                 newTarget(Host host) {
-        mActualTarget = host;
-        host_et.setText(host.ip);
-        mListHostSelected.add(host);
-        mToolbar.setSubtitle(host.ip);
-        host_et.setText(host.ip);
-        params_et.setText(mParams.get(mCmd.get(0)));
-        targetMonitor.setText(mListHostSelected.size() + " target");
-    }
-
-    private void                execNmap() {
-        Output.setText("roo$Wait...");
-        final String cmd = mSingleton.FilesPath + "nmap/nmap " + host_et.getText() + " " + params_et.getText() + " ";
-        Monitor.setVisibility(View.VISIBLE);
-        Monitor.setText(cmd.replace("nmap/nmap","nmap").replace("\n", "").replace(mSingleton.FilesPath, ""));
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    BufferedReader reader = new BufferedReader(new RootProcess("Nmap", mSingleton.FilesPath)//Exec and > in BufferedReader
-                            .exec(cmd).getInputStreamReader());
-                    String dumpOutput, tmp;
-                    StringBuilder dumpOutputBuilder = new StringBuilder();
-                    while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {
-                        dumpOutputBuilder.append(tmp).append('\n');
+    public void                 initTabswithTargets(final List<Host> hosts) {
+        mTabs.removeAllTabs();
+        for (Host host : hosts) {
+            TabLayout.Tab tabItem = mTabs.newTab();
+            tabItem.setText(host.ip);
+        }
+        mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            public void onTabSelected(TabLayout.Tab tab) {
+                String ipHostSelected = tab.getText().toString().replace("\n", " ");
+                Log.d(TAG, "onTabSelected:[" + ipHostSelected + "]");
+                for (Host host : hosts) {
+                    if (host.ip.contentEquals(ipHostSelected)) {
+                        initUIWithTarget(host);
+                        nmapOutputFragment.refresh(host);
+                        break;
                     }
-                    dumpOutputBuilder.append(tmp);
-                    Log.d(TAG, "Nmap final stdouT" + dumpOutputBuilder.toString());
-                    final String finalDumpOutput = dumpOutputBuilder.toString();
-                    mInstance.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Output.setText(finalDumpOutput);
-                            Monitor.setVisibility(View.GONE);
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
-        }).start();
+            public void onTabUnselected(TabLayout.Tab tab) {}
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
     }
+
+    public void                 initUIWithTarget(Host host) {
+        mListHostSelected.add(host);
+        mToolbar.setSubtitle(host.getName());
+        //TODO un nmapControler par fragment ?
+        nmapControler.setHosts(mListHostSelected);
+        MonitorInoptionTheTarget.setText(host.ip);
+        monitorHostTargeted.setText(host.ip);
+    }
+
+    public void                 flushOutput(final String stdout) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Output.setText(Output.getText() + "\nroot$> " + stdout);
+            }
+        });
+    }
+
+    public void                 showSnackbar(String txt) {
+        Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
+    }
+
 }
