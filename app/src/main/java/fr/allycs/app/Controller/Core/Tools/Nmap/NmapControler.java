@@ -1,7 +1,6 @@
 package fr.allycs.app.Controller.Core.Tools.Nmap;
 
 import android.util.Log;
-import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +12,7 @@ import java.util.Map;
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Core.Tools.RootProcess;
 import fr.allycs.app.Model.Target.Host;
-import fr.allycs.app.View.Scan.NmapActivity;
+import fr.allycs.app.View.Scan.NmapOutputFragment;
 
 public class                        NmapControler {
     private String                  TAG = "NmapControler";
@@ -82,27 +81,24 @@ public class                        NmapControler {
         return Binary + hostFilter + " " + parameter + " ";
     }
 
-    public void                     start(final TextView Output, final NmapActivity activity) {
+    public void                     start(final NmapOutputFragment nmapOutputFragment) {
         if (mHost != null) {
             final String cmd = buildCommand();
             String trimmed_cmd = "root$> " + cmd
                     .replace("nmap/nmap", "nmap").replace("\n", "")
                     .replace(mSingleton.FilesPath, "");
-            Output.setText(trimmed_cmd);
-            stdoutToBuffer(cmd, activity);
+
+            stdoutToBuffer(cmd, nmapOutputFragment);
         } else {
-            if (activity != null)
-                activity.showSnackbar("Can\'t exec nmap without target selected");
             Log.e(TAG, "No client selected when launched");
         }
     }
 
-    private void                    stdoutToBuffer(final String cmd, final NmapActivity activity) {
+    private void                    stdoutToBuffer(final String cmd, final NmapOutputFragment fragment) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-
                     BufferedReader reader = new RootProcess("Nmap", mSingleton.FilesPath)
                             .exec(cmd).getReader();
                     String tmp;
@@ -111,11 +107,10 @@ public class                        NmapControler {
                         dumpOutputBuilder.append(tmp).append('\n');
                     }
                     dumpOutputBuilder.append(tmp);
-                    if (activity != null) {
+                    if (fragment != null) {
                         Log.d(TAG, "Nmap STDOUT LIVE MODE");
-                        activity.flushOutput(dumpOutputBuilder.toString());
-                    }
-                    else {
+                        fragment.flushOutput(dumpOutputBuilder.toString());
+                    } else {
                         Log.d(TAG, "Nmap STDOUT PARSING MODE");
                         new NmapParser(mInstance).parseStdout(dumpOutputBuilder.toString());
                     }
@@ -126,8 +121,6 @@ public class                        NmapControler {
             }
         }).start();
     }
-
-
 
     public void                     setHosts(List<Host> hosts) {
         this.mHost = hosts;

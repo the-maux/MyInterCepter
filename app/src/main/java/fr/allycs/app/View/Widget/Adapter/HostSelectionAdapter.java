@@ -24,7 +24,8 @@ public class                    HostSelectionAdapter extends RecyclerView.Adapte
                                                      List<Host> hostsSelected) {
         this.mHosts = hostsList;
         this.mActivity = activity;
-        mListHostSelected.clear();
+        if (mListHostSelected != null)
+            mListHostSelected.clear();
         this.mListHostSelected = hostsSelected;
     }
 

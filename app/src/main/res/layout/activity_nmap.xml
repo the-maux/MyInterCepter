@@ -84,36 +84,6 @@
                 android:background="@color/primary_text"
                 app:tabMode="scrollable">
 
-                <android.support.design.widget.TabItem
-                    android:id="@+id/radar5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="192.168.0.1" />
-
-                <android.support.design.widget.TabItem
-                    android:id="@+id/radar4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="192.168.0.1" />
-
-                <android.support.design.widget.TabItem
-                    android:id="@+id/radar3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="192.168.0.1" />
-
-                <android.support.design.widget.TabItem
-                    android:id="@+id/radar2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="192.168.0.1" />
-
-                <android.support.design.widget.TabItem
-                    android:id="@+id/radar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="192.168.0.1" />
-
             </android.support.design.widget.TabLayout>
 
         </RelativeLayout>
@@ -262,18 +232,12 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/nmapConfEditorLayout">
 
-            <TextView
-                android:id="@+id/Output"
+            <FrameLayout
+                android:id="@+id/frame_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentBottom="true"
+                />
 
-                android:background="#F2000000"
-                android:maxLines="200"
-                android:padding="16dp"
-                android:scrollbars="vertical"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp" />
         </RelativeLayout>
 
         <android.support.design.widget.FloatingActionButton

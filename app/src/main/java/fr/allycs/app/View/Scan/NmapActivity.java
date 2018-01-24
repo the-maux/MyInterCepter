@@ -7,7 +7,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.Toolbar;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -41,7 +40,7 @@ public class                    NmapActivity extends MyActivity {
     private MaterialSpinner     mNmapParamMenu;
     private NmapOutputFragment  nmapOutputFragment;
     private TextView            monitorHostTargeted, monitorNmapParam;
-    private TextView            Output, MonitorInoptionTheTarget;
+    private TextView            MonitorInoptionTheTarget;
     private RelativeLayout      mNmapConfEditorLayout, nmapConfLayout;
     private Toolbar             mToolbar;
     private List<Host>          mListHostSelected = new ArrayList<>();
@@ -54,22 +53,31 @@ public class                    NmapActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nmap);
         nmapControler = new NmapControler();
+        initFragment();
         initXml();
         initSpinner();
         initRecyHost();
         if (mSingleton.hostsList == null) {
             MonitorInoptionTheTarget.setText("No target selected");
         } else {
-            initTabswithTargets(mSingleton.hostsList);
-            initFragment();
+            mListHostSelected = mSingleton.hostsList;
+            initTabswithTargets(mListHostSelected);
             monitorNmapParam.setText(nmapControler.getNmapParamFromMenuItem(nmapControler.getMenuCommmands().get(0)));
         }
     }
 
     private void                initFragment() {
-        //TODO: FAIRE LE LIEN
-        // Passez le (RV + TextView Output) dans le fragment
-        // Faire le mode sans Target
+        try {
+            nmapOutputFragment = new NmapOutputFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frame_container, nmapOutputFragment)
+                    .commit();
+        } catch (IllegalStateException e) {
+            showSnackbar("Error in fragment: " + e.getCause().getMessage());
+            e.getStackTrace();
+            super.onBackPressed();
+        }
     }
 
     private void                initXml() {
@@ -79,8 +87,7 @@ public class                    NmapActivity extends MyActivity {
         monitorNmapParam = (EditText) findViewById(R.id.nmapMonitorParameter);
         mTabs = findViewById(R.id.tabs);
         mToolbar = findViewById(R.id.toolbar);
-        Output = findViewById(R.id.Output);
-        Output.setMovementMethod(new ScrollingMovementMethod());
+
         mSettingsMenu = findViewById(R.id.settingsMenu);
         MonitorInoptionTheTarget = findViewById(R.id.targetMonitor);
         mSettings = findViewById(R.id.settings);
@@ -90,16 +97,17 @@ public class                    NmapActivity extends MyActivity {
             @Override
             public void onClick(View v) {
                 Utils.vibrateDevice(mInstance);
-                nmapControler.start(Output, mInstance);
+                nmapControler.start(nmapOutputFragment);
             }
         });
+
         mSettings.setOnClickListener(onSwitchHeader());
         monitorNmapParam.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 Log.d(TAG, "onEditorAction : " + actionId + " event:" + event);
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    nmapControler.start(Output, mInstance);
+                    nmapControler.start(nmapOutputFragment);
                     return true;
                 }
                 return false;
@@ -165,11 +173,12 @@ public class                    NmapActivity extends MyActivity {
         for (Host host : hosts) {
             TabLayout.Tab tabItem = mTabs.newTab();
             tabItem.setText(host.ip);
+            mTabs.addTab(tabItem);
         }
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             public void onTabSelected(TabLayout.Tab tab) {
                 String ipHostSelected = tab.getText().toString().replace("\n", " ");
-                Log.d(TAG, "onTabSelected:[" + ipHostSelected + "]");
+                Log.d(TAG, "onSelectedTab host :[" + ipHostSelected + "]");
                 for (Host host : hosts) {
                     if (host.ip.contentEquals(ipHostSelected)) {
                         initUIWithTarget(host);
@@ -184,22 +193,14 @@ public class                    NmapActivity extends MyActivity {
     }
 
     public void                 initUIWithTarget(Host host) {
-        mListHostSelected.add(host);
         mToolbar.setSubtitle(host.getName());
-        //TODO un nmapControler par fragment ?
-        nmapControler.setHosts(mListHostSelected);
+        List<Host> TmpHost = new ArrayList<>();
+        nmapControler.setHosts(TmpHost);
         MonitorInoptionTheTarget.setText(host.ip);
         monitorHostTargeted.setText(host.ip);
     }
 
-    public void                 flushOutput(final String stdout) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Output.setText(Output.getText() + "\nroot$> " + stdout);
-            }
-        });
-    }
+
 
     public void                 showSnackbar(String txt) {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
