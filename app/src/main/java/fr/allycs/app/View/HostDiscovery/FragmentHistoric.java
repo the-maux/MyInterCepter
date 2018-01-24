@@ -109,8 +109,8 @@ public class                        FragmentHistoric extends MyFragment {
     }
 
     private void                    initXml(View rootView) {
-        mRV = (RecyclerView) rootView.findViewById(R.id.recycler_view);
-        mEmptyList = (TextView) rootView.findViewById(R.id.emptyList);
+        mRV = rootView.findViewById(R.id.recycler_view);
+        mEmptyList = rootView.findViewById(R.id.emptyList);
         mDetailSessionLayout = rootView.findViewById(R.id.detailSessionLayout);
         mDetailSessionLayout.setVisibility(View.GONE);
 
