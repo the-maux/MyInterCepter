@@ -85,7 +85,7 @@ public class                        FragmentHistoric extends MyFragment {
             switch (getArguments().getString("mode")) {
                 case HOST_HISTORIC:
                     mHistoricMODE = HOST_HISTORIC;
-                    mFocusedHost = mSingleton.hostsList.get(0);
+                    mFocusedHost = mSingleton.selectedHostsList.get(0);
                     initHistoricFromDB(mFocusedHost);
                     break;
                 case DB_HISTORIC:
@@ -138,7 +138,6 @@ public class                        FragmentHistoric extends MyFragment {
         subtitleService = rootView.findViewById(R.id.SubtitleServices);
         typeScan = rootView.findViewById(R.id.TypeOfScan);
         nbrServiceDiscovered = rootView.findViewById(R.id.nbrServiceDiscovered);
-
     }
 
     private void                    initHistoricFromDB() /* All Session, no filter*/{

@@ -35,11 +35,11 @@ public class HostDetailActivity extends MyActivity {
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hostdetail);
-        if (mSingleton.hostsList == null || mSingleton.hostsList.isEmpty()) {
+        if (mSingleton.selectedHostsList == null || mSingleton.selectedHostsList.isEmpty()) {
             Snackbar.make(findViewById(R.id.Coordonitor), "Vous n'avez selectionner aucune target", Snackbar.LENGTH_LONG).show();
             onBackPressed();
         } else {
-            mFocusedHost = mSingleton.hostsList.get(0);
+            mFocusedHost = mSingleton.selectedHostsList.get(0);
             initXml();
             initMenu();
             initFragment();

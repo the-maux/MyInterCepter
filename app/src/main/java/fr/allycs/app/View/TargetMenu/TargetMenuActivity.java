@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
+import android.util.Log;
 import android.view.View;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -18,6 +19,7 @@ import fr.allycs.app.Controller.Core.Tools.Tcpdump.Tcpdump;
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Controller.Misc.Utils;
+import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.DnsSpoofing.DnsActivity;
 import fr.allycs.app.View.Dora.DoraActivity;
@@ -35,31 +37,40 @@ public class TargetMenuActivity extends MyActivity {
     private CoordinatorLayout   mCoordinatorLayout;
     private Singleton           mSingleton = Singleton.getInstance();
     private enum                choice {
-        Nmap, CepterMitm, ARPCage, DnsSpoofing, Wireshark, DoraDiagnostic, Metasploit, Settings
+        Nmap, CepterMitm, ARPCage, DnsSpoofing, Wireshark, DoraDiagnostic, WebServer, Settings
     }
 
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         initXml();
+        if (mSingleton.DebugMode) {
+            Log.d(TAG, "Dump des HOST SELECTED: " +
+                    ((mSingleton.selectedHostsList == null) ? "MODE NO DEVICE": ""));
+            if (mSingleton.selectedHostsList != null) {
+                for (Host host : mSingleton.selectedHostsList) {
+                    Log.d(TAG, "\t - " + host.toString());
+                }
+            }
+        }
     }
 
     protected void              onResume() {
         super.onResume();
-        initflags();
-    }
-
-    private void                initXml() {
-        mCoordinatorLayout = findViewById(R.id.Coordonitor);
-        MyGlideLoader.coordoBackground(this, mCoordinatorLayout);
         findViewById(R.id.NmapButton).setOnClickListener(onClickButton(choice.Nmap));
         findViewById(R.id.MitmButton).setOnClickListener(onClickButton(choice.CepterMitm));
         findViewById(R.id.ArpButton).setOnClickListener(onClickButton(choice.ARPCage));
         findViewById(R.id.DnsButton).setOnClickListener(onClickButton(choice.DnsSpoofing));
         findViewById(R.id.WiresharkButton).setOnClickListener(onClickButton(choice.Wireshark));
         findViewById(R.id.DoraDiagnostic).setOnClickListener(onClickButton(choice.DoraDiagnostic));
-        findViewById(R.id.Metasploit).setOnClickListener(onClickButton(choice.Metasploit));
+        findViewById(R.id.Metasploit).setOnClickListener(onClickButton(choice.WebServer));
         findViewById(R.id.SettingsButton).setOnClickListener(onClickButton(choice.Settings));
+        initflags();
+    }
+
+    private void                initXml() {
+        mCoordinatorLayout = findViewById(R.id.Coordonitor);
+        MyGlideLoader.coordoBackground(this, mCoordinatorLayout);
     }
 
     private void                initflags() {
@@ -84,12 +95,12 @@ public class TargetMenuActivity extends MyActivity {
                 Utils.vibrateDevice(mInstance);
                 Class choice = TargetMenuActivity.class;
                 Intent intent;
-                Pair<View, String> p1, p2, p3, p4;
+                Pair<View, String> p1;
                 ActivityOptionsCompat options = null;
                 switch (clickChoice) {
                     case Nmap:
                         choice = NmapActivity.class;
-                        p1 = Pair.create(findViewById(R.id.imageView), "NmapIconTransition");
+                        p1 = Pair.create(findViewById(R.id.nmapImage), "NmapIconTransition");
                         options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1);
                         break;
                     case CepterMitm:
@@ -102,31 +113,28 @@ public class TargetMenuActivity extends MyActivity {
                         break;
                     case DnsSpoofing:
                         choice = DnsActivity.class;
-                        p1 = Pair.create((View)findViewById(R.id.imageView8), "iconDNS");
+                        p1 = Pair.create(findViewById(R.id.dnsImage), "iconDNS");
                         options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1);
                         break;
                     case Wireshark:
-                        if (Singleton.getInstance().hostsList == null) {
+                        if (Singleton.getInstance().selectedHostsList == null) {
                             Snackbar.make(mCoordinatorLayout, "Wireshark needs target(s) to work", Snackbar.LENGTH_LONG).show();
                             choice = null;
                         } else {
                             choice = WiresharkActivity.class;
-                            p1 = Pair.create(findViewById(R.id.imageView3), "wiresharkIcon");
+                            p1 = Pair.create(findViewById(R.id.wiresharkImage), "wiresharkIcon");
                             options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1);
                         }
                         break;
                     case DoraDiagnostic:
-                        if (Singleton.getInstance().hostsList == null) {
+                        if (Singleton.getInstance().selectedHostsList == null) {
                             Snackbar.make(mCoordinatorLayout, "Dora needs target(s) to work", Snackbar.LENGTH_LONG).show();
                             choice = null;
                         } else {
                             choice = DoraActivity.class;
-//                            p1 = Pair.create((View)findViewById(R.id.imageView3), "");
-//                            options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1);
                         }
                         break;
-                    case Metasploit:
-                        //Snackbar.make(mCoordinatorLayout, "Fonctionnalité Metasploit non implémenté", Snackbar.LENGTH_LONG).show();
+                    case WebServer:
                         choice = WebServerActivity.class;
                         break;
                     case Settings:

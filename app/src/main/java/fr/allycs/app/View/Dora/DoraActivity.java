@@ -48,16 +48,15 @@ public class                    DoraActivity extends MyActivity {
     }
 
     private void                initXml() {
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.Coordonitor);
+        mCoordinatorLayout = findViewById(R.id.Coordonitor);
         MyGlideLoader.coordoBackground(this, mCoordinatorLayout);
-
-        searchView = (SearchView) findViewById(R.id.searchView);
-        radar = (TabItem) findViewById(R.id.radar);
-        signalQuality = (TabItem) findViewById(R.id.signalQuality);
-        add = (ImageView) findViewById(R.id.add);
-        more = (ImageView) findViewById(R.id.action_add_host);
-        mRV_dora = (RecyclerView) findViewById(R.id.RV_dora);
-        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        searchView =  findViewById(R.id.searchView);
+        radar = findViewById(R.id.radar);
+        signalQuality = findViewById(R.id.signalQuality);
+        add = findViewById(R.id.add);
+        more = findViewById(R.id.action_add_host);
+        mRV_dora = findViewById(R.id.RV_dora);
+        mFab = findViewById(R.id.fab);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

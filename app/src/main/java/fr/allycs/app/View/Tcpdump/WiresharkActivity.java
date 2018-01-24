@@ -68,7 +68,7 @@ public class                    WiresharkActivity extends MyActivity {
         initFilter();
         initSettings();
         initRV();
-        setToolbarTitle(null, "Cible " + mSingleton.hostsList.get(0));
+        setToolbarTitle(null, "Cible " + mSingleton.selectedHostsList.get(0));
         if (mTcpdump.isRunning)
             mFab.setImageResource(R.mipmap.ic_pause);
     }
@@ -165,7 +165,7 @@ public class                    WiresharkActivity extends MyActivity {
 
     private void                onClickChoiceTarget() {
         new RV_dialog(this)
-                .setAdapter(new HostSelectionAdapter(this, mSingleton.hostsList, mListHostSelected), false)
+                .setAdapter(new HostSelectionAdapter(this, mSingleton.selectedHostsList, mListHostSelected), false)
                 .setTitle("Choix des cibles")
                 .onPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -227,8 +227,8 @@ public class                    WiresharkActivity extends MyActivity {
 
     private boolean             startTcpdump() {
         if (mListHostSelected.isEmpty()) {
-            if (mSingleton.hostsList.size() == 1) {//Automatic selection when 1 target only
-                mListHostSelected.add(mSingleton.hostsList.get(0));
+            if (mSingleton.selectedHostsList.size() == 1) {//Automatic selection when 1 target only
+                mListHostSelected.add(mSingleton.selectedHostsList.get(0));
                 mToolbar.setSubtitle(mListHostSelected.size() + " target");
             } else {
                 Snackbar.make(mCoordinatorLayout, "Selectionner une target", Snackbar.LENGTH_SHORT)

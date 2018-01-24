@@ -47,12 +47,12 @@ public class                    HostDetailFragment extends MyFragment {
     public View                 onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_hostdetail, container, false);
         initXml(rootView);
-        if (mSingleton.hostsList == null) {
+        if (mSingleton.selectedHostsList == null) {
             Snackbar.make(mCoordinatorLayout, "No target saved, You need to scan the network", Snackbar.LENGTH_LONG).show();
             startActivity(new Intent(getActivity(), HostDiscoveryActivity.class));
             getActivity().finish();
         }
-        mFocusedHost = mSingleton.hostsList.get(0);
+        mFocusedHost = mSingleton.selectedHostsList.get(0);
         if (mRV.getVisibility() == View.GONE) {
             mDetailSessionLayout.setVisibility(View.GONE);
             mRV.setVisibility(View.VISIBLE);
@@ -76,11 +76,11 @@ public class                    HostDetailFragment extends MyFragment {
 
     public void                 focusOneTarget(Host host) {
         mSingleton.actualSession = mActivity.actualSession;
-        if (mSingleton.hostsList == null)
-            mSingleton.hostsList = new ArrayList<>();
+        if (mSingleton.selectedHostsList == null)
+            mSingleton.selectedHostsList = new ArrayList<>();
         else
-            mSingleton.hostsList.clear();
-        mSingleton.hostsList.add(host);
+            mSingleton.selectedHostsList.clear();
+        mSingleton.selectedHostsList.add(host);
         Intent intent = new Intent(mActivity, HostDetailActivity.class);
         startActivity(intent);
     }

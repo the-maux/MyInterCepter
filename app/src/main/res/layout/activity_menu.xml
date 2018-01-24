@@ -113,7 +113,7 @@
                             android:textSize="18sp" />
 
                         <ImageView
-                            android:id="@+id/imageView"
+                            android:id="@+id/nmapImage"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_below="@+id/monitorNmap"
@@ -224,7 +224,7 @@
                             android:textSize="18sp" />
 
                         <ImageView
-                            android:id="@+id/imageView8"
+                            android:id="@+id/dnsImage"
                             android:layout_width="45dp"
                             android:layout_height="45dp"
                             android:layout_below="@+id/monitorDNS"
@@ -285,7 +285,7 @@
                             android:textSize="18sp" />
 
                         <ImageView
-                            android:id="@+id/imageView3"
+                            android:id="@+id/wiresharkImage"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_below="@+id/monitorWireshark"

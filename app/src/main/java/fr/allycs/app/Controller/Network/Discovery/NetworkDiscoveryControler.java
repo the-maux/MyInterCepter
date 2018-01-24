@@ -72,7 +72,7 @@ public class                        NetworkDiscoveryControler {
 
     private void                    startNmapScan() {
         mActivity.showSnackbar("Not implémented");
-        inLoading = false;
+
     }
 
     public void                     onReachableScanOver(ArrayList<String> ipReachable) {

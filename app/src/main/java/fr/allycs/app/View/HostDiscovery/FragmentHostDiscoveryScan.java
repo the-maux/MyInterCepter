@@ -23,6 +23,7 @@ import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
 
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
@@ -80,6 +81,10 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         if (!mHostLoaded && !mScannerControler.inLoading) {
             startNetworkScan();
             return true;
+        }
+        if (mSingleton.DebugMode) {
+            Log.d(TAG, "mHostLoaded:" + mHostLoaded);
+            Log.d(TAG, "mScannerControler.inLoading:" + mScannerControler.inLoading);
         }
         return mScannerControler.inLoading;
     }
@@ -142,6 +147,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     }
 
     public void                     startNetworkScan() {
+        Log.d(TAG, "startNetworkScan");
         mActivity.setProgressState(-1);
         if (!mScannerControler.inLoading) {
             try {
@@ -169,16 +175,58 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         }
     }
 
+    private ArrayList<Host>         extractAndDumpSelectedHost(ArrayList<Host> hostList) {
+        ArrayList<Host> selectedHost = new ArrayList<>();
+        try {
+            boolean noTargetSelected = true;
+            FileOutputStream out = mActivity.openFileOutput("targets", 0);
+            for (Host host : hostList) {
+                if (host.selected) {
+                    Log.d(TAG, host.ip + " is selected");
+                    selectedHost.add(host);
+                    noTargetSelected = false;
+                    String dumpHost = host.ip + ":" + host.mac + "\n";
+                    out.write(dumpHost.getBytes());
+                } else
+                    Log.d(TAG, host.ip + " is not selected");
+            }
+            out.close();
+            if (noTargetSelected) {
+                mActivity.showSnackbar("No target selected!");
+                return null;
+            }
+            return selectedHost;
+        } catch (Exception e) {
+            e.getStackTrace();
+            return null;
+        }
+    }
+
+    public void                     launchMenu() {
+        Log.d(TAG, "launchMenu()");
+        mSingleton.selectedHostsList = extractAndDumpSelectedHost(mHosts);
+        if (mSingleton.DebugMode) {
+            Log.d(TAG, "mSingleton.selectedHostsList" + mSingleton.selectedHostsList);
+            Log.d(TAG, "mSingleton.hostsListSize:" +
+                    ((mSingleton.selectedHostsList != null) ? mSingleton.selectedHostsList.size() : "0"));
+        }
+    }
+
     public void                     onHostActualized(final ArrayList<Host> hosts) {
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                Log.d(TAG, "onHostActualize::" + ((hosts == null) ? "null" : hosts.size() + " devices"));
                 mHosts = hosts;
                 mActivity.setProgressState(mActivity.MAXIMUM_PROGRESS);
-                mHostAdapter.updateHostList(mHosts);
+                mSingleton.selectedHostsList = mHosts;
+                mHostAdapter.updateHostList(mSingleton.selectedHostsList);
                 mScannerControler.inLoading = false;
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
-                setTitleToolbar(null, mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": ""));
+                setTitleToolbar(mScannerControler.getSSID(), mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": ""));
+                mSwipeRefreshLayout.setRefreshing(false);
+                mHostLoaded = true;
+
                 mActivity.actualSession =
                         DBSession.buildSession(mScannerControler.getSSID(),
                                 mSingleton.network.gateway,
@@ -186,9 +234,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                                 "Icmp",
                                 mHostAdapter.getOsList());
                 mSingleton.actualSession = mActivity.actualSession;
-                mSwipeRefreshLayout.setRefreshing(false);
-                mHostLoaded = true;
-                mSingleton.hostsList = mHosts;
             }
         });
     }

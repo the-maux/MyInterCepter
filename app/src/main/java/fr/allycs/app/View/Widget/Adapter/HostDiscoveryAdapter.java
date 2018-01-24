@@ -71,8 +71,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
     }
 
     private void                isItMyDevice(Host host, HostDiscoveryHolder holder) {
-        if (host.ip.contains(Singleton.getInstance().network.myIp) &&
-                Singleton.getInstance().network.myIp.length() == host.ip.length()) {
+        if (host.ip.contains(Singleton.getInstance().network.myIp)) {
             holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.primary_dark));
             holder.ipHostname.setText(host.ip + " " + host.getName() + " MY DEVICE");
         } else {
@@ -81,8 +80,10 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
     }
 
     private void                 onHostChecked(final HostDiscoveryHolder holder, Host host, final int position) {
+        Utils.vibrateDevice(mActivity);
         host.selected = !host.selected;
         holder.selected.setSelected(host.selected);
+        Log.d(TAG, "onHostChecked::" + host.ip + ":" + host.selected);
         mHost_RV.post(new Runnable() {
             @Override
             public void run() {
@@ -95,7 +96,6 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.vibrateDevice(mActivity);
                 onHostChecked(holder, mHosts.get(position), position);
             }
         };
@@ -108,11 +108,11 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                     @Override
                     public void run() {
                         Utils.vibrateDevice(mActivity);
-                        if (mSingleton.hostsList == null)
-                            mSingleton.hostsList = new ArrayList<>();
+                        if (mSingleton.selectedHostsList == null)
+                            mSingleton.selectedHostsList = new ArrayList<>();
                         else
-                            mSingleton.hostsList.clear();
-                        mSingleton.hostsList.add(host);
+                            mSingleton.selectedHostsList.clear();
+                        mSingleton.selectedHostsList.add(host);
                         Intent intent = new Intent(mActivity, HostDetailActivity.class);
                         Pair<View, String> p1 = Pair.create((View)holder.osIcon, "hostPicture");
                         Pair<View, String> p2 = Pair.create((View)holder.ipHostname, "hostTitle");

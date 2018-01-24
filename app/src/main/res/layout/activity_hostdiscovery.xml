@@ -133,7 +133,6 @@
 			android:layout_alignParentEnd="false"
 			android:layout_centerHorizontal="true"
 			android:background="@color/primary_text"
-			android:elevation="6dp"
 			android:gravity="right"
 			android:lines="2"
 			android:paddingBottom="2dp"

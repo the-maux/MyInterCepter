@@ -26,7 +26,9 @@ public class                            Singleton {
     }
     public PreferenceControler          userPreference;
     private DnsControl                  dnsSpoofed = null;
-    public ArrayList<Host>              hostsList = null;
+
+    public ArrayList<Host>              HostsList = null;
+    public ArrayList<Host>              selectedHostsList = null;
     public List<ArpSpoof>               ArpSpoofProcessStack = new ArrayList<>();
     public NetworkInformation           network = null;
     private SniffSession                actualSniffSession = null;

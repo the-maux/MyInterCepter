@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
@@ -154,12 +153,12 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 Utils.vibrateDevice(mInstance);
                 mFab.startAnimation(AnimationUtils.loadAnimation(mInstance, R.anim.shake));
                 if (!mFragment.start()) {
-                    try {
-                        launchMenu();
-                    } catch (IOException e) {
-                        Log.e(TAG, "Error in start attack");
-                        e.getStackTrace();
-                    }
+                    // Yes it's ugly, missconception herei admit, but lazy
+                    ((FragmentHostDiscoveryScan)NetDiscoveryFragment).launchMenu();
+                    mSingleton.actualSession = actualSession;
+                    startActivity(new Intent(mInstance, TargetMenuActivity.class));
+                } else if (mSingleton.DebugMode) {
+                    Log.i(TAG, "fragment start false");
                 }
             }
         });
@@ -275,46 +274,12 @@ public class                        HostDiscoveryActivity extends MyActivity {
         }).start();
     }
 
-    private ArrayList<Host>         extractAndDumpSelectedHost(ArrayList<Host> hostList) {
-        ArrayList<Host> selectedHost = new ArrayList<>();
-        try {
-            boolean noTargetSelected = true;
-            FileOutputStream out = openFileOutput("targets", 0);
-            for (Host host : hostList) {
-                if (host.selected) {
-                    selectedHost.add(host);
-                    noTargetSelected = false;
-                    String dumpHost = host.ip + ":" + host.mac + "\n";
-                    out.write(dumpHost.getBytes());
-                }
-            }
-            out.close();
-            if (noTargetSelected) {
-                showSnackbar("No target selected!");
-                return null;
-            }
-            return selectedHost;
-        } catch (Exception e) {
-            e.getStackTrace();
-            return null;
-        }
-    }
-
-    private void                    launchMenu() throws IOException {
-        ArrayList<Host> selectedHost = mSingleton.hostsList;
-        mSingleton.hostsList = extractAndDumpSelectedHost(selectedHost);
-        if (selectedHost != null && !selectedHost.isEmpty()) {
-            mSingleton.actualSession = actualSession;
-            startActivity(new Intent(mInstance, TargetMenuActivity.class));
-        }
-    }
-
     public void                     showSnackbar(String txt) {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
 
     public void                     onBackPressed() {
-        if (HistoricFragment.isVisible()) {
+        if (HistoricFragment != null && HistoricFragment.isVisible()) {
             Log.d(TAG, "onBackPressed custom on historic fragment");
             if (HistoricFragment == null || ((FragmentHistoric) HistoricFragment).onBackPressed()) {
                 mTabs.getTabAt(0).select();

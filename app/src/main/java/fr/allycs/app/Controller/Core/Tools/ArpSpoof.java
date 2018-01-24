@@ -65,7 +65,7 @@ public class                        ArpSpoof {
     }
 
     public static void              launchArpSpoof() {
-        for (Host host : Singleton.getInstance().hostsList) {
+        for (Host host : Singleton.getInstance().selectedHostsList) {
             if (host.selected) {
                 new ArpSpoof(host).start();
             }
