@@ -90,9 +90,9 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     }
 
     private void                    initXml(View rootView) {
-        mHost_RV = (RecyclerView) rootView.findViewById(R.id.recycler_view);
-        mEmptyList = (TextView) rootView.findViewById(R.id.emptyList);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+        mHost_RV = rootView.findViewById(R.id.recycler_view);
+        mEmptyList = rootView.findViewById(R.id.emptyList);
+        mSwipeRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayout);
     }
 
     private void                    initSwipeRefresh() {
@@ -182,13 +182,11 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
             FileOutputStream out = mActivity.openFileOutput("targets", 0);
             for (Host host : hostList) {
                 if (host.selected) {
-                    Log.d(TAG, host.ip + " is selected");
                     selectedHost.add(host);
                     noTargetSelected = false;
                     String dumpHost = host.ip + ":" + host.mac + "\n";
                     out.write(dumpHost.getBytes());
-                } else
-                    Log.d(TAG, host.ip + " is not selected");
+                }
             }
             out.close();
             if (noTargetSelected) {
@@ -216,7 +214,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Log.d(TAG, "onHostActualize::" + ((hosts == null) ? "null" : hosts.size() + " devices"));
                 mHosts = hosts;
                 mActivity.setProgressState(mActivity.MAXIMUM_PROGRESS);
                 mSingleton.selectedHostsList = mHosts;

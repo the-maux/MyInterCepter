@@ -19,9 +19,6 @@ import android.widget.Toast;
 
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-
 import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Controller.Misc.MyActivity;
 import fr.allycs.app.Controller.Misc.MyFragment;
@@ -29,7 +26,6 @@ import fr.allycs.app.Controller.Misc.MyGlideLoader;
 import fr.allycs.app.Controller.Misc.Utils;
 import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Controller.Network.NetUtils;
-import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
 import fr.allycs.app.View.TargetMenu.TargetMenuActivity;
@@ -150,8 +146,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.vibrateDevice(mInstance);
                 mFab.startAnimation(AnimationUtils.loadAnimation(mInstance, R.anim.shake));
+                Utils.vibrateDevice(mInstance);
                 if (!mFragment.start()) {
                     // Yes it's ugly, missconception herei admit, but lazy
                     ((FragmentHostDiscoveryScan)NetDiscoveryFragment).launchMenu();

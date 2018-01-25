@@ -99,7 +99,7 @@ public class                    Setup {
         Singleton singleton = Singleton.getInstance();
         singleton.FilesPath = activity.getFilesDir().getPath() + '/';
         singleton.BinaryPath = singleton.FilesPath;
-        singleton.PcapPath = Environment.getExternalStorageDirectory().getPath() + "Pcap/";
+        singleton.PcapPath = Environment.getExternalStorageDirectory().getPath() + "/Pcap/";
         singleton.userPreference = new PreferenceControler(singleton.FilesPath);
     }
     

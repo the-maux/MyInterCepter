@@ -14,6 +14,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +49,8 @@ public class                    NmapActivity extends MyActivity {
     private ImageView           mSettingsMenu;
     private ImageButton         mSettings;
     private NmapControler       nmapControler;
+    private ProgressBar         mProgressBar;
+
 
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +77,7 @@ public class                    NmapActivity extends MyActivity {
         monitorNmapParam = (EditText) findViewById(R.id.nmapMonitorParameter);
         mTabs = findViewById(R.id.tabs);
         mToolbar = findViewById(R.id.toolbar);
-
+        mProgressBar = findViewById(R.id.progressBar);
         mSettingsMenu = findViewById(R.id.settingsMenu);
         MonitorInoptionTheTarget = findViewById(R.id.targetMonitor);
         mSettings = findViewById(R.id.settings);
@@ -83,18 +86,16 @@ public class                    NmapActivity extends MyActivity {
         findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.vibrateDevice(mInstance);
-                nmapControler.start(nmapOutputFragment);
+                startNmap();
             }
         });
-
         mSettings.setOnClickListener(onClickSettingsBtn());
         monitorNmapParam.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 Log.d(TAG, "onEditorAction : " + actionId + " event:" + event);
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    nmapControler.start(nmapOutputFragment);
+                    startNmap();
                     return true;
                 }
                 return false;
@@ -120,8 +121,11 @@ public class                    NmapActivity extends MyActivity {
         mNmapParamMenu.setItems(nmapControler.getMenuCommmands());
         mNmapParamMenu.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
             @Override public void onItemSelected(MaterialSpinner view, int position, long id, String typeScan) {
-                monitorNmapParam.setText(nmapControler.getNmapParamFromMenuItem(typeScan));
-                nmapControler.setActualItemMenu(nmapControler.getNmapParamFromMenuItem(typeScan));
+                String param = nmapControler.getNmapParamFromMenuItem(typeScan);
+                monitorNmapParam.setText(param);
+                nmapControler.setActualItemMenu(typeScan);
+                if (param != null)
+                    setToolbarTitle(null, typeScan);
             }
         });
     }
@@ -186,6 +190,7 @@ public class                    NmapActivity extends MyActivity {
         nmapControler.setHosts(TmpHost);
         MonitorInoptionTheTarget.setText(host.ip);
         monitorHostTargeted.setText(host.ip);
+        nmapOutputFragment.refresh(host);
     }
 
     private View.OnClickListener onClickSettingsBtn() {
@@ -220,5 +225,11 @@ public class                    NmapActivity extends MyActivity {
 
     public void                 showSnackbar(String txt) {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
+    }
+
+    public void                 startNmap() {
+        Utils.vibrateDevice(mInstance);
+        nmapControler.start(nmapOutputFragment, mProgressBar);
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 }

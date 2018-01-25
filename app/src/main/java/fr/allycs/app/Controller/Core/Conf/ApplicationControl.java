@@ -1,4 +1,4 @@
-package fr.allycs.app.Controller.Misc;
+package fr.allycs.app.Controller.Core.Conf;
 
 import com.activeandroid.ActiveAndroid;
 
@@ -14,4 +14,5 @@ public class                ApplicationControl extends com.activeandroid.app.App
         ActiveAndroid.endTransaction();
         super.onTerminate();
     }
+
 }

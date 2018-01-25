@@ -66,8 +66,9 @@
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
-                    android:layout_width="100dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="56dp"
+                    android:layout_toLeftOf="@+id/settings"
                     android:layout_toRightOf="@+id/OsImg"
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:subtitle="v6.40"
@@ -240,6 +241,23 @@
 
         </RelativeLayout>
 
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/fab"
+            android:layout_alignBottom="@+id/fab"
+            android:layout_alignLeft="@+id/fab"
+            android:layout_alignRight="@+id/fab"
+            android:layout_alignTop="@+id/fab"
+            android:layout_marginBottom="-12dp"
+            android:layout_marginLeft="-12dp"
+            android:layout_marginRight="-12dp"
+            android:layout_marginTop="-12dp"
+            android:elevation="6dp"
+            android:visibility="gone" />
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="56dp"
@@ -250,10 +268,12 @@
             android:layout_marginRight="16dp"
             android:scaleType="fitCenter"
             android:src="?android:attr/actionModeWebSearchDrawable"
+            android:visibility="visible"
             app:backgroundTint="@color/material_blue_grey_400"
             app:fabSize="normal"
             app:fab_elevationCompat="4dp"
             app:layout_anchorGravity="bottom|right|end" />
+
 
     </RelativeLayout>
 

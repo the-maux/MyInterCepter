@@ -77,10 +77,10 @@ public class                        Tcpdump {
                             }
                         }).start();
                     }
-                    Log.d(TAG, "./Tcpdump stopeed stdout");
+                    Log.i(TAG, "Tcpdump execution over");
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Log.d(TAG, "Process Error: " + e.getMessage());
+                    Log.e(TAG, "Process Error: " + e.getMessage());
                 } finally {
                     if (mTcpDumpProcess != null)
                         mTcpDumpProcess.closeProcess();
@@ -89,24 +89,27 @@ public class                        Tcpdump {
                 Log.d(TAG, "End of Tcpdump thread");
             }
         }).start();
-        return cmd;
+        return cmd.replace("nmap/nmap", "nmap")
+                .replace(mSingleton.FilesPath, "");//trimmed cmd
     }
     private void                    onNewLine(String line) {
         if (line.contains("Quiting...")) {
-            Trame trame = new Trame("Processus over", listOfTrames.size(), 0);
+            Trame trame = new Trame("Processus over", 0);
             trame.connectionOver = true;
             mActivity.onNewTrame(trame);
             onTcpDumpStop();
             return;
         }
         mTcpdumpConf.evilSocketDnsParsing.mitm_dns_behavior(actualParam, line);
-        Trame trame = new Trame(line, listOfTrames.size(), 0);
+        Trame trame = new Trame(line, 0);
         if (trame.initialised) {
             listOfTrames.add(0, trame);
             trame.offsett = listOfTrames.size();
             mActivity.onNewTrame(trame);
         } else if (!trame.skipped) {
             mActivity.onNewTrame(trame);
+            Log.d(TAG, "trame created not initialized and not skipped, STOP TCPDUMP");
+            mActivity.setToolbarTitle(null, "Error in processing");
             onTcpDumpStop();
         }
     }

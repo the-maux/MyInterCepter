@@ -68,7 +68,7 @@ public class                    WiresharkActivity extends MyActivity {
         initFilter();
         initSettings();
         initRV();
-        setToolbarTitle(null, "Cible " + mSingleton.selectedHostsList.get(0));
+        setToolbarTitle(null, mSingleton.selectedHostsList.get(0).getName());
         if (mTcpdump.isRunning)
             mFab.setImageResource(R.mipmap.ic_pause);
     }
@@ -229,7 +229,7 @@ public class                    WiresharkActivity extends MyActivity {
         if (mListHostSelected.isEmpty()) {
             if (mSingleton.selectedHostsList.size() == 1) {//Automatic selection when 1 target only
                 mListHostSelected.add(mSingleton.selectedHostsList.get(0));
-                mToolbar.setSubtitle(mListHostSelected.size() + " target");
+                mToolbar.setSubtitle("Processing");
             } else {
                 Snackbar.make(mCoordinatorLayout, "Selectionner une target", Snackbar.LENGTH_SHORT)
                         .setActionTextColor(Color.RED).show();
@@ -241,6 +241,7 @@ public class                    WiresharkActivity extends MyActivity {
         Log.d(TAG, "mMonitorCmd::" + mMonitorCmd.getText().toString());
         mMonitorCmd.setText(mTcpdump.actualParam);
         Log.d(TAG, "starting tcpdump with monitor:[" + mMonitorCmd.getText().toString() + "]");
+
         mMonitorAgv.setText(mTcpdump.start(mMonitorCmd.getText().toString(), mListHostSelected, mTypeScan));
         mInstance.runOnUiThread(new Runnable() {
             @Override

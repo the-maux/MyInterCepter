@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Locale;
 
 import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Core.Database.DBHost;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Pcap;
 
@@ -78,7 +77,8 @@ class                           ConfTcpdump {
     String                      buildCmd(String actualParam, boolean isDumpingInFile,
                                             String typeScan, List<Host> hosts) {
         String hostFilter = buildHostFilterCommand(hosts, typeScan);
-        String date =  new SimpleDateFormat("MM_dd_HH_mm_ss", Locale.FRANCE).format(new Date());
+        String date =  new SimpleDateFormat("dd_MMMM_HH#mm-ss", Locale.FRANCE).format(new Date())
+                .replace("#", "h").replace("-", "m");
         String nameFile = mSingleton.network.Ssid  + "_" + date;
         String pcapFile = (isDumpingInFile) ? buildForDumpingPcap(nameFile, hosts) : "";
         String cmd = (mSingleton.FilesPath + "tcpdump " +

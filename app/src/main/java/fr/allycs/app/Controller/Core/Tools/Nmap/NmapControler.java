@@ -1,6 +1,7 @@
 package fr.allycs.app.Controller.Core.Tools.Nmap;
 
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -57,6 +58,12 @@ public class                        NmapControler {
     }
 
     public String                   getNmapParamFromMenuItem(String itemMenu) {
+        Log.d(TAG, "printing:mNmapParams:");
+        for (Map.Entry<String, String> entry : mNmapParams.entrySet()) {
+            Log.d(TAG, "\t" + entry.getKey() + "=" + entry.getValue());
+        }
+
+        Log.d(TAG, "getNmapParamFromMenuItem(" + itemMenu + ") => " + mNmapParams.get(itemMenu));
         return mNmapParams.get(itemMenu);
     }
 
@@ -76,24 +83,25 @@ public class                        NmapControler {
         String Binary = mSingleton.FilesPath + "nmap/nmap ";
         String hostFilter = buildHostFilterCommand();
         String parameter = getNmapParamFromMenuItem(actualItemMenu);
-        Log.d(TAG, Binary + hostFilter + " " + parameter + " ");
         return Binary + hostFilter + " " + parameter + " ";
     }
 
-    public void                     start(final NmapOutputFragment nmapOutputFragment) {
+    public void                     start(final NmapOutputFragment nmapOutputFragment, final ProgressBar progressBar) {
         if (mHost != null) {
-            final String cmd = buildCommand();
-            String trimmed_cmd = "root$> " + cmd
-                    .replace("nmap/nmap", "nmap").replace("\n", "")
+            final String cmd = buildCommand().replace("\n", "").replace("  ", " ");
+            String trimmed_cmd = cmd
+                    .replace("nmap/nmap", "nmap")
                     .replace(mSingleton.FilesPath, "");
-
-            stdoutToBuffer(cmd, nmapOutputFragment);
+            Log.d(TAG, cmd);
+            if (nmapOutputFragment != null)
+                nmapOutputFragment.printCmdInTerminal(trimmed_cmd);
+            stdoutToBuffer(cmd, nmapOutputFragment, progressBar);
         } else {
             Log.e(TAG, "No client selected when launched");
         }
     }
 
-    private void                    stdoutToBuffer(final String cmd, final NmapOutputFragment fragment) {
+    private void                    stdoutToBuffer(final String cmd, final NmapOutputFragment fragment, final ProgressBar progressBar) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -108,10 +116,10 @@ public class                        NmapControler {
                     dumpOutputBuilder.append(tmp);
                     if (fragment != null) {
                         Log.d(TAG, "Nmap STDOUT LIVE MODE");
-                        fragment.flushOutput(dumpOutputBuilder.toString());
+                        fragment.flushOutput(dumpOutputBuilder.toString().substring(1), progressBar);
                     } else {
                         Log.d(TAG, "Nmap STDOUT PARSING MODE");
-                        new NmapParser(mInstance).parseStdout(dumpOutputBuilder.toString());
+                        new NmapParser(mInstance).parseStdout(dumpOutputBuilder.toString().substring(1));
                     }
                     Log.d(TAG, "Nmap final stdouT" + dumpOutputBuilder.toString());
                 } catch (IOException e) {
