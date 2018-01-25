@@ -13,12 +13,12 @@ import android.util.Log;
 import android.view.View;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Core.Tools.Dora;
-import fr.allycs.app.Controller.Core.Tools.Tcpdump.Tcpdump;
-import fr.allycs.app.Controller.Misc.MyActivity;
-import fr.allycs.app.Controller.Misc.MyGlideLoader;
-import fr.allycs.app.Controller.Misc.Utils;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Controller.Core.Core.Dora;
+import fr.allycs.app.Controller.Core.Core.Tcpdump.Tcpdump;
+import fr.allycs.app.Controller.AndroidUtils.MyActivity;
+import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
+import fr.allycs.app.Controller.AndroidUtils.Utils;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.DnsSpoofing.DnsActivity;

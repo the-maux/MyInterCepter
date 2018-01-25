@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import javax.jmdns.JmDNS;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
 
 public class                        MapNetwork {
     private String                  TAG = "MapNetwork";
@@ -26,20 +26,19 @@ public class                        MapNetwork {
         DiscoverNetwork();
     }
 
-    public static synchronized MapNetwork getInstance(NetworkDiscoveryControler scannerControler, String routerIp) {
+  /*  public static synchronized MapNetwork getInstance(NetworkDiscoveryControler scannerControler, String routerIp) {
         if (instance == null) {
             instance = new MapNetwork(scannerControler, routerIp);
         }
         return instance;
-    }
+    }*/
 
     private void                    DiscoverNetwork() {
         Log.w(TAG, "Starting Discover Natif client in Network");
 
         final String ipBuild = routerIp.substring(0, routerIp.lastIndexOf('.'));
         for (int rcx = 1; rcx <= 255 ; rcx++) {
-            final int copyFinalRcx = rcx;
-            final String ip = ipBuild + "." + copyFinalRcx;
+            final String ip = ipBuild + "." + rcx;
             new Thread (new Runnable() {
                 @Override
                 public void run() {

@@ -9,7 +9,7 @@ import android.widget.CompoundButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
+import fr.allycs.app.Controller.Network.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Widget.Holder.HostSelectionHolder;

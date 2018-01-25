@@ -7,8 +7,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Misc.MyGlideLoader;
+import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.R;
 import fr.allycs.app.View.HostDiscovery.FragmentHistoric;

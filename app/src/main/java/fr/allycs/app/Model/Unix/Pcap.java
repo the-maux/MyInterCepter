@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.SniffSession;
 

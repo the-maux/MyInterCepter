@@ -8,7 +8,7 @@ import com.activeandroid.annotation.Table;
 
 import java.util.List;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
 
 @Table(name = "AccessPoint", id = "_id")
 public class                AccessPoint extends Model {

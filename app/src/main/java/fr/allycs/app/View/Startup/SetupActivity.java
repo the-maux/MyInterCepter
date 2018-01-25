@@ -15,10 +15,10 @@ import android.widget.Toast;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import fr.allycs.app.Controller.Core.Conf.Setup;
-import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Core.Tools.RootProcess;
-import fr.allycs.app.Controller.Misc.MyActivity;
+import fr.allycs.app.Controller.Core.Configuration.Setup;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Controller.Core.Core.RootProcess;
+import fr.allycs.app.Controller.AndroidUtils.MyActivity;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.R;
 import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;

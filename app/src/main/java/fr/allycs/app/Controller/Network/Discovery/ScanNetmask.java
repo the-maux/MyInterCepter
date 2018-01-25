@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Network.IPv4CIDR;
 
 /**

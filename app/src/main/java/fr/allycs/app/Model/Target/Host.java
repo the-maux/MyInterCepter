@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Controller.Network.Fingerprint;
 import fr.allycs.app.Model.Net.Port;
 import fr.allycs.app.Model.Net.Service;
 import fr.allycs.app.Model.Unix.Os;

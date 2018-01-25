@@ -17,8 +17,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Misc.MyFragment;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Controller.AndroidUtils.MyFragment;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Session;

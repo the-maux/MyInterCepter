@@ -10,8 +10,7 @@ import android.widget.ImageView;
 
 import java.util.List;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Misc.MyGlideLoader;
+import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
 import fr.allycs.app.Model.Unix.DNSLog;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Widget.Holder.ConsoleLogHolder;

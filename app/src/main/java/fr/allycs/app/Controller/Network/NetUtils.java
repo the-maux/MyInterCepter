@@ -20,7 +20,7 @@ import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
 
 /**
  * Created by maxim on 29/06/2017.
@@ -121,9 +121,6 @@ public class                NetUtils {
         if (wifiManager == null)
             return false;
 
-        DhcpInfo dhcpInfo = wifiManager.getDhcpInfo();
-
-
         String data = wifiManager.getDhcpInfo().toString();
         if (!data.contains("ipaddr") || !data.contains("gateway") || !data.contains("netmask") ) {
             return false;
@@ -143,7 +140,7 @@ public class                NetUtils {
         if (res[netmask].contains("0.0.0.0"))
             res[netmask] = "255.255.255.0";
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        Singleton.getInstance().network = new NetworkInformation(dhcpInfo, wifiInfo.getMacAddress());
+        Singleton.getInstance().network = new NetworkInformation(wifiManager, wifiInfo.getMacAddress());
         if ((activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)) != null) {
             wifiInfo = ((WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
         }

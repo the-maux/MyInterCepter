@@ -21,8 +21,8 @@ package fr.allycs.app.Controller.Network;
 
 import android.util.Log;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Core.Tools.RootProcess;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Controller.Core.Core.RootProcess;
 
 public class                    IPTables {
     private static final String TAG = "IPTABLES";

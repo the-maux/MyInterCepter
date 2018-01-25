@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-import fr.allycs.app.Controller.Core.Database.DBHost;
+import fr.allycs.app.Controller.Database.DBHost;
 import fr.allycs.app.Model.Net.Service;
 
 @Table(name = "Session", id = "_id")

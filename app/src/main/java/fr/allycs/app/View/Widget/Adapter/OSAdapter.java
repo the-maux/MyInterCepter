@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import fr.allycs.app.Controller.Misc.MyGlideLoader;
+import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Widget.Holder.HostSelectionHolder;
 

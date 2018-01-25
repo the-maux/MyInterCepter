@@ -18,10 +18,10 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Core.Tools.Dns.DnsControl;
-import fr.allycs.app.Controller.Misc.MyActivity;
-import fr.allycs.app.Controller.Misc.Utils;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Controller.Core.Core.Dnsmasq.DnsmasqControl;
+import fr.allycs.app.Controller.AndroidUtils.MyActivity;
+import fr.allycs.app.Controller.AndroidUtils.Utils;
 import fr.allycs.app.Model.Target.DNSSpoofItem;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Widget.Adapter.DnsLogsAdapter;
@@ -42,7 +42,7 @@ public class                            DnsActivity extends MyActivity {
     private RelativeLayout              mClipper;
     private TextView                    mAction_deleteall, mAction_import, mAction_export, textEmpty, title;
     private Singleton                   mSingleton = Singleton.getInstance();
-    private DnsControl                  mDnsSpoof = mSingleton.getDnsControler();
+    private DnsmasqControl mDnsSpoof = mSingleton.getDnsControler();
     private DnsSpoofConfAdapter         mDnsSpoofAdapter;
     private DnsLogsAdapter              mDnsConsoleAdapter;
 

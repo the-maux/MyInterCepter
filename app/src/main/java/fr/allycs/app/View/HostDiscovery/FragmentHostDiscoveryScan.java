@@ -26,10 +26,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Core.Database.DBSession;
-import fr.allycs.app.Controller.Misc.MyFragment;
-import fr.allycs.app.Controller.Misc.MyGlideLoader;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Controller.Database.DBSession;
+import fr.allycs.app.Controller.AndroidUtils.MyFragment;
+import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
 import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.Model.Target.Host;

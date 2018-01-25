@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Model.Net.Protocol;
 import fr.allycs.app.Model.Net.Trame;
 import fr.allycs.app.R;

@@ -11,9 +11,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 
-import fr.allycs.app.Controller.Core.Conf.Setup;
-import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Core.Tools.RootProcess;
+import fr.allycs.app.Controller.Core.Configuration.Setup;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Controller.Core.Core.RootProcess;
 import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
 
 

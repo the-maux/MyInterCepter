@@ -24,10 +24,10 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Core.Tools.Nmap.NmapControler;
-import fr.allycs.app.Controller.Misc.MyActivity;
-import fr.allycs.app.Controller.Misc.Utils;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Controller.Core.Core.Nmap.NmapControler;
+import fr.allycs.app.Controller.AndroidUtils.MyActivity;
+import fr.allycs.app.Controller.AndroidUtils.Utils;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Widget.Adapter.HostSelectionAdapter;

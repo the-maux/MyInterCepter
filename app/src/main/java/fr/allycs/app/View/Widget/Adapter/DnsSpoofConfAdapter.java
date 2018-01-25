@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Model.Target.DNSSpoofItem;
 import fr.allycs.app.R;
 import fr.allycs.app.View.DnsSpoofing.DnsActivity;

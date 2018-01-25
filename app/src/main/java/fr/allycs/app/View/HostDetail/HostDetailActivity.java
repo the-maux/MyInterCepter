@@ -11,9 +11,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Misc.MyActivity;
-import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Controller.AndroidUtils.MyActivity;
+import fr.allycs.app.Controller.Network.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.HostDiscovery.FragmentHistoric;

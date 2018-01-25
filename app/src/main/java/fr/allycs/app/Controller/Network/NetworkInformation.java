@@ -1,6 +1,7 @@
 package fr.allycs.app.Controller.Network;
 
 import android.net.DhcpInfo;
+import android.net.wifi.WifiManager;
 import android.util.Log;
 
 
@@ -14,9 +15,10 @@ public class                NetworkInformation {
     public String           dhcp = "";
     public String           Ssid = "";
     public DhcpInfo         dhcpInfo;
+    private WifiManager     mWifiManager;
 
-    public                  NetworkInformation(DhcpInfo dhcpInfo, String mac) {
-        this.dhcpInfo = dhcpInfo;
+    public                  NetworkInformation(WifiManager wifiManager, String mac) {
+        this.mWifiManager = wifiManager;
         this.mac = mac;
         init();
     }
@@ -31,6 +33,7 @@ public class                NetworkInformation {
     }
 
     private void            init() {
+        this.dhcpInfo = mWifiManager.getDhcpInfo();
         myIp = NetUtils.intADDRtoStringHostname(dhcpInfo.ipAddress);
         gateway = NetUtils.intADDRtoStringHostname(dhcpInfo.gateway);
         netmask = NetUtils.intADDRtoStringHostname(dhcpInfo.netmask);

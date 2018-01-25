@@ -16,10 +16,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Misc.MyActivity;
-import fr.allycs.app.Controller.Misc.Utils;
-import fr.allycs.app.Controller.Network.WebServer.GenericServer;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Controller.AndroidUtils.MyActivity;
+import fr.allycs.app.Controller.AndroidUtils.Utils;
+import fr.allycs.app.Controller.WebServer.GenericServer;
 import fr.allycs.app.R;
 
 public class                    WebServerActivity extends MyActivity {

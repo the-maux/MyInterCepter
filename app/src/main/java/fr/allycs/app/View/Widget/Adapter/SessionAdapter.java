@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;

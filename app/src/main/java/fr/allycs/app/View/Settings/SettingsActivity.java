@@ -3,8 +3,8 @@ package fr.allycs.app.View.Settings;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 
-import fr.allycs.app.Controller.Misc.MyActivity;
-import fr.allycs.app.Controller.Misc.MyGlideLoader;
+import fr.allycs.app.Controller.AndroidUtils.MyActivity;
+import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
 import fr.allycs.app.R;
 
 /**

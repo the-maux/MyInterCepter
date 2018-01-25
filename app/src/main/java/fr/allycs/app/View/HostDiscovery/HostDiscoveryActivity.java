@@ -19,11 +19,11 @@ import android.widget.Toast;
 
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Misc.MyActivity;
-import fr.allycs.app.Controller.Misc.MyFragment;
-import fr.allycs.app.Controller.Misc.MyGlideLoader;
-import fr.allycs.app.Controller.Misc.Utils;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Controller.AndroidUtils.MyActivity;
+import fr.allycs.app.Controller.AndroidUtils.MyFragment;
+import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
+import fr.allycs.app.Controller.AndroidUtils.Utils;
 import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.Model.Target.Session;
