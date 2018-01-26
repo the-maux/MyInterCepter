@@ -17,7 +17,7 @@ public class                    RootProcess {
     private DataOutputStream    mOutputStream;
     private int                 mPid;
     private String              mLogID;
-    private boolean             mDebugLog = true;
+    private boolean             mDebugLog = false;
 
     public                      RootProcess(String LogID) {
         this.mLogID = LogID;
@@ -28,7 +28,6 @@ public class                    RootProcess {
             e.printStackTrace();
         }
     }
-
     public                      RootProcess(String LogID, String workingDirectory) {
         this.mLogID = LogID;
         try {
@@ -39,6 +38,7 @@ public class                    RootProcess {
         }
     }
     public                      RootProcess(String LogID, boolean noRoot) {
+        /* Ye noRoot is never used, why bother ? */
         this.mLogID = LogID;
         try {
             mProcess = Runtime.getRuntime().exec("ls\n", null, new File("/"));
@@ -51,13 +51,15 @@ public class                    RootProcess {
     public RootProcess          exec(String cmd) {
         try {
             cmd = cmd.replace("//", "/");
-            //if (mDebugLog)
-            //    Log.d(TAG, mLogID + "::" + cmd);
+            if (mDebugLog)
+                Log.d(TAG, mLogID + "::" + cmd);
             mOutputStream.writeBytes(cmd + " 2>&1 \n");
             mOutputStream.flush();
             Field f = mProcess.getClass().getDeclaredField("pid");
             f.setAccessible(true);
             mPid = f.getInt(mProcess);
+            if (mDebugLog)
+                Log.d(TAG, mLogID + "[PID:" + mPid + "]::" + cmd);
             f.setAccessible(false);
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,10 +80,10 @@ public class                    RootProcess {
         return this;
     }
 
-    public int                  waitFor() {
+    private int                 waitFor() {
+        /* Pro-Tip: You want to close process ? Purge all fd first */
         try {
             BufferedReader reader = new BufferedReader(getReader());
-            String line;
             if (reader.ready()) {
                 while (reader.readLine() != null) {}
             }
@@ -112,12 +114,8 @@ public class                    RootProcess {
         return new InputStreamReader(mProcess.getInputStream());
     }
 
-    public InputStreamReader    getErrorStreamReader() {
+    private InputStreamReader   getErrorStreamReader() {
         return new InputStreamReader(mProcess.getErrorStream());
-    }
-
-    public Process              getActualProcess() {
-        return mProcess;
     }
 
     public int                  getmPid() {
@@ -129,7 +127,7 @@ public class                    RootProcess {
         return waitFor();
     }
 
-    public RootProcess          closeDontWait() {
+    RootProcess                 closeDontWait() {
         try {
             //Log.d(TAG, this.mLogID + "::Close");
             //mOutputStream.writeBytes("exit\n");
@@ -146,7 +144,6 @@ public class                    RootProcess {
                 .exec(Singleton.getInstance().BinaryPath + "busybox kill " + pid)
                 .closeProcess();
     }
-
     public static void          kill(String binary) {
         new RootProcess("KILLALL")
                 .exec(Singleton.getInstance().BinaryPath + "busybox killall " + binary)

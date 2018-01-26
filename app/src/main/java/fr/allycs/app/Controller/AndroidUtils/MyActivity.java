@@ -16,7 +16,6 @@ public class                    MyActivity extends AppCompatActivity {
     protected String            TAG = this.getClass().getName();
     protected MyActivity        mInstance = this;
     protected Bundle            bundle = null;
-    protected boolean           splashscreen = true;
 
     public void                 onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         //overridePendingTransition(R.anim.slide_in, R.anim.slide_out);

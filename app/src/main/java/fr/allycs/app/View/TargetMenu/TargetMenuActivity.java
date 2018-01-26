@@ -31,7 +31,7 @@ import fr.allycs.app.View.WebServer.WebServerActivity;
 /**
  * Menu
  */
-public class TargetMenuActivity extends MyActivity {
+public class                    TargetMenuActivity extends MyActivity {
     private String              TAG = "TargetMenuActivity";
     private TargetMenuActivity  mInstance = this;
     private CoordinatorLayout   mCoordinatorLayout;
@@ -43,16 +43,8 @@ public class TargetMenuActivity extends MyActivity {
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        initXml();
-        if (mSingleton.DebugMode) {
-            Log.d(TAG, "Dump des HOST SELECTED: " +
-                    ((mSingleton.selectedHostsList == null) ? "MODE NO DEVICE": ""));
-            if (mSingleton.selectedHostsList != null) {
-                for (Host host : mSingleton.selectedHostsList) {
-                    Log.d(TAG, "\t - " + host.toString());
-                }
-            }
-        }
+        mCoordinatorLayout = findViewById(R.id.Coordonitor);
+        MyGlideLoader.coordoBackground(this, mCoordinatorLayout);
     }
 
     protected void              onResume() {
@@ -68,22 +60,20 @@ public class TargetMenuActivity extends MyActivity {
         initflags();
     }
 
-    private void                initXml() {
-        mCoordinatorLayout = findViewById(R.id.Coordonitor);
-        MyGlideLoader.coordoBackground(this, mCoordinatorLayout);
-    }
-
     private void                initflags() {
         ColorDrawable red = new ColorDrawable(ContextCompat.getColor(this, R.color.material_red_800));
         ColorDrawable green = new ColorDrawable(ContextCompat.getColor(this, R.color.material_green_700));
-        ((CircleImageView) findViewById(R.id.monitorDNS)).setImageDrawable((mSingleton.isDnsControlstarted()) ? green : red);
+        ((CircleImageView) findViewById(R.id.monitorDNS))
+                .setImageDrawable((mSingleton.isDnsControlstarted()) ? green : red);
         Tcpdump tcpdump = Tcpdump.getTcpdump(this, false);
         if (tcpdump != null)
-            ((CircleImageView) findViewById(R.id.monitorWireshark)).setImageDrawable((tcpdump.isRunning) ? green : red);
+            ((CircleImageView) findViewById(R.id.monitorWireshark))
+                    .setImageDrawable((tcpdump.isRunning) ? green : red);
         else
             ((CircleImageView) findViewById(R.id.monitorWireshark)).setImageDrawable(red);
         if (Dora.getDora(this) != null)
-            ((CircleImageView) findViewById(R.id.monitorDora)).setImageDrawable((Dora.getDora(this).isRunning()) ? green : red);
+            ((CircleImageView) findViewById(R.id.monitorDora))
+                    .setImageDrawable((Dora.getDora(this).isRunning()) ? green : red);
         else
             ((CircleImageView) findViewById(R.id.monitorDora)).setImageDrawable(red);
     }
@@ -117,7 +107,7 @@ public class TargetMenuActivity extends MyActivity {
                         options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1);
                         break;
                     case Wireshark:
-                        if (Singleton.getInstance().selectedHostsList == null) {
+                        if (mSingleton.selectedHostsList == null) {
                             Snackbar.make(mCoordinatorLayout, "Wireshark needs target(s) to work", Snackbar.LENGTH_LONG).show();
                             choice = null;
                         } else {
@@ -127,7 +117,7 @@ public class TargetMenuActivity extends MyActivity {
                         }
                         break;
                     case DoraDiagnostic:
-                        if (Singleton.getInstance().selectedHostsList == null) {
+                        if (mSingleton.selectedHostsList == null) {
                             Snackbar.make(mCoordinatorLayout, "Dora needs target(s) to work", Snackbar.LENGTH_LONG).show();
                             choice = null;
                         } else {

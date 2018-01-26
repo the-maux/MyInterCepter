@@ -16,49 +16,31 @@ import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Core.Core.RootProcess;
 import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
 
-
+/**
+ * Init App &
+ * Check Root
+ * Checking latest version in file for update
+ */
 public class                    SplashscreenActivity extends AppCompatActivity {
-
-    public boolean              isItUpdated() {
-        try {
-            Log.d("SplashscreenActivity", Singleton.getInstance().FilesPath + "version");
-            return new File(Singleton.getInstance().FilesPath + "version").exists();
-        } catch (Exception e) {
-            e.getStackTrace();
-            return false;
-        }
-    }
-
-    public void                 onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     protected void              onPostResume() {
         super.onPostResume();
         Setup.buildPath(this);
-        if (!checkRoot())
-            Toast.makeText(this, "You need root privilege", Toast.LENGTH_LONG).show();
-        else {
-            if (isItUpdated()) {
-                startActivity(new Intent(this, HostDiscoveryActivity.class));
-            } else {
-                startActivity(new Intent(this, SetupActivity.class));
-            }
+        Intent intent = null;
+        try {
+            Log.d("SplashscreenActivity", Singleton.getInstance().FilesPath + "version");
+            if ((new BufferedReader(new RootProcess("Whoami").exec("id")/*Check Root Process*/
+                    .getInputStreamReader()).readLine().contains("uid=0(root)")) &&
+                    (new File(Singleton.getInstance().FilesPath + "version").exists()))/*Versionning Update*/
+                intent = new Intent(this, HostDiscoveryActivity.class);
+            else
+                intent = new Intent(this, SetupActivity.class);
+        } catch (Exception e) {
+            e.getStackTrace();
+            intent = new Intent(this, SetupActivity.class);
+        } finally {
+            startActivity(intent);
             finish();
         }
-    }
-
-    private boolean             checkRoot() {
-        try {
-            String idUser = new BufferedReader(new RootProcess("Whoami").exec("id").getInputStreamReader()).readLine();
-            Log.d("SplashscreenActivity", "whoami:" + idUser);
-            if (idUser != null && idUser.contains("uid=0(root)") && idUser.contains("gid=0(root)")) {
-                Log.d("SplashscreenActivity", "You have root privilege");
-                return true;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 }

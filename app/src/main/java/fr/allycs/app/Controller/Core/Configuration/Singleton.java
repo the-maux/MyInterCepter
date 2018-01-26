@@ -16,32 +16,31 @@ import fr.allycs.app.Model.Target.SniffSession;
 
 public class                            Singleton {
     private static Singleton            mInstance = null;
-    private                             Singleton() {
-
-    }
     public static synchronized Singleton getInstance() {
         if(mInstance == null)
             mInstance = new Singleton();
         return mInstance;
     }
-    public PreferenceControler          userPreference;
-    private DnsmasqControl dnsSpoofed = null;
+    private                             Singleton() {
 
-    public ArrayList<Host>              HostsList = null;
-    public ArrayList<Host>              selectedHostsList = null;
-    public List<ArpSpoof>               ArpSpoofProcessStack = new ArrayList<>();
-    public NetworkInformation           network = null;
-    private SniffSession                actualSniffSession = null;
-    public Session                      actualSession = null;
-    private boolean                     sslstripMode = false, LockScreen = false;
-    private boolean                     DnsControlstarted = false, isTcpdumpStarted = false;
-
+    }
+    PreferenceControler                 userPreference;
     public  int                         nbrInteface = 1;
     public boolean                      DebugMode = true, UltraDebugMode = false;
-    public String                       VERSION = "0xDEADBEEF";
+    String                              VERSION = "0xDEADBEEF";
     public String                       PcapPath;
     public String                       BinaryPath = null;
     public String                       FilesPath = null;
+
+    public ArrayList<Host>              selectedHostsList = null;
+    public List<ArpSpoof>               ArpSpoofProcessStack = new ArrayList<>();
+    public NetworkInformation           network = null;
+    public Session                      actualSession = null;
+    private DnsmasqControl              dnsSpoofed = null;
+    private SniffSession                actualSniffSession = null;
+    private boolean                     sslstripMode = false, LockScreen = false;
+    private boolean                     DnsControlstarted = false;
+
 
     public SniffSession                 getActualSniffSession() {
         if (actualSniffSession == null) {
@@ -49,8 +48,7 @@ public class                            Singleton {
         }
        return actualSniffSession;
     }
-
-    public DnsmasqControl getDnsControler() {
+    public DnsmasqControl               getDnsControler() {
         if (dnsSpoofed == null) {
             dnsSpoofed = new DnsmasqControl();
         }
