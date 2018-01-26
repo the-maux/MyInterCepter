@@ -2,7 +2,6 @@ package fr.allycs.app.View.Scan;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -21,17 +20,20 @@ import android.widget.Toast;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Core.Core.Nmap.NmapControler;
 import fr.allycs.app.Controller.AndroidUtils.MyActivity;
 import fr.allycs.app.Controller.AndroidUtils.Utils;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Controller.Core.Core.Nmap.NmapControler;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Widget.Adapter.HostSelectionAdapter;
-import fr.allycs.app.View.Widget.Dialog.RV_dialog;
+import fr.allycs.app.View.Widget.Dialog.DialogQuestionWithInput;
 
 public class                    NmapActivity extends MyActivity {
     private String              TAG = "NmapActivity";
@@ -50,24 +52,17 @@ public class                    NmapActivity extends MyActivity {
     private ImageButton         mSettings;
     private NmapControler       nmapControler;
     private ProgressBar         mProgressBar;
+    private boolean             isExternalTarget;
 
-
-    protected void              onCreate(@Nullable Bundle savedInstanceState) {
+    protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nmap);
-        nmapControler = new NmapControler();
-        initFragment();
         initXml();
+        nmapControler = new NmapControler(false);
+        initFragment();
         initSpinner();
         initRecyHost();
-        if (mSingleton.selectedHostsList == null || mSingleton.selectedHostsList.isEmpty()) {
-            MonitorInoptionTheTarget.setText("No target selected");
-        } else {
-            mListHostSelected = mSingleton.selectedHostsList;
-            initTabswithTargets(mListHostSelected);
-            monitorNmapParam.setText(nmapControler.getNmapParamFromMenuItem(nmapControler.getMenuCommmands().get(0)));
-            initUIWithTarget(mListHostSelected.get(0));
-        }
+        init();
     }
 
     private void                initXml() {
@@ -93,7 +88,6 @@ public class                    NmapActivity extends MyActivity {
         monitorNmapParam.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                Log.d(TAG, "onEditorAction : " + actionId + " event:" + event);
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     startNmap();
                     return true;
@@ -102,6 +96,21 @@ public class                    NmapActivity extends MyActivity {
             }
         });
     }
+
+    private void                init() {
+        if (mSingleton.selectedHostsList == null || mSingleton.selectedHostsList.isEmpty()) {
+            MonitorInoptionTheTarget.setText("No target selected");
+            isExternalTarget = true;
+            askForExternalTarget();
+        } else {
+            isExternalTarget = false;
+            mListHostSelected = mSingleton.selectedHostsList;
+            initTabswithTargets(mListHostSelected);
+            monitorNmapParam.setText(nmapControler.getNmapParamFromMenuItem(nmapControler.getMenuCommmands().get(0)));
+            initUIWithTarget(mListHostSelected.get(0));
+        }
+    }
+
 
     private void                initFragment() {
         try {
@@ -123,17 +132,13 @@ public class                    NmapActivity extends MyActivity {
             @Override public void onItemSelected(MaterialSpinner view, int position, long id, String typeScan) {
                 String param = nmapControler.getNmapParamFromMenuItem(typeScan);
                 monitorNmapParam.setText(param);
-                nmapControler.setActualItemMenu(typeScan);
+                nmapControler.setmActualItemMenu(typeScan);
                 if (param != null)
                     setToolbarTitle(null, typeScan);
             }
         });
     }
-
-    private void                initRecyHost() {
-        if (mSingleton.selectedHostsList == null || mSingleton.selectedHostsList.isEmpty()) {
-            Snackbar.make(mCoordinatorLayout, "Vous n'avez aucun device selectionne", Snackbar.LENGTH_SHORT).show();
-        } else  {
+/*
             MonitorInoptionTheTarget.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -151,10 +156,18 @@ public class                    NmapActivity extends MyActivity {
                                         }
                                     }
                                 }).show();
-                    }
-                });
+ */
+    private void                initRecyHost() {
+        if (mSingleton.selectedHostsList == null || mSingleton.selectedHostsList.isEmpty()) {
+            if (isExternalTarget) {
+
+            } else {
+                Snackbar.make(mCoordinatorLayout, "Vous n'avez aucun device selectionne", Snackbar.LENGTH_SHORT).show();
             }
+        } else {
+
         }
+    }
 
     public void                 initTabswithTargets(final List<Host> hosts) {
         mTabs.removeAllTabs();
@@ -231,5 +244,45 @@ public class                    NmapActivity extends MyActivity {
         Utils.vibrateDevice(mInstance);
         nmapControler.start(nmapOutputFragment, mProgressBar);
         mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void                askForExternalTarget() {
+        final DialogQuestionWithInput dialog = new DialogQuestionWithInput(this)
+                .hideSecondInput()
+                .setIcon(R.drawable.dns) //IMAGE HOST
+                .setTitle("Choose your target")
+                .setHintToEDFirstQuestion("")
+                .setHintToTILFirstQuestion("");
+        dialog.onPositiveButton("Ajouter", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface d, int which) {
+                onAddExternal(dialog.getFirstInputQuestion());
+
+            }
+        }).show();
+    }
+
+    private void                onAddExternal(String externalHost) {
+        int nbrPoint = StringUtils.countMatches(externalHost, ".");
+        InetAddress address = null;
+        if (nbrPoint == 3) {
+            try {
+                address = InetAddress.getByName(externalHost);
+                String ip = address.getHostAddress();
+                List<String> listExternalHost = new ArrayList<>();
+                new NmapControler(listExternalHost)
+                        //TODO: Comment récupérer cette host/list de host
+                //          - 1er cas: ADD TARGET ON FLY (NmapActivity onlyForNow)
+                //          - 2eme cas: Scan target on start up
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+                addExternalHostFailed(externalHost + ": Name or service unknow");
+                return ;
+            }
+            addExternalHostFailed(externalHost + ": Name or service unknow");
+        }
+    }
+    private void            addExternalHostFailed(String msg) {
+        showSnackbar(msg);
+        return ;
     }
 }

@@ -11,8 +11,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.AndroidUtils.MyActivity;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Network.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
@@ -98,7 +98,7 @@ public class HostDetailActivity extends MyActivity {
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Log.d(TAG, "tab.getHost().toString():" + tab.getText().toString());
+                Log.d(TAG, "tab.getFirstInputQuestion().toString():" + tab.getText().toString());
                 switch (tab.getText().toString()) {
                     case "historic":
                         displayHistoric();

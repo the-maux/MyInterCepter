@@ -20,6 +20,5 @@
     <color name="divider">#BDBDBD</color>
     <color name="tcp">#d50000</color>
     <color name="dns">#66bb6a</color>
-    <color name="accent_material_dark">#40ffff</color>
     <color name="primary_material_dark">#313131</color>
 </resources>

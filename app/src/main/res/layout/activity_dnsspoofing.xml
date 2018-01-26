@@ -34,8 +34,7 @@
                     android:addStatesFromChildren="true"
                     android:minWidth="100dp"
                     app:layout_scrollFlags="scroll|enterAlways"
-                    app:subtitle="0 request intecepted"
-                    app:title="Dns Intercept">
+                    app:title="Dnsmasq">
 
                 </android.support.v7.widget.Toolbar>
 
@@ -87,7 +86,7 @@
                     android:id="@+id/listSpoof"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Domains" />
+                    android:text="Domain" />
 
                 <android.support.design.widget.TabItem
                     android:id="@+id/historique"
@@ -129,25 +128,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:ems="10"
             android:padding="4dp"
-            android:text="Spoofed domain:"
-            android:textColor="@color/material_light_white" />
+            android:text="Spoofable domain:"
+            android:textColor="@color/material_light_white"
+            android:textSize="18sp" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/dnsSpoof_RV"
+        <android.support.v7.widget.CardView
+            android:id="@+id/spinnerTypeScan_cardiview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/host"
-            android:layout_margin="8dp"
-            android:background="@color/primary_text"
-            android:elevation="4dp"
-            android:padding="1dp"
-            android:scrollbars="vertical"
-            tools:listitem="@layout/item_dnsspoof">
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@color/cardview_dark_background"
+            app:cardBackgroundColor="@color/cardview_dark_background"
+            app:cardCornerRadius="@dimen/cardview_default_radius"
+            app:cardElevation="6dp">
 
-        </android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/dnsSpoof_RV"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                tools:listitem="@layout/item_dnsspoof">
+
+            </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.CardView>
 
         <TextView
             android:id="@+id/textEmpty"

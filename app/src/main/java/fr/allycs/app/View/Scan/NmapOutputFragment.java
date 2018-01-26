@@ -15,8 +15,8 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Map;
 
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.AndroidUtils.MyFragment;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 
@@ -81,7 +81,7 @@ public class                    NmapOutputFragment extends MyFragment  {
                 Output.setText(Html.fromHtml(output), TextView.BufferType.SPANNABLE);
                 actualOutput = output;
                 historicByDevice.put(mFocusedHost.mac, actualOutput);
-                if (progressBar != null)
+                if (progressBar != null && progressBar.getVisibility() == View.VISIBLE)
                     progressBar.setVisibility(View.GONE);
             }
         });

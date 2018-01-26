@@ -139,7 +139,7 @@
 			android:paddingRight="8dp"
 			android:paddingTop="4dp"
 			android:text="Gateway: x.x.x.x \n IP: x.x.x.x"
-			android:textColor="@color/green"
+			android:textColor="@color/accent_material_dark"
 			android:textSize="12sp" />
 
 	</RelativeLayout>

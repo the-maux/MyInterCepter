@@ -84,10 +84,10 @@ public class            DoraProcess extends MyObject {
         mUptime = Calendar.getInstance().getTime();
     }
     public int          getPourcentage() {
-        //Si not started, return 0
+
         Log.d(TAG, "Dora::POURCENTAGE::" + mhost.ip + "::Terminated->Dump::rcv:" + rcv + "&sent:" + sent);
         if (rcv < MARGE_ERREUR+1 && sent < MARGE_ERREUR+1) {
-            if (rcv > 0 && sent > 0)
+            if (rcv > 0 && sent > 0)//Si not started, return 0
                 Log.d(TAG, "%%::" + (rcv / sent) * 100);
             return 0;
         } else {

@@ -15,10 +15,10 @@ import android.widget.Toast;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import fr.allycs.app.Controller.AndroidUtils.MyActivity;
 import fr.allycs.app.Controller.Core.Configuration.Setup;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Core.Core.RootProcess;
-import fr.allycs.app.Controller.AndroidUtils.MyActivity;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.R;
 import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
@@ -40,8 +40,8 @@ public class                    SetupActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         setContentView(rootView);
         initXml(rootView);
-        Log.d(TAG, "SetupActivity::onPostResume");
-        new RootProcess("Init").closeProcess();
+
+        new RootProcess("Init").exec("ls").closeProcess();
         if (getPermission())
             initialisation();
         else

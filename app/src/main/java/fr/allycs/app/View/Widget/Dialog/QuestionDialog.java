@@ -15,7 +15,7 @@ public class                        QuestionDialog {
     public                          QuestionDialog(Activity activity) {
         dialog = new AlertDialog.Builder(activity);
         dialog.setCancelable(true);
-        View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_question, null);
+        View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_questionsimple, null);
         dialog.setView(dialogView);
         dialog.setNegativeButton("Non", new DialogInterface.OnClickListener() {
             @Override

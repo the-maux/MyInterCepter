@@ -19,12 +19,12 @@ public class DnsmasqControl {
     public  List<DNSLog>        mDnsLogs;
     private RootProcess         mProcess;
     private DnsLogsAdapter      mRV_Adapter = null;
-    private DnsConf             mDnsConf;
+    private DnsmasqConfig       mDnsConf;
     private DnsActivity         mActivity;
     private SniffSession        sniffSession;
 
     public DnsmasqControl() {
-        mDnsConf = new DnsConf();
+        mDnsConf = new DnsmasqConfig();
         if (Singleton.getInstance().getActualSniffSession() != null) {
             sniffSession = Singleton.getInstance().getActualSniffSession();
             mDnsLogs = sniffSession.logDnsSpoofed();
@@ -63,7 +63,7 @@ public class DnsmasqControl {
         return true;
     }
 
-    public DnsmasqControl start() {
+    public DnsmasqControl       start() {
         initRVLink();
         new Thread(new Runnable() {
             @Override
@@ -137,22 +137,22 @@ public class DnsmasqControl {
                 }
             });
         if (mActivity != null)
-            mActivity.titleToolbar(mDnsLogs.size() + " dns request");
+            mActivity.setToolbarTitle(null, mDnsLogs.size() + " dns request catched");
     }
 
     /**
-     * DnsConf
+     * DnsmasqConfig
      */
     public void                 saveDnsConf(String nameOfFile) {
         mDnsConf.saveConf();
     }
     public void                 removeDomain(DNSSpoofItem domainAsked) {
-        mDnsConf.listDomainSpoofed.remove(mDnsConf.listDomainSpoofed.indexOf(domainAsked));
+        mDnsConf.listDomainSpoofable.remove(mDnsConf.listDomainSpoofable.indexOf(domainAsked));
     }
     public void                 clear() {
         mDnsConf.clear();
     }
-    public DnsConf              getDnsConf() {
+    public DnsmasqConfig getDnsConf() {
         return mDnsConf;
     }
     public void                 setToolbar(DnsActivity activity) {

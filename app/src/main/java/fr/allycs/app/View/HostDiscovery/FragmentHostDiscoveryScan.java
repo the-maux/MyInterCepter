@@ -26,10 +26,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Database.DBSession;
 import fr.allycs.app.Controller.AndroidUtils.MyFragment;
 import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Controller.Database.DBSession;
 import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.Model.Target.Host;
@@ -37,7 +37,7 @@ import fr.allycs.app.R;
 import fr.allycs.app.View.TargetMenu.TargetMenuActivity;
 import fr.allycs.app.View.Widget.Adapter.HostDiscoveryAdapter;
 import fr.allycs.app.View.Widget.Adapter.OSAdapter;
-import fr.allycs.app.View.Widget.Dialog.AddDnsDialog;
+import fr.allycs.app.View.Widget.Dialog.DialogQuestionWithInput;
 import fr.allycs.app.View.Widget.Dialog.RV_dialog;
 
 public class                        FragmentHostDiscoveryScan extends MyFragment {
@@ -277,13 +277,12 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
             public void onClick(View v) {
                 switch (mActivity.typeScan) {
                     case Arp:
-                        final AddDnsDialog dialog = new AddDnsDialog(mActivity)
+                        final DialogQuestionWithInput dialog = new DialogQuestionWithInput(mActivity)
                                 .setIcon(R.drawable.cyber_security5_rounded)
                                 .setTitle("Add target");
                         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
                             public void onClick(DialogInterface d, int which) {
-                                onCheckAddedHost(dialog.getHost());
+                                onCheckAddedHost(dialog.getFirstInputQuestion());
                             }
                         }).show();
                         break;

@@ -19,11 +19,11 @@ import android.widget.Toast;
 
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.AndroidUtils.MyActivity;
 import fr.allycs.app.Controller.AndroidUtils.MyFragment;
 import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
 import fr.allycs.app.Controller.AndroidUtils.Utils;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.Model.Target.Session;
@@ -83,6 +83,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mToolbar = findViewById(R.id.toolbar2);
         mTabs = findViewById(R.id.tabs);
         mProgressBar = findViewById(R.id.progressBar);
+        Log.d(TAG, "SetupActivity::PBCOLOR::" + mProgressBar);
     }
 
     private void                    init()  throws Exception {
@@ -178,7 +179,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     public void                     initMonitor() {
         String monitor = "";
         if (!monitor.contains("WiFi")) {
-            monitor += " Ip Adress : " + mSingleton.network.myIp;
+            monitor += " Ip Address : " + mSingleton.network.myIp;
             monitor += "\n" + mSingleton.network.Ssid + " : " + mSingleton.network.gateway;
         } else {
             monitor += "Not Connected";

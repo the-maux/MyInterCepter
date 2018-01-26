@@ -42,7 +42,8 @@ public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter
             @Override
             public void onClick(View view) {
                 mSingleton.getDnsControler().removeDomain(domain);
-                mActivity.updateToolbarTitle(domain);
+                mActivity.onDnsmasqConfChanged(domain + " deleted from configuration");
+                mActivity.setToolbarTitle(null, mDnsIntercepts.size() + " domain spoofable");
                 notifyDataSetChanged();
             }
         };

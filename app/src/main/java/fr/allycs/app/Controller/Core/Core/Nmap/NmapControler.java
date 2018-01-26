@@ -18,19 +18,68 @@ import fr.allycs.app.View.Scan.NmapOutputFragment;
 public class                        NmapControler {
     private String                  TAG = "NmapControler";
     private NmapControler           mInstance = this;
-    private Map<String, String>     mNmapParams =  new HashMap<>();
-    private ArrayList<String>       mMenuCommand = new ArrayList<>();
     private Singleton               mSingleton = Singleton.getInstance();
+    private boolean                 mIsLiveDump;
+    private boolean                 mIsOneByOnExecuted = false;
+
+    private Map<String, String>     mNmapParams;
+    private ArrayList<String>       mMenuCommand;
+    private String                  mActualItemMenu = "Ping scan";//Default
     private List<Host>              mHost = null;
-    private boolean mIsOneByOnExecuted = false;
-    private String                  actualItemMenu = "Ping scan";//Default
+    private String                  mExternalHostToScan = null;
     private NmapParser              mNmapParser = null;
 
-    public NmapControler() {
-        initMenu();
+
+    public NmapControler(List<String> ips) {
+        Log.d(TAG, "Nmap STDOUT PARSING MODE");
+        mIsLiveDump = false;
+        mIsOneByOnExecuted = false;
+        mActualItemMenu = "Basic Host discovery";
+        for (String ip : ips) {
+            mExternalHostToScan = ip;
+            Log.d(TAG, "Scanning : [" + ip + "]");
+            start(null, null );
+        }
     }
 
+    public NmapControler(boolean execureAllCommandTogether) {
+        Log.d(TAG, "Nmap STDOUT LIVE MODE");
+        initMenu();
+        mIsLiveDump = true;
+        mIsOneByOnExecuted = execureAllCommandTogether;
+    }
+    /*
+    Utilisation: nmap [Type(s) de scan] [Options] {spécifications des cibles}
+
+           -A Active la détection du système d'exploitation et des versions
+           -O Active la détection d'OS
+           -sS/sT/sA/sW/sM: Scans TCP SYN/Connect()/ACK/Window/Maimon
+           -sU: Scan UDP
+           -iL <inputfilename>: Lit la liste des hôtes/réseaux cibles à partir du fichier
+           -sL: List Scan - Liste simplement les cibles à scanner
+           -PN: Considérer tous les hôtes comme étant connectés -- saute l'étape de découverte des hôtes
+           -sO: Scan des protocoles supportés par la couche IP
+           -sV: Teste les ports ouverts pour déterminer le service en écoute et sa version
+               --version-light: Limite les tests aux plus probables pour une identification plus rapide
+               --version-intensity <niveau>: De 0 (léger) à 9 (tout essayer)
+               --version-all: Essaie un à un tous les tests possibles pour la détection des versions
+               --version-trace: Affiche des informations détaillées du scan de versions (pour débogage)
+           -T[0-5]: Choisit une politique de temporisation (plus élevée, plus rapide)
+           -D <decoy1,decoy2[,ME],...>: Obscurci le scan avec des leurres
+           --spoof-mac <adresse MAC, préfixe ou nom du fabriquant>: Usurpe une adresse MAC
+           --log-errors: Journalise les erreurs/alertes dans un fichier au format normal
+           --packet-trace: Affiche tous les paquets émis et reçus
+           -v: Rend Nmap plus verbeux (-vv pour plus d'effet)
+           --badsum: Envoi des paquets TCP/UDP avec une somme de controle erronnée
+           --scan-delay/--max-scan-delay <time>: Ajuste le delais entre les paquets de tests.
+           -p <plage de ports>: Ne scanne que les ports spécifiés
+               Exemple: -p22; -p1-65535; -pU:53,111,137,T:21-25,80,139,8080
+
+
+     */
     private void                    initMenu() {
+        mMenuCommand = new ArrayList<>();
+        mNmapParams = new HashMap<>();
         mMenuCommand.add("Ping scan");
         mNmapParams.put(mMenuCommand.get(0), " -sn");
         mMenuCommand.add("Quick scan");
@@ -50,7 +99,10 @@ public class                        NmapControler {
         mMenuCommand.add("Intense scan, all TCP ports");
         mNmapParams.put(mMenuCommand.get(8), " -p 1-65535 -T4 -A -v");
         mMenuCommand.add("Intense scan, no ping");
-        mNmapParams.put(mMenuCommand.get(9), " -T4 -A -v -Pn");
+        mNmapParams.put(mMenuCommand.get(9), " -T4 -A -v -Pn ");
+        mMenuCommand.add("Basic Host discovery");
+        mNmapParams.put(mMenuCommand.get(10), " -O -A -v ");
+
     }
 
     public ArrayList<String>        getMenuCommmands() {
@@ -58,70 +110,69 @@ public class                        NmapControler {
     }
 
     public String                   getNmapParamFromMenuItem(String itemMenu) {
-        Log.d(TAG, "printing:mNmapParams:");
-        for (Map.Entry<String, String> entry : mNmapParams.entrySet()) {
-            Log.d(TAG, "\t" + entry.getKey() + "=" + entry.getValue());
-        }
-
-        Log.d(TAG, "getNmapParamFromMenuItem(" + itemMenu + ") => " + mNmapParams.get(itemMenu));
         return mNmapParams.get(itemMenu);
-    }
-
-    public void                     setActualItemMenu(String itemMenu) {
-        this.actualItemMenu = itemMenu;
     }
 
     private String                  buildHostFilterCommand() {
         StringBuilder res = new StringBuilder("");
-        for (Host host : mHost) {
-            res.append(host.ip).append("\n");
+        if (mIsLiveDump) {
+            for (Host host : mHost) {
+                res.append(host.ip).append(" ");
+            }
+        } else {
+            return mExternalHostToScan;
         }
         return res.toString();
     }
 
     private String                  buildCommand() {
         String Binary = mSingleton.FilesPath + "nmap/nmap ";
+        String parameter = getNmapParamFromMenuItem(mActualItemMenu);
         String hostFilter = buildHostFilterCommand();
-        String parameter = getNmapParamFromMenuItem(actualItemMenu);
-        return Binary + hostFilter + " " + parameter + " ";
+        return Binary + parameter + " " + hostFilter;
     }
 
-    public void                     start(final NmapOutputFragment nmapOutputFragment, final ProgressBar progressBar) {
-        if (mHost != null) {
-            final String cmd = buildCommand().replace("\n", "").replace("  ", " ");
+    public void                     start(final NmapOutputFragment nmapOutputFragment,
+                                          final ProgressBar progressBar) {
+        if (mHost == null && mExternalHostToScan == null) {
+            Log.e(TAG, "No client selected when launched");
+        } else {
+            final String cmd = buildCommand().replace("\n", "")
+                                             .replace("  ", " ");
             String trimmed_cmd = cmd
                     .replace("nmap/nmap", "nmap")
                     .replace(mSingleton.FilesPath, "");
             Log.d(TAG, cmd);
-            if (nmapOutputFragment != null)
+            if (mIsLiveDump)
                 nmapOutputFragment.printCmdInTerminal(trimmed_cmd);
-            stdoutToBuffer(cmd, nmapOutputFragment, progressBar);
-        } else {
-            Log.e(TAG, "No client selected when launched");
+            execAndDumpInBuffer(cmd, nmapOutputFragment, progressBar);
         }
     }
 
-    private void                    stdoutToBuffer(final String cmd, final NmapOutputFragment fragment, final ProgressBar progressBar) {
+    private void                    execAndDumpInBuffer(final String cmd, final NmapOutputFragment fragment,
+                                     final ProgressBar progressBar) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    BufferedReader reader = new RootProcess("Nmap", mSingleton.FilesPath)
-                            .exec(cmd).getReader();
                     String tmp;
                     StringBuilder dumpOutputBuilder = new StringBuilder();
+                    BufferedReader reader = new RootProcess("Nmap", mSingleton.FilesPath)
+                                                    .exec(cmd).getReader();
                     while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {
-                        dumpOutputBuilder.append(tmp).append('\n');
+                        if (fragment != null) {
+                            if (tmp.charAt(0) == '\n')
+                                tmp = tmp.substring(1);
+                            fragment.flushOutput(tmp + '\n', progressBar);
+                        }  else {
+                            dumpOutputBuilder.append(tmp).append('\n');
+                        }
                     }
                     dumpOutputBuilder.append(tmp);
-                    if (fragment != null) {
-                        Log.d(TAG, "Nmap STDOUT LIVE MODE");
-                        fragment.flushOutput(dumpOutputBuilder.toString().substring(1), progressBar);
-                    } else {
-                        Log.d(TAG, "Nmap STDOUT PARSING MODE");
+                    if (!mIsLiveDump) { /* Parsing Nmap output to scan host on network*/
                         new NmapParser(mInstance).parseStdout(dumpOutputBuilder.toString().substring(1));
                     }
-                    Log.d(TAG, "Nmap final stdouT" + dumpOutputBuilder.toString());
+                    Log.d(TAG, "Nmap final dump:" + dumpOutputBuilder.toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -129,12 +180,12 @@ public class                        NmapControler {
         }).start();
     }
 
-    public void                     setHosts(List<Host> hosts) {
-        this.mHost = hosts;
+    public void                     setmActualItemMenu(String itemMenu) {
+        this.mActualItemMenu = itemMenu;
     }
 
-    public void                     setExecAllHostInOnceExecution(boolean execAllHostInOnceExecution) {
-        this.mIsOneByOnExecuted = execAllHostInOnceExecution;
+    public void                     setHosts(List<Host> hosts) {
+        this.mHost = hosts;
     }
 
     public boolean                  ismOneByOnExecuted() {

@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.CoordinatorLayout;
+import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -31,7 +31,7 @@ public class                MyGlideLoader {
     public static void      loadDrawableInImageViewNoOverride(Context context, int ressource, ImageView imageView) {
         GlideApp.with(context)
                 .load(ressource)
-                .placeholder(R.mipmap.ic_add_button)
+                .placeholder(R.drawable.ico)
                 .into(imageView);
     }
 
@@ -39,6 +39,7 @@ public class                MyGlideLoader {
         GlideApp.with(context)
                 .load(R.drawable.splashscreen)
                 .transition(withCrossFade())
+                .placeholder(R.drawable.ico)
                 .into(new SimpleTarget<Drawable>() {
                     @Override
                     public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
@@ -46,10 +47,11 @@ public class                MyGlideLoader {
                     }
                 });
     }
-    public static void      coordoBackground(Activity context, final RelativeLayout layout) {
+    public static void      coordoBackground(Activity context, final View layout) {
         GlideApp.with(context)
                 .load(R.drawable.splashscreen)
                 .transition(withCrossFade())
+                .placeholder(R.drawable.ico)
                 .into(new SimpleTarget<Drawable>() {
                     @Override
                     public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {

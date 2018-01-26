@@ -7,8 +7,7 @@
     android:alpha="0.90"
     android:padding="16dp"
     app:cardBackgroundColor="@color/cardview_dark_background"
-    app:cardCornerRadius="4dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="4dp">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -16,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_marginTop="1px"
-        android:background="@color/material_grey_700"
+        android:background="@color/cardview_dark_background"
         android:elevation="1dp"
         android:paddingBottom="2dp"
         android:paddingRight="6dp"

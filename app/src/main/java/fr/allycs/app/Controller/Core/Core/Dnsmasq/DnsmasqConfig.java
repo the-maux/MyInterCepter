@@ -9,19 +9,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.allycs.app.Controller.Core.Core.RootProcess;
 import fr.allycs.app.Controller.AndroidUtils.Utils;
+import fr.allycs.app.Controller.Core.Core.RootProcess;
 import fr.allycs.app.Model.Target.DNSSpoofItem;
 
-public class                    DnsConf {
-    private String              TAG = "DnsConf";
+public class                    DnsmasqConfig {
+    private String              TAG = "DnsmasqConfig";
     public static String        PATH_CONF_FILE = "/etc/dnsmasq.conf ";
     public static String        PATH_HOST_FILE = "/etc/dnsmasq.hosts";
     public static String        PATH_RESOLV_FILE = "/etc/resolv.conf";
-    public List<DNSSpoofItem>   listDomainSpoofed;
+    public List<DNSSpoofItem>   listDomainSpoofable;
 
-    DnsConf() {
-        listDomainSpoofed = new ArrayList<>();
+    DnsmasqConfig() {
+        listDomainSpoofable = new ArrayList<>();
         readDnsFromFile();
     }
 
@@ -35,7 +35,7 @@ public class                    DnsConf {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 Log.d("DNS CONF::readDnsconf", line);
-                listDomainSpoofed.add(new DNSSpoofItem(line.split(" ")[0], line.split(" ")[1]));
+                listDomainSpoofable.add(new DNSSpoofItem(line.split(" ")[0], line.split(" ")[1]));
             }
         } catch (IOException e) {
             try {
@@ -45,7 +45,7 @@ public class                    DnsConf {
                 String line;
                 while ((line = bufferedReader.readLine()) != null) {
                     Log.d("DNS CONF", line);
-                    listDomainSpoofed.add(new DNSSpoofItem(line.split(" ")[0], line.split(" ")[1]));
+                    listDomainSpoofable.add(new DNSSpoofItem(line.split(" ")[0], line.split(" ")[1]));
                 }
             } catch (IOException e2) {
                 e2.getStackTrace();
@@ -56,13 +56,13 @@ public class                    DnsConf {
         readDnsFromFile();
     }
     public void                 clear() {
-        listDomainSpoofed.clear();
+        listDomainSpoofable.clear();
     }
     public void                 saveConf() {
         if (Utils.ReadOnlyFileSystemOFF() != -1) {
             int rax = 0;
             StringBuilder tmp = new StringBuilder("");
-            for (DNSSpoofItem dnsSpoofItem : listDomainSpoofed) {
+            for (DNSSpoofItem dnsSpoofItem : listDomainSpoofable) {
                 if (rax == 0) {
                     tmp.append("echo \"")
                             .append(dnsSpoofItem.ip)
@@ -71,7 +71,7 @@ public class                    DnsConf {
                             .append(" ")
                             .append(dnsSpoofItem.domain)
                             .append("\" > ")
-                            .append(DnsConf.PATH_HOST_FILE);
+                            .append(DnsmasqConfig.PATH_HOST_FILE);
                 } else {
                     tmp.append(" && echo \"")
                             .append(dnsSpoofItem.ip)
@@ -80,7 +80,7 @@ public class                    DnsConf {
                             .append(" ")
                             .append(dnsSpoofItem.domain)
                             .append("\" >> ")
-                            .append(DnsConf.PATH_HOST_FILE);
+                            .append(DnsmasqConfig.PATH_HOST_FILE);
                 }
                 rax++;
             }
@@ -91,6 +91,6 @@ public class                    DnsConf {
         }
     }
     public void                 addHost(String ip, String domain) {
-        listDomainSpoofed.add(0, new DNSSpoofItem(ip, domain));
+        listDomainSpoofable.add(0, new DNSSpoofItem(ip, domain));
     }
 }

@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
-import fr.allycs.app.Controller.Core.Core.Dnsmasq.DnsConf;
+import fr.allycs.app.Controller.Core.Core.Dnsmasq.DnsmasqConfig;
 import fr.allycs.app.Controller.Core.Core.RootProcess;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Startup.SetupActivity;
@@ -36,29 +36,29 @@ public class                    Setup {
         new RootProcess("initialisation ").exec("mount -o rw,remount /system").closeProcess();
         new RootProcess("initialisation ").exec("cp ./ping /system/bin/;").closeProcess();
         /*  Dns Stuff    */
-        new RootProcess("initialisation ").exec("echo \"nameserver `getprop net.dns1`\" > " + DnsConf.PATH_RESOLV_FILE).closeProcess();
+        new RootProcess("initialisation ").exec("echo \"nameserver `getprop net.dns1`\" > " + DnsmasqConfig.PATH_RESOLV_FILE).closeProcess();
         /*  Clean    */
         new RootProcess("initialisation ").exec("rm " + mSingleton.BinaryPath).closeProcess();
         buildDefaultDnsConf();
-        new RootProcess("initialisation ").exec("chmod 644 " + DnsConf.PATH_HOST_FILE).closeProcess();
+        new RootProcess("initialisation ").exec("chmod 644 " + DnsmasqConfig.PATH_HOST_FILE).closeProcess();
         mActivity.monitor("Cleaning installation");
         cleanTheKitchenBoy();
     }
 
     private void                buildDefaultDnsConf() {
-        new RootProcess("DNS::" + DnsConf.PATH_CONF_FILE)
-                .exec("echo \"no-dhcp-interface=\" > " + DnsConf.PATH_CONF_FILE + " && " +
-                        "echo \"server=8.8.8.8\" >> " + DnsConf.PATH_CONF_FILE + " && " +
-                        "echo \"port=8053\" >> " + DnsConf.PATH_CONF_FILE + " && " +
-                        "echo \"no-hosts\" >> " + DnsConf.PATH_CONF_FILE + " && " +
-                        "echo \"addn-hosts=" + DnsConf.PATH_HOST_FILE + "\" >> " + DnsConf.PATH_CONF_FILE + " && " +
-                        "chmod 644 " + DnsConf.PATH_CONF_FILE).
+        new RootProcess("DNS::" + DnsmasqConfig.PATH_CONF_FILE)
+                .exec("echo \"no-dhcp-interface=\" > " + DnsmasqConfig.PATH_CONF_FILE + " && " +
+                        "echo \"server=8.8.8.8\" >> " + DnsmasqConfig.PATH_CONF_FILE + " && " +
+                        "echo \"port=8053\" >> " + DnsmasqConfig.PATH_CONF_FILE + " && " +
+                        "echo \"no-hosts\" >> " + DnsmasqConfig.PATH_CONF_FILE + " && " +
+                        "echo \"addn-hosts=" + DnsmasqConfig.PATH_HOST_FILE + "\" >> " + DnsmasqConfig.PATH_CONF_FILE + " && " +
+                        "chmod 644 " + DnsmasqConfig.PATH_CONF_FILE).
                 closeProcess();
-        new RootProcess("DNS::" + DnsConf.PATH_HOST_FILE)
-                .exec("echo \"192.168.0.29 www.microsof.com microsoft.com\" > " + DnsConf.PATH_HOST_FILE + " && " +
-                        "echo \"192.168.0.30 www.any.domain any.domain\" >> " + DnsConf.PATH_HOST_FILE + " && " +
-                        "echo \"192.168.0.30 www.test.fr test.fr\" >> " + DnsConf.PATH_HOST_FILE + " && " +
-                        "chmod 644 " + DnsConf.PATH_HOST_FILE)
+        new RootProcess("DNS::" + DnsmasqConfig.PATH_HOST_FILE)
+                .exec("echo \"192.168.0.29 www.microsof.com microsoft.com\" > " + DnsmasqConfig.PATH_HOST_FILE + " && " +
+                        "echo \"192.168.0.30 www.any.domain any.domain\" >> " + DnsmasqConfig.PATH_HOST_FILE + " && " +
+                        "echo \"192.168.0.30 www.test.fr test.fr\" >> " + DnsmasqConfig.PATH_HOST_FILE + " && " +
+                        "chmod 644 " + DnsmasqConfig.PATH_HOST_FILE)
                 .closeProcess();
     }
 

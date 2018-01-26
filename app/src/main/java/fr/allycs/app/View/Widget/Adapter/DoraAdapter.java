@@ -61,8 +61,14 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
     public void                 onBindViewHolder(DoraHolder holder, int position) {
         final DoraProcess host = mHosts.get(position);
         holder.diagnose.setText(new String(new char[host.getVisu()]).replace("\0", "#"));
-        String IP = host.mhost.ip + (host.mhost.getName().contains("(-)") ? "" : (" - " + host.mhost.getName().replace("(", "[").replace(")", "]")));
+        String IP = host.mhost.ip + (host.mhost.getName().contains("(-)") ? "" : (" - " +
+                host.mhost.getName().replace("(", "[").replace(")", "]")));
         holder.IP.setText(IP);
+        if (host.mhost.getName().contains(host.mhost.ip)) {
+            holder.ipHostname.setVisibility(View.GONE);
+        } else {
+            holder.ipHostname.setText(host.mhost.name);
+        }
         holder.uptime.setText("Uptime:    " + host.getmUptime());
         holder.stat.setText("sent: " + host.sent + " / rcv: " + host.rcv);
         int pourc = host.getPourcentage();
@@ -71,7 +77,7 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
         } else if (pourc <= 60) {
             holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(mActivity, R.color.material_red_500));
         } else if (pourc <= 90) {
-            holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(mActivity, R.color.material_deep_orange_500));
+            holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(mActivity, R.color.material_orange_500));
         } else {
             holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(mActivity, R.color.material_green_600));
         }
