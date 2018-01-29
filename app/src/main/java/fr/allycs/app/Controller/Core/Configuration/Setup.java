@@ -42,7 +42,7 @@ public class                    Setup {
 
     private void                buildDefaultDnsConf() {
         exec( /* Dnsmasq default configuration */
-            "echo \"nameserver `getprop net.dns1`\" > " + DnsmasqConfig.PATH_RESOLV_FILE +
+            "echo \"nameserver `getprop net.dns1`\" > " + DnsmasqConfig.PATH_RESOLV_FILE + " && " +
                  "echo \"no-dhcp-interface=\" > " + DnsmasqConfig.PATH_CONF_FILE + " && " +
                  "echo \"server=8.8.8.8\" >> " + DnsmasqConfig.PATH_CONF_FILE + " && " +
                  "echo \"port=8053\" >> " + DnsmasqConfig.PATH_CONF_FILE + " && " +
@@ -112,22 +112,35 @@ public class                    Setup {
         out.flush();
         inputStream.close();
         out.close();
-        Log.d(TAG, "Building[" + nameFile + "] chmod::+x::" + file.setExecutable(true, false));
-        Log.d(TAG, "File exist:" + file.exists() + " and size: " + (file.length() / 1024) + "kb");
+        file.setExecutable(true, false);
+        Log.d(TAG, "Building[" + nameFile + "] chmod::+x::" + file.canExecute() + " and size: " + (file.length() / 1024) + "kb");
+    }
+
+    private void                unzipNmap() throws IOException {
+        String stdout;
+        RootProcess process = new RootProcess("Setup", mSingleton.FilesPath);
+        Log.d(TAG, mSingleton.FilesPath + "busybox unzip " + mSingleton.FilesPath + "archive_nmap.zip");
+        process.exec(mSingleton.FilesPath + "busybox unzip archive_nmap.zip").closeProcess();
+/*        Log.d(TAG, "UNZIP[nmap]:");
+        while ((stdout = reader.readLine()) != null) {
+            Log.d(TAG, "\t:" + stdout);
+        }
+        process.closeProcess();*/
     }
 
     private void                buildFiles() throws IOException, InterruptedException  {
         buildFile("busybox", R.raw.busybox);
+        buildFile("ettercap_archive", R.raw.ettercap_archive);
+        buildFile("archive_nmap.zip", R.raw.nmap);
         buildFile("cepter", 0);
         buildFile("tcpdump", R.raw.tcpdump);
-        buildFile("ettercap_archive", R.raw.ettercap_archive);
-        buildFile("archive_nmap", R.raw.nmap);
         buildFile("macchanger", R.raw.macchanger);
         buildFile("usernames", R.raw.usernames);
         buildFile("arpspoof", R.raw.arpspoof);
 
-        Log.d(TAG, "unzip ettercap::exit::" + exec(mSingleton.BinaryPath + "busybox unzip ettercap_archive"));
-        Log.d(TAG, "unzip nmap::exit::" + exec(mSingleton.BinaryPath + "busybox unzip archive_nmap"));
+        unzipNmap();
+        //Log.d(TAG, "unzip ettercap::exit::" + exec(mSingleton.BinaryPath + "busybox unzip ettercap_archive"));
+        //Log.d(TAG, "unzip nmap::exit::" + exec(mSingleton.BinaryPath + "busybox unzip archive_nmap.zip"));
         Log.d(TAG, "chmod 744 " + mSingleton.BinaryPath + "nmap/*" + "::exit::" + exec("chmod 744 " + mSingleton.BinaryPath + "nmap/*"));
     }
 
@@ -139,13 +152,19 @@ public class                    Setup {
         Log.d(TAG, "rm -f " + mSingleton.FilesPath + "dnss::exit::" + exec("rm -f " + mSingleton.FilesPath + "dnss"));
         Log.d(TAG, "rm -f " + mSingleton.FilesPath + "hostlist::exit::" + exec("rm -f " + mSingleton.FilesPath + "hostlist"));
         Log.d(TAG, "rm -f " + mSingleton.FilesPath + "*Activity::exit::" + exec("rm -f " + mSingleton.FilesPath + "*Activity"));
-//        Log.d(TAG, "rm -f " + mSingleton.FilesPath + "archive_nmap::exit::" + exec("rm -f " + mSingleton.FilesPath + "archive_nmap"));
+        Log.d(TAG, "rm -f " + mSingleton.FilesPath + "archive_nmap::exit::" + exec("rm -f " + mSingleton.FilesPath + "archive_nmap"));
         Log.d(TAG, "rm -f " + mSingleton.FilesPath + "ettercap_archive::exit::" + exec("rm -f " + mSingleton.FilesPath + "ettercap_archive"));
         Log.d(TAG, "echo '" + mSingleton.VERSION + "' > " + mSingleton.FilesPath + "version::exit::" + exec("echo '" + mSingleton.VERSION + "' > " + mSingleton.FilesPath + "version"));
     }
 
     private int                exec(String cmd) {
-        Log.d(TAG, cmd.replace(mSingleton.FilesPath, "./files/").replace(mSingleton.BinaryPath, "./binary/"));
+        if (cmd.contains(" && ")) {
+            for (String line : cmd.split(" && ")) {
+                Log.d(TAG, line.replace(mSingleton.FilesPath, "./files/").replace(mSingleton.BinaryPath, "./binary/"));
+            }
+        } else {
+            Log.d(TAG, cmd);//.replace(mSingleton.FilesPath, "./files/").replace(mSingleton.BinaryPath, "./binary/"));
+        }
         return new RootProcess("Setup").exec(cmd).closeProcess();
     }
 }
