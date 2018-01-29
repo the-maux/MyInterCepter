@@ -116,11 +116,11 @@ public class                    Setup {
         Log.d(TAG, "Building[" + nameFile + "] chmod::+x::" + file.canExecute() + " and size: " + (file.length() / 1024) + "kb");
     }
 
-    private void                unzipNmap() throws IOException {
+    private void                unzipNmap(String nameArchive) throws IOException {
         String stdout;
         RootProcess process = new RootProcess("Setup", mSingleton.FilesPath);
-        Log.d(TAG, mSingleton.FilesPath + "busybox unzip " + mSingleton.FilesPath + "archive_nmap.zip");
-        process.exec(mSingleton.FilesPath + "busybox unzip archive_nmap.zip").closeProcess();
+        Log.d(TAG, mSingleton.FilesPath + "busybox unzip " + mSingleton.FilesPath + nameArchive);
+        process.exec(mSingleton.FilesPath + "busybox unzip " + nameArchive).closeProcess();
 /*        Log.d(TAG, "UNZIP[nmap]:");
         while ((stdout = reader.readLine()) != null) {
             Log.d(TAG, "\t:" + stdout);
@@ -130,17 +130,16 @@ public class                    Setup {
 
     private void                buildFiles() throws IOException, InterruptedException  {
         buildFile("busybox", R.raw.busybox);
-        buildFile("ettercap_archive", R.raw.ettercap_archive);
-        buildFile("archive_nmap.zip", R.raw.nmap);
         buildFile("cepter", 0);
         buildFile("tcpdump", R.raw.tcpdump);
         buildFile("macchanger", R.raw.macchanger);
         buildFile("usernames", R.raw.usernames);
         buildFile("arpspoof", R.raw.arpspoof);
 
-        unzipNmap();
-        //Log.d(TAG, "unzip ettercap::exit::" + exec(mSingleton.BinaryPath + "busybox unzip ettercap_archive"));
-        //Log.d(TAG, "unzip nmap::exit::" + exec(mSingleton.BinaryPath + "busybox unzip archive_nmap.zip"));
+        buildFile("archive_nmap.zip", R.raw.nmap);
+        unzipNmap("archive_nmap.zip");
+        buildFile("ettercap_archive", R.raw.ettercap_archive);
+        unzipNmap("ettercap_archive");
         Log.d(TAG, "chmod 744 " + mSingleton.BinaryPath + "nmap/*" + "::exit::" + exec("chmod 744 " + mSingleton.BinaryPath + "nmap/*"));
     }
 
