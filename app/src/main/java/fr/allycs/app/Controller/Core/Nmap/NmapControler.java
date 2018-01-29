@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -63,8 +64,12 @@ public class                        NmapControler {
         mIsOneByOnExecuted = false;
         mActualItemMenu = "Basic Host discovery";
         ListNmap listNmap = new ListNmap(this);
-        for (String ip : ips) {
-
+        if (ips.size() > 20) {
+            Log.e(TAG, "WARNING TOO MANY CLIENT TO SCAN");
+            return;
+        }
+        for (Iterator<String> iterator = ips.iterator(); iterator.hasNext();) {
+            String ip = iterator.next();
             mExternalHostToScan = ip.replace(":", "");
             //Log.d(TAG, "Scanning : [" + ip.replace(":", "") + "]");
             final NmapParser parser = new NmapParser(listNmap, ip.replace(":", ""));
@@ -73,7 +78,6 @@ public class                        NmapControler {
     }
 
     public                          NmapControler(boolean execureAllCommandTogether) {/*Live mode*/
-        Log.d(TAG, "Nmap STDOUT LIVE MODE");
         initMenu();
         mIsLiveDump = true;
         mIsOneByOnExecuted = execureAllCommandTogether;

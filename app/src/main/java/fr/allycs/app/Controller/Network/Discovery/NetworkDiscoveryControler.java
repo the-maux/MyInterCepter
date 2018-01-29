@@ -85,7 +85,8 @@ public class                        NetworkDiscoveryControler {
         mActivity.setToolbarTitle(null, tmpAntiConcurentExecptionFFS.size() + " hosts detected");
         mActivity.setProgressState(1500);
         mActivity.setToolbarTitle(null,"Scanning " + tmpAntiConcurentExecptionFFS.size() + " devices");
-        new NmapControler(ipReachable);
+        new NmapControler(tmpAntiConcurentExecptionFFS);
+
         Fingerprint.getDevicesInfoFromCepter(mFragment);
         mActivity.setProgressState(2000);
     }
