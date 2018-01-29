@@ -66,7 +66,7 @@ public class                        NmapControler {
         for (String ip : ips) {
 
             mExternalHostToScan = ip.replace(":", "");
-            Log.d(TAG, "Scanning : [" + ip.replace(":", "") + "]");
+            //Log.d(TAG, "Scanning : [" + ip.replace(":", "") + "]");
             final NmapParser parser = new NmapParser(listNmap, ip.replace(":", ""));
             listNmap.addParsing(startAsParse(parser));
         }
@@ -178,7 +178,7 @@ public class                        NmapControler {
             String trimmed_cmd = cmd
                     .replace("nmap/nmap", "nmap")
                     .replace(mSingleton.FilesPath, "");
-            Log.d(TAG, trimmed_cmd);
+        //    Log.d(TAG, trimmed_cmd);
             new Thread(new Runnable() {
                 @Override
                 public void run() {

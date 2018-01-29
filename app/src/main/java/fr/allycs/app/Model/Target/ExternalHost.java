@@ -88,9 +88,11 @@ public class                ExternalHost extends Model {
         Log.d(TAG, "NetworkDistance:[" + NetworkDistance + "]");
         Log.d(TAG, "TooManyFingerprintMatchForOs:[" + TooManyFingerprintMatchForOs + "]");
         Log.d(TAG, "deviceType:[" + deviceType + "]");
-        Log.d(TAG, "OPENED PORT:");
-        for (Port port : getPortList()) {
-            Log.d(TAG, "\tPort:" + port.port + " PROTO:[" + port.protocol +"] state:[" + port.state + "]");
+        if (getPortList() != null) {
+            Log.d(TAG, "OPENED PORT:");
+            for (Port port : getPortList()) {
+                Log.d(TAG, "\tPort:" + port.port + " PROTO:[" + port.protocol + "] state:[" + port.state + "]");
+            }
         }
     }
 }
