@@ -66,7 +66,7 @@ public class                        NmapControler {
         ListNmap listNmap = new ListNmap(this);
         if (ips.size() > 20) {
             Log.e(TAG, "WARNING TOO MANY CLIENT TO SCAN");
-            return;
+            //return;
         }
         for (Iterator<String> iterator = ips.iterator(); iterator.hasNext();) {
             String ip = iterator.next();
@@ -74,6 +74,7 @@ public class                        NmapControler {
             //Log.d(TAG, "Scanning : [" + ip.replace(":", "") + "]");
             final NmapParser parser = new NmapParser(listNmap, ip.replace(":", ""));
             listNmap.addParsing(startAsParse(parser));
+            return ;
         }
     }
 
@@ -107,7 +108,7 @@ public class                        NmapControler {
         mMenuCommand.add("Intense scan, no ping");
         mNmapParams.put(mMenuCommand.get(9), " -T4 -A -v -Pn ");
         mMenuCommand.add("Basic Host discovery");
-        mNmapParams.put(mMenuCommand.get(10), " -O -A -v ");
+        mNmapParams.put(mMenuCommand.get(10), " -O -v ");
 
     }
 
@@ -176,23 +177,23 @@ public class                        NmapControler {
         if (mHost == null && mExternalHostToScan == null) {
             Log.e(TAG, "No client selected when launched");
         } else {
-
-            final String cmd = buildCommand(parser).replace("\n", "")
-                    .replace("  ", " ");
-            String trimmed_cmd = cmd
-                    .replace("nmap/nmap", "nmap")
-                    .replace(mSingleton.FilesPath, "");
-        //    Log.d(TAG, trimmed_cmd);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
+                        final String cmd = buildCommand(parser).replace("\n", "")
+                                .replace("  ", " ");
                         String tmp;
+                        String trimmed_cmd = cmd
+                                .replace("nmap/nmap", "nmap")
+                                .replace(mSingleton.FilesPath, "");
+                        Log.d(TAG, trimmed_cmd);
                         StringBuilder dumpOutputBuilder = new StringBuilder();
                         BufferedReader reader = new RootProcess("Nmap", mSingleton.FilesPath)
                                 .exec(cmd).getReader();
                         while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {
                             dumpOutputBuilder.append(tmp).append('\n');
+                            Log.d(TAG, "NMAP:" + tmp);
                         }
                         dumpOutputBuilder.append(tmp);
                         parser.parseStdout(dumpOutputBuilder.toString().substring(1));
