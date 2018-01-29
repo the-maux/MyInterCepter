@@ -30,8 +30,8 @@ public class                    GeneralSettings {
                                 SSLSTRIP_MODE = "SslStrip Mode",
                                 LOCKSCREEN = "Lockscreen",
                                 ADVANCED_SNIFF_ANAL = "Advanced trame analyse",
-                                PORT_REDIRECT = "Port redirect",
-                                PORT_FILTERING = "Port filtering",
+                                PORT_REDIRECT = "Ports redirect",
+                                PORT_FILTERING = "Ports filtering",
                                 DNS_SPOOFING = "Dns Spoofing";
 
     public                      GeneralSettings(Activity activity, CoordinatorLayout coordinatorLayout, Tcpdump tcpdump) {

@@ -45,22 +45,34 @@ public class                                DBHost {
         return tmp;
     }
 
-    public static Host                      saveOrGetInDatabase(Host myDevice) {
+    public static Host                      saveOrGetInDatabase(Host myDevice, boolean onlyGet) {
         //ActiveAndroid.beginTransaction();
         Host deviceFromDB = DBHost.getDevicesFromMAC(myDevice.mac);
         if (deviceFromDB == null) {
+            if (onlyGet)
+                Log.i(TAG, myDevice.toString() + " was unknow in BDD");
+            Fingerprint.initHost(myDevice);
             myDevice.save();
             return myDevice;
         } else {
+            if (onlyGet)
+                Log.i(TAG, myDevice.toString() + " was knew in BDD");
             deviceFromDB.ip = myDevice.ip;
             if (!myDevice.getName().equals("(-)"))
                 deviceFromDB.setName(myDevice.getName());
+            deviceFromDB.deviceType = myDevice.deviceType;
+            deviceFromDB.dumpInfo = myDevice.dumpInfo;
+            deviceFromDB.NetworkDistance = myDevice.NetworkDistance;
+            deviceFromDB.osDetail = myDevice.osDetail;
+            deviceFromDB.vendor = myDevice.vendor;
+            deviceFromDB.deviceType = myDevice.deviceType;
+            deviceFromDB.TooManyFingerprintMatchForOs = myDevice.TooManyFingerprintMatchForOs;
             Fingerprint.initHost(deviceFromDB);
             deviceFromDB.save();
 //            ActiveAndroid.setTransactionSuccessful();
 //            ActiveAndroid.endTransaction();
-            return deviceFromDB;
         }
+        return deviceFromDB;
     }
 
     public static List<Session>             getAllDiscovered() {

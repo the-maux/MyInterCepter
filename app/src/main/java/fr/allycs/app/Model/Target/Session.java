@@ -19,31 +19,23 @@ public class                Session extends Model {
 
     @Column(name = "Date")
     public java.util.Date   Date;
-
     @Column(name = "Gateway")
     public Host             Gateway;
-
     @Column(name = "OsNumber")
     public int              nbrOs;
-
     @Column(name = "typeScan")
     public String           typeScan;
-
     @Column(name = "name")
     public String           name;
-
     @Column(name = "isSniffed")
     public boolean           isSniffed = false;
-
     @Column(name = "service")
     public List<Service>    services;
-
     @Column(name = "AccessPoint")
     public AccessPoint      Ap;
 
     @Column(name = "Devices")
     public String           listDevicesSerialized;
-
     private List<Host>      listDevices = null;
     /**
      * Create the ManyToMany relation
@@ -56,15 +48,10 @@ public class                Session extends Model {
         return listDevices;
     }
 
-    /**
-     * Create the OneToMany relation
-     * @return
-     */
     public List<SniffSession> SniffSessions() {
         return getMany(SniffSession.class, "Session");
     }
 
-    @Override
     public String           toString() {
         return new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE)
                 .format(Date) +" " + listDevices().size() + " Devices Connected";

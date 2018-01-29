@@ -42,7 +42,6 @@ public class                AccessPoint extends Model {
         super();
     }
 
-    @Override
     public String           toString() {
         return Ssid + " with " + sessions().size() + " session recorded";
     }

@@ -7,14 +7,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Core.RootProcess;
-import fr.allycs.app.Model.Target.ExternalHost;
 import fr.allycs.app.Model.Target.Host;
+import fr.allycs.app.View.HostDiscovery.FragmentHostDiscoveryScan;
 import fr.allycs.app.View.Scan.NmapOutputFragment;
 
 /*
@@ -50,31 +49,20 @@ public class                        NmapControler {
     private Singleton               mSingleton = Singleton.getInstance();
     private boolean                 mIsLiveDump;
     private boolean                 mIsOneByOnExecuted = false;
-
+    private FragmentHostDiscoveryScan mFragment;
     private Map<String, String>     mNmapParams;
     private ArrayList<String>       mMenuCommand;
     private String                  mActualItemMenu = "Ping scan";//Default
     private List<Host>              mHost = null;
-    private String                  mExternalHostToScan = null;
-    private NmapParser              mNmapParser = null;
 
-
-    public                          NmapControler(List<String> ips) {/* Parsing mode */
+    public                          NmapControler(List<String> ips, FragmentHostDiscoveryScan fragment) {/* Parsing mode */
         mIsLiveDump = false;
         mIsOneByOnExecuted = false;
+        mFragment = fragment;
         mActualItemMenu = "Basic Host discovery";
-        ListNmap listNmap = new ListNmap(this);
+        new NmapParser(ips, fragment);
         if (ips.size() > 20) {
             Log.e(TAG, "WARNING TOO MANY CLIENT TO SCAN");
-            //return;
-        }
-        for (Iterator<String> iterator = ips.iterator(); iterator.hasNext();) {
-            String ip = iterator.next();
-            mExternalHostToScan = ip.replace(":", "");
-            //Log.d(TAG, "Scanning : [" + ip.replace(":", "") + "]");
-            final NmapParser parser = new NmapParser(listNmap, ip.replace(":", ""));
-            listNmap.addParsing(startAsParse(parser));
-            return ;
         }
     }
 
@@ -126,25 +114,23 @@ public class                        NmapControler {
             for (Host host : mHost) {
                 res.append(host.ip).append(" ");
             }
-        } else {
-            return mExternalHostToScan;
         }
         return res.toString();
     }
 
-    private String                  buildCommand(NmapParser parser) {
+    private String                  buildCommand() {
         String Binary = mSingleton.FilesPath + "nmap/nmap ";
-        String parameter = ((parser == null) ? getNmapParamFromMenuItem(mActualItemMenu) : " -O -A -v ");
-        String hostFilter = ((parser == null) ? buildHostFilterCommand() : parser.TARGETED_IP + " ");
+        String parameter = getNmapParamFromMenuItem(mActualItemMenu);
+        String hostFilter = buildHostFilterCommand();
         return Binary + parameter + " " + hostFilter;
     }
 
     public void                     startAsLive(final NmapOutputFragment nmapOutputFragment,
                                             final ProgressBar progressBar) {
-        if (mHost == null && mExternalHostToScan == null) {
+        if (mHost == null) {
             Log.e(TAG, "No client selected when launched");
         } else {
-            final String cmd = buildCommand(null).replace("\n", "")
+            final String cmd = buildCommand().replace("\n", "")
                                              .replace("  ", " ");
             String trimmed_cmd = cmd
                     .replace("nmap/nmap", "nmap")
@@ -173,43 +159,10 @@ public class                        NmapControler {
             }).start();
         }
     }
-    private NmapParser              startAsParse(final NmapParser parser) {
-        if (mHost == null && mExternalHostToScan == null) {
-            Log.e(TAG, "No client selected when launched");
-        } else {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        final String cmd = buildCommand(parser).replace("\n", "")
-                                .replace("  ", " ");
-                        String tmp;
-                        String trimmed_cmd = cmd
-                                .replace("nmap/nmap", "nmap")
-                                .replace(mSingleton.FilesPath, "");
-                        Log.d(TAG, trimmed_cmd);
-                        StringBuilder dumpOutputBuilder = new StringBuilder();
-                        BufferedReader reader = new RootProcess("Nmap", mSingleton.FilesPath)
-                                .exec(cmd).getReader();
-                        while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {
-                            dumpOutputBuilder.append(tmp).append('\n');
-                            Log.d(TAG, "NMAP:" + tmp);
-                        }
-                        dumpOutputBuilder.append(tmp);
-                        parser.parseStdout(dumpOutputBuilder.toString().substring(1));
-                        Log.d(TAG, "Nmap final dump:" + dumpOutputBuilder.toString());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-            return parser;
-        }
-        return null;
-    }
 
-    public void                     onParsingNmapOver(List<ExternalHost> externalHosts) {
+    public void                     onParsingNmapOver(ArrayList<Host> externalHosts) {
         Log.i(TAG, "ALL NMAP PARSING OVER, WE CAN CLOSE");
+        mFragment.onHostActualized(externalHosts);
     }
 
     public void                     setmActualItemMenu(String itemMenu) {

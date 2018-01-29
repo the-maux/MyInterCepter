@@ -27,24 +27,32 @@ public class                Host extends Model {
     public String           mac = "Unknown";
     @Column(name ="os")
     public String           os = "Unknown";
+    @Column(name ="osDetail")
+    public String           osDetail = "Unknown";
     @Column(name ="vendor")
     public String           vendor = "Unknown";
     @Column(name = "dump")
     public String           dumpInfo;
     @Column(name = "Notes")
     public List<String>     Notes = new ArrayList<>();
+    @Column(name = "deviceType")
+    public String           deviceType;
+    @Column(name = "TooManyFingerprintMatchForOs")
+    public boolean          TooManyFingerprintMatchForOs = false;
+    @Column(name = "NetworkDistance")
+    public String           NetworkDistance = "Unknow";
+    public ArrayList<Service> ServiceActivOnHost = new ArrayList<>();
+    public boolean          selected = false;
+    public boolean          isItMyDevice = false;
+    public Os               osType;
 
     public List<Session>    Session() {
         return getMany(Session.class, "listDevices");
     }
 
-    public ArrayList<Service> ServiceActivOnHost = new ArrayList<>();
-    public boolean          isServiceActiveOnHost = false;
-    private List<Port>      portList;
-    public boolean          selected = false;
-    public boolean          isItMyDevice = false;
-    public Os               osType;
-
+    public List<Port>       Ports() {
+        return getMany(Port.class, "Host");
+    }
 
     public                  Host(String buffer) {
         super();
@@ -74,31 +82,9 @@ public class                Host extends Model {
     public String           getName() {
         return (name.contains("Unknown") ? ip : name);
     }
-
     public void             setName(String name) {
         this.name = name;
     }
-
-    public String           getGenericId() {
-        return mac.replace(":", "");
-    }
-
-    public static Comparator<Host> comparator = new Comparator<Host>() {
-        @Override
-        public int compare(Host o1, Host o2) {
-            String ip1[] = o1.ip.replace(" ", "").replace(".", "::").split("::");
-            String ip2[] = o2.ip.replace(" ", "").replace(".", "::").split("::");
-            if (Integer.parseInt(ip1[2]) > Integer.parseInt(ip2[2]))
-                return 1;
-            else if (Integer.parseInt(ip1[2]) < Integer.parseInt(ip2[2]))
-                return -1;
-            else if (Integer.parseInt(ip1[3]) > Integer.parseInt(ip2[3]))
-                return 1;
-            else if (Integer.parseInt(ip1[3]) < Integer.parseInt(ip2[3]))
-                return -1;
-            return 0;
-        }
-    };
 
     public boolean          isServiceActiveOnHost() {
         return !ServiceActivOnHost.isEmpty();
@@ -110,14 +96,6 @@ public class                Host extends Model {
         ServiceActivOnHost.add(service);
     }
 
-    public List<Port>       getPortList() {
-        return portList;
-    }
-
-    public void             setPortList(List<Port> portList) {
-        this.portList = portList;
-    }
-
     private void            dumpHost() {
         Log.i(TAG, "Buffer Device: " + dumpInfo + "");
         Log.i(TAG, "\t  ip " + ip + "");
@@ -127,15 +105,55 @@ public class                Host extends Model {
         Log.i(TAG, "\t  vendor " + vendor + "");
     }
 
-    @Override public boolean equals(Object obj) {
+    public boolean          equals(Object obj) {
         return mac.equals(((Host) obj).mac);
     }
 
-    @Override public String toString() {
+    public String           toString() {
         return ip + ":" + mac;
     }
 
     public                  Host() {
         super();
     }
+
+    public void             dumpMe() {
+        Log.d(TAG, "ip:[" + ip + "]");
+        Log.d(TAG, "mac:[" + mac + "]");
+        Log.d(TAG, "vendor:[" + vendor + "]");
+        Log.d(TAG, "os:[" + os + "]");
+        Log.d(TAG, "osType[" + osType.name() + "]");
+        Log.d(TAG, "osDetail:[" + osDetail + "]");
+        Log.d(TAG, "name:[" + name + "]");
+        Log.d(TAG, "NetworkDistance:[" + NetworkDistance + "]");
+        Log.d(TAG, "TooManyFingerprintMatchForOs:[" + TooManyFingerprintMatchForOs + "]");
+        Log.d(TAG, "deviceType:[" + deviceType + "]");
+        if (Ports() != null) {
+            Log.d(TAG, "OPENED PORT:");
+            for (Port port : Ports()) {
+                Log.d(TAG, "\tPorts:" + port.port + " PROTO:[" + port.protocol + "] state:[" + port.state + "]");
+            }
+        }
+    }
+    public static Comparator<Host> getComparator() {
+        return new Comparator<Host>() {
+            @Override
+            public int compare(Host o1, Host o2) {
+                String ip1[] = o1.ip.replace(" ", "").replace(".", "::").split("::");
+                String ip2[] = o2.ip.replace(" ", "").replace(".", "::").split("::");
+                if (Integer.parseInt(ip1[2]) > Integer.parseInt(ip2[2]))
+                    return 1;
+                else if (Integer.parseInt(ip1[2]) < Integer.parseInt(ip2[2]))
+                    return -1;
+                else if (Integer.parseInt(ip1[3]) > Integer.parseInt(ip2[3]))
+                    return 1;
+                else if (Integer.parseInt(ip1[3]) < Integer.parseInt(ip2[3]))
+                    return -1;
+                return 0;
+            }
+
+            ;
+        };
+    }
+
 }

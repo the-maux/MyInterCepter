@@ -256,7 +256,6 @@ public class                    NmapActivity extends MyActivity {
         dialog.onPositiveButton("Ajouter", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface d, int which) {
                 onAddExternal(dialog.getFirstInputQuestion());
-
             }
         }).show();
     }
@@ -269,7 +268,7 @@ public class                    NmapActivity extends MyActivity {
                 address = InetAddress.getByName(externalHost);
                 String ip = address.getHostAddress();
                 List<String> listExternalIp = new ArrayList<>();
-                new NmapControler(listExternalIp);
+                //new NmapControler(listExternalIp);
             } catch (UnknownHostException e) {
                 e.printStackTrace();
                 addExternalHostFailed(externalHost + ": Name or service unknow");

@@ -62,8 +62,9 @@ public class                NetUtils {
         return true;
     }
 
-    public static void      dumpListHostFromARPTableInFile(Context context, ArrayList<String> ipReachable) {
+    public static ArrayList<String>      dumpListHostFromARPTableInFile(Context context, ArrayList<String> ipReachable) {
         Log.i(TAG, "Dump list devices from Arp Table");
+        ArrayList<String> listIpPlusMac = new ArrayList<>();
         try {
             ArrayList<String> listOfIpsAlreadyIn = new ArrayList<>();
             FileOutputStream hostListFile = new FileOutputStream(new File(Singleton.getInstance().FilesPath + "hostlist"));
@@ -78,6 +79,8 @@ public class                NetUtils {
                 if (matcher.matches() && !ip.contains(Singleton.getInstance().network.myIp)) {
                     listOfIpsAlreadyIn.add(ip);
                     hostListFile.write((ip + ":" + matcher.group(1) + "\n").getBytes());
+                    listIpPlusMac.add(ip + ":" + matcher.group(1));
+                    Log.i(TAG, "dumpListHostFromARPTableInFile::" + ip + ":" + matcher.group(1));
                 }
             }
             Log.d(TAG, listOfIpsAlreadyIn.size() + " new host discovered in /proc/arp");
@@ -91,17 +94,23 @@ public class                NetUtils {
                     }
                 }
                 if (!already) {
-                    if (!reachable.contains(Singleton.getInstance().network.myIp))
+                    if (!reachable.contains(Singleton.getInstance().network.myIp)) {
                         hostListFile.write((reachable + "\n").getBytes());
+                        listIpPlusMac.add(reachable);
+                        Log.i(TAG, "dumpListHostFromARPTableInFile::" + reachable);
+                    }
                 }
             }
             String dumpMyDevice = Singleton.getInstance().network.myIp + ":" + Singleton.getInstance().network.mac + '\n';
             hostListFile.write(dumpMyDevice.getBytes());
+            listIpPlusMac.add(dumpMyDevice);
+            Log.i(TAG, "dumpListHostFromARPTableInFile::" + dumpMyDevice);
             bufferedReader.close();
             hostListFile.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return listIpPlusMac;
     }
 
     public static String    intADDRtoStringHostname(int hostAddress) {
