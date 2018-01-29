@@ -23,7 +23,7 @@ import fr.allycs.app.Controller.AndroidUtils.MyActivity;
 import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
 import fr.allycs.app.Controller.AndroidUtils.Utils;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Core.Core.Dnsmasq.DnsmasqControl;
+import fr.allycs.app.Controller.Core.Dnsmasq.DnsmasqControl;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Widget.Adapter.DnsLogsAdapter;
 import fr.allycs.app.View.Widget.Adapter.DnsSpoofConfAdapter;

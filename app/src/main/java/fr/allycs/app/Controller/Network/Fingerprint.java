@@ -8,15 +8,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Database.DBHost;
-import fr.allycs.app.Controller.Core.Core.RootProcess;
 import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Controller.Core.RootProcess;
+import fr.allycs.app.Controller.Database.DBHost;
+import fr.allycs.app.Model.Target.ExternalHost;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;
 import fr.allycs.app.View.HostDiscovery.FragmentHostDiscoveryScan;
 
+/**
+ * Supprimer les duplicata External & Host
+ */
 public class                         Fingerprint {
     private static String            TAG = "Fingerprint";
     /**
@@ -68,6 +72,10 @@ public class                         Fingerprint {
         guessosType(host.dumpInfo, host);
         isItMyDevice(host);
     }
+    public static void               initExternalHost(ExternalHost host) {
+        guessosType(host.dumpInfo, host);
+        isItMyExternalDevice(host);
+    }
 
     private static void              guessosType(String InfoDevice, Host host) {
         if (InfoDevice == null) {
@@ -101,6 +109,46 @@ public class                         Fingerprint {
             host.osType = Os.Linux_Unix;
         } else
             host.osType = Os.Unknow;
+    }
+
+    private static void              guessosType(String InfoDevice, ExternalHost host) {
+        if (InfoDevice == null) {
+            host.osType = Os.Unknow;
+            return;
+        }
+        InfoDevice = InfoDevice.toLowerCase();
+        if (InfoDevice.contains("bluebird")) {
+            host.osType = Os.Bluebird;
+        } else if (InfoDevice.contains("cisco")) {
+            host.osType = Os.Cisco;
+        } else if (InfoDevice.contains("quanta")) {
+            host.osType = Os.QUANTA;
+        } else if (InfoDevice.contains("android") || InfoDevice.contains("mobile") || InfoDevice.contains("samsung") ||
+                InfoDevice.contains("murata") || InfoDevice.contains("huawei") || InfoDevice.contains("oneplus") ||
+                InfoDevice.contains("lg") || InfoDevice.contains("motorola")) {
+            host.osType = Os.Android;
+        } else if (InfoDevice.contains("windows 7")) {
+            host.osType = Os.Windows7_8_10;
+        } else if (InfoDevice.contains("windows 2000")) {
+            host.osType = Os.WindowsXP;
+        } else if (InfoDevice.contains("windows")) {
+            host.osType = Os.Windows10;
+        } else if (InfoDevice.contains("apple")) {
+            host.osType = Os.Apple;
+        } else if (InfoDevice.contains("raspberry")) {
+            host.osType = Os.Raspberry;
+        }  else if (InfoDevice.contains("ios")) {
+            host.osType = Os.Ios;
+        } else if (!(!InfoDevice.contains("unix") && !InfoDevice.contains("linux") && !InfoDevice.contains("bsd"))) {
+            host.osType = Os.Linux_Unix;
+        } else
+            host.osType = Os.Unknow;
+    }
+
+    private static void              isItMyExternalDevice(ExternalHost host) {
+        if (host.ip.contains(Singleton.getInstance().network.myIp)) {
+            host.isItMyDevice = true;
+        }
     }
 
     private static void              isItMyDevice(Host host) {

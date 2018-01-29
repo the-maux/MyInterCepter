@@ -155,7 +155,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                     mSingleton.actualSession = actualSession;
                     startActivity(new Intent(mInstance, TargetMenuActivity.class));
                 } else if (mSingleton.DebugMode) {
-                    Log.i(TAG, "fragment start false");
+                    Log.i(TAG, "fragment startAsLive false");
                 }
             }
         });
@@ -168,7 +168,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                     .beginTransaction()
                     .replace(R.id.frame_container, mFragment)
                     .commit();
-            //mFragment.start();
+            //mFragment.startAsLive();
         } catch (IllegalStateException e) {
             showSnackbar("Error in fragment: " + e.getCause().getMessage());
             e.getStackTrace();

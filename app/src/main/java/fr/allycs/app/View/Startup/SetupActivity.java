@@ -14,7 +14,7 @@ import java.io.IOException;
 
 import fr.allycs.app.Controller.AndroidUtils.MyActivity;
 import fr.allycs.app.Controller.Core.Configuration.Setup;
-import fr.allycs.app.Controller.Core.Core.RootProcess;
+import fr.allycs.app.Controller.Core.RootProcess;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.R;
 import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;

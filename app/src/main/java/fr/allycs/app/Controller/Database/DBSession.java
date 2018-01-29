@@ -29,7 +29,7 @@ public class                                DBSession {
         mActualSession.nbrOs = osList.size();
         mActualSession.save();
 //            }
-//        }).start();
+//        }).startAsLive();
         return mActualSession;
     }
 

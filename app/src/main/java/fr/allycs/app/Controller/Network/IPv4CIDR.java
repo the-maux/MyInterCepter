@@ -5,21 +5,22 @@ import android.support.v4.view.MotionEventCompat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class                    IPv4CIDR {
-    int                             baseIPnumeric;
-    int                             netmaskNumeric;
+public class                        IPv4CIDR {
+    private int                     baseIPnumeric;
+    private int                     netmaskNumeric;
 
-    public                          IPv4CIDR(String symbolicIP, String netmask) throws NumberFormatException {
-        String[] st = symbolicIP.split("\\.");
+    public                          IPv4CIDR(NetworkInformation network) throws NumberFormatException {
+        String[] st = network.myIp.split("\\.");
+        String netmask = network.netmask;
         if (st.length != 4) {
-            throw new NumberFormatException("Invalid IP address: " + symbolicIP);
+            throw new NumberFormatException("Invalid IP address: " + network.myIp);
         }
         int i = 24;
         this.baseIPnumeric = 0;
         for (String parseInt : st) {
             int value = Integer.parseInt(parseInt);
             if (value != (value & MotionEventCompat.ACTION_MASK)) {
-                throw new NumberFormatException("Invalid IP address: " + symbolicIP);
+                throw new NumberFormatException("Invalid IP address: " + network.myIp);
             }
             this.baseIPnumeric += value << i;
             i -= 8;
@@ -51,41 +52,6 @@ public class                    IPv4CIDR {
             }
             ourMaskBitPattern <<= 1;
         }
-    }
-
-    public                          IPv4CIDR(String IPinCIDRFormat) throws NumberFormatException {
-        String[] st = IPinCIDRFormat.split("\\/");
-        if (st.length != 2) {
-            throw new NumberFormatException("Invalid CIDR format '" + IPinCIDRFormat + "', should be: xx.xx.xx.xx/xx");
-        }
-        String symbolicIP = st[0];
-        Integer numericCIDR = new Integer(st[1]);
-        if (numericCIDR  > 32) {
-            throw new NumberFormatException("CIDR can not be greater than 32");
-        }
-        st = symbolicIP.split("\\.");
-        if (st.length != 4) {
-            throw new NumberFormatException("Invalid IP address: " + symbolicIP);
-        }
-        int i = 24;
-        this.baseIPnumeric = 0;
-        for (String parseInt : st) {
-            int value = Integer.parseInt(parseInt);
-            if (value != (value & MotionEventCompat.ACTION_MASK)) {
-                throw new NumberFormatException("Invalid IP address: " + symbolicIP);
-            }
-            this.baseIPnumeric += value << i;
-            i -= 8;
-        }
-        if (numericCIDR < 8) {
-            throw new NumberFormatException("Netmask CIDR can not be less than 8");
-        }
-        this.netmaskNumeric = -1;
-        this.netmaskNumeric <<= 32 - numericCIDR;
-    }
-
-    public String                   getIP() {
-        return convertNumericIpToSymbolic(this.baseIPnumeric);
     }
 
     private String                  convertNumericIpToSymbolic(Integer ip) {
@@ -127,37 +93,5 @@ public class                    IPv4CIDR {
             x = 1.0d;
         }
         return x.intValue();
-    }
-
-    public boolean                  contains(String IPaddress) {
-        Integer checkingIP = 0;
-        String[] st = IPaddress.split("\\.");
-        if (st.length != 4) {
-            throw new NumberFormatException("Invalid IP address: " + IPaddress);
-        }
-        int i = 24;
-        for (String parseInt : st) {
-            int value = Integer.parseInt(parseInt);
-            if (value != (value & MotionEventCompat.ACTION_MASK)) {
-                throw new NumberFormatException("Invalid IP address: " + IPaddress);
-            }
-            checkingIP = checkingIP + (value << i);
-            i -= 8;
-        }
-        if ((this.baseIPnumeric & this.netmaskNumeric) == (checkingIP  & this.netmaskNumeric)) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean                  contains(IPv4CIDR child) {
-        Integer subnetID = child.baseIPnumeric;
-        Integer subnetMask = child.netmaskNumeric;
-        if ((subnetID  & this.netmaskNumeric) == (this.baseIPnumeric & this.netmaskNumeric)) {
-            if ((this.netmaskNumeric < subnetMask ) && this.baseIPnumeric <= subnetID ) {
-                return true;
-            }
-        }
-        return false;
     }
 }

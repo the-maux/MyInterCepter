@@ -7,7 +7,7 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 
-import fr.allycs.app.Controller.Core.Core.RootProcess;
+import fr.allycs.app.Controller.Core.RootProcess;
 
 
 public class                Utils {

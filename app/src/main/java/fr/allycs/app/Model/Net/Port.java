@@ -10,10 +10,10 @@ public class            Port {
         CLOSED, OPEN, FILTERED
     }
     @SerializedName("port")
-    private int         port;
+    public int         port;
     @SerializedName("protocol")
-    private Protocol    protocol;
+    public Protocol    protocol;
     @SerializedName("state")
-    private State       state;
+    public State       state;
 
 }

@@ -1,4 +1,4 @@
-package fr.allycs.app.Controller.Core.Core.Dnsmasq;
+package fr.allycs.app.Controller.Core.Dnsmasq;
 
 import android.util.Log;
 
@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Core.Core.RootProcess;
+import fr.allycs.app.Controller.Core.RootProcess;
 import fr.allycs.app.Model.Target.DNSSpoofItem;
 import fr.allycs.app.Model.Target.SniffSession;
 import fr.allycs.app.Model.Unix.DNSLog;
@@ -17,7 +17,7 @@ import fr.allycs.app.View.Widget.Adapter.DnsLogsAdapter;
 public class DnsmasqControl {
     private String              TAG = "DnsmasqControl";
     public  List<DNSLog>        mDnsLogs;
-    private RootProcess         mProcess;
+    private RootProcess mProcess;
     private DnsLogsAdapter      mRV_Adapter = null;
     private DnsmasqConfig       mDnsConf;
     private DnsActivity         mActivity;

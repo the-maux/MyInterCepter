@@ -1,4 +1,4 @@
-package fr.allycs.app.Controller.Core.Core.Tcpdump;
+package fr.allycs.app.Controller.Core.Tcpdump;
 
 import android.app.Activity;
 import android.util.Log;
@@ -9,9 +9,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import fr.allycs.app.Controller.Core.ArpSpoof;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Core.Core.ArpSpoof;
-import fr.allycs.app.Controller.Core.Core.RootProcess;
+import fr.allycs.app.Controller.Core.RootProcess;
 import fr.allycs.app.Controller.Network.IPTables;
 import fr.allycs.app.Model.Net.Trame;
 import fr.allycs.app.Model.Target.Host;
@@ -22,7 +22,7 @@ public class                        Tcpdump {
     private static Tcpdump          mInstance = null;
     private Singleton               mSingleton = Singleton.getInstance();
     private LinkedHashMap<String, String> mCmds;
-    private RootProcess             mTcpDumpProcess;
+    private RootProcess mTcpDumpProcess;
     private WiresharkActivity       mActivity;
     private ConfTcpdump             mTcpdumpConf = new ConfTcpdump();
     private boolean                 mAdvancedAnalyseTrame = false;

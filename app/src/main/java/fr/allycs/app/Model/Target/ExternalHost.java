@@ -22,12 +22,20 @@ public class                ExternalHost extends Model {
     public String           mac = "Unknown";
     @Column(name ="os")
     public String           os = "Unknown";
+    @Column(name ="osDetail")
+    public String           osDetail = "Unknown";
     @Column(name ="vendor")
     public String           vendor = "Unknown";
     @Column(name = "dump")
     public String           dumpInfo;
     @Column(name = "Notes")
-    public List<String> Notes = new ArrayList<>();
+    public List<String>     Notes = new ArrayList<>();
+    @Column(name = "deviceType")
+    public String           deviceType;
+    @Column(name = "TooManyFingerprintMatchForOs")
+    public boolean          TooManyFingerprintMatchForOs = false;
+    @Column(name = "NetworkDistance")
+    public String           NetworkDistance = "Unknow";
 
     private List<Port>      portList;
     public boolean          selected = false;
@@ -36,16 +44,6 @@ public class                ExternalHost extends Model {
 
     public                  ExternalHost() {
         super();
-    }
-
-    public                  ExternalHost(String buffer) {
-        super();
-        try {
-            //TODO: Parse this !
-        } catch (StringIndexOutOfBoundsException e) {
-            Log.e(TAG, buffer);
-            e.getStackTrace();
-        }
     }
 
     public List<Port>       getPortList() {
@@ -64,7 +62,6 @@ public class                ExternalHost extends Model {
         return ip + ":" + mac;
     }
 
-
     public static Comparator<Host> comparator = new Comparator<Host>() {
         @Override
         public int compare(Host o1, Host o2) {
@@ -81,4 +78,19 @@ public class                ExternalHost extends Model {
             return 0;
         }
     };
+
+    public void             dumpMe() {
+        Log.d(TAG, "ip:[" + ip + "]");
+        Log.d(TAG, "mac:[" + mac + "]");
+        Log.d(TAG, "os:[" + os + "]");
+        Log.d(TAG, "osDetail:[" + osDetail + "]");
+        Log.d(TAG, "name:[" + name + "]");
+        Log.d(TAG, "NetworkDistance:[" + NetworkDistance + "]");
+        Log.d(TAG, "TooManyFingerprintMatchForOs:[" + TooManyFingerprintMatchForOs + "]");
+        Log.d(TAG, "deviceType:[" + deviceType + "]");
+        Log.d(TAG, "OPENED PORT:");
+        for (Port port : getPortList()) {
+            Log.d(TAG, "\tPort:" + port.port + " PROTO:[" + port.protocol +"] state:[" + port.state + "]");
+        }
+    }
 }

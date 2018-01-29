@@ -30,7 +30,7 @@ import java.util.List;
 import fr.allycs.app.Controller.AndroidUtils.MyActivity;
 import fr.allycs.app.Controller.AndroidUtils.Utils;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Core.Core.Nmap.NmapControler;
+import fr.allycs.app.Controller.Core.Nmap.NmapControler;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Widget.Dialog.DialogQuestionWithInput;
@@ -242,7 +242,7 @@ public class                    NmapActivity extends MyActivity {
 
     public void                 startNmap() {
         Utils.vibrateDevice(mInstance);
-        nmapControler.start(nmapOutputFragment, mProgressBar);
+        nmapControler.startAsLive(nmapOutputFragment, mProgressBar);
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
@@ -268,11 +268,8 @@ public class                    NmapActivity extends MyActivity {
             try {
                 address = InetAddress.getByName(externalHost);
                 String ip = address.getHostAddress();
-                List<String> listExternalHost = new ArrayList<>();
-                new NmapControler(listExternalHost)
-                        //TODO: Comment récupérer cette host/list de host
-                //          - 1er cas: ADD TARGET ON FLY (NmapActivity onlyForNow)
-                //          - 2eme cas: Scan target on start up
+                List<String> listExternalIp = new ArrayList<>();
+                new NmapControler(listExternalIp);
             } catch (UnknownHostException e) {
                 e.printStackTrace();
                 addExternalHostFailed(externalHost + ": Name or service unknow");
@@ -281,8 +278,8 @@ public class                    NmapActivity extends MyActivity {
             addExternalHostFailed(externalHost + ": Name or service unknow");
         }
     }
-    private void            addExternalHostFailed(String msg) {
+    private void                addExternalHostFailed(String msg) {
         showSnackbar(msg);
-        return ;
+        askForExternalTarget();
     }
 }

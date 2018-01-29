@@ -25,7 +25,10 @@ public class                PreferenceControler {
             Log.e(TAG, "ERROR NO FILE_PATH ON LOADING USER PREFERENCE");
         } else {
             PATH_TO_PREFERENCES_FILE = new File(FilesPath, "userPreference.json");
-            load();
+            if (PATH_TO_PREFERENCES_FILE.exists())
+                load();
+            else
+                Log.d(TAG, "no userPreference.json found");
         }
     }
 

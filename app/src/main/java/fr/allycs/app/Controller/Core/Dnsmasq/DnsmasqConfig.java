@@ -1,4 +1,4 @@
-package fr.allycs.app.Controller.Core.Core.Dnsmasq;
+package fr.allycs.app.Controller.Core.Dnsmasq;
 
 import android.util.Log;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.allycs.app.Controller.AndroidUtils.Utils;
-import fr.allycs.app.Controller.Core.Core.RootProcess;
+import fr.allycs.app.Controller.Core.RootProcess;
 import fr.allycs.app.Model.Target.DNSSpoofItem;
 
 public class                    DnsmasqConfig {

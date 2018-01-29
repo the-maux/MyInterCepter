@@ -39,6 +39,7 @@
         <meta-data android:name="AA_MODELS"
             android:value="
             fr.allycs.app.Model.Target.Host,
+            fr.allycs.app.Model.Target.ExternalHost,
             fr.allycs.app.Model.Target.AccessPoint,
             fr.allycs.app.Model.Target.Session,
             fr.allycs.app.Model.Target.SniffSession,

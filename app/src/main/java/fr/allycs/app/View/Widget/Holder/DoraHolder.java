@@ -15,7 +15,7 @@ public class                DoraHolder extends RecyclerView.ViewHolder {
     public View             itemView;
     public RelativeLayout   relativeLayout, menuView;
     public TextView         diagnose, diagnosPourcentage, uptime, stat, IP, ipHostname;
-    public FloatingActionButton fab, stopFab;
+    public FloatingActionButton fab;
 
     public                  DoraHolder(View v) {
         super(v);
@@ -29,6 +29,5 @@ public class                DoraHolder extends RecyclerView.ViewHolder {
         IP = itemView.findViewById(R.id.IP);
         menuView = itemView.findViewById(R.id.menuView);
         fab = itemView.findViewById(R.id.fab);
-        stopFab = itemView.findViewById(R.id.stopFab);
     }
 }

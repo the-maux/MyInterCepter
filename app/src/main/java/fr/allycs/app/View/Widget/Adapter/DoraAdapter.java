@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import fr.allycs.app.Controller.Core.Core.RootProcess;
+import fr.allycs.app.Controller.Core.RootProcess;
 import fr.allycs.app.Model.Unix.DoraProcess;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Widget.Holder.DoraHolder;
@@ -84,7 +84,8 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
         holder.diagnosPourcentage.setText(pourc + "%");
         holder.fab.setImageDrawable(mActivity.getDrawable(host.mIsRunning ? R.drawable.ic_pause : R.drawable.ic_media_play));
         holder.fab.setOnClickListener(onClickFab(position, holder));
-        holder.stopFab.setOnClickListener(onClickStop(position, holder));
+        //TODO: replace with status bar in card view
+        //holder.stopFab.setOnClickListener(onClickStop(position, holder));
     }
 
     private View.OnClickListener onClickStop(final int position, final DoraHolder holder) {

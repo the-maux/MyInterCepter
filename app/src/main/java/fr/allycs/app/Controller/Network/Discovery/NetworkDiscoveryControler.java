@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Controller.Core.Nmap.NmapControler;
 import fr.allycs.app.Controller.Network.BonjourService.BonjourManager;
 import fr.allycs.app.Controller.Network.Fingerprint;
 import fr.allycs.app.Controller.Network.IPv4CIDR;
@@ -63,7 +64,7 @@ public class                        NetworkDiscoveryControler {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                new ScanNetmask(new IPv4CIDR(mSingleton.network.myIp, mSingleton.network.netmask), mInstance);
+                new IcmpScanNetmask(new IPv4CIDR(mSingleton.network), mInstance);
             }
         }).start();
     }
@@ -84,6 +85,7 @@ public class                        NetworkDiscoveryControler {
         mActivity.setToolbarTitle(null, tmpAntiConcurentExecptionFFS.size() + " hosts detected");
         mActivity.setProgressState(1500);
         mActivity.setToolbarTitle(null,"Scanning " + tmpAntiConcurentExecptionFFS.size() + " devices");
+        new NmapControler(ipReachable);
         Fingerprint.getDevicesInfoFromCepter(mFragment);
         mActivity.setProgressState(2000);
     }

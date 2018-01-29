@@ -2,7 +2,7 @@ package fr.allycs.app.Controller.Core.Configuration;
 
 import com.activeandroid.ActiveAndroid;
 
-import fr.allycs.app.Controller.Core.Core.RootProcess;
+import fr.allycs.app.Controller.Core.RootProcess;
 
 public class                ApplicationControl extends com.activeandroid.app.Application {
 

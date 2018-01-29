@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
-import fr.allycs.app.Controller.Core.Core.Dnsmasq.DnsmasqConfig;
-import fr.allycs.app.Controller.Core.Core.RootProcess;
+import fr.allycs.app.Controller.Core.Dnsmasq.DnsmasqConfig;
+import fr.allycs.app.Controller.Core.RootProcess;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Startup.SetupActivity;
 

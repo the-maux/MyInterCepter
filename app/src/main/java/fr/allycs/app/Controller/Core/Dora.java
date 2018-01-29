@@ -1,4 +1,4 @@
-package fr.allycs.app.Controller.Core.Core;
+package fr.allycs.app.Controller.Core;
 
 import android.app.Activity;
 import android.util.Log;

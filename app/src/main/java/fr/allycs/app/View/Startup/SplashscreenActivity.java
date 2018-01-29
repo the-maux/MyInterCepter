@@ -1,19 +1,15 @@
 package fr.allycs.app.View.Startup;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 
 import fr.allycs.app.Controller.Core.Configuration.Setup;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Core.Core.RootProcess;
+import fr.allycs.app.Controller.Core.RootProcess;
 import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
 
 /**

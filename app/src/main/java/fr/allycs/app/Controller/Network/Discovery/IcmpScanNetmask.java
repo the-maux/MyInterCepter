@@ -17,8 +17,8 @@ import fr.allycs.app.Controller.Network.IPv4CIDR;
 /**
  * Scan Netmask check the rechability of devices in file hostfile
  */
-public class                        ScanNetmask {
-    private String                  TAG = "ScanNetmask";
+public class                        IcmpScanNetmask {
+    private String                  TAG = "IcmpScanNetmask";
     private Integer                 mNumberOfHosts;
     private volatile int            mNbrHostScanned = 0;
     private volatile boolean        alreadySend = false;
@@ -26,7 +26,7 @@ public class                        ScanNetmask {
     private boolean                 debuglog = Singleton.getInstance().DebugMode;
     private NetworkDiscoveryControler mScanner;
 
-    ScanNetmask(IPv4CIDR iPv4CIDR, NetworkDiscoveryControler scanner) {
+    IcmpScanNetmask(IPv4CIDR iPv4CIDR, NetworkDiscoveryControler scanner) {
         ExecutorService service = Executors.newCachedThreadPool();
         reachableLoop(iPv4CIDR, service);
         this.mScanner = scanner;
