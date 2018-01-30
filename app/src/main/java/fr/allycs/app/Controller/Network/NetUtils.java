@@ -101,8 +101,8 @@ public class                NetUtils {
                     }
                 }
             }
-            String dumpMyDevice = Singleton.getInstance().network.myIp + ":" + Singleton.getInstance().network.mac + '\n';
-            hostListFile.write(dumpMyDevice.getBytes());
+            String dumpMyDevice = Singleton.getInstance().network.myIp + ":" + Singleton.getInstance().network.mac;
+            hostListFile.write((dumpMyDevice + "\n").getBytes());
             listIpPlusMac.add(dumpMyDevice);
             Log.i(TAG, "dumpListHostFromARPTableInFile::" + dumpMyDevice);
             bufferedReader.close();

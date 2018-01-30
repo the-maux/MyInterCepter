@@ -80,7 +80,7 @@ public class                Host extends Model {
     }
 
     public String           getName() {
-        return (name.contains("Unknown") ? ip : name);
+        return (name.contains("Unknown") ? "-" : name);
     }
     public void             setName(String name) {
         this.name = name;
@@ -117,14 +117,25 @@ public class                Host extends Model {
         super();
     }
 
-    public void             dumpMe() {
+    public void             dumpMe(ArrayList<Host> selectedHostsList) {
+        Host sameHost = null;
+//        for (Host host : selectedHostsList) {
+//            if (host.mac.contentEquals(mac)) {
+//                sameHost = host;
+//                Log.e(TAG, ip + "IN INTERCEPT SCAN");
+//            }
+//        }
+        if (sameHost == null) {
+            Log.e(TAG, ip + " NOT IN INTERCEPT SCAN");
+            sameHost = this;
+        }
         Log.d(TAG, "ip:[" + ip + "]");
         Log.d(TAG, "mac:[" + mac + "]");
-        Log.d(TAG, "vendor:[" + vendor + "]");
-        Log.d(TAG, "os:[" + os + "]");
-        Log.d(TAG, "osType[" + osType.name() + "]");
-        Log.d(TAG, "osDetail:[" + osDetail + "]");
-        Log.d(TAG, "name:[" + name + "]");
+        Log.d(TAG, "vendor:[" + vendor + "]" + "VENDOR[" + sameHost.vendor + "]");
+        Log.d(TAG, "os:[" + os + "] OS[" + sameHost.os + "]");
+        Log.d(TAG, "osType[" + osType.name() + "] OSTYPE[" + sameHost.osType + "]");
+        Log.d(TAG, "osDetail:[" + osDetail + "] OSDETAIL[" + osDetail + "]");
+        Log.d(TAG, "name:[" + getName() + "] NAME[" + sameHost.getName() +"]");
         Log.d(TAG, "NetworkDistance:[" + NetworkDistance + "]");
         Log.d(TAG, "TooManyFingerprintMatchForOs:[" + TooManyFingerprintMatchForOs + "]");
         Log.d(TAG, "deviceType:[" + deviceType + "]");

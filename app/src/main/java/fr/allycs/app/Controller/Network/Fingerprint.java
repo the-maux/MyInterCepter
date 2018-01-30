@@ -69,9 +69,8 @@ public class                         Fingerprint {
     }
 
     public static void               initHost(Host host) {
-
-        guessosType(host.dumpInfo, host);
         isItMyDevice(host);
+        guessosType(host.dumpInfo, host);
     }
 
     private static void              guessosType(String InfoDevice, Host host) {
@@ -80,7 +79,10 @@ public class                         Fingerprint {
             return;
         }
         InfoDevice = InfoDevice.toLowerCase();
-        if (InfoDevice.contains("bluebird")) {
+        if (host.isItMyDevice) {
+            host.osType = Os.Android;
+            host.vendor = "Your Device";
+        } else if (InfoDevice.contains("bluebird")) {
             host.osType = Os.Bluebird;
         } else if (InfoDevice.contains("cisco")) {
             host.osType = Os.Cisco;
@@ -90,13 +92,13 @@ public class                         Fingerprint {
                 InfoDevice.contains("murata") || InfoDevice.contains("huawei") || InfoDevice.contains("oneplus") ||
                 InfoDevice.contains("lg") || InfoDevice.contains("motorola")) {
             host.osType = Os.Android;
-        } else if (InfoDevice.contains("windows 7")) {
+        } else if (InfoDevice.contains("windows") || InfoDevice.contains("microsoft")) {
+            host.osType = Os.Windows;
+        } /*else if (InfoDevice.contains("windows 7")) {
             host.osType = Os.Windows7_8_10;
         } else if (InfoDevice.contains("windows 2000")) {
             host.osType = Os.WindowsXP;
-        } else if (InfoDevice.contains("windows")) {
-            host.osType = Os.Windows10;
-        } else if (InfoDevice.contains("apple")) {
+        } */else if (InfoDevice.contains("apple")) {
             host.osType = Os.Apple;
         } else if (InfoDevice.contains("raspberry")) {
             host.osType = Os.Raspberry;
@@ -124,7 +126,7 @@ public class                         Fingerprint {
                 case WindowsXP:
                     ImageRessource = R.drawable.winicon;
                     break;
-                case Windows10:
+                case Windows:
                     ImageRessource = R.drawable.winicon;
                     break;
                 case Windows7_8_10:

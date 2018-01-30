@@ -80,14 +80,12 @@ public class                        NetworkDiscoveryControler {
     public void                     onReachableScanOver(ArrayList<String> ipReachable) {
         Log.d(TAG, "onReachableScanOver with : "+ ipReachable.size() + " ip(s) reachable");
         ArrayList<String> tmpAntiConcurentExecptionFFS = new ArrayList<>();
-        ArrayList<String> tmpAntiConcurentExecptionFFS2 = new ArrayList<>();
-
         tmpAntiConcurentExecptionFFS.addAll(ipReachable);
         mActivity.setToolbarTitle(null, tmpAntiConcurentExecptionFFS.size() + " hosts detected");
         mActivity.setProgressState(1500);
         mActivity.setToolbarTitle(null,"Scanning " + tmpAntiConcurentExecptionFFS.size() + " devices");
         new NmapControler(NetUtils.dumpListHostFromARPTableInFile(mActivity, tmpAntiConcurentExecptionFFS), mFragment);
-        Fingerprint.getDevicesInfoFromCepter(mFragment);
+        //Fingerprint.getDevicesInfoFromCepter(mFragment);
         mActivity.setProgressState(2000);
     }
 

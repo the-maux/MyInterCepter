@@ -46,10 +46,12 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
 
     public void                 onBindViewHolder(final HostDiscoveryHolder holder, final int position) {
         final Host host = mHosts.get(position);
-        String ipHostname = host.ip + " " + host.getName();
+        String ipHostname = host.ip + " (" + host.getName() + ")";
         holder.ipHostname.setText(ipHostname);
         holder.mac.setText(host.mac);
         holder.os.setText(host.os);
+        if (host.os.contains("Unknown"))
+            holder.os.setText(host.osType.name());
         holder.vendor.setText(host.vendor);
         Fingerprint.setOsIcon(mActivity, host, holder.osIcon);
         if (mIsHistoric)

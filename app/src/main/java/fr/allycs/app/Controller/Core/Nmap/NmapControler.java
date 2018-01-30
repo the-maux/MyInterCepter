@@ -54,13 +54,14 @@ public class                        NmapControler {
     private ArrayList<String>       mMenuCommand;
     private String                  mActualItemMenu = "Ping scan";//Default
     private List<Host>              mHost = null;
+    public String                   PATH_NMAP = mSingleton.FilesPath + "nmap/nmap ";
 
     public                          NmapControler(List<String> ips, FragmentHostDiscoveryScan fragment) {/* Parsing mode */
         mIsLiveDump = false;
         mIsOneByOnExecuted = false;
         mFragment = fragment;
         mActualItemMenu = "Basic Host discovery";
-        new NmapParser(ips, fragment);
+        new NmapParser(this, ips, fragment);
         if (ips.size() > 20) {
             Log.e(TAG, "WARNING TOO MANY CLIENT TO SCAN");
         }
@@ -119,10 +120,9 @@ public class                        NmapControler {
     }
 
     private String                  buildCommand() {
-        String Binary = mSingleton.FilesPath + "nmap/nmap ";
         String parameter = getNmapParamFromMenuItem(mActualItemMenu);
         String hostFilter = buildHostFilterCommand();
-        return Binary + parameter + " " + hostFilter;
+        return PATH_NMAP + parameter + " " + hostFilter;
     }
 
     public void                     startAsLive(final NmapOutputFragment nmapOutputFragment,
@@ -152,6 +152,7 @@ public class                        NmapControler {
                         }
                         dumpOutputBuilder.append(tmp);
                         Log.d(TAG, "Nmap final dump:" + dumpOutputBuilder.toString());
+                        nmapOutputFragment.flushOutput(tmp + '\n', progressBar);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
