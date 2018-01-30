@@ -18,6 +18,8 @@ public class                        ArpSpoof {
     }
 
     public ArpSpoof                 start() {
+        if (Singleton.getInstance().DebugMode)
+            Log.d(TAG, "ARPSpooging Attacking " + mTarget.ip);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -41,6 +43,8 @@ public class                        ArpSpoof {
     }
 
     public static void              stopArpSpoof() {
+        if (Singleton.getInstance().DebugMode)
+            Log.d(TAG, "STOP ARPSpooging Attacking ");
         new Thread(new Runnable() {
             @Override
             public void run() {

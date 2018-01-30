@@ -22,51 +22,6 @@ import fr.allycs.app.View.HostDiscovery.FragmentHostDiscoveryScan;
  */
 public class                         Fingerprint {
     private static String            TAG = "Fingerprint";
-    /**
-     * Scan with the cepter binary the hostList
-     * @param scanActivity activity for callback
-     */
-    public static void               getDevicesInfoFromCepter(final FragmentHostDiscoveryScan scanActivity) {
-        final ArrayList<Host> hosts = new ArrayList<>();
-        final RootProcess process = new RootProcess("Cepter Scan device", Singleton.getInstance().FilesPath);
-        final BufferedReader bufferedReader = process.getReader();
-        process.exec(Singleton.getInstance().FilesPath + "cepter scan " + Singleton.getInstance().nbrInteface);
-        process.exec("exit");
-        new Thread(new Runnable() {
-            public void run() {
-                    String buffer = null;
-                    boolean alreadyIn, over = false;
-                    while (!over) {
-                        try {
-                            buffer = bufferedReader.readLine();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            scanActivity.onHostActualized(hosts);
-                        }
-
-                        if (buffer == null) {
-                            over = true;
-                        } else if ((buffer.length() - buffer.replace(".", "").length()) >= 3 &&
-                                !buffer.contains("wrong interface...")) {
-                            alreadyIn = false;
-                            Host newDevice = new Host(buffer);
-                            if (!hosts.contains(newDevice)) {
-                                for (Host host : hosts) {
-                                    if (host.mac.equals(newDevice.mac)) {
-                                        alreadyIn = true;
-                                    }
-                                }
-                                if (!alreadyIn) {
-                                    hosts.add(DBHost.saveOrGetInDatabase(newDevice, false));
-                                }
-                            }
-                        }
-                    }
-                    Collections.sort(hosts, Host.getComparator());
-                    scanActivity.onHostActualized(hosts);
-            }
-        }).start();
-    }
 
     public static void               initHost(Host host) {
         isItMyDevice(host);

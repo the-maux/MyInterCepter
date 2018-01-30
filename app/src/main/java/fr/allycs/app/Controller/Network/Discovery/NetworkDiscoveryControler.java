@@ -20,7 +20,6 @@ import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
 public class                        NetworkDiscoveryControler {
     private String                  TAG = "NetworkDiscoveryControler";
     public enum typeScan {          Arp, Services, Historic }
- //   private NetworkDiscoveryControler mInstance = this;
     private FragmentHostDiscoveryScan mFragment;
     private Singleton               mSingleton = Singleton.getInstance();
     private HostDiscoveryActivity   mActivity;
@@ -28,7 +27,7 @@ public class                        NetworkDiscoveryControler {
     public boolean                  inLoading = false;
 
     private static NetworkDiscoveryControler            mInstance = null;
-    private                             NetworkDiscoveryControler(final FragmentHostDiscoveryScan fragmentHostDiscoveryScan) {
+    private                         NetworkDiscoveryControler(final FragmentHostDiscoveryScan fragmentHostDiscoveryScan) {
 
     }
     public static synchronized NetworkDiscoveryControler getInstance(final FragmentHostDiscoveryScan fragmentHostDiscoveryScan) {
@@ -72,11 +71,6 @@ public class                        NetworkDiscoveryControler {
         new BonjourManager(mActivity, listOfHosts, this);
     }
 
-    private void                    startNmapScan() {
-        mActivity.showSnackbar("Not implémented");
-
-    }
-
     public void                     onReachableScanOver(ArrayList<String> ipReachable) {
         Log.d(TAG, "onReachableScanOver with : "+ ipReachable.size() + " ip(s) reachable");
         ArrayList<String> tmpAntiConcurentExecptionFFS = new ArrayList<>();
@@ -85,7 +79,6 @@ public class                        NetworkDiscoveryControler {
         mActivity.setProgressState(1500);
         mActivity.setToolbarTitle(null,"Scanning " + tmpAntiConcurentExecptionFFS.size() + " devices");
         new NmapControler(NetUtils.dumpListHostFromARPTableInFile(mActivity, tmpAntiConcurentExecptionFFS), mFragment);
-        //Fingerprint.getDevicesInfoFromCepter(mFragment);
         mActivity.setProgressState(2000);
     }
 

@@ -67,7 +67,6 @@ public class                NetUtils {
         ArrayList<String> listIpPlusMac = new ArrayList<>();
         try {
             ArrayList<String> listOfIpsAlreadyIn = new ArrayList<>();
-            FileOutputStream hostListFile = new FileOutputStream(new File(Singleton.getInstance().FilesPath + "hostlist"));
             BufferedReader bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"));
             String MAC_RE = "^%s\\s+0x1\\s+0x2\\s+([:0-9a-fA-F]+)\\s+\\*\\s+\\w+$";
             String read;
@@ -78,7 +77,6 @@ public class                NetUtils {
                 Matcher matcher = Pattern.compile(String.format(MAC_RE, objArr)).matcher(read);
                 if (matcher.matches() && !ip.contains(Singleton.getInstance().network.myIp)) {
                     listOfIpsAlreadyIn.add(ip);
-                    hostListFile.write((ip + ":" + matcher.group(1) + "\n").getBytes());
                     listIpPlusMac.add(ip + ":" + matcher.group(1));
                     Log.i(TAG, "dumpListHostFromARPTableInFile::" + ip + ":" + matcher.group(1));
                 }
@@ -95,18 +93,15 @@ public class                NetUtils {
                 }
                 if (!already) {
                     if (!reachable.contains(Singleton.getInstance().network.myIp)) {
-                        hostListFile.write((reachable + "\n").getBytes());
                         listIpPlusMac.add(reachable);
                         Log.i(TAG, "dumpListHostFromARPTableInFile::" + reachable);
                     }
                 }
             }
             String dumpMyDevice = Singleton.getInstance().network.myIp + ":" + Singleton.getInstance().network.mac;
-            hostListFile.write((dumpMyDevice + "\n").getBytes());
             listIpPlusMac.add(dumpMyDevice);
             Log.i(TAG, "dumpListHostFromARPTableInFile::" + dumpMyDevice);
             bufferedReader.close();
-            hostListFile.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
