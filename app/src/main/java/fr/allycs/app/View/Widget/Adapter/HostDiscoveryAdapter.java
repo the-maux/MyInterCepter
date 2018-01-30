@@ -15,8 +15,8 @@ import android.widget.CompoundButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.AndroidUtils.Utils;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Network.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
@@ -149,7 +149,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         return listOs;
     }
 
-    public void                 filterByOs(ArrayList<String> Os) {
+    public int                  filterByOs(ArrayList<String> Os) {
         mHosts.clear();
         for (Host host : mOriginalList) {
             for (String os : Os) {
@@ -160,6 +160,8 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
             }
         }
         notifyDataSetChanged();
+        return mHosts.size();
+
     }
 
     public void                 filterByString(String query) {

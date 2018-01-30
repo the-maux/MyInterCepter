@@ -43,6 +43,7 @@ public class                         Fingerprint {
                             e.printStackTrace();
                             scanActivity.onHostActualized(hosts);
                         }
+
                         if (buffer == null) {
                             over = true;
                         } else if ((buffer.length() - buffer.replace(".", "").length()) >= 3 &&

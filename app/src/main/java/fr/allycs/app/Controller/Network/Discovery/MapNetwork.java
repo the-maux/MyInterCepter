@@ -53,18 +53,20 @@ public class                        MapNetwork {
         }
         Log.w(TAG, "Stoping Discover Natif client in Network");
     }
-    private void                    getJmDNSName(String ip) {
+    public static String            getJmDNSName(String ip) {
         try {
             InetAddress localHost = InetAddress.getByName(ip);
             JmDNS jmdns = JmDNS.create(localHost);
-            Log.d("MapNetWork", "add Client [" + ip + "]" + jmdns.getHostName());
+            //Log.d("MapNetWork", "add Client [" + ip + "]" + jmdns.getHostName());
+            return jmdns.getHostName();
         } catch (UnknownHostException e) {
             e.printStackTrace();
-            Log.d(TAG, "UnknowHostException at JmDNS");
+            Log.d("MAPNETWORK", "UnknowHostException at JmDNS");
         } catch (IOException e) {
             e.printStackTrace();
-            Log.d(TAG, "IO EXCEPTION AT JmDNS");
+            Log.d("MAPNETWORK", "IO EXCEPTION AT JmDNS");
         }
+        return null;
     }
     public boolean                  ping(String host) {
         try {

@@ -258,7 +258,8 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (mListOS.size() > 0) {
-                            mHostAdapter.filterByOs(mListOS);
+                            ;
+                            mActivity.showSnackbar(mHostAdapter.filterByOs(mListOS) + " devices");
                             mListOS.clear();
                         }
                     }
