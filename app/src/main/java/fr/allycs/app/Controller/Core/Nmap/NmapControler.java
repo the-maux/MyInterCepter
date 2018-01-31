@@ -27,6 +27,7 @@ import fr.allycs.app.View.Scan.NmapOutputFragment;
            -sL: List Scan - Liste simplement les cibles à scanner
            -PN: Considérer tous les hôtes comme étant connectés -- saute l'étape de découverte des hôtes
            -sO: Scan des protocoles supportés par la couche IP
+           -sT: TCP Connect scan
            -sV: Teste les ports ouverts pour déterminer le service en écoute et sa version
                --version-light: Limite les tests aux plus probables pour une identification plus rapide
                --version-intensity <niveau>: De 0 (léger) à 9 (tout essayer)
@@ -34,6 +35,7 @@ import fr.allycs.app.View.Scan.NmapOutputFragment;
                --version-trace: Affiche des informations détaillées du scan de versions (pour débogage)
            -T[0-5]: Choisit une politique de temporisation (plus élevée, plus rapide)
            -D <decoy1,decoy2[,ME],...>: Obscurci le scan avec des leurres
+           -F fast
            --spoof-mac <adresse MAC, préfixe ou nom du fabriquant>: Usurpe une adresse MAC
            --log-errors: Journalise les erreurs/alertes dans un fichier au format normal
            --packet-trace: Affiche tous les paquets émis et reçus

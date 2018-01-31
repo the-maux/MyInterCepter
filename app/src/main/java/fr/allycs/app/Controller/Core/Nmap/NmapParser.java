@@ -12,7 +12,6 @@ import java.util.List;
 
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Core.RootProcess;
-import fr.allycs.app.Controller.Database.DBHost;
 import fr.allycs.app.Controller.Network.Fingerprint;
 import fr.allycs.app.Model.Net.Port;
 import fr.allycs.app.Model.Target.Host;
@@ -26,6 +25,9 @@ class NmapParser {
     private NmapControler           mNmapControler;
     private FragmentHostDiscoveryScan mFragment;
 
+    /**
+
+*/
     NmapParser(NmapControler nmapControler, List<String> ips, FragmentHostDiscoveryScan fragment) {
         this.mNmapControler = nmapControler;
         this.mFragment = fragment;
