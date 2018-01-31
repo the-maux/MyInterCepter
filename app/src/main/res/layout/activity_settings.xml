@@ -51,6 +51,13 @@
             android:gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end"
             android:text="v 2.0" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/textView3"
+            android:layout_below="@+id/clearButton"
+            android:orientation="vertical"></LinearLayout>
+
         <TextView
             android:id="@+id/monitor"
             android:layout_width="wrap_content"

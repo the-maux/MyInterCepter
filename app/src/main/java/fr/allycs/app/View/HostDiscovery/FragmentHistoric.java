@@ -53,7 +53,7 @@ public class                        FragmentHistoric extends MyFragment {
     private Host                    mFocusedHost = null;
     private List<AccessPoint>       HistoricAps;
     private Session                 focusedSession = null;
-    private MyActivity mActivity = null;
+    private MyActivity              mActivity = null;
     private RecyclerView            mRV;
     private TextView                mEmptyList;
     private RecyclerView.Adapter    RV_AdapterAp = null, RV_AdapterSessions = null, RV_AdapterHostSession = null;

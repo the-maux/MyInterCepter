@@ -18,7 +18,7 @@
         android:maxLines="1"
         android:paddingLeft="2dp"
         android:text="No"
-        android:textColor="@color/primary_text"
+        android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="11sp"
         android:textStyle="bold" />
 
@@ -33,7 +33,7 @@
         android:maxLines="1"
         android:paddingLeft="2dp"
         android:text="Time"
-        android:textColor="@color/primary_text"
+        android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="11sp"
         android:textStyle="bold" />
 
@@ -48,7 +48,7 @@
         android:maxLines="1"
         android:paddingLeft="2dp"
         android:text=" Source"
-        android:textColor="@color/primary_text"
+        android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="11sp"
         android:textStyle="bold" />
 
@@ -63,7 +63,7 @@
         android:maxLines="1"
         android:paddingLeft="2dp"
         android:text=" Destination"
-        android:textColor="@color/primary_text"
+        android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="11sp"
         android:textStyle="bold" />
 
@@ -77,7 +77,7 @@
         android:maxLines="1"
         android:paddingLeft="2dp"
         android:text=" Protocol"
-        android:textColor="@color/primary_text"
+        android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="11sp"
         android:textStyle="bold" />
 
@@ -93,7 +93,7 @@
         android:maxLines="1"
         android:paddingLeft="2dp"
         android:text="  Info                                                                                                                                       "
-        android:textColor="@color/primary_text"
+        android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="11sp"
         android:textStyle="bold" />
 </LinearLayout>
