@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Network.Fingerprint;
+import fr.allycs.app.Controller.Core.Nmap.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Session;
 

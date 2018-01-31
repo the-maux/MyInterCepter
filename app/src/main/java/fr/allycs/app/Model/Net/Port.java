@@ -1,29 +1,75 @@
 package fr.allycs.app.Model.Net;
 
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
+import java.util.HashMap;
+import java.util.Map;
 
 import fr.allycs.app.Model.Target.Host;
 
-@Table(name = "Ports", id = "_id")
-public class            Port extends Model {
-    public static String NAME_COLUMN = "Ports";
-    @Column(name = "port")
+public class            Port {
+    public String       TAG = "Port";
     public String       port;
-    @Column(name = "protocol")
     public String       protocol;
-    @Column(name = "state")
-    public String       state;
-    @Column(name = "Host")
+    public State        state;
     public Host         host;
 
-    public              Port() {
+    public enum         State   {
+        CLOSED(0), OPEN(1), FILTERED(2), UNFILTERED(3), OPEN_FILTERED(4), CLOSED_FILTERED(5), UNKNOW(6);
+
+
+        private int value;
+        private static Map map = new HashMap<>();
+
+        State(int value) {
+            this.value = value;
+        }
+
+        static {
+            for (State pageType : State.values()) {
+                map.put(pageType.value, pageType);
+            }
+        }
+        public static State valueOf(int pageType) {
+            return (State) State.map.get(pageType);
+        }
+
+        public static State valueOf(String pageType, int a) {
+            switch (pageType) {
+                case "CLOSED":
+                    return CLOSED;
+                case "OPEN":
+                    return OPEN;
+                case "FILTERED":
+                    return FILTERED;
+                case "UNFILTERED":
+                    return UNFILTERED;
+                case "OPEN_FILTERED":
+                    return OPEN_FILTERED;
+                case "OPEN_UNFILTERED":
+                    return CLOSED_FILTERED;
+                default:
+                    return UNKNOW;
+            }
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        }
+
+    /*  Exemple port: 22/tcp   closed ssh */
+    public Port(String port_proto, String state, String protocolName) {
         super();
+        this.port = port_proto;
+        this.state = State.valueOf(state.toUpperCase().replace("|", "_"), 0);
+        protocol = protocolName;
     }
 
+    public int          getPort() {
+        return Integer.valueOf(port.split("/")[0]);
+    }
 
-    public enum         State   {
-        CLOSED, OPEN, FILTERED
+    public String       toString() {
+        return port + "  " + state.name() + " " + protocol;
     }
 }

@@ -1,21 +1,17 @@
-package fr.allycs.app.Controller.Network;
+package fr.allycs.app.Controller.Core.Nmap;
 
 import android.content.Context;
+import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Core.RootProcess;
-import fr.allycs.app.Controller.Database.DBHost;
+import fr.allycs.app.Model.Net.Port;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;
-import fr.allycs.app.View.HostDiscovery.FragmentHostDiscoveryScan;
 
 /**
  * Supprimer les duplicata External & Host
@@ -24,6 +20,7 @@ public class                         Fingerprint {
     private static String            TAG = "Fingerprint";
 
     public static void               initHost(Host host) {
+        Log.d(TAG, "initHost:\t" + host.toString());
         isItMyDevice(host);
         guessosType(host.dumpInfo, host);
     }
@@ -31,6 +28,10 @@ public class                         Fingerprint {
     private static void              guessosType(String InfoDevice, Host host) {
         if (InfoDevice == null) {
             host.osType = Os.Unknow;
+            return;
+        }
+        if (isItWindows(host)) {
+            host.osType = Os.Windows;
             return;
         }
         InfoDevice = InfoDevice.toLowerCase();
@@ -41,6 +42,8 @@ public class                         Fingerprint {
             host.osType = Os.Bluebird;
         } else if (InfoDevice.contains("cisco")) {
             host.osType = Os.Cisco;
+        } else if (InfoDevice.contains("raspberry")) {
+            host.osType = Os.Raspberry;
         } else if (InfoDevice.contains("quanta")) {
             host.osType = Os.QUANTA;
         } else if (InfoDevice.contains("android") || InfoDevice.contains("mobile") || InfoDevice.contains("samsung") ||
@@ -55,8 +58,6 @@ public class                         Fingerprint {
             host.osType = Os.WindowsXP;
         } */else if (InfoDevice.contains("apple")) {
             host.osType = Os.Apple;
-        } else if (InfoDevice.contains("raspberry")) {
-            host.osType = Os.Raspberry;
         }  else if (InfoDevice.contains("ios")) {
             host.osType = Os.Ios;
         } else if (!(!InfoDevice.contains("unix") && !InfoDevice.contains("linux") && !InfoDevice.contains("bsd"))) {
@@ -65,10 +66,22 @@ public class                         Fingerprint {
             host.osType = Os.Unknow;
     }
 
-    private static void              isItMyDevice(Host host) {
+    private static boolean          isItWindows(Host host) {
+        /*
+               TODO: Do i have to checkd the proto for microsoft|windows|msrpc ?
+         */
+        if (host.Ports() == null)
+            return false;
+        return
+                host.Ports().isPortOpen(135) &&
+                host.Ports().isPortOpen(445);
+    }
+
+    public static boolean           isItMyDevice(Host host) {
         if (host.ip.contains(Singleton.getInstance().network.myIp)) {
             host.isItMyDevice = true;
         }
+        return host.isItMyDevice;
     }
 
     public static void               setOsIcon(Context context, Host host, CircleImageView osImageView) {

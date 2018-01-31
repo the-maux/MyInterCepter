@@ -11,9 +11,10 @@ import java.util.Comparator;
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Network.Fingerprint;
+import fr.allycs.app.Controller.Core.Nmap.Fingerprint;
 import fr.allycs.app.Model.Net.Port;
 import fr.allycs.app.Model.Net.Service;
+import fr.allycs.app.Model.Net.listPorts;
 import fr.allycs.app.Model.Unix.Os;
 
 @Table(name = "Device", id = "_id")
@@ -22,7 +23,7 @@ public class                Host extends Model {
     @Column(name ="ip")
     public String           ip = "Unknown";
     @Column(name ="name")
-    public String           name = "Unknown";
+    public String           name = "";
     @Column(name ="mac")
     public String           mac = "Unknown";
     @Column(name ="os")
@@ -50,8 +51,16 @@ public class                Host extends Model {
         return getMany(Session.class, "listDevices");
     }
 
-    public List<Port>       Ports() {
-        return getMany(Port.class, "Host");
+    private listPorts       listPorts = null;
+    public listPorts       Ports() {
+//        if (listPorts == null)
+//            return null;// CHARGER DEPUIS LA BDD
+        return listPorts;
+    }
+
+    public listPorts       Ports(ArrayList<String> dumpsPorts) {
+        listPorts = new listPorts(dumpsPorts);
+        return listPorts;
     }
 
     public                  Host(String buffer) {
@@ -72,7 +81,7 @@ public class                Host extends Model {
             if (Singleton.getInstance().UltraDebugMode)
                 dumpHost();
             dumpInfo = buffer;
-            Fingerprint.initHost(this);
+            //Fingerprint.initHost(this, ports);
         } catch (StringIndexOutOfBoundsException e) {
             Log.e(TAG, buffer);
             e.getStackTrace();
@@ -139,12 +148,10 @@ public class                Host extends Model {
         Log.d(TAG, "NetworkDistance:[" + NetworkDistance + "]");
         Log.d(TAG, "TooManyFingerprintMatchForOs:[" + TooManyFingerprintMatchForOs + "]");
         Log.d(TAG, "deviceType:[" + deviceType + "]");
-        if (Ports() != null) {
-            Log.d(TAG, "OPENED PORT:");
-            for (Port port : Ports()) {
-                Log.d(TAG, "\tPorts:" + port.port + " PROTO:[" + port.protocol + "] state:[" + port.state + "]");
-            }
-        }
+        if (Ports() != null)
+            Ports().dump();
+        else
+            Log.d(TAG, "Ports Not found...");
     }
     public static Comparator<Host> getComparator() {
         return new Comparator<Host>() {

@@ -12,8 +12,9 @@ import java.util.List;
 
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Core.RootProcess;
-import fr.allycs.app.Controller.Network.Fingerprint;
+import fr.allycs.app.Controller.Database.DBHost;
 import fr.allycs.app.Model.Net.Port;
+import fr.allycs.app.Model.Net.listPorts;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.View.HostDiscovery.FragmentHostDiscoveryScan;
 import jcifs.netbios.NbtAddress;
@@ -46,48 +47,46 @@ class NmapParser {
                 //Log.e(TAG, "[" + ip + "]");
             }*/
         }
-        String cmd = mNmapControler.PATH_NMAP + " -sT -O -Pn -T4 --max-os-tries 2 " + hostCmd.toString();
+        String cmd = mNmapControler.PATH_NMAP + " -Pn -T4 -sS --script nbstat.nse -p 21,22,23,25,80,110,135,3128,443,445  " + hostCmd.toString();
         Log.d(TAG, "CMD:["+ cmd + "]");
         startAsParse(cmd, hostsMAC.toString());
     }
 
 
-    private Host                    buildHostFromDump(String nmapStdout, String ip, String mac) throws UnknownHostException {
-        Host host = new Host();
-        host.ip = ip;
-        host.mac = mac;
-        Log.v(TAG, "buildHostFromDump::" + host.toString());
-        //host = DBHost.saveOrGetInDatabase(host, true);
+    private Host                    buildHostFromDump(String nmapStdout, Host host) throws UnknownHostException {
+
+
         String[] nmapStdoutHost = nmapStdout.split("\n");
         List<Port> ports = new ArrayList<>();
         for (int i = 0; i < nmapStdoutHost.length; i++) {
             String line = nmapStdoutHost[i];
             if (line.contains("Device type: ")) {
-                Log.v(TAG, line);
+                Log.v(TAG,  "buildHostFromDump::" + line);
                 host.deviceType = line.replace("Device type: ", "");
             } else if (line.contains("Running: ")) {
-                Log.v(TAG, line);
+                Log.v(TAG, "buildHostFromDump::" + line);
                 getOs(line.replace("Running: ", ""), host, nmapStdoutHost);
             } else if (line.contains("Too many fingerprints match this host to give specific OS details")) {
-                Log.v(TAG, line);
+                Log.v(TAG, "buildHostFromDump::" + line);
                 host.TooManyFingerprintMatchForOs = true;
             } else if (line.contains("Network Distance: ")) {
-                Log.v(TAG, line);
+                Log.v(TAG, "buildHostFromDump::" + line);
                 host.NetworkDistance = line.replace("Network Distance: ", "");
+            } else if (line.contains("NetBIOS name:")) {
+                host.name = line.split(",")[0].replace("NetBIOS name: ", "")
+                        .replace("|   ", "");
             } else if (line.contains("MAC Address: ")) {
-                Log.v(TAG, line);
+                Log.v(TAG, "buildHostFromDump::" + line);
                 host.mac = line.replace("MAC Address: ", "").split(" ")[0];
                 host.vendor = line.replace("MAC Address: " + host.mac + " (", "").replace(")", "");
-            } else if (line.contains("STATE SERVICE")) {
-                Log.v(TAG, line);
-                ports = getPortList(nmapStdoutHost, i);
+            } else if (line.contains("PORT ")) {
+                Log.v(TAG, "buildHostFromDump::" + line);
+                i = getPortList(nmapStdoutHost, i +1, host);
             } else {
-                Log.e(TAG, line);
+                Log.e(TAG,"buildHostFromDump::" +  line);
             }
         }
         host.dumpInfo = nmapStdout;
-        Log.d(TAG, "ports");
-        //host.Ports().addAll(ports);/*CHECK DUPLICATA*/
         Fingerprint.initHost(host);
         Log.d(TAG, "getNetBiosName");
         getNetBiosName(host);
@@ -106,10 +105,19 @@ class NmapParser {
                 String ip = node.split("\n")[0].split(" ")[0].replace(":", "");
                 Log.d(TAG, "NODE:" + ip);
                 Log.d(TAG, "\t\t" + node);
-                Host host = buildHostFromDump(node, ip, getMACInTmp(macs, ip));
-                host.dumpMe(mSingleton.selectedHostsList);
-                Log.e(TAG, "new host builded: " + host.toString());
-                hosts.add(host);
+                Host host = new Host();
+                host.ip = ip;
+                host.mac = getMACInTmp(macs, ip);
+
+                if (!Fingerprint.isItMyDevice(host)) {
+                    host = DBHost.saveOrGetInDatabase(host, true);
+                    host = buildHostFromDump(node, host);
+                    host.dumpMe(mSingleton.selectedHostsList);
+                    Log.e(TAG, "new host builded: " + host.toString());
+                    hosts.add(host);
+                } else {
+
+                }
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             }
@@ -138,6 +146,7 @@ class NmapParser {
                         Log.d(TAG, "\t\t" + tmp);
                     }
                     dumpOutputBuilder.append(tmp);
+                    Log.d(TAG, "\t\t" + tmp);
                     Log.d(TAG, "LIVENMAP : <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
                     parseNmapStdout(listMacs, dumpOutputBuilder.toString().substring(1));
                 } catch (IOException e) {
@@ -147,39 +156,22 @@ class NmapParser {
         }).start();
     }
 
-
+    /**
+     * TODO: Regarder comment avoir le nom des servers comme on avait eu a L.M
+     * @param host
+     */
     private void                    getNetBiosName(Host host) {
         try {
-            if (host.osType.name().contains("Windows") ||
-                    host.osType.name().contains("Android") ||
-                    host.osType.name().contains("Unknow")) {//si Windows privilegié NetBios,
-                String tmp;
-                BufferedReader reader = new RootProcess("Nmap", mSingleton.FilesPath)
-                        .exec(mNmapControler.PATH_NMAP + " -sU --script nbstat.nse -p137 " + host.ip)
-                        .getReader();
-                while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {
-                    Log.d(TAG, "NETBIOS::" + tmp);
-                    if (tmp.contains("NetBIOS")) {
-                        host.name = tmp.split(",")[0].replace("NetBIOS name: ", "")
-                        .replace("|   ", "");
-                    }
-                }
-                return;
-            } else if (host.osType.name().contains("Unknow") && host.name != null)
-                return;
-            //else Jcifs name
                 Log.d(TAG, "Jcifs::");
                 InetAddress addr = InetAddress.getByName(host.ip);
                 String hostname = (addr.getHostName().contentEquals(host.ip)) ? "-" : addr.getHostName();
                 String jcifsName = ((NbtAddress.getByName(host.ip).nextCalledName() == null) ?
-                        "-" : NbtAddress.getByName(host.ip).nextCalledName());
+                        "" : NbtAddress.getByName(host.ip).nextCalledName());
                 if (!hostname.contentEquals(host.ip)) {
-                    host.name = hostname;
+                    host.name = host.name + hostname;
                 } else {
-                    host.name = jcifsName;
+                    host.name = host.name + jcifsName;
                 }
-
-
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -187,20 +179,18 @@ class NmapParser {
         }
     }
 
-    private List<Port>             getPortList(String[] line, int i) {
-        List<Port> ports = new ArrayList<>();
+    private int               getPortList(String[] line, int i, Host host) {
+        Log.d(TAG, "getPortList::");
+        ArrayList<String> ports = new ArrayList<>();
         for (; i < line.length; i++) {
-            if (line[i] != null &&
-                    (line[i].contains("STATE") || line[i].contains("open") || line[i].contains("close"))) {
-                String[] tmp = line[i].replace("  ", " ").split(" ");
-                Port port = new Port();
-                port.port = tmp[0];
-                port.state = tmp[1];
-                port.protocol = tmp[2];
-                ports.add(port);
-            }
+            if (!(line[i].contains("open") || line[i].contains("close") || line[i].contains("filtered"))) {
+                host.Ports(ports);/*TODO:CHECK DUPLICATA*/
+                return i-1;
+            } else
+                ports.add(line[i].replaceAll("  ", " "));
         }
-        return ports;
+
+        return i;
     }
     private void                    getOs(String line, Host host, String[] nmapStdoutHost) {
         String OsDetail = getLineContaining("OS details", nmapStdoutHost);
