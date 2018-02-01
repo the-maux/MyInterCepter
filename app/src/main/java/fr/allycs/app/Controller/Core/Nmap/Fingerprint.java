@@ -3,12 +3,9 @@ package fr.allycs.app.Controller.Core.Nmap;
 import android.content.Context;
 import android.util.Log;
 
-import java.util.List;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Model.Net.Port;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;
@@ -50,18 +47,18 @@ public class                         Fingerprint {
                 InfoDevice.contains("murata") || InfoDevice.contains("huawei") || InfoDevice.contains("oneplus") ||
                 InfoDevice.contains("lg") || InfoDevice.contains("motorola")) {
             host.osType = Os.Android;
+        } else if (InfoDevice.contains("apple")) {
+            host.osType = Os.Apple;
+        } else if (!(!InfoDevice.contains("unix") && !InfoDevice.contains("linux") && !InfoDevice.contains("bsd"))) {
+            host.osType = Os.Linux_Unix;
         } else if (InfoDevice.contains("windows") || InfoDevice.contains("microsoft")) {
             host.osType = Os.Windows;
         } /*else if (InfoDevice.contains("windows 7")) {
             host.osType = Os.Windows7_8_10;
         } else if (InfoDevice.contains("windows 2000")) {
             host.osType = Os.WindowsXP;
-        } */else if (InfoDevice.contains("apple")) {
-            host.osType = Os.Apple;
-        }  else if (InfoDevice.contains("ios")) {
+        } */ else if (InfoDevice.contains("Ios")) {
             host.osType = Os.Ios;
-        } else if (!(!InfoDevice.contains("unix") && !InfoDevice.contains("linux") && !InfoDevice.contains("bsd"))) {
-            host.osType = Os.Linux_Unix;
         } else
             host.osType = Os.Unknow;
     }

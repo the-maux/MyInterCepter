@@ -11,8 +11,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Core.Nmap.Fingerprint;
-import fr.allycs.app.Model.Net.Port;
 import fr.allycs.app.Model.Net.Service;
 import fr.allycs.app.Model.Net.listPorts;
 import fr.allycs.app.Model.Unix.Os;
@@ -127,27 +125,32 @@ public class                Host extends Model {
     }
 
     public void             dumpMe(ArrayList<Host> selectedHostsList) {
-        Host sameHost = null;
+//        Host sameHost = null;
 //        for (Host host : selectedHostsList) {
 //            if (host.mac.contentEquals(mac)) {
 //                sameHost = host;
 //                Log.e(TAG, ip + "IN INTERCEPT SCAN");
 //            }
 //        }
-        if (sameHost == null) {
-            Log.e(TAG, ip + " NOT IN INTERCEPT SCAN");
-            sameHost = this;
-        }
-        Log.d(TAG, "ip:[" + ip + "]");
-        Log.d(TAG, "mac:[" + mac + "]");
-        Log.d(TAG, "vendor:[" + vendor + "]" + "VENDOR[" + sameHost.vendor + "]");
-        Log.d(TAG, "os:[" + os + "] OS[" + sameHost.os + "]");
-        Log.d(TAG, "osType[" + osType.name() + "] OSTYPE[" + sameHost.osType + "]");
-        Log.d(TAG, "osDetail:[" + osDetail + "] OSDETAIL[" + osDetail + "]");
-        Log.d(TAG, "name:[" + getName() + "] NAME[" + sameHost.getName() +"]");
-        Log.d(TAG, "NetworkDistance:[" + NetworkDistance + "]");
-        Log.d(TAG, "TooManyFingerprintMatchForOs:[" + TooManyFingerprintMatchForOs + "]");
-        Log.d(TAG, "deviceType:[" + deviceType + "]");
+//        if (sameHost == null) {
+//            Log.e(TAG, ip + " NOT IN INTERCEPT SCAN");
+//            sameHost = this;
+//        }
+        if (dumpInfo == null)
+            Log.d(TAG, "NO DUMP /!\\ : " + ip);
+        else
+            Log.i(TAG, "DUMPINFO::" + dumpInfo);
+        Log.i(TAG, "END DUMP ---------");
+        Log.i(TAG, "ip: " + ip);// + "]");
+        Log.i(TAG, "mac: " + mac);// + "]");
+        Log.i(TAG, "vendor: " + vendor);// + "]" + "VENDOR[" + sameHost.vendor + "]");
+        Log.i(TAG, "os: " + os);// + "] OS[" + sameHost.os + "]");
+        Log.i(TAG, "osType: " + osType.name());// + "] OSTYPE[" + sameHost.osType + "]");
+        Log.i(TAG, "osDetail: " + osDetail);// + "] OSDETAIL[" + osDetail + "]");
+        Log.i(TAG, "name: " + getName());// + "] NAME[" + sameHost.getName() +"]");
+        Log.i(TAG, "NetworkDistance: " + NetworkDistance );//+ "]");
+        Log.i(TAG, "TooManyFingerprintMatchForOs: " + TooManyFingerprintMatchForOs );//+ "]");
+        Log.i(TAG, "deviceType: " + deviceType );//+ "]");
         if (Ports() != null)
             Ports().dump();
         else

@@ -2,15 +2,12 @@ package fr.allycs.app.Controller.Network;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.DhcpInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -78,7 +75,7 @@ public class                NetUtils {
                 if (matcher.matches() && !ip.contains(Singleton.getInstance().network.myIp)) {
                     listOfIpsAlreadyIn.add(ip);
                     listIpPlusMac.add(ip + ":" + matcher.group(1));
-                    Log.i(TAG, "dumpListHostFromARPTableInFile::" + ip + ":" + matcher.group(1));
+//                    Log.i(TAG, "dumpListHostFromARPTableInFile::" + ip + ":" + matcher.group(1));
                 }
             }
             Log.d(TAG, listOfIpsAlreadyIn.size() + " new host discovered in /proc/arp");
@@ -94,13 +91,13 @@ public class                NetUtils {
                 if (!already) {
                     if (!reachable.contains(Singleton.getInstance().network.myIp)) {
                         listIpPlusMac.add(reachable);
-                        Log.i(TAG, "dumpListHostFromARPTableInFile::" + reachable);
+//                        Log.i(TAG, "dumpListHostFromARPTableInFile::" + reachable);
                     }
                 }
             }
             String dumpMyDevice = Singleton.getInstance().network.myIp + ":" + Singleton.getInstance().network.mac;
             listIpPlusMac.add(dumpMyDevice);
-            Log.i(TAG, "dumpListHostFromARPTableInFile::" + dumpMyDevice);
+//            Log.i(TAG, "dumpListHostFromARPTableInFile::" + dumpMyDevice);
             bufferedReader.close();
         } catch (IOException e) {
             e.printStackTrace();

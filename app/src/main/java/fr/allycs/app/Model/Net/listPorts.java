@@ -7,7 +7,6 @@ import android.util.SparseIntArray;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class                    listPorts {
     private String              TAG = "listPorts";
@@ -38,12 +37,12 @@ public class                    listPorts {
     }
 
 
-    public boolean               isPortOpen(int portNumber) {
+    public boolean              isPortOpen(int portNumber) {
         return Port.State.valueOf(primitivePortsLits.get(portNumber)) == Port.State.OPEN;
     }
 
     public void                 dump() {
-        Log.d(TAG, "Ports dumps:");
+        Log.e(TAG, "Ports dumps:" + dump);
         for (Port port : mPorts) {
             Log.i(TAG, port.toString());
         }
