@@ -33,26 +33,6 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
         Collections.fill(mListHostRunning, Boolean.FALSE);
     }
 
-    public void                 setIsRunning(boolean mIsRunning) {
-        this.mIsRunning = mIsRunning;
-        Collections.fill(mListHostRunning, mIsRunning);
-        notifyDataSetChanged();
-    }
-
-    private void                playProcess(int position, DoraHolder holder) {
-        mHosts.get(position).exec();
-        Log.d(TAG, "Play process:" + mHosts.get(position).mhost.ip);
-        mListHostRunning.set(position, true);
-        holder.fab.setImageDrawable(mActivity.getDrawable(R.drawable.ic_pause));
-    }
-
-    private void                killProcess(int position, DoraHolder holder) {
-        Log.d(TAG, "kill process:" + mHosts.get(position).mhost.ip + " mPid:" + mHosts.get(position).mPid);
-        RootProcess.kill(mHosts.get(position).mPid);
-        mListHostRunning.set(position, false);
-        holder.fab.setImageDrawable(mActivity.getDrawable(R.drawable.ic_media_play));
-    }
-
     public DoraHolder           onCreateViewHolder(ViewGroup parent, int viewType) {
         return new DoraHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_dora, parent, false));
@@ -61,14 +41,7 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
     public void                 onBindViewHolder(DoraHolder holder, int position) {
         final DoraProcess host = mHosts.get(position);
         holder.diagnose.setText(new String(new char[host.getVisu()]).replace("\0", "#"));
-        String IP = host.mhost.ip + (host.mhost.getName().contains("(-)") ? "" : (" - " +
-                host.mhost.getName().replace("(", "[").replace(")", "]")));
-        holder.IP.setText(IP);
-        if (host.mhost.getName().contains(host.mhost.ip)) {
-            holder.ipHostname.setVisibility(View.GONE);
-        } else {
-            holder.ipHostname.setText(host.mhost.name);
-        }
+        holder.IP.setText(host.mhost.name.isEmpty() ? host.mhost.ip : host.mhost.name);
         holder.uptime.setText("Uptime:    " + host.getmUptime());
         holder.stat.setText("sent: " + host.sent + " / rcv: " + host.rcv);
         int pourc = host.getPourcentage();
@@ -82,10 +55,30 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
             holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(mActivity, R.color.material_green_600));
         }
         holder.diagnosPourcentage.setText(pourc + "%");
-        holder.fab.setImageDrawable(mActivity.getDrawable(host.mIsRunning ? R.drawable.ic_pause : R.drawable.ic_media_play));
-        holder.fab.setOnClickListener(onClickFab(position, holder));
+//        holder.fab.setImageDrawable(mActivity.getDrawable(host.mIsRunning ? R.drawable.ic_pause : R.drawable.ic_media_play));
+//        holder.fab.setOnClickListener(onClickFab(position, holder));
         //TODO: replace with status bar in card view
         //holder.stopFab.setOnClickListener(onClickStop(position, holder));
+    }
+
+    public void                 setIsRunning(boolean mIsRunning) {
+        this.mIsRunning = mIsRunning;
+        Collections.fill(mListHostRunning, mIsRunning);
+        notifyDataSetChanged();
+    }
+
+    /*private void                playProcess(int position, DoraHolder holder) {
+        mHosts.get(position).exec();
+        Log.d(TAG, "Play process:" + mHosts.get(position).mhost.ip);
+        mListHostRunning.set(position, true);
+        //holder.fab.setImageDrawable(mActivity.getDrawable(R.drawable.ic_pause));
+    }
+
+    private void                killProcess(int position, DoraHolder holder) {
+        Log.d(TAG, "kill process:" + mHosts.get(position).mhost.ip + " mPid:" + mHosts.get(position).mPid);
+        RootProcess.kill(mHosts.get(position).mPid);
+        mListHostRunning.set(position, false);
+        //holder.fab.setImageDrawable(mActivity.getDrawable(R.drawable.ic_media_play));
     }
 
     private View.OnClickListener onClickStop(final int position, final DoraHolder holder) {
@@ -105,7 +98,7 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
                 else playProcess(position, holder);
             }
         };
-    }
+    }*/
 
     public int                  getItemCount() {
         return mHosts.size();

@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
@@ -171,7 +172,7 @@ public class                    WiresharkActivity extends MyActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (mListHostSelected.isEmpty())
-                            Snackbar.make(mCoordinatorLayout, "No target selected", Snackbar.LENGTH_LONG).show();
+                            showSnackbar("No target selected");
                         else {
                             setToolbarTitle(null, mListHostSelected.size() + " target" +
                                     ((mListHostSelected.size() <= 1) ? "" : "s") + " selected");
@@ -221,6 +222,7 @@ public class                    WiresharkActivity extends MyActivity {
             mMonitorAgv.setVisibility(View.GONE);
             mProgressBar.setVisibility(View.GONE);
             mTcpdump.onTcpDumpStop();
+            setToolbarTitle(null, "Sniffing over");
             mFab.setImageResource(R.mipmap.ic_play);
         }
     }
@@ -229,10 +231,9 @@ public class                    WiresharkActivity extends MyActivity {
         if (mListHostSelected.isEmpty()) {
             if (mSingleton.selectedHostsList.size() == 1) {//Automatic selection when 1 target only
                 mListHostSelected.add(mSingleton.selectedHostsList.get(0));
-                mToolbar.setSubtitle("Processing");
+                setToolbarTitle(null,"Sniffing " + mSingleton.selectedHostsList.get(0).ip);
             } else {
-                Snackbar.make(mCoordinatorLayout, "Selectionner une target", Snackbar.LENGTH_SHORT)
-                        .setActionTextColor(Color.RED).show();
+                showSnackbar("Selectionner une target");
                 onClickChoiceTarget();
                 return false;
             }
@@ -241,7 +242,6 @@ public class                    WiresharkActivity extends MyActivity {
         Log.d(TAG, "mMonitorCmd::" + mMonitorCmd.getText().toString());
         mMonitorCmd.setText(mTcpdump.actualParam);
         Log.d(TAG, "starting tcpdump with monitor:[" + mMonitorCmd.getText().toString() + "]");
-
         mMonitorAgv.setText(mTcpdump.start(mMonitorCmd.getText().toString(), mListHostSelected, mTypeScan));
         mInstance.runOnUiThread(new Runnable() {
             @Override
@@ -276,6 +276,7 @@ public class                    WiresharkActivity extends MyActivity {
                     ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text))
                             .setTextColor(ContextCompat.getColor(mInstance, R.color.material_red_400));
                     snackbar.show();
+                    showSnackbar("Error in Sniffing");
                     mProgressBar.setVisibility(View.GONE);
                     mFab.setImageResource(R.mipmap.ic_play);
                 } else {
@@ -295,5 +296,9 @@ public class                    WiresharkActivity extends MyActivity {
                     mToolbar.setSubtitle(subtitle);
             }
         });
+    }
+
+    public void                 showSnackbar(String txt) {
+        Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
 }

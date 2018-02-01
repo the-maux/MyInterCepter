@@ -155,7 +155,7 @@ public class HostDetailActivity extends MyActivity {
         supportFinishAfterTransition();
     }*/
 
-    public void                     setToolbarTitle(final String title, final String subtitle) {
+    public void                   setToolbarTitle(final String title, final String subtitle) {
         mInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -167,7 +167,7 @@ public class HostDetailActivity extends MyActivity {
         });
     }
 
-    public void                 onBackPressed() {
+    public void                   onBackPressed() {
         if (mFragmentHistoric == null || mFragmentHistoric.onBackPressed()) {
             super.onBackPressed();
   //          supportFinishAfterTransition();

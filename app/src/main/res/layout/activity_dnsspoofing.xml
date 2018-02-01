@@ -123,29 +123,36 @@
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
 
-        <TextView
-            android:id="@+id/host"
+        <RelativeLayout
+            android:id="@+id/hostLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:padding="4dp"
-            android:text="Spoofable domain:"
-            android:textColor="@color/material_light_white"
-            android:textSize="18sp" />
+            android:layout_height="match_parent"
+            android:background="@color/material_grey_800">
+
+            <TextView
+                android:id="@+id/host"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:padding="4dp"
+                android:text="Spoofable domain:"
+                android:textColor="@color/material_light_white"
+                android:textSize="18sp" />
+        </RelativeLayout>
 
         <android.support.v7.widget.CardView
             android:id="@+id/spinnerTypeScan_cardiview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/host"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="50dp"
             android:background="@color/cardview_dark_background"
+            android:elevation="-10dp"
             app:cardBackgroundColor="@color/cardview_dark_background"
-            app:cardCornerRadius="@dimen/cardview_default_radius"
-            app:cardElevation="6dp">
+            app:cardCornerRadius="@dimen/cardview_default_radius">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/dnsSpoof_RV"

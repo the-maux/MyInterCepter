@@ -11,13 +11,9 @@ import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.DoraProcess;
 import fr.allycs.app.View.Dora.DoraActivity;
 
-/**
- * Created by the-maux on 06/10/17.
- */
-
 public class Dora {
     private String                  TAG = "Dora";
-    private static Dora mInstance = null;
+    private static Dora             mInstance = null;
     private DoraActivity            activity;
     private List<DoraProcess>       mListOfHostDored = new ArrayList<>();
     private Singleton               mSingleton = Singleton.getInstance();

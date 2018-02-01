@@ -7,6 +7,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -20,6 +21,7 @@ public class                MyGlideLoader {
     public static void      loadDrawableInImageView(Context context, int ressource, ImageView imageView) {
         GlideApp.with(context)
                 .load(ressource)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .apply(new RequestOptions()
                         .fitCenter()
                         .override(100, 100))
@@ -31,6 +33,7 @@ public class                MyGlideLoader {
     public static void      loadDrawableInImageViewNoOverride(Context context, int ressource, ImageView imageView) {
         GlideApp.with(context)
                 .load(ressource)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .placeholder(R.drawable.ico)
                 .into(imageView);
     }
@@ -38,6 +41,7 @@ public class                MyGlideLoader {
     public static void      coordoBackgroundXMM(Activity context, final CoordinatorLayout layout) {
         GlideApp.with(context)
                 .load(R.drawable.splashscreen)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .transition(withCrossFade())
                 .placeholder(R.drawable.ico)
                 .into(new SimpleTarget<Drawable>() {
@@ -50,6 +54,7 @@ public class                MyGlideLoader {
     public static void      coordoBackgroundXMM(Activity context, final View layout) {
         GlideApp.with(context)
                 .load(R.drawable.splashscreen)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .transition(withCrossFade())
                 .placeholder(R.drawable.ico)
                 .into(new SimpleTarget<Drawable>() {

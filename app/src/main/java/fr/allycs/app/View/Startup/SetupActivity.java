@@ -28,7 +28,6 @@ public class                    SetupActivity extends MyActivity {
     private String              TAG = "SetupActivity";
     private SetupActivity       mInstance = this;
     private static final int    PERMISSIONS_MULTIPLE_REQUEST = 123;
-    private int                 MAXIMUM_TRY_PERMISSION = 42, try_permission = 0;
     /*static {
         System.loadLibrary("native-lib");
     }*/
@@ -52,32 +51,8 @@ public class                    SetupActivity extends MyActivity {
             monitor("Need write permission for many reasons");
             ActivityCompat.requestPermissions(this, PERMISSION_STORAGE, PERMISSIONS_MULTIPLE_REQUEST);
             return ;
-        }
-        if (rootCheck())
+        } else {
             initialisation();
-        else {
-            monitor("You need to accept root permission to use the app");
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (try_permission++ > MAXIMUM_TRY_PERMISSION)
-                        finish();
-                    getPermission();
-                }
-            }, 5000);
-        }
-        return;
-    }
-
-    private boolean             rootCheck() {
-        try {
-            String RootOk = new RootProcess("Init").exec("id").getReader().readLine();
-            Log.d(TAG, "ROOT: " + RootOk);
-            return  (RootOk != null && RootOk.contains("root"));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
         }
     }
 
