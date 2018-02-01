@@ -77,7 +77,7 @@ public class                        NetworkDiscoveryControler {
         mActivity.setToolbarTitle(null, tmpAntiConcurentExecptionFFS.size() + " hosts detected");
         mActivity.setProgressState(1500);
         mActivity.setToolbarTitle(null,"Scanning " + tmpAntiConcurentExecptionFFS.size() + " devices");
-        new NmapControler(NetUtils.dumpListHostFromARPTableInFile(mActivity, tmpAntiConcurentExecptionFFS), mFragment);
+        new NmapControler(NetUtils.readARPTable(mActivity, tmpAntiConcurentExecptionFFS), mFragment);
         mActivity.setProgressState(2000);
     }
 

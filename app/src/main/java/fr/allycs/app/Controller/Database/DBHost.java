@@ -93,12 +93,17 @@ public class                                DBHost {
         return dump.toString();
     }
 
-    public static List<Host>                getListFromSerialized(String list) {
+    public static List<Host>                getListFromSerialized(String listSerializedId) {
         List<Host> hosts = new ArrayList<>();
-        for (String id : list.split(";")) {
+        for (String id : listSerializedId.split(";")) {
             Host device = findDeviceById(id.replace(";", ""));
-            Fingerprint.initHost(device);
-            hosts.add(device);
+            try {
+                Fingerprint.initHost(device);
+                hosts.add(device);
+            } catch (NullPointerException e) {
+                Log.e(TAG, "id[" + id + "] was not found in BDD");
+                Log.e(TAG, "id[" + id + "] from " + listSerializedId);
+            }
         }
         return hosts;
     }

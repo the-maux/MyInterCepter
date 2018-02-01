@@ -49,7 +49,7 @@ public class                    DoraActivity extends MyActivity {
 
     private void                initXml() {
         mCoordinatorLayout = findViewById(R.id.Coordonitor);
-        MyGlideLoader.coordoBackground(this, mCoordinatorLayout);
+        MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
         searchView =  findViewById(R.id.searchView);
         radar = findViewById(R.id.radar);
         signalQuality = findViewById(R.id.signalQuality);

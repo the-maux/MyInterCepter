@@ -75,7 +75,7 @@ public class                            DnsActivity extends MyActivity {
         mAction_export = findViewById(R.id.action_export);
         textEmpty = findViewById(R.id.textEmpty);
         mTabs = findViewById(R.id.tabs);
-        MyGlideLoader.coordoBackground(this, mDnsSpoof_RV);
+        MyGlideLoader.coordoBackgroundXMM(this, mDnsSpoof_RV);
     }
 
     private void                        initFab() {

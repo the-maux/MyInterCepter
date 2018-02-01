@@ -76,14 +76,13 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mAppbar = findViewById(R.id.appbar);
         mBottomMonitor = ( findViewById(R.id.Message));
         mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
-        MyGlideLoader.coordoBackground(this, mCoordinatorLayout);
+        MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
         mAddHostBtn = findViewById(R.id.action_add_host);
         mSettingsBtn = findViewById(R.id.settings);
         mSearchView = findViewById(R.id.searchView);
         mToolbar = findViewById(R.id.toolbar2);
         mTabs = findViewById(R.id.tabs);
         mProgressBar = findViewById(R.id.progressBar);
-        Log.d(TAG, "SetupActivity::PBCOLOR::" + mProgressBar);
     }
 
     private void                    init()  throws Exception {

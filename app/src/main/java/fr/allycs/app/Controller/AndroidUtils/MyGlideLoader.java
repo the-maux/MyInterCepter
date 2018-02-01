@@ -35,7 +35,7 @@ public class                MyGlideLoader {
                 .into(imageView);
     }
 
-    public static void      coordoBackground(Activity context, final CoordinatorLayout layout) {
+    public static void      coordoBackgroundXMM(Activity context, final CoordinatorLayout layout) {
         GlideApp.with(context)
                 .load(R.drawable.splashscreen)
                 .transition(withCrossFade())
@@ -47,7 +47,7 @@ public class                MyGlideLoader {
                     }
                 });
     }
-    public static void      coordoBackground(Activity context, final View layout) {
+    public static void      coordoBackgroundXMM(Activity context, final View layout) {
         GlideApp.with(context)
                 .load(R.drawable.splashscreen)
                 .transition(withCrossFade())

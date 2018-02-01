@@ -26,21 +26,22 @@ public class                    Setup {
     }
 
     public void                 install() throws IOException, InterruptedException {
-        exec("mkdir -p " + mSingleton.PcapPath);/*  Build directory    */
-        exec("mkdir -p " + mSingleton.FilesPath);
-        exec("chmod 777 " + mSingleton.FilesPath);
+        exec("Creating Directory:", "mkdir -p " + mSingleton.PcapPath);/*  Build directory    */
+        exec("Creating Directory:", "mkdir -p " + mSingleton.FilesPath);
+        exec("Creating Directory:", "chmod 777 " + mSingleton.FilesPath);
         buildFiles();
-        exec("mount -o rw,remount /system");
-        exec("cp ./ping /system/bin/;");
-        exec("rm " + mSingleton.BinaryPath);
+        exec("Dumping binary:","mount -o rw,remount /system");
+        exec("Dumping binary:","cp ./ping /system/bin/;");
+        exec("Dumping binary:","rm " + mSingleton.BinaryPath);
         buildDefaultDnsConf();
-        exec("chmod 644 " + DnsmasqConfig.PATH_HOST_FILE);
-        mActivity.monitor("Cleaning installation");
+        exec("Configuring Dnsmasq","chmod 644 " + DnsmasqConfig.PATH_HOST_FILE);
+
         cleanTheKitchenBoy();
         //TODO: faire un controle d'accés binaire : (./nmap --version, ./tcpdump --version, etc...)
     }
 
     private void                buildDefaultDnsConf() {
+        mActivity.monitor("Configuring Dnsmasq");
         exec( /* Dnsmasq default configuration */
             "echo \"nameserver `getprop net.dns1`\" > " + DnsmasqConfig.PATH_RESOLV_FILE + " && " +
                  "echo \"no-dhcp-interface=\" > " + DnsmasqConfig.PATH_CONF_FILE + " && " +
@@ -129,21 +130,27 @@ public class                    Setup {
     }
 
     private void                buildFiles() throws IOException, InterruptedException  {
+        mActivity.monitor("Building Busybox");
         buildFile("busybox", R.raw.busybox);
-        buildFile("cepter", 0);
+        mActivity.monitor("Building tcpdump");
         buildFile("tcpdump", R.raw.tcpdump);
+        mActivity.monitor("Building macchanger");
         buildFile("macchanger", R.raw.macchanger);
         buildFile("usernames", R.raw.usernames);
+        mActivity.monitor("Building arpspoof");
         buildFile("arpspoof", R.raw.arpspoof);
 
+        mActivity.monitor("Building nmap");
         buildFile("archive_nmap.zip", R.raw.nmap);
         unzipNmap("archive_nmap.zip");
+        mActivity.monitor("Building ettercap");
         buildFile("ettercap_archive", R.raw.ettercap_archive);
         unzipNmap("ettercap_archive");
         Log.d(TAG, "chmod 744 " + mSingleton.BinaryPath + "nmap/*" + "::exit::" + exec("chmod 744 " + mSingleton.BinaryPath + "nmap/*"));
     }
 
     private void                cleanTheKitchenBoy() {
+        mActivity.monitor("Cleaning installation");
         Log.d(TAG, "busybox killall cepter::exit::" + exec(mSingleton.BinaryPath + "busybox killall cepter"));
         Log.d(TAG, "busybox killall tcpdump::exit::" + exec(mSingleton.BinaryPath + "busybox killall tcpdump"));
         Log.d(TAG, "busybox killall arpspoof::exit::" + exec(mSingleton.BinaryPath + "busybox killall arpspoof"));
@@ -156,7 +163,11 @@ public class                    Setup {
         Log.d(TAG, "echo '" + mSingleton.VERSION + "' > " + mSingleton.FilesPath + "version::exit::" + exec("echo '" + mSingleton.VERSION + "' > " + mSingleton.FilesPath + "version"));
     }
 
-    private int                exec(String cmd) {
+    private int                 exec(String TAG, String cmd) {
+        return exec(cmd);
+    }
+
+    private int                 exec(String cmd) {
         if (cmd.contains(" && ")) {
             for (String line : cmd.split(" && ")) {
                 Log.d(TAG, line.replace(mSingleton.FilesPath, "./files/").replace(mSingleton.BinaryPath, "./binary/"));

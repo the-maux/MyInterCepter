@@ -26,7 +26,7 @@ public class                    SettingsActivity extends MyActivity {
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        MyGlideLoader.coordoBackground(this, (CoordinatorLayout) findViewById(R.id.coordinatorLayout));
+        MyGlideLoader.coordoBackgroundXMM(this, (CoordinatorLayout) findViewById(R.id.coordinatorLayout));
     }
 
 }

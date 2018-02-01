@@ -42,7 +42,7 @@ public class                    TargetMenuActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         mCoordinatorLayout = findViewById(R.id.Coordonitor);
-        MyGlideLoader.coordoBackground(this, mCoordinatorLayout);
+        MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
     }
 
     protected void              onResume() {

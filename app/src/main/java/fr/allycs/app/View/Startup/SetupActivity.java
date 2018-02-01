@@ -4,7 +4,11 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +17,7 @@ import android.widget.TextView;
 import java.io.IOException;
 
 import fr.allycs.app.Controller.AndroidUtils.MyActivity;
+import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
 import fr.allycs.app.Controller.Core.Configuration.Setup;
 import fr.allycs.app.Controller.Core.RootProcess;
 import fr.allycs.app.Controller.Network.NetUtils;
@@ -23,46 +28,64 @@ public class                    SetupActivity extends MyActivity {
     private String              TAG = "SetupActivity";
     private SetupActivity       mInstance = this;
     private static final int    PERMISSIONS_MULTIPLE_REQUEST = 123;
+    private int                 MAXIMUM_TRY_PERMISSION = 42, try_permission = 0;
     /*static {
         System.loadLibrary("native-lib");
     }*/
 
     public void                 onCreate(Bundle savedInstanceState) {
-        View rootView = LayoutInflater.from(this).inflate(R.layout.activity_setup, null);
         super.onCreate(savedInstanceState);
+        View rootView = LayoutInflater.from(this).inflate(R.layout.activity_setup, null);
         setContentView(rootView);
-        monitor("Initialization");
-        if (getPermission()) {
-            new RootProcess("Init").exec("ls").closeProcess();
-            initialisation();
-        }
-        else
-            monitor("You need to accept root permission to use the app");
+        MyGlideLoader.coordoBackgroundXMM(this, (CoordinatorLayout)findViewById(R.id.Coordonitor));
+        monitor("Requesting permission");
+        getPermission();
     }
 
-    private boolean             getPermission() {
-        String[]     PERMISSION_STORAGE = {
+    private void                getPermission() {
+        String[] PERMISSION_STORAGE = {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE
         };
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-             ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            monitor("Need write permission for many reasons");
             ActivityCompat.requestPermissions(this, PERMISSION_STORAGE, PERMISSIONS_MULTIPLE_REQUEST);
+            return ;
+        }
+        if (rootCheck())
+            initialisation();
+        else {
+            monitor("You need to accept root permission to use the app");
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (try_permission++ > MAXIMUM_TRY_PERMISSION)
+                        finish();
+                    getPermission();
+                }
+            }, 5000);
+        }
+        return;
+    }
+
+    private boolean             rootCheck() {
+        try {
+            String RootOk = new RootProcess("Init").exec("id").getReader().readLine();
+            Log.d(TAG, "ROOT: " + RootOk);
+            return  (RootOk != null && RootOk.contains("root"));
+        } catch (IOException e) {
+            e.printStackTrace();
             return false;
         }
-        return true;
     }
 
     public void                 onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        final int REQUEST_PERMISSION = 1;
-        switch (requestCode) {
-            case REQUEST_PERMISSION: {
-                if (grantResults.length <= 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    monitor("Vous ne pouvez pas utiliser l'application sans ces permissions");
-                    getPermission();
-                }
-            }
+        if (grantResults.length <= 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            monitor("Vous ne pouvez pas utiliser l'application sans ces permissions");
         }
+        getPermission();
     }
 
     private void                initialisation() {
@@ -70,16 +93,18 @@ public class                    SetupActivity extends MyActivity {
             public void run() {
                 try {
                     Setup.buildPath(mInstance);
-                    Log.d(TAG, "SetupActivity::initialisation");
+                    Log.d(TAG, "Installation");
                     new Setup(mInstance).install();
-                    monitor("Initialization..");
+                    monitor("Network initialization");
                     NetUtils.initNetworkInfo(mInstance);
-                    monitor("Initialization...");
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            startActivity(new Intent(mInstance, HostDiscoveryActivity.class));
-                            finish();
+                            Pair<View, String> p1;
+                            p1 = Pair.create(findViewById(R.id.monitor), "title");
+                            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1);
+                            startActivity(new Intent(mInstance, HostDiscoveryActivity.class), options.toBundle());
+
                         }
                     });
                 } catch (IOException e) {

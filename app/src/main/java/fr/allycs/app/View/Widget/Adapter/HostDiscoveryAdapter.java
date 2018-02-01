@@ -46,7 +46,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
 
     public void                 onBindViewHolder(final HostDiscoveryHolder holder, final int position) {
         final Host host = mHosts.get(position);
-        String ipHostname = host.ip + " (" + host.getName() + ")";
+        String ipHostname = host.ip + ((host.getName().isEmpty()) ? "" : " (" + host.getName() + ")");
         holder.ipHostname.setText(ipHostname);
         holder.mac.setText(host.mac);
         holder.os.setText(host.os);
@@ -69,16 +69,10 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                 }
             });
         }
-        isItMyDevice(host, holder);
-    }
-
-    private void                isItMyDevice(Host host, HostDiscoveryHolder holder) {
-        if (host.ip.contains(Singleton.getInstance().network.myIp)) {
-            holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.primary_dark));
-            holder.ipHostname.setText(host.ip + " " + host.getName() + " MY DEVICE");
-        } else {
-            holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.cardview_dark_background));
-        }
+        /*Special background to notice my device*/
+        holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity,
+                (host.ip.contains(Singleton.getInstance().network.myIp)) ?
+                        R.color.primary_dark : R.color.cardview_dark_background));
     }
 
     private void                 onHostChecked(final HostDiscoveryHolder holder, Host host, final int position) {

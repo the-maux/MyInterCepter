@@ -75,7 +75,7 @@ public class                    WiresharkActivity extends MyActivity {
 
     private void                initXml() {
         mCoordinatorLayout = findViewById(R.id.Coordonitor);
-        MyGlideLoader.coordoBackground(this, mCoordinatorLayout);
+        MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
         mRV_Wireshark = findViewById(R.id.Output);
         mHeaderConfON = findViewById(R.id.filterPcapLayout);
         mMonitorAgv =  findViewById(R.id.Monitor);

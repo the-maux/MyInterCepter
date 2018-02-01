@@ -9,5 +9,5 @@ public enum Os {
     Unix, Linux_Unix, OpenBSD,
     Android,
     Mobile, Samsung,
-    Unknow
+    Ps4, Unknow
 }

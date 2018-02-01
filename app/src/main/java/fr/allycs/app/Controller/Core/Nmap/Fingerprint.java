@@ -35,20 +35,34 @@ public class                         Fingerprint {
         if (host.isItMyDevice) {
             host.osType = Os.Android;
             host.vendor = "Your Device";
+            host.os = "Unix/(AOSP)";
+        } if (host.vendor.contains("Sony")) {
+            /**
+             * TODO: faire un Thread qui check les port, si c'est open, c'est une ps4
+             * 9295/tcp  open  unknown
+             * 41800/tcp open  unknown
+             * Sinon c'est une TV ou téléphone
+             */
+            host.osType = Os.Ps4;
+            host.os = "FreeBSD 10.X, Sony embedded";
         } else if (InfoDevice.contains("bluebird")) {
             host.osType = Os.Bluebird;
+            host.os = "Unix/(AOSP)";
         } else if (InfoDevice.contains("cisco")) {
             host.osType = Os.Cisco;
         } else if (InfoDevice.contains("raspberry")) {
             host.osType = Os.Raspberry;
         } else if (InfoDevice.contains("quanta")) {
             host.osType = Os.QUANTA;
+            host.os = "Unix/(redHat)";
         } else if (InfoDevice.contains("android") || InfoDevice.contains("mobile") || InfoDevice.contains("samsung") ||
                 InfoDevice.contains("murata") || InfoDevice.contains("huawei") || InfoDevice.contains("oneplus") ||
                 InfoDevice.contains("lg") || InfoDevice.contains("motorola")) {
             host.osType = Os.Android;
+            host.os = "Unix/(AOSP)";
         } else if (InfoDevice.contains("apple")) {
             host.osType = Os.Apple;
+            host.os = "Unix/(MacOs)";//TODO FINGERPRINT WITH MAC NAME ON zeroconf
         } else if (!(!InfoDevice.contains("unix") && !InfoDevice.contains("linux") && !InfoDevice.contains("bsd"))) {
             host.osType = Os.Linux_Unix;
         } else if (InfoDevice.contains("windows") || InfoDevice.contains("microsoft")) {
@@ -57,9 +71,7 @@ public class                         Fingerprint {
             host.osType = Os.Windows7_8_10;
         } else if (InfoDevice.contains("windows 2000")) {
             host.osType = Os.WindowsXP;
-        } */ else if (InfoDevice.contains("Ios")) {
-            host.osType = Os.Ios;
-        } else
+        } */ else
             host.osType = Os.Unknow;
     }
 
@@ -82,63 +94,62 @@ public class                         Fingerprint {
     }
 
     public static void               setOsIcon(Context context, Host host, CircleImageView osImageView) {
-        int                 ImageRessource;
+        int ImageRessource;
         if (host != null && host.osType != null) {
-            switch (host.osType) {
-                case Windows2000:
-                    ImageRessource = R.drawable.winicon;
-                    break;
-                case WindowsXP:
-                    ImageRessource = R.drawable.winicon;
-                    break;
-                case Windows:
-                    ImageRessource = R.drawable.winicon;
-                    break;
-                case Windows7_8_10:
-                    ImageRessource = R.drawable.winicon;
-                    break;
-                case Cisco:
-                    ImageRessource = R.drawable.cisco;
-                    break;
-                case Raspberry:
-                    ImageRessource = R.drawable.rasp;
-                    break;
-                case QUANTA:
-                    ImageRessource = R.drawable.quanta;
-                    break;
-                case Bluebird:
-                    ImageRessource = R.drawable.bluebird;
-                    break;
-                case Apple:
-                    ImageRessource = R.drawable.ios;
-                    break;
-                case Ios:
-                    ImageRessource = R.drawable.ios;
-                    break;
-                case Unix:
-                    ImageRessource = R.drawable.linuxicon;
-                    break;
-                case Linux_Unix:
-                    ImageRessource = R.drawable.linuxicon;
-                    break;
-                case OpenBSD:
-                    ImageRessource = R.drawable.linuxicon;
-                    break;
-                case Android:
-                    ImageRessource = R.mipmap.ic_logo_android_trans_round;
-                    break;
-                case Mobile:
-                    ImageRessource = R.mipmap.ic_logo_android_trans_round;
-                    break;
-                case Samsung:
-                    ImageRessource = R.mipmap.ic_logo_android_trans_round;
-                    break;
-                case Unknow:
-                    ImageRessource = R.drawable.monitor;
-                    break;
-                default:
-                    ImageRessource = R.drawable.monitor;
-                    break;
+            if (host.ip.equals(Singleton.getInstance().network.gateway)) {
+                ImageRessource = R.drawable.router1;
+                host.osType = Os.Unix;
+            } else {
+                switch (host.osType) {
+                    case Windows:
+                        ImageRessource = R.drawable.winicon;
+                        break;
+                    case Cisco:
+                        ImageRessource = R.drawable.cisco;
+                        break;
+                    case Raspberry:
+                        ImageRessource = R.drawable.rasp;
+                        break;
+                    case QUANTA:
+                        ImageRessource = R.drawable.quanta;
+                        break;
+                    case Bluebird:
+                        ImageRessource = R.drawable.bluebird;
+                        break;
+                    case Apple:
+                        ImageRessource = R.drawable.ios;
+                        break;
+                    case Ios:
+                        ImageRessource = R.drawable.ios;
+                        break;
+                    case Unix:
+                        ImageRessource = R.drawable.linuxicon;
+                        break;
+                    case Linux_Unix:
+                        ImageRessource = R.drawable.linuxicon;
+                        break;
+                    case OpenBSD:
+                        ImageRessource = R.drawable.linuxicon;
+                        break;
+                    case Android:
+                        ImageRessource = R.drawable.android_winner;
+                        break;
+                    case Mobile:
+                        ImageRessource = R.mipmap.ic_logo_android_trans_round;
+                        break;
+                    case Samsung:
+                        ImageRessource = R.mipmap.ic_logo_android_trans_round;
+                        break;
+                    case Ps4:
+                        ImageRessource = R.drawable.ps4;
+                        break;
+                    case Unknow:
+                        ImageRessource = R.drawable.monitor;
+                        break;
+                    default:
+                        ImageRessource = R.drawable.monitor;
+                        break;
+                }
             }
         } else {
             ImageRessource = R.drawable.monitor;
