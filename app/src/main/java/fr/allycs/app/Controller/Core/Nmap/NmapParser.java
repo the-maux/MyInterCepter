@@ -48,8 +48,7 @@ class NmapParser {
         startAsParse(cmd, hostsMAC.toString());
     }
 
-
-    private Host buildHostFromNmapDump(String nmapStdout, Host host) throws UnknownHostException {
+    private Host                    buildHostFromNmapDump(String nmapStdout, Host host) throws UnknownHostException {
         String[] nmapStdoutHost = nmapStdout.split("\n");
         List<Port> ports = new ArrayList<>();
         for (int i = 0; i < nmapStdoutHost.length; i++) {
@@ -104,7 +103,7 @@ class NmapParser {
                 if (!Fingerprint.isItMyDevice(host)) {
                     host = DBHost.saveOrGetInDatabase(host, true);
                     host = buildHostFromNmapDump(node, host);
-                    host.dumpMe(mSingleton.selectedHostsList);
+                    //host.dumpMe(mSingleton.selectedHostsList);
                     //Log.e(TAG, "new host builded: " + host.toString());
                 } else {
                     host.mac = mSingleton.network.mac;
@@ -162,35 +161,45 @@ class NmapParser {
         }).start();
     }
 
-//    /**
-//     * TODO: Regarder comment avoir le nom des servers comme on avait eu a L.M
-//     * @param host
-//     */
-//    private void                    getNetBiosName(Host host) {
-//        try {
-//                Log.d(TAG, "Jcifs::");
-//                InetAddress addr = InetAddress.getByName(host.ip);
-//                String hostname = (addr.getHostName().contentEquals(host.ip)) ? "-" : addr.getHostName();
-//                String jcifsName = ((NbtAddress.getByName(host.ip).nextCalledName() == null) ?
-//                        "" : NbtAddress.getByName(host.ip).nextCalledName());
-//                if (!hostname.contentEquals(host.ip)) {
-//                    host.name = host.name + hostname;
-//                } else {
-//                    host.name = host.name + jcifsName;
-//                }
-//        } catch (UnknownHostException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    /**
+     *                                   PORT     STATE  SERVICE
+     21/tcp   closed ftp
+     22/tcp   closed ssh
+     23/tcp   closed telnet
+     25/tcp   closed smtp
+     80/tcp   closed http
+     110/tcp  closed pop3
+     135/tcp  closed msrpc
+     139/tcp  closed netbios-ssn
+     443/tcp  closed https
+     445/tcp  closed microsoft-ds
+     3128/tcp closed squid-http
+     53/udp   closed domain
+     3031/udp closed unknown
+     5353/udp open   zeroconf
+     | dns-service-discovery:
+     |   49804/tcp companion-link
+     |     rpBA=BB:AF:8F:77:DC:AD
+     |     rpVr=120.51
+     |     rpHI=9bfff01882c6
+     |     rpHN=5b3e412e991f
+     |     rpHA=2c264c268b6a
+     |     model=MacBookPro11,4
+     |     osxvers=17
+     |_    Address=10.16.187.114 fe80:0:0:0:c38:76b8:7a27:48f3
+     MAC Address: 6C:96:CF:DB:51:6F (Apple, Inc.)
+     * @param line
+     * @param i
+     * @param host
+     * @return
+     */
 
     private int               getPortList(String[] line, int i, Host host) {
         ArrayList<String> ports = new ArrayList<>();
         for (; i < line.length; i++) {
             if (!(line[i].contains("open") || line[i].contains("close") || line[i].contains("filtered"))) {
                 host.Ports(ports);/*TODO:CHECK DUPLICATA*/
-                if (line[i].contains("| dns-service-discovery:")) {
+                if (line[i].contains("dns-service-discovery: ")) {
                     while (i < line.length && !line[i].contains("|_ ")) {
                         i++;
                     }
@@ -201,6 +210,7 @@ class NmapParser {
         }
         return i;
     }
+
     private void                    getOs(String line, Host host, String[] nmapStdoutHost) {
         String OsDetail = getLineContaining("OS details", nmapStdoutHost);
         if (OsDetail != null)
