@@ -164,7 +164,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         Log.d(TAG, "filterByString:" + query);
         mHosts.clear();
         for (Host host : mOriginalList) {
-            if (host.dumpInfo.toLowerCase().contains(query.toLowerCase()))
+            if (host.dumpInfo != null && host.dumpInfo.toLowerCase().contains(query.toLowerCase()))
                 mHosts.add(host);
         }
         notifyDataSetChanged();

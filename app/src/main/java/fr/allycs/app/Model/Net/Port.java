@@ -5,12 +5,15 @@ import java.util.Map;
 
 import fr.allycs.app.Model.Target.Host;
 
+import static fr.allycs.app.Model.Net.Port.State.OPEN;
+
 public class            Port {
     public String       TAG = "Port";
     public String       port;
     public String       protocol;
     public State        state;
     public Host         host;
+
 
     public enum         State   {
         CLOSED(0), OPEN(1), FILTERED(2), UNFILTERED(3), OPEN_FILTERED(4), CLOSED_FILTERED(5), UNKNOW(6);
@@ -33,19 +36,20 @@ public class            Port {
         }
 
         public static State valueOf(String pageType, int a) {
+            pageType = pageType.toUpperCase().replace("|", "_");
             switch (pageType) {
-                case "CLOSED":
-                    return CLOSED;
-                case "OPEN":
-                    return OPEN;
+                case "OPEN_FILTERED":
+                    return OPEN_FILTERED;
+                case "CLOSED_FILTERED":
+                    return CLOSED_FILTERED;
                 case "FILTERED":
                     return FILTERED;
                 case "UNFILTERED":
                     return UNFILTERED;
-                case "OPEN_FILTERED":
-                    return OPEN_FILTERED;
-                case "OPEN_UNFILTERED":
-                    return CLOSED_FILTERED;
+                case "CLOSED":
+                    return CLOSED;
+                case "OPEN":
+                    return OPEN;
                 default:
                     return UNKNOW;
             }
@@ -56,13 +60,20 @@ public class            Port {
         }
 
         }
+    public Port(String line) {
+        String[] dumpSplitetd = line.trim().split(" ");
+        this.state = OPEN;
+        this.port = dumpSplitetd[0];
+        this.protocol = dumpSplitetd[1];
+    }
 
     /*  Exemple port: 22/tcp   closed ssh */
     public Port(String port_proto, String state, String protocolName) {
         super();
+        //Log.i(TAG, "Building:\t" + port_proto + "  " + state + " -> " + protocolName);
         this.port = port_proto;
-        this.state = State.valueOf(state.toUpperCase().replace("|", "_"), 0);
-        protocol = protocolName;
+        this.state = State.valueOf(state, 0);
+        this.protocol = protocolName;
     }
 
     public int          getPort() {

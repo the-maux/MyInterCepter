@@ -47,31 +47,30 @@ public class                         Fingerprint {
             host.os = "FreeBSD 10.X, Sony embedded";
         } else if (InfoDevice.contains("bluebird")) {
             host.osType = Os.Bluebird;
-            host.os = "Unix/(AOSP)";
+            host.os = "Unix/(Aosp)";
         } else if (InfoDevice.contains("cisco")) {
             host.osType = Os.Cisco;
         } else if (InfoDevice.contains("raspberry")) {
             host.osType = Os.Raspberry;
+            host.os = "Unix/(Raspbian)";
         } else if (InfoDevice.contains("quanta")) {
             host.osType = Os.QUANTA;
-            host.os = "Unix/(redHat)";
+            host.os = "Unix/(RedHat 3)";
         } else if (InfoDevice.contains("android") || InfoDevice.contains("mobile") || InfoDevice.contains("samsung") ||
                 InfoDevice.contains("murata") || InfoDevice.contains("huawei") || InfoDevice.contains("oneplus") ||
                 InfoDevice.contains("lg") || InfoDevice.contains("motorola")) {
             host.osType = Os.Android;
             host.os = "Unix/(AOSP)";
-        } else if (InfoDevice.contains("apple")) {
+        } else if (InfoDevice.contains("apple") || host.vendor.toLowerCase().contains("apple")) {
+            host.os = "FreeBSD";
             host.osType = Os.Apple;
-            host.os = "Unix/(MacOs)";//TODO FINGERPRINT WITH MAC NAME ON zeroconf
+            host.os = "Unix/(Mac OS X)";//TODO FINGERPRINT WITH MAC NAME ON zeroconf
         } else if (!(!InfoDevice.contains("unix") && !InfoDevice.contains("linux") && !InfoDevice.contains("bsd"))) {
             host.osType = Os.Linux_Unix;
         } else if (InfoDevice.contains("windows") || InfoDevice.contains("microsoft")) {
+            Log.i(TAG, "WINDOWS OR MICROSOFT HERE:" + InfoDevice);
             host.osType = Os.Windows;
-        } /*else if (InfoDevice.contains("windows 7")) {
-            host.osType = Os.Windows7_8_10;
-        } else if (InfoDevice.contains("windows 2000")) {
-            host.osType = Os.WindowsXP;
-        } */ else
+        } else
             host.osType = Os.Unknow;
     }
 
@@ -116,7 +115,7 @@ public class                         Fingerprint {
                     case Bluebird:
                         ImageRessource = R.drawable.bluebird;
                         break;
-                    case Apple:
+                    case Apple://Need MacBOOK, MacAIR, Iphone, AppleTV
                         ImageRessource = R.drawable.ios;
                         break;
                     case Ios:

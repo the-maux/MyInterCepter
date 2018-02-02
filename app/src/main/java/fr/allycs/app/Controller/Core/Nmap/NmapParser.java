@@ -12,7 +12,6 @@ import java.util.List;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Core.RootProcess;
 import fr.allycs.app.Controller.Database.DBHost;
-import fr.allycs.app.Model.Net.Port;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.View.HostDiscovery.FragmentHostDiscoveryScan;
@@ -45,53 +44,51 @@ class NmapParser {
         }
         String cmd = mNmapControler.PATH_NMAP + NMAP_ARG_SCAN + hostCmd.toString();
         Log.d(TAG, "CMD:["+ cmd + "]");
+
         startAsParse(cmd, hostsMAC.toString());
     }
 
     private Host                    buildHostFromNmapDump(String nmapStdout, Host host) throws UnknownHostException {
+
         String[] nmapStdoutHost = nmapStdout.split("\n");
-        List<String> dump = new ArrayList<>();
+        StringBuilder dump = new StringBuilder("");
         for (int i = 0; i < nmapStdoutHost.length; i++) {
             String line = nmapStdoutHost[i];
             if (line.contains("Device type: ")) {
-                dump.add(line);
+                dump.append(line);
                 //Log.v(TAG,  "buildHostFromNmapDump::" + line);
                 host.deviceType = line.replace("Device type: ", "");
             } else if (line.contains("Running: ")) {
-                dump.add(line);
+                dump.append(line);
                 //Log.v(TAG, "buildHostFromNmapDump::" + line);
                 getOs(line.replace("Running: ", ""), host, nmapStdoutHost);
             } else if (line.contains("Too many fingerprints match this host to give specific OS details")) {
-                dump.add(line);
-                //Log.v(TAG, "buildHostFromNmapDump::" + line);
+                dump.append(line);
                 host.TooManyFingerprintMatchForOs = true;
             } else if (line.contains("Network Distance: ")) {
-                dump.add(line);
-                //Log.v(TAG, "buildHostFromNmapDump::" + line);
+                dump.append(line);
                 host.NetworkDistance = line.replace("Network Distance: ", "");
             } else if (line.contains("NetBIOS name:")) {
-                dump.add(line);
+                dump.append(line);
                 host.name = line.split(",")[0].replace("NetBIOS name: ", "")
                         .replace("|   ", "");
             } else if (line.contains("MAC Address: ")) {
-                dump.add(line);
-                //              Log.v(TAG, "buildHostFromNmapDump::" + line);
+                dump.append(line);
                 host.mac = line.replace("MAC Address: ", "").split(" ")[0];
-                host.vendor = line.replace("MAC Address: " + host.mac + " (", "").replace(")", "");
+                if (host.vendor.contains("Unknown"))
+                    host.vendor = line.replace("MAC Address: " + host.mac + " (", "").replace(")", "");
             } else if (line.contains("PORT ")) {
-                dump.add(line);
-  //              Log.v(TAG, "buildHostFromNmapDump::" + line);
                 i = getPortList(nmapStdoutHost, i +1, host);
             } else {
-  //              Log.e(TAG,"buildHostFromNmapDump::" +  line);
+
             }
         }
-        host.dumpInfo = nmapStdout;
+        host.dumpInfo = dump.toString();
         Fingerprint.initHost(host);
 //        Log.d(TAG, "getNetBiosName");
         //getNetBiosName(host);
         host.mac = host.mac.toUpperCase();
-        Log.d(TAG, "Saving " + host.ip +" builded from dump");
+        //Log.d(TAG, "Saving " + host.ip +" builded from dump");
         host.save();
         return host;
     }
@@ -104,18 +101,14 @@ class NmapParser {
                 String node = NmapDump.split("Nmap scan report for ")[i];
                 Host host = new Host();
                 getIpHOSTNAME(node.split("\n")[0], host);
-                //Log.d(TAG, "NODE:" + host.ip);
-                //Log.d(TAG, "\t\t" + node);
                 host.mac = getMACInTmp(macs, host.ip);
                 if (!Fingerprint.isItMyDevice(host)) {
-                    host = DBHost.saveOrGetInDatabase(host, true);
+                    host = DBHost.saveOrGetInDatabase(host);
                     host = buildHostFromNmapDump(node, host);
-                    //host.dumpMe(mSingleton.selectedHostsList);
-                    //Log.e(TAG, "new host builded: " + host.toString());
                 } else {
                     host.mac = mSingleton.network.mac;
                     host.ip = mSingleton.network.myIp;
-                    if ((host = DBHost.saveOrGetInDatabase(host, true)) == null) {
+                    if ((host = DBHost.saveOrGetInDatabase(host)) == null) {
                         host.name = "My Device";
                         host.os = "Android/(AOSP)";
                         host.osType = Os.Android;
@@ -156,14 +149,21 @@ class NmapParser {
                     StringBuilder dumpOutputBuilder = new StringBuilder();
                     BufferedReader reader = new RootProcess("Nmap", mSingleton.FilesPath)
                             .exec(cmd).getReader();
-                    Log.d(TAG, "LIVENMAP : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-                    while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {
+                    mFragment.setTitleToolbar("Network scan", "Scanning devices");
+                    String lastLine = "";
+                    while ((tmp = reader.readLine()) != null && !tmp.startsWith("Nmap done")) {
                         dumpOutputBuilder.append(tmp).append('\n');
                     }
+                    if (tmp == null || !tmp.startsWith("Nmap done")) {
+                        Log.d(TAG, "Error in nmap execution, Nmap didn't end");
+                        mFragment.setTitleToolbar("Network scan", "Nmap Error");
+                        return;
+                    }
                     dumpOutputBuilder.append(tmp);
-                    Log.d(TAG, "\t\t" + dumpOutputBuilder.toString().substring(1));
-                    Log.d(TAG, "LIVENMAP : <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-                    parseNmapMultipleTarget(listMacs, dumpOutputBuilder.toString().substring(1));
+                    String FullDUMP = dumpOutputBuilder.toString().substring(1);
+                    Log.d(TAG, "\t\t LastLine[" + tmp + "]");
+                    mFragment.setTitleToolbar("Fingerprint", tmp.replace("Nmap done: ", ""));
+                    parseNmapMultipleTarget(listMacs, FullDUMP);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -171,53 +171,19 @@ class NmapParser {
         }).start();
     }
 
-    /**
-     *                                   PORT     STATE  SERVICE
-     21/tcp   closed ftp
-     22/tcp   closed ssh
-     23/tcp   closed telnet
-     25/tcp   closed smtp
-     80/tcp   closed http
-     110/tcp  closed pop3
-     135/tcp  closed msrpc
-     139/tcp  closed netbios-ssn
-     443/tcp  closed https
-     445/tcp  closed microsoft-ds
-     3128/tcp closed squid-http
-     53/udp   closed domain
-     3031/udp closed unknown
-     5353/udp open   zeroconf
-     | dns-service-discovery:
-     |   49804/tcp companion-link
-     |     rpBA=BB:AF:8F:77:DC:AD
-     |     rpVr=120.51
-     |     rpHI=9bfff01882c6
-     |     rpHN=5b3e412e991f
-     |     rpHA=2c264c268b6a
-     |     model=MacBookPro11,4
-     |     osxvers=17
-     |_    Address=10.16.187.114 fe80:0:0:0:c38:76b8:7a27:48f3
-     MAC Address: 6C:96:CF:DB:51:6F (Apple, Inc.)
-     * @param line
-     * @param i
-     * @param host
-     * @return
-     */
-
-    private int               getPortList(String[] line, int i, Host host) {
+    private int                     getPortList(String[] line, int i, Host host) {
         ArrayList<String> ports = new ArrayList<>();
         for (; i < line.length; i++) {
             if (!(line[i].contains("open") || line[i].contains("close") || line[i].contains("filtered"))) {
-                host.Ports(ports);/*TODO:CHECK DUPLICATA*/
-                if (line[i].contains("dns-service-discovery: ")) {
-                    Log.d(TAG, "line container:dns-service-discovery:");
-                    while (i < line.length && !line[i].contains("|_ ")) {
-                        i++;
-                        Log.d(TAG, "dns-service-discovery: IS GOOD [" + line[i] + "]");
+                /*TODO:CHECK DUPLICATA*/
+                if (line[i].startsWith("| ") && line[i].endsWith(": ")) {
+                    while (i < line.length && !line[i].startsWith("|_")) {
+                        ports.add(line[i++].replaceAll("  ", " "));
                     }
-                    Log.d(TAG, "STOPPING HERE !! [" + line[i] + "]");
+                } else {
+                    host.Ports(ports);
+                    return i-1;
                 }
-                return i-1;
             } else
                 ports.add(line[i].replaceAll("  ", " "));
         }

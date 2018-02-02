@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Model.Net.Service;
 import fr.allycs.app.Model.Net.listPorts;
 import fr.allycs.app.Model.Unix.Os;
@@ -51,40 +50,14 @@ public class                Host extends Model {
 
     private listPorts       listPorts = null;
     public listPorts       Ports() {
-//        if (listPorts == null)
-//            return null;// CHARGER DEPUIS LA BDD
         return listPorts;
     }
 
     public listPorts       Ports(ArrayList<String> dumpsPorts) {
-        listPorts = new listPorts(dumpsPorts);
+        listPorts = new listPorts(dumpsPorts, this);
         return listPorts;
     }
 
-    public                  Host(String buffer) {
-        super();
-        try {
-            buffer = buffer.trim().replaceAll("\\p{Cntrl}", "?")
-                    .replace("\t", " ").replace("  ", " ");
-            String beg = buffer.substring(0, buffer.indexOf(":") - 1);
-            String mid = buffer.substring(buffer.indexOf(":") + 2, buffer.indexOf(";") - 1);
-            String end = buffer.substring(buffer.indexOf(";") + 2);
-            ip = beg.substring(0, beg.indexOf("(") - 1).replace("\n", "");
-            name = beg.substring(beg.indexOf("(")).replace("\n", "");
-            mac = mid.substring(0, mid.indexOf(" ")).replace("\n", "")
-                    .replace("[", "").replace("]", "")
-                    .replace("-", ":");
-            os = mid.substring(mid.indexOf(" ") + 1).replace("\n", "");
-            vendor = end.replace("\n", "");
-            if (Singleton.getInstance().UltraDebugMode)
-                dumpHost();
-            dumpInfo = buffer;
-            //Fingerprint.initHost(this, ports);
-        } catch (StringIndexOutOfBoundsException e) {
-            Log.e(TAG, buffer);
-            e.getStackTrace();
-        }
-    }
 
     public String           getName() {
         return (name.contains("Unknown") ? "-" : name);

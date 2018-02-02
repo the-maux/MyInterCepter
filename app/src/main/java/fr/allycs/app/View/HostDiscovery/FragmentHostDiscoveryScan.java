@@ -239,7 +239,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         mActivity.setToolbarTitle(mTitle, mSubtitle);
         mActivity.initToolbarButton();
     }
-    private void                    setTitleToolbar(String title, String subtitle) {
+    public void                     setTitleToolbar(String title, String subtitle) {
         if (title != null)
             mTitle = title;
         if (subtitle != null)
