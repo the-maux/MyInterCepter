@@ -2,15 +2,11 @@ package fr.allycs.app.Controller.Core.Nmap;
 
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Core.RootProcess;
 import fr.allycs.app.Controller.Database.DBHost;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Os;
@@ -22,34 +18,42 @@ class NmapParser {
     private ArrayList<Host>         hosts = new ArrayList<>();
     private NmapControler           mNmapControler;
     private FragmentHostDiscoveryScan mFragment;
-    private String                  NMAP_ARG_SCAN = " -PN -T4 -sS -sU --script nbstat.nse,dns-service-discovery --min-parallelism 100 -p T:21,T:22,T:23,T:25,T:80,T:110,T:135,T:139,T:3128,T:443,T:445,U:53,U:3031,U:5353  ";
-    /**
+    private int                     LENGTH_NODE, NBR_PARSED_NODE = 0;
 
-*/
-    NmapParser(NmapControler nmapControler, List<String> ips, FragmentHostDiscoveryScan fragment) {
+    NmapParser(NmapControler nmapControler,FragmentHostDiscoveryScan fragment, String listMacs, String NmapDump) {
         this.mNmapControler = nmapControler;
         this.mFragment = fragment;
-        StringBuilder hostCmd = new StringBuilder("");
-        StringBuilder hostsMAC = new StringBuilder("");
-        for (String ip : ips) {
-            String[] tmp = ip.split(":");
-            /*if (tmp[0].contentEquals("10.16.187.6") || tmp[0].contentEquals("10.16.187.159") || tmp[0].contentEquals("10.16.187.223") ||
-                    tmp[0].contentEquals("10.16.187.238") || tmp[0].contentEquals("10.16.187.21") ||
-                    tmp[0].contentEquals("10.16.187.19") || tmp[0].contentEquals("10.16.187.25")) {*/
-                hostCmd.append(" ").append(tmp[0]);
-                hostsMAC.append(" ").append(ip);
-            /*} else {
-                //Log.e(TAG, "[" + ip + "]");
-            }*/
+        String[] macs = listMacs.split(" ");
+        String[] HostNmapDump = NmapDump.split("Nmap scan report for ");
+        LENGTH_NODE = HostNmapDump.length -1;
+        for (int i = 1; i < HostNmapDump.length; i++) {/*First node is the nmap preambule*/
+            dispatcher(HostNmapDump[i], macs);
         }
-        String cmd = mNmapControler.PATH_NMAP + NMAP_ARG_SCAN + hostCmd.toString();
-        Log.d(TAG, "CMD:["+ cmd + "]");
-
-        startAsParse(cmd, hostsMAC.toString());
     }
 
-    private Host                    buildHostFromNmapDump(String nmapStdout, Host host) throws UnknownHostException {
+    private void                    dispatcher(final String node, final String[] macs) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Host host = new Host();
+                    getIpHOSTNAME(node.split("\n")[0], host);
+                    host.mac = getMACInTmp(macs, host.ip);
+                    if (!Fingerprint.isItMyDevice(host)) {
+                        host = DBHost.saveOrGetInDatabase(host);
+                        buildHostFromNmapDump(node, host, hosts);
+                    } else {
+                        initIfItsMyDevice(host, hosts);
+                    }
+                    onNodeParsed();
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
 
+    private void                    buildHostFromNmapDump(String nmapStdout, Host host, ArrayList<Host> hosts) throws UnknownHostException {
         String[] nmapStdoutHost = nmapStdout.split("\n");
         StringBuilder dump = new StringBuilder("");
         for (int i = 0; i < nmapStdoutHost.length; i++) {
@@ -90,44 +94,19 @@ class NmapParser {
         host.mac = host.mac.toUpperCase();
         //Log.d(TAG, "Saving " + host.ip +" builded from dump");
         host.save();
-        return host;
+        hosts.add(host);
     }
 
-
-    private void                    parseNmapMultipleTarget(String listMacs, String NmapDump) {
-        String[] macs = listMacs.split(" ");
-        for (int i = 1; i < NmapDump.split("Nmap scan report for ").length; i++) {/*First node is the nmap preambule*/
-            try {
-                String node = NmapDump.split("Nmap scan report for ")[i];
-                Host host = new Host();
-                getIpHOSTNAME(node.split("\n")[0], host);
-                host.mac = getMACInTmp(macs, host.ip);
-                if (!Fingerprint.isItMyDevice(host)) {
-                    host = DBHost.saveOrGetInDatabase(host);
-                    host = buildHostFromNmapDump(node, host);
-                } else {
-                    host.mac = mSingleton.network.mac;
-                    host.ip = mSingleton.network.myIp;
-                    if ((host = DBHost.saveOrGetInDatabase(host)) == null) {
-                        host.name = "My Device";
-                        host.os = "Android/(AOSP)";
-                        host.osType = Os.Android;
-                        host.isItMyDevice = true;
-                        host.save();
-                    }
-                }
-                hosts.add(host);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
-        }
-        //Log.d(TAG, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-        for (Host host : hosts) {
-            //host.dumpMe(mSingleton.selectedHostsList);
-            //Log.d(TAG, "--------------------------------------------------");
-        }
-        Collections.sort(hosts, Host.getComparator());
-        this.mFragment.onHostActualized(hosts);
+    private void                    initIfItsMyDevice(Host host, ArrayList<Host> hosts) {
+        host.mac = mSingleton.network.mac;
+        host.ip = mSingleton.network.myIp;
+        host = DBHost.saveOrGetInDatabase(host);
+        host.name = "My Device";
+        host.os = "Android/(AOSP)";
+        host.osType = Os.Android;
+        host.isItMyDevice = true;
+        host.save();
+        hosts.add(host);
     }
 
     private void                    getIpHOSTNAME(String line, Host host) {
@@ -138,37 +117,6 @@ class NmapParser {
         } else {
             host.ip = line.split(" ")[0];
         }
-    }
-
-    private void                    startAsParse(final String cmd, final String listMacs) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String tmp;
-                    StringBuilder dumpOutputBuilder = new StringBuilder();
-                    BufferedReader reader = new RootProcess("Nmap", mSingleton.FilesPath)
-                            .exec(cmd).getReader();
-                    mFragment.setTitleToolbar("Network scan", "Scanning devices");
-                    String lastLine = "";
-                    while ((tmp = reader.readLine()) != null && !tmp.startsWith("Nmap done")) {
-                        dumpOutputBuilder.append(tmp).append('\n');
-                    }
-                    if (tmp == null || !tmp.startsWith("Nmap done")) {
-                        Log.d(TAG, "Error in nmap execution, Nmap didn't end");
-                        mFragment.setTitleToolbar("Network scan", "Nmap Error");
-                        return;
-                    }
-                    dumpOutputBuilder.append(tmp);
-                    String FullDUMP = dumpOutputBuilder.toString().substring(1);
-                    Log.d(TAG, "\t\t LastLine[" + tmp + "]");
-                    mFragment.setTitleToolbar("Fingerprint", tmp.replace("Nmap done: ", ""));
-                    parseNmapMultipleTarget(listMacs, FullDUMP);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
     }
 
     private int                     getPortList(String[] line, int i, Host host) {
@@ -211,6 +159,18 @@ class NmapParser {
                 return mac.replace(ip + ':', "").toUpperCase();
         }
         return null;
+    }
+
+    private void                    onNodeParsed() {
+        NBR_PARSED_NODE = NBR_PARSED_NODE + 1;
+        if (NBR_PARSED_NODE >= LENGTH_NODE)
+            onAllNodeParsed();
+    }
+
+    private void                    onAllNodeParsed() {
+        Log.d(TAG, "All node was parsed in :" + mNmapControler.getTimeSpend());
+        Collections.sort(hosts, Host.getComparator());
+        this.mFragment.onHostActualized(hosts);
     }
 
 }

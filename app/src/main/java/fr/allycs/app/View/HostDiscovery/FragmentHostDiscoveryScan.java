@@ -122,6 +122,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         mHost_RV.setAdapter(mHostAdapter);
         mHost_RV.setHasFixedSize(true);
         mHost_RV.setLayoutManager(new LinearLayoutManager(mActivity));
+        Log.d(TAG, "ADAPTER_RV OK");
     }
 
     public void                     initSearchView(SearchView mSearchView) {

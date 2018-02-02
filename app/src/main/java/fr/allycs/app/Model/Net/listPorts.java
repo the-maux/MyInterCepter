@@ -45,18 +45,6 @@ public class                    listPorts {
         mPorts.add(port);
     }
 
-    /**
-     | dns-service-discovery:
-     |   49804/tcp companion-link
-     |     rpBA=BB:AF:8F:77:DC:AD
-     |     rpVr=120.51
-     |     rpHI=9bfff01882c6
-     |     rpHN=5b3e412e991f
-     |     rpHA=2c264c268b6a
-     |     model=MacBookPro11,4
-     |     osxvers=17
-     |_    Address=10.16.187.114 fe80:0:0:0:c38:76b8:7a27:48f3
-     */
     private void                initService(Host host, String line) {
         if (line.contains("/tcp") || line.contains("/udp")) {
             initPort(host, line.replaceAll("  ", " ").replace("|", ""), true);
@@ -65,7 +53,7 @@ public class                    listPorts {
             host.vendor = host.vendor.replace("|", "").trim();
         } else {
             //DEBUG
-            Log.e(TAG, "initService::[" + line + "]");
+            //Log.e(TAG, "initService::[" + line + "]");
         }
     }
 

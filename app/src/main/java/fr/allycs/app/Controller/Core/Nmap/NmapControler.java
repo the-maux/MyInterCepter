@@ -5,9 +5,13 @@ import android.widget.ProgressBar;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
@@ -57,16 +61,55 @@ public class                        NmapControler {
     private String                  mActualItemMenu = "Ping scan";//Default
     private List<Host>              mHost = null;
     public String                   PATH_NMAP = mSingleton.FilesPath + "nmap/nmap ";
+    private String                  NMAP_ARG_SCAN = " -PN -T4 -sS -sU --script nbstat.nse,dns-service-discovery --min-parallelism 100 -p T:21,T:22,T:23,T:25,T:80,T:110,T:135,T:139,T:3128,T:443,T:445,U:53,U:3031,U:5353  ";
+    private Date                    startScanning, endScanning;
 
     public                          NmapControler(List<String> ips, FragmentHostDiscoveryScan fragment) {/* Parsing mode */
         mIsLiveDump = false;
         mIsOneByOnExecuted = false;
         mFragment = fragment;
         mActualItemMenu = "Basic Host discovery";
-        new NmapParser(this, ips, fragment);
-        if (ips.size() > 20) {
-            Log.e(TAG, "WARNING TOO MANY CLIENT TO SCAN");
+        startScanning = Calendar.getInstance().getTime();
+        StringBuilder hostCmd = new StringBuilder("");
+        StringBuilder hostsMAC = new StringBuilder("");
+        for (String ip : ips) {
+            String[] tmp = ip.split(":");
+            hostCmd.append(" ").append(tmp[0]);
+            hostsMAC.append(" ").append(ip);
         }
+        String cmd = PATH_NMAP + NMAP_ARG_SCAN + hostCmd.toString();
+        Log.d(TAG, "CMD:["+ cmd + "]");
+        execNmapToParseIt(cmd, hostsMAC.toString());
+    }
+
+    private void                    execNmapToParseIt(final String cmd, final String listMacs) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String tmp, lastLine = "";
+                    StringBuilder dumpOutputBuilder = new StringBuilder();
+                    BufferedReader reader = new RootProcess("Nmap", mSingleton.FilesPath)
+                            .exec(cmd).getReader();
+                    mFragment.setTitleToolbar("Network scan", "Scanning devices");
+                    while ((tmp = reader.readLine()) != null && !tmp.startsWith("Nmap done")) {
+                        dumpOutputBuilder.append(tmp).append('\n');
+                    }
+                    if (tmp == null || !tmp.startsWith("Nmap done")) {
+                        Log.d(TAG, "Error in nmap execution, Nmap didn't end");
+                        mFragment.setTitleToolbar("Network scan", "Nmap Error");
+                        return;
+                    }
+                    dumpOutputBuilder.append(tmp);
+                    String FullDUMP = dumpOutputBuilder.toString().substring(1);
+                    Log.d(TAG, "\t\t LastLine[" + tmp + "]");
+                    mFragment.setTitleToolbar("Fingerprint", tmp.replace("Nmap done: ", ""));
+                    new NmapParser(mInstance, mFragment, listMacs, FullDUMP);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     public                          NmapControler(boolean execureAllCommandTogether) {/*Live mode*/
@@ -179,4 +222,17 @@ public class                        NmapControler {
     public boolean                  ismOneByOnExecuted() {
         return mIsOneByOnExecuted;
     }
+
+    /**
+     * Benchmark
+     * + (114 hosts up) 40s
+     * @return
+     */
+    public String                   getTimeSpend() {
+        Date now = Calendar.getInstance().getTime();
+        long restDatesinMillis = now.getTime() - startScanning.getTime();
+        Date restdate = new Date(restDatesinMillis);
+        return new SimpleDateFormat("mm:ss", Locale.FRANCE).format(restdate);
+    }
+
 }

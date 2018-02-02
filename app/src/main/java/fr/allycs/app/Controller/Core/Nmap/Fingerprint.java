@@ -17,7 +17,7 @@ public class                         Fingerprint {
     private static String            TAG = "Fingerprint";
 
     public static void               initHost(Host host) {
-        Log.d(TAG, "initHost:\t" + host.toString());
+        //Log.d(TAG, "initHost:\t" + host.toString());
         isItMyDevice(host);
         guessosType(host.dumpInfo, host);
     }
