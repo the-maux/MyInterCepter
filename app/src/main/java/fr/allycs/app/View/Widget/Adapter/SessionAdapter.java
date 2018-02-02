@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
@@ -36,7 +37,8 @@ public class                    SessionAdapter extends RecyclerView.Adapter<Sess
         final Session session = mSessions.get(position);
         String date = new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE).format(session.Date);
         holder.title.setText(date);
-        holder.subtitle.setText(session.listDevicesSerialized.split(";").length + " devices decouvert");
+        int size = session.listDevicesSerialized.split(";").length;
+        holder.subtitle.setText(size + " device" + ((size >= 2) ? "s" : "")+ " decouvert");
         View.OnClickListener onClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,8 +46,11 @@ public class                    SessionAdapter extends RecyclerView.Adapter<Sess
             }
         };
         holder.forward.setOnClickListener(onClick);
-        if (session.isSniffed)
+        if (session.isSniffed) {
+            MyGlideLoader.loadDrawableInImageView(mFragment.getContext(), R.mipmap.ic_forward_round,
+                    holder.forward, false);
             holder.wiresharkMiniLogo.setVisibility(View.VISIBLE);
+        }
         holder.card_view.setOnClickListener(onClick);
         holder.relative_layout.setOnClickListener(onClick);
     }

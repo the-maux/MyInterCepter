@@ -370,7 +370,7 @@ public class                        FragmentHistoric extends MyFragment {
     }
 
     public void                     onAddButtonClick(ImageButton addHostBtn) {
-        MyGlideLoader.loadDrawableInImageView(mActivity, R.mipmap.ic_history, addHostBtn);
+        MyGlideLoader.loadDrawableInImageView(mActivity, R.mipmap.ic_history, addHostBtn, true);
         addHostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

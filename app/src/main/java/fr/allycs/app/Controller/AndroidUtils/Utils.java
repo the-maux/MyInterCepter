@@ -7,6 +7,11 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import fr.allycs.app.Controller.Core.RootProcess;
 
 
@@ -35,5 +40,12 @@ public class                Utils {
         } catch (Exception e) {
             Log.e(TAG, "hidding keyboard failed, cause no focus");
         }
+    }
+
+    public static String     TimeDifference(Date start) {
+        Date now = Calendar.getInstance().getTime();
+        long restDatesinMillis = now.getTime() - start.getTime();
+        Date restdate = new Date(restDatesinMillis);
+        return new SimpleDateFormat("mm:ss", Locale.FRANCE).format(restdate);
     }
 }

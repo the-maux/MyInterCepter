@@ -5,8 +5,11 @@ import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import fr.allycs.app.Controller.AndroidUtils.Utils;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Core.Nmap.NmapControler;
 import fr.allycs.app.Controller.Network.BonjourService.BonjourManager;
@@ -22,28 +25,24 @@ public class                        NetworkDiscoveryControler {
     private FragmentHostDiscoveryScan mFragment;
     private Singleton               mSingleton = Singleton.getInstance();
     private HostDiscoveryActivity   mActivity;
-    private String                  mSSID = null;
     public boolean                  inLoading = false;
+    private Date                    startScanning;
 
-    private static NetworkDiscoveryControler            mInstance = null;
-    private                         NetworkDiscoveryControler(final FragmentHostDiscoveryScan fragmentHostDiscoveryScan) {
+    private static                  NetworkDiscoveryControler            mInstance = null;
 
-    }
-    public static synchronized NetworkDiscoveryControler getInstance(final FragmentHostDiscoveryScan fragmentHostDiscoveryScan) {
+    public static synchronized      NetworkDiscoveryControler getInstance(final FragmentHostDiscoveryScan fragmentHostDiscoveryScan) {
         if(mInstance == null)
-            mInstance = new NetworkDiscoveryControler(fragmentHostDiscoveryScan);
+            mInstance = new NetworkDiscoveryControler();
         mInstance.mActivity = (HostDiscoveryActivity) fragmentHostDiscoveryScan.getActivity();
         mInstance.mFragment = fragmentHostDiscoveryScan;
-        WifiManager wifiManager = (WifiManager) fragmentHostDiscoveryScan.getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        mInstance.mSSID = (wifiManager) != null ?
-                wifiManager.getConnectionInfo().getSSID().replace("\"", "") : "NO SSID";
         return mInstance;
     }
 
-    public void                    run(typeScan typeOfScan, List<Host> listOfHosts) {
+    public void                     run(typeScan typeOfScan, List<Host> listOfHosts) {
         Log.d(TAG, "running: " + typeOfScan.name());
         if (!inLoading) {
             inLoading = true;
+            startScanning = Calendar.getInstance().getTime();
             mSingleton.resetActualSniffSession();
             switch (typeOfScan) {
                 case Arp:
@@ -59,6 +58,7 @@ public class                        NetworkDiscoveryControler {
     }
 
     private void                    startArpScan() {
+        startScanning = Calendar.getInstance().getTime();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -77,12 +77,17 @@ public class                        NetworkDiscoveryControler {
         mActivity.setToolbarTitle(null, tmpAntiConcurentExecptionFFS.size() + " hosts detected");
         mActivity.setProgressState(1500);
         mActivity.setToolbarTitle(null,"Scanning " + tmpAntiConcurentExecptionFFS.size() + " devices");
-        new NmapControler(NetUtils.readARPTable(mActivity, tmpAntiConcurentExecptionFFS), mFragment);
+        new NmapControler(NetUtils.readARPTable(mActivity, tmpAntiConcurentExecptionFFS),this);
         mActivity.setProgressState(2000);
     }
 
-    public String                   getSSID() {
-        return mSSID;
+    public void                     onHostActualized(ArrayList<Host> hosts) {
+        Log.d(TAG, "Full scanning in " + Utils.TimeDifference(startScanning));
+        mFragment.onHostActualized(hosts);
+    }
+
+    public void                     setToolbarTitle(String title, String subtitle) {
+        mActivity.setToolbarTitle(title, subtitle);
     }
 
 }

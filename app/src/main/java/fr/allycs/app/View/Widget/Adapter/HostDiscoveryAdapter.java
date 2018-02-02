@@ -15,10 +15,12 @@ import android.widget.CompoundButton;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.AndroidUtils.Utils;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Core.Nmap.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
+import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;
 import fr.allycs.app.View.HostDetail.HostDetailActivity;
 import fr.allycs.app.View.Widget.Holder.HostDiscoveryHolder;
@@ -134,22 +136,22 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         return (mHosts == null) ? 0 : mHosts.size();
     }
 
-    public ArrayList<String>    getOsList() {
-        ArrayList<String> listOs = new ArrayList<>();
+    public ArrayList<Os>        getOsList() {
+        ArrayList<Os> listOs = new ArrayList<>();
         if (mOriginalList != null) {
             for (Host host : mOriginalList) {
-                if (host.osType != null && !listOs.contains(host.osType.name()))
-                    listOs.add(host.osType.name());
+                if (host.osType != null && !listOs.contains(host.osType))
+                    listOs.add(host.osType);
             }
         }
         return listOs;
     }
 
-    public int                  filterByOs(ArrayList<String> Os) {
+    public int                  filterByOs(ArrayList<Os> Os) {
         mHosts.clear();
         for (Host host : mOriginalList) {
-            for (String os : Os) {
-                if (os.contains(host.osType.name())) {
+            for (Os os : Os) {
+                if (os.name().contains(host.osType.name())) {
                     mHosts.add(host);
                     break;
                 }

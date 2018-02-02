@@ -19,9 +19,9 @@ public class                AccessPointHolder extends RecyclerView.ViewHolder {
         super(itemView);
         card_view = itemView.findViewById(R.id.card_view);
         relative_layout = itemView.findViewById(R.id.relative_layout);
-        ssid = (TextView) itemView.findViewById(R.id.ssid);
-        ssid_subtitle = (TextView) itemView.findViewById(R.id.ssid_subtitle);
-        forward = (ImageView) itemView.findViewById(R.id.icon2);
-        wifi_logo = (ImageView) itemView.findViewById(R.id.icon);
+        ssid = itemView.findViewById(R.id.ssid);
+        ssid_subtitle = itemView.findViewById(R.id.ssid_subtitle);
+        forward = itemView.findViewById(R.id.icon2);
+        wifi_logo = itemView.findViewById(R.id.icon);
     }
 }

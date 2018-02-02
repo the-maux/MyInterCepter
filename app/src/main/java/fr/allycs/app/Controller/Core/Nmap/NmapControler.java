@@ -14,8 +14,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import fr.allycs.app.Controller.AndroidUtils.Utils;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Core.RootProcess;
+import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.View.HostDiscovery.FragmentHostDiscoveryScan;
 import fr.allycs.app.View.Scan.NmapOutputFragment;
@@ -55,19 +57,19 @@ public class                        NmapControler {
     private Singleton               mSingleton = Singleton.getInstance();
     private boolean                 mIsLiveDump;
     private boolean                 mIsOneByOnExecuted = false;
-    private FragmentHostDiscoveryScan mFragment;
+    private NetworkDiscoveryControler mNnetworkDiscoveryControler;
     private Map<String, String>     mNmapParams;
     private ArrayList<String>       mMenuCommand;
     private String                  mActualItemMenu = "Ping scan";//Default
     private List<Host>              mHost = null;
     public String                   PATH_NMAP = mSingleton.FilesPath + "nmap/nmap ";
     private String                  NMAP_ARG_SCAN = " -PN -T4 -sS -sU --script nbstat.nse,dns-service-discovery --min-parallelism 100 -p T:21,T:22,T:23,T:25,T:80,T:110,T:135,T:139,T:3128,T:443,T:445,U:53,U:3031,U:5353  ";
-    private Date                    startScanning, endScanning;
+    private Date                    startScanning;
 
-    public                          NmapControler(List<String> ips, FragmentHostDiscoveryScan fragment) {/* Parsing mode */
+    public                          NmapControler(List<String> ips, NetworkDiscoveryControler networkDiscoveryControler) {/* Parsing mode */
         mIsLiveDump = false;
         mIsOneByOnExecuted = false;
-        mFragment = fragment;
+        mNnetworkDiscoveryControler = networkDiscoveryControler;
         mActualItemMenu = "Basic Host discovery";
         startScanning = Calendar.getInstance().getTime();
         StringBuilder hostCmd = new StringBuilder("");
@@ -79,6 +81,7 @@ public class                        NmapControler {
         }
         String cmd = PATH_NMAP + NMAP_ARG_SCAN + hostCmd.toString();
         Log.d(TAG, "CMD:["+ cmd + "]");
+        setTitleToolbar("Network scan", "Scanning the " + ips.size() + "devices found");
         execNmapToParseIt(cmd, hostsMAC.toString());
     }
 
@@ -87,24 +90,22 @@ public class                        NmapControler {
             @Override
             public void run() {
                 try {
-                    String tmp, lastLine = "";
+                    String tmp;
                     StringBuilder dumpOutputBuilder = new StringBuilder();
                     BufferedReader reader = new RootProcess("Nmap", mSingleton.FilesPath)
                             .exec(cmd).getReader();
-                    mFragment.setTitleToolbar("Network scan", "Scanning devices");
                     while ((tmp = reader.readLine()) != null && !tmp.startsWith("Nmap done")) {
                         dumpOutputBuilder.append(tmp).append('\n');
                     }
                     if (tmp == null || !tmp.startsWith("Nmap done")) {
                         Log.d(TAG, "Error in nmap execution, Nmap didn't end");
-                        mFragment.setTitleToolbar("Network scan", "Nmap Error");
+                        setTitleToolbar("Network scan", "Nmap Error");
                         return;
                     }
                     dumpOutputBuilder.append(tmp);
                     String FullDUMP = dumpOutputBuilder.toString().substring(1);
                     Log.d(TAG, "\t\t LastLine[" + tmp + "]");
-                    mFragment.setTitleToolbar("Fingerprint", tmp.replace("Nmap done: ", ""));
-                    new NmapParser(mInstance, mFragment, listMacs, FullDUMP);
+                    new NmapParser(mInstance, listMacs, FullDUMP);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -206,11 +207,6 @@ public class                        NmapControler {
         }
     }
 
-    public void                     onParsingNmapOver(ArrayList<Host> externalHosts) {
-        Log.i(TAG, "ALL NMAP PARSING OVER, WE CAN CLOSE");
-        mFragment.onHostActualized(externalHosts);
-    }
-
     public void                     setmActualItemMenu(String itemMenu) {
         this.mActualItemMenu = itemMenu;
     }
@@ -223,16 +219,12 @@ public class                        NmapControler {
         return mIsOneByOnExecuted;
     }
 
-    /**
-     * Benchmark
-     * + (114 hosts up) 40s
-     * @return
-     */
-    public String                   getTimeSpend() {
-        Date now = Calendar.getInstance().getTime();
-        long restDatesinMillis = now.getTime() - startScanning.getTime();
-        Date restdate = new Date(restDatesinMillis);
-        return new SimpleDateFormat("mm:ss", Locale.FRANCE).format(restdate);
+    public void                     onHostActualized(ArrayList<Host> hosts) {
+        Log.d(TAG, "All node was parsed in :" + Utils.TimeDifference(startScanning));
+        mNnetworkDiscoveryControler.onHostActualized(hosts);
     }
 
+    public void                     setTitleToolbar(String title, String subtitle) {
+        mNnetworkDiscoveryControler.setToolbarTitle(title, subtitle);
+    }
 }

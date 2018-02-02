@@ -69,7 +69,7 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
             default:
                 TypeLogo = R.mipmap.ic_dns_text;
         }
-        MyGlideLoader.loadDrawableInImageView(activity, TypeLogo, DNSTypeImg);
+        MyGlideLoader.loadDrawableInImageView(activity, TypeLogo, DNSTypeImg, true);
     }
 
     private RecyclerView.Adapter<ConsoleLogHolder> setDetailLogsAdapter(final DNSLog logs, RecyclerView dnsRVLogs) {

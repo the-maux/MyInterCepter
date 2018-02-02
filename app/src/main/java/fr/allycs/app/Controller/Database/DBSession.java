@@ -16,20 +16,17 @@ import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Session;
+import fr.allycs.app.Model.Unix.Os;
 
 public class                                DBSession {
     private static String                   TAG = "DBSession";
 
     public static Session                   buildSession(final String SSID, final String gateway,
                                                          final List<Host> hosts, String protoUsed,
-                                                         final ArrayList<String> osList) {
-//        new Thread(new Runnable() {
-//            public void run() {
+                                                         final ArrayList<Os> osList) {
         Session mActualSession = DBManager.saveSession(SSID, gateway, hosts, protoUsed);
         mActualSession.nbrOs = osList.size();
         mActualSession.save();
-//            }
-//        }).startAsLive();
         return mActualSession;
     }
 

@@ -33,10 +33,11 @@ import fr.allycs.app.Controller.Database.DBSession;
 import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.Model.Target.Host;
+import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;
 import fr.allycs.app.View.TargetMenu.TargetMenuActivity;
 import fr.allycs.app.View.Widget.Adapter.HostDiscoveryAdapter;
-import fr.allycs.app.View.Widget.Adapter.OSAdapter;
+import fr.allycs.app.View.Widget.Adapter.OSFilterAdapter;
 import fr.allycs.app.View.Widget.Dialog.DialogQuestionWithInput;
 import fr.allycs.app.View.Widget.Dialog.RV_dialog;
 
@@ -50,7 +51,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     private RecyclerView            mHost_RV;
     private TextView                mEmptyList;
     private SwipeRefreshLayout      mSwipeRefreshLayout;
-    private ArrayList<String>       mListOS = new ArrayList<>();
+    private ArrayList<Os>           mListOS = new ArrayList<>();
     private NetworkDiscoveryControler mScannerControler;
     private String                  mTitle, mSubtitle;
 
@@ -98,8 +99,8 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     private void                    initSwipeRefresh() {
         mSwipeRefreshLayout.setColorSchemeResources(
                 R.color.material_green_200,
-                R.color.material_green_500,
-                R.color.material_green_900);
+                R.color.material_deep_teal_200,
+                R.color.material_deep_teal_500);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -220,13 +221,14 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 mSingleton.selectedHostsList = mHosts;
                 mHostAdapter.updateHostList(mSingleton.selectedHostsList);
                 mScannerControler.inLoading = false;
-                mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
-                setTitleToolbar(mScannerControler.getSSID(), mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": ""));
+                mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ?
+                        View.VISIBLE : View.GONE);
+                setTitleToolbar(mSingleton.network.Ssid,
+                        mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": ""));
                 mSwipeRefreshLayout.setRefreshing(false);
                 mHostLoaded = true;
-
                 mActivity.actualSession =
-                        DBSession.buildSession(mScannerControler.getSSID(),
+                        DBSession.buildSession(mSingleton.network.Ssid,
                                 mSingleton.network.gateway,
                                 hosts,
                                 "Icmp",
@@ -251,7 +253,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     }
 
     public void                     osFilterDialog() {
-        final RecyclerView.Adapter adapter = new OSAdapter(mActivity, mHostAdapter.getOsList(), mListOS);
+        final RecyclerView.Adapter adapter = new OSFilterAdapter(mActivity, mHostAdapter.getOsList(), mListOS);
         new RV_dialog(mActivity)
                 .setAdapter(adapter, false)
                 .setTitle("Choix des cibles")
@@ -259,7 +261,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (mListOS.size() > 0) {
-                            ;
                             mActivity.showSnackbar(mHostAdapter.filterByOs(mListOS) + " devices");
                             mListOS.clear();
                         }

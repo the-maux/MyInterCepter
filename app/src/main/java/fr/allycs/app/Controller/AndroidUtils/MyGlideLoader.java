@@ -18,14 +18,24 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
 
 public class                MyGlideLoader {
 
-    public static void      loadDrawableInImageView(Context context, int ressource, ImageView imageView) {
+    public static void      loadDrawableInCircularImageView(Context context, int ressource, ImageView imageView) {
         GlideApp.with(context)
                 .load(ressource)
+                .apply(RequestOptions.circleCropTransform())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .apply(new RequestOptions()
-                        .fitCenter()
-                        .override(100, 100))
                 .placeholder(R.drawable.ico)
+                .into(imageView);
+    }
+
+    public static void      loadDrawableInImageView(Context context, int ressource, ImageView imageView, boolean override) {
+        GlideRequest r = GlideApp.with(context)
+                .load(ressource)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+        if (override)
+                r.apply(new RequestOptions()
+                        .fitCenter()
+                        .override(100, 100));
+        r.placeholder(R.drawable.ico)
                 .into(imageView);
     }
 

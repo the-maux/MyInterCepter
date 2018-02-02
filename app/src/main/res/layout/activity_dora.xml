@@ -118,7 +118,6 @@
         android:src="@android:drawable/ic_media_play"
         app:backgroundTint="@color/material_blue_grey_400"
         app:fabSize="normal"
-        app:fab_elevationCompat="4dp"
         app:layout_anchor="@id/appbar"
         app:layout_anchorGravity="bottom|right|end" />
 

@@ -1,5 +1,7 @@
 package fr.allycs.app.Model.Unix;
 
+import fr.allycs.app.Model.Net.Port;
+
 public enum Os {
     Windows2000, WindowsXP, Windows, Windows7_8_10,
     Cisco, QUANTA,

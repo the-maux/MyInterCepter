@@ -98,21 +98,20 @@
 		</RelativeLayout>
 	</android.support.design.widget.AppBarLayout>
 
-	<android.support.design.widget.FloatingActionButton
-		android:id="@+id/fab"
-		android:layout_width="56dp"
-		android:layout_height="56dp"
-		android:layout_alignParentBottom="true"
-		android:layout_alignParentEnd="true"
-		android:layout_marginBottom="16dp"
-		android:layout_marginEnd="16dp"
-		android:scaleType="fitCenter"
-		android:src="?android:attr/actionModeWebSearchDrawable"
-		app:backgroundTint="@color/material_blue_grey_400"
-		app:fabSize="normal"
-		app:fab_elevationCompat="4dp"
-		app:layout_anchor="@id/appbar"
-		app:layout_anchorGravity="bottom|right|end" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:scaleType="fitCenter"
+        android:src="?android:attr/actionModeWebSearchDrawable"
+        app:backgroundTint="@color/material_blue_grey_400"
+        app:fabSize="normal"
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom|right|end" />
 
 	<RelativeLayout
 		android:id="@+id/layout"

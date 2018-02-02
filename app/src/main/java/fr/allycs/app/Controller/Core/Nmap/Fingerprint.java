@@ -2,6 +2,7 @@ package fr.allycs.app.Controller.Core.Nmap;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.ImageView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
@@ -92,68 +93,69 @@ public class                         Fingerprint {
         return host.isItMyDevice;
     }
 
-    public static void               setOsIcon(Context context, Host host, CircleImageView osImageView) {
-        int ImageRessource;
+    public static void               setOsIcon(Context context, Host host,  ImageView osImageView) {
         if (host != null && host.osType != null) {
-            if (host.ip.equals(Singleton.getInstance().network.gateway)) {
-                ImageRessource = R.drawable.router1;
-                host.osType = Os.Unix;
-            } else {
-                switch (host.osType) {
-                    case Windows:
-                        ImageRessource = R.drawable.winicon;
-                        break;
-                    case Cisco:
-                        ImageRessource = R.drawable.cisco;
-                        break;
-                    case Raspberry:
-                        ImageRessource = R.drawable.rasp;
-                        break;
-                    case QUANTA:
-                        ImageRessource = R.drawable.quanta;
-                        break;
-                    case Bluebird:
-                        ImageRessource = R.drawable.bluebird;
-                        break;
-                    case Apple://Need MacBOOK, MacAIR, Iphone, AppleTV
-                        ImageRessource = R.drawable.ios;
-                        break;
-                    case Ios:
-                        ImageRessource = R.drawable.ios;
-                        break;
-                    case Unix:
-                        ImageRessource = R.drawable.linuxicon;
-                        break;
-                    case Linux_Unix:
-                        ImageRessource = R.drawable.linuxicon;
-                        break;
-                    case OpenBSD:
-                        ImageRessource = R.drawable.linuxicon;
-                        break;
-                    case Android:
-                        ImageRessource = R.drawable.android_winner;
-                        break;
-                    case Mobile:
-                        ImageRessource = R.mipmap.ic_logo_android_trans_round;
-                        break;
-                    case Samsung:
-                        ImageRessource = R.mipmap.ic_logo_android_trans_round;
-                        break;
-                    case Ps4:
-                        ImageRessource = R.drawable.ps4;
-                        break;
-                    case Unknow:
-                        ImageRessource = R.drawable.monitor;
-                        break;
-                    default:
-                        ImageRessource = R.drawable.monitor;
-                        break;
-                }
-            }
-        } else {
-            ImageRessource = R.drawable.monitor;
+            setOsIcon(context, host.osType, osImageView);
+            return;
         }
-        MyGlideLoader.loadDrawableInImageView(context, ImageRessource, osImageView);
+        MyGlideLoader.loadDrawableInCircularImageView(context, R.drawable.monitor, osImageView);
+    }
+
+
+    public static void               setOsIcon(Context context, Os os,  ImageView osImageView) {
+        int ImageRessource;
+        switch (os) {
+            case Windows:
+                ImageRessource = R.drawable.winicon;
+                break;
+            case Cisco:
+                ImageRessource = R.drawable.cisco;
+                break;
+            case Raspberry:
+                ImageRessource = R.drawable.rasp;
+                break;
+            case QUANTA:
+                ImageRessource = R.drawable.quanta;
+                break;
+            case Bluebird:
+                ImageRessource = R.drawable.bluebird;
+                break;
+            case Apple://Need MacBOOK, MacAIR, Iphone, AppleTV
+                ImageRessource = R.drawable.ios;
+                break;
+            case Ios:
+                ImageRessource = R.drawable.ios;
+                break;
+            case Unix:
+                ImageRessource = R.drawable.linuxicon;
+                break;
+            case Linux_Unix:
+                ImageRessource = R.drawable.linuxicon;
+                break;
+            case OpenBSD:
+                ImageRessource = R.drawable.linuxicon;
+                break;
+            case Android:
+                ImageRessource = R.drawable.android_winner;
+                break;
+            case Mobile:
+                ImageRessource = R.mipmap.ic_logo_android_trans_round;
+                break;
+            case Samsung:
+                ImageRessource = R.mipmap.ic_logo_android_trans_round;
+                break;
+            case Ps4:
+                ImageRessource = R.drawable.ps4;
+                break;
+            case Unknow:
+                ImageRessource = R.drawable.cyber_security5_rounded2;
+                MyGlideLoader.loadDrawableInImageView(context, ImageRessource, osImageView, false);
+                return;
+            default:
+                ImageRessource = R.drawable.router3;
+                break;
+        }
+        MyGlideLoader.loadDrawableInCircularImageView(context, ImageRessource, osImageView);
     }
 
 }
