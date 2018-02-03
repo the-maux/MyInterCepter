@@ -81,7 +81,7 @@ public class                        NmapControler {
         }
         String cmd = PATH_NMAP + NMAP_ARG_SCAN + hostCmd.toString();
         Log.d(TAG, "CMD:["+ cmd + "]");
-        setTitleToolbar("Network scan", "Scanning the " + ips.size() + "devices found");
+        setTitleToolbar("Network scan", "Scanning " + ips.size() + " devices found");
         execNmapToParseIt(cmd, hostsMAC.toString());
     }
 

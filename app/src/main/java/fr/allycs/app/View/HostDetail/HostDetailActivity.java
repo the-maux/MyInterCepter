@@ -8,29 +8,34 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+import java.util.List;
+
 import fr.allycs.app.Controller.AndroidUtils.MyActivity;
+import fr.allycs.app.Controller.AndroidUtils.MyFragment;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Core.Nmap.Fingerprint;
+import fr.allycs.app.Controller.Database.DBManager;
+import fr.allycs.app.Model.Net.Pcap;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.HostDiscovery.FragmentHistoric;
 import fr.allycs.app.View.Scan.NmapActivity;
 import fr.allycs.app.View.Tcpdump.WiresharkActivity;
 
-public class HostDetailActivity extends MyActivity {
+public class                    HostDetailActivity extends MyActivity {
     private String              TAG = "HostDetailActivity";
-    private HostDetailActivity mInstance = this;
+    private HostDetailActivity  mInstance = this;
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinator;
     private Toolbar             mToolbar;
-    private CircleImageView     osHostImage;
+    private ImageView           osHostImage;
     private TabLayout           mTabs;
     private TextView            mPortScan, mVulnerabilitys, mFingerprint, mMitm;
     private Host                mFocusedHost;
-    private FragmentHistoric    mFragmentHistoric;
+    private MyFragment          mCurrentFragment;
 
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +47,8 @@ public class HostDetailActivity extends MyActivity {
             mFocusedHost = mSingleton.selectedHostsList.get(0);
             initXml();
             initMenu();
-            initFragment();
+            initTabs();
+            displayHistoric();
         }
     }
 
@@ -58,7 +64,7 @@ public class HostDetailActivity extends MyActivity {
         Fingerprint.setOsIcon(this, mFocusedHost, osHostImage);
         mToolbar.setTitle(mFocusedHost.ip);
         mTabs  = findViewById(R.id.tabs);
-        if (mFocusedHost.getName().contains("-")) {
+        if (mFocusedHost.getName().isEmpty()) {
             mToolbar.setSubtitle(mFocusedHost.mac);
         } else {
             mToolbar.setSubtitle(mFocusedHost.getName());
@@ -99,17 +105,16 @@ public class HostDetailActivity extends MyActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 Log.d(TAG, "tab.getFirstInputQuestion().toString():" + tab.getText().toString());
-                switch (tab.getText().toString()) {
+                switch (tab.getText().toString().toLowerCase()) {
                     case "historic":
                         displayHistoric();
                         break;
                     case "notes":
                         displayNotes();
                         break;
-                    case "services":
-                        displayServices();
+                    case "pcap":
+                        displayPcap();
                         break;
-
                 }
             }
             @Override public void onTabUnselected(TabLayout.Tab tab) {}
@@ -118,29 +123,34 @@ public class HostDetailActivity extends MyActivity {
     }
 
     private void                displayNotes() {
-        Log.d(TAG, "LOAD FROM BDD THE NOTES OF " + mFocusedHost.ip);
-        Snackbar.make(mCoordinator, "Not implemented yet", Snackbar.LENGTH_LONG).show();
+        initFragment(new HostNotesFragment());
     }
 
     private void                displayHistoric() {
-        Log.d(TAG, "LOAD FROM BDD THE HISTORIC OF " + mFocusedHost.ip);
-        Snackbar.make(mCoordinator, "Not implemented yet", Snackbar.LENGTH_LONG).show();
+        MyFragment fragment = new FragmentHistoric();
+        Bundle args = new Bundle();
+        args.putString("mode", FragmentHistoric.HOST_HISTORIC);
+        fragment.setArguments(args);
+        initFragment(fragment);
     }
 
-    private void                displayServices() {
-        Log.d(TAG, "SHOW SERVICES OF " + mFocusedHost.ip);
-        Snackbar.make(mCoordinator, "Not implemented yet", Snackbar.LENGTH_LONG).show();
+    private void                displayPcap() {
+        Log.d(TAG, "SHOW Pcaps OF " + mFocusedHost.ip);
+
+        List<Pcap> pcapList = DBManager.getListPcapFormHost(mFocusedHost);
+        if (pcapList == null || pcapList.isEmpty())
+            Snackbar.make(mCoordinator, "Not implemented yet", Snackbar.LENGTH_LONG).show();
+        else {
+
+        }
     }
 
-    private void                initFragment() {
+    private void                initFragment(MyFragment fragment) {
         try {
-            mFragmentHistoric = new FragmentHistoric();
-            Bundle args = new Bundle();
-            args.putString("mode", FragmentHistoric.HOST_HISTORIC);
-            mFragmentHistoric.setArguments(args);
+            mCurrentFragment = fragment;
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.frame_container, mFragmentHistoric)
+                    .replace(R.id.frame_container, fragment)
                     .commit();
         } catch (IllegalStateException e) {
             Log.w("Error MainActivity", "FragmentStack or FragmentManager corrupted");
@@ -149,13 +159,7 @@ public class HostDetailActivity extends MyActivity {
         }
     }
 
-/*    @Override
-    public void                 finish() {
-        super.finish();
-        supportFinishAfterTransition();
-    }*/
-
-    public void                   setToolbarTitle(final String title, final String subtitle) {
+    public void                 setToolbarTitle(final String title, final String subtitle) {
         mInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -167,13 +171,9 @@ public class HostDetailActivity extends MyActivity {
         });
     }
 
-    public void                   onBackPressed() {
-        if (mFragmentHistoric == null || mFragmentHistoric.onBackPressed()) {
+    public void                 onBackPressed() {
+        if (mCurrentFragment == null || mCurrentFragment.onBackPressed()) {
             super.onBackPressed();
-  //          supportFinishAfterTransition();
-        }
-        else {
-            Log.d(TAG, "Fragment mode: " + mFragmentHistoric.mActualMode.name());
         }
     }
 }

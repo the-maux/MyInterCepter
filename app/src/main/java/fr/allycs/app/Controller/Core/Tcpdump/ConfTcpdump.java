@@ -10,7 +10,7 @@ import java.util.Locale;
 
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Model.Target.Host;
-import fr.allycs.app.Model.Unix.Pcap;
+import fr.allycs.app.Model.Net.Pcap;
 
 class                           ConfTcpdump {
     private String              TAG = "ConfTcpdump";

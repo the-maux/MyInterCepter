@@ -16,7 +16,7 @@ import java.util.Locale;
 import fr.allycs.app.Controller.AndroidUtils.MyFragment;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.SniffSession;
-import fr.allycs.app.Model.Unix.Pcap;
+import fr.allycs.app.Model.Net.Pcap;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Widget.Dialog.QuestionDialog;
 import fr.allycs.app.View.Widget.Holder.SniffSessionHolder;

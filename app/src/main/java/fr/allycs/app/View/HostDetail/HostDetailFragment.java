@@ -62,12 +62,9 @@ public class                    HostDetailFragment extends MyFragment {
     
     private void                initXml(View rootView) {
         mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
-
         mDetailSessionLayout = rootView.findViewById(R.id.detailSessionLayout);
         mDetailSessionLayout.setVisibility(View.GONE);
-
         mNoHistoric = rootView.findViewById(R.id.noHistoric);
-
         mRV = rootView.findViewById(R.id.RV_Historic);
         mRV.setHasFixedSize(true);
         mRV.setLayoutManager(new LinearLayoutManager(mCtx));

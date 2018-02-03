@@ -34,4 +34,8 @@ public class                        MyFragment extends Fragment implements MyFra
     public void                     onAddButtonClick(ImageButton mAddHostBtn) {
 
     }
+
+    public boolean                  onBackPressed() {
+        return true;
+    }
 }

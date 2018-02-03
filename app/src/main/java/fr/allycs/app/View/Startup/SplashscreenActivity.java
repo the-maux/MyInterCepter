@@ -15,9 +15,7 @@ import fr.allycs.app.Controller.Core.RootProcess;
 import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
 
 /**
- * Init App &
- * Check Root
- * Checking latest version in file for update
+ * Baigne toi dans le sang des mots si ils te plaisent, leurs sens ne t'appartiendra jamais. KT
  */
 public class                    SplashscreenActivity extends AppCompatActivity {
     private int                 MAXIMUM_TRY_PERMISSION = 42, try_permission = 0;

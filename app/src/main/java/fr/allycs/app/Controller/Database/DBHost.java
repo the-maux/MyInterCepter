@@ -16,13 +16,6 @@ import fr.allycs.app.Model.Target.Session;
 public class                                DBHost {
     private static String                   TAG = "DBHost";
 
-    public static Host                      getRandomDevices() {
-        return new Select()
-                .from(Host.class)
-                .orderBy("RANDOM()")
-                .executeSingle();
-    }
-
     public static Host                      findDeviceById(String id) {
         return new Select()
                 .from(Host.class)
@@ -54,7 +47,7 @@ public class                                DBHost {
             return myDevice;
         } else {
             deviceFromDB.ip = myDevice.ip;
-            if (!myDevice.getName().equals("(-)"))
+            if (!myDevice.getName().isEmpty())
                 deviceFromDB.setName(myDevice.getName());
             deviceFromDB.deviceType = myDevice.deviceType;
             deviceFromDB.dumpInfo = myDevice.dumpInfo;
@@ -69,13 +62,6 @@ public class                                DBHost {
 //            ActiveAndroid.endTransaction();
         }
         return deviceFromDB;
-    }
-
-    public static List<Session>             getAllDiscovered() {
-        return new Select()
-                .all()
-                .from(Host.class)
-                .execute();
     }
 
     public static String                    SerializeListDevices(List<Host> hosts) {

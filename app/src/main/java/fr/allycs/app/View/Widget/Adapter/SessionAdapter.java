@@ -45,6 +45,8 @@ public class                    SessionAdapter extends RecyclerView.Adapter<Sess
                 mFragment.onSessionFocused(session);
             }
         };
+        MyGlideLoader.loadDrawableInCircularImageView(mFragment.getContext(), R.drawable.radar,
+                holder.icon);
         holder.forward.setOnClickListener(onClick);
         if (session.isSniffed) {
             MyGlideLoader.loadDrawableInImageView(mFragment.getContext(), R.mipmap.ic_forward_round,

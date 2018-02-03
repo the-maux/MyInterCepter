@@ -261,7 +261,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (mListOS.size() > 0) {
-                            mActivity.showSnackbar(mHostAdapter.filterByOs(mListOS) + " devices");
+                            mActivity.showSnackbar(mHostAdapter.filterByOs(mListOS) + " devices found");
                             mListOS.clear();
                         }
                     }
@@ -274,7 +274,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     }
 
     public void                     onAddButtonClick(ImageButton addHostBtn) {
-        MyGlideLoader.loadDrawableInImageViewNoOverride(mActivity, R.mipmap.ic_add_button, addHostBtn);
+        MyGlideLoader.loadDrawableInImageView(mActivity, R.mipmap.ic_add_button, addHostBtn, false);
         addHostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -15,7 +15,6 @@ import android.widget.CompoundButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.AndroidUtils.Utils;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Core.Nmap.Fingerprint;

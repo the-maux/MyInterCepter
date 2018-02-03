@@ -39,15 +39,6 @@ public class                MyGlideLoader {
                 .into(imageView);
     }
 
-
-    public static void      loadDrawableInImageViewNoOverride(Context context, int ressource, ImageView imageView) {
-        GlideApp.with(context)
-                .load(ressource)
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .placeholder(R.drawable.ico)
-                .into(imageView);
-    }
-
     public static void      coordoBackgroundXMM(Activity context, final CoordinatorLayout layout) {
         GlideApp.with(context)
                 .load(R.drawable.splashscreen)

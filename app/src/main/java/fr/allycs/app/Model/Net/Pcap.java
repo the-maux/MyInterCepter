@@ -1,4 +1,4 @@
-package fr.allycs.app.Model.Unix;
+package fr.allycs.app.Model.Net;
 
 import android.util.Log;
 
@@ -13,9 +13,13 @@ import java.util.List;
 import java.util.Locale;
 
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Controller.Database.DBHost;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.SniffSession;
 
+/**
+ * TODO: Put how many long in time the sniff was
+ */
 @Table(name = "Pcap", id = "_id")
 public class                Pcap extends Model {
     private String          TAG = "Pcap";
@@ -23,19 +27,18 @@ public class                Pcap extends Model {
 
     @Column(name ="Date")
     public Date             date;
-
     @Column(name ="NameFile")
     public String           nameFile;
-
     @Column(name = "SniffSession")
     public SniffSession     sniffSession;
-
+    @Column(name = "Devices")
+    public String           listDevicesSerialized;
     private List<Host>      listDevices = null;
 
     public List<Host>       listDevices() {
         if (listDevices == null) {
-            listDevices = sniffSession.listDevices();
-            Log.d(NAME_COLUMN, "Liste Devices deserialized " + listDevices.size() + " devices");
+            listDevices = DBHost.getListFromSerialized(listDevicesSerialized);
+            Log.d(NAME_COLUMN, "Liste devices deserialized " + listDevices.size() + " devices");
         }
         return listDevices;
     }
@@ -47,7 +50,7 @@ public class                Pcap extends Model {
     public                  Pcap(String nameFile, List<Host> sniffedDevice) {
         super();
         this.nameFile = nameFile;
-        this.listDevices = sniffedDevice;
+        listDevicesSerialized = DBHost.SerializeListDevices(sniffedDevice);
         this.date = new Date();
         Log.d(TAG, "New PCAP FILE(" + nameFile + ") with " + sniffedDevice.size() + "devices");
     }
@@ -62,7 +65,7 @@ public class                Pcap extends Model {
         return new File(Singleton.getInstance().PcapPath + nameFile);
     }
 
-    @Override public String toString() {
+    public String           toString() {
         return "Pcap: create the [" + new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE)
                 .format(date)+ "] at [" + nameFile + "]";
     }

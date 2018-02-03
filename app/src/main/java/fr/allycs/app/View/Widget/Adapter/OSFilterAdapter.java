@@ -9,9 +9,6 @@ import android.widget.CompoundButton;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
 import fr.allycs.app.Controller.Core.Nmap.Fingerprint;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;

@@ -10,8 +10,8 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.view.View;
+import android.widget.ImageView;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.AndroidUtils.MyActivity;
 import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
 import fr.allycs.app.Controller.AndroidUtils.Utils;
@@ -61,19 +61,19 @@ public class                    TargetMenuActivity extends MyActivity {
     private void                initflags() {
         ColorDrawable red = new ColorDrawable(ContextCompat.getColor(this, R.color.material_red_800));
         ColorDrawable green = new ColorDrawable(ContextCompat.getColor(this, R.color.material_green_700));
-        ((CircleImageView) findViewById(R.id.monitorDNS))
+        ((ImageView) findViewById(R.id.monitorDNS))
                 .setImageDrawable((mSingleton.isDnsControlstarted()) ? green : red);
         Tcpdump tcpdump = Tcpdump.getTcpdump(this, false);
         if (tcpdump != null)
-            ((CircleImageView) findViewById(R.id.monitorWireshark))
+            ((ImageView) findViewById(R.id.monitorWireshark))
                     .setImageDrawable((tcpdump.isRunning) ? green : red);
         else
-            ((CircleImageView) findViewById(R.id.monitorWireshark)).setImageDrawable(red);
+            ((ImageView) findViewById(R.id.monitorWireshark)).setImageDrawable(red);
         if (Dora.getDora(this) != null)
-            ((CircleImageView) findViewById(R.id.monitorDora))
+            ((ImageView) findViewById(R.id.monitorDora))
                     .setImageDrawable((Dora.getDora(this).isRunning()) ? green : red);
         else
-            ((CircleImageView) findViewById(R.id.monitorDora)).setImageDrawable(red);
+            ((ImageView) findViewById(R.id.monitorDora)).setImageDrawable(red);
     }
 
     private View.OnClickListener onClickButton(final choice clickChoice) {

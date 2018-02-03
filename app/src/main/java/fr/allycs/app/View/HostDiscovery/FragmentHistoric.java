@@ -36,7 +36,7 @@ import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.Model.Target.SniffSession;
-import fr.allycs.app.Model.Unix.Pcap;
+import fr.allycs.app.Model.Net.Pcap;
 import fr.allycs.app.R;
 import fr.allycs.app.View.TargetMenu.TargetMenuActivity;
 import fr.allycs.app.View.Widget.Adapter.AccessPointAdapter;
@@ -132,6 +132,8 @@ public class                        FragmentHistoric extends MyFragment {
         titleDevices = rootView.findViewById(R.id.titleDevices);
         titleService = rootView.findViewById(R.id.titleServices);
 
+        MyGlideLoader.loadDrawableInCircularImageView(mInstance.getContext(), R.drawable.radar,
+                (ImageView) rootView.findViewById(R.id.radar_logo));
         subtitleGateway = rootView.findViewById(R.id.SubtitleGateway);
         subtitleWireshark  = rootView.findViewById(R.id.SubtitleWireshark);
         subtitleDevices = rootView.findViewById(R.id.SubtitleDevices);
@@ -208,13 +210,21 @@ public class                        FragmentHistoric extends MyFragment {
         initViewSessionFocus_Services(focusedSession);
         setTitleToolbar(null, focusedSession.getDateString());
         typeScan.setText("Realised with an " + focusedSession.typeScan + "scan");
-        nbrServiceDiscovered.setText(((focusedSession.services == null) ? "0" : focusedSession.services.size()) + " services discovered on network");
+        String nbrService = ((focusedSession.services == null) ? "0" :
+                focusedSession.services.size()) + " services discovered on network";
+        nbrServiceDiscovered.setText(nbrService);
     }
 
     private void                    initViewSessionFocus_Gateway(final Session session) {
         if (session.Gateway != null) {
             titleGateway.setText("Gateway: " + session.Gateway.ip);
             subtitleGateway.setText(session.Gateway.name + " - " + session.Gateway.mac);
+            DevicesLine.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new HostDialogDetail(session.Gateway).show();
+                }
+            });
             forwardGateway.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -270,7 +280,8 @@ public class                        FragmentHistoric extends MyFragment {
     private void                    initViewSessionFocus_Services(final Session session) {
         if (session.services != null && !session.services.isEmpty()) {
             titleService.setText(session.services.size() + " découvert sur ce réseau");
-            subtitleService.setText("Sur " + ServicesController.howManyHostTheServices(session.services) + " devices différents");
+            subtitleService.setText("Sur " + ServicesController.howManyHostTheServices(session.services)
+                    + " devices différents");
             forwardGateway.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

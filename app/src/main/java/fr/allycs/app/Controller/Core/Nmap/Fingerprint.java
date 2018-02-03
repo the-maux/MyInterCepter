@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.ImageView;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Model.Target.Host;

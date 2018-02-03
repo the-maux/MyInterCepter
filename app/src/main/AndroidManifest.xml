@@ -43,7 +43,7 @@
             fr.allycs.app.Model.Target.AccessPoint,
             fr.allycs.app.Model.Target.Session,
             fr.allycs.app.Model.Target.SniffSession,
-            fr.allycs.app.Model.Unix.Pcap,
+            fr.allycs.app.Model.Net.Pcap,
             fr.allycs.app.Model.Unix.DNSLog" />
         <meta-data android:name="AA_DB_NAME" android:value="ScyllaDatabase" />
         <meta-data android:name="AA_DB_VERSION" android:value="6" />

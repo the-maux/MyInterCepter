@@ -13,7 +13,7 @@ import java.util.Locale;
 
 import fr.allycs.app.Controller.Database.DBHost;
 import fr.allycs.app.Model.Unix.DNSLog;
-import fr.allycs.app.Model.Unix.Pcap;
+import fr.allycs.app.Model.Net.Pcap;
 
 //TODO: Create when wireshark is started
 @Table(name = "SniffSession", id = "_id")

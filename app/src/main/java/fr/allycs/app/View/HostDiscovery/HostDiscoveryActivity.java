@@ -91,7 +91,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
             showSnackbar("You need to be connected to a network");
             finish();
         } else {
-            //Intercepter.initCepter(mSingleton.network.mac);
             initTabs();
             initFabs();
             initMonitor();

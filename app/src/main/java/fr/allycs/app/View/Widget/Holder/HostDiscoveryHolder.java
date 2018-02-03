@@ -7,7 +7,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import fr.allycs.app.R;
 
 public class                HostDiscoveryHolder extends RecyclerView.ViewHolder {
