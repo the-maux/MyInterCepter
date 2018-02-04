@@ -38,20 +38,12 @@ public class                        NetworkDiscoveryControler {
         return mInstance;
     }
 
-    public void                     run(typeScan typeOfScan, List<Host> listOfHosts) {
-        Log.d(TAG, "running: " + typeOfScan.name());
+    public void                     run(List<Host> listOfHosts) {
         if (!inLoading) {
             inLoading = true;
             startScanning = Calendar.getInstance().getTime();
             mSingleton.resetActualSniffSession();
-            switch (typeOfScan) {
-                case Arp:
-                    startArpScan();
-                    break;
-                case Services:
-                    startBonjourScan(listOfHosts);
-                    break;
-            }
+            startArpScan();
         } else {
             Log.e(TAG, "Trying to launch multiple scan at same time");
         }

@@ -5,6 +5,7 @@ import android.util.Log;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Database.DBHost;
@@ -181,7 +182,9 @@ class NmapParser {
     private void                    onAllNodeParsed() {
         Log.d(TAG, "AllNode parsed, inintializing..");
         Collections.sort(hosts, Host.getComparator());
-        for (Host host : hosts) {
+        Iterator<Host> iter = hosts.iterator();
+        while (iter.hasNext()) {//ConcurrentModificationException
+            Host host = iter.next();
             host.dumpMe(mSingleton.selectedHostsList);
             Log.d(TAG, "-------------");
         }

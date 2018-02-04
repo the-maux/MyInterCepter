@@ -11,6 +11,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -43,7 +44,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private HostDiscoveryActivity   mInstance = this;
     private Singleton               mSingleton = Singleton.getInstance();
     private CoordinatorLayout       mCoordinatorLayout;
-    private AppBarLayout            mAppbar;
     private FloatingActionButton    mFab;
     private TextView                mBottomMonitor;
     private int                     mProgress = 0;
@@ -55,7 +55,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private MyFragment              mFragment, HistoricFragment = null, NetDiscoveryFragment = null;
     public final int                MAXIMUM_PROGRESS = 6500;
     public Session                  actualSession;
-    public NetworkDiscoveryControler.typeScan typeScan = NetworkDiscoveryControler.typeScan.Arp;
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,9 +70,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     private void                    initXml() {
         mFab = findViewById(R.id.fab);
-        mFab.setUseCompatPadding(true);
-        mFab.setSoundEffectsEnabled(true);
-        mAppbar = findViewById(R.id.appbar);
         mBottomMonitor = ( findViewById(R.id.Message));
         mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
@@ -106,23 +102,21 @@ public class                        HostDiscoveryActivity extends MyActivity {
                                     SERVICES_TAB_NAME = "Services\nDiscovery",
                                     HISTORIC_TAB_NAME = "Audit\nHistoric";
         mTabs.addTab(mTabs.newTab().setText(ARP_TAB_NAME), 0);
-        mTabs.addTab(mTabs.newTab().setText(SERVICES_TAB_NAME), 1);
-        mTabs.addTab(mTabs.newTab().setText(HISTORIC_TAB_NAME), 2);
+        //mTabs.addTab(mTabs.newTab().setText(SERVICES_TAB_NAME), 1);
+        mTabs.addTab(mTabs.newTab().setText(HISTORIC_TAB_NAME), 1);
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             public void onTabSelected(TabLayout.Tab tab) {
                 MyFragment fragment;
                 Log.d(TAG, "onTabSelected:[" + tab.getText().toString().replace("\n", " ") + "]");
                 switch (tab.getText().toString()) {
                     case ARP_TAB_NAME:
-                        typeScan = NetworkDiscoveryControler.typeScan.Arp;
                         fragment = NetDiscoveryFragment;
                         break;
-                    case SERVICES_TAB_NAME:
+/*                    case SERVICES_TAB_NAME:
                         typeScan = NetworkDiscoveryControler.typeScan.Services;
                         fragment = NetDiscoveryFragment;
-                        break;
+                        break;*/
                     case HISTORIC_TAB_NAME:
-                        typeScan = NetworkDiscoveryControler.typeScan.Historic;
                         if (HistoricFragment == null)
                             HistoricFragment = new FragmentHistoric();
                         fragment = HistoricFragment;
@@ -188,14 +182,14 @@ public class                        HostDiscoveryActivity extends MyActivity {
             mBottomMonitor.setText(mSingleton.network.Ssid + ": No connection");
     }
 
-    public void                     initToolbarButton() {
-        final BottomSheetMenuDialog bottomSheet;
-        bottomSheet = mFragment.onSettingsClick(mAppbar, this);
+    public void                     initSettingsButton() {
         mSettingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (bottomSheet != null)
-                    mFragment.onSettingsClick(mAppbar, mInstance).show();
+                mFragment = new HostDiscoverySettingsFragmt();
+                initFragment(mFragment);
+                mFab.setVisibility(View.GONE);
+                mTabs.setVisibility(View.GONE);
             }
         });
         mFragment.onAddButtonClick(mAddHostBtn);
@@ -224,6 +218,27 @@ public class                        HostDiscoveryActivity extends MyActivity {
                     mToolbar.setTitle(title);
                 if (subtitle != null)
                     mToolbar.setSubtitle(subtitle);
+            }
+        });
+    }
+
+    public void                     setToolbarBackgroundColor(final int color) {
+        Animation fadeOut = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
+        mToolbar.setAnimation(fadeOut);
+        fadeOut.start();
+        fadeOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mToolbar.setBackgroundColor(color);
+                mTabs.startAnimation(AnimationUtils.loadAnimation(mInstance, android.R.anim.fade_in));
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
             }
         });
     }
@@ -274,9 +289,12 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     public void                     onBackPressed() {
-        if (HistoricFragment != null && HistoricFragment.isVisible()) {
+        if ((mFragment.getClass().getName().contains("HostDiscoverySettingsFragmt")) ||
+            (HistoricFragment != null && HistoricFragment.isVisible())) {
+            mFab.setVisibility(View.GONE);
+            mTabs.setVisibility(View.GONE);
             Log.d(TAG, "onBackPressed custom on historic fragment");
-            if (HistoricFragment == null || ((FragmentHistoric) HistoricFragment).onBackPressed()) {
+            if (HistoricFragment == null || HistoricFragment.onBackPressed()) {
                 mTabs.getTabAt(0).select();
             } else {
                 Log.d(TAG, "Fragment mode: " + ((FragmentHistoric) HistoricFragment).mActualMode.name());

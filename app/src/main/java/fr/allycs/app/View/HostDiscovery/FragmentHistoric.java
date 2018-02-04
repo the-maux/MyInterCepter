@@ -318,7 +318,7 @@ public class                        FragmentHistoric extends MyFragment {
 
     private void                    pushToolbar() {
         mActivity.setToolbarTitle(mTitle, mSubtitle);
-        mActivity.initToolbarButton();
+        mActivity.initSettingsButton();
     }
 
     private void                    showSniffSessionList() {

@@ -11,6 +11,7 @@ import fr.allycs.app.Controller.AndroidUtils.MyFragment;
 import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
 import fr.allycs.app.R;
 import fr.allycs.app.View.HostDiscovery.FragmentHistoric;
+import fr.allycs.app.View.HostDiscovery.HostDiscoverySettingsFragmt;
 
 /**
  * TODO: SSLStrip

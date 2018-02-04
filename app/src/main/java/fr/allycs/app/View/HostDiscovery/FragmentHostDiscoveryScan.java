@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
@@ -27,7 +26,6 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import fr.allycs.app.Controller.AndroidUtils.MyFragment;
-import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Database.DBSession;
 import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
@@ -38,7 +36,6 @@ import fr.allycs.app.R;
 import fr.allycs.app.View.TargetMenu.TargetMenuActivity;
 import fr.allycs.app.View.Widget.Adapter.HostDiscoveryAdapter;
 import fr.allycs.app.View.Widget.Adapter.OSFilterAdapter;
-import fr.allycs.app.View.Widget.Dialog.DialogQuestionWithInput;
 import fr.allycs.app.View.Widget.Dialog.RV_dialog;
 
 public class                        FragmentHostDiscoveryScan extends MyFragment {
@@ -65,7 +62,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
             startNetworkScan();
         }
         initSwipeRefresh();
-        mActivity.initToolbarButton();
+        mActivity.initSettingsButton();
         return rootView;
     }
 
@@ -159,11 +156,10 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                     return;
                 }
                 if (mSingleton.network.updateInfo().isConnectedToNetwork()) {
-                    if (mActivity.typeScan != NetworkDiscoveryControler.typeScan.Services)
-                        initHostsRecyclerView();
+                    initHostsRecyclerView();
                     mActivity.progressAnimation();
                     setTitleToolbar("Scanner", "Discovering network");
-                    mScannerControler.run(mActivity.typeScan, mHosts);
+                    mScannerControler.run(mHosts);
                     mActivity.setProgressState(1000);
                 } else {
                     mActivity.showSnackbar("You need to be connected");
@@ -240,7 +236,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
 
     private void                    pushToolbar() {
         mActivity.setToolbarTitle(mTitle, mSubtitle);
-        mActivity.initToolbarButton();
+        mActivity.initSettingsButton();
     }
     public void                     setTitleToolbar(String title, String subtitle) {
         if (title != null)
@@ -267,34 +263,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                     }
                 })
                 .show();
-    }
-
-    public void                     onCheckAddedHost(String addedHost) {
-        mActivity.showSnackbar("Fonctionnalité non implémenté:"+ addedHost);
-    }
-
-    public void                     onAddButtonClick(ImageButton addHostBtn) {
-        MyGlideLoader.loadDrawableInImageView(mActivity, R.mipmap.ic_add_button, addHostBtn, false);
-        addHostBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (mActivity.typeScan) {
-                    case Arp:
-                        final DialogQuestionWithInput dialog = new DialogQuestionWithInput(mActivity)
-                                .setIcon(R.drawable.cyber_security5_rounded)
-                                .setTitle("Add target");
-                        dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface d, int which) {
-                                onCheckAddedHost(dialog.getFirstInputQuestion());
-                            }
-                        }).show();
-                        break;
-                    default:
-                        mActivity.showSnackbar("Not implemented");
-                        break;
-                }
-            }
-        });
     }
 
     public BottomSheetMenuDialog    onSettingsClick(final AppBarLayout mAppbar, Activity activity) {

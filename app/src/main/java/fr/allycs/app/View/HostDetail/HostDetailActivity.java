@@ -36,6 +36,7 @@ public class                    HostDetailActivity extends MyActivity {
     private TextView            mPortScan, mVulnerabilitys, mFingerprint, mMitm;
     private Host                mFocusedHost;
     private MyFragment          mCurrentFragment;
+    private List<Pcap>          mPcapsList;
 
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +102,12 @@ public class                    HostDetailActivity extends MyActivity {
     }
 
     private void                initTabs() {
+        mTabs.addTab(mTabs.newTab().setText("Historic"), 0);
+        if (mFocusedHost.Notes != null && !mFocusedHost.Notes.isEmpty())
+            mTabs.addTab(mTabs.newTab().setText("Notes"), 0);
+        mPcapsList = DBManager.getListPcapFormHost(mFocusedHost);
+        if (mPcapsList != null && !mPcapsList.isEmpty())
+            mTabs.addTab(mTabs.newTab().setText("Pcap"), 0);
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -139,9 +146,9 @@ public class                    HostDetailActivity extends MyActivity {
 
         List<Pcap> pcapList = DBManager.getListPcapFormHost(mFocusedHost);
         if (pcapList == null || pcapList.isEmpty())
-            Snackbar.make(mCoordinator, "Not implemented yet", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mCoordinator, "No Pcap Recorded for " + mFocusedHost.getOneName(), Snackbar.LENGTH_LONG).show();
         else {
-
+            //TODO: faire l'adapter de pcap
         }
     }
 

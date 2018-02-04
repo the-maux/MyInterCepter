@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -22,7 +23,7 @@ public class                    SettingsFragment extends MyFragment {
     protected CoordinatorLayout mCoordinatorLayout;
     protected Singleton         mSingleton = Singleton.getInstance();
     protected MyActivity        mActivity;
-    protected LinearLayout      mCentral_layout;
+    protected LinearLayout        mCentral_layout;
     private LayoutInflater      inflater;
     private ViewGroup           container;
 
@@ -42,10 +43,11 @@ public class                    SettingsFragment extends MyFragment {
     }
 
     public void                 setTitle(String txt) {
-        mActivity.setToolbarTitle(txt, null);
+        mActivity.setToolbarTitle(txt, "");
     }
 
-    public void                 addItemMenu(String title, String subtitle, final Thread onClick, boolean switchEnabled) {
+    public void                 addItemMenu(String title, String subtitle, final Thread onClick,
+                                            String switchEnabled) {
         View settingsItemView = inflater.inflate(R.layout.item_settings, container, false);
         TextView title_TV = settingsItemView.findViewById(R.id.title);
         TextView subtitle_TV = settingsItemView.findViewById(R.id.subtitle);
@@ -57,11 +59,10 @@ public class                    SettingsFragment extends MyFragment {
         } else {
             subtitle_TV.setText(subtitle);
         }
-        if (switchEnabled) {
+        if (switchEnabled == null) {
             switch_sw.setVisibility(View.GONE);
-        } else {
-            switch_sw.setChecked(switchEnabled);
         }
+        switch_sw.setChecked(Boolean.valueOf(switchEnabled));
         switch_sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

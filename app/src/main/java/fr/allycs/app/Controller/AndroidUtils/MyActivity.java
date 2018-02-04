@@ -67,7 +67,9 @@ public class                    MyActivity extends AppCompatActivity {
 
     public void                 setToolbarTitle(final String title, final String subtitle) {}
 
-    public void                 initToolbarButton() {}
+    public void                 setToolbarBackgroundColor(final int color) {}
+
+    public void initSettingsButton() {}
 
     protected void              onDestroy() {
         ArpSpoof.stopArpSpoof();
