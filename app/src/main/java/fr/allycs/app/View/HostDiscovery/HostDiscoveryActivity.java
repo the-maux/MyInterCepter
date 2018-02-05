@@ -7,6 +7,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -52,7 +53,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private Toolbar                 mToolbar;
     private TabLayout               mTabs;
     private ProgressBar             mProgressBar;
-    private MyFragment              mFragment, HistoricFragment = null, NetDiscoveryFragment = null;
+    private MyFragment              HistoricFragment = null, NetDiscoveryFragment = null;
+    private MyFragment              mFragment = null, mLastFragment = null;
     public final int                MAXIMUM_PROGRESS = 8500;
     public Session                  actualSession;
 
@@ -155,12 +157,13 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     private void                    initFragment(MyFragment fragment) {
         try {
+            mLastFragment = mFragment;
             mFragment = fragment;
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.frame_container, mFragment)
+                    .addToBackStack(fragment.getClass().getName())
                     .commit();
-            //mFragment.startAsLive();
         } catch (IllegalStateException e) {
             showSnackbar("Error in fragment: " + e.getCause().getMessage());
             e.getStackTrace();
@@ -284,23 +287,25 @@ public class                        HostDiscoveryActivity extends MyActivity {
         }).start();
     }
 
+    public boolean                  isWaiting() {
+        return mProgressBar.getVisibility() == View.VISIBLE;
+    }
+
     public void                     showSnackbar(String txt) {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
 
     public void                     onBackPressed() {
-        if ((mFragment.getClass().getName().contains("HostDiscoverySettingsFragmt")) ||
-            (HistoricFragment != null && HistoricFragment.isVisible())) {
-            mFab.setVisibility(View.GONE);
-            mTabs.setVisibility(View.GONE);
-            Log.d(TAG, "onBackPressed custom on historic fragment");
-            if (HistoricFragment == null || HistoricFragment.onBackPressed()) {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            mFab.setVisibility(View.VISIBLE);
+            mTabs.setVisibility(View.VISIBLE);
+            getSupportFragmentManager().popBackStackImmediate();
+            if (mLastFragment.getClass().getName().contains(FragmentHostDiscoveryScan.class.getName()))
                 mTabs.getTabAt(0).select();
-            } else {
-                Log.d(TAG, "Fragment mode: " + ((FragmentHistoric) HistoricFragment).mActualMode.name());
-            }
+            else if (mLastFragment.getClass().getName().contains(FragmentHistoric.class.getName()))
+                mTabs.getTabAt(1).select();
         } else {
-            super.onBackPressed();
+            finish();
         }
     }
 }

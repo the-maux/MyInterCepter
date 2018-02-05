@@ -51,6 +51,7 @@ public class                        NetworkDiscoveryControler {
 
     private void                    startArpScan() {
         startScanning = Calendar.getInstance().getTime();
+        mActivity.setToolbarTitle(null, "Icmp scanning");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -69,12 +70,18 @@ public class                        NetworkDiscoveryControler {
         mActivity.setToolbarTitle(null, tmpAntiConcurentExecptionFFS.size() + " hosts detected");
         mActivity.setProgressState(1500);
         mActivity.setToolbarTitle(null,"Scanning " + tmpAntiConcurentExecptionFFS.size() + " devices");
+        mActivity.setToolbarTitle(null, "Reading ARP Table");
         new NmapControler(NetUtils.readARPTable(mActivity, tmpAntiConcurentExecptionFFS),this);
         mActivity.setProgressState(2000);
     }
 
     public void                     onHostActualized(ArrayList<Host> hosts) {
         Log.d(TAG, "Full scanning in " + Utils.TimeDifference(startScanning));
+        String time = Utils.TimeDifference(startScanning)
+                .replace("00:", "")
+                .replace(":", "m") + "s";
+        setToolbarTitle(hosts.size() + " device" + ((hosts.size() > 1) ? "s" : "") + " found",
+                mSingleton.network.Ssid  + " analyzed in " + time);
         mFragment.onHostActualized(hosts);
     }
 

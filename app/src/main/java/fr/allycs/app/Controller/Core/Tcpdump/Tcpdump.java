@@ -46,6 +46,12 @@ public class                        Tcpdump {
         return mInstance;
     }
 
+    public static synchronized boolean  isRunning() {
+        if (mInstance == null)
+            return false;
+        return mInstance.isRunning;
+    }
+
     private void                    initPromptCmds() {
         mCmds = mTcpdumpConf.initCmds();
     }

@@ -12,10 +12,14 @@
         android:layout_height="match_parent"
         android:background="@color/material_light_white"
         android:orientation="vertical">
+
         <LinearLayout
+            android:id="@+id/central_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/central_layout"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@color/material_light_white"
             android:orientation="vertical">
 
         </LinearLayout>

@@ -1,7 +1,10 @@
 package fr.allycs.app.View.TargetMenu;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,18 +21,19 @@ import fr.allycs.app.View.Dora.DoraActivity;
 import fr.allycs.app.View.Scan.NmapActivity;
 import fr.allycs.app.View.Settings.SettingsActivity;
 import fr.allycs.app.View.Tcpdump.WiresharkActivity;
+import fr.allycs.app.View.WebServer.WebServerActivity;
 import fr.allycs.app.View.Widget.Holder.MenuItemPointHolder;
 
 public class                    MenuAdapter extends RecyclerView.Adapter<MenuItemPointHolder> {
     private String              TAG = "MenuAdapter";
     private TargetMenuActivity  menuActivity;
-    private int                 red, green;
+    private Drawable            red, green;
     private Singleton           mSingleton = Singleton.getInstance();
 
     public MenuAdapter(TargetMenuActivity activity) {
         this.menuActivity = activity;
-        red = R.color.material_red_800;
-        green = R.color.material_green_700;
+        red = new ColorDrawable(ContextCompat.getColor( activity, R.color.material_red_700));
+        green = new ColorDrawable(ContextCompat.getColor( activity, R.color.material_green_700));
 
     }
 
@@ -70,7 +74,7 @@ public class                    MenuAdapter extends RecyclerView.Adapter<MenuIte
     private void                    initIcmpVectorMenu(MenuItemPointHolder holder) {
         holder.name.setText("Icmp vectors");
         MyGlideLoader.loadDrawableInImageView(menuActivity, R.drawable.cage, holder.image, true);
-        MyGlideLoader.loadDrawableInCircularImageView(menuActivity, R.color.material_red_500, holder.image);
+        MyGlideLoader.loadDrawableInCircularImageView(menuActivity, R.color.material_red_500, holder.monitor);
         holder.monitor.setVisibility(View.GONE);
         Pair<View, String> p1 = Pair.create((View)holder.image, "NmapIconTransition");
         final ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(menuActivity, p1);
@@ -83,7 +87,7 @@ public class                    MenuAdapter extends RecyclerView.Adapter<MenuIte
     private void                    initNmapMenu(MenuItemPointHolder holder) {
         holder.name.setText("Nmap");
         MyGlideLoader.loadDrawableInImageView(menuActivity, R.drawable.nmap, holder.image, true);
-        MyGlideLoader.loadDrawableInCircularImageView(menuActivity, R.color.material_red_500, holder.image);
+        MyGlideLoader.loadDrawableInCircularImageView(menuActivity, R.color.material_red_500,holder.monitor);
         holder.monitor.setVisibility(View.GONE);
         Pair<View, String> p1 = Pair.create((View)holder.image, "NmapIconTransition");
         final ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(menuActivity, p1);
@@ -95,7 +99,7 @@ public class                    MenuAdapter extends RecyclerView.Adapter<MenuIte
     }
     private void                    initInterceptMenu(MenuItemPointHolder holder) {
         holder.name.setText("Intercept");
-        MyGlideLoader.loadDrawableInImageView(menuActivity, R.drawable.cage, holder.image, true);
+        MyGlideLoader.loadDrawableInCircularImageView(menuActivity, R.drawable.death, holder.image);
 //        MyGlideLoader.loadDrawableInCircularImageView(menuActivity, R.drawable.nmap, holder.monitor);
         holder.monitor.setVisibility(View.GONE);
         Pair<View, String> p1 = Pair.create((View)holder.image, "");
@@ -110,7 +114,7 @@ public class                    MenuAdapter extends RecyclerView.Adapter<MenuIte
     private void                    initDnsmasqMenu(MenuItemPointHolder holder) {
         holder.name.setText("Dns spoofing");
         MyGlideLoader.loadDrawableInImageView(menuActivity, R.mipmap.ic_dns, holder.image, true);
-        int ressourceID = (mSingleton.isDnsControlstarted()) ? red : green;
+        Drawable ressourceID = (mSingleton.isDnsControlstarted()) ? red : green;
         MyGlideLoader.loadDrawableInCircularImageView(menuActivity, ressourceID, holder.monitor);
         holder.monitor.setVisibility(View.GONE);
         Pair<View, String> p1 = Pair.create((View)holder.image, "iconDNS");
@@ -124,7 +128,7 @@ public class                    MenuAdapter extends RecyclerView.Adapter<MenuIte
     private void                    initDoraMenu(MenuItemPointHolder holder) {
         holder.name.setText("Dora");
         MyGlideLoader.loadDrawableInImageView(menuActivity, R.drawable.radar1600, holder.image, true);
-        int ressourceID = (Dora.getDora(menuActivity).isRunning()) ? green : red;
+        Drawable ressourceID = (Dora.isRunning()) ? green : red;
         MyGlideLoader.loadDrawableInCircularImageView(menuActivity, ressourceID, holder.monitor);
         Pair<View, String> p1 = Pair.create((View)holder.image, "");
         final ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(menuActivity, p1);
@@ -140,7 +144,7 @@ public class                    MenuAdapter extends RecyclerView.Adapter<MenuIte
     private void                    initWiresharkMenu(MenuItemPointHolder holder) {
         holder.name.setText("Wireshark");
         MyGlideLoader.loadDrawableInImageView(menuActivity, R.drawable.wireshark, holder.image, true);
-        int ressourceID = (Tcpdump.getTcpdump(menuActivity, false).isRunning) ? green : red;
+        Drawable ressourceID = (Tcpdump.isRunning()) ? green : red;
         MyGlideLoader.loadDrawableInCircularImageView(menuActivity, ressourceID, holder.monitor);
 //        holder.monitor.setVisibility(View.GONE);
         Pair<View, String> p1 = Pair.create((View)holder.image, "wiresharkIcon");
@@ -165,7 +169,7 @@ public class                    MenuAdapter extends RecyclerView.Adapter<MenuIte
         holder.monitor.setVisibility(View.GONE);
         holder.Button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(NmapActivity.class, null);
+                startActivity(WebServerActivity.class, null);
             }
         });
     }

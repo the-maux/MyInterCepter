@@ -162,10 +162,11 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
     }
 
     public void                 filterByString(String query) {
-        Log.d(TAG, "filterByString:" + query);
         mHosts.clear();
         for (Host host : mOriginalList) {
-            if (host.dumpInfo != null && host.dumpInfo.toLowerCase().contains(query.toLowerCase()))
+            if ((host.dumpInfo != null && host.dumpInfo.toLowerCase().contains(query.toLowerCase())) ||
+                    host.ip.contains(query) || host.mac.contains(query) ||
+                    host.vendor.contains(query) || host.name.contains(query))
                 mHosts.add(host);
         }
         notifyDataSetChanged();

@@ -2,6 +2,7 @@ package fr.allycs.app.View.Settings;
 
 
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +52,7 @@ public class                    SettingsFragment extends MyFragment {
         View settingsItemView = inflater.inflate(R.layout.item_settings, container, false);
         TextView title_TV = settingsItemView.findViewById(R.id.title);
         TextView subtitle_TV = settingsItemView.findViewById(R.id.subtitle);
-        RelativeLayout rootView = settingsItemView.findViewById(R.id.rootView);
+        ConstraintLayout rootView = settingsItemView.findViewById(R.id.rootView);
         Switch switch_sw = settingsItemView.findViewById(R.id.switch_sw);
         title_TV.setText(title);
         if (subtitle == null) {

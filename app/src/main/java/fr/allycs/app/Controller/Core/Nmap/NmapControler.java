@@ -81,7 +81,7 @@ public class                        NmapControler {
         }
         String cmd = PATH_NMAP + NMAP_ARG_SCAN + hostCmd.toString();
         Log.d(TAG, "CMD:["+ cmd + "]");
-        setTitleToolbar("Network scan", "Scanning " + ips.size() + " devices found");
+        setTitleToolbar(null, "Port scanning ");
         execNmapToParseIt(cmd, hostsMAC.toString());
     }
 
@@ -221,6 +221,7 @@ public class                        NmapControler {
 
     public void                     onHostActualized(ArrayList<Host> hosts) {
         Log.d(TAG, "All node was parsed in :" + Utils.TimeDifference(startScanning));
+
         mNnetworkDiscoveryControler.onHostActualized(hosts);
     }
 

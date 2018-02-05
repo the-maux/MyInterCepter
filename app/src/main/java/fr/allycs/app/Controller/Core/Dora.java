@@ -17,7 +17,7 @@ public class Dora {
     private DoraActivity            activity;
     private List<DoraProcess>       mListOfHostDored = new ArrayList<>();
     private Singleton               mSingleton = Singleton.getInstance();
-    private boolean                 running = false;
+    private boolean isRunning = false;
 
     private Dora(DoraActivity activity) {
         this.activity = activity;
@@ -37,6 +37,12 @@ public class Dora {
         return mInstance;
     }
 
+    public static synchronized boolean  isRunning() {
+        if (mInstance == null)
+            return false;
+        return mInstance.isRunning;
+    }
+
     public void                     reset() {
         if (mInstance != null) {
             mListOfHostDored.clear();
@@ -47,25 +53,21 @@ public class Dora {
     }
 
     public boolean                  onAction() {
-        if (!running) {
-            running  = true;
+        if (!isRunning) {
+            isRunning = true;
             for (DoraProcess doraProcess : mListOfHostDored) {
                 doraProcess.exec();
             }
             activity.adapterRefreshDeamon();
             Log.d(TAG, "diagnose dora started");
         } else {
-            running  = false;
+            isRunning = false;
             for (DoraProcess doraProcess : mListOfHostDored) {
                 RootProcess.kill(doraProcess.mProcess.getmPid());
             }
             Log.d(TAG, "diagnose dora stopped");
         }
-        return running;
-    }
-
-    public boolean                  isRunning() {
-        return running;
+        return isRunning;
     }
 
     public List<DoraProcess>        getmListOfHostDored() {

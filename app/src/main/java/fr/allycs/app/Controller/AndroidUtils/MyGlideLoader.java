@@ -26,7 +26,14 @@ public class                MyGlideLoader {
                 .placeholder(R.drawable.ico)
                 .into(imageView);
     }
-
+    public static void      loadDrawableInCircularImageView(Context context, Drawable    ressource, ImageView imageView) {
+        GlideApp.with(context)
+                .load(ressource)
+                .apply(RequestOptions.circleCropTransform())
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .placeholder(R.drawable.ico)
+                .into(imageView);
+    }
     public static void      loadDrawableInImageView(Context context, int ressource, ImageView imageView, boolean override) {
         GlideRequest r = GlideApp.with(context)
                 .load(ressource)

@@ -60,7 +60,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         if (mSingleton.DebugMode && !mHostLoaded) {
             mActivity.showSnackbar("Debug mode: auto scan started");
             startNetworkScan();
-        }
+        }//TODO: else si premier scan du SSID alors re scann (ou last scan past from 1 week)
         initSwipeRefresh();
         mActivity.initSettingsButton();
         return rootView;
@@ -75,7 +75,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         pushToolbar();
     }
 
-    public boolean                  start() {
+    /*public boolean                  start() {
         if (!mHostLoaded && !mScannerControler.inLoading) {
             startNetworkScan();
             return true;
@@ -85,7 +85,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
             Log.d(TAG, "mScannerControler.inLoading:" + mScannerControler.inLoading);
         }
         return mScannerControler.inLoading;
-    }
+    }*/
 
     private void                    initXml(View rootView) {
         mHost_RV = rootView.findViewById(R.id.recycler_view);
@@ -101,7 +101,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (!mScannerControler.inLoading) {
+                if (mActivity.isWaiting()) {
                     Log.d(TAG, "clearing Refresh");
                     mHosts.clear();
                     mEmptyList.setVisibility(View.GONE);
@@ -147,8 +147,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
 
     public void                     startNetworkScan() {
         Log.d(TAG, "startNetworkScan");
-        mActivity.setProgressState(-1);
-        if (!mScannerControler.inLoading) {
+        if (!mActivity.isWaiting()) {
             try {
                 if (mSingleton.network == null && !NetUtils.initNetworkInfo(mActivity)) {
                     mActivity.showSnackbar("You need to be connected");
@@ -157,10 +156,9 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 }
                 if (mSingleton.network.updateInfo().isConnectedToNetwork()) {
                     initHostsRecyclerView();
-                    mActivity.progressAnimation();
                     setTitleToolbar("Scanner", "Discovering network");
                     mScannerControler.run(mHosts);
-                    mActivity.setProgressState(1000);
+                    mActivity.progressAnimation();
                 } else {
                     mActivity.showSnackbar("You need to be connected");
                     mEmptyList.setVisibility(View.VISIBLE);
@@ -219,8 +217,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 mScannerControler.inLoading = false;
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ?
                         View.VISIBLE : View.GONE);
-                setTitleToolbar(mSingleton.network.Ssid,
-                        mHosts.size() + " device" + ((mHosts.size() > 1) ? "s": ""));
                 mSwipeRefreshLayout.setRefreshing(false);
                 mHostLoaded = true;
                 mActivity.actualSession =
