@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import fr.allycs.app.Controller.AndroidUtils.MyActivity;
 import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
@@ -138,6 +139,9 @@ public class                    TargetMenuActivity extends MyActivity {
                 }
             }
         };
+    }
+    public void                     showSnackbar(String txt) {
+        Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
 
 }

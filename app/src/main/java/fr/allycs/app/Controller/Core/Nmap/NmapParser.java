@@ -37,15 +37,12 @@ class NmapParser {
                     Host host = new Host();
                     getIpHOSTNAME(node.split("\n")[0], host);
                     host.mac = getMACInTmp(macs, host.ip);
-                    Log.d(TAG, "starting dispatacher::"+host.mac);
                     if (!Fingerprint.isItMyDevice(host)) {
                         host = DBHost.saveOrGetInDatabase(host);
-                        Log.d(TAG, "buildHostFromNmapDump::"+host.mac);
                         buildHostFromNmapDump(node, host, hosts);
                     } else {
                         initIfItsMyDevice(host, hosts);
                     }
-                    Log.d(TAG, "starting onNodeParsed::"+host.mac);
                     onNodeParsed();
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
@@ -61,11 +58,11 @@ class NmapParser {
             String line = nmapStdoutHost[i];
             if (line.contains("Device type: ")) {
                 dump.append(line).append("\n");
-                Log.v(TAG,  "buildHostFromNmapDump::" + line);
+                //Log.v(TAG,  "buildHostFromNmapDump::" + line);
                 host.deviceType = line.replace("Device type: ", "");
             } else if (line.contains("Running: ")) {
                 dump.append(line);
-                Log.v(TAG, "buildHostFromNmapDump::" + line);
+                //Log.v(TAG, "buildHostFromNmapDump::" + line);
                 getOs(line.replace("Running: ", ""), host, nmapStdoutHost);
             } else if (line.contains("Too many fingerprints match this host to give specific OS details")) {
                 dump.append(line);
@@ -93,10 +90,7 @@ class NmapParser {
         host.dumpInfo = dump.toString();
         Fingerprint.initHost(host);
         host.mac = host.mac.toUpperCase();
-        /**
-         * TODO:Don't delete when is is not a Discovery scan but a real scan
-         */
-        Log.d(TAG, "SaveHost::"+host.mac);
+        //Log.d(TAG, "SaveHost::"+host.mac);
         if (host.Notes == null)
             host.Notes = "";
         host.Notes = host.Notes + "-----------------------\n" +
@@ -171,7 +165,6 @@ class NmapParser {
 
     private void                    onNodeParsed() {
         NBR_PARSED_NODE = NBR_PARSED_NODE + 1;
-        Log.d(TAG, "Analyzing (" + NBR_PARSED_NODE + "/" + LENGTH_NODE + ") devices scanned");
         mNmapControler.setTitleToolbar("Analyzing",
                 "(" + NBR_PARSED_NODE + "/" + LENGTH_NODE + ") devices scanned");
         if (NBR_PARSED_NODE >= LENGTH_NODE)
@@ -182,8 +175,10 @@ class NmapParser {
         Log.d(TAG, "AllNode parsed, inintializing..");
         Collections.sort(hosts, Host.getComparator());
         for (Host host : hosts) {
-            host.dumpMe(mSingleton.selectedHostsList);
-            Log.d(TAG, "-------------");
+            if (host.osType == Os.Unknow) {
+                host.dumpMe(mSingleton.selectedHostsList);
+                Log.d(TAG, "-------------");
+            }
         }
         mNmapControler.onHostActualized(hosts);
     }

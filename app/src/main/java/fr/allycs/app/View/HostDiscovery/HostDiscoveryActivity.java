@@ -53,7 +53,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private TabLayout               mTabs;
     private ProgressBar             mProgressBar;
     private MyFragment              mFragment, HistoricFragment = null, NetDiscoveryFragment = null;
-    public final int                MAXIMUM_PROGRESS = 6500;
+    public final int                MAXIMUM_PROGRESS = 8500;
     public Session                  actualSession;
     public NetworkDiscoveryControler.typeScan typeScan = NetworkDiscoveryControler.typeScan.Arp;
 
