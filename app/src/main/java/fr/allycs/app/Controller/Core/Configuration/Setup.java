@@ -76,14 +76,14 @@ public class                    Setup {
     private InputStream         getCepterRessource() {
         InputStream cepter;
         dumpBuildSystem();
-        cepter = mActivity.getResources().openRawResource(R.raw.cepter_android_21_armeabi);
+        cepter = mActivity.getResources().openRawResource(R.raw.ping);//cepter_android_21_armeabi);
         if (Build.CPU_ABI.contains("x86")) {
             Log.d(TAG, "GIVING X86 BINARI");
-            return mActivity.getResources().openRawResource(R.raw.cepter_android_21_x86);
+            return mActivity.getResources().openRawResource(R.raw.ping);//cepter_android_21_x86);
         }
         if (Build.CPU_ABI.contains("arm64")) {
             Log.d(TAG, "GIVING arm64");
-            return mActivity.getResources().openRawResource(R.raw.cepter_android_21_arm64_v8a);
+            return mActivity.getResources().openRawResource(R.raw.ping);//cepter_android_21_arm64_v8a);
         }
         Log.d(TAG, "GIVING arm BINARI");
         return cepter;

@@ -1,30 +1,17 @@
 package fr.allycs.app.View.TargetMenu;
 
-import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.util.Pair;
-import android.view.View;
-import android.widget.ImageView;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import fr.allycs.app.Controller.AndroidUtils.MyActivity;
 import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
-import fr.allycs.app.Controller.AndroidUtils.Utils;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Core.Dora;
-import fr.allycs.app.Controller.Core.Tcpdump.Tcpdump;
 import fr.allycs.app.R;
-import fr.allycs.app.View.DnsSpoofing.DnsActivity;
-import fr.allycs.app.View.Dora.DoraActivity;
-import fr.allycs.app.View.Scan.NmapActivity;
-import fr.allycs.app.View.Settings.SettingsActivity;
-import fr.allycs.app.View.Tcpdump.WiresharkActivity;
-import fr.allycs.app.View.WebServer.WebServerActivity;
 
 /**
  * Menu
@@ -34,9 +21,6 @@ public class                    TargetMenuActivity extends MyActivity {
     private TargetMenuActivity  mInstance = this;
     private CoordinatorLayout   mCoordinatorLayout;
     private Singleton           mSingleton = Singleton.getInstance();
-    private enum                choice {
-        Nmap, CepterMitm, ARPCage, DnsSpoofing, Wireshark, DoraDiagnostic, WebServer, Settings
-    }
 
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,18 +31,12 @@ public class                    TargetMenuActivity extends MyActivity {
 
     protected void              onResume() {
         super.onResume();
-        findViewById(R.id.NmapButton).setOnClickListener(onClickButton(choice.Nmap));
-        findViewById(R.id.MitmButton).setOnClickListener(onClickButton(choice.CepterMitm));
-        findViewById(R.id.ArpButton).setOnClickListener(onClickButton(choice.ARPCage));
-        findViewById(R.id.DnsButton).setOnClickListener(onClickButton(choice.DnsSpoofing));
-        findViewById(R.id.WiresharkButton).setOnClickListener(onClickButton(choice.Wireshark));
-        findViewById(R.id.DoraDiagnostic).setOnClickListener(onClickButton(choice.DoraDiagnostic));
-        findViewById(R.id.Metasploit).setOnClickListener(onClickButton(choice.WebServer));
-        findViewById(R.id.SettingsButton).setOnClickListener(onClickButton(choice.Settings));
-        initflags();
+        RecyclerView RV_menu = findViewById(R.id.RV_menu);
+        RV_menu.setAdapter(new MenuAdapter(this));
+        RV_menu.setLayoutManager(new GridLayoutManager(this, 2));
     }
 
-    private void                initflags() {
+    /*private void                initflags() {
         ColorDrawable red = new ColorDrawable(ContextCompat.getColor(this, R.color.material_red_800));
         ColorDrawable green = new ColorDrawable(ContextCompat.getColor(this, R.color.material_green_700));
         ((ImageView) findViewById(R.id.monitorDNS))
@@ -138,6 +116,9 @@ public class                    TargetMenuActivity extends MyActivity {
                 }
             }
         };
+    }*/
+    public void                     showSnackbar(String txt) {
+        Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
 
 }
