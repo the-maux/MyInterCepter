@@ -1,6 +1,7 @@
 package fr.allycs.app.View.HostDiscovery;
 
 import android.content.Intent;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -16,6 +17,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +54,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private SearchView              mSearchView;
     private Toolbar                 mToolbar;
     private TabLayout               mTabs;
+    private TransitionDrawable      mToolbarBackground;
     private ProgressBar             mProgressBar;
     private MyFragment              HistoricFragment = null, NetDiscoveryFragment = null;
     private MyFragment              mFragment = null, mLastFragment = null;
@@ -81,6 +84,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mToolbar = findViewById(R.id.toolbar2);
         mTabs = findViewById(R.id.tabs);
         mProgressBar = findViewById(R.id.progressBar);
+        mToolbarBackground = (TransitionDrawable)(findViewById(R.id.topToolbar)).getBackground();
     }
 
     private void                    init()  throws Exception {
@@ -193,8 +197,10 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 initFragment(mFragment);
                 mFab.setVisibility(View.GONE);
                 mTabs.setVisibility(View.GONE);
+                mToolbarBackground.startTransition(500);
             }
         });
+
         mFragment.onAddButtonClick(mAddHostBtn);
     }
 
@@ -299,6 +305,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             mFab.setVisibility(View.VISIBLE);
             mTabs.setVisibility(View.VISIBLE);
+            mToolbarBackground.reverseTransition(700);
             getSupportFragmentManager().popBackStackImmediate();
             if (mLastFragment.getClass().getName().contains(FragmentHostDiscoveryScan.class.getName()))
                 mTabs.getTabAt(0).select();

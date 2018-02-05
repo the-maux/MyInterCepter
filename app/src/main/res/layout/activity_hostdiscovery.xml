@@ -22,7 +22,7 @@
 				android:id="@+id/topToolbar"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:background="@color/primary_text"
+				android:background="@drawable/backgroundtransition"
 				android:elevation="1dp"
 				android:focusable="true"
 				android:focusableInTouchMode="true"
