@@ -25,8 +25,6 @@
                 android:id="@+id/topToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_toLeftOf="@+id/settings"
-                android:layout_toRightOf="@+id/toolbar"
                 android:focusable="false"
                 android:focusableInTouchMode="false">
 
@@ -281,7 +279,8 @@
             layout="@layout/item_nav_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true" />
+            android:layout_alignParentBottom="true"
+            android:transitionName="navigation"/>
 
     </RelativeLayout>
 

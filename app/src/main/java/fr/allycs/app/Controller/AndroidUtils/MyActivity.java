@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 
 public class                    MyActivity extends AppCompatActivity {
@@ -22,6 +23,7 @@ public class                    MyActivity extends AppCompatActivity {
     }
 
     public void                 overridePendingTransition(int enterAnim, int exitAnim) {
+        Log.d(TAG, "overridePendingTransition::(EnterAnim:" + enterAnim + ") & exitAnim(" + exitAnim +")");
         super.overridePendingTransition(enterAnim, exitAnim);
     }
 

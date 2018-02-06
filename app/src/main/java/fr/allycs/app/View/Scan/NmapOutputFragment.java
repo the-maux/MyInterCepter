@@ -74,16 +74,17 @@ public class                    NmapOutputFragment extends MyFragment  {
     }
 
     public void                 flushOutput(final String stdout, final ProgressBar progressBar) {
+        final String output = (stdout == null) ? "Nmap error" : (actualOutput + stdout).replace("\n", "<br>");
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                String output = (actualOutput + stdout).replace("\n", "<br>");
+                if (progressBar != null && progressBar.getVisibility() == View.VISIBLE)
+                    progressBar.setVisibility(View.GONE);
                 Output.setText(Html.fromHtml(output), TextView.BufferType.SPANNABLE);
                 actualOutput = output;
                 historicByDevice.put(mFocusedHost.mac, actualOutput);
-                if (progressBar != null && progressBar.getVisibility() == View.VISIBLE)
-                    progressBar.setVisibility(View.GONE);
             }
         });
     }
+
 }

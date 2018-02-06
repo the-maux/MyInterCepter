@@ -324,11 +324,11 @@ public class                            DnsActivity extends SniffActivity {
 
     /*Navigation */
 
-    public int                  getContentViewId() {
+    public int                          getContentViewId() {
         return R.layout.activity_dnsspoofing;
     }
 
-    public int                  getNavigationMenuItemId() {
-        return R.mipmap.ic_dns;
+    public int                          getNavigationMenuItemId() {
+        return R.id.navigation_dns;
     }
 }

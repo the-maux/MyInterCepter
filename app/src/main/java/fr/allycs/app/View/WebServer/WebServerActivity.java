@@ -152,7 +152,7 @@ public class                    WebServerActivity extends SniffActivity {
     }
 
     public int                  getNavigationMenuItemId() {
-        return R.drawable.www;
+        return R.id.navigation_webserver;
     }
 
 }

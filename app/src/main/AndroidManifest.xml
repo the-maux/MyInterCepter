@@ -25,15 +25,24 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".View.Startup.SetupActivity"/>
-        <activity android:name=".View.DnsSpoofing.DnsActivity"/>
-        <activity android:name=".View.HostDiscovery.HostDiscoveryActivity" />
-        <activity android:name=".View.Settings.SettingsActivity" />
-        <activity android:name=".View.Scan.NmapActivity" />
-        <activity android:name=".View.TargetMenu.TargetMenuActivity" />
-        <activity android:name=".View.Tcpdump.WiresharkActivity" />
-        <activity android:name=".View.Dora.DoraActivity" />
-        <activity android:name=".View.WebServer.WebServerActivity" />
+        <activity android:name=".View.Startup.SetupActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".View.DnsSpoofing.DnsActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".View.HostDiscovery.HostDiscoveryActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".View.Settings.SettingsActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".View.Scan.NmapActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".View.TargetMenu.TargetMenuActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".View.Tcpdump.WiresharkActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".View.Dora.DoraActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".View.WebServer.WebServerActivity"
+            android:launchMode="singleTask"/>
         <activity android:name=".View.HostDetail.HostDetailActivity" />
 
         <meta-data android:name="AA_MODELS"

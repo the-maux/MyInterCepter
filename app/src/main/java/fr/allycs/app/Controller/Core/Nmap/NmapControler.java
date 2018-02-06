@@ -190,15 +190,18 @@ public class                        NmapControler {
                         BufferedReader reader = new RootProcess("Nmap", mSingleton.FilesPath)
                                 .exec(cmd).getReader();
                         while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {
-                            if (tmp.charAt(0) == '\n')
-                                tmp = tmp.substring(1);
-                            nmapOutputFragment.flushOutput(tmp + '\n', progressBar);
+                            if (tmp != null && !tmp.isEmpty()) {
+                                if (tmp.charAt(0) == '\n')
+                                    tmp = tmp.substring(1);
+                                nmapOutputFragment.flushOutput(tmp + '\n', progressBar);
+                            }
                         }
                         dumpOutputBuilder.append(tmp);
                         Log.d(TAG, "Nmap final dump:" + dumpOutputBuilder.toString());
                         nmapOutputFragment.flushOutput(tmp + '\n', progressBar);
                     } catch (IOException e) {
                         e.printStackTrace();
+                        nmapOutputFragment.flushOutput(null, progressBar);
                     }
                 }
             }).start();

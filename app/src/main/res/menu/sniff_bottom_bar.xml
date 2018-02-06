@@ -19,11 +19,11 @@
     <item
         android:id="@+id/navigation_webserver"
         android:icon="@drawable/ic_http_btnbar"
-        android:title="SPOOFER" />
+        android:title="HTTP SPOOFER" />
 
     <item
         android:id="@+id/navigation_dns"
         android:icon="@drawable/ic_dns_btnbar"
-        android:title="DNS" />
+        android:title="DNS SPOOFER" />
 
 </menu>

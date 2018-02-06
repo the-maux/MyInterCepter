@@ -308,6 +308,6 @@ public class                    WiresharkActivity extends SniffActivity {
     }
 
     public int                  getNavigationMenuItemId() {
-        return R.drawable.ic_sniff_barbutton;
+        return R.id.navigation_wireshark;
     }
 }

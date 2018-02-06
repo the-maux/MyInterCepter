@@ -455,7 +455,8 @@
             layout="@layout/item_nav_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true" />
+            android:layout_alignParentBottom="true"
+            android:transitionName="navigation"/>
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

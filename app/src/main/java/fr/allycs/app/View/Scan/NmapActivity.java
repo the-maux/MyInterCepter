@@ -270,7 +270,7 @@ public class                    NmapActivity extends SniffActivity {
     }
 
     public int                  getNavigationMenuItemId() {
-        return R.drawable.ic_nmap_icon_tabbutton;
+        return R.id.navigation_nmap;
     }
 
 }

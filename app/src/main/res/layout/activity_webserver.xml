@@ -80,5 +80,6 @@
         layout="@layout/item_nav_bottom"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:transitionName="navigation"/>
 </android.support.constraint.ConstraintLayout>
