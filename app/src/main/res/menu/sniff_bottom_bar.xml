@@ -4,26 +4,26 @@
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/ico_home_barbutton"
-        android:title="home" />
+        android:title="HOME" />
 
     <item
         android:id="@+id/navigation_nmap"
         android:icon="@drawable/ic_nmap_icon_tabbutton"
-        android:title="nmap" />
+        android:title="SCANNER" />
 
     <item
         android:id="@+id/navigation_wireshark"
         android:icon="@drawable/ic_sniff_barbutton"
-        android:title="wireshark" />
-
-    <item
-        android:id="@+id/navigation_dns"
-        android:icon="@mipmap/ic_dns"
-        android:title="spoof dns" />
+        android:title="SNIFFER" />
 
     <item
         android:id="@+id/navigation_webserver"
-        android:icon="@drawable/www"
-        android:title="Fake site" />
+        android:icon="@drawable/ic_http_btnbar"
+        android:title="SPOOFER" />
+
+    <item
+        android:id="@+id/navigation_dns"
+        android:icon="@drawable/ic_dns_btnbar"
+        android:title="DNS" />
 
 </menu>
