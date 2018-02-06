@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,99 +13,143 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primary_text"
+        android:background="@color/NmapPrimary"
         app:elevation="6dp">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/primary_text"
+            android:background="@color/NmapPrimary"
             android:elevation="4dp">
 
-            <RelativeLayout
-                android:id="@+id/topToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:focusable="false"
-                android:focusableInTouchMode="false">
 
+            <ImageView
+                android:id="@+id/OsImg"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:elevation="4dp"
+                android:src="@drawable/nmap"
+                android:transitionName="NmapIconTransition"
+                app:layout_constraintHeight_min="50dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_min="50dp" />
 
-                <ImageView
-                    android:id="@+id/settingsMenu"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="8dp"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
-                    app:srcCompat="@drawable/ic_more_vert_white_24dp" />
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/tabs"
+                app:layout_constraintLeft_toRightOf="@+id/OsImg"
+                app:layout_constraintRight_toLeftOf="@+id/settings"
+                app:layout_constraintTop_toTopOf="parent"
+                app:subtitle="v6.40"
+                app:title="Nmap">
 
-                <ImageButton
-                    android:id="@+id/settings"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="false"
-                    android:layout_alignParentRight="false"
-                    android:layout_marginRight="12dp"
-                    android:layout_toLeftOf="@+id/settingsMenu"
-                    android:background="@android:color/transparent"
-                    android:baselineAlignBottom="false"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
-                    android:src="@android:drawable/ic_menu_manage" />
+            </android.support.v7.widget.Toolbar>
 
-                <ImageView
-                    android:id="@+id/OsImg"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="8dp"
-                    android:elevation="4dp"
-                    android:src="@drawable/nmap"
-                    android:transitionName="NmapIconTransition" />
+            <ImageButton
+                android:id="@+id/settings"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
+                android:baselineAlignBottom="false"
+                android:src="@android:drawable/ic_menu_manage"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/tabs"
+                app:layout_constraintRight_toLeftOf="@+id/settingsMenu"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_min="45dp" />
 
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="56dp"
-                    android:layout_toLeftOf="@+id/settings"
-                    android:layout_toRightOf="@+id/OsImg"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    app:subtitle="v6.40"
-                    app:title="Nmap">
+            <ImageView
+                android:id="@+id/settingsMenu"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/tabs"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_min="45dp"
+                app:srcCompat="@drawable/ic_more_vert_white_24dp" />
 
-                </android.support.v7.widget.Toolbar>
-            </RelativeLayout>
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_below="@+id/topToolbar"
-                android:background="@color/primary_text"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/NmapPrimary"
+                app:layout_constraintHeight_min="56dp"
+                app:layout_constraintLeft_toLeftOf="@+id/OsImg"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/OsImg"
                 app:tabMode="scrollable">
 
+                <android.support.design.widget.TabItem
+                    android:id="@+id/tabItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tab1" />
             </android.support.design.widget.TabLayout>
 
-        </RelativeLayout>
+
+
+
+        </android.support.constraint.ConstraintLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-    <RelativeLayout
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginRight="16dp"
+        android:scaleType="fitCenter"
+        android:src="?android:attr/actionModeWebSearchDrawable"
+        android:visibility="visible"
+        app:backgroundTint="@color/material_blue_grey_400"
+        app:fabSize="normal"
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom|right|end" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/fab"
+        android:layout_alignBottom="@+id/fab"
+        android:layout_alignLeft="@+id/fab"
+        android:layout_alignRight="@+id/fab"
+        android:layout_alignTop="@+id/fab"
+        android:elevation="6dp"
+        android:visibility="visible" />
+
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/generic_background"
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
         <RelativeLayout
             android:id="@+id/nmapConfLayout"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:background="@color/primary_text"
             android:elevation="2dp"
             android:paddingBottom="6dp"
             android:paddingTop="4dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/nmapConfEditorLayout"
+            app:layout_constraintHeight_min="60dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <android.support.v7.widget.CardView
                 android:id="@+id/RL_host_cardiview"
@@ -159,13 +204,15 @@
 
         <RelativeLayout
             android:id="@+id/nmapConfEditorLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_below="@+id/nmapConfLayout"
             android:elevation="2dp"
             android:padding="8dp"
             android:visibility="gone"
-            android:weightSum="2">
+            android:weightSum="2"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -228,60 +275,36 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/nmapConfEditorLayout">
+            android:id="@+id/frame_layout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_above="@+id/navigation"
+            android:layout_below="@+id/nmapConfEditorLayout"
+            app:layout_constraintBottom_toTopOf="@+id/navigation"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nmapConfLayout">
 
             <FrameLayout
                 android:id="@+id/frame_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                />
+                android:background="@android:drawable/dialog_frame" />
 
         </RelativeLayout>
-
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/fab"
-            android:layout_alignBottom="@+id/fab"
-            android:layout_alignLeft="@+id/fab"
-            android:layout_alignRight="@+id/fab"
-            android:layout_alignTop="@+id/fab"
-            android:layout_marginBottom="-12dp"
-            android:layout_marginLeft="-12dp"
-            android:layout_marginRight="-12dp"
-            android:layout_marginTop="-12dp"
-            android:elevation="6dp"
-            android:visibility="gone" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_above="@+id/navigation"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="8dp"
-            android:layout_marginRight="8dp"
-            android:scaleType="fitCenter"
-            android:src="?android:attr/actionModeWebSearchDrawable"
-            android:visibility="visible"
-            app:backgroundTint="@color/material_blue_grey_400"
-            app:fabSize="normal"
-            app:layout_anchorGravity="bottom|right|end" />
 
 
         <include
             android:id="@+id/navigation"
             layout="@layout/item_nav_bottom"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:transitionName="navigation"/>
+            android:transitionName="navigation"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
 
-    </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.design.widget.CoordinatorLayout>

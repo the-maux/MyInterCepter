@@ -28,9 +28,8 @@ public class                    WebServerActivity extends SniffActivity {
 
     private Singleton           mSingleton = Singleton.getInstance();
     private ConstraintLayout    mCoordinatorLayout;
-    private EditText            mEditTextPort;
-    private FloatingActionButton mFab;
-    private TextView            mTV_Message, mTV_IpAccess;
+
+    private TextView            mTV_Message, mTV_IpAccess, mEditTextPort;
 
     private GenericServer       mWebServer;
     private BroadcastReceiver   broadcastReceiverNetworkState;
@@ -51,6 +50,7 @@ public class                    WebServerActivity extends SniffActivity {
         mFab = findViewById(R.id.fab);
         mFab.setOnClickListener(onFabClick());
         initBroadcastReceiverNetworkStateChanged();// INIT BROADCAST RECEIVER TO LISTEN NETWORK STATE CHANGED
+        initNavigationBottomBar(WEB, true);
     }
 
     private View.OnClickListener onFabClick() {
@@ -144,6 +144,12 @@ public class                    WebServerActivity extends SniffActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initNavigationBottomBar(DNS, false);
+
+    }
 
     /*Navigation */
 

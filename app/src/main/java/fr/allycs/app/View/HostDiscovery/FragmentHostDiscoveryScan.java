@@ -33,6 +33,7 @@ import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;
+import fr.allycs.app.View.Scan.NmapActivity;
 import fr.allycs.app.View.TargetMenu.TargetMenuActivity;
 import fr.allycs.app.View.Widget.Adapter.HostDiscoveryAdapter;
 import fr.allycs.app.View.Widget.Adapter.OSFilterAdapter;
@@ -282,7 +283,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                                 mHostAdapter.selectAll();
                                 break;
                             case "Mode offline":
-                                startActivity(new Intent(mActivity, TargetMenuActivity.class));
+                                startActivity(new Intent(mActivity, NmapActivity.class));
                                 break;
                         }
                     }

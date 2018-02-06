@@ -32,7 +32,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <EditText
+            <TextView
                 android:id="@+id/editTextPort"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
@@ -80,6 +80,8 @@
         layout="@layout/item_nav_bottom"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:transitionName="navigation"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:transitionName="navigation"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 </android.support.constraint.ConstraintLayout>

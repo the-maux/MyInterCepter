@@ -48,7 +48,6 @@ public class                    WiresharkActivity extends SniffActivity {
     private RelativeLayout      mHeaderConfOFF, mHeaderConfON;
     private ProgressBar         mProgressBar;
     private TextView            mMonitorAgv, mMonitorCmd;
-    private FloatingActionButton mFab;
     private MaterialSpinner     mSpiner;
     private CheckBox            Autoscroll;
     private TextView            tcp_cb, dns_cb, arp_cb, https_cb, http_cb, udp_cb, ip_cb;
@@ -59,7 +58,7 @@ public class                    WiresharkActivity extends SniffActivity {
     private Tcpdump             mTcpdump;
     private Singleton           mSingleton = Singleton.getInstance();
 
-    protected void              onCreate(@Nullable Bundle savedInstanceState) {
+    protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentViewId());
         initXml();
@@ -68,9 +67,16 @@ public class                    WiresharkActivity extends SniffActivity {
         initFilter();
         initSettings();
         initRV();
+        initNavigationBottomBar(DNS, true);
         setToolbarTitle(null, mSingleton.selectedHostsList.get(0).getName());
         if (mTcpdump.isRunning)
             mFab.setImageResource(R.mipmap.ic_pause);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initNavigationBottomBar(SNIFFER, false);
     }
 
     private void                initXml() {

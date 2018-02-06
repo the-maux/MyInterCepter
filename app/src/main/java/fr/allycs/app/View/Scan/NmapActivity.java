@@ -63,7 +63,14 @@ public class                    NmapActivity extends SniffActivity {
         initSpinner();
         initRecyHost();
         init();
+
     }
+
+//    @Override
+//    protected void              onResume() {
+//        super.onResume();
+//        initNavigationBottomBar(SCANNER, false);
+//    }
 
     private void                initXml() {
         mCoordinatorLayout = findViewById(R.id.Coordonitor);
@@ -78,7 +85,8 @@ public class                    NmapActivity extends SniffActivity {
         mSettings = findViewById(R.id.settings);
         mNmapConfEditorLayout = findViewById(R.id.nmapConfEditorLayout);
         nmapConfLayout = findViewById(R.id.nmapConfLayout);
-        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
+        mFab = findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startNmap();
@@ -86,8 +94,7 @@ public class                    NmapActivity extends SniffActivity {
         });
         mSettings.setOnClickListener(onClickSettingsBtn());
         monitorNmapParam.setOnEditorActionListener(new EditText.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            public boolean      onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     startNmap();
                     return true;
@@ -109,6 +116,7 @@ public class                    NmapActivity extends SniffActivity {
             monitorNmapParam.setText(nmapControler.getNmapParamFromMenuItem(nmapControler.getMenuCommmands().get(0)));
             initUIWithTarget(mListHostSelected.get(0));
         }
+        initNavigationBottomBar(DNS, true);
     }
 
     private void                initFragment() {

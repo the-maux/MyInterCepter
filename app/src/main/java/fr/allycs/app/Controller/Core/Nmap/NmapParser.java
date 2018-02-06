@@ -92,11 +92,11 @@ class NmapParser {
         host.dumpInfo = dump.toString();
         Fingerprint.initHost(host);
         host.mac = host.mac.toUpperCase();
-        //Log.d(TAG, "SaveHost::"+host.mac);
         if (host.Notes == null)
             host.Notes = "";
         host.Notes = host.Notes + "-----------------------\n" +
-                host.dumpInfo + '\n' + host.Ports().getDump();
+                host.dumpInfo + '\n' +
+                ((host.Ports() == null) ? " No Port detected ? " : host.Ports().getDump());
         host.save();
         hosts.add(host);
     }

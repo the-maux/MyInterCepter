@@ -38,7 +38,6 @@ public class                            DnsActivity extends SniffActivity {
     private SearchView                  mSearchView;
     private ImageButton                 mAction_add_host, mSettingsBtn;
     private TabLayout                   mTabs;
-    private FloatingActionButton        mFab;
     private RecyclerView                mDnsSpoof_RV;
     private RelativeLayout              mClipper;
     private TextView                    mAction_deleteall, mAction_import, mAction_export, textEmpty, title;
@@ -57,6 +56,7 @@ public class                            DnsActivity extends SniffActivity {
         initTabs();
         initRVConfiguration();
         initSearchView();
+        initNavigationBottomBar(DNS, true);
         mDnsSpoof.setToolbar(this);
     }
 
@@ -320,6 +320,11 @@ public class                            DnsActivity extends SniffActivity {
         if (title.getText().toString().contains(NAME_LOGS_MENU) ) {
             initRVConfiguration();
         }
+    }
+
+    protected void                      onResume() {
+        super.onResume();
+        initNavigationBottomBar(DNS, false);
     }
 
     /*Navigation */

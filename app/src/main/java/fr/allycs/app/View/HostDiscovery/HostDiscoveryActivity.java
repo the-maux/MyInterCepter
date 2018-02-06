@@ -32,6 +32,7 @@ import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
+import fr.allycs.app.View.Scan.NmapActivity;
 import fr.allycs.app.View.TargetMenu.TargetMenuActivity;
 
 /**
@@ -151,7 +152,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                     // Yes it's ugly, missconception herei admit, but lazy
                     ((FragmentHostDiscoveryScan)NetDiscoveryFragment).launchMenu();
                     mSingleton.actualSession = actualSession;
-                    startActivity(new Intent(mInstance, TargetMenuActivity.class));
+                    startActivity(new Intent(mInstance, NmapActivity.class));
                 } else if (mSingleton.DebugMode) {
                     Log.i(TAG, "fragment startAsLive false");
                 }
