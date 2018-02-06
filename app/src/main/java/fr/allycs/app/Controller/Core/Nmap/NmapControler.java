@@ -5,13 +5,11 @@ import android.widget.ProgressBar;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import fr.allycs.app.Controller.AndroidUtils.Utils;
@@ -19,7 +17,6 @@ import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Core.RootProcess;
 import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Model.Target.Host;
-import fr.allycs.app.View.HostDiscovery.FragmentHostDiscoveryScan;
 import fr.allycs.app.View.Scan.NmapOutputFragment;
 
 /*
@@ -100,6 +97,7 @@ public class                        NmapControler {
                     if (tmp == null || !tmp.startsWith("Nmap done")) {
                         Log.d(TAG, "Error in nmap execution, Nmap didn't end");
                         setTitleToolbar("Network scan", "Nmap Error");
+
                         return;
                     }
                     dumpOutputBuilder.append(tmp);

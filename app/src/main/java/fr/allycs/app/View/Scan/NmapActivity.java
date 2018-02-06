@@ -27,7 +27,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.allycs.app.Controller.AndroidUtils.MyActivity;
+import fr.allycs.app.Controller.AndroidUtils.SniffActivity;
 import fr.allycs.app.Controller.AndroidUtils.Utils;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Core.Nmap.NmapControler;
@@ -35,7 +35,7 @@ import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Widget.Dialog.DialogQuestionWithInput;
 
-public class                    NmapActivity extends MyActivity {
+public class                    NmapActivity extends SniffActivity {
     private String              TAG = "NmapActivity";
     private NmapActivity        mInstance = this;
     private Singleton           mSingleton = Singleton.getInstance();
@@ -56,7 +56,7 @@ public class                    NmapActivity extends MyActivity {
 
     protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nmap);
+        setContentView(getContentViewId());
         initXml();
         nmapControler = new NmapControler(false);
         initFragment();
@@ -111,7 +111,6 @@ public class                    NmapActivity extends MyActivity {
         }
     }
 
-
     private void                initFragment() {
         try {
             nmapOutputFragment = new NmapOutputFragment();
@@ -138,25 +137,7 @@ public class                    NmapActivity extends MyActivity {
             }
         });
     }
-/*
-            MonitorInoptionTheTarget.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        new RV_dialog(mInstance)
-                                .setAdapter(new HostSelectionAdapter(mInstance, mSingleton.selectedHostsList, mListHostSelected), false)
-                                .setTitle("Choix des cibles")
-                                .onPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        if (mListHostSelected.isEmpty())
-                                            Snackbar.make(mCoordinatorLayout, "No target selected", Snackbar.LENGTH_LONG).show();
-                                        else {
-                                            initTabswithTargets(mListHostSelected);
-                                            Snackbar.make(mCoordinatorLayout, mListHostSelected.size() + " target", Snackbar.LENGTH_LONG).show();
-                                        }
-                                    }
-                                }).show();
- */
+
     private void                initRecyHost() {
         if (mSingleton.selectedHostsList == null || mSingleton.selectedHostsList.isEmpty()) {
             if (isExternalTarget) {
@@ -281,4 +262,15 @@ public class                    NmapActivity extends MyActivity {
         showSnackbar(msg);
         askForExternalTarget();
     }
+
+    /*Navigation */
+
+    public int                  getContentViewId() {
+        return R.layout.activity_nmap;
+    }
+
+    public int                  getNavigationMenuItemId() {
+        return R.drawable.ic_nmap_icon_tabbutton;
+    }
+
 }

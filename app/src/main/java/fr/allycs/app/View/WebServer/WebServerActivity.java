@@ -7,7 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -16,18 +16,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.AndroidUtils.MyActivity;
+import fr.allycs.app.Controller.AndroidUtils.SniffActivity;
 import fr.allycs.app.Controller.AndroidUtils.Utils;
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.WebServer.GenericServer;
 import fr.allycs.app.R;
 
-public class                    WebServerActivity extends MyActivity {
+public class                    WebServerActivity extends SniffActivity {
     private String              TAG = "WebServerActivity";
     private int                 PORT = 8080;
 
     private Singleton           mSingleton = Singleton.getInstance();
-    private CoordinatorLayout   mCoordinatorLayout;
+    private ConstraintLayout    mCoordinatorLayout;
     private EditText            mEditTextPort;
     private FloatingActionButton mFab;
     private TextView            mTV_Message, mTV_IpAccess;
@@ -38,7 +38,7 @@ public class                    WebServerActivity extends MyActivity {
 
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_webserver);
+        setContentView(getContentViewId());
         init();
     }
 
@@ -142,6 +142,17 @@ public class                    WebServerActivity extends MyActivity {
         if (broadcastReceiverNetworkState != null) {
             unregisterReceiver(broadcastReceiverNetworkState);
         }
+    }
+
+
+    /*Navigation */
+
+    public int                  getContentViewId() {
+        return R.layout.activity_webserver;
+    }
+
+    public int                  getNavigationMenuItemId() {
+        return R.drawable.www;
     }
 
 }

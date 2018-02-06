@@ -19,8 +19,8 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 
-import fr.allycs.app.Controller.AndroidUtils.MyActivity;
 import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
+import fr.allycs.app.Controller.AndroidUtils.SniffActivity;
 import fr.allycs.app.Controller.AndroidUtils.Utils;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Core.Dnsmasq.DnsmasqControl;
@@ -30,7 +30,7 @@ import fr.allycs.app.View.Widget.Adapter.DnsSpoofConfAdapter;
 import fr.allycs.app.View.Widget.Dialog.DialogQuestionWithInput;
 
 
-public class                            DnsActivity extends MyActivity {
+public class                            DnsActivity extends SniffActivity {
     private String                      TAG = "DnsActivity";
     private DnsActivity                 mInstance = this;
     private CoordinatorLayout           mCoordinatorLayout;
@@ -50,7 +50,7 @@ public class                            DnsActivity extends MyActivity {
 
     public void                         onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dnsspoofing);
+        setContentView(getContentViewId());
         initXml();
         initFab();
         initMenu();
@@ -320,5 +320,15 @@ public class                            DnsActivity extends MyActivity {
         if (title.getText().toString().contains(NAME_LOGS_MENU) ) {
             initRVConfiguration();
         }
+    }
+
+    /*Navigation */
+
+    public int                  getContentViewId() {
+        return R.layout.activity_dnsspoofing;
+    }
+
+    public int                  getNavigationMenuItemId() {
+        return R.mipmap.ic_dns;
     }
 }

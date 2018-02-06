@@ -1,7 +1,6 @@
 package fr.allycs.app.View.Tcpdump;
 
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -27,8 +26,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import fr.allycs.app.Controller.AndroidUtils.MyActivity;
 import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
+import fr.allycs.app.Controller.AndroidUtils.SniffActivity;
 import fr.allycs.app.Controller.AndroidUtils.Utils;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Core.Tcpdump.Tcpdump;
@@ -41,7 +40,7 @@ import fr.allycs.app.View.Widget.Adapter.WiresharkAdapter;
 import fr.allycs.app.View.Widget.Dialog.BottomSheet.GeneralSettings;
 import fr.allycs.app.View.Widget.Dialog.RV_dialog;
 
-public class                    WiresharkActivity extends MyActivity {
+public class                    WiresharkActivity extends SniffActivity {
     private String              TAG = this.getClass().getName();
     private WiresharkActivity   mInstance = this;
     private CoordinatorLayout   mCoordinatorLayout;
@@ -62,7 +61,7 @@ public class                    WiresharkActivity extends MyActivity {
 
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wireshark);
+        setContentView(getContentViewId());
         initXml();
         mTcpdump = Tcpdump.getTcpdump(this, true);
         initSpinner();
@@ -300,5 +299,15 @@ public class                    WiresharkActivity extends MyActivity {
 
     public void                 showSnackbar(String txt) {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
+    }
+
+    /*Navigation */
+
+    public int                  getContentViewId() {
+        return R.layout.activity_wireshark;
+    }
+
+    public int                  getNavigationMenuItemId() {
+        return R.drawable.ic_sniff_barbutton;
     }
 }

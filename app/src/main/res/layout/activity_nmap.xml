@@ -259,14 +259,15 @@
             android:layout_marginTop="-12dp"
             android:elevation="6dp"
             android:visibility="gone" />
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@+id/navigation"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="8dp"
             android:scaleType="fitCenter"
             android:src="?android:attr/actionModeWebSearchDrawable"
             android:visibility="visible"
@@ -274,6 +275,13 @@
             app:fabSize="normal"
             app:layout_anchorGravity="bottom|right|end" />
 
+
+        <include
+            android:id="@+id/navigation"
+            layout="@layout/item_nav_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" />
 
     </RelativeLayout>
 
