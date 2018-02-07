@@ -96,6 +96,7 @@ public class                            DnsActivity extends SniffActivity {
                     mDnsSpoof.stop();
                     mFab.setImageResource(R.mipmap.ic_play);
                 }
+                updateNotifications();
             }
         });
     }

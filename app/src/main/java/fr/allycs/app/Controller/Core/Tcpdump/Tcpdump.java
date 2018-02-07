@@ -130,6 +130,8 @@ public class                        Tcpdump {
                         .exec("chmod 666 " + mSingleton.PcapPath + "/*")
                         .exec("chown sdcard_r:sdcard_r " + mSingleton.PcapPath + "/*")
                         .closeProcess();
+                //TODO: faire un ok qui t'amene vers le dossier
+                mActivity.showSnackbar("Pcap saved here : " + mSingleton.PcapPath);
             }
         }
     }

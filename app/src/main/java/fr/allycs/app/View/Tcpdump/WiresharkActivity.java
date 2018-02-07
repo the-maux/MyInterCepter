@@ -219,6 +219,7 @@ public class                    WiresharkActivity extends SniffActivity {
                 mAdapterWireshark.clear();
                 mProgressBar.setVisibility(View.VISIBLE);
                 mFab.setImageResource(R.mipmap.ic_pause);
+                updateNotifications();
             }
         } else {
             mMonitorAgv.setVisibility(View.GONE);
@@ -226,6 +227,7 @@ public class                    WiresharkActivity extends SniffActivity {
             mTcpdump.onTcpDumpStop();
             setToolbarTitle(null, "Sniffing over");
             mFab.setImageResource(R.mipmap.ic_play);
+            updateNotifications();
         }
     }
 
@@ -244,7 +246,8 @@ public class                    WiresharkActivity extends SniffActivity {
         Log.d(TAG, "mMonitorCmd::" + mMonitorCmd.getText().toString());
         mMonitorCmd.setText(mTcpdump.actualParam);
         Log.d(TAG, "starting tcpdump with monitor:[" + mMonitorCmd.getText().toString() + "]");
-        mMonitorAgv.setText(mTcpdump.start(mMonitorCmd.getText().toString(), mListHostSelected, mTypeScan));
+        String argv = mTcpdump.start(mMonitorCmd.getText().toString(), mListHostSelected, mTypeScan);
+        mMonitorAgv.setText(argv);
         mInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {

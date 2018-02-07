@@ -13,7 +13,10 @@ import android.view.View;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 
+import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Controller.Core.Tcpdump.Tcpdump;
 import fr.allycs.app.R;
 import fr.allycs.app.View.DnsSpoofing.DnsActivity;
 import fr.allycs.app.View.Scan.NmapActivity;
@@ -29,6 +32,7 @@ public abstract class           SniffActivity extends MyActivity  {
     protected FloatingActionButton mFab;
     protected static final int   SCANNER=0, SNIFFER=1, DNS=2, WEB=3;
     private int                  mType;
+    private Singleton           mSingleton = Singleton.getInstance();
 
     public void                 onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
@@ -64,7 +68,7 @@ public abstract class           SniffActivity extends MyActivity  {
                 mBottomBar.addItem(bottomItem);
             }
             mBottomBar.setDefaultBackgroundColor(Color.parseColor("#414141"));
-            mBottomBar.setBehaviorTranslationEnabled(false);
+            mBottomBar.setBehaviorTranslationEnabled(true);
             mBottomBar.setAccentColor(R.color.accent);
             mBottomBar.setInactiveColor(Color.parseColor("#747474"));
             mBottomBar.setForceTint(true);
@@ -72,27 +76,29 @@ public abstract class           SniffActivity extends MyActivity  {
             mBottomBar.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
             mBottomBar.setColored(true);
             mBottomBar.setOnTabSelectedListener(onSelectedListener());
-            updateNotifications();
         }
         //mBottomBar.setCurrentItem(position, false);
     }
 
-    private void                    updateNotifications() {
-        // Customize notification (title, background, typeface)
-        mBottomBar.setNotificationBackgroundColor(ContextCompat.getColor(mInstance, R.color.material_red_600));
-
-// Add or remove notification for each item
-//        mBottomBar.setNotification(" ", 0);
-// OR
-        mBottomBar.setNotification(" ", 1);//Singleton like menu
-        mBottomBar.setNotification(" ", 2);
-        mBottomBar.setNotification(" ", 3);
-        /*AHNotification notification = new AHNotification.Builder()
-                .setText("0")
-                .setBackgroundColor(ContextCompat.getColor(mInstance, R.color.material_green_400))
+    protected void                    updateNotifications() {
+        AHNotification greenNotif = new AHNotification.Builder()
+                .setText(" ")
+                .setBackgroundColor(ContextCompat.getColor(mInstance, R.color.material_green_700))
                 .setTextColor(ContextCompat.getColor(mInstance, R.color.primary_text))
-                .build();*/
-       // mBottomBar.setNotification(notification, 1);
+                .build();
+        AHNotification redNotif = new AHNotification.Builder()
+                .setText(" ")
+                .setBackgroundColor(ContextCompat.getColor(mInstance, R.color.material_red_800))
+                .setTextColor(ContextCompat.getColor(mInstance, R.color.primary_text))
+                .build();
+        Tcpdump tcpdump = Tcpdump.getTcpdump(this, false);
+        if (tcpdump != null)
+            mBottomBar.setNotification(tcpdump.isRunning ? greenNotif : redNotif, 1);
+        else
+            mBottomBar.setNotification(redNotif, 1);
+        mBottomBar.setNotification(mSingleton.isDnsControlstarted() ? greenNotif : redNotif, 2);
+        //TODO: a faire quand le spoof http sera fait
+        mBottomBar.setNotification(redNotif, 3);
     }
 
     private AHBottomNavigation.OnTabSelectedListener onSelectedListener() {
@@ -147,6 +153,7 @@ public abstract class           SniffActivity extends MyActivity  {
         super.onResume();
         Log.d(TAG, " onResume::setCurrentItem::" + mType);
         mBottomBar.setCurrentItem(mType, false);
+        updateNotifications();
     }
 
     @Override
@@ -155,6 +162,7 @@ public abstract class           SniffActivity extends MyActivity  {
         Log.d(TAG, "onNew Intent mTypeRecorded(" + mType + ") currentItem(" + mBottomBar.getCurrentItem() + ") on "+ mBottomBar.getItemsCount() + " items");
         Log.d(TAG, " onNewIntent::setCurrentItem::" + mType);
         mBottomBar.setCurrentItem(mType, false);
+        updateNotifications();
     }
 
     public abstract int         getContentViewId();
