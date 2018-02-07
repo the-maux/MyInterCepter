@@ -63,12 +63,12 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         holder.proto.setBackgroundColor(ContextCompat.getColor(mActivity, color));
         holder.info.setBackgroundColor(ContextCompat.getColor(mActivity, color));
         holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.material_grey_700));
-        holder.No.setTypeface(null, Typeface.NORMAL);
-        holder.time.setTypeface(null, Typeface.NORMAL);
-        holder.source.setTypeface(null, Typeface.NORMAL);
-        holder.dest.setTypeface(null, Typeface.NORMAL);
-        holder.proto.setTypeface(null, Typeface.NORMAL);
-        holder.info.setTypeface(null, Typeface.NORMAL);
+//        holder.No.setTypeface(null, Typeface.NORMAL);
+//        holder.time.setTypeface(null, Typeface.NORMAL);
+//        holder.source.setTypeface(null, Typeface.NORMAL);
+//        holder.dest.setTypeface(null, Typeface.NORMAL);
+//        holder.proto.setTypeface(null, Typeface.NORMAL);
+//        holder.info.setTypeface(null, Typeface.NORMAL);
     }
 
     public int              getItemCount() {

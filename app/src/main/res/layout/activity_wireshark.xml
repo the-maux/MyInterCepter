@@ -361,6 +361,15 @@
             android:layout_below="@+id/TopBarLayout"
             android:background="@color/generic_background">
 
+            <include
+                android:id="@+id/topBar"
+                layout="@layout/item_tcpdump"
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_below="@+id/Monitor"
+                android:background="@color/cardview_shadow_start_color"
+                android:elevation="4dp" />
+
             <TextView
                 android:id="@+id/Monitor"
                 android:layout_width="match_parent"
@@ -383,37 +392,59 @@
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/Monitor"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentRight="false"
+                android:layout_below="@+id/topBar"
                 android:background="@color/cardview_shadow_start_color"
-                android:scrollbars="horizontal">
+                android:fillViewport="true"
+                android:scrollbars="horizontal"
+                android:visibility="visible">
 
-                <RelativeLayout
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/Output"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/cardview_shadow_start_color">
+                    android:alpha="0.98"
+                    android:background="@color/generic_background"
+                    android:scrollbars="vertical"
+
+                    tools:listitem="@layout/item_tcpdump" />
+
+
+                <!--android.support.constraint.ConstraintLayout
+                    android:id="@+id/relativeLayout2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@color/cardview_shadow_start_color"
+                    android:visibility="gone">
 
                     <include
-
                         android:id="@+id/topBar"
                         layout="@layout/item_tcpdump"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/cardview_shadow_start_color"
-                        android:elevation="4dp" />
+                        android:elevation="4dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/Output"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignLeft="@+id/topBar"
-                        android:layout_alignRight="@+id/topBar"
-                        android:layout_below="@+id/topBar"
+                        android:layout_height="0dp"
                         android:alpha="0.98"
                         android:background="@color/generic_background"
                         android:scrollbars="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         tools:listitem="@layout/item_tcpdump" />
 
-                </RelativeLayout>
+
+                </android.support.constraint.ConstraintLayout-->
             </HorizontalScrollView>
 
         </RelativeLayout>
