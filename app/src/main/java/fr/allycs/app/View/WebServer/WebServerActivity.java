@@ -8,11 +8,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -142,14 +140,14 @@ public class                    WebServerActivity extends SniffActivity {
         if (broadcastReceiverNetworkState != null) {
             unregisterReceiver(broadcastReceiverNetworkState);
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initNavigationBottomBar(DNS, false);
-
-    }
+   }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        initNavigationBottomBar(DNS, false);
+//
+//    }
 
     /*Navigation */
 

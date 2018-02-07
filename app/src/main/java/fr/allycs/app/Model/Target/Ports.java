@@ -9,12 +9,13 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 
 import fr.allycs.app.Model.Net.Port;
+import fr.allycs.app.Model.Unix.Os;
 
 public class                    Ports {
     private String              TAG = "Ports";
     private ArrayList<Port>     mPorts = new ArrayList<>();
     private SparseIntArray      primitivePortsLits = new SparseIntArray();
-    String                      dump;
+    public String               dump;
 
     public Ports(ArrayList<String> lines, Host host) {
         dump = StringUtils.join(lines, "\n");
@@ -48,6 +49,7 @@ public class                    Ports {
         } else if (line.contains("model=") && !line.contains("rmodel=")) {
             host.vendor = line.replace("model=", "").split(",")[0];
             host.vendor = host.vendor.replace("|", "").trim();
+            host.osType = Os.Apple;
         } else {
             //DEBUG
             //Log.e(TAG, "initService::[" + line + "]");

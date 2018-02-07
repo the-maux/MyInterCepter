@@ -38,7 +38,6 @@ class NmapParser {
                     Host host = new Host();
                     getIpHOSTNAME(node.split("\n")[0], host);
                     host.mac = getMACInTmp(macs, host.ip);
-                    Log.d(TAG, "starting dispatacher::"+host.mac);
                     if (!Fingerprint.isItMyDevice(host)) {
                         host = DBHost.saveOrGetInDatabase(host);
                         buildHostFromNmapDump(node, host, hosts);
@@ -116,6 +115,7 @@ class NmapParser {
     private void                    getIpHOSTNAME(String line, Host host) {
         /* nbl037421.hq.fr.corp.leroymerlin.com (10.16.187.230) */
         if (line.contains("(")) {
+            Log.d(TAG, "getIpHOSTNAME:" + line);
             host.ip = line.split(" ")[1].replace("(", "").replace(")", "");
             host.name = line.split(" ")[0];
         } else {
@@ -182,7 +182,7 @@ class NmapParser {
             if (host.osType == Os.Unknow) {
                 host.dumpMe(mSingleton.selectedHostsList);
                 Log.d(TAG, "-------------");
-            }           Log.d(TAG, "-------------");
+            }
         }
         mNmapControler.onHostActualized(hosts);
     }

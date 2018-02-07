@@ -34,7 +34,6 @@ import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Scan.NmapActivity;
-import fr.allycs.app.View.TargetMenu.TargetMenuActivity;
 import fr.allycs.app.View.Widget.Adapter.HostDiscoveryAdapter;
 import fr.allycs.app.View.Widget.Adapter.OSFilterAdapter;
 import fr.allycs.app.View.Widget.Dialog.RV_dialog;
@@ -233,7 +232,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
 
     private void                    pushToolbar() {
         mActivity.setToolbarTitle(mTitle, mSubtitle);
-        mActivity.initSettingsButton();
+        mActivity.initToolbarButton();
     }
     public void                     setTitleToolbar(String title, String subtitle) {
         if (title != null)
@@ -271,6 +270,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 .addItem(0, "Os filter", R.mipmap.ic_os_filter)
                 .addItem(1, "Select all", R.mipmap.ic_select_all)
                 .addItem(2, "Mode offline", R.mipmap.ic_leave)
+                .addItem(2, "Settings", R.mipmap.ic_leave)
                 .setItemClickListener(new BottomSheetItemClickListener() {
                     @Override
                     public void onBottomSheetItemClick(MenuItem menuItem) {
@@ -285,6 +285,8 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                             case "Mode offline":
                                 startActivity(new Intent(mActivity, NmapActivity.class));
                                 break;
+                            case "Settings":
+                                mActivity.initFragmentSettings();
                         }
                     }
                 })

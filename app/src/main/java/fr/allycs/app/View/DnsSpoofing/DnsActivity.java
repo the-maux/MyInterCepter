@@ -3,7 +3,6 @@ package fr.allycs.app.View.DnsSpoofing;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -322,10 +321,10 @@ public class                            DnsActivity extends SniffActivity {
         }
     }
 
-    protected void                      onResume() {
+/*    protected void                      onResume() {
         super.onResume();
         initNavigationBottomBar(DNS, false);
-    }
+    }*/
 
     /*Navigation */
 

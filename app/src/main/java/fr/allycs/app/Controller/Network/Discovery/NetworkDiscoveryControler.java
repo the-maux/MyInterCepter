@@ -1,7 +1,5 @@
 package fr.allycs.app.Controller.Network.Discovery;
 
-import android.content.Context;
-import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -68,6 +66,7 @@ public class                        NetworkDiscoveryControler {
         ArrayList<String> tmpAntiConcurentExecptionFFS = new ArrayList<>();
         tmpAntiConcurentExecptionFFS.addAll(ipReachable);
         mActivity.setToolbarTitle(null, tmpAntiConcurentExecptionFFS.size() + " hosts detected");
+
         mActivity.setProgressState(1500);
         mActivity.setToolbarTitle(null,"Scanning " + tmpAntiConcurentExecptionFFS.size() + " devices");
         mActivity.setToolbarTitle(null, "Reading ARP Table");

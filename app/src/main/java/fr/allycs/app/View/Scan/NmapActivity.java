@@ -63,7 +63,6 @@ public class                    NmapActivity extends SniffActivity {
         initSpinner();
         initRecyHost();
         init();
-
     }
 
 //    @Override
@@ -116,7 +115,7 @@ public class                    NmapActivity extends SniffActivity {
             monitorNmapParam.setText(nmapControler.getNmapParamFromMenuItem(nmapControler.getMenuCommmands().get(0)));
             initUIWithTarget(mListHostSelected.get(0));
         }
-        initNavigationBottomBar(DNS, true);
+        initNavigationBottomBar(SCANNER, true);
     }
 
     private void                initFragment() {

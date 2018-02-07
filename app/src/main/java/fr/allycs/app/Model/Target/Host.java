@@ -19,7 +19,7 @@ public class                Host extends Model {
     @Column(name ="ip")
     public String           ip = "Unknown";
     @Column(name ="name")
-    public String           name = "";
+    public String           name = "Unknown";
     @Column(name ="mac")
     public String           mac = "Unknown";
     @Column(name ="os")

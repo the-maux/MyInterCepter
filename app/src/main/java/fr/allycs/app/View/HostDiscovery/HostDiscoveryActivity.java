@@ -8,7 +8,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -17,23 +16,18 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 
 import fr.allycs.app.Controller.AndroidUtils.MyActivity;
 import fr.allycs.app.Controller.AndroidUtils.MyFragment;
 import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
 import fr.allycs.app.Controller.AndroidUtils.Utils;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Scan.NmapActivity;
-import fr.allycs.app.View.TargetMenu.TargetMenuActivity;
 
 /**
  * TODO:    + Add manual target
@@ -190,18 +184,26 @@ public class                        HostDiscoveryActivity extends MyActivity {
             mBottomMonitor.setText(mSingleton.network.Ssid + ": No connection");
     }
 
-    public void                     initSettingsButton() {
+    public void                     initFragmentSettings() {
+        mFragment = new HostDiscoverySettingsFragmt();
+        initFragment(mFragment);
+        mFab.setVisibility(View.GONE);
+        mTabs.setVisibility(View.GONE);
+        mToolbarBackground.startTransition(500);
+    }
+
+    public void                     initToolbarButton() {
+        /*
+            typeSetting: 1 == DISCOVERY
+                         2 == HISTORIC
+                         3 == SETTINGS
+         */
         mSettingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mFragment = new HostDiscoverySettingsFragmt();
-                initFragment(mFragment);
-                mFab.setVisibility(View.GONE);
-                mTabs.setVisibility(View.GONE);
-                mToolbarBackground.startTransition(500);
+                NetDiscoveryFragment.onSettingsClick((AppBarLayout) findViewById(R.id.appbar), mInstance).show();
             }
         });
-
         mFragment.onAddButtonClick(mAddHostBtn);
     }
 
@@ -214,8 +216,11 @@ public class                        HostDiscoveryActivity extends MyActivity {
             @Override
             public void run() {
                 mProgressBar.setVisibility(View.VISIBLE);
-                if (progress != -1)
+                if (progress != -1) {
+                    if (mProgress >= progress && progress == MAXIMUM_PROGRESS)
+                        mProgressBar.setVisibility(View.GONE);
                     mProgress = progress;
+                }
             }
         });
     }

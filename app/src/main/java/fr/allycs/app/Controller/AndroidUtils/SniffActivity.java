@@ -13,7 +13,6 @@ import android.view.View;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
-import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 
 import fr.allycs.app.R;
 import fr.allycs.app.View.DnsSpoofing.DnsActivity;
@@ -34,7 +33,6 @@ public abstract class           SniffActivity extends MyActivity  {
     public void                 onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
         setContentView(getContentViewId());
-
     }
 
     protected void              onStart() {
@@ -49,7 +47,10 @@ public abstract class           SniffActivity extends MyActivity  {
 // Create items
         mType = position;
         mBottomBar = findViewById(R.id.navigation);
+        mBottomBar.clearAnimation();
+        mBottomBar.removeAllItems();
         if (useCallback) {
+            Log.d(TAG, "initNavigationBottomBar(" + position + ":" + useCallback + ")");
             AHBottomNavigationItem[] bottomItems = new AHBottomNavigationItem[4];
             bottomItems[0] = new AHBottomNavigationItem(R.string.SCANNER,
                     R.drawable.ic_nmap_icon_tabbutton, R.color.NmapPrimary);
@@ -64,17 +65,9 @@ public abstract class           SniffActivity extends MyActivity  {
             }
             mBottomBar.setDefaultBackgroundColor(Color.parseColor("#414141"));
             mBottomBar.setBehaviorTranslationEnabled(false);
-            //mBottomBar.setOnNavigationPositionListener(this);
-// Change colors
             mBottomBar.setAccentColor(R.color.accent);
             mBottomBar.setInactiveColor(Color.parseColor("#747474"));
-// Force to tint the drawable (useful for font with icon for example)
             mBottomBar.setForceTint(true);
-
-// Display color under navigation bar (API 21+)
-// Don't forget these lines in your style-v21
-// <item name="android:windowTranslucentNavigation">true</item>
-// <item name="android:fitsSystemWindows">true</item>
             mBottomBar.setTranslucentNavigationEnabled(true);
             mBottomBar.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
             mBottomBar.setColored(true);
@@ -82,14 +75,6 @@ public abstract class           SniffActivity extends MyActivity  {
             mBottomBar.setCurrentItem(position);
             updateNotifications();
         }
-
-
-// Enable / disable item & set disable color
-//        mBottomBar.enableItemAtPosition(2);
-//        mBottomBar.disableItemAtPosition(3);
-//        mBottomBar.setItemDisableColor(Color.parseColor("#3A000000"));
-
-
     }
 
     private void                    updateNotifications() {
@@ -113,41 +98,70 @@ public abstract class           SniffActivity extends MyActivity  {
     private AHBottomNavigation.OnTabSelectedListener onSelectedListener() {
         return new AHBottomNavigation.OnTabSelectedListener() {
             @Override
-            public boolean onTabSelected(int position, boolean wasSelected) {
-                Log.d(TAG, "onNavigationItemSelected::" + position);
-                Pair<View, String> p1 = Pair.create((View) mBottomBar, "navigation");
-                final ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1);
-                Intent intent = null;
-                switch (position) {
-                    case 0:
-                        intent = new Intent(mInstance, NmapActivity.class);
-                        break;
-                    case 1:
-                        intent = new Intent(mInstance, WiresharkActivity.class);
-                        break;
-                    case 2:
-                        intent = new Intent(mInstance, DnsActivity.class);
-                        break;
-                    case 3:
-                        intent = new Intent(mInstance, WebServerActivity.class);
-                        break;
-                    default:
-                        Log.d(TAG, "No activity found");
-                        break;
-                }
-                if (intent != null) {
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent, options.toBundle());
-                }
+            public boolean onTabSelected(final int position, boolean wasSelected) {
+                mBottomBar.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mInstance.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d(TAG, "onNavigationItemSelected::" + position);
+                                Intent intent = null;
+                                Pair<View, String> p1 = Pair.create((View) mBottomBar, "navigation");
+                                final ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1);
+                                if (position != mType) {
+                                    switch (position) {
+                                        case 0:
+                                            intent = new Intent(mInstance, NmapActivity.class);
+                                            break;
+                                        case 1:
+                                            intent = new Intent(mInstance, WiresharkActivity.class);
+                                            break;
+                                        case 2:
+                                            intent = new Intent(mInstance, DnsActivity.class);
+                                            break;
+                                        case 3:
+                                            intent = new Intent(mInstance, WebServerActivity.class);
+                                            break;
+                                        default:
+                                            Log.d(TAG, "No activity found");
+                                            break;
+                                    }
+                                    if (intent != null) {
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent, options.toBundle());
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
                 return true;
             }
         };
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        initNavigationBottomBar(mType, true);
+    }
+
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Log.d(TAG, "onNew Intent");
+
+        Log.d(TAG, "onNew Intent mTypeRecorded(" + mType + ") currentItem(" + mBottomBar.getCurrentItem() + ") on "+ mBottomBar.getItemsCount() + " items");
+//        mBottomBar.enableItemAtPosition(mType);
+//        if (mType != 0)
+//            mBottomBar.disableItemAtPosition(0);
+//        if (mType != 1)
+//            mBottomBar.disableItemAtPosition(1);
+//        if (mType != 2)
+//            mBottomBar.disableItemAtPosition(2);
+//        if (mType != 3)
+//            mBottomBar.disableItemAtPosition(3);
+        initNavigationBottomBar(mType, true);
     }
 
     public abstract int         getContentViewId();

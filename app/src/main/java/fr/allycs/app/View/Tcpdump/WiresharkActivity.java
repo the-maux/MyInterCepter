@@ -2,9 +2,7 @@ package fr.allycs.app.View.Tcpdump;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -67,7 +65,7 @@ public class                    WiresharkActivity extends SniffActivity {
         initFilter();
         initSettings();
         initRV();
-        initNavigationBottomBar(DNS, true);
+        initNavigationBottomBar(SNIFFER, true);
         setToolbarTitle(null, mSingleton.selectedHostsList.get(0).getName());
         if (mTcpdump.isRunning)
             mFab.setImageResource(R.mipmap.ic_pause);
@@ -76,7 +74,6 @@ public class                    WiresharkActivity extends SniffActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        initNavigationBottomBar(SNIFFER, false);
     }
 
     private void                initXml() {

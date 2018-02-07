@@ -13,16 +13,16 @@ import fr.allycs.app.R;
 /**
  * Supprimer les duplicata External & Host
  */
-public class                         Fingerprint {
-    private static String            TAG = "Fingerprint";
+public class                            Fingerprint {
+    private static String               TAG = "Fingerprint";
 
-    public static void               initHost(Host host) {
+    public static void                  initHost(Host host) {
         //Log.d(TAG, "initHost:\t" + host.toString());
         isItMyDevice(host);
         guessosType(host.dumpInfo, host);
     }
 
-    private static void              guessosType(String InfoDevice, Host host) {
+    private static void                 guessosType(String InfoDevice, Host host) {
         if (InfoDevice == null) {
             host.osType = Os.Unknow;
             return;
@@ -59,12 +59,9 @@ public class                         Fingerprint {
         } else if (InfoDevice.contains("android") || InfoDevice.contains("mobile") || InfoDevice.contains("samsung") ||
                 InfoDevice.contains("murata") || InfoDevice.contains("huawei") || InfoDevice.contains("oneplus") ||
                 InfoDevice.contains("lg") || InfoDevice.contains("motorola")) {
-            host.osType = Os.Android;
-            host.os = "Unix/(AOSP)";
-        } else if (InfoDevice.contains("apple") || host.vendor.toLowerCase().contains("apple")) {
-            host.os = "FreeBSD";
-            host.osType = Os.Apple;
-            host.os = "Unix/(Mac OS X)";//TODO FINGERPRINT WITH MAC NAME ON zeroconf
+            fingerprintMobile(host, InfoDevice);
+        } else if (InfoDevice.contains("apple") || host.vendor.toLowerCase().contains("apple") || host.osType == Os.Apple) {
+            fingerprintApple(host, InfoDevice);
         } else if (!(!InfoDevice.contains("unix") && !InfoDevice.contains("linux") && !InfoDevice.contains("bsd"))) {
             host.osType = Os.Linux_Unix;
         } else if (InfoDevice.contains("windows") || InfoDevice.contains("microsoft")) {
@@ -74,7 +71,22 @@ public class                         Fingerprint {
             host.osType = Os.Unknow;
     }
 
-    private static boolean          isItWindows(Host host) {
+    private static void                 fingerprintApple(Host host, String infoDevice) {
+        host.os = "FreeBSD";
+        host.osType = Os.Apple;
+        host.os = "Unix/(Mac OS X)";//TODO FINGERPRINT WITH MAC NAME ON zeroconf
+        if (host.getName().isEmpty() && host.Ports().dump.contains("model=")) {
+            String name = host.mac.split(":")[4] + host.mac.split(":")[5];
+            host.name = host.vendor.toUpperCase().replaceAll("\\d","") + "-" + name;
+        }
+    }
+
+    private static void                 fingerprintMobile(Host host, String infoDevice) {
+        host.osType = Os.Android;
+        host.os = "Unix/(AOSP)";
+    }
+
+    private static boolean              isItWindows(Host host) {
         /*
                TODO: Do i have to checkd the proto for microsoft|windows|msrpc ?
          */
@@ -85,14 +97,14 @@ public class                         Fingerprint {
                 host.Ports().isPortOpen(445);
     }
 
-    public static boolean           isItMyDevice(Host host) {
+    public static boolean               isItMyDevice(Host host) {
         if (host.ip.contains(Singleton.getInstance().network.myIp)) {
             host.isItMyDevice = true;
         }
         return host.isItMyDevice;
     }
 
-    public static void               setOsIcon(Context context, Host host,  ImageView osImageView) {
+    public static void                  setOsIcon(Context context, Host host,  ImageView osImageView) {
         if (host != null && host.osType != null) {
             setOsIcon(context, host.osType, osImageView);
             return;
@@ -100,8 +112,7 @@ public class                         Fingerprint {
         MyGlideLoader.loadDrawableInCircularImageView(context, R.drawable.monitor, osImageView);
     }
 
-
-    public static void               setOsIcon(Context context, Os os,  ImageView osImageView) {
+    public static void                  setOsIcon(Context context, Os os,  ImageView osImageView) {
         int ImageRessource;
         switch (os) {
             case Windows:
