@@ -47,9 +47,9 @@ public abstract class           SniffActivity extends MyActivity  {
 // Create items
         mType = position;
         mBottomBar = findViewById(R.id.navigation);
-        mBottomBar.clearAnimation();
-        mBottomBar.removeAllItems();
         if (useCallback) {
+            mBottomBar.clearAnimation();
+            mBottomBar.removeAllItems();
             Log.d(TAG, "initNavigationBottomBar(" + position + ":" + useCallback + ")");
             AHBottomNavigationItem[] bottomItems = new AHBottomNavigationItem[4];
             bottomItems[0] = new AHBottomNavigationItem(R.string.SCANNER,
@@ -72,9 +72,9 @@ public abstract class           SniffActivity extends MyActivity  {
             mBottomBar.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
             mBottomBar.setColored(true);
             mBottomBar.setOnTabSelectedListener(onSelectedListener());
-            mBottomBar.setCurrentItem(position);
             updateNotifications();
         }
+        //mBottomBar.setCurrentItem(position, false);
     }
 
     private void                    updateNotifications() {
@@ -99,17 +99,17 @@ public abstract class           SniffActivity extends MyActivity  {
         return new AHBottomNavigation.OnTabSelectedListener() {
             @Override
             public boolean onTabSelected(final int position, boolean wasSelected) {
-                mBottomBar.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mInstance.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.d(TAG, "onNavigationItemSelected::" + position);
-                                Intent intent = null;
-                                Pair<View, String> p1 = Pair.create((View) mBottomBar, "navigation");
-                                final ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1);
-                                if (position != mType) {
+                if (position != mType) {
+                    mBottomBar.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mInstance.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Log.d(TAG, "onNavigationItemSelected::" + position);
+                                    Intent intent = null;
+                                    Pair<View, String> p1 = Pair.create((View) mBottomBar, "navigation");
+                                    final ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1);
                                     switch (position) {
                                         case 0:
                                             intent = new Intent(mInstance, NmapActivity.class);
@@ -132,11 +132,12 @@ public abstract class           SniffActivity extends MyActivity  {
                                         startActivity(intent, options.toBundle());
                                     }
                                 }
-                            }
-                        });
-                    }
-                });
-                return true;
+                            });
+                        }
+                    });
+                    return true;
+                }
+                return false;
             }
         };
     }
@@ -144,24 +145,16 @@ public abstract class           SniffActivity extends MyActivity  {
     @Override
     protected void onResume() {
         super.onResume();
-        initNavigationBottomBar(mType, true);
+        Log.d(TAG, " onResume::setCurrentItem::" + mType);
+        mBottomBar.setCurrentItem(mType, false);
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-
         Log.d(TAG, "onNew Intent mTypeRecorded(" + mType + ") currentItem(" + mBottomBar.getCurrentItem() + ") on "+ mBottomBar.getItemsCount() + " items");
-//        mBottomBar.enableItemAtPosition(mType);
-//        if (mType != 0)
-//            mBottomBar.disableItemAtPosition(0);
-//        if (mType != 1)
-//            mBottomBar.disableItemAtPosition(1);
-//        if (mType != 2)
-//            mBottomBar.disableItemAtPosition(2);
-//        if (mType != 3)
-//            mBottomBar.disableItemAtPosition(3);
-        initNavigationBottomBar(mType, true);
+        Log.d(TAG, " onNewIntent::setCurrentItem::" + mType);
+        mBottomBar.setCurrentItem(mType, false);
     }
 
     public abstract int         getContentViewId();
