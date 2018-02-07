@@ -3,7 +3,6 @@
     <string name="app_name">Scylla</string>
     <string name="menu_settings">Settings</string>
     <string name="dialog_exit_message">Android Web Server is currently mIsRunning. If you exit the application we will stop it. Are sure you want to exit the application?</string>
-    <string name="message">You can now access the Android Web Server from a browser connected to the same wifi network.</string>
     <string name="todo">TODO</string>
     <string name="settings">Settings</string>
     <string name="SCANNER">SCANNER</string>
