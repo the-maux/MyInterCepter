@@ -271,8 +271,6 @@ public class                    NmapActivity extends SniffActivity {
         askForExternalTarget();
     }
 
-    /*Navigation */
-
     public int                  getContentViewId() {
         return R.layout.activity_nmap;
     }
@@ -282,13 +280,13 @@ public class                    NmapActivity extends SniffActivity {
     }
 
     public void                 onBackPressed() {
-        if (mSingleton.isSniffServiceActif()) {
+        if (mSingleton.isSniffServiceActif(this)) {
              new AlertDialog.Builder(this)
                         .setTitle("Warning: Sniffing service is active")
                         .setMessage("You press ok we will terminate every process for you")
                         .setPositiveButton(getResources().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                mSingleton.closeEverySniffService();
+                                mSingleton.closeEverySniffService(mInstance);
                                 onBackPressed();
                             }
                         })
