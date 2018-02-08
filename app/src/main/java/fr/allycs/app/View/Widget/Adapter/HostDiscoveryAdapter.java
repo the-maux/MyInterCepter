@@ -21,7 +21,7 @@ import fr.allycs.app.Controller.Core.Nmap.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;
-import fr.allycs.app.View.HostDetail.HostDetailActivity;
+import fr.allycs.app.View.Activity.HostDetail.HostDetailActivity;
 import fr.allycs.app.View.Widget.Holder.HostDiscoveryHolder;
 
 

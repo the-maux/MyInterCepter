@@ -18,10 +18,10 @@ import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Core.Tcpdump.Tcpdump;
 import fr.allycs.app.R;
-import fr.allycs.app.View.DnsSpoofing.DnsActivity;
-import fr.allycs.app.View.Scan.NmapActivity;
-import fr.allycs.app.View.Tcpdump.WiresharkActivity;
-import fr.allycs.app.View.WebServer.WebServerActivity;
+import fr.allycs.app.View.Activity.DnsSpoofing.DnsActivity;
+import fr.allycs.app.View.Activity.Scan.NmapActivity;
+import fr.allycs.app.View.Activity.Tcpdump.WiresharkActivity;
+import fr.allycs.app.View.Activity.WebServer.WebServerActivity;
 
 
 public abstract class           SniffActivity extends MyActivity  {
@@ -83,12 +83,12 @@ public abstract class           SniffActivity extends MyActivity  {
     protected void                    updateNotifications() {
         AHNotification greenNotif = new AHNotification.Builder()
                 .setText(" ")
-                .setBackgroundColor(ContextCompat.getColor(mInstance, R.color.material_green_700))
+                .setBackgroundColor(ContextCompat.getColor(mInstance, R.color.material_green_500))
                 .setTextColor(ContextCompat.getColor(mInstance, R.color.primary_text))
                 .build();
         AHNotification redNotif = new AHNotification.Builder()
                 .setText(" ")
-                .setBackgroundColor(ContextCompat.getColor(mInstance, R.color.material_red_800))
+                .setBackgroundColor(ContextCompat.getColor(mInstance, R.color.material_red_500))
                 .setTextColor(ContextCompat.getColor(mInstance, R.color.primary_text))
                 .build();
         Tcpdump tcpdump = Tcpdump.getTcpdump(this, false);
@@ -97,8 +97,7 @@ public abstract class           SniffActivity extends MyActivity  {
         else
             mBottomBar.setNotification(redNotif, 1);
         mBottomBar.setNotification(mSingleton.isDnsControlstarted() ? greenNotif : redNotif, 2);
-        //TODO: a faire quand le spoof http sera fait
-        mBottomBar.setNotification(redNotif, 3);
+        mBottomBar.setNotification(mSingleton.iswebSpoofed() ? greenNotif : redNotif, 3);
     }
 
     private AHBottomNavigation.OnTabSelectedListener onSelectedListener() {

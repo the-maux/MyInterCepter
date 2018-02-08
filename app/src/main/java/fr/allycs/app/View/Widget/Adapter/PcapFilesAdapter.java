@@ -2,7 +2,6 @@ package fr.allycs.app.View.Widget.Adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
@@ -10,10 +9,8 @@ import java.util.List;
 import fr.allycs.app.Controller.AndroidUtils.MyFragment;
 import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
 import fr.allycs.app.Model.Net.Pcap;
-import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.R;
-import fr.allycs.app.View.HostDetail.PcapFragment;
-import fr.allycs.app.View.HostDiscovery.FragmentHistoric;
+import fr.allycs.app.View.Activity.HostDetail.PcapFragment;
 import fr.allycs.app.View.Widget.Holder.PcapHolder;
 
 public class                    PcapFilesAdapter extends RecyclerView.Adapter<PcapHolder> {

@@ -14,7 +14,7 @@ import java.util.Arrays;
 import fr.allycs.app.Controller.Core.Dnsmasq.DnsmasqConfig;
 import fr.allycs.app.Controller.Core.RootProcess;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Startup.SetupActivity;
+import fr.allycs.app.View.Activity.Startup.SetupActivity;
 
 public class                    Setup {
     private String              TAG = "Setup";

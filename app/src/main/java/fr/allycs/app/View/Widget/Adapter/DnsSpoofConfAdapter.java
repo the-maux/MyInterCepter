@@ -10,7 +10,7 @@ import java.util.List;
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Model.Target.DNSSpoofItem;
 import fr.allycs.app.R;
-import fr.allycs.app.View.DnsSpoofing.DnsActivity;
+import fr.allycs.app.View.Activity.DnsSpoofing.DnsActivity;
 import fr.allycs.app.View.Widget.Holder.DnsSpoofConfHolder;
 
 

@@ -11,7 +11,7 @@ import fr.allycs.app.Controller.Core.RootProcess;
 import fr.allycs.app.Model.Target.DNSSpoofItem;
 import fr.allycs.app.Model.Target.SniffSession;
 import fr.allycs.app.Model.Unix.DNSLog;
-import fr.allycs.app.View.DnsSpoofing.DnsActivity;
+import fr.allycs.app.View.Activity.DnsSpoofing.DnsActivity;
 import fr.allycs.app.View.Widget.Adapter.DnsLogsAdapter;
 
 public class DnsmasqControl {

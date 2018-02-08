@@ -16,7 +16,7 @@ import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickList
 import fr.allycs.app.Controller.Core.Configuration.Singleton;
 import fr.allycs.app.Controller.Core.Tcpdump.Tcpdump;
 import fr.allycs.app.R;
-import fr.allycs.app.View.TargetMenu.TargetMenuActivity;
+import fr.allycs.app.View.Activity.TargetMenu.TargetMenuActivity;
 
 public class                    GeneralSettings {
     private String              TAG = "GeneralSettings";

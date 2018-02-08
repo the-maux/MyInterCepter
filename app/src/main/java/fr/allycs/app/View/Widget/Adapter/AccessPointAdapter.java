@@ -10,7 +10,7 @@ import java.util.List;
 import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.R;
-import fr.allycs.app.View.HostDiscovery.FragmentHistoric;
+import fr.allycs.app.View.Activity.HostDiscovery.FragmentHistoric;
 import fr.allycs.app.View.Widget.Holder.AccessPointHolder;
 
 public class                    AccessPointAdapter extends RecyclerView.Adapter<AccessPointHolder> {

@@ -1,5 +1,6 @@
 package fr.allycs.app.Controller.Core.Configuration;
 
+import android.app.Activity;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.List;
 
 import fr.allycs.app.Controller.Core.ArpSpoof;
 import fr.allycs.app.Controller.Core.Dnsmasq.DnsmasqControl;
+import fr.allycs.app.Controller.Core.Tcpdump.Tcpdump;
 import fr.allycs.app.Controller.Database.DBSniffSession;
 import fr.allycs.app.Controller.Network.IPTables;
 import fr.allycs.app.Controller.Network.NetworkInformation;
@@ -40,6 +42,7 @@ public class                            Singleton {
     private SniffSession                actualSniffSession = null;
     private boolean                     sslstripMode = false, LockScreen = false;
     private boolean                     DnsControlstarted = false;
+    private boolean                     webSpoofedstarted = false;
 
 
     public SniffSession                 getActualSniffSession() {
@@ -69,7 +72,6 @@ public class                            Singleton {
         DnsControlstarted = dnsControlstarted;
         //TODO: CHECK IF TCPDUMP IS STARTED, IF YES RESTART IT
         IPTables.sslConf();
-
     }
     public boolean                      isLockScreen() {
         return LockScreen;
@@ -80,7 +82,35 @@ public class                            Singleton {
         Log.i("setockScreenActived", "Not implemented");
     }
 
+    public boolean                      iswebSpoofed() {
+        return webSpoofedstarted;
+    }
+    public void                         setwebSpoofed(boolean webSpoofed) {
+        webSpoofedstarted = webSpoofed;
+    }
+
     public void                         resetActualSniffSession() {
         actualSniffSession = null;
+    }
+
+    public void                         closeEverySniffService(Activity activity) {
+        Tcpdump tcpdump = Tcpdump.getTcpdump(activity, false);
+        if (tcpdump.isRunning) {
+            Log.e("Singleton", "Stopping tcpdump not implemented");
+        }
+        if (!ArpSpoofProcessStack.isEmpty()) {
+            Log.e("Singleton", "Stopping ArpSpoof not implemented");
+        }
+        if (DnsControlstarted) {
+            Log.e("Singleton", "Stopping dnsSpoofnot implemented");
+        }
+        if (webSpoofedstarted) {
+            Log.e("Singleton", "Stopping webspoof not implemented");
+        }
+    }
+
+    public boolean                      isSniffServiceActif(Activity activity) {
+        Tcpdump tcpdump = Tcpdump.getTcpdump(activity, false);
+        return tcpdump != null && tcpdump.isRunning || !(!sslstripMode && !DnsControlstarted && !webSpoofedstarted);
     }
 }

@@ -14,8 +14,8 @@ import fr.allycs.app.Controller.Network.BonjourService.BonjourManager;
 import fr.allycs.app.Controller.Network.IPv4CIDR;
 import fr.allycs.app.Controller.Network.NetUtils;
 import fr.allycs.app.Model.Target.Host;
-import fr.allycs.app.View.HostDiscovery.FragmentHostDiscoveryScan;
-import fr.allycs.app.View.HostDiscovery.HostDiscoveryActivity;
+import fr.allycs.app.View.Activity.HostDiscovery.FragmentHostDiscoveryScan;
+import fr.allycs.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
 
 public class                        NetworkDiscoveryControler {
     private String                  TAG = "NetworkDiscoveryControler";

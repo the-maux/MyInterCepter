@@ -2,7 +2,6 @@
 
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -143,47 +142,18 @@
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
 
-        <TextView
-            android:id="@+id/editTextPort"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:gravity="center"
-            android:hint="8080"
-            android:inputType="numberDecimal"
-            android:maxLength="4"
-            android:text="8080"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textViewIpAccess"
-            app:layout_constraintLeft_toRightOf="@+id/textViewIpAccess"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textViewIpAccess" />
-
-        <TextView
-            android:id="@+id/textViewIpAccess"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:text="http://000.000.000.000:"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <WebView
             android:id="@+id/webViewToSeeWebsite"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="8dp"
             android:background="@android:drawable/dialog_frame"
+            android:elevation="4dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/navigation"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewIpAccess" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <include
             android:id="@+id/navigation"

@@ -17,7 +17,7 @@ public class                    GenericServer extends NanoHTTPD {
         super(hostname, port);
     }
 
-    @Override public Response   serve(IHTTPSession session) {
+    public Response             serve(IHTTPSession session) {
         switch (conf) {
             case Default:
                 return serveDefaultPage(session);
@@ -30,9 +30,9 @@ public class                    GenericServer extends NanoHTTPD {
         StringBuilder html = new StringBuilder("<html><body><h1>Man In The Middle HTTP REDIR</h1>\n");
         Map<String, String> sessionParams = session.getParms();
         if (sessionParams.get("username") == null) {
-            html.append("<form action='?' method='get'>\n");
-            html.append("<p>Your name: <input type='text' name='username'></p>\n");
-            html.append("</form>\n");
+            html.append("<form action='?' method='get'>").append("\n");
+            html.append("<p>Your name: <input type='text' name='username'></p>").append("\n");
+            html.append("</form>").append("\n");
         } else {
             html.append("<p>Hello, ");
             html.append(sessionParams.get("username"));
@@ -41,4 +41,6 @@ public class                    GenericServer extends NanoHTTPD {
         html.append("</body></html>\n");
         return newFixedLengthResponse(html.toString());
     }
+
+
 }
