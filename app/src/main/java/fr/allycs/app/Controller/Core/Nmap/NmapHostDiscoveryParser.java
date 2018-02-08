@@ -12,14 +12,14 @@ import fr.allycs.app.Controller.Database.DBHost;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Os;
 
-class NmapParser {
-    private String                  TAG = "NmapParser";
+class NmapHostDiscoveryParser {
+    private String                  TAG = "NmapHostDiscoveryParser";
     private Singleton               mSingleton = Singleton.getInstance();
     private ArrayList<Host>         hosts = new ArrayList<>();
     private NmapControler           mNmapControler;
     private int                     LENGTH_NODE, NBR_PARSED_NODE = 0;
 
-    NmapParser(NmapControler nmapControler, String listMacs, String NmapDump) {
+    NmapHostDiscoveryParser(NmapControler nmapControler, String listMacs, String NmapDump) {
         this.mNmapControler = nmapControler;
         String[] macs = listMacs.split(" ");
         String[] HostNmapDump = NmapDump.split("Nmap scan report for ");

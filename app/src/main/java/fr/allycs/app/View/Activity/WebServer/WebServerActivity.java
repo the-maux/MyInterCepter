@@ -79,7 +79,7 @@ public class                    WebServerActivity extends SniffActivity {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            showWebView();
+                            unShowWebView();
                         }
                     }, 1000);
                 }

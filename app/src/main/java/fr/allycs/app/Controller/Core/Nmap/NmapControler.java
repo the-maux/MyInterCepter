@@ -103,7 +103,7 @@ public class                        NmapControler {
                     dumpOutputBuilder.append(tmp);
                     String FullDUMP = dumpOutputBuilder.toString().substring(1);
                     Log.d(TAG, "\t\t LastLine[" + tmp + "]");
-                    new NmapParser(mInstance, listMacs, FullDUMP);
+                    new NmapHostDiscoveryParser(mInstance, listMacs, FullDUMP);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
