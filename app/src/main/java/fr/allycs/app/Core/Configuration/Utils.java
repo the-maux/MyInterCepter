@@ -46,6 +46,8 @@ public class                Utils {
         Date now = Calendar.getInstance().getTime();
         long restDatesinMillis = now.getTime() - start.getTime();
         Date restdate = new Date(restDatesinMillis);
-        return new SimpleDateFormat("mm:ss", Locale.FRANCE).format(restdate);
+        return new SimpleDateFormat("mm:ss", Locale.FRANCE).format(restdate)
+                .replace("00:", "")
+                .replace(":", "m") + "s";
     }
 }

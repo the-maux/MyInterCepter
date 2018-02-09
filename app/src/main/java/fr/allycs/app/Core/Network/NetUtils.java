@@ -7,7 +7,6 @@ import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,7 +59,7 @@ public class                NetUtils {
         return listIpPlusMac;
     }
 
-    public static boolean   initNetworkInfo(Activity activity) throws FileNotFoundException {
+    public static boolean   initNetworkInfo(Activity activity) {
         WifiManager wifiManager = (WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if (wifiManager == null)
             return false;

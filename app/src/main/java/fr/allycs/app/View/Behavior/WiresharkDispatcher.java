@@ -2,11 +2,12 @@ package fr.allycs.app.View.Behavior;
 
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import java.util.ArrayList;
 
 import fr.allycs.app.Model.Net.Trame;
-import fr.allycs.app.View.Activity.Tcpdump.WiresharkActivity;
+import fr.allycs.app.View.Activity.Wireshark.WiresharkActivity;
 import fr.allycs.app.View.Widget.Adapter.WiresharkAdapter;
 
 public class                        WiresharkDispatcher  {
@@ -19,6 +20,7 @@ public class                        WiresharkDispatcher  {
     private int                     REFRESH_TIME = 1000;// == 1seconde
     private java.util.Queue         queue = new java.util.LinkedList();
     private boolean                 acknowledged = false;
+
     public                          WiresharkDispatcher(RecyclerView.Adapter adapter,
                                                         RecyclerView recyclerView, WiresharkActivity activity) {
         mAdapterWireshark = adapter;
@@ -38,6 +40,7 @@ public class                        WiresharkDispatcher  {
             publishNewTrame();
             new Handler().postDelayed(new Runnable() {
                 public void run() {
+                    Log.d(TAG, "adapterRefreshDeamon");
                     adapterRefreshDeamon();
                 }
             }, REFRESH_TIME);
@@ -45,7 +48,9 @@ public class                        WiresharkDispatcher  {
     }
 
     private synchronized void   publishNewTrame() {
+        Log.d(TAG, "publishNewTrame");
         if (!acknowledged) {
+            Log.d(TAG, "ack send to Activity");
             mActivity.connectionSucceed();
             acknowledged = true;
         }
@@ -55,11 +60,13 @@ public class                        WiresharkDispatcher  {
                 for (int i = 0; i < queue.size(); i++) {
                     tmp.add(pop());
                 }
+                Log.d(TAG, "addTrameOnAdapter: " +  tmp.size()  + " trames");
                 for (Object o : tmp) {
                     ((WiresharkAdapter)mAdapterWireshark).addTrameOnAdapter((Trame)o);
                 }
                 tmp.clear();
                 mAdapterWireshark.notifyDataSetChanged();
+                Log.d(TAG, "notify adapter changing");
                 if (mAutoscroll) {
                     mRV_Wireshark.smoothScrollToPosition(0);
                 }
@@ -68,6 +75,7 @@ public class                        WiresharkDispatcher  {
     }
 
     private synchronized Trame   pop() {
+        Log.d(TAG, "pop");
         Trame msg;
         while (queue.isEmpty()) {
             try {
@@ -81,6 +89,7 @@ public class                        WiresharkDispatcher  {
     }
 
     public synchronized void    addToQueue(Trame o) {
+        Log.d(TAG, "addToqueue");
         queue.add(o);
         notifyAll();
     }

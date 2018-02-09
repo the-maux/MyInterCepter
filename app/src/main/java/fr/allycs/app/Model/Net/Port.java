@@ -59,7 +59,26 @@ public class            Port {
             return value;
         }
 
+        @Override
+        public String           toString() {
+            switch (valueOf(value)) {
+                case OPEN_FILTERED:
+                    return "OPEN_FILTERED";
+                case CLOSED_FILTERED:
+                    return "CLOSED_FILTERED";
+                case FILTERED:
+                    return "FILTERED";
+                case UNFILTERED:
+                    return "UNFILTERED";
+                case CLOSED:
+                    return "CLOSED";
+                case OPEN:
+                    return "OPEN";
+                default:
+                    return "UNKNOW";
+            }
         }
+    }
     public Port(String line) {
         String[] dumpSplitetd = line.trim().split(" ");
         this.state = OPEN;

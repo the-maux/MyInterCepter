@@ -1,4 +1,4 @@
-package fr.allycs.app.View.Activity.Tcpdump;
+package fr.allycs.app.View.Activity.Wireshark;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -24,15 +24,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import fr.allycs.app.View.Behavior.MyGlideLoader;
-import fr.allycs.app.View.Behavior.Activity.SniffActivity;
-import fr.allycs.app.Core.Configuration.Utils;
 import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Configuration.Utils;
 import fr.allycs.app.Core.Tcpdump.Tcpdump;
 import fr.allycs.app.Model.Net.Protocol;
 import fr.allycs.app.Model.Net.Trame;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
+import fr.allycs.app.View.Behavior.Activity.SniffActivity;
+import fr.allycs.app.View.Behavior.MyGlideLoader;
 import fr.allycs.app.View.Behavior.WiresharkDispatcher;
 import fr.allycs.app.View.Widget.Adapter.HostSelectionAdapter;
 import fr.allycs.app.View.Widget.Adapter.WiresharkAdapter;
@@ -56,7 +56,7 @@ public class                    WiresharkActivity extends SniffActivity {
     private List<Host>          mListHostSelected = new ArrayList<>();
     private Tcpdump             mTcpdump;
     private Singleton           mSingleton = Singleton.getInstance();
-    private WiresharkDispatcher TrameDispatcher;
+
     protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentViewId());
@@ -66,13 +66,17 @@ public class                    WiresharkActivity extends SniffActivity {
         initFilter();
         initSettings();
         initRV();
+        initTimer();
         initNavigationBottomBar(SNIFFER, true);
         setToolbarTitle(null, mSingleton.selectedHostsList.get(0).getName());
         if (mTcpdump.isRunning)
             mFab.setImageResource(R.mipmap.ic_pause);
     }
 
-    @Override
+    private void                initTimer() {
+
+    }
+
     protected void              onResume() {
         super.onResume();
     }
@@ -96,6 +100,7 @@ public class                    WiresharkActivity extends SniffActivity {
                 startWireshark(false);
             }
         });
+
         Autoscroll =  findViewById(R.id.Autoscroll);
         tcp_cb =  findViewById(R.id.tcp_cb);
         dns_cb =  findViewById(R.id.dns_cb);
@@ -248,10 +253,10 @@ public class                    WiresharkActivity extends SniffActivity {
         mMonitorCmd.setText(mTcpdump.actualParam);
         Log.d(TAG, "starting tcpdump with monitor:[" + mMonitorCmd.getText().toString() + "]");
         String cmd = mMonitorCmd.getText().toString();
-        TrameDispatcher = new WiresharkDispatcher(mAdapterWireshark, mRV_Wireshark, this);
+        WiresharkDispatcher trameDispatcher = new WiresharkDispatcher(mAdapterWireshark, mRV_Wireshark, this);
         String argv = mTcpdump
                 .initCmd(mListHostSelected, mTypeScan, cmd)
-                .start(TrameDispatcher);
+                .start(trameDispatcher);
         mMonitorAgv.setText(argv);
         mInstance.runOnUiThread(new Runnable() {
             @Override
@@ -311,8 +316,6 @@ public class                    WiresharkActivity extends SniffActivity {
                 .setTextColor(color);
         snackbar.show();
     }
-
-    /*Navigation */
 
     public int                  getContentViewId() {
         return R.layout.activity_wireshark;

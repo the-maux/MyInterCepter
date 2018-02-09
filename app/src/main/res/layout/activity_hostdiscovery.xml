@@ -120,6 +120,8 @@
 		android:layout_height="match_parent"
 		app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
+
+
 		<FrameLayout
 			android:id="@+id/frame_container"
 			android:layout_width="match_parent"
@@ -140,6 +142,22 @@
 			android:paddingRight="8dp"
 			android:paddingTop="4dp"
 			android:text="Gateway: x.x.x.x \n IP: x.x.x.x"
+			android:textColor="@color/accent_material_dark"
+			android:textSize="12sp" />
+
+		<TextView
+			android:id="@+id/timer"
+			android:layout_width="wrap_content"
+			android:layout_height="42dp"
+			android:layout_alignBottom="@+id/Message"
+			android:layout_alignParentStart="true"
+			android:layout_centerVertical="true"
+			android:background="@color/primary_text"
+			android:gravity="left|center_vertical"
+			android:lines="1"
+			android:paddingBottom="2dp"
+			android:paddingLeft="8dp"
+			android:paddingTop="4dp"
 			android:textColor="@color/accent_material_dark"
 			android:textSize="12sp" />
 

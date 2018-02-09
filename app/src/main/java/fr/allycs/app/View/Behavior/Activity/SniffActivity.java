@@ -20,8 +20,8 @@ import fr.allycs.app.Core.Tcpdump.Tcpdump;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.DnsSpoofing.DnsActivity;
 import fr.allycs.app.View.Activity.Scan.NmapActivity;
-import fr.allycs.app.View.Activity.Tcpdump.WiresharkActivity;
 import fr.allycs.app.View.Activity.WebServer.WebServerActivity;
+import fr.allycs.app.View.Activity.Wireshark.WiresharkActivity;
 
 
 public abstract class           SniffActivity extends MyActivity  {

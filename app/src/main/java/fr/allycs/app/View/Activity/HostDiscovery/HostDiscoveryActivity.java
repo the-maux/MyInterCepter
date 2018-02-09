@@ -19,15 +19,21 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import fr.allycs.app.View.Behavior.Activity.MyActivity;
-import fr.allycs.app.View.Behavior.Fragment.MyFragment;
-import fr.allycs.app.View.Behavior.MyGlideLoader;
-import fr.allycs.app.Core.Configuration.Utils;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Configuration.Utils;
 import fr.allycs.app.Core.Network.NetUtils;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.Scan.NmapActivity;
+import fr.allycs.app.View.Behavior.Activity.MyActivity;
+import fr.allycs.app.View.Behavior.Fragment.MyFragment;
+import fr.allycs.app.View.Behavior.MyGlideLoader;
+import fr.allycs.app.View.Behavior.ViewAnimate;
 
 /**
  * TODO:    + Add manual target
@@ -43,7 +49,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private Singleton               mSingleton = Singleton.getInstance();
     private CoordinatorLayout       mCoordinatorLayout;
     private FloatingActionButton    mFab;
-    private TextView                mBottomMonitor;
+    private TextView                mBottomMonitor, mTimer;
     private int                     mProgress = 0;
     private ImageButton             mAddHostBtn, mSettingsBtn;
     private SearchView              mSearchView;
@@ -53,8 +59,9 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private ProgressBar             mProgressBar;
     private MyFragment              HistoricFragment = null, NetDiscoveryFragment = null;
     private MyFragment              mFragment = null, mLastFragment = null;
-    public final int                MAXIMUM_PROGRESS = 8500;
+    public int                MAXIMUM_PROGRESS = 8500, MAX_TIME_ONE_HOST = 1;
     public Session                  actualSession;
+    public Date                     date;
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,11 +85,12 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mSearchView = findViewById(R.id.searchView);
         mToolbar = findViewById(R.id.toolbar2);
         mTabs = findViewById(R.id.tabs);
+        mTimer = findViewById(R.id.timer);
         mProgressBar = findViewById(R.id.progressBar);
         mToolbarBackground = (TransitionDrawable)(findViewById(R.id.topToolbar)).getBackground();
     }
 
-    private void                    init()  throws Exception {
+    private void                    init()  {
         NetUtils.initNetworkInfo(this);
         if (mSingleton.network == null || mSingleton.network.myIp == null) {
             showSnackbar("You need to be connected to a network");
@@ -95,6 +103,31 @@ public class                        HostDiscoveryActivity extends MyActivity {
             NetDiscoveryFragment = mFragment;
             initFragment(NetDiscoveryFragment);
             initSearchView();
+            initTimer();
+
+        }
+    }
+
+    Timer timer = new Timer();
+    public void                     initTimer() {
+        class UpdateTimer extends TimerTask {
+            private Date start = Calendar.getInstance().getTime();
+            public void run() {
+                mInstance.runOnUiThread(new Runnable() {
+                    public void run() {
+                        mTimer.setText(Utils.TimeDifference(start));
+                    }
+                });
+            }
+        }
+        timer.scheduleAtFixedRate(new UpdateTimer(), 0, 1000);
+    }
+
+    public void                     stopTimer() {
+        if (timer != null) {
+            timer.cancel();
+            ViewAnimate.setVisibilityToGoneLong(mTimer);
+            timer = null;
         }
     }
 
@@ -142,6 +175,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
             public void onClick(View v) {
                 mFab.startAnimation(AnimationUtils.loadAnimation(mInstance, R.anim.shake));
                 Utils.vibrateDevice(mInstance);
+
                 if (!mFragment.start()) {
                     // Yes it's ugly, missconception herei admit, but lazy
                     ((FragmentHostDiscoveryScan)NetDiscoveryFragment).launchMenu();
@@ -211,20 +245,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mFragment.initSearchView(mSearchView);
     }
 
-    public void                     setProgressState(final int progress){
-        mInstance.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mProgressBar.setVisibility(View.VISIBLE);
-                if (progress != -1) {
-                    if (mProgress >= progress && progress == MAXIMUM_PROGRESS)
-                        mProgressBar.setVisibility(View.GONE);
-                    mProgress = progress;
-                }
-            }
-        });
-    }
-
     public void                     setToolbarTitle(final String title, final String subtitle) {
         mInstance.runOnUiThread(new Runnable() {
             @Override
@@ -267,6 +287,20 @@ public class                        HostDiscoveryActivity extends MyActivity {
         });
     }
 
+    public void                     setProgressState(final int progress){
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mProgressBar.setVisibility(View.VISIBLE);
+                if (progress != -1) {
+                    if (mProgress >= progress && progress == MAXIMUM_PROGRESS)
+                        mProgressBar.setVisibility(View.GONE);
+                    mProgress = progress;
+                }
+            }
+        });
+    }
+
     public void                     progressAnimation() {
         mProgressBar.setVisibility(View.VISIBLE);
         mFab.setImageResource(R.drawable.my_icon_search);
@@ -275,13 +309,13 @@ public class                        HostDiscoveryActivity extends MyActivity {
         new Thread(new Runnable() {
             public void run() {
                 mProgress = 0;
-                while (mProgress <= MAXIMUM_PROGRESS) {
+                while (mProgress <= (MAXIMUM_PROGRESS)) {//1 tour == 0,8s == 1HOST
                     try {
-                        Thread.sleep(50);
+                        Thread.sleep(400);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    mProgress += 10;
+                    mProgress += 1;
                     final int prog2 = mProgress;
                     mInstance.runOnUiThread(new Runnable() {
                         public void run() {
@@ -299,6 +333,14 @@ public class                        HostDiscoveryActivity extends MyActivity {
         }).start();
     }
 
+    public void                     setMAXIMUM_PROGRESS(int nbrHost) {
+        int icmpLoopTime = 10;
+        Log.d(TAG, "MAXIMUM PROGRESS SET : [" + icmpLoopTime + (nbrHost) + "] estimation[" + icmpLoopTime + (nbrHost) * 400 / 1000+ "s]");
+
+        mProgressBar.setMax(icmpLoopTime + (nbrHost)*4);
+        MAXIMUM_PROGRESS = icmpLoopTime + (nbrHost)*4;
+    }
+
     public boolean                  isWaiting() {
         return mProgressBar.getVisibility() == View.VISIBLE;
     }
@@ -311,12 +353,13 @@ public class                        HostDiscoveryActivity extends MyActivity {
         if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             mFab.setVisibility(View.VISIBLE);
             mTabs.setVisibility(View.VISIBLE);
-            mToolbarBackground.reverseTransition(700);
             getSupportFragmentManager().popBackStackImmediate();
             if (mLastFragment.getClass().getName().contains(FragmentHostDiscoveryScan.class.getName()))
                 mTabs.getTabAt(0).select();
             else if (mLastFragment.getClass().getName().contains(FragmentHistoric.class.getName()))
                 mTabs.getTabAt(1).select();
+            else
+                mToolbarBackground.reverseTransition(700);
         } else {
             finish();
         }

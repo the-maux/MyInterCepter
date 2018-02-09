@@ -7,12 +7,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import fr.allycs.app.Core.Configuration.Utils;
 import fr.allycs.app.Core.Configuration.Singleton;
-import fr.allycs.app.Core.Nmap.NmapControler;
+import fr.allycs.app.Core.Configuration.Utils;
 import fr.allycs.app.Core.Network.BonjourService.BonjourManager;
 import fr.allycs.app.Core.Network.IPv4CIDR;
 import fr.allycs.app.Core.Network.NetUtils;
+import fr.allycs.app.Core.Nmap.NmapControler;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.View.Activity.HostDiscovery.FragmentHostDiscoveryScan;
 import fr.allycs.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
@@ -50,6 +50,7 @@ public class                        NetworkDiscoveryControler {
     private void                    startArpScan() {
         startScanning = Calendar.getInstance().getTime();
         mActivity.setToolbarTitle(null, "Icmp scanning");
+        mActivity.setProgressState(0);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -61,24 +62,18 @@ public class                        NetworkDiscoveryControler {
         new BonjourManager(mActivity, listOfHosts, this);
     }
 
-    public void                     onReachableScanOver(ArrayList<String> ipReachable) {
+     synchronized void              onReachableScanOver(ArrayList<String> ipReachable) {
+        ArrayList<String> threadSafeArray = new ArrayList<>();
+        threadSafeArray.addAll(ipReachable);
         Log.d(TAG, "onReachableScanOver with : "+ ipReachable.size() + " ip(s) reachable");
-        ArrayList<String> tmpAntiConcurentExecptionFFS = new ArrayList<>();
-        tmpAntiConcurentExecptionFFS.addAll(ipReachable);
-        mActivity.setToolbarTitle(null, tmpAntiConcurentExecptionFFS.size() + " hosts detected");
-
-        mActivity.setProgressState(1500);
-        mActivity.setToolbarTitle(null,"Scanning " + tmpAntiConcurentExecptionFFS.size() + " devices");
-        mActivity.setToolbarTitle(null, "Reading ARP Table");
-        new NmapControler(NetUtils.readARPTable(mActivity, tmpAntiConcurentExecptionFFS),this);
-        mActivity.setProgressState(2000);
+        mActivity.setToolbarTitle(null, threadSafeArray.size() + " hosts detected");
+        mActivity.setMAXIMUM_PROGRESS(threadSafeArray.size());
+        new NmapControler(NetUtils.readARPTable(mActivity, threadSafeArray),this);
     }
 
     public void                     onHostActualized(ArrayList<Host> hosts) {
         Log.d(TAG, "Full scanning in " + Utils.TimeDifference(startScanning));
-        String time = Utils.TimeDifference(startScanning)
-                .replace("00:", "")
-                .replace(":", "m") + "s";
+        String time = Utils.TimeDifference(startScanning);
         setToolbarTitle(hosts.size() + " device" + ((hosts.size() > 1) ? "s" : "") + " found",
                 mSingleton.network.Ssid  + " analyzed in " + time);
         mFragment.onHostActualized(hosts);

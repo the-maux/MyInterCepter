@@ -21,11 +21,9 @@ import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
-import fr.allycs.app.View.Behavior.Fragment.MyFragment;
 import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Database.DBSession;
 import fr.allycs.app.Core.Network.Discovery.NetworkDiscoveryControler;
@@ -34,6 +32,7 @@ import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.Scan.NmapActivity;
+import fr.allycs.app.View.Behavior.Fragment.MyFragment;
 import fr.allycs.app.View.Widget.Adapter.HostDiscoveryAdapter;
 import fr.allycs.app.View.Widget.Adapter.OSFilterAdapter;
 import fr.allycs.app.View.Widget.Dialog.RV_dialog;
@@ -57,12 +56,13 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         initXml(rootView);
         this.mActivity = (HostDiscoveryActivity) getActivity();
         mScannerControler = NetworkDiscoveryControler.getInstance(this);
+//TODO: else si premier scan du SSID alors re scann (ou last scan past from 1 week)
+        initSwipeRefresh();
+        mActivity.initSettingsButton();
         if (mSingleton.DebugMode && !mHostLoaded) {
             mActivity.showSnackbar("Debug mode: auto scan started");
             startNetworkScan();
-        }//TODO: else si premier scan du SSID alors re scann (ou last scan past from 1 week)
-        initSwipeRefresh();
-        mActivity.initSettingsButton();
+        }
         return rootView;
     }
 
@@ -75,18 +75,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         pushToolbar();
     }
 
-    /*public boolean                  start() {
-        if (!mHostLoaded && !mScannerControler.inLoading) {
-            startNetworkScan();
-            return true;
-        }
-        if (mSingleton.DebugMode) {
-            Log.d(TAG, "mHostLoaded:" + mHostLoaded);
-            Log.d(TAG, "mScannerControler.inLoading:" + mScannerControler.inLoading);
-        }
-        return mScannerControler.inLoading;
-    }*/
-
     private void                    initXml(View rootView) {
         mHost_RV = rootView.findViewById(R.id.recycler_view);
         mEmptyList = rootView.findViewById(R.id.emptyList);
@@ -95,22 +83,23 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
 
     private void                    initSwipeRefresh() {
         mSwipeRefreshLayout.setColorSchemeResources(
-                R.color.material_green_200,
-                R.color.material_deep_teal_200,
-                R.color.material_deep_teal_500);
+                R.color.dnsSpoofPrimary,
+                R.color.NmapPrimary,
+                R.color.webserverSpoofPrimary);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 if (mActivity.isWaiting()) {
-                    Log.d(TAG, "clearing Refresh");
                     mHosts.clear();
                     mEmptyList.setVisibility(View.GONE);
                     if (mHostAdapter != null)
                         mHostAdapter.notifyDataSetChanged();
                     mActivity.initMonitor();
-                    mActivity.setProgressState(0);
-                    startNetworkScan();
+                    if (startNetworkScan())
+                        return;
                 }
+                mActivity.showSnackbar("Scanning already started");
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -145,30 +134,30 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         });
     }
 
-    public void                     startNetworkScan() {
+    public boolean                  start() {
+        return startNetworkScan();
+    }
+
+    public boolean                  startNetworkScan() {
         Log.d(TAG, "startNetworkScan");
         if (!mActivity.isWaiting()) {
-            try {
-                if (mSingleton.network == null && !NetUtils.initNetworkInfo(mActivity)) {
-                    mActivity.showSnackbar("You need to be connected");
-                    mEmptyList.setVisibility(View.VISIBLE);
-                    return;
-                }
-                if (mSingleton.network.updateInfo().isConnectedToNetwork()) {
+                if ((mSingleton.network != null && NetUtils.initNetworkInfo(mActivity)) &&
+                        mSingleton.network.updateInfo().isConnectedToNetwork()) {
+                    mActivity.initTimer();
                     initHostsRecyclerView();
                     setTitleToolbar("Scanner", "Discovering network");
-                    mScannerControler.run(mHosts);
                     mActivity.progressAnimation();
+                    mScannerControler.run(mHosts);
+                    return true;
                 } else {
                     mActivity.showSnackbar("You need to be connected");
                     mEmptyList.setVisibility(View.VISIBLE);
+                    mEmptyList.setText("No connection detected");
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
         } else {
             mActivity.showSnackbar("Patientez, loading en cours");
         }
+        return false;
     }
 
     private ArrayList<Host>         extractAndDumpSelectedHost(ArrayList<Host> hostList) {
@@ -211,13 +200,14 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
             @Override
             public void run() {
                 mHosts = hosts;
-                mActivity.setProgressState(mActivity.MAXIMUM_PROGRESS);
+                mActivity.setProgressState(mActivity.MAXIMUM_PROGRESS*2);
                 mSingleton.selectedHostsList = mHosts;
                 mHostAdapter.updateHostList(mSingleton.selectedHostsList);
                 mScannerControler.inLoading = false;
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ?
                         View.VISIBLE : View.GONE);
                 mSwipeRefreshLayout.setRefreshing(false);
+                mActivity.stopTimer();
                 mHostLoaded = true;
                 mActivity.actualSession =
                         DBSession.buildSession(mSingleton.network.Ssid,

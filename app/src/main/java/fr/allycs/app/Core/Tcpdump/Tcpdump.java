@@ -7,15 +7,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import fr.allycs.app.Core.Network.ArpSpoof;
-import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Configuration.RootProcess;
+import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Network.ArpSpoof;
 import fr.allycs.app.Core.Network.IPTables;
 import fr.allycs.app.Model.Net.Trame;
 import fr.allycs.app.Model.Target.Host;
-import fr.allycs.app.View.Activity.Tcpdump.WiresharkActivity;
+import fr.allycs.app.View.Activity.Wireshark.WiresharkActivity;
 import fr.allycs.app.View.Behavior.WiresharkDispatcher;
 
 public class                        Tcpdump {
@@ -102,7 +101,9 @@ public class                        Tcpdump {
     }
 
     private void                    onNewLine(String line, WiresharkDispatcher trameDispatcher) {
+
         if (line.contains("Quiting...")) {
+            Log.d(TAG, "Finishing Adapter trame");
             Trame trame = new Trame("Processus over", 0);
             trame.connectionOver = true;
             trameDispatcher.addToQueue(trame);
@@ -111,10 +112,11 @@ public class                        Tcpdump {
         }
         Trame trame = new Trame(line, 0);
         if (trame.initialised) {
+            Log.d(TAG, "onNewLine");
             trameDispatcher.addToQueue(trame);
         } else if (!trame.skipped) {
-            mActivity.onTrameError(/*trame*/);
             Log.d(TAG, "trame created not initialized and not skipped, STOP TCPDUMP");
+            mActivity.onTrameError(/*trame*/);
             onTcpDumpStop();
         }
     }

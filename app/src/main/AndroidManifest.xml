@@ -37,7 +37,7 @@
             android:launchMode="singleTask"/>
         <activity android:name=".View.Activity.TargetMenu.TargetMenuActivity"
             android:launchMode="singleTask"/>
-        <activity android:name=".View.Activity.Tcpdump.WiresharkActivity"
+        <activity android:name=".View.Activity.Wireshark.WiresharkActivity"
             android:launchMode="singleTask"/>
         <activity android:name=".View.Activity.Dora.DoraActivity"
             android:launchMode="singleTask"/>

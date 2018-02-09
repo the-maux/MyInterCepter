@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import fr.allycs.app.Core.Nmap.Fingerprint;
 import fr.allycs.app.Model.Net.Service;
 import fr.allycs.app.Model.Unix.Os;
 
@@ -111,7 +112,8 @@ public class                Host extends Model {
             Ports().dump();
         else
             Log.d(TAG, "Ports Not found...");
-
+        if (osType == Os.Unknow)
+            Log.d(TAG, "isItWindowsPort() => " + Fingerprint.isItWindows(this));
         Log.i(TAG, "END DUMP ---------");
     }
 

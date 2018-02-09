@@ -13,17 +13,17 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import fr.allycs.app.View.Behavior.Activity.MyActivity;
-import fr.allycs.app.View.Behavior.Fragment.MyFragment;
 import fr.allycs.app.Core.Configuration.Singleton;
-import fr.allycs.app.Core.Nmap.Fingerprint;
 import fr.allycs.app.Core.Database.DBManager;
+import fr.allycs.app.Core.Nmap.Fingerprint;
 import fr.allycs.app.Model.Net.Pcap;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.HostDiscovery.FragmentHistoric;
 import fr.allycs.app.View.Activity.Scan.NmapActivity;
-import fr.allycs.app.View.Activity.Tcpdump.WiresharkActivity;
+import fr.allycs.app.View.Activity.Wireshark.WiresharkActivity;
+import fr.allycs.app.View.Behavior.Activity.MyActivity;
+import fr.allycs.app.View.Behavior.Fragment.MyFragment;
 
 public class                    HostDetailActivity extends MyActivity {
     private String              TAG = "HostDetailActivity";

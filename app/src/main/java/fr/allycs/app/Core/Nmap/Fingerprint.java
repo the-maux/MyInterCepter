@@ -4,11 +4,11 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.ImageView;
 
-import fr.allycs.app.View.Behavior.MyGlideLoader;
 import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;
+import fr.allycs.app.View.Behavior.MyGlideLoader;
 
 /**
  * Supprimer les duplicata External & Host
@@ -50,6 +50,7 @@ public class                            Fingerprint {
             host.os = "Unix/(Aosp)";
         } else if (InfoDevice.contains("cisco")) {
             host.osType = Os.Cisco;
+            host.os = "BSD/(Cisco NX-OS)";
         } else if (InfoDevice.contains("raspberry")) {
             host.osType = Os.Raspberry;
             host.os = "Unix/(Raspbian)";
@@ -86,14 +87,13 @@ public class                            Fingerprint {
         host.os = "Unix/(AOSP)";
     }
 
-    private static boolean              isItWindows(Host host) {
+    public static boolean              isItWindows(Host host) {
         /*
                TODO: Do i have to checkd the proto for microsoft|windows|msrpc ?
          */
         if (host.Ports() == null)
             return false;
-        return
-                host.Ports().isPortOpen(135) &&
+        return  host.Ports().isPortOpen(135) &&
                 host.Ports().isPortOpen(445);
     }
 

@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import fr.allycs.app.View.Behavior.MyGlideLoader;
 import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Dora;
 import fr.allycs.app.Core.Tcpdump.Tcpdump;
@@ -20,8 +19,9 @@ import fr.allycs.app.View.Activity.DnsSpoofing.DnsActivity;
 import fr.allycs.app.View.Activity.Dora.DoraActivity;
 import fr.allycs.app.View.Activity.Scan.NmapActivity;
 import fr.allycs.app.View.Activity.Settings.SettingsActivity;
-import fr.allycs.app.View.Activity.Tcpdump.WiresharkActivity;
 import fr.allycs.app.View.Activity.WebServer.WebServerActivity;
+import fr.allycs.app.View.Activity.Wireshark.WiresharkActivity;
+import fr.allycs.app.View.Behavior.MyGlideLoader;
 import fr.allycs.app.View.Widget.Holder.MenuItemPointHolder;
 
 public class                    MenuAdapter extends RecyclerView.Adapter<MenuItemPointHolder> {
