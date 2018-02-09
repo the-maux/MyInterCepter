@@ -11,10 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Core.Dora;
-import fr.allycs.app.Controller.Core.Tcpdump.Tcpdump;
+import fr.allycs.app.View.Behavior.MyGlideLoader;
+import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Dora;
+import fr.allycs.app.Core.Tcpdump.Tcpdump;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.DnsSpoofing.DnsActivity;
 import fr.allycs.app.View.Activity.Dora.DoraActivity;

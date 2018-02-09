@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-import fr.allycs.app.Controller.AndroidUtils.MyFragment;
+import fr.allycs.app.View.Behavior.Fragment.MyFragment;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.SniffSession;
 import fr.allycs.app.Model.Net.Pcap;

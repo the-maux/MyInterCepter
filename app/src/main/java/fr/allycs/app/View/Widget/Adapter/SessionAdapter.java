@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
+import fr.allycs.app.View.Behavior.MyGlideLoader;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;

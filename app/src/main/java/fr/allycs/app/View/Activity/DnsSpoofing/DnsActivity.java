@@ -18,11 +18,11 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 
-import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
-import fr.allycs.app.Controller.AndroidUtils.SniffActivity;
-import fr.allycs.app.Controller.AndroidUtils.Utils;
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Core.Dnsmasq.DnsmasqControl;
+import fr.allycs.app.View.Behavior.MyGlideLoader;
+import fr.allycs.app.View.Behavior.Activity.SniffActivity;
+import fr.allycs.app.Core.Configuration.Utils;
+import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Dnsmasq.DnsmasqControl;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Widget.Adapter.DnsLogsAdapter;
 import fr.allycs.app.View.Widget.Adapter.DnsSpoofConfAdapter;

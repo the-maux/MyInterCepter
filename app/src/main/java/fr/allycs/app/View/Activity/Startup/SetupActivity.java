@@ -15,10 +15,10 @@ import android.widget.TextView;
 
 import java.io.IOException;
 
-import fr.allycs.app.Controller.AndroidUtils.MyActivity;
-import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
-import fr.allycs.app.Controller.Core.Configuration.Setup;
-import fr.allycs.app.Controller.Network.NetUtils;
+import fr.allycs.app.View.Behavior.Activity.MyActivity;
+import fr.allycs.app.View.Behavior.MyGlideLoader;
+import fr.allycs.app.Core.Configuration.Setup;
+import fr.allycs.app.Core.Network.NetUtils;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
 

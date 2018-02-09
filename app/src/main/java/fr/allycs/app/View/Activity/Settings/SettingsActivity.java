@@ -6,9 +6,9 @@ import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.widget.Toast;
 
-import fr.allycs.app.Controller.AndroidUtils.MyActivity;
-import fr.allycs.app.Controller.AndroidUtils.MyFragment;
-import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
+import fr.allycs.app.View.Behavior.Activity.MyActivity;
+import fr.allycs.app.View.Behavior.Fragment.MyFragment;
+import fr.allycs.app.View.Behavior.MyGlideLoader;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.HostDiscovery.FragmentHistoric;
 import fr.allycs.app.View.Activity.HostDiscovery.HostDiscoverySettingsFragmt;

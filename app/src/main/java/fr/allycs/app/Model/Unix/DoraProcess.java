@@ -9,7 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import fr.allycs.app.Controller.Core.RootProcess;
+import fr.allycs.app.Core.Configuration.RootProcess;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.MyObject;
 

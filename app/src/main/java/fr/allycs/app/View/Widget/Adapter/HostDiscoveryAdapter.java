@@ -15,9 +15,9 @@ import android.widget.CompoundButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.allycs.app.Controller.AndroidUtils.Utils;
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Core.Nmap.Fingerprint;
+import fr.allycs.app.Core.Configuration.Utils;
+import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Nmap.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;

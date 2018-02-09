@@ -6,8 +6,8 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import fr.allycs.app.Controller.AndroidUtils.MyFragment;
-import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
+import fr.allycs.app.View.Behavior.Fragment.MyFragment;
+import fr.allycs.app.View.Behavior.MyGlideLoader;
 import fr.allycs.app.Model.Net.Pcap;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.HostDetail.PcapFragment;

@@ -14,11 +14,11 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 
-import fr.allycs.app.Controller.AndroidUtils.SniffActivity;
-import fr.allycs.app.Controller.AndroidUtils.Utils;
-import fr.allycs.app.Controller.AndroidUtils.ViewAnimate;
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.WebServer.GenericServer;
+import fr.allycs.app.View.Behavior.Activity.SniffActivity;
+import fr.allycs.app.Core.Configuration.Utils;
+import fr.allycs.app.View.Behavior.ViewAnimate;
+import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.WebServer.GenericServer;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Widget.MyWebViewClient;
 

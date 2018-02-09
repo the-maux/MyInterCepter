@@ -25,11 +25,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
-import fr.allycs.app.Controller.AndroidUtils.MyFragment;
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Database.DBSession;
-import fr.allycs.app.Controller.Network.Discovery.NetworkDiscoveryControler;
-import fr.allycs.app.Controller.Network.NetUtils;
+import fr.allycs.app.View.Behavior.Fragment.MyFragment;
+import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Database.DBSession;
+import fr.allycs.app.Core.Network.Discovery.NetworkDiscoveryControler;
+import fr.allycs.app.Core.Network.NetUtils;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;

@@ -12,8 +12,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Database.DBHost;
+import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Database.DBHost;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.SniffSession;
 

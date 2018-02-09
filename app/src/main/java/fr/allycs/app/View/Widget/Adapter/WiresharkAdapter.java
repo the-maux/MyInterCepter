@@ -1,7 +1,6 @@
 package fr.allycs.app.View.Widget.Adapter;
 
 import android.app.Activity;
-import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,12 +9,11 @@ import android.view.ViewGroup;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Model.Net.Protocol;
 import fr.allycs.app.Model.Net.Trame;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Widget.Holder.WiresharkHolder;
-
 
 public class                WiresharkAdapter extends RecyclerView.Adapter<WiresharkHolder> {
     private String          TAG = "WiresharkAdapter";
@@ -27,9 +25,9 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
     private boolean         arp = true, http = true, https = true,
                             tcp = true, dns = true, udp = true, ip = true;
 
-    public                  WiresharkAdapter(Activity activity, CopyOnWriteArrayList<Trame> trames, RecyclerView recyclerView) {
+    public                  WiresharkAdapter(Activity activity, RecyclerView recyclerView) {
         this.listOfTrame = new CopyOnWriteArrayList<>();
-        this.originalListOfTrames = trames;
+        this.originalListOfTrames = new CopyOnWriteArrayList<>();
         listOfTrame.addAll(originalListOfTrames);
         this.mActivity = activity;
         this.mRV_Wireshark = recyclerView;
@@ -133,6 +131,7 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
 
     }
     public void             addTrameOnAdapter(Trame trame) {
+        trame.offsett = originalListOfTrames.size();
         addTrameFiltered(trame, true);
         originalListOfTrames.add(0, trame);
     }

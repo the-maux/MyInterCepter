@@ -13,8 +13,8 @@ import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
 
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Core.Tcpdump.Tcpdump;
+import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Tcpdump.Tcpdump;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.TargetMenu.TargetMenuActivity;
 

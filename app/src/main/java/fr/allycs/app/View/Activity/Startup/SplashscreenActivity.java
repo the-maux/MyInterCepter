@@ -7,9 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import java.io.File;
 import java.io.IOException;
 
-import fr.allycs.app.Controller.Core.Configuration.Setup;
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Core.RootProcess;
+import fr.allycs.app.Core.Configuration.Setup;
+import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Configuration.RootProcess;
 import fr.allycs.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
 
 /**

@@ -24,14 +24,14 @@ import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickList
 
 import java.util.List;
 
-import fr.allycs.app.Controller.AndroidUtils.MyActivity;
-import fr.allycs.app.Controller.AndroidUtils.MyFragment;
-import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Database.DBAccessPoint;
-import fr.allycs.app.Controller.Database.DBSession;
-import fr.allycs.app.Controller.Database.DBSniffSession;
-import fr.allycs.app.Controller.Network.BonjourService.ServicesController;
+import fr.allycs.app.View.Behavior.Activity.MyActivity;
+import fr.allycs.app.View.Behavior.Fragment.MyFragment;
+import fr.allycs.app.View.Behavior.MyGlideLoader;
+import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Database.DBAccessPoint;
+import fr.allycs.app.Core.Database.DBSession;
+import fr.allycs.app.Core.Database.DBSniffSession;
+import fr.allycs.app.Core.Network.BonjourService.ServicesController;
 import fr.allycs.app.Model.Net.Pcap;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;

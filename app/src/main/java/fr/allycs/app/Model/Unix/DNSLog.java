@@ -9,7 +9,7 @@ import com.activeandroid.annotation.Table;
 
 import java.util.ArrayList;
 
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Model.Target.SniffSession;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Widget.Holder.ConsoleLogHolder;

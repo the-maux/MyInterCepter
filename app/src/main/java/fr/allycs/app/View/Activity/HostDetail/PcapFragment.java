@@ -12,9 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import fr.allycs.app.Controller.AndroidUtils.MyFragment;
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Database.DBManager;
+import fr.allycs.app.View.Behavior.Fragment.MyFragment;
+import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Database.DBManager;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.HostDiscovery.HostDiscoveryActivity;

@@ -8,9 +8,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
-import fr.allycs.app.Controller.AndroidUtils.MyActivity;
-import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
+import fr.allycs.app.View.Behavior.Activity.MyActivity;
+import fr.allycs.app.View.Behavior.MyGlideLoader;
+import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.R;
 
 /**

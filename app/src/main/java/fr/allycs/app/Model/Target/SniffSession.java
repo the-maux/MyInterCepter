@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import fr.allycs.app.Controller.Database.DBHost;
+import fr.allycs.app.Core.Database.DBHost;
 import fr.allycs.app.Model.Unix.DNSLog;
 import fr.allycs.app.Model.Net.Pcap;
 

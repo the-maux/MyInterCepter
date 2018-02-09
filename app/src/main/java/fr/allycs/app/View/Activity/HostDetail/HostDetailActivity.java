@@ -13,11 +13,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import fr.allycs.app.Controller.AndroidUtils.MyActivity;
-import fr.allycs.app.Controller.AndroidUtils.MyFragment;
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Core.Nmap.Fingerprint;
-import fr.allycs.app.Controller.Database.DBManager;
+import fr.allycs.app.View.Behavior.Activity.MyActivity;
+import fr.allycs.app.View.Behavior.Fragment.MyFragment;
+import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Nmap.Fingerprint;
+import fr.allycs.app.Core.Database.DBManager;
 import fr.allycs.app.Model.Net.Pcap;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;

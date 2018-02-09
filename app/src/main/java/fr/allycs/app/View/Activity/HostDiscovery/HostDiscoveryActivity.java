@@ -19,12 +19,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import fr.allycs.app.Controller.AndroidUtils.MyActivity;
-import fr.allycs.app.Controller.AndroidUtils.MyFragment;
-import fr.allycs.app.Controller.AndroidUtils.MyGlideLoader;
-import fr.allycs.app.Controller.AndroidUtils.Utils;
-import fr.allycs.app.Controller.Core.Configuration.Singleton;
-import fr.allycs.app.Controller.Network.NetUtils;
+import fr.allycs.app.View.Behavior.Activity.MyActivity;
+import fr.allycs.app.View.Behavior.Fragment.MyFragment;
+import fr.allycs.app.View.Behavior.MyGlideLoader;
+import fr.allycs.app.Core.Configuration.Utils;
+import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Network.NetUtils;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.Scan.NmapActivity;
