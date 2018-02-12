@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:layout_marginBottom="1dp"
+    android:alpha="0.90"
     android:padding="16dp"
     app:cardBackgroundColor="@color/cardview_dark_background"
     app:cardCornerRadius="4dp"
@@ -24,8 +25,7 @@
             android:layout_centerVertical="true"
             android:layout_margin="2dp"
             android:elevation="4dp"
-            android:padding="2dp"
-            android:src="@drawable/prey" />
+            android:padding="2dp" />
 
         <TextView
             android:id="@+id/title"
@@ -56,6 +56,26 @@
             android:paddingLeft="8dp"
             android:text="144 devices decouvert"
             android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/wiresharkMiniLogo"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignBottom="@+id/subtitle"
+            android:layout_marginRight="4dp"
+            android:layout_toLeftOf="@+id/icon2"
+            android:visibility="gone"
+            app:srcCompat="@drawable/wireshark" />
+
+        <ImageView
+            android:id="@+id/doraMiniLogo"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignBottom="@+id/subtitle"
+            android:layout_marginRight="4dp"
+            android:layout_toLeftOf="@+id/wiresharkMiniLogo"
+            android:visibility="gone"
+            app:srcCompat="@drawable/radar1600" />
 
         <ImageView
             android:id="@+id/icon2"

@@ -4,20 +4,18 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="1px"
-
     android:elevation="1dp"
     android:paddingBottom="2dp"
     android:paddingRight="6dp"
     android:paddingTop="2dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:id="@+id/imageDNS"
-        android:layout_width="wrap_content"
+        android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginLeft="8dp"
         android:elevation="4dp"
-        android:paddingEnd="2dp"
-        android:paddingTop="2dp"
-        android:src="@mipmap/ic_dns" />
+        android:padding="2dp" />
 
     <TextView
         android:id="@+id/nameOS"

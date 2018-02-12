@@ -9,10 +9,10 @@ import com.activeandroid.annotation.Table;
 
 import java.util.ArrayList;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Model.Target.SniffSession;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Adapter.Holder.ConsoleLogHolder;
+import fr.allycs.app.View.Widget.Adapter.Holder.ConsoleLogHolder;
 
 @Table(name = "DnsLog", id = "_id")
 public class                            DNSLog extends Model {
@@ -27,6 +27,7 @@ public class                            DNSLog extends Model {
 
     public String                       data;
     public ArrayList<DNSLog>            logs = new ArrayList<>();
+    public RecyclerView                 recyclerView;
     public RecyclerView.Adapter<ConsoleLogHolder> adapter = null;
     public int                          color;
 
@@ -67,15 +68,22 @@ public class                            DNSLog extends Model {
     public boolean                      isSameDomain(DNSLog dnsLog) {
         return dnsLog.domain.contains(domain);
     }
-    public void                         setAdapter(RecyclerView.Adapter<ConsoleLogHolder> adapter) {
-        this.adapter = adapter;
+    public void                         setAdapter(RecyclerView.Adapter<ConsoleLogHolder> adapter, RecyclerView dnsRVLogs) {
+        this.adapter =  adapter;
+        this.recyclerView = dnsRVLogs;
     }
     public void                         addLog(DNSLog dnsLog) {
         if (Singleton.getInstance().DebugMode)
             Log.d(TAG, "addLog:" + dnsLog.data + "] to [" + this.domain + "]");
         logs.add(dnsLog);
         this.currentType = dnsLog.currentType;
-        if (adapter != null)
-            adapter.notifyDataSetChanged();
+        if (adapter != null) {
+            recyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 }

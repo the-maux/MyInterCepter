@@ -10,9 +10,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
-import fr.allycs.app.Controller.Network.Discovery.Fingerprint;
-import fr.allycs.app.Model.Net.Port;
+import fr.allycs.app.Core.Nmap.Fingerprint;
 import fr.allycs.app.Model.Net.Service;
 import fr.allycs.app.Model.Unix.Os;
 
@@ -27,114 +25,120 @@ public class                Host extends Model {
     public String           mac = "Unknown";
     @Column(name ="os")
     public String           os = "Unknown";
+    @Column(name ="osDetail")
+    public String           osDetail = "Unknown";
     @Column(name ="vendor")
     public String           vendor = "Unknown";
     @Column(name = "dump")
     public String           dumpInfo;
     @Column(name = "Notes")
-    public List<String>     Notes = new ArrayList<>();
-
+    public String           Notes;
+    @Column(name = "deviceType")
+    public String           deviceType;
+    @Column(name = "TooManyFingerprintMatchForOs")/*TODO when BDD is false and new scan is true don't save*/
+    public boolean          TooManyFingerprintMatchForOs = false;
+    @Column(name = "NetworkDistance")
+    public String           NetworkDistance = "Unknow";
+    public ArrayList<Service> ServiceActivOnHost = new ArrayList<>();
     public List<Session>    Session() {
         return getMany(Session.class, "listDevices");
     }
 
-    public ArrayList<Service> ServiceActivOnHost = new ArrayList<>();
-    public boolean          isServiceActiveOnHost = false;
-    private List<Port>      portList;
     public boolean          selected = false;
     public boolean          isItMyDevice = false;
     public Os               osType;
-
-
-    public                  Host(String buffer) {
-        super();
-        try {
-            buffer = buffer.replace("\t", " ").replace("  ", " ");
-            String beg = buffer.substring(0, buffer.indexOf(":") - 1);
-            String mid = buffer.substring(buffer.indexOf(":") + 2, buffer.indexOf(";") - 1);
-            String end = buffer.substring(buffer.indexOf(";") + 2);
-            ip = beg.substring(0, beg.indexOf("(") - 1).replace("\n", "");
-            name = beg.substring(beg.indexOf("(")).replace("\n", "");
-            mac = mid.substring(0, mid.indexOf(" ")).replace("\n", "")
-                    .replace("[", "").replace("]", "")
-                    .replace("-", ":");
-            os = mid.substring(mid.indexOf(" ") + 1).replace("\n", "");
-            vendor = end.replace("\n", "");
-            if (Singleton.getInstance().UltraDebugMode)
-                dumpHost();
-            dumpInfo = buffer;
-            Fingerprint.initHost(this);
-        } catch (StringIndexOutOfBoundsException e) {
-            Log.e(TAG, buffer);
-            e.getStackTrace();
-        }
+    private Ports           listPorts = null;
+    public Ports            Ports() {
+        return listPorts;
     }
-
-    public String           getName() {
-        return (name.contains("Unknown") ? ip : name);
-    }
-
-    public void             setName(String name) {
-        this.name = name;
-    }
-
-    public String           getGenericId() {
-        return mac.replace(":", "");
-    }
-
-    public static Comparator<Host> comparator = new Comparator<Host>() {
-        @Override
-        public int compare(Host o1, Host o2) {
-            String ip1[] = o1.ip.replace(".", "::").split("::");
-            String ip2[] = o2.ip.replace(".", "::").split("::");
-            if (Integer.parseInt(ip1[2]) > Integer.parseInt(ip2[2]))
-                return 1;
-            else if (Integer.parseInt(ip1[2]) < Integer.parseInt(ip2[2]))
-                return -1;
-            else if (Integer.parseInt(ip1[3]) > Integer.parseInt(ip2[3]))
-                return 1;
-            else if (Integer.parseInt(ip1[3]) < Integer.parseInt(ip2[3]))
-                return -1;
-            return 0;
-        }
-    };
-
-    public boolean          isServiceActiveOnHost() {
-        return !ServiceActivOnHost.isEmpty();
-    }
-    /**
-     * Update service by BonjourManager
-     */
-    public void             updateServiceHost(Service service) {
-        ServiceActivOnHost.add(service);
-    }
-
-    public List<Port>       getPortList() {
-        return portList;
-    }
-
-    public void             setPortList(List<Port> portList) {
-        this.portList = portList;
-    }
-
-    private void            dumpHost() {
-        Log.i(TAG, "Buffer Device: " + dumpInfo + "");
-        Log.i(TAG, "\t  ip " + ip + "");
-        Log.i(TAG, "\t  name " + name + "");
-        Log.i(TAG, "\t  mac " + mac + "");
-        Log.i(TAG, "\t  os " + os + "");
-        Log.i(TAG, "\t  vendor " + vendor + "");
-    }
-
-    @Override public boolean equals(Object obj) {
-        return mac.equals(((Host) obj).mac);
-    }
-
-    @Override public String toString() {
-        return ip + ":" + mac;
+    public Ports            Ports(ArrayList<String> dumpsPorts) {
+        listPorts = new Ports(dumpsPorts, this);
+        return listPorts;
     }
 
     public                  Host() {
         super();
     }
+
+    public void             updateServiceHost(Service service) {
+        ServiceActivOnHost.add(service);
+    }
+
+    public String           getName() {
+        return (name.contains("Unknown") ? "" : name);
+    }
+
+    public String           getOneName() {
+        return (getName().isEmpty()) ? ip : getName();
+    }
+
+
+    public void             setName(String name) {
+        this.name = name;
+    }
+
+    public boolean          equals(Object obj) {
+        return mac.equals(((Host) obj).mac);
+    }
+
+    public void             dumpMe(ArrayList<Host> selectedHostsList) {
+//        Host sameHost = null;
+//        for (Host host : selectedHostsList) {
+//            if (host.mac.contentEquals(mac)) {
+//                sameHost = host;
+//                Log.e(TAG, ip + "IN INTERCEPT SCAN");
+//            }
+//        }
+//        if (sameHost == null) {
+//            Log.e(TAG, ip + " NOT IN INTERCEPT SCAN");
+//            sameHost = this;
+//        }
+        Log.i(TAG, "ip: " + ip);// + "]");
+        Log.i(TAG, "mac: " + mac);// + "]");
+        Log.i(TAG, "vendor: " + vendor);// + "]" + "VENDOR[" + sameHost.vendor + "]");
+        Log.i(TAG, "os: " + os);// + "] OS[" + sameHost.os + "]");
+        Log.i(TAG, "osType: " + osType.name());// + "] OSTYPE[" + sameHost.osType + "]");
+        Log.i(TAG, "osDetail: " + osDetail);// + "] OSDETAIL[" + osDetail + "]");
+        Log.i(TAG, "name: " + getName());// + "] NAME[" + sameHost.getName() +"]");
+        Log.i(TAG, "NetworkDistance: " + NetworkDistance );//+ "]");
+        Log.i(TAG, "TooManyFingerprintMatchForOs: " + TooManyFingerprintMatchForOs );//+ "]");
+        Log.i(TAG, "deviceType: " + deviceType );//+ "]");
+
+        if (dumpInfo == null)
+            Log.d(TAG, "NO DUMP /!\\ : " + ip);
+        else
+            Log.i(TAG, "DUMPINFO::" + dumpInfo);
+        if (Ports() != null)
+            Ports().dump();
+        else
+            Log.d(TAG, "Ports Not found...");
+        if (osType == Os.Unknow)
+            Log.d(TAG, "isItWindowsPort() => " + Fingerprint.isItWindows(this));
+        Log.i(TAG, "END DUMP ---------");
+    }
+
+    public String           toString() {
+        return ip + ":" + mac;
+    }
+    public static           Comparator<Host> getComparator() {
+        return new Comparator<Host>() {
+            @Override
+            public int compare(Host o1, Host o2) {
+                String ip1[] = o1.ip.replace(" ", "").replace(".", "::").split("::");
+                String ip2[] = o2.ip.replace(" ", "").replace(".", "::").split("::");
+                if (Integer.parseInt(ip1[2]) > Integer.parseInt(ip2[2]))
+                    return 1;
+                else if (Integer.parseInt(ip1[2]) < Integer.parseInt(ip2[2]))
+                    return -1;
+                else if (Integer.parseInt(ip1[3]) > Integer.parseInt(ip2[3]))
+                    return 1;
+                else if (Integer.parseInt(ip1[3]) < Integer.parseInt(ip2[3]))
+                    return -1;
+                return 0;
+            }
+
+            ;
+        };
+    }
+
 }

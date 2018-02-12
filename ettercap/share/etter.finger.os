@@ -81,8 +81,8 @@
 0212:_MSS:80:00:0:1:1:1:A:LT:Solaris 2.6 - 2.7
 0212:_MSS:80:WS:0:0:0:0:A:LT:CacheOS (CacheFlow 2000 proxy cache)
 0212:_MSS:80:WS:0:0:1:0:A:LT:Linux 2.2.5 - 2.2.13 SMP
-0212:_MSS:80:WS:0:1:0:0:A:LT:NetBSD 1.4 running on a SPARC IPX
-0212:_MSS:80:WS:0:1:0:1:A:LT:NetBSD 1.4 running on a SPARC IPX
+0212:_MSS:80:WS:0:1:0:0:A:LT:NetBSD 1.4 mIsRunning on a SPARC IPX
+0212:_MSS:80:WS:0:1:0:1:A:LT:NetBSD 1.4 mIsRunning on a SPARC IPX
 0212:_MSS:80:WS:0:1:1:0:A:LT:NetBSD 1.4 / Generic mac68k (Quadra 610)
 0212:_MSS:80:WS:0:1:1:1:A:LT:NetBSD 1.4 / Generic mac68k (Quadra 610)
 0218:0218:40:00:0:1:0:1:A:LT:NetBSD
@@ -186,7 +186,7 @@
 0808:_MSS:80:WS:0:0:0:0:A:LT:Siemens HICOM 300 Phone switch (WAML LAN card)
 0834:0578:FF:WS:0:0:0:0:A:2C:BeWan 2.3.6 
 0834:7805:FF:WS:0:0:0:0:A:2C:Vigor 2900G 
-0848:_MSS:80:WS:0:0:0:0:A:LT:Intergraph Workstation (2000 Series) running CLiX R3.1
+0848:_MSS:80:WS:0:0:0:0:A:LT:Intergraph Workstation (2000 Series) mIsRunning CLiX R3.1
 0860:0218:40:00:1:1:1:0:S:30:Windows 9x
 0860:0218:40:00:1:1:1:0:S:3C:Windows 9x
 0860:0218:40:00:1:1:1:0:S:LT:Windows 9x
@@ -216,7 +216,7 @@
 0B68:_MSS:80:00:0:1:1:1:A:LT:Sun Solaris 8 early acces beta through actual release
 0B68:_MSS:80:WS:0:0:0:0:A:LT:D-Link Print Server
 0BB8:05B0:20:WS:0:0:0:0:A:2C:VMS/VAX 5.5
-0BB8:_MSS:80:00:0:1:0:0:A:LT:OpenVMS 7.1 Alpha running Digital's UCX v4.1ECO2
+0BB8:_MSS:80:00:0:1:0:0:A:LT:OpenVMS 7.1 Alpha mIsRunning Digital's UCX v4.1ECO2
 0C00:0109:40:10:0:1:0:1:S:3C:Linux Mandrake 9.1
 0C00:052A:40:WS:0:0:0:0:A:2C:NetGear Router
 0C00:05A0:40:WS:0:0:0:0:A:2C:Trendnet TEW 431 BRP
@@ -266,7 +266,7 @@
 1000:_MSS:80:00:0:1:0:0:A:LT:Alcatel 1000 ADSL (modem)
 1000:_MSS:80:00:0:1:0:1:A:LT:Alcatel 1000 ADSL (modem)
 1000:_MSS:80:WS:0:0:0:0:A:28:Aironet AP4800E v8.07 11 Mbps wireless access poinit
-1000:_MSS:80:WS:0:0:1:0:A:LT:VirtualAccess LinxpeedPro 120 running Software 7.4.33CM
+1000:_MSS:80:WS:0:0:1:0:A:LT:VirtualAccess LinxpeedPro 120 mIsRunning Software 7.4.33CM
 1020:0218:FF:WS:0:0:0:0:A:2C:Cisco 2600 IOS 12.0
 1020:0218:FF:WS:0:0:0:0:S:2C:Cisco 3660 IOS 12.2(x)
 1020:022C:FF:00:0:0:0:0:S:LT:Cisco 1750 IOS 12.0(5), Cisco 2500 IOS 11.3(1)
@@ -575,15 +575,15 @@
 2000:_MSS:80:00:0:0:1:0:A:LT:Novell NetWare 3.12 - 5.00
 2000:_MSS:80:00:0:1:0:0:A:LT:Accelerated Networks - High Speed Integrated Access VoDSL
 2000:_MSS:80:00:0:1:0:1:A:LT:Tandem NSK D40
-2000:_MSS:80:00:0:1:1:0:A:LT:AS/400e 720 running OS/400 R4.4
-2000:_MSS:80:00:0:1:1:1:A:LT:AS/400e 720 running OS/400 R4.4
+2000:_MSS:80:00:0:1:1:0:A:LT:AS/400e 720 mIsRunning OS/400 R4.4
+2000:_MSS:80:00:0:1:1:1:A:LT:AS/400e 720 mIsRunning OS/400 R4.4
 2000:_MSS:80:WS:0:0:0:0:A:LT:AGE Logic, Inc. IBM XStation
 2010:_MSS:80:WS:0:0:1:0:A:LT:Windows NT / Win9x
 2017:0534:80:WS:0:0:1:0:A:2C:Windows 98 SE
 2017:05B4:40:00:0:1:1:1:A:LT:BSDI BSD/OS 3.0-3.1 (or possibly MacOS, NetBSD)
 2017:05B4:80:WS:0:0:1:0:A:2C:Windows 98 SE / Windows NT 4.0
 2017:1802:80:WS:0:0:1:0:A:LT:Windows NT 4.0
-2017:_MSS:80:00:0:1:0:0:A:LT:Ascend GRF Router running Ascend Embedded/OS 2.1
+2017:_MSS:80:00:0:1:0:0:A:LT:Ascend GRF Router mIsRunning Ascend Embedded/OS 2.1
 2017:_MSS:80:00:0:1:1:0:A:LT:BSDI 4.0-4.0.1
 2017:_MSS:80:00:0:1:1:1:A:LT:BSDI 4.0-4.0.1
 2017:_MSS:80:WS:0:0:0:0:A:LT:CacheOS (CacheFlow 500-5000 webcache) CFOS 2.1.08 - 2.2.1
@@ -930,7 +930,7 @@
 40E8:05B4:FF:00:0:0:1:0:S:30:Mac OS 7.x-9.x
 40E8:B405:80:WS:0:0:1:0:A:2C:Windows 2000
 40E8:B405:FF:00:0:0:1:0:S:LT:Mac OS 8.6
-4150:_MSS:40:WS:0:0:1:0:A:LT:Cisco Localdirector 430, running OS 2.1
+4150:_MSS:40:WS:0:0:1:0:A:LT:Cisco Localdirector 430, mIsRunning OS 2.1
 41A0:0578:80:00:1:1:1:1:A:40:Windows XP SP1
 41A0:0584:40:00:1:1:1:1:A:40:Windos XP
 41B8:05B4:80:WS:1:1:1:0:A:30:Windows 2000 server
@@ -1022,7 +1022,7 @@
 4510:0550:80:WS:0:0:1:0:A:LT:Windows 2000 Professional 5.0.2195 Service Pack 2
 4510:0550:80:WS:1:1:1:0:A:30:Windows 2000 Professional 5.0.2195 Service Pack 2
 4510:05B4:FF:WS:1:1:1:0:A:30:Windows XP Pro 
-455B:_MSS:80:00:0:0:0:0:A:LT:MacOS 8.1 running on a PowerPC G3 (iMac)
+455B:_MSS:80:00:0:0:0:0:A:LT:MacOS 8.1 mIsRunning on a PowerPC G3 (iMac)
 455B:_MSS:80:00:0:0:1:0:A:LT:Mac OS 8.6
 462B:_MSS:80:00:0:1:1:0:A:LT:Solaris 2.6 - 7 X86
 462B:_MSS:80:00:0:1:1:1:A:LT:Solaris 2.6 - 7 X86
@@ -1103,8 +1103,8 @@
 77C4:B405:40:00:0:1:1:1:A:3C:Linux
 77C4:_MSS:40:WS:0:0:1:0:A:LT:Linux 2.1.122 - 2.2.14
 7850:0578:40:WS:1:1:1:0:A:30:Suse Linux 7.0
-7900:_MSS:80:00:0:1:1:0:A:LT:Atari Mega STE running JIS-68k 3.0
-7900:_MSS:80:00:0:1:1:1:A:LT:Atari Mega STE running JIS-68k 3.0
+7900:_MSS:80:00:0:1:1:0:A:LT:Atari Mega STE mIsRunning JIS-68k 3.0
+7900:_MSS:80:00:0:1:1:1:A:LT:Atari Mega STE mIsRunning JIS-68k 3.0
 7958:0584:40:00:1:1:1:0:A:34:Linux Mandrake 7.2
 7958:0584:40:00:1:1:1:1:A:3C:Windows NT 4
 7958:0584:40:WS:1:1:1:0:A:30:Linux 2.2.16-3 (RH 6.2)
@@ -1301,8 +1301,8 @@
 805C:_MSS:80:00:0:1:1:0:A:LT:Compaq Tru64 UNIX (formerly Digital UNIX) 4.0e
 807A:_MSS:80:00:0:1:0:0:A:LT:OpenBSD 2.6-2.8
 807A:_MSS:80:00:0:1:0:1:A:LT:OpenBSD 2.6-2.8
-807A:_MSS:80:00:0:1:1:0:A:LT:AmigaOS 3.1 running Miami Deluxe 0.9m
-807A:_MSS:80:00:0:1:1:1:A:LT:AmigaOS 3.1 running Miami Deluxe 0.9m
+807A:_MSS:80:00:0:1:1:0:A:LT:AmigaOS 3.1 mIsRunning Miami Deluxe 0.9m
+807A:_MSS:80:00:0:1:1:1:A:LT:AmigaOS 3.1 mIsRunning Miami Deluxe 0.9m
 8084:0584:40:01:1:1:1:1:A:40:SunOS 5.8 / Solaris 8 
 8160:0564:40:01:1:1:1:0:A:34:Solaris 8
 8160:05B4:40:01:0:1:1:1:A:3C:Solaris 8 - X86
@@ -1691,8 +1691,8 @@ FFFF:05B4:40:WS:1:1:0:0:S:30:Windows 98
 FFFF:05B4:40:WS:1:1:1:0:A:30:Windows 2000 Pro SP2
 FFFF:05B4:40:WS:1:1:1:0:S:30:Windows 98 Second Edition
 FFFF:05B4:80:00:0:0:1:0:A:LT:MacOS 8.1
-FFFF:05B4:80:00:0:1:0:0:A:LT:AIX 3.2 running on RS/6000
-FFFF:05B4:80:00:0:1:0:1:A:LT:AIX 3.2 running on RS/6000
+FFFF:05B4:80:00:0:1:0:0:A:LT:AIX 3.2 mIsRunning on RS/6000
+FFFF:05B4:80:00:0:1:0:1:A:LT:AIX 3.2 mIsRunning on RS/6000
 FFFF:05B4:80:00:0:1:1:1:A:3C:Windows 2000 SP4 
 FFFF:05B4:80:00:1:1:0:1:A:40:Windows 2000 Server 
 FFFF:05B4:80:00:1:1:1:0:A:34:Windows 2000 Server SP4 

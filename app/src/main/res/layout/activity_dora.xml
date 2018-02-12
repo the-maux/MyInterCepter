@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:id="@+id/Coordonitor"
     android:animationCache="true">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/primary_text"
+        app:elevation="6dp">
 
 
         <RelativeLayout
@@ -64,6 +65,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_toLeftOf="@+id/settings"
                     android:background="@android:color/transparent"
+                    android:visibility="gone"
                     app:srcCompat="@drawable/ic_add_circle" />
 
                 <ImageButton
@@ -116,7 +118,6 @@
         android:src="@android:drawable/ic_media_play"
         app:backgroundTint="@color/material_blue_grey_400"
         app:fabSize="normal"
-        app:fab_elevationCompat="4dp"
         app:layout_anchor="@id/appbar"
         app:layout_anchorGravity="bottom|right|end" />
 
@@ -125,7 +126,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:addStatesFromChildren="false"
-        android:background="@color/material_grey_400"
         android:paddingBottom="8dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"

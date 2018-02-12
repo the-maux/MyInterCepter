@@ -14,7 +14,8 @@
         android:paddingBottom="2dp"
         android:paddingLeft="8dp"
         android:paddingTop="2dp"
-        android:text="TextView"
+        android:singleLine="true"
+        android:text="assets.onestore.ms.assets.onestore.ms.assets.onestore.ms.assets.onestore.ms.assets.onestore.ms."
         android:textColor="@color/material_light_white"
         android:textSize="12sp" />
 </RelativeLayout>

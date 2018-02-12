@@ -7,7 +7,7 @@ import fr.allycs.app.R;
 
 public class               Trame extends MyObject {
     public String          TAG = "Trame";
-    public int             offsett, verbose;
+    public int             offsett = 0, verbose;
     public String          time;
     public Protocol        protocol;
     public String          StringSrc, StringDest, Errno = null;
@@ -17,7 +17,7 @@ public class               Trame extends MyObject {
     public boolean         initialised = false, skipped = false;
     public boolean         connectionOver = false;
 
-    public                  Trame(String dump, int offsett, int verbose_lvl) {
+    public                  Trame(String dump, int verbose_lvl) {
         this.verbose = verbose_lvl;//0: Nothing; 1 => -v ; 2 -vv ; 3 -vvv ; 4 -X
 
         if (skipUnnecessary(dump)) {
@@ -68,7 +68,7 @@ public class               Trame extends MyObject {
                     HttpsParsing(line);
                     break;
                 case HTTP:
-                    Log.d(TAG, "HTTP trame: " + line);
+                    //Log.d(TAG, "HTTP trame: " + line);
                     HttpParsing(line);
                     break;
                 case TCP:
@@ -317,6 +317,10 @@ public class               Trame extends MyObject {
 
     @Override
     public String          toString() {
-        return protocol.name() + ":" + StringSrc + ">" + StringDest + ": " + info;
+        return  "Trame n°" + offsett + " " +
+                ((protocol != null) ? protocol.name() : "") + ":" +
+                ((StringSrc != null) ? StringSrc : "") + ">" +
+                ((StringDest != null) ? StringDest : "") + ": " +
+                ((info != null) ? info : "");
     }
 }

@@ -16,7 +16,7 @@ public class            Service {
     private String      TAG = "Service";
     @Column(name ="Host")
     public Host         host;
-    @Column(name ="Port")
+    @Column(name ="Ports")
     public String       Port;
     @Column(name ="ServiceName")
     public String       ServiceName;

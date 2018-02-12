@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lllayout"
+    android:layout_width="match_parent"
+    android:layout_height="16dp"
+    android:layout_marginTop="1dp"
+    android:background="@color/cardview_shadow_start_color"
+    android:minWidth="650dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:layout_editor_absoluteY="26dp">
+
+    <TextView
+        android:id="@+id/No"
+        android:layout_width="35dp"
+        android:layout_height="0dp"
+        android:background="@color/material_light_white"
+        android:ellipsize="start"
+        android:gravity="center_vertical"
+        android:paddingLeft="2dp"
+        android:singleLine="true"
+        android:text="No"
+        android:textColor="?android:attr/textColorPrimaryInverse"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="45dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="1px"
+        android:background="@color/material_light_white"
+        android:ellipsize="start"
+        android:gravity="center_vertical"
+        android:paddingLeft="2dp"
+        android:singleLine="true"
+        android:text="Time"
+        android:textColor="?android:attr/textColorPrimaryInverse"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/No"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Source"
+        android:layout_width="85dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="1px"
+        android:background="@color/material_light_white"
+        android:ellipsize="start"
+        android:gravity="center_vertical"
+        android:paddingLeft="2dp"
+        android:singleLine="true"
+        android:text=" Source"
+        android:textColor="?android:attr/textColorPrimaryInverse"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/time"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Destination"
+        android:layout_width="100dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="1px"
+        android:background="@color/material_light_white"
+        android:ellipsize="start"
+        android:gravity="center_vertical"
+        android:paddingLeft="2dp"
+        android:singleLine="true"
+        android:text=" Destination"
+        android:textColor="?android:attr/textColorPrimaryInverse"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/Source"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Protocol"
+        android:layout_width="155dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="1px"
+        android:background="@color/material_light_white"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:paddingLeft="2dp"
+        android:text=" Protocol"
+        android:textColor="?android:attr/textColorPrimaryInverse"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/Destination"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Info"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="1px"
+        android:background="@color/material_light_white"
+
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:paddingLeft="2dp"
+        android:text=" Info"
+        android:textColor="?android:attr/textColorPrimaryInverse"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/Protocol"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</android.support.constraint.ConstraintLayout>
+
+<!--
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lllayout"
+    android:layout_width="match_parent"
+    android:layout_height="16dp"
+    android:layout_marginTop="1dp"
+    android:background="@color/cardview_shadow_start_color"
+    android:minWidth="650dp"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/No"
+        android:layout_width="35dp"
+        android:layout_height="match_parent"
+        android:background="@color/material_light_white"
+        android:ellipsize="start"
+        android:gravity="center_vertical"
+        android:paddingLeft="2dp"
+        android:text="No"
+        android:textColor="?android:attr/textColorPrimaryInverse"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="45dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="1px"
+        android:background="@color/material_light_white"
+        android:ellipsize="start"
+        android:gravity="center_vertical"
+        android:paddingLeft="2dp"
+        android:text="Time"
+        android:textColor="?android:attr/textColorPrimaryInverse"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/Source"
+        android:layout_width="85dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="1px"
+        android:background="@color/material_light_white"
+        android:ellipsize="start"
+        android:gravity="center_vertical"
+        android:paddingLeft="2dp"
+        android:text=" Source"
+        android:textColor="?android:attr/textColorPrimaryInverse"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/Destination"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="1px"
+        android:background="@color/material_light_white"
+        android:ellipsize="start"
+        android:gravity="center_vertical"
+        android:paddingLeft="2dp"
+        android:text=" Destination"
+        android:textColor="?android:attr/textColorPrimaryInverse"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/Protocol"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="1px"
+        android:background="@color/material_light_white"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:paddingLeft="2dp"
+        android:text=" Protocol"
+        android:textColor="?android:attr/textColorPrimaryInverse"
+        android:textSize="11sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/Info"
+        android:layout_width="400dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="1px"
+        android:background="@color/material_light_white"
+        android:gravity="center_vertical"
+
+        android:maxLines="1"
+        android:paddingLeft="2dp"
+        android:text="  Info                                                                                                                                       "
+        android:textColor="?android:attr/textColorPrimaryInverse"
+        android:textSize="11sp"
+        android:textStyle="bold" />
+</LinearLayout>
+-->

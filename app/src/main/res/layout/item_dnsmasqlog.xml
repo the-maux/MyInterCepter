@@ -26,8 +26,7 @@
                 android:layout_height="40dp"
                 android:layout_alignParentBottom="false"
                 android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                app:srcCompat="@mipmap/ic_dns_replay" />
+                android:layout_centerVertical="true" />
 
             <TextView
                 android:id="@+id/host"
@@ -36,24 +35,30 @@
                 android:layout_marginRight="8dp"
                 android:layout_toLeftOf="@+id/viewFullLogsBtn"
                 android:layout_toRightOf="@+id/DNSTypeImg"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:paddingBottom="2dp"
                 android:paddingLeft="8dp"
                 android:paddingTop="2dp"
-                android:text="assets.onestore.ms.edgekey.net"
-                android:textColor="@color/material_green_accent_100"
+                android:singleLine="true"
+                android:text="assets.onestore.ms.edgekey.netassets.onestore.ms.assets.onestore.ms."
+                android:textColor="@color/accent_material_dark"
                 android:textSize="14sp"
                 android:typeface="sans" />
 
             <ImageView
                 android:id="@+id/viewFullLogsBtn"
                 android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
+                android:layout_centerVertical="false"
                 android:layout_marginRight="8dp"
-                android:src="@mipmap/ic_add_button" />
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="22dp"
+                android:src="@drawable/ms__arrow" />
 
         </RelativeLayout>
 
@@ -64,10 +69,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/card_view"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginTop="-2dp"
         android:background="@android:drawable/editbox_dropdown_dark_frame"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/DnsRVLogs"

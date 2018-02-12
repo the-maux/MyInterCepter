@@ -6,7 +6,5 @@
 /build/generated/
 /.idea/
 /local.properties
-Supprimerait .gradle/
-Supprimerait app/libs/
-Supprimerait app/src/main/res/drawable/
-Supprimerait build/
+.gradle/
+build/

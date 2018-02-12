@@ -8,21 +8,20 @@ import com.activeandroid.annotation.Table;
 
 import java.util.List;
 
-import fr.allycs.app.Controller.Core.Conf.Singleton;
+import fr.allycs.app.Core.Configuration.Singleton;
 
 @Table(name = "AccessPoint", id = "_id")
-public class               AccessPoint extends Model {
-    public static String   TAG = "AccessPoint";
+public class                AccessPoint extends Model {
+    public static String    TAG = "AccessPoint";
 
     @Column(name = "Ssid")
-    public String          Ssid;
+    public String           Ssid;
+    public int              nbrSession;
 
-    /**
-     * Create the OneToMany relation
-     * @return
-     */
     public List<Session>    sessions() {
-        return getMany(Session.class, "AccessPoint");
+        List<Session> sessions = getMany(Session.class, "AccessPoint");
+        nbrSession = sessions.size();
+        return sessions;
     }
 
     public void             dumpSessions() {
@@ -43,7 +42,6 @@ public class               AccessPoint extends Model {
         super();
     }
 
-    @Override
     public String           toString() {
         return Ssid + " with " + sessions().size() + " session recorded";
     }

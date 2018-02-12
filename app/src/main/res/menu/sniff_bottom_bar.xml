@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ico_home_barbutton"
+        android:title="HOME" /-->
+
+    <item
+        android:id="@+id/navigation_nmap"
+        android:icon="@drawable/ic_nmap_icon_tabbutton"
+        android:iconTint="@color/NmapPrimary"
+        android:title="SCANNER" />
+
+    <item
+        android:id="@+id/navigation_wireshark"
+        android:icon="@drawable/ic_sniff_barbutton"
+        android:iconTint="@color/wiresharkPrimary"
+        android:title="SNIFFER" />
+
+    <item
+        android:id="@+id/navigation_dns"
+        android:icon="@drawable/ic_dns_btnbar"
+        android:iconTint="@color/dnsSpoofPrimary"
+        android:title="DNS SPOOFER" />
+
+    <item
+        android:id="@+id/navigation_webserver"
+        android:icon="@drawable/ic_world_locked"
+        android:iconTint="@color/webserverSpoofPrimary"
+        android:title="HTTP SPOOFER" />
+
+</menu>

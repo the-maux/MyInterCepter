@@ -9,9 +9,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import fr.allycs.app.Controller.Core.BinaryWrapper.RootProcess;
-import fr.allycs.app.Model.Target.MyObject;
+import fr.allycs.app.Core.Configuration.RootProcess;
 import fr.allycs.app.Model.Target.Host;
+import fr.allycs.app.Model.Target.MyObject;
 
 public class            DoraProcess extends MyObject {
     private String      TAG = getClass().getName();
@@ -38,7 +38,7 @@ public class            DoraProcess extends MyObject {
                     mUptime = Calendar.getInstance().getTime();
                     mIsRunning = true;
                     mProcess.exec("ping -fi 0.2 " + mhost.ip);
-                    mPid = mProcess.getPid();
+                    mPid = mProcess.getmPid();
                     Log.d(TAG, "Dora:" + mhost.ip + " PID:" + mPid);
                     // find mPid pour finir
                     int tmpLine;
@@ -84,10 +84,10 @@ public class            DoraProcess extends MyObject {
         mUptime = Calendar.getInstance().getTime();
     }
     public int          getPourcentage() {
-        //Si not started, return 0
+
         Log.d(TAG, "Dora::POURCENTAGE::" + mhost.ip + "::Terminated->Dump::rcv:" + rcv + "&sent:" + sent);
         if (rcv < MARGE_ERREUR+1 && sent < MARGE_ERREUR+1) {
-            if (rcv > 0 && sent > 0)
+            if (rcv > 0 && sent > 0)//Si not started, return 0
                 Log.d(TAG, "%%::" + (rcv / sent) * 100);
             return 0;
         } else {
