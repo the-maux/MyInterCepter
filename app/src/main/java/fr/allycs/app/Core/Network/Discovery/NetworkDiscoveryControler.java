@@ -36,15 +36,17 @@ public class                        NetworkDiscoveryControler {
         return mInstance;
     }
 
-    public void                     run(List<Host> listOfHosts) {
+    public boolean                   run(List<Host> listOfHosts) {
         if (!inLoading) {
             inLoading = true;
             startScanning = Calendar.getInstance().getTime();
             mSingleton.resetActualSniffSession();
             startArpScan();
+            return true;
         } else {
             Log.e(TAG, "Trying to launch multiple scan at same time");
         }
+        return false;
     }
 
     private void                    startArpScan() {

@@ -80,7 +80,7 @@ public abstract class           SniffActivity extends MyActivity  {
         //mBottomBar.setCurrentItem(position, false);
     }
 
-    protected void                    updateNotifications() {
+    public void                    updateNotifications() {
         AHNotification greenNotif = new AHNotification.Builder()
                 .setText(" ")
                 .setBackgroundColor(ContextCompat.getColor(mInstance, R.color.material_green_500))

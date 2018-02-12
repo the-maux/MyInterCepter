@@ -28,6 +28,7 @@ public class                        Tcpdump {
     private boolean                 mAdvancedAnalyseTrame = false;
     public boolean                  isRunning = false, isDumpingInFile = true;
     public String                   actualParam = "", actualCmd = "";
+    private WiresharkDispatcher     mDispatcher = null;
 
     private                         Tcpdump(WiresharkActivity activity) {
         this.mActivity = activity;
@@ -61,6 +62,7 @@ public class                        Tcpdump {
     }
 
     public String                   start(final WiresharkDispatcher trameDispatcher) {
+        mDispatcher = trameDispatcher;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -69,7 +71,7 @@ public class                        Tcpdump {
                     ArpSpoof.launchArpSpoof();
                     Log.i(TAG, actualCmd);
                     mTcpDumpProcess = new RootProcess("Wireshark").exec(actualCmd);
-                    readTcpdump(mTcpDumpProcess.getReader(), trameDispatcher);
+                    readTcpdump(mTcpDumpProcess.getReader());
                     Log.i(TAG, "Tcpdump execution over");
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -77,7 +79,7 @@ public class                        Tcpdump {
                 } finally {
                     if (mTcpDumpProcess != null)
                         mTcpDumpProcess.closeProcess();
-                    onNewLine("Quiting...", trameDispatcher);
+                    onNewLine("Quiting...");
                 }
                 Log.i(TAG, "End of Tcpdump thread");
             }
@@ -86,7 +88,7 @@ public class                        Tcpdump {
                 .replace(mSingleton.FilesPath, "");//trimmed cmd
     }
 
-    private void                    readTcpdump(BufferedReader reader, final WiresharkDispatcher trameDispatcher) throws IOException {
+    private void                    readTcpdump(BufferedReader reader) throws IOException {
         String line;
         while ((line = reader.readLine()) != null) {
             final String finalLine = line;
@@ -94,26 +96,25 @@ public class                        Tcpdump {
                 @Override
                 public void run() {
                     if (isRunning)
-                        onNewLine(finalLine, trameDispatcher);
+                        onNewLine(finalLine);
                 }
             }).start();
         }
     }
 
-    private void                    onNewLine(String line, WiresharkDispatcher trameDispatcher) {
-
+    private void                    onNewLine(String line) {
         if (line.contains("Quiting...")) {
             Log.d(TAG, "Finishing Adapter trame");
             Trame trame = new Trame("Processus over", 0);
             trame.connectionOver = true;
-            trameDispatcher.addToQueue(trame);
+            mDispatcher.addToQueue(trame);
             onTcpDumpStop();
             return;
         }
         Trame trame = new Trame(line, 0);
         if (trame.initialised) {
             Log.d(TAG, "onNewLine");
-            trameDispatcher.addToQueue(trame);
+            mDispatcher.addToQueue(trame);
         } else if (!trame.skipped) {
             Log.d(TAG, "trame created not initialized and not skipped, STOP TCPDUMP");
             mActivity.onTrameError(/*trame*/);
@@ -126,6 +127,7 @@ public class                        Tcpdump {
             RootProcess.kill("tcpdump");
             isRunning = false;
             IPTables.stopIpTable();
+            mDispatcher.stop();
             if (isDumpingInFile) {
                 new RootProcess("chmod Pcap files")
                         .exec("chmod 666 " + mSingleton.PcapPath + "/*")

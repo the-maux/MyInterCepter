@@ -121,7 +121,6 @@
 		app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
 
-
 		<FrameLayout
 			android:id="@+id/frame_container"
 			android:layout_width="match_parent"

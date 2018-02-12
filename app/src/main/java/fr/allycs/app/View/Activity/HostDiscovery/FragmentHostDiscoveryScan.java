@@ -21,7 +21,6 @@ import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
 
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import fr.allycs.app.Core.Configuration.Singleton;
@@ -42,7 +41,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     private HostDiscoveryActivity   mActivity;
     private Singleton               mSingleton = Singleton.getInstance();
     private ArrayList<Host>         mHosts = new ArrayList<>();
-    private boolean                 mHostLoaded = false;
     private HostDiscoveryAdapter    mHostAdapter;
     private RecyclerView            mHost_RV;
     private TextView                mEmptyList;
@@ -50,6 +48,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     private ArrayList<Os>           mListOS = new ArrayList<>();
     private NetworkDiscoveryControler mScannerControler;
     private String                  mTitle, mSubtitle;
+    boolean                         mHostLoaded = false;
 
     public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hostdiscovery_scan, container, false);
@@ -147,8 +146,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                     initHostsRecyclerView();
                     setTitleToolbar("Scanner", "Discovering network");
                     mActivity.progressAnimation();
-                    mScannerControler.run(mHosts);
-                    return true;
+                    return mScannerControler.run(mHosts);
                 } else {
                     mActivity.showSnackbar("You need to be connected");
                     mEmptyList.setVisibility(View.VISIBLE);
@@ -160,20 +158,16 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         return false;
     }
 
-    private ArrayList<Host>         extractAndDumpSelectedHost(ArrayList<Host> hostList) {
+    public ArrayList<Host>         getTargetFromHostList() {
         ArrayList<Host> selectedHost = new ArrayList<>();
         try {
             boolean noTargetSelected = true;
-            FileOutputStream out = mActivity.openFileOutput("targets", 0);
-            for (Host host : hostList) {
+            for (Host host : mHosts) {
                 if (host.selected) {
                     selectedHost.add(host);
                     noTargetSelected = false;
-                    String dumpHost = host.ip + ":" + host.mac + "\n";
-                    out.write(dumpHost.getBytes());
                 }
             }
-            out.close();
             if (noTargetSelected) {
                 mActivity.showSnackbar("No target selected!");
                 return null;
@@ -185,30 +179,20 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         }
     }
 
-    public void                     launchMenu() {
-        Log.d(TAG, "launchMenu()");
-        mSingleton.selectedHostsList = extractAndDumpSelectedHost(mHosts);
-        if (mSingleton.DebugMode) {
-            Log.d(TAG, "mSingleton.selectedHostsList" + mSingleton.selectedHostsList);
-            Log.d(TAG, "mSingleton.hostsListSize:" +
-                    ((mSingleton.selectedHostsList != null) ? mSingleton.selectedHostsList.size() : "0"));
-        }
-    }
-
     public void                     onHostActualized(final ArrayList<Host> hosts) {
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mHosts = hosts;
+                mHostLoaded = true;
+                mScannerControler.inLoading = false;
                 mActivity.setProgressState(mActivity.MAXIMUM_PROGRESS*2);
                 mSingleton.selectedHostsList = mHosts;
                 mHostAdapter.updateHostList(mSingleton.selectedHostsList);
-                mScannerControler.inLoading = false;
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ?
                         View.VISIBLE : View.GONE);
                 mSwipeRefreshLayout.setRefreshing(false);
                 mActivity.stopTimer();
-                mHostLoaded = true;
                 mActivity.actualSession =
                         DBSession.buildSession(mSingleton.network.Ssid,
                                 mSingleton.network.gateway,

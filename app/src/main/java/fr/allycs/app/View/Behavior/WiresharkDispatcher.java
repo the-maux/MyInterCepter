@@ -17,7 +17,7 @@ public class                        WiresharkDispatcher  {
     private RecyclerView            mRV_Wireshark;
     private ArrayList               tmp = new ArrayList();
     private boolean                 mIsRunning = false, mAutoscroll = true;
-    private int                     REFRESH_TIME = 1000;// == 1seconde
+    private int                     REFRESH_TIME = 1000;
     private java.util.Queue         queue = new java.util.LinkedList();
     private boolean                 acknowledged = false;
 
@@ -27,28 +27,23 @@ public class                        WiresharkDispatcher  {
         mIsRunning = true;
         mActivity = activity;
         mRV_Wireshark = recyclerView;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                adapterRefreshDeamon();
-            }
-        }).start();
+        adapterRefreshDeamon();
     }
 
-    private void                 adapterRefreshDeamon() {
+    private void                    adapterRefreshDeamon() {
         if (mIsRunning) {
             publishNewTrame();
             new Handler().postDelayed(new Runnable() {
                 public void run() {
-                    Log.d(TAG, "adapterRefreshDeamon");
                     adapterRefreshDeamon();
                 }
             }, REFRESH_TIME);
+        } else {
+            Log.d(TAG, "Dispatcher closing");
         }
     }
 
-    private synchronized void   publishNewTrame() {
-        Log.d(TAG, "publishNewTrame");
+    private synchronized void       publishNewTrame() {
         if (!acknowledged) {
             Log.d(TAG, "ack send to Activity");
             mActivity.connectionSucceed();
@@ -60,13 +55,11 @@ public class                        WiresharkDispatcher  {
                 for (int i = 0; i < queue.size(); i++) {
                     tmp.add(pop());
                 }
-                Log.d(TAG, "addTrameOnAdapter: " +  tmp.size()  + " trames");
                 for (Object o : tmp) {
                     ((WiresharkAdapter)mAdapterWireshark).addTrameOnAdapter((Trame)o);
                 }
+                mAdapterWireshark.notifyItemRangeInserted(0, tmp.size());
                 tmp.clear();
-                mAdapterWireshark.notifyDataSetChanged();
-                Log.d(TAG, "notify adapter changing");
                 if (mAutoscroll) {
                     mRV_Wireshark.smoothScrollToPosition(0);
                 }
@@ -74,8 +67,7 @@ public class                        WiresharkDispatcher  {
         });
     }
 
-    private synchronized Trame   pop() {
-        Log.d(TAG, "pop");
+    private synchronized Trame      pop() {
         Trame msg;
         while (queue.isEmpty()) {
             try {
@@ -88,9 +80,13 @@ public class                        WiresharkDispatcher  {
         return msg;
     }
 
-    public synchronized void    addToQueue(Trame o) {
-        Log.d(TAG, "addToqueue");
+    public synchronized void        addToQueue(Trame o) {
         queue.add(o);
         notifyAll();
+    }
+
+    public void                     stop() {
+        mIsRunning = false;
+
     }
 }

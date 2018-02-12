@@ -59,9 +59,10 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private ProgressBar             mProgressBar;
     private MyFragment              HistoricFragment = null, NetDiscoveryFragment = null;
     private MyFragment              mFragment = null, mLastFragment = null;
-    public int                MAXIMUM_PROGRESS = 8500, MAX_TIME_ONE_HOST = 1;
+    public int                      MAXIMUM_PROGRESS = 8500, MAX_TIME_ONE_HOST = 1;
     public Session                  actualSession;
     public Date                     date;
+    private Timer                   timer = new Timer();
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,12 +104,9 @@ public class                        HostDiscoveryActivity extends MyActivity {
             NetDiscoveryFragment = mFragment;
             initFragment(NetDiscoveryFragment);
             initSearchView();
-            initTimer();
-
         }
     }
 
-    Timer timer = new Timer();
     public void                     initTimer() {
         class UpdateTimer extends TimerTask {
             private Date start = Calendar.getInstance().getTime();
@@ -120,6 +118,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 });
             }
         }
+        if (timer == null)
+            timer = new Timer();
         timer.scheduleAtFixedRate(new UpdateTimer(), 0, 1000);
     }
 
@@ -175,18 +175,26 @@ public class                        HostDiscoveryActivity extends MyActivity {
             public void onClick(View v) {
                 mFab.startAnimation(AnimationUtils.loadAnimation(mInstance, R.anim.shake));
                 Utils.vibrateDevice(mInstance);
-
-                if (!mFragment.start()) {
-                    // Yes it's ugly, missconception herei admit, but lazy
-                    ((FragmentHostDiscoveryScan)NetDiscoveryFragment).launchMenu();
+                if (mFragment.getClass().getName().contains("FragmentHostDiscoveryScan") &&
+                    ((FragmentHostDiscoveryScan) mFragment).mHostLoaded) {
+                    mSingleton.selectedHostsList = ((FragmentHostDiscoveryScan) mFragment).getTargetFromHostList();
+                    if (mSingleton.DebugMode) {
+                        Log.d(TAG, "mSingleton.selectedHostsList" + mSingleton.selectedHostsList);
+                        Log.d(TAG, "mSingleton.hostsListSize:" +
+                                ((mSingleton.selectedHostsList != null) ? mSingleton.selectedHostsList.size() : "0"));
+                    }
                     mSingleton.actualSession = actualSession;
                     startActivity(new Intent(mInstance, NmapActivity.class));
+                }
+                else if (!mFragment.start()) {
+
                 } else if (mSingleton.DebugMode) {
                     Log.i(TAG, "fragment startAsLive false");
                 }
             }
         });
     }
+
 
     private void                    initFragment(MyFragment fragment) {
         try {
@@ -293,7 +301,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
             public void run() {
                 mProgressBar.setVisibility(View.VISIBLE);
                 if (progress != -1) {
-                    if (mProgress >= progress && progress == MAXIMUM_PROGRESS)
+                    if (progress >= MAXIMUM_PROGRESS)
                         mProgressBar.setVisibility(View.GONE);
                     mProgress = progress;
                 }
@@ -316,6 +324,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
                         e.printStackTrace();
                     }
                     mProgress += 1;
+                    if (mProgress == MAXIMUM_PROGRESS && ((FragmentHostDiscoveryScan) mFragment).mHostLoaded)
+                        mProgress -= 100;
                     final int prog2 = mProgress;
                     mInstance.runOnUiThread(new Runnable() {
                         public void run() {
@@ -336,7 +346,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
     public void                     setMAXIMUM_PROGRESS(int nbrHost) {
         int icmpLoopTime = 10;
         Log.d(TAG, "MAXIMUM PROGRESS SET : [" + icmpLoopTime + (nbrHost) + "] estimation[" + icmpLoopTime + (nbrHost) * 400 / 1000+ "s]");
-
         mProgressBar.setMax(icmpLoopTime + (nbrHost)*4);
         MAXIMUM_PROGRESS = icmpLoopTime + (nbrHost)*4;
     }
