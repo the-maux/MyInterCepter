@@ -14,7 +14,7 @@ import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.HostDiscovery.FragmentHistoric;
-import fr.allycs.app.View.Widget.Holder.SessionHolder;
+import fr.allycs.app.View.Widget.Adapter.Holder.SessionHolder;
 
 public class                    SessionAdapter extends RecyclerView.Adapter<SessionHolder> {
     private String              TAG = "SessionAdapter";

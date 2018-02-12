@@ -22,7 +22,7 @@ import fr.allycs.app.View.Activity.Settings.SettingsActivity;
 import fr.allycs.app.View.Activity.WebServer.WebServerActivity;
 import fr.allycs.app.View.Activity.Wireshark.WiresharkActivity;
 import fr.allycs.app.View.Behavior.MyGlideLoader;
-import fr.allycs.app.View.Widget.Holder.MenuItemPointHolder;
+import fr.allycs.app.View.Widget.Adapter.Holder.MenuItemPointHolder;
 
 public class                    MenuAdapter extends RecyclerView.Adapter<MenuItemPointHolder> {
     private String              TAG = "MenuAdapter";

@@ -68,7 +68,7 @@ public class               Trame extends MyObject {
                     HttpsParsing(line);
                     break;
                 case HTTP:
-                    Log.d(TAG, "HTTP trame: " + line);
+                    //Log.d(TAG, "HTTP trame: " + line);
                     HttpParsing(line);
                     break;
                 case TCP:

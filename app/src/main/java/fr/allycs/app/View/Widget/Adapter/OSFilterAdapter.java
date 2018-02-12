@@ -12,7 +12,7 @@ import java.util.List;
 import fr.allycs.app.Core.Nmap.Fingerprint;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Widget.Holder.HostSelectionHolder;
+import fr.allycs.app.View.Widget.Adapter.Holder.HostSelectionHolder;
 
 public class                    OSFilterAdapter extends RecyclerView.Adapter<HostSelectionHolder> {
     private String              TAG = "OSFilterAdapter";

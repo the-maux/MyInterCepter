@@ -1,4 +1,4 @@
-package fr.allycs.app.View.Widget.Holder;
+package fr.allycs.app.View.Widget.Adapter.Holder;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -9,19 +9,21 @@ import android.widget.TextView;
 
 import fr.allycs.app.R;
 
-public class                PcapHolder extends RecyclerView.ViewHolder {
+public class                SessionHolder extends RecyclerView.ViewHolder {
     public CardView         card_view;
     public RelativeLayout   relative_layout;
-    public ImageView        forward, wifi_logo;
     public TextView         title, subtitle;
+    public ImageView        forward, wiresharkMiniLogo, doraMiniLogo, icon;
 
-    public                  PcapHolder(View itemView) {
+    public                  SessionHolder(View itemView) {
         super(itemView);
         card_view = itemView.findViewById(R.id.card_view);
         relative_layout = itemView.findViewById(R.id.relative_layout);
-        title = itemView.findViewById(R.id.ssid);
-        subtitle = itemView.findViewById(R.id.ssid_subtitle);
+        title = itemView.findViewById(R.id.title);
+        icon = itemView.findViewById(R.id.icon);
+        subtitle = itemView.findViewById(R.id.subtitle);
         forward = itemView.findViewById(R.id.icon2);
-        wifi_logo = itemView.findViewById(R.id.icon);
+        wiresharkMiniLogo = itemView.findViewById(R.id.wiresharkMiniLogo);
+        doraMiniLogo = itemView.findViewById(R.id.doraMiniLogo);
     }
 }

@@ -88,8 +88,12 @@ public class                    WiresharkActivity extends SniffActivity {
     }
 
     public void                 connectionSucceed() {
-        if (mProgressBar.getVisibility() == View.VISIBLE)
-            mProgressBar.setVisibility(View.GONE);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mProgressBar.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void                initSettings() {

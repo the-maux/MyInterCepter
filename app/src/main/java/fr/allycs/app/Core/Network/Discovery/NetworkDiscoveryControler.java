@@ -76,7 +76,7 @@ public class                        NetworkDiscoveryControler {
     public void                     onHostActualized(ArrayList<Host> hosts) {
         Log.d(TAG, "Full scanning in " + Utils.TimeDifference(startScanning));
         String time = Utils.TimeDifference(startScanning);
-        setToolbarTitle(hosts.size() + " device" + ((hosts.size() > 1) ? "s" : "") + " found",
+        setToolbarTitle(hosts.size() + " device" + ((hosts.size() > 1) ? "s" : "") + " discovered",
                 mSingleton.network.Ssid  + " analyzed in " + time);
         mFragment.onHostActualized(hosts);
     }

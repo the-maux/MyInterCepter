@@ -11,7 +11,7 @@ import fr.allycs.app.View.Behavior.MyGlideLoader;
 import fr.allycs.app.Model.Net.Pcap;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.HostDetail.PcapFragment;
-import fr.allycs.app.View.Widget.Holder.PcapHolder;
+import fr.allycs.app.View.Widget.Adapter.Holder.PcapHolder;
 
 public class                    PcapFilesAdapter extends RecyclerView.Adapter<PcapHolder> {
     private String              TAG = "AccessPointAdapter";

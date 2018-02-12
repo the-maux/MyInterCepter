@@ -13,7 +13,7 @@ import java.util.List;
 
 import fr.allycs.app.Model.Unix.DoraProcess;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Widget.Holder.DoraHolder;
+import fr.allycs.app.View.Widget.Adapter.Holder.DoraHolder;
 
 
 public class                    DoraAdapter extends RecyclerView.Adapter<DoraHolder> {

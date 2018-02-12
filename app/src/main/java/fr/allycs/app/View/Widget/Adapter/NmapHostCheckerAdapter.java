@@ -11,7 +11,7 @@ import java.util.List;
 import fr.allycs.app.Core.Nmap.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Widget.Holder.HostSelectionHolder;
+import fr.allycs.app.View.Widget.Adapter.Holder.HostSelectionHolder;
 
 public class                    NmapHostCheckerAdapter extends RecyclerView.Adapter<HostSelectionHolder> {
     private String              TAG = this.getClass().getName();

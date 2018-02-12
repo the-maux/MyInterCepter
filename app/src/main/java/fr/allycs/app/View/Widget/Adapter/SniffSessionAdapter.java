@@ -19,7 +19,7 @@ import fr.allycs.app.Model.Target.SniffSession;
 import fr.allycs.app.Model.Net.Pcap;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Widget.Dialog.QuestionDialog;
-import fr.allycs.app.View.Widget.Holder.SniffSessionHolder;
+import fr.allycs.app.View.Widget.Adapter.Holder.SniffSessionHolder;
 
 public class                    SniffSessionAdapter extends RecyclerView.Adapter<SniffSessionHolder> {
     private String              TAG = "SniffSessionAdapter";

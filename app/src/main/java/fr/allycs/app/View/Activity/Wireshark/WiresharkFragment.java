@@ -86,12 +86,31 @@ public class                    WiresharkFragment extends MyFragment {
         initRV();
         initTimer();
     }
+    public class WrapContentLinearLayoutManager extends LinearLayoutManager {
+        public WrapContentLinearLayoutManager(Context context) {
+            super(context);
+        }
 
+        public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
+            try {
+                super.onLayoutChildren(recycler, state);
+            } catch (IndexOutOfBoundsException e) {
+                mRV_Wireshark.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapterWireshark.notifyDataSetChanged();
+                    }
+                });
+                Log.e("Error", "O.M.G::IndexOutOfBoundsException in RecyclerView happens");
+            }
+        }
+    }
     private void                initRV() {
         mAdapterWireshark = new WiresharkAdapter(mActivity, mRV_Wireshark);
         mRV_Wireshark.setAdapter(mAdapterWireshark);
-        mRV_Wireshark.hasFixedSize();
-        mRV_Wireshark.setLayoutManager(new LinearLayoutManager(mActivity));
+        //mRV_Wireshark.hasFixedSize();
+
+        mRV_Wireshark.setLayoutManager(new WrapContentLinearLayoutManager(mActivity));
     }
 
     private void                initFilter() {
@@ -170,7 +189,7 @@ public class                    WiresharkFragment extends MyFragment {
         if (mListHostSelected.isEmpty()) {
             if (mSingleton.selectedHostsList.size() == 1) {//Automatic selection when 1 target only
                 mListHostSelected.add(mSingleton.selectedHostsList.get(0));
-                mActivity.setToolbarTitle(null,"Sniffing " + mSingleton.selectedHostsList.get(0).ip);
+                mActivity.setToolbarTitle(null,"Listenning " + mSingleton.selectedHostsList.get(0).ip);
             } else {
                 mActivity.showSnackbar("Selectionner une target", -1);
                 onClickChoiceTarget();
@@ -187,12 +206,6 @@ public class                    WiresharkFragment extends MyFragment {
                 .initCmd(mListHostSelected, mTypeScan, cmd)
                 .start(trameDispatcher);
         mMonitorAgv.setText(argv);
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mAdapterWireshark.notifyDataSetChanged();
-            }
-        });
         return true;
     }
 

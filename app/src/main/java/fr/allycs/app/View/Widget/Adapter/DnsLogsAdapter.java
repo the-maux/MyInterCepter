@@ -13,8 +13,8 @@ import java.util.List;
 import fr.allycs.app.View.Behavior.MyGlideLoader;
 import fr.allycs.app.Model.Unix.DNSLog;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Widget.Holder.ConsoleLogHolder;
-import fr.allycs.app.View.Widget.Holder.DnsLogHolder;
+import fr.allycs.app.View.Widget.Adapter.Holder.ConsoleLogHolder;
+import fr.allycs.app.View.Widget.Adapter.Holder.DnsLogHolder;
 
 
 public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsLogHolder> {
@@ -34,18 +34,18 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
     }
 
     public void                 onBindViewHolder(final DnsLogHolder holder, int position) {
-        DNSLog dnslog = mListConsole.get(position);
+        final DNSLog dnslog = mListConsole.get(position);
         holder.nameHost.setText(dnslog.domain);
         setCurrentTypeLogo(dnslog.currentType, holder.DNSTypeImg);
-        holder.DnsRVLogs.setAdapter(setDetailLogsAdapter(dnslog, holder.DnsRVLogs));
-        holder.DnsRVLogs.setHasFixedSize(true);
-        holder.DnsRVLogs.setLayoutManager(new LinearLayoutManager(activity));
         holder.viewFullLogsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (holder.RV_layout.getVisibility() == View.GONE)
+                if (holder.RV_layout.getVisibility() == View.GONE) {
+                    holder.DnsRVLogs.setAdapter(setDetailLogsAdapter(dnslog, holder.DnsRVLogs));
+                    holder.DnsRVLogs.setHasFixedSize(true);
+                    holder.DnsRVLogs.setLayoutManager(new LinearLayoutManager(activity));
                     holder.RV_layout.setVisibility(View.VISIBLE);
-                else
+                } else
                     holder.RV_layout.setVisibility(View.GONE);
             }
         });

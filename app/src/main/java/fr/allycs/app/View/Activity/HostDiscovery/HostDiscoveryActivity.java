@@ -104,6 +104,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
             NetDiscoveryFragment = mFragment;
             initFragment(NetDiscoveryFragment);
             initSearchView();
+            initTimer();
+
         }
     }
 

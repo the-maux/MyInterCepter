@@ -1,6 +1,5 @@
-package fr.allycs.app.View.Widget.Holder;
+package fr.allycs.app.View.Widget.Adapter.Holder;
 
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;

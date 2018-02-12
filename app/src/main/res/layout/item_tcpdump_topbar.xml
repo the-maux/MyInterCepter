@@ -24,6 +24,7 @@
         android:text="No"
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="11sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,6 +41,7 @@
         android:text="Time"
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="11sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/No"
         app:layout_constraintTop_toTopOf="parent" />
@@ -57,6 +59,7 @@
         android:text=" Source"
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="11sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/time"
         app:layout_constraintTop_toTopOf="parent" />
@@ -74,6 +77,7 @@
         android:text=" Destination"
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="11sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/Source"
         app:layout_constraintTop_toTopOf="parent" />
@@ -90,6 +94,7 @@
         android:text=" Protocol"
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="11sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/Destination"
         app:layout_constraintTop_toTopOf="parent" />
@@ -107,6 +112,7 @@
         android:text=" Info"
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="11sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/Protocol"
         app:layout_constraintRight_toRightOf="parent"

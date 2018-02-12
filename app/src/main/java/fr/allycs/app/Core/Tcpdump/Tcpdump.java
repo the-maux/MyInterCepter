@@ -1,6 +1,7 @@
 package fr.allycs.app.Core.Tcpdump;
 
 import android.app.Activity;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -14,6 +15,7 @@ import fr.allycs.app.Core.Network.ArpSpoof;
 import fr.allycs.app.Core.Network.IPTables;
 import fr.allycs.app.Model.Net.Trame;
 import fr.allycs.app.Model.Target.Host;
+import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.Wireshark.WiresharkActivity;
 import fr.allycs.app.View.Behavior.WiresharkDispatcher;
 
@@ -76,6 +78,12 @@ public class                        Tcpdump {
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.e(TAG, "Process Error: " + e.getMessage());
+                    mActivity.showSnackbar(e.getMessage(), ContextCompat.getColor(mActivity, R.color.material_red_400));
+                    mActivity.setToolbarTitle("Execution stopped", e.getMessage());
+                    onTcpDumpStop();
+                    Log.d(TAG, "Restarting ?");
+                    if (e.getMessage().contains("read failed"))
+                        start(trameDispatcher);
                 } finally {
                     if (mTcpDumpProcess != null)
                         mTcpDumpProcess.closeProcess();
@@ -113,13 +121,12 @@ public class                        Tcpdump {
         }
         Trame trame = new Trame(line, 0);
         if (trame.initialised) {
-            Log.d(TAG, "onNewLine");
             mDispatcher.addToQueue(trame);
         } else if (!trame.skipped) {
             Log.d(TAG, "trame created not initialized and not skipped, STOP TCPDUMP");
             mActivity.onTrameError(/*trame*/);
             onTcpDumpStop();
-        }
+        }//else skipped
     }
     public void                     onTcpDumpStop() {
         if (isRunning) {

@@ -52,17 +52,15 @@ public class                        WiresharkDispatcher  {
         mRV_Wireshark.post(new Runnable() {
             @Override
             public void run() {
+                int size = queue.size();
                 for (int i = 0; i < queue.size(); i++) {
-                    tmp.add(pop());
+                    ((WiresharkAdapter)mAdapterWireshark).addTrameOnAdapter((Trame)pop());
+//                    mAdapterWireshark.notifyItemInserted(0);
                 }
-                for (Object o : tmp) {
-                    ((WiresharkAdapter)mAdapterWireshark).addTrameOnAdapter((Trame)o);
-                }
-                mAdapterWireshark.notifyItemRangeInserted(0, tmp.size());
-                tmp.clear();
-                if (mAutoscroll) {
+                Log.d(TAG, "notifyItemRangeInserted(0," + size+ ");");
+                mAdapterWireshark.notifyItemRangeInserted(0, size);
+                if (mAutoscroll)
                     mRV_Wireshark.smoothScrollToPosition(0);
-                }
             }
         });
     }

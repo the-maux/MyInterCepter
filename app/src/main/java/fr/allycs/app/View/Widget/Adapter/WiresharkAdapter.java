@@ -13,7 +13,7 @@ import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Model.Net.Protocol;
 import fr.allycs.app.Model.Net.Trame;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Widget.Holder.WiresharkHolder;
+import fr.allycs.app.View.Widget.Adapter.Holder.WiresharkHolder;
 
 public class                WiresharkAdapter extends RecyclerView.Adapter<WiresharkHolder> {
     private String          TAG = "WiresharkAdapter";
@@ -35,7 +35,7 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
 
     public WiresharkHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
         return new WiresharkHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_tcpdump, parent, false));
+                .inflate(R.layout.item_tcpdump, parent, false), false);
     }
 
     public void             onBindViewHolder(WiresharkHolder holder, int position) {
@@ -43,11 +43,7 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         holder.No.setText(trame.offsett + "");
         holder.time.setText(trame.time);
         holder.source.setText(trame.StringSrc);
-        if (trame.StringDest.contains("00:16:7f")) {
-            holder.dest.setText("00:16:7F:13:4A:DD");
-        } else {
-            holder.dest.setText(trame.StringDest.toUpperCase());
-        }
+        holder.dest.setText(trame.StringDest.toUpperCase());
         holder.proto.setText(trame.protocol.name().toUpperCase());
         holder.info.setText(trame.info);
         setBackgroundColor(trame.backgroundColor, holder);
@@ -61,12 +57,7 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         holder.proto.setBackgroundColor(ContextCompat.getColor(mActivity, color));
         holder.info.setBackgroundColor(ContextCompat.getColor(mActivity, color));
         holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.material_grey_700));
-//        holder.No.setTypeface(null, Typeface.NORMAL);
-//        holder.time.setTypeface(null, Typeface.NORMAL);
-//        holder.source.setTypeface(null, Typeface.NORMAL);
-//        holder.dest.setTypeface(null, Typeface.NORMAL);
-//        holder.proto.setTypeface(null, Typeface.NORMAL);
-//        holder.info.setTypeface(null, Typeface.NORMAL);
+
     }
 
     public int              getItemCount() {

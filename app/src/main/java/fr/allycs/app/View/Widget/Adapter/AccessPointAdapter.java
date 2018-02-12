@@ -11,7 +11,7 @@ import fr.allycs.app.View.Behavior.MyGlideLoader;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.HostDiscovery.FragmentHistoric;
-import fr.allycs.app.View.Widget.Holder.AccessPointHolder;
+import fr.allycs.app.View.Widget.Adapter.Holder.AccessPointHolder;
 
 public class                    AccessPointAdapter extends RecyclerView.Adapter<AccessPointHolder> {
     private String              TAG = "AccessPointAdapter";

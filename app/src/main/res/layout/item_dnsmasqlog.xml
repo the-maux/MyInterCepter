@@ -58,7 +58,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="22dp"
-                android:src="@android:drawable/arrow_down_float" />
+                android:src="@drawable/ms__arrow" />
 
         </RelativeLayout>
 
@@ -71,7 +71,7 @@
         android:layout_below="@+id/card_view"
         android:layout_marginTop="-2dp"
         android:background="@android:drawable/editbox_dropdown_dark_frame"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/DnsRVLogs"
