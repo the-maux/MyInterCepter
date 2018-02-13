@@ -146,14 +146,4 @@ public class                        Tcpdump {
         }
     }
 
-    public LinkedHashMap<String, String> getCmdsWithArgsInMap() {
-        return mCmds;
-    }
-    public boolean                  ismAdvancedAnalyseTrame() {
-        return mAdvancedAnalyseTrame;
-    }
-    public void                     setmAdvancedAnalyseTrame(boolean mAdvancedAnalyseTrame) {
-        /** TODO: Restart App with dump Mode**/
-        this.mAdvancedAnalyseTrame = mAdvancedAnalyseTrame;
-    }
 }

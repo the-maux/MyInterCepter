@@ -50,11 +50,10 @@ public class                    GeneralSettings {
         builder.addItem(0, PCAP_DUMP, (mTcpdump.isDumpingInFile) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp );
         builder.addItem(1, SSLSTRIP_MODE, (mSingleton.isSslstripMode()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp );
         builder.addItem(2, LOCKSCREEN, (mSingleton.isLockScreen()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp );
-        builder.addItem(3, ADVANCED_SNIFF_ANAL, (mTcpdump.ismAdvancedAnalyseTrame()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp );
         builder.addDividerItem();
-        builder.addItem(4, PORT_REDIRECT, R.drawable.ic_checkbox_blank_outline_grey600_24dp);
-        builder.addItem(5, PORT_FILTERING, R.drawable.ic_checkbox_blank_outline_grey600_24dp);
-        builder.addItem(6, DNS_SPOOFING, (mSingleton.isDnsControlstarted()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp )
+        builder.addItem(3, PORT_REDIRECT, R.drawable.ic_checkbox_blank_outline_grey600_24dp);
+        builder.addItem(4, PORT_FILTERING, R.drawable.ic_checkbox_blank_outline_grey600_24dp);
+        builder.addItem(5, DNS_SPOOFING, (mSingleton.isDnsControlstarted()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp )
                 .setItemClickListener(onClick())
                 .expandOnStart(true);
         mBottomSheet = builder.createDialog();
@@ -76,7 +75,7 @@ public class                    GeneralSettings {
                         mSingleton.setLockScreen(!mSingleton.isLockScreen());
                         break;
                     case ADVANCED_SNIFF_ANAL:
-                        mTcpdump.setmAdvancedAnalyseTrame(!mTcpdump.ismAdvancedAnalyseTrame());
+//                        mTcpdump.setmAdvancedAnalyseTrame(!mTcpdump.ismAdvancedAnalyseTrame());
                         break;
                     case PORT_REDIRECT:
                         onPortMitm(true);

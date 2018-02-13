@@ -44,19 +44,32 @@
 
             </android.support.v7.widget.Toolbar>
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/settings"
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="false"
                 android:layout_alignParentRight="false"
-                android:layout_marginRight="12dp"
+                android:layout_marginRight="8dp"
+                android:layout_toLeftOf="@+id/settings2"
+                android:background="@android:color/transparent"
+                android:baselineAlignBottom="false"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/ic_history_foreground" />
+
+            <ImageButton
+                android:id="@+id/settings2"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentRight="false"
                 android:layout_toLeftOf="@+id/settingsMenu"
                 android:background="@android:color/transparent"
                 android:baselineAlignBottom="false"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:src="@android:drawable/ic_menu_manage" />
+                android:src="@android:drawable/ic_menu_manage"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/settingsMenu"

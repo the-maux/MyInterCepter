@@ -25,7 +25,6 @@ import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Configuration.Utils;
 import fr.allycs.app.Core.Tcpdump.Tcpdump;
 import fr.allycs.app.Model.Net.Protocol;
-import fr.allycs.app.Model.Net.Trame;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Behavior.Fragment.MyFragment;
@@ -207,22 +206,6 @@ public class                    WiresharkFragment extends MyFragment {
                 .start(trameDispatcher);
         mMonitorAgv.setText(argv);
         return true;
-    }
-
-    public void                 onNewTrame(final Trame trame) {
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (!trame.connectionOver && trame.Errno == null && trame.initialised) {
-
-
-                } else if (!trame.skipped) { /** Error Trame; Over**/
-                    mActivity.onTrameError();
-                } else {
-                    Log.d(TAG, "Not inited or skipped:" + trame);
-                }
-            }//else skipped do nothing
-        });
     }
 
     private void                onClickChoiceTarget() {
