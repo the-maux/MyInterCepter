@@ -15,10 +15,10 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Map;
 
-import fr.allycs.app.View.Behavior.Fragment.MyFragment;
 import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
+import fr.allycs.app.View.Behavior.Fragment.MyFragment;
 
 public class                    NmapOutputFragment extends MyFragment  {
     private String              TAG = "NmapOutputFragment";
@@ -38,7 +38,7 @@ public class                    NmapOutputFragment extends MyFragment  {
 
     private void                initXml(View rootView) {
         mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
-        Output = rootView.findViewById(R.id.Output);
+        Output = rootView.findViewById(R.id.RV_Wireshark);
         Output.setMovementMethod(new ScrollingMovementMethod());
         String output = "<font color='red'>" + PROMPT + "</font> ";
         Output.setText(Html.fromHtml(output), TextView.BufferType.SPANNABLE);

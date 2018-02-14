@@ -78,7 +78,7 @@ public class                        Tcpdump {
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.e(TAG, "Process Error: " + e.getMessage());
-                    mActivity.showSnackbar(e.getMessage(), ContextCompat.getColor(mActivity, R.color.material_red_400));
+                    mActivity.showSnackbar(e.getMessage(), ContextCompat.getColor(mActivity, R.color.stop_color));
                     mActivity.setToolbarTitle("Execution stopped", e.getMessage());
                     onTcpDumpStop();
                     Log.d(TAG, "Restarting ?");
@@ -124,7 +124,7 @@ public class                        Tcpdump {
             mDispatcher.addToQueue(trame);
         } else if (!trame.skipped) {
             Log.d(TAG, "trame created not initialized and not skipped, STOP TCPDUMP");
-            mActivity.onTrameError(/*trame*/);
+            mActivity.onError(/*trame*/);
             onTcpDumpStop();
         }//else skipped
     }

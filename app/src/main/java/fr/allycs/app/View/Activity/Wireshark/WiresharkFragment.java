@@ -10,21 +10,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.jaredrummler.materialspinner.MaterialSpinner;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Configuration.Utils;
 import fr.allycs.app.Core.Tcpdump.Tcpdump;
-import fr.allycs.app.Model.Net.Protocol;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Behavior.Fragment.MyFragment;
@@ -41,15 +34,15 @@ public class                    WiresharkFragment extends MyFragment {
     private Host                mFocusedHost;//TODO need to be init
     private Context             mCtx;
     private WiresharkActivity   mActivity;
-    private MaterialSpinner     mSpiner;
+//    private MaterialSpinner     mSpiner;
     private RecyclerView        mRV_Wireshark;
     private WiresharkAdapter    mAdapterWireshark;
     private List<Host>          mListHostSelected = new ArrayList<>();
-    private TextView            mMonitorAgv, mMonitorCmd;
+    private TextView            mMonitorAgv;//, mMonitorCmd;
     private Tcpdump             mTcpdump;
     private String              mTypeScan = "No Filter";
-    private CheckBox            Autoscroll;
-    private TextView            tcp_cb, dns_cb, arp_cb, https_cb, http_cb, udp_cb, ip_cb;
+/*    private CheckBox            Autoscroll;
+    private TextView            tcp_cb, dns_cb, arp_cb, https_cb, http_cb, udp_cb, ip_cb;*/
 
     
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
@@ -65,23 +58,23 @@ public class                    WiresharkFragment extends MyFragment {
     
     private void                initXml(View rootView) {
         mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
-        mSpiner =  rootView.findViewById(R.id.spinnerTypeScan);
-        mRV_Wireshark = rootView.findViewById(R.id.Output);
-        Autoscroll =  rootView.findViewById(R.id.Autoscroll);
-        tcp_cb =  rootView.findViewById(R.id.tcp_cb);
-        dns_cb =  rootView.findViewById(R.id.dns_cb);
-        arp_cb =  rootView.findViewById(R.id.arp_cb);
-        https_cb =  rootView.findViewById(R.id.https_cb);
-        http_cb =  rootView.findViewById(R.id.http_cb);
-        udp_cb =  rootView.findViewById(R.id.udp_cb);
-        ip_cb =  rootView.findViewById(R.id.ip_cb);
+        mRV_Wireshark = rootView.findViewById(R.id.RV_Wireshark);
         mMonitorAgv =  rootView.findViewById(R.id.Monitor);
-        mMonitorCmd =  rootView.findViewById(R.id.cmd);
+  //      mMonitorCmd =  rootView.findViewById(R.id.cmd);
+//        mSpiner =  rootView.findViewById(R.id.spinnerTypeScan);
+//        Autoscroll =  rootView.findViewById(R.id.Autoscroll);
+//        tcp_cb =  rootView.findViewById(R.id.tcp_cb);
+//        dns_cb =  rootView.findViewById(R.id.dns_cb);
+//        arp_cb =  rootView.findViewById(R.id.arp_cb);
+//        https_cb =  rootView.findViewById(R.id.https_cb);
+//        http_cb =  rootView.findViewById(R.id.http_cb);
+//        udp_cb =  rootView.findViewById(R.id.udp_cb);
+//        ip_cb =  rootView.findViewById(R.id.ip_cb);
     }
 
     public void                 init() {
-        initSpinner();
-        initFilter();
+        //initSpinner();
+        //initFilter();
         initRV();
         initTimer();
     }
@@ -111,8 +104,10 @@ public class                    WiresharkFragment extends MyFragment {
 
         mRV_Wireshark.setLayoutManager(new WrapContentLinearLayoutManager(mActivity));
     }
+    private void                initTimer() {
 
-    private void                initFilter() {
+    }
+    /*private void                initFilter() {
         tcp_cb.setOnClickListener(onChangePermissionFilter(Protocol.TCP, tcp_cb));
         dns_cb.setOnClickListener(onChangePermissionFilter(Protocol.DNS, dns_cb));
         http_cb.setOnClickListener(onChangePermissionFilter(Protocol.HTTP, http_cb));
@@ -136,11 +131,9 @@ public class                    WiresharkFragment extends MyFragment {
             }
         };
     }
-    private void                initTimer() {
 
-    }
 
-    private void                initSpinner() {
+/*    private void                initSpinner() {
         final Map<String, String> mParams = new HashMap<>();
         Iterator it = mTcpdump.getCmdsWithArgsInMap().entrySet().iterator();
         ArrayList<String> cmds = new ArrayList<>();
@@ -164,7 +157,7 @@ public class                    WiresharkFragment extends MyFragment {
             mMonitorCmd.setText(mParams.get(cmds.get(0)));
         }
         Log.d(TAG, "initSpinner:: monitor::" + mMonitorCmd.getText().toString());
-    }
+    }*/
 
     public boolean              start(boolean isResume) {
         Utils.vibrateDevice(mActivity);
@@ -196,13 +189,9 @@ public class                    WiresharkFragment extends MyFragment {
             }
         }
         Log.d(TAG, "mTcpdump.actualParam::" + mTcpdump.actualParam);
-        Log.d(TAG, "mMonitorCmd::" + mMonitorCmd.getText().toString());
-        mMonitorCmd.setText(mTcpdump.actualParam);
-        Log.d(TAG, "starting tcpdump with monitor:[" + mMonitorCmd.getText().toString() + "]");
-        String cmd = mMonitorCmd.getText().toString();
         WiresharkDispatcher trameDispatcher = new WiresharkDispatcher(mAdapterWireshark, mRV_Wireshark, mActivity);
         String argv = mTcpdump
-                .initCmd(mListHostSelected, mTypeScan, cmd)
+                .initCmd(mListHostSelected, mTypeScan, mTcpdump.actualParam)
                 .start(trameDispatcher);
         mMonitorAgv.setText(argv);
         return true;

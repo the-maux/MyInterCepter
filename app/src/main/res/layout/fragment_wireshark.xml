@@ -5,290 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
-    <RelativeLayout
-        android:id="@+id/rootView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-        <RelativeLayout
-            android:id="@+id/TopBarLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/material_grey_900">
-
-            <RelativeLayout
-                android:id="@+id/nmapConfEditorLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/material_grey_900"
-                android:elevation="4dp"
-                android:padding="8dp"
-                android:visibility="gone">
-
-                <com.jaredrummler.materialspinner.MaterialSpinner
-                    android:id="@+id/spinnerTypeScan"
-                    android:layout_width="150dp"
-                    android:layout_height="55dp"
-                    android:layout_alignParentRight="false"
-                    android:layout_alignParentStart="false"
-                    android:layout_alignParentTop="false"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:elevation="4dp"
-                    android:text="DNS filter"
-                    android:textColor="@color/material_light_black"
-                    android:visibility="visible" />
-
-                <EditText
-                    android:id="@+id/cmd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/spinnerTypeScan"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignTop="@+id/spinnerTypeScan"
-                    android:layout_toRightOf="@+id/spinnerTypeScan"
-                    android:background="@color/material_grey_400"
-                    android:focusableInTouchMode="true"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="8dp"
-                    android:text="DNS"
-                    android:textColor="@color/primary_text"
-                    android:textSize="16sp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/filterPcapLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/material_grey_900"
-                android:elevation="4dp"
-                android:padding="8dp"
-                android:visibility="gone">
-
-                <RelativeLayout
-                    android:id="@+id/lineFilterProto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/titleProtocol"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="textPersonName"
-                        android:text="Protocole:"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/titleProtocol"
-                        android:orientation="horizontal"
-                        android:weightSum="6">
-
-                        <TextView
-                            android:id="@+id/tcp_cb"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignTop="@+id/https_cb"
-                            android:layout_margin="4dp"
-                            android:layout_toRightOf="@+id/https_cb"
-                            android:layout_weight="1"
-                            android:background="@drawable/rounded_corner_on"
-                            android:elevation="2dp"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="8dp"
-                            android:singleLine="true"
-                            android:text="TCP"
-                            android:textColor="@color/primary_text"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/dns_cb"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignTop="@+id/ip_cb"
-                            android:layout_margin="4dp"
-                            android:layout_toRightOf="@+id/ip_cb"
-                            android:layout_weight="1"
-                            android:background="@drawable/rounded_corner_on"
-                            android:elevation="2dp"
-
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="8dp"
-                            android:singleLine="true"
-                            android:text="DNS"
-                            android:textColor="@color/primary_text"
-                            android:textSize="13sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/arp_cb"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignLeft="@+id/titleProtocol"
-                            android:layout_below="@+id/titleProtocol"
-                            android:layout_margin="4dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/rounded_corner_on"
-                            android:elevation="2dp"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="8dp"
-                            android:singleLine="true"
-                            android:text="ARP"
-                            android:textColor="@color/primary_text"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/https_cb"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignTop="@+id/arp_cb"
-                            android:layout_margin="4dp"
-                            android:layout_toRightOf="@+id/arp_cb"
-                            android:layout_weight="1"
-                            android:background="@drawable/rounded_corner_on"
-                            android:elevation="2dp"
-                            android:gravity="center"
-                            android:paddingBottom="10dp"
-                            android:paddingTop="10dp"
-                            android:singleLine="true"
-                            android:text="HTTPS"
-                            android:textColor="@color/primary_text"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/http_cb"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignTop="@+id/arp_cb"
-                            android:layout_margin="4dp"
-                            android:layout_toRightOf="@+id/arp_cb"
-                            android:layout_weight="1"
-                            android:background="@drawable/rounded_corner_on"
-                            android:elevation="2dp"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="8dp"
-                            android:singleLine="true"
-                            android:text="HTTP"
-                            android:textColor="@color/primary_text"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/udp_cb"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignTop="@+id/https_cb"
-                            android:layout_margin="4dp"
-                            android:layout_toRightOf="@+id/tcp_cb"
-                            android:layout_weight="1"
-                            android:background="@drawable/rounded_corner_on"
-                            android:elevation="2dp"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="8dp"
-                            android:singleLine="true"
-                            android:text="UDP"
-                            android:textColor="@color/primary_text"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/ip_cb"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignTop="@+id/udp_cb"
-                            android:layout_margin="4dp"
-                            android:layout_toRightOf="@+id/udp_cb"
-                            android:layout_weight="1"
-                            android:background="@drawable/rounded_corner_on"
-                            android:elevation="2dp"
-                            android:gravity="center"
-                            android:padding="4dp"
-                            android:text=" IP"
-                            android:textColor="?attr/actionMenuTextColor"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:visibility="gone" />
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/lineFilterInfo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/lineFilterProto">
-
-                    <TextView
-                        android:id="@+id/titleSection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="textPersonName"
-                        android:text="Section:"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <CheckBox
-                        android:id="@+id/Autoscroll"
-                        style="@android:style/Widget.Material.Light.CompoundButton.CheckBox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/No_cb"
-                        android:layout_marginLeft="17dp"
-                        android:layout_toRightOf="@+id/time_cb"
-                        android:checked="true"
-                        android:text="Autoscroll"
-                        android:textColor="@color/material_light_white"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <CheckBox
-                        android:id="@+id/No_cb"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/titleSection"
-                        android:checked="true"
-                        android:text="N°"
-                        android:textColor="@color/material_light_white"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <CheckBox
-                        android:id="@+id/time_cb"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/No_cb"
-                        android:layout_marginLeft="17dp"
-                        android:layout_toRightOf="@+id/No_cb"
-                        android:checked="true"
-                        android:text="Timef"
-                        android:textColor="@color/material_light_white"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                </RelativeLayout>
-
-            </RelativeLayout>
-        </RelativeLayout>
-
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/TopBarLayout">
+            android:layout_height="match_parent">
 
             <include
                 android:id="@+id/topBar"
@@ -303,16 +22,15 @@
                 android:id="@+id/Monitor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#111111"
+                android:background="@color/black_primary"
                 android:elevation="2dp"
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:paddingBottom="2dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="2dp"
+                android:paddingEnd="2dp"
+                android:paddingStart="16dp"
                 android:paddingTop="2dp"
-                android:text="tcpdump [ -AdDefIKlLnNOpqRStuUvxX ] [Expression]"
-                android:textColor="@color/material_light_white"
+                android:textColor="?android:attr/textColorTertiary"
                 android:textStyle="italic"
                 android:typeface="normal"
                 android:visibility="gone" />
@@ -321,61 +39,24 @@
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentRight="false"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentEnd="false"
                 android:layout_below="@+id/topBar"
                 android:fillViewport="true"
                 android:scrollbars="horizontal"
                 android:visibility="visible">
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/Output"
-                    android:layout_width="match_parent"
+                    android:id="@+id/RV_Wireshark"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:alpha="0.98"
                     android:scrollbars="vertical"
 
                     tools:listitem="@layout/item_tcpdump" />
 
-
-                <!--android.support.constraint.ConstraintLayout
-                    android:id="@+id/relativeLayout2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@color/cardview_shadow_start_color"
-                    android:visibility="gone">
-
-                    <include
-                        android:id="@+id/topBar"
-                        layout="@layout/item_tcpdump"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@color/cardview_shadow_start_color"
-                        android:elevation="4dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/Output"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:alpha="0.98"
-                        android:background="@color/generic_background"
-                        android:scrollbars="vertical"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:listitem="@layout/item_tcpdump" />
-
-
-                </android.support.constraint.ConstraintLayout-->
             </HorizontalScrollView>
 
         </RelativeLayout>
-
-    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

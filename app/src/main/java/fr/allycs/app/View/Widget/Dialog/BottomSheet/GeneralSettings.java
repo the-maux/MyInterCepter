@@ -27,8 +27,8 @@ public class                    GeneralSettings {
     private BottomSheetMenuDialog mBottomSheet;
 
     private final String        PCAP_DUMP = "Write in Pcap file",
-                                SSLSTRIP_MODE = "SslStrip Mode",
-                                LOCKSCREEN = "Lockscreen",
+                                SSLSTRIP_MODE = "SSLstrip Activated",
+                                LOCKSCREEN = "Lockscreen Activated",
                                 ADVANCED_SNIFF_ANAL = "Advanced trame analyse",
                                 PORT_REDIRECT = "Ports redirect",
                                 PORT_FILTERING = "Ports filtering",

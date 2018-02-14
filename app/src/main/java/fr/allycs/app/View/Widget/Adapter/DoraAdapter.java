@@ -35,6 +35,7 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
                 .inflate(R.layout.item_dora, parent, false));
     }
 
+
     public void                 onBindViewHolder(DoraHolder holder, int position) {
         final DoraProcess host = mHosts.get(position);
         holder.diagnose.setText(new String(new char[host.getVisu()]).replace("\0", "#"));
@@ -45,11 +46,11 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
         if (pourc == 0) {
             holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(mActivity, R.color.material_light_white));
         } else if (pourc <= 60) {
-            holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(mActivity, R.color.material_red_500));
+            holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(mActivity, R.color.stop_color));
         } else if (pourc <= 90) {
             holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(mActivity, R.color.material_orange_500));
         } else {
-            holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(mActivity, R.color.material_green_600));
+            holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(mActivity, R.color.start_color));
         }
         holder.diagnosPourcentage.setText(pourc + "%");
 //        holder.fab.setImageDrawable(mActivity.getDrawable(host.mIsRunning ? R.drawable.ic_pause : R.drawable.ic_media_play));

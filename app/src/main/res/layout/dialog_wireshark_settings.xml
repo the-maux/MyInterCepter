@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:id="@+id/filterPcapLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/material_grey_900"
+        android:elevation="4dp"
+        android:padding="8dp"
+        android:visibility="visible">
+
+        <RelativeLayout
+            android:id="@+id/lineFilterProto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/titleProtocol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Protocole:"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/titleProtocol"
+                android:orientation="horizontal"
+                android:weightSum="6">
+
+                <TextView
+                    android:id="@+id/tcp_cb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/https_cb"
+                    android:layout_margin="4dp"
+                    android:layout_toRightOf="@+id/https_cb"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_corner_on"
+                    android:elevation="2dp"
+                    android:gravity="center"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:singleLine="true"
+                    android:text="TCP"
+                    android:textColor="@color/primary_text"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/dns_cb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/ip_cb"
+                    android:layout_margin="4dp"
+                    android:layout_toRightOf="@+id/ip_cb"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_corner_on"
+                    android:elevation="2dp"
+
+                    android:gravity="center"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:singleLine="true"
+                    android:text="DNS"
+                    android:textColor="@color/primary_text"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/arp_cb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/titleProtocol"
+                    android:layout_below="@+id/titleProtocol"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_corner_on"
+                    android:elevation="2dp"
+                    android:gravity="center"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:singleLine="true"
+                    android:text="ARP"
+                    android:textColor="@color/primary_text"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/https_cb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/arp_cb"
+                    android:layout_margin="4dp"
+                    android:layout_toRightOf="@+id/arp_cb"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_corner_on"
+                    android:elevation="2dp"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:singleLine="true"
+                    android:text="HTTPS"
+                    android:textColor="@color/primary_text"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/http_cb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/arp_cb"
+                    android:layout_margin="4dp"
+                    android:layout_toRightOf="@+id/arp_cb"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_corner_on"
+                    android:elevation="2dp"
+                    android:gravity="center"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:singleLine="true"
+                    android:text="HTTP"
+                    android:textColor="@color/primary_text"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/udp_cb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/https_cb"
+                    android:layout_margin="4dp"
+                    android:layout_toRightOf="@+id/tcp_cb"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_corner_on"
+                    android:elevation="2dp"
+                    android:gravity="center"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:singleLine="true"
+                    android:text="UDP"
+                    android:textColor="@color/primary_text"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/ip_cb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/udp_cb"
+                    android:layout_margin="4dp"
+                    android:layout_toRightOf="@+id/udp_cb"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_corner_on"
+                    android:elevation="2dp"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text=" IP"
+                    android:textColor="?attr/actionMenuTextColor"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/lineFilterInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lineFilterProto">
+
+            <TextView
+                android:id="@+id/titleSection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Section:"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/Autoscroll"
+                style="@android:style/Widget.Material.Light.CompoundButton.CheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/No_cb"
+                android:layout_marginLeft="17dp"
+                android:layout_toRightOf="@+id/time_cb"
+                android:checked="true"
+                android:text="Autoscroll"
+                android:textColor="@color/material_light_white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/No_cb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/titleSection"
+                android:checked="true"
+                android:text="N°"
+                android:textColor="@color/material_light_white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/time_cb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/No_cb"
+                android:layout_marginLeft="17dp"
+                android:layout_toRightOf="@+id/No_cb"
+                android:checked="true"
+                android:text="Timef"
+                android:textColor="@color/material_light_white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

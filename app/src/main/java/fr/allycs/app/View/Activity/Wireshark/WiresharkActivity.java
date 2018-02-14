@@ -1,16 +1,22 @@
 package fr.allycs.app.View.Activity.Wireshark;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
+import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
 
 import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Tcpdump.Tcpdump;
@@ -18,12 +24,12 @@ import fr.allycs.app.R;
 import fr.allycs.app.View.Behavior.Activity.SniffActivity;
 import fr.allycs.app.View.Behavior.Fragment.MyFragment;
 import fr.allycs.app.View.Behavior.MyGlideLoader;
-import fr.allycs.app.View.Widget.Dialog.BottomSheet.GeneralSettings;
 
 public class                    WiresharkActivity extends SniffActivity {
     private String              TAG = this.getClass().getName();
     private WiresharkActivity   mInstance = this;
     private CoordinatorLayout   mCoordinatorLayout;
+    private AppBarLayout        mAppBar;
     private Toolbar             mToolbar;
     private RelativeLayout      mHeaderConfOFF, mHeaderConfON;
     private ProgressBar         mProgressBar;
@@ -43,7 +49,6 @@ public class                    WiresharkActivity extends SniffActivity {
         setToolbarTitle(null, mSingleton.selectedHostsList.get(0).getName());
     }
 
-
     private void                initXml() {
         mCoordinatorLayout = findViewById(R.id.Coordonitor);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
@@ -51,10 +56,12 @@ public class                    WiresharkActivity extends SniffActivity {
         mFrame_container = findViewById(R.id.frame_container);
         mHeaderConfOFF = findViewById(R.id.nmapConfEditorLayout);
         mProgressBar =  findViewById(R.id.progressBar);
+        mAppBar = findViewById(R.id.appbar);
         mToolbar = findViewById(R.id.toolbar);
         mFab =  findViewById(R.id.fab);
         mFab.setOnClickListener(onclickFab());
-        findViewById(R.id.settings).setOnClickListener(onSwitchHeader());
+        MyGlideLoader.loadDrawableInImageView(this, R.drawable.wireshark, (ImageView) findViewById(R.id.OsImg), true);
+        findViewById(R.id.history).setOnClickListener(onSwitchHeader());
     }
 
     private void                initFragment(MyFragment fragment) {
@@ -97,17 +104,59 @@ public class                    WiresharkActivity extends SniffActivity {
     }
 
     private void                initSettings() {
+        final String            PCAP_DUMP = "Write in Pcap file",
+                                SSLSTRIP_MODE = "SSLstrip Activated",
+                                LOCKSCREEN = "Lockscreen Activated",
+                                FILTERING = "Output filtering",
+                                GLOBAL_SETTINGS = "Global settings";
+
         findViewById(R.id.settingsMenu).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new GeneralSettings(mInstance, mCoordinatorLayout, Tcpdump.getTcpdump(mInstance, true)).show();
+                BottomSheetBuilder builder = new BottomSheetBuilder(mInstance)
+                            .setMode(BottomSheetBuilder.MODE_LIST)
+                            .setBackgroundColor(ContextCompat.getColor(mInstance, R.color.material_light_white))
+                            .setAppBarLayout(mAppBar)
+                            .addTitleItem("Wireshark settings");
+                            if (Tcpdump.getTcpdump(mInstance, true) != null)
+                                builder.addItem(0, PCAP_DUMP, (Tcpdump.getTcpdump(mInstance, true).isDumpingInFile) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp);
+                            else {
+                                builder.addItem(0, PCAP_DUMP, R.drawable.ic_checkbox_marked_grey600_24dp);
+                            }
+                            builder.addItem(1, SSLSTRIP_MODE, (mSingleton.isSslstripMode()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp )
+                                .addItem(2, LOCKSCREEN, (mSingleton.isLockScreen()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp )
+                                .addDividerItem()
+                                    .addItem(3, FILTERING, R.drawable.ic_my_icon_play)
+                                    .addItem(4, GLOBAL_SETTINGS, R.mipmap.ic_settings_wireshark)
+                                .setItemClickListener(new BottomSheetItemClickListener() {
+                                    @Override
+                                    public void onBottomSheetItemClick(MenuItem menuItem) {
+                                        switch (menuItem.getTitle().toString()) {
+                                            case FILTERING:
+                                                //TODO: create dialog for dialog_wireshark_settings
+                                                showSnackbar("FILTERING DIALOG to do", -1);
+                                                break;
+                                            case SSLSTRIP_MODE:
+                                                showSnackbar("SSLSTRIP MODE to do", -1);
+                                                break;
+                                            case LOCKSCREEN:
+                                                showSnackbar("Lockscreen settings to do", -1);
+                                                break;
+                                            case GLOBAL_SETTINGS:
+                                                showSnackbar("Global settings to do", -1);
+                                                break;
+                                        }
+                                    }
+                                })
+                                .expandOnStart(true)
+                                .createDialog().show();
             }
         });
     }
 
-    public void                 onTrameError() {
+    public void                 onError() {
         setToolbarTitle(null, "Error in processing");
-        showSnackbar("Error in Sniffing", ContextCompat.getColor(mInstance, R.color.material_red_400));
+        showSnackbar("Error in Sniffing", ContextCompat.getColor(mInstance, R.color.stop_color));
         mProgressBar.setVisibility(View.GONE);
         mFab.setImageResource(R.mipmap.ic_play);
     }

@@ -12,6 +12,9 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
     <color name="generic_background">#ee212121</color>
+    <color name="stop_color">@color/material_red_500</color>
+    <color name="start_color">@color/material_green_500</color>
+
 
     <!-- Activitys color  -->
     <color name="wiresharkPrimary">#263238</color>

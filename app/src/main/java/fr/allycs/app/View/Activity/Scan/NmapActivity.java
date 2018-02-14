@@ -28,12 +28,12 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.allycs.app.View.Behavior.Activity.SniffActivity;
-import fr.allycs.app.Core.Configuration.Utils;
 import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Configuration.Utils;
 import fr.allycs.app.Core.Nmap.NmapControler;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
+import fr.allycs.app.View.Behavior.Activity.SniffActivity;
 import fr.allycs.app.View.Widget.Dialog.DialogQuestionWithInput;
 
 public class                    NmapActivity extends SniffActivity {
@@ -82,7 +82,7 @@ public class                    NmapActivity extends SniffActivity {
         mProgressBar = findViewById(R.id.progressBar);
         mSettingsMenu = findViewById(R.id.settingsMenu);
         MonitorInoptionTheTarget = findViewById(R.id.targetMonitor);
-        mSettings = findViewById(R.id.settings);
+        mSettings = findViewById(R.id.history);
         mNmapConfEditorLayout = findViewById(R.id.nmapConfEditorLayout);
         nmapConfLayout = findViewById(R.id.nmapConfLayout);
         mFab = findViewById(R.id.fab);

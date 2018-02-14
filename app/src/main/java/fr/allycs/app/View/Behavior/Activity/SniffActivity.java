@@ -77,18 +77,17 @@ public abstract class           SniffActivity extends MyActivity  {
             mBottomBar.setColored(true);
             mBottomBar.setOnTabSelectedListener(onSelectedListener());
         }
-        //mBottomBar.setCurrentItem(position, false);
     }
 
     public void                    updateNotifications() {
         AHNotification greenNotif = new AHNotification.Builder()
                 .setText(" ")
-                .setBackgroundColor(ContextCompat.getColor(mInstance, R.color.material_green_500))
+                .setBackgroundColor(ContextCompat.getColor(mInstance, R.color.start_color))
                 .setTextColor(ContextCompat.getColor(mInstance, R.color.primary_text))
                 .build();
         AHNotification redNotif = new AHNotification.Builder()
                 .setText(" ")
-                .setBackgroundColor(ContextCompat.getColor(mInstance, R.color.material_red_500))
+                .setBackgroundColor(ContextCompat.getColor(mInstance, R.color.stop_color))
                 .setTextColor(ContextCompat.getColor(mInstance, R.color.primary_text))
                 .build();
         Tcpdump tcpdump = Tcpdump.getTcpdump(this, false);

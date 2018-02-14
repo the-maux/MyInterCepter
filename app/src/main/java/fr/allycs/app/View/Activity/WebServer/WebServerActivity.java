@@ -14,12 +14,12 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 
-import fr.allycs.app.View.Behavior.Activity.SniffActivity;
-import fr.allycs.app.Core.Configuration.Utils;
-import fr.allycs.app.View.Behavior.ViewAnimate;
 import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Configuration.Utils;
 import fr.allycs.app.Core.WebServer.GenericServer;
 import fr.allycs.app.R;
+import fr.allycs.app.View.Behavior.Activity.SniffActivity;
+import fr.allycs.app.View.Behavior.ViewAnimate;
 import fr.allycs.app.View.Widget.MyWebViewClient;
 
 public class                    WebServerActivity extends SniffActivity {
@@ -66,7 +66,7 @@ public class                    WebServerActivity extends SniffActivity {
                 Utils.vibrateDevice(mInstance);
                 if (!mSingleton.iswebSpoofed() && startAndroidWebServer()) {
                     mSingleton.setwebSpoofed(true);
-                    mFab.setBackgroundTintList(ContextCompat.getColorStateList(WebServerActivity.this, R.color.material_green_500));
+                    mFab.setBackgroundTintList(ContextCompat.getColorStateList(WebServerActivity.this, R.color.start_color));
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -75,7 +75,7 @@ public class                    WebServerActivity extends SniffActivity {
                     }, 2000);
                 } else if (stopAndroidWebServer()) {
                     mSingleton.setwebSpoofed(false);
-                    mFab.setBackgroundTintList(ContextCompat.getColorStateList(WebServerActivity.this, R.color.material_red_500));
+                    mFab.setBackgroundTintList(ContextCompat.getColorStateList(WebServerActivity.this, R.color.stop_color));
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {

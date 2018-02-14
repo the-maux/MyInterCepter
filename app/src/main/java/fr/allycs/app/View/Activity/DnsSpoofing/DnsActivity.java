@@ -18,12 +18,12 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 
-import fr.allycs.app.View.Behavior.MyGlideLoader;
-import fr.allycs.app.View.Behavior.Activity.SniffActivity;
-import fr.allycs.app.Core.Configuration.Utils;
 import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Configuration.Utils;
 import fr.allycs.app.Core.Dnsmasq.DnsmasqControl;
 import fr.allycs.app.R;
+import fr.allycs.app.View.Behavior.Activity.SniffActivity;
+import fr.allycs.app.View.Behavior.MyGlideLoader;
 import fr.allycs.app.View.Widget.Adapter.DnsLogsAdapter;
 import fr.allycs.app.View.Widget.Adapter.DnsSpoofConfAdapter;
 import fr.allycs.app.View.Widget.Dialog.DialogQuestionWithInput;
@@ -64,7 +64,7 @@ public class                            DnsActivity extends SniffActivity {
         mToolbar = findViewById(R.id.toolbar2);
         mSearchView = findViewById(R.id.searchView);
         mAction_add_host = findViewById(R.id.action_add_host);
-        mSettingsBtn = findViewById(R.id.settings);
+        mSettingsBtn = findViewById(R.id.history);
         mFab = findViewById(R.id.fab);
         mDnsSpoof_RV = findViewById(R.id.dnsSpoof_RV);
         mClipper = findViewById(R.id.clipper);
