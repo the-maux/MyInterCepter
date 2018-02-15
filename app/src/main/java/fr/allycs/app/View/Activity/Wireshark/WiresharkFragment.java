@@ -52,7 +52,6 @@ public class                    WiresharkFragment extends MyFragment {
         mActivity = (WiresharkActivity) getActivity();
         mTcpdump = Tcpdump.getTcpdump(mActivity, true);
         init();
-
         return rootView;
     }
     
@@ -101,8 +100,9 @@ public class                    WiresharkFragment extends MyFragment {
         mAdapterWireshark = new WiresharkAdapter(mActivity, mRV_Wireshark);
         mRV_Wireshark.setAdapter(mAdapterWireshark);
         //mRV_Wireshark.hasFixedSize();
-
-        mRV_Wireshark.setLayoutManager(new WrapContentLinearLayoutManager(mActivity));
+        WrapContentLinearLayoutManager layoutManager = new WrapContentLinearLayoutManager(mActivity);
+        layoutManager.setAutoMeasureEnabled(false);
+        mRV_Wireshark.setLayoutManager(layoutManager);
     }
     private void                initTimer() {
 

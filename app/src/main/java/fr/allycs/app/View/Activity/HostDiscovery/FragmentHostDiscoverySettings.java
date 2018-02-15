@@ -25,6 +25,12 @@ public class FragmentHostDiscoverySettings extends SettingsFragment {
     }
 
     private void                    typeOfDiscovery() {
+        /**
+         * [X] Voir les host découvert mais HORS LIGNE Aussi
+         * [X] Voir les host découvert mais
+         * [X] Rescan every host even when know
+         * [X] See host even if scan is not OK (it means: present in ARP table but no response from Nmap
+         */
         addItemMenu("Aggresive discovery",
                 "Type of scan who will be launch on the netwotk, Silence, Normal, Agressive, Insane",
                 new Thread(new Runnable() {
