@@ -87,7 +87,7 @@ public class                        WiresharkDispatcher  {
         notifyAll();
     }
 
-    public void                     stop() {
+    public synchronized void        stop() {
         mIsRunning = false;
 
     }

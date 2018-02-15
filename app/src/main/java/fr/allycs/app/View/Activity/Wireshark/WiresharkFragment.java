@@ -92,7 +92,8 @@ public class                    WiresharkFragment extends MyFragment {
                         mAdapterWireshark.notifyDataSetChanged();
                     }
                 });
-                Log.e("Error", "O.M.G::IndexOutOfBoundsException in RecyclerView happens");
+                Log.d("ERROR", e.getMessage());
+                Log.e("ERROR", "O.M.G::IndexOutOfBoundsException in RecyclerView happens");
             }
         }
     }

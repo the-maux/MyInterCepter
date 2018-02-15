@@ -85,7 +85,7 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
             });
         }
     }
-    private void            addTrameFiltered(Trame trame, boolean reverse) {
+    private synchronized void addTrameFiltered(Trame trame, boolean reverse) {
         switch (trame.protocol) {
             case ARP:
                 if (arp)
