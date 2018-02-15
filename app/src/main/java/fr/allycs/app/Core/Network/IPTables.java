@@ -100,11 +100,20 @@ public class                    IPTables {
                 .exec("iptables -P FORWARD ACCEPT;")
                 .exec("iptables -P OUTPUT ACCEPT")
                 .exec("echo '1' > /proc/sys/net/ipv4/ip_forward");
-        if (Singleton.getInstance().isDnsControlstarted()) {
-            Log.d("DNSREDIRECT", "iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053");
-            process.exec("iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053");
-        }
         process.closeProcess();
+    }
+
+    public static void         redirectDnsForSpoofing() {
+        Log.d("DNSREDIRECT", "iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053");
+        new RootProcess("IpTable::DNSREDIRECT")
+                .exec("iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053")
+                .closeProcess();
+    }
+    public static void         stopRedirectDnsForSpoofing() {
+        Log.d("DNSREDIRECT", "iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053");
+        new RootProcess("IpTable::DNSREDIRECT")
+                .exec("iptables -t nat -D PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053")
+                .closeProcess();
     }
 
     private static  void        InterceptWithSSlStrip() {

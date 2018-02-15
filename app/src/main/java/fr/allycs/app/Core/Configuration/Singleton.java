@@ -41,7 +41,6 @@ public class                            Singleton {
     private DnsmasqControl              dnsSpoofed = null;
     private SniffSession                actualSniffSession = null;
     private boolean                     sslstripMode = false, LockScreen = false;
-    private boolean                     DnsControlstarted = false;
     private boolean                     webSpoofedstarted = false;
 
 
@@ -66,12 +65,9 @@ public class                            Singleton {
         IPTables.sslConf();
     }
     public boolean                      isDnsControlstarted() {
-        return DnsControlstarted;
-    }
-    public void                         setDnsControlstarted(boolean dnsControlstarted) {
-        DnsControlstarted = dnsControlstarted;
-        //TODO: CHECK IF TCPDUMP IS STARTED, IF YES RESTART IT
-        IPTables.sslConf();
+        if (dnsSpoofed == null)
+            return false;
+        return dnsSpoofed.isRunning();
     }
     public boolean                      isLockScreen() {
         return LockScreen;
@@ -101,8 +97,9 @@ public class                            Singleton {
         if (!ArpSpoofProcessStack.isEmpty()) {
             Log.e("Singleton", "Stopping ArpSpoof not implemented");
         }
-        if (DnsControlstarted) {
+        if (dnsSpoofed != null) {
             Log.e("Singleton", "Stopping dnsSpoofnot implemented");
+            dnsSpoofed.stop();
         }
         if (webSpoofedstarted) {
             Log.e("Singleton", "Stopping webspoof not implemented");
@@ -111,6 +108,6 @@ public class                            Singleton {
 
     public boolean                      isSniffServiceActif(Activity activity) {
         Tcpdump tcpdump = Tcpdump.getTcpdump(activity, false);
-        return tcpdump != null && tcpdump.isRunning || !(!sslstripMode && !DnsControlstarted && !webSpoofedstarted);
+        return tcpdump != null && tcpdump.isRunning || !(!sslstripMode && !isDnsControlstarted() && !webSpoofedstarted);
     }
 }

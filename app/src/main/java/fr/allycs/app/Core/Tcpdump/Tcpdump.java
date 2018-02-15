@@ -78,12 +78,11 @@ public class                        Tcpdump {
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.e(TAG, "Process Error: " + e.getMessage());
+                    //TODO: ask if he wants to retry sniff
                     mActivity.showSnackbar(e.getMessage(), ContextCompat.getColor(mActivity, R.color.stop_color));
                     mActivity.setToolbarTitle("Execution stopped", e.getMessage());
                     onTcpDumpStop();
                     Log.d(TAG, "Restarting ?");
-                    if (e.getMessage().contains("read failed"))
-                        start(trameDispatcher);
                 } finally {
                     if (mTcpDumpProcess != null)
                         mTcpDumpProcess.closeProcess();
@@ -120,7 +119,7 @@ public class                        Tcpdump {
             return;
         }
         Trame trame = new Trame(line, 0);
-        if (trame.initialised) {
+        if (trame.initialised && !trame.skipped) {
             mDispatcher.addToQueue(trame);
         } else if (!trame.skipped) {
             Log.d(TAG, "trame created not initialized and not skipped, STOP TCPDUMP");

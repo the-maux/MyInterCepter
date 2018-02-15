@@ -1,5 +1,6 @@
 package fr.allycs.app.View.Activity.DnsSpoofing;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -56,7 +57,7 @@ public class                            DnsActivity extends SniffActivity {
         initRVConfiguration();
         initSearchView();
         initNavigationBottomBar(DNS, true);
-        mDnsSpoof.setToolbar(this);
+        mDnsSpoof.setActivity(this);
     }
 
     private void                        initXml() {
@@ -88,8 +89,7 @@ public class                            DnsActivity extends SniffActivity {
             @Override
             public void onClick(View view) {
                 Utils.vibrateDevice(mInstance);
-                mSingleton.setDnsControlstarted(!mSingleton.isDnsControlstarted());
-                if (mSingleton.isDnsControlstarted()) {
+                if (!mSingleton.isDnsControlstarted()) {
                     mDnsSpoof.start();
                     mFab.setImageResource(R.drawable.ic_stop);
                 } else {
@@ -322,18 +322,27 @@ public class                            DnsActivity extends SniffActivity {
         }
     }
 
-/*    protected void                      onResume() {
-        super.onResume();
-        initNavigationBottomBar(DNS, false);
-    }*/
-
-    /*Navigation */
-
     public int                          getContentViewId() {
         return R.layout.activity_dnsspoofing;
     }
 
-    public int                          getNavigationMenuItemId() {
-        return R.id.navigation_dns;
+    public void                         onError(String error) {
+        Snackbar.make(mCoordinatorLayout, error, Snackbar.LENGTH_SHORT).show();
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                updateNotifications();
+                new AlertDialog.Builder(mInstance)
+                        .setTitle("Dns error detected")
+                        .setMessage("Would you like to restart the dns process ?")
+                        .setPositiveButton(getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                mDnsSpoof.start();
+                            }
+                        })
+                        .setNegativeButton(getResources().getString(android.R.string.no), null)
+                        .show();
+            }
+        });
     }
 }

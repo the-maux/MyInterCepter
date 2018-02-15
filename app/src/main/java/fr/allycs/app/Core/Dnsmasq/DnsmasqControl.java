@@ -8,20 +8,22 @@ import java.util.List;
 
 import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Configuration.RootProcess;
+import fr.allycs.app.Core.Network.IPTables;
 import fr.allycs.app.Model.Target.DNSSpoofItem;
 import fr.allycs.app.Model.Target.SniffSession;
 import fr.allycs.app.Model.Unix.DNSLog;
 import fr.allycs.app.View.Activity.DnsSpoofing.DnsActivity;
 import fr.allycs.app.View.Widget.Adapter.DnsLogsAdapter;
 
-public class DnsmasqControl {
+public class                    DnsmasqControl {
     private String              TAG = "DnsmasqControl";
     public  List<DNSLog>        mDnsLogs;
-    private RootProcess mProcess;
+    private RootProcess         mProcess;
     private DnsLogsAdapter      mRV_Adapter = null;
     private DnsmasqConfig       mDnsConf;
     private DnsActivity         mActivity;
     private SniffSession        sniffSession;
+    private boolean             isRunning = false;
 
     public DnsmasqControl() {
         mDnsConf = new DnsmasqConfig();
@@ -45,13 +47,13 @@ public class DnsmasqControl {
     }
 
     private boolean             isItALog(String read) {
-        return !read.isEmpty() && !read.contains("compile time options: no-IPv6 GNU-getopt no-DBus no-I18N DHCP no-scripts no-TFTP") &&
+        return !read.isEmpty() && !read.contains("compile time options:") &&
                 !read.contains("using nameserver 8.8.8.8#53") &&
                 !read.contains("using nameserver") &&
                 !read.contains("read /etc/dnsmasq.hosts") &&
                 !read.contains("read /etc/hosts") &&
                 !read.contains("reading ") &&
-                !read.contains("started, version 2.51 cachesize 150");
+                !read.contains("started, version");
     }
     private boolean             isADomainConnu(DNSLog dnsLog) {
         for (DNSLog domainLog : mDnsLogs) {
@@ -64,21 +66,26 @@ public class DnsmasqControl {
     }
 
     public DnsmasqControl       start() {
+        isRunning = true;
         initRVLink();
+        IPTables.redirectDnsForSpoofing();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                DNSLog Domainlog;
                 mDnsLogs.clear();
                 mProcess = new RootProcess("Dnsmasq::");
                 mProcess.exec("dnsmasq --no-daemon --log-queries");
                 BufferedReader reader = mProcess.getReader();
-                final boolean[] deprecatedStart = {false};
                 try {
                     String read;
-                    while (!deprecatedStart[0] && ((read = reader.readLine()) != null)) {
+                    while ((read = reader.readLine()) != null) {
                         Log.d(TAG, "DNS_STDOUT::(" +read + ')');
                         read = read.replace("dnsmasq: ", "");
+                        if (read.contains("failed to create listening socket")){
+                            stop();
+                            mActivity.onError(read);
+                            break;
+                        }
                         if (isItALog(read)) {
                             DNSLog DomainlogTmp = new DNSLog();
                             DomainlogTmp.init(read);
@@ -88,16 +95,12 @@ public class DnsmasqControl {
                                 DomainlogTmp.save();
                                 mDnsLogs.add(0, DomainlogTmp);
                             }
-                            notifyAdapter(DomainlogTmp, deprecatedStart, isAnewDomain);
+                            notifyAdapter(DomainlogTmp, isAnewDomain);
                         }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                } finally {
-                    if (deprecatedStart[0]) {
-                        stop();
-                        start();
-                    }
+                    mActivity.onError(e.getMessage());
                 }
                 Log.d(TAG, "dnsmasq terminated");
             }
@@ -105,6 +108,8 @@ public class DnsmasqControl {
         return this;
     }
     public void                 stop() {
+        isRunning = false;
+        IPTables.stopRedirectDnsForSpoofing();
         RootProcess.kill("dnsmasq");
         if (mRV_Adapter.getRecyclerview() != null)
             mRV_Adapter.getRecyclerview().post(new Runnable() {
@@ -123,14 +128,12 @@ public class DnsmasqControl {
     public void                 setRV_Adapter(DnsLogsAdapter mRV_Adapter) {
         this.mRV_Adapter = mRV_Adapter;
     }
-    private void                notifyAdapter(final DNSLog log, final boolean[] deprecatedStart, final boolean isAnewDomain) {
+    private void                notifyAdapter(final DNSLog log, final boolean isAnewDomain) {
         if (mRV_Adapter.getRecyclerview() != null)
             mRV_Adapter.getRecyclerview().post(new Runnable() {
                 @Override
                 public void run() {
-                    if (log.data.contains("failed to create listening socket: Address already in use")) {
-                        deprecatedStart[0] = true;
-                    } else if (mRV_Adapter != null && isAnewDomain)
+                    if (mRV_Adapter != null && isAnewDomain)
                         mRV_Adapter.notifyItemInserted(mDnsLogs.indexOf(log));
                     else if (mRV_Adapter != null && !isAnewDomain)
                         mRV_Adapter.notifyDataSetChanged();
@@ -152,10 +155,14 @@ public class DnsmasqControl {
     public void                 clear() {
         mDnsConf.clear();
     }
-    public DnsmasqConfig getDnsConf() {
+    public DnsmasqConfig        getDnsConf() {
         return mDnsConf;
     }
-    public void                 setToolbar(DnsActivity activity) {
+    public void                 setActivity(DnsActivity activity) {
         this.mActivity = activity;
+    }
+
+    public boolean              isRunning() {
+        return isRunning;
     }
 }

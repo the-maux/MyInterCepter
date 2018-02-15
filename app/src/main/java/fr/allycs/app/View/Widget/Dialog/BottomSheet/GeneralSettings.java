@@ -83,9 +83,6 @@ public class                    GeneralSettings {
                     case PORT_FILTERING:
                         onPortMitm(false);
                         break;
-                    case DNS_SPOOFING:
-                        mSingleton.setDnsControlstarted(!mSingleton.isDnsControlstarted());
-                        break;
                     default:
                         mActivity.startActivity(new Intent(mActivity, TargetMenuActivity.class));
                         break;
