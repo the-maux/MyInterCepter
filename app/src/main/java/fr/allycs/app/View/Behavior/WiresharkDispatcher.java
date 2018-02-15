@@ -58,7 +58,10 @@ public class                        WiresharkDispatcher  {
                         ((WiresharkAdapter) mAdapterWireshark).addTrameOnAdapter(pop());
                     }
                     Log.d(TAG, "notifyItemRangeInserted(" + size + ");");
-                    mAdapterWireshark.notifyItemRangeInserted(0, size);
+                    if (size == 1)
+                        mAdapterWireshark.notifyItemInserted(0);
+                    else
+                        mAdapterWireshark.notifyItemRangeInserted(0, size);
                     if (mAutoscroll)
                         mRV_Wireshark.smoothScrollToPosition(0);
                 }
