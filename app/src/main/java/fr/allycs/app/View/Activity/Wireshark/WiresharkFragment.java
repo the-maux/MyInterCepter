@@ -102,6 +102,7 @@ public class                    WiresharkFragment extends MyFragment {
         //mRV_Wireshark.hasFixedSize();
         WrapContentLinearLayoutManager layoutManager = new WrapContentLinearLayoutManager(mActivity);
         layoutManager.setAutoMeasureEnabled(false);
+        mRV_Wireshark.setItemAnimator(null);
         mRV_Wireshark.setLayoutManager(layoutManager);
     }
     private void                initTimer() {
