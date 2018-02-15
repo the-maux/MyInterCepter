@@ -1,5 +1,6 @@
 package fr.allycs.app.View.Activity.Wireshark;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -7,6 +8,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -60,7 +62,7 @@ public class                    WiresharkActivity extends SniffActivity {
         mFab =  findViewById(R.id.fab);
         mFab.setOnClickListener(onclickFab());
         MyGlideLoader.loadDrawableInImageView(this, R.drawable.wireshark, (ImageView) findViewById(R.id.OsImg), true);
-        findViewById(R.id.history).setOnClickListener(onClickHistory());
+        findViewById(R.id.script).setOnClickListener(onClickHistory());
     }
 
     private void                initFragment(MyFragment fragment) {
@@ -82,12 +84,11 @@ public class                    WiresharkActivity extends SniffActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mFragment.start(false)) {
+                if (mFragment.start()) {
                     mProgressBar.setVisibility(View.VISIBLE);
                     mFab.setImageResource(R.mipmap.ic_pause);
                 } else {
-                    mProgressBar.setVisibility(View.GONE);
-                    mFab.setImageResource(R.mipmap.ic_play);
+                    onTcpdumpstopped();
                 }
             }
         };
@@ -154,10 +155,26 @@ public class                    WiresharkActivity extends SniffActivity {
     }
 
     public void                 onError() {
-        setToolbarTitle(null, "Error in processing");
-        showSnackbar("Error in Sniffing", ContextCompat.getColor(mInstance, R.color.stop_color));
-        mProgressBar.setVisibility(View.GONE);
-        mFab.setImageResource(R.mipmap.ic_play);
+        Log.d(TAG, "onError");
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                updateNotifications();
+                setToolbarTitle(null, "Error in processing");
+                showSnackbar("Error in Sniffing", ContextCompat.getColor(mInstance, R.color.stop_color));
+                onTcpdumpstopped();
+                new AlertDialog.Builder(mInstance)
+                        .setTitle("Tcpdump error detected")
+                        .setMessage("Would you like to restart the tcpdump process ?")
+                        .setPositiveButton(getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                mFragment.start();
+                            }
+                        })
+                        .setNegativeButton(getResources().getString(android.R.string.no), null)
+                        .show();
+            }
+        });
     }
 
     private View.OnClickListener onClickHistory() {
@@ -205,7 +222,16 @@ public class                    WiresharkActivity extends SniffActivity {
         return R.layout.activity_wireshark;
     }
 
-    @Override
+    public void                 onTcpdumpstopped() {
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mProgressBar.setVisibility(View.GONE);
+                mFab.setImageResource(R.mipmap.ic_play);
+            }
+        });
+    }
+
     public void                 onBackPressed() {
         super.onBackPressed();
     }

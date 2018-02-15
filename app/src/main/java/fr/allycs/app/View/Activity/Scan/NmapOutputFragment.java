@@ -1,5 +1,6 @@
 package fr.allycs.app.View.Activity.Scan;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -28,10 +29,12 @@ public class                    NmapOutputFragment extends MyFragment  {
     private TextView            Output;
     private Map                 historicByDevice = new HashMap();
     private String              actualOutput = "";
-    private String              PROMPT = "root $> ";
+    private String              PROMPT = "root ";
+    private Activity            mActivity;
 
-    public View                 onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View                 onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_nmap, container, false);
+        mActivity = getActivity();
         initXml(rootView);
         return rootView;
     }
@@ -63,10 +66,12 @@ public class                    NmapOutputFragment extends MyFragment  {
     }
 
     public void                 printCmdInTerminal(final String txt) {
-        getActivity().runOnUiThread(new Runnable() {
+        mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                String output = "<font color='red'>" + PROMPT + "></font> " + txt + "<br>";
+                String output = "<font color='red'>" + PROMPT + "</font> " +
+                        "<font color='darkcyan'>" +  " $> " + "</font>" +
+                        txt + "<br>";
                 Output.setText(Html.fromHtml(output), TextView.BufferType.SPANNABLE);
                 actualOutput = output;
             }
@@ -75,7 +80,7 @@ public class                    NmapOutputFragment extends MyFragment  {
 
     public void                 flushOutput(final String stdout, final ProgressBar progressBar) {
         final String output = (stdout == null) ? "Nmap error" : (actualOutput + stdout).replace("\n", "<br>");
-        getActivity().runOnUiThread(new Runnable() {
+        mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (progressBar != null && progressBar.getVisibility() == View.VISIBLE)

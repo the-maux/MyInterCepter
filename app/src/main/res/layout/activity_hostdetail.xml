@@ -37,7 +37,7 @@
                 android:layout_height="56dp"
                 android:transitionName="hostTitle"
                 android:layout_marginLeft="-8dp"
-                android:layout_toLeftOf="@+id/history"
+                android:layout_toLeftOf="@+id/script"
                 android:layout_toRightOf="@+id/OsImg"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:subtitle="THE-MAUX PC"
@@ -46,7 +46,7 @@
             </android.support.v7.widget.Toolbar>
 
             <ImageView
-                android:id="@+id/history"
+                android:id="@+id/script"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentEnd="true"

@@ -52,20 +52,24 @@ public class                        NmapControler {
     private String                  TAG = "NmapControler";
     private NmapControler           mInstance = this;
     private Singleton               mSingleton = Singleton.getInstance();
-    private boolean                 mIsLiveDump;
-    private boolean                 mIsOneByOnExecuted = false;
+    private String                  PATH_NMAP = mSingleton.FilesPath + "nmap/nmap ";
+    private boolean                 mIsLiveDump, isRunning;
     private NetworkDiscoveryControler mNnetworkDiscoveryControler;
     private Map<String, String>     mNmapParams;
     private ArrayList<String>       mMenuCommand;
     private String                  mActualItemMenu = "Ping scan";//Default
     private List<Host>              mHost = null;
-    public String                   PATH_NMAP = mSingleton.FilesPath + "nmap/nmap ";
-    private String                  NMAP_ARG_SCAN = " -PN -T4 -sS -sU --script nbstat.nse,dns-service-discovery --min-parallelism 100 -p T:21,T:22,T:23,T:25,T:80,T:110,T:135,T:139,T:3128,T:443,T:445,U:53,U:3031,U:5353  ";
-    private Date startParsing;
+    private Date                    startParsing;
 
+    /*
+    **   HostDiscoveryActivity
+    */
     public                          NmapControler(List<String> ips, NetworkDiscoveryControler networkDiscoveryControler) {/* Parsing mode */
+        String NMAP_ARG_SCAN = " -PN -T4 -sS -sU " +
+                "--script nbstat.nse,dns-service-discovery " +
+                "--min-parallelism 100 " +
+                "-p T:21,T:22,T:23,T:25,T:80,T:110,T:135,T:139,T:3128,T:443,T:445,U:53,U:3031,U:5353  ";
         mIsLiveDump = false;
-        mIsOneByOnExecuted = false;
         mNnetworkDiscoveryControler = networkDiscoveryControler;
         mActualItemMenu = "Basic Host discovery";
         StringBuilder hostCmd = new StringBuilder("");
@@ -78,10 +82,18 @@ public class                        NmapControler {
         String cmd = PATH_NMAP + NMAP_ARG_SCAN + hostCmd.toString();
         Log.d(TAG, "CMD:["+ cmd + "]");
         setTitleToolbar(null, "Scanning " + ips.size() + " devices");
-        execNmapToParseIt(cmd, hostsMAC.toString());
+        hostDiscoveryFromNmap(cmd, hostsMAC.toString());
     }
 
-    private void                    execNmapToParseIt(final String cmd, final String listMacs) {
+    /*
+    **   NmapActivity
+    */
+    public                          NmapControler(boolean execureAllCommandTogether) {/*Live mode*/
+        initMenu();
+        mIsLiveDump = true;
+    }
+
+    private void                    hostDiscoveryFromNmap(final String cmd, final String listMacs) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -108,12 +120,6 @@ public class                        NmapControler {
                 }
             }
         }).start();
-    }
-
-    public                          NmapControler(boolean execureAllCommandTogether) {/*Live mode*/
-        initMenu();
-        mIsLiveDump = true;
-        mIsOneByOnExecuted = execureAllCommandTogether;
     }
 
     private void                    initMenu() {
@@ -144,52 +150,44 @@ public class                        NmapControler {
 
     }
 
-    public ArrayList<String>        getMenuCommmands() {
-        return mMenuCommand;
-    }
-
-    public String                   getNmapParamFromMenuItem(String itemMenu) {
-        return mNmapParams.get(itemMenu);
-    }
-
-    private String                  buildHostFilterCommand() {
+    private String                  buildCommand() {
         StringBuilder res = new StringBuilder("");
         if (mIsLiveDump) {
             for (Host host : mHost) {
                 res.append(host.ip).append(" ");
             }
         }
-        return res.toString();
-    }
-
-    private String                  buildCommand() {
+        String hostFilter = res.toString();
         String parameter = getNmapParamFromMenuItem(mActualItemMenu);
-        String hostFilter = buildHostFilterCommand();
-        return PATH_NMAP + parameter + " " + hostFilter;
+        String cmd = PATH_NMAP + parameter + " " + hostFilter;
+        return cmd.replace("  ", " ").replace("\n", "");
     }
 
-    public void                     startAsLive(final NmapOutputFragment nmapOutputFragment,
+    private String                  build(NmapOutputFragment nmapOutputFragment) {
+        String cmd = buildCommand();
+        Log.i(TAG, cmd);
+        nmapOutputFragment.printCmdInTerminal(cmd
+                .replace("nmap/nmap", "nmap")
+                .replace(mSingleton.FilesPath, ""));
+        return cmd;
+    }
+
+    public void                     start(final NmapOutputFragment nmapOutputFragment,
                                             final ProgressBar progressBar) {
         if (mHost == null) {
             Log.e(TAG, "No client selected when launched");
         } else {
-            final String cmd = buildCommand().replace("\n", "")
-                                             .replace("  ", " ");
-            String trimmed_cmd = cmd
-                    .replace("nmap/nmap", "nmap")
-                    .replace(mSingleton.FilesPath, "");
-            Log.d(TAG, cmd);
-            nmapOutputFragment.printCmdInTerminal(trimmed_cmd);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         String tmp;
+                        mSingleton.isNmapRunning = true;
                         StringBuilder dumpOutputBuilder = new StringBuilder();
                         BufferedReader reader = new RootProcess("Nmap", mSingleton.FilesPath)
-                                .exec(cmd).getReader();
+                                .exec(build(nmapOutputFragment)).getReader();
                         while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {
-                            if (tmp != null && !tmp.isEmpty()) {
+                            if (!tmp.isEmpty()) {
                                 if (tmp.charAt(0) == '\n')
                                     tmp = tmp.substring(1);
                                 nmapOutputFragment.flushOutput(tmp + '\n', progressBar);
@@ -198,6 +196,7 @@ public class                        NmapControler {
                         dumpOutputBuilder.append(tmp);
                         Log.d(TAG, "Nmap final dump:" + dumpOutputBuilder.toString());
                         nmapOutputFragment.flushOutput(tmp + '\n', progressBar);
+                        mSingleton.isNmapRunning = false;
                     } catch (IOException e) {
                         e.printStackTrace();
                         nmapOutputFragment.flushOutput(null, progressBar);
@@ -205,6 +204,12 @@ public class                        NmapControler {
                 }
             }).start();
         }
+    }
+
+    public void                     onHostActualized(ArrayList<Host> hosts) {
+        Log.d(TAG, "All node was parsed in :" + Utils.TimeDifference(startParsing));
+
+        mNnetworkDiscoveryControler.onHostActualized(hosts);
     }
 
     public void                     setmActualItemMenu(String itemMenu) {
@@ -215,17 +220,19 @@ public class                        NmapControler {
         this.mHost = hosts;
     }
 
-    public boolean                  ismOneByOnExecuted() {
-        return mIsOneByOnExecuted;
-    }
-
-    public void                     onHostActualized(ArrayList<Host> hosts) {
-        Log.d(TAG, "All node was parsed in :" + Utils.TimeDifference(startParsing));
-
-        mNnetworkDiscoveryControler.onHostActualized(hosts);
-    }
-
     public void                     setTitleToolbar(String title, String subtitle) {
         mNnetworkDiscoveryControler.setToolbarTitle(title, subtitle);
+    }
+
+    public String                   getActualCmd() {
+        return mActualItemMenu;
+    }
+
+    public ArrayList<String>        getMenuCommmands() {
+        return mMenuCommand;
+    }
+
+    public String                   getNmapParamFromMenuItem(String itemMenu) {
+        return mNmapParams.get(itemMenu);
     }
 }

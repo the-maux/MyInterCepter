@@ -47,9 +47,7 @@ public class                        Tcpdump {
     }
 
     public static synchronized boolean  isRunning() {
-        if (mInstance == null)
-            return false;
-        return mInstance.isRunning;
+        return mInstance != null && mInstance.isRunning;
     }
 
     private void                    initPromptCmds() {
@@ -75,6 +73,7 @@ public class                        Tcpdump {
                     mTcpDumpProcess = new RootProcess("Wireshark").exec(actualCmd);
                     readTcpdump(mTcpDumpProcess.getReader());
                     Log.i(TAG, "Tcpdump execution over");
+                    onTcpDumpStop();
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.e(TAG, "Process Error: " + e.getMessage());
@@ -130,6 +129,7 @@ public class                        Tcpdump {
     public void                     onTcpDumpStop() {
         if (isRunning) {
             ArpSpoof.stopArpSpoof();
+            mActivity.onTcpdumpstopped();
             RootProcess.kill("tcpdump");
             isRunning = false;
             IPTables.stopIpTable();

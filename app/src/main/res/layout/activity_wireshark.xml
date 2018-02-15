@@ -39,17 +39,15 @@
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/history"
+                app:layout_constraintRight_toLeftOf="@+id/script"
                 app:layout_constraintStart_toEndOf="@+id/OsImg"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:subtitle="Aucune cible selectionné"
-                app:title="Wireshark">
+                app:layout_scrollFlags="scroll|enterAlways">
 
             </android.support.v7.widget.Toolbar>
 
             <ImageView
-                android:id="@+id/history"
+                android:id="@+id/script"
                 android:layout_width="50dp"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"

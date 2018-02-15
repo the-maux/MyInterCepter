@@ -82,7 +82,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
         mAddHostBtn = findViewById(R.id.action_add_host);
-        mSettingsBtn = findViewById(R.id.history);
+        mSettingsBtn = findViewById(R.id.script);
         mSearchView = findViewById(R.id.searchView);
         mToolbar = findViewById(R.id.toolbar2);
         mTabs = findViewById(R.id.tabs);
@@ -186,7 +186,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 else if (!mFragment.start()) {
 
                 } else if (mSingleton.DebugMode) {
-                    Log.i(TAG, "fragment startAsLive false");
+                    Log.i(TAG, "fragment start false");
                 }
             }
         });

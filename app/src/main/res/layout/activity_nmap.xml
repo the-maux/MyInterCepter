@@ -43,20 +43,32 @@
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toTopOf="@+id/tabs"
                 app:layout_constraintLeft_toRightOf="@+id/OsImg"
-                app:layout_constraintRight_toLeftOf="@+id/history"
+                app:layout_constraintRight_toLeftOf="@+id/script"
                 app:layout_constraintTop_toTopOf="parent"
                 app:subtitle="v6.40"
                 app:title="Nmap">
 
             </android.support.v7.widget.Toolbar>
 
-            <ImageButton
-                android:id="@+id/history"
+            <ImageView
+                android:id="@+id/scanType"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
                 android:baselineAlignBottom="false"
-                android:src="@android:drawable/ic_menu_manage"
+                android:src="@mipmap/ic_nmap_type_foreground"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/tabs"
+                app:layout_constraintRight_toLeftOf="@+id/script"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_min="45dp" />
+
+            <ImageView
+                android:id="@+id/script"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:baselineAlignBottom="false"
+                android:src="@mipmap/ic_script"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/tabs"
                 app:layout_constraintRight_toLeftOf="@+id/settingsMenu"

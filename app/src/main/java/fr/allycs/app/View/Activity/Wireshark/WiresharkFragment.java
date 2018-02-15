@@ -161,7 +161,7 @@ public class                    WiresharkFragment extends MyFragment {
         Log.d(TAG, "initSpinner:: monitor::" + mMonitorCmd.getText().toString());
     }*/
 
-    public boolean              start(boolean isResume) {
+    public boolean              start() {
         Utils.vibrateDevice(mActivity);
         if (!mTcpdump.isRunning) {
             if (startTcpdump()) {
@@ -211,7 +211,7 @@ public class                    WiresharkFragment extends MyFragment {
                         else {
                             mActivity.setToolbarTitle(null, mListHostSelected.size() + " target" +
                                     ((mListHostSelected.size() <= 1) ? "" : "s") + " selected");
-                            start(false);
+                            start();
                         }
                     }
                 })

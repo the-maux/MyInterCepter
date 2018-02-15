@@ -17,19 +17,8 @@ import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.Model.Target.SniffSession;
 
 public class                            Singleton {
-    private static Singleton            mInstance = null;
-    public static synchronized Singleton getInstance() {
-        if(mInstance == null)
-            mInstance = new Singleton();
-        return mInstance;
-    }
-    private                             Singleton() {
-
-    }
     PreferenceControler                 userPreference;
-    public  int                         nbrInteface = 1;
     public boolean                      DebugMode = true, UltraDebugMode = false;
-    String                              VERSION = "0xDEADBEEF";
     public String                       PcapPath;
     public String                       BinaryPath = null;
     public String                       FilesPath = null;
@@ -42,7 +31,16 @@ public class                            Singleton {
     private SniffSession                actualSniffSession = null;
     private boolean                     sslstripMode = false, LockScreen = false;
     private boolean                     webSpoofedstarted = false;
+    public boolean                      isNmapRunning = false;
 
+    private static Singleton            mInstance = null;
+    String                              VERSION = "0xDEADBEEF";
+    public static synchronized Singleton getInstance() {
+        if(mInstance == null)
+            mInstance = new Singleton();
+        return mInstance;
+    }
+    private                             Singleton() {}
 
     public SniffSession                 getActualSniffSession() {
         if (actualSniffSession == null) {
@@ -65,9 +63,7 @@ public class                            Singleton {
         IPTables.sslConf();
     }
     public boolean                      isDnsControlstarted() {
-        if (dnsSpoofed == null)
-            return false;
-        return dnsSpoofed.isRunning();
+        return dnsSpoofed != null && dnsSpoofed.isRunning();
     }
     public boolean                      isLockScreen() {
         return LockScreen;
@@ -108,6 +104,7 @@ public class                            Singleton {
 
     public boolean                      isSniffServiceActif(Activity activity) {
         Tcpdump tcpdump = Tcpdump.getTcpdump(activity, false);
-        return tcpdump != null && tcpdump.isRunning || !(!sslstripMode && !isDnsControlstarted() && !webSpoofedstarted);
+        return tcpdump != null && tcpdump.isRunning ||
+                !(!sslstripMode && !isDnsControlstarted() && !webSpoofedstarted);
     }
 }

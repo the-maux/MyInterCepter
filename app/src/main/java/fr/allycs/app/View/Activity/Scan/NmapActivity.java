@@ -12,14 +12,11 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -41,7 +38,6 @@ public class                    NmapActivity extends SniffActivity {
     private NmapActivity        mInstance = this;
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
-    private MaterialSpinner     mNmapParamMenu;
     private NmapOutputFragment  nmapOutputFragment;
     private TextView            monitorHostTargeted, monitorNmapParam;
     private TextView            MonitorInoptionTheTarget;
@@ -49,8 +45,7 @@ public class                    NmapActivity extends SniffActivity {
     private Toolbar             mToolbar;
     private List<Host>          mListHostSelected = new ArrayList<>();
     private TabLayout           mTabs;
-    private ImageView           mSettingsMenu;
-    private ImageButton         mSettings;
+    private ImageView           mSettingsMenu, mScript, mScanType;
     private NmapControler       nmapControler;
     private ProgressBar         mProgressBar;
     private boolean             isExternalTarget;
@@ -59,22 +54,11 @@ public class                    NmapActivity extends SniffActivity {
         super.onCreate(savedInstanceState);
         setContentView(getContentViewId());
         initXml();
-        nmapControler = new NmapControler(false);
-        initFragment();
-        initSpinner();
-        initRecyHost();
         init();
     }
 
-//    @Override
-//    protected void              onResume() {
-//        super.onResume();
-//        initNavigationBottomBar(SCANNER, false);
-//    }
-
     private void                initXml() {
         mCoordinatorLayout = findViewById(R.id.Coordonitor);
-        mNmapParamMenu = findViewById(R.id.spinnerTypeScan);
         monitorHostTargeted = (EditText) findViewById(R.id.hostEditext);
         monitorNmapParam = (EditText) findViewById(R.id.nmapMonitorParameter);
         mTabs = findViewById(R.id.tabs);
@@ -82,7 +66,8 @@ public class                    NmapActivity extends SniffActivity {
         mProgressBar = findViewById(R.id.progressBar);
         mSettingsMenu = findViewById(R.id.settingsMenu);
         MonitorInoptionTheTarget = findViewById(R.id.targetMonitor);
-        mSettings = findViewById(R.id.history);
+        mScript = findViewById(R.id.script);
+        mScanType = findViewById(R.id.scanType);
         mNmapConfEditorLayout = findViewById(R.id.nmapConfEditorLayout);
         nmapConfLayout = findViewById(R.id.nmapConfLayout);
         mFab = findViewById(R.id.fab);
@@ -92,7 +77,6 @@ public class                    NmapActivity extends SniffActivity {
                 startNmap();
             }
         });
-        mSettings.setOnClickListener(onClickSettingsBtn());
         monitorNmapParam.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             public boolean      onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -105,6 +89,10 @@ public class                    NmapActivity extends SniffActivity {
     }
 
     private void                init() {
+        nmapControler = new NmapControler(false);
+        initFragment();
+        mScript.setOnClickListener(onClickScript());
+        mScanType.setOnClickListener(onClickTypeScript());
         if (mSingleton.selectedHostsList == null || mSingleton.selectedHostsList.isEmpty()) {
             MonitorInoptionTheTarget.setText("No target selected");
             isExternalTarget = true;
@@ -133,29 +121,46 @@ public class                    NmapActivity extends SniffActivity {
         }
     }
 
-    private void                initSpinner() {
-        mNmapParamMenu.setItems(nmapControler.getMenuCommmands());
-        mNmapParamMenu.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String typeScan) {
-                String param = nmapControler.getNmapParamFromMenuItem(typeScan);
-                monitorNmapParam.setText(param);
-                nmapControler.setmActualItemMenu(typeScan);
-                if (param != null)
-                    setToolbarTitle(null, typeScan);
+    private View.OnClickListener onClickTypeScript() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<String> list = nmapControler.getMenuCommmands();
+                final CharSequence[] charSequenceItems = list.toArray(new CharSequence[list.size()]);
+                int i = 0;
+                for (; i < charSequenceItems.length; i++) {
+                    if (charSequenceItems[i].toString().contains(nmapControler.getActualCmd()))
+                        break;
+                }
+                new AlertDialog.Builder(mInstance)
+                        .setSingleChoiceItems(charSequenceItems, i, null)
+                        .setTitle("Type of scan")
+                        .setIcon(R.drawable.ic_nmap_icon_tabbutton)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.dismiss();
+                                String typeScan = charSequenceItems[((AlertDialog)dialog).getListView().getCheckedItemPosition()].toString();
+                                Log.d(TAG, "NEW Nmap TypeScan:" + typeScan);
+                                String param = nmapControler.getNmapParamFromMenuItem(typeScan);
+                                Log.d(TAG, "NEW Nmap Param:" + param);
+                                monitorNmapParam.setText(param);
+                                nmapControler.setmActualItemMenu(typeScan);
+                                if (param != null)
+                                    setToolbarTitle(null, typeScan);
+                            }
+                        })
+                        .show();
             }
-        });
+        };
     }
 
-    private void                initRecyHost() {
-        if (mSingleton.selectedHostsList == null || mSingleton.selectedHostsList.isEmpty()) {
-            if (isExternalTarget) {
+    private View.OnClickListener    onClickScript() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-            } else {
-                Snackbar.make(mCoordinatorLayout, "Vous n'avez aucun device selectionne", Snackbar.LENGTH_SHORT).show();
             }
-        } else {
-
-        }
+        };
     }
 
     public void                 initTabswithTargets(final List<Host> hosts) {
@@ -183,34 +188,13 @@ public class                    NmapActivity extends SniffActivity {
     }
 
     public void                 initUIWithTarget(Host host) {
-        String subtitle = ((nmapControler.ismOneByOnExecuted()) ?
-                host.getName() :
-                mListHostSelected.size() + " device"  + ((mListHostSelected.size() >= 2) ? "s" : ""));
-        setToolbarTitle("Nmap v6.40", subtitle);
+        setToolbarTitle("Nmap v6.40", nmapControler.getActualCmd());
         List<Host> TmpHost = new ArrayList<>();
         TmpHost.add(host);
         nmapControler.setHosts(TmpHost);
         MonitorInoptionTheTarget.setText(host.ip);
         monitorHostTargeted.setText(host.ip);
         nmapOutputFragment.refresh(host);
-    }
-
-    private View.OnClickListener onClickSettingsBtn() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mNmapConfEditorLayout.getVisibility() == View.GONE &&
-                        nmapConfLayout.getVisibility() == View.GONE) {
-                    nmapConfLayout.setVisibility(View.VISIBLE);
-                } else if (mNmapConfEditorLayout.getVisibility() == View.GONE) {
-                    nmapConfLayout.setVisibility(View.GONE);
-                    mNmapConfEditorLayout.setVisibility(View.VISIBLE);
-                } else {
-                    nmapConfLayout.setVisibility(View.GONE);
-                    mNmapConfEditorLayout.setVisibility(View.GONE);
-                }
-            }
-        };
     }
 
     public void                 setToolbarTitle(final String title, final String subtitle) {
@@ -231,7 +215,7 @@ public class                    NmapActivity extends SniffActivity {
 
     public void                 startNmap() {
         Utils.vibrateDevice(mInstance);
-        nmapControler.startAsLive(nmapOutputFragment, mProgressBar);
+        nmapControler.start(nmapOutputFragment, mProgressBar);
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
@@ -273,10 +257,6 @@ public class                    NmapActivity extends SniffActivity {
 
     public int                  getContentViewId() {
         return R.layout.activity_nmap;
-    }
-
-    public int                  getNavigationMenuItemId() {
-        return R.id.navigation_nmap;
     }
 
     public void                 onBackPressed() {

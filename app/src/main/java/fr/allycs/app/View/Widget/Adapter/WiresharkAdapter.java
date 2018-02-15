@@ -40,7 +40,8 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
 
     public void             onBindViewHolder(WiresharkHolder holder, int position) {
         Trame trame = listOfTrame.get(position);
-        holder.No.setText(trame.offsett + "");
+        String s = "" + position;
+        holder.No.setText(s);
         holder.time.setText(trame.time);
         holder.source.setText(trame.StringSrc);
         holder.dest.setText(trame.StringDest.toUpperCase());
@@ -86,40 +87,40 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         }
     }
     private synchronized void addTrameFiltered(Trame trame, boolean reverse) {
-        switch (trame.protocol) {
-            case ARP:
-                if (arp)
-                    addOnList(trame, reverse);
-                break;
-            case HTTP:
-                if (http)
-                    addOnList(trame, reverse);
-                break;
-            case HTTPS:
-                if (https)
-                    addOnList(trame, reverse);
-                break;
-            case DNS:
-                if (dns)
-                    addOnList(trame, reverse);
-                break;
-            case TCP:
-                if (tcp)
-                    addOnList(trame, reverse);
-                break;
-            case UDP:
-                if (udp)
-                    addOnList(trame, reverse);
-                break;
-            case IP:
-                if (ip)
-                    addOnList(trame, reverse);
-                break;
-            default:
-                break;
-//                Log.e(TAG, "Trame unknow:" + trame.toString());
-        }
-
+        if (trame.protocol != null)
+            switch (trame.protocol) {
+                case ARP:
+                    if (arp)
+                        addOnList(trame, reverse);
+                    break;
+                case HTTP:
+                    if (http)
+                        addOnList(trame, reverse);
+                    break;
+                case HTTPS:
+                    if (https)
+                        addOnList(trame, reverse);
+                    break;
+                case DNS:
+                    if (dns)
+                        addOnList(trame, reverse);
+                    break;
+                case TCP:
+                    if (tcp)
+                        addOnList(trame, reverse);
+                    break;
+                case UDP:
+                    if (udp)
+                        addOnList(trame, reverse);
+                    break;
+                case IP:
+                    if (ip)
+                        addOnList(trame, reverse);
+                    break;
+                default:
+                    break;
+                //                Log.e(TAG, "Trame unknow:" + trame.toString());
+            }
     }
     public synchronized void addTrameOnAdapter(Trame trame) {
         trame.offsett = originalListOfTrames.size();

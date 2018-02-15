@@ -65,7 +65,7 @@ public class                            DnsActivity extends SniffActivity {
         mToolbar = findViewById(R.id.toolbar2);
         mSearchView = findViewById(R.id.searchView);
         mAction_add_host = findViewById(R.id.action_add_host);
-        mSettingsBtn = findViewById(R.id.history);
+        mSettingsBtn = findViewById(R.id.script);
         mFab = findViewById(R.id.fab);
         mDnsSpoof_RV = findViewById(R.id.dnsSpoof_RV);
         mClipper = findViewById(R.id.clipper);
