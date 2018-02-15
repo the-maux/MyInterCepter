@@ -1,5 +1,6 @@
 package fr.allycs.app.View.Widget.Adapter;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -13,21 +14,20 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-import fr.allycs.app.View.Behavior.Fragment.MyFragment;
+import fr.allycs.app.Model.Net.Pcap;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.SniffSession;
-import fr.allycs.app.Model.Net.Pcap;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Widget.Dialog.QuestionDialog;
 import fr.allycs.app.View.Widget.Adapter.Holder.SniffSessionHolder;
+import fr.allycs.app.View.Widget.Dialog.QuestionDialog;
 
 public class                    SniffSessionAdapter extends RecyclerView.Adapter<SniffSessionHolder> {
     private String              TAG = "SniffSessionAdapter";
-    private MyFragment          mFragment;
+    private Activity            mActivity;
     private List<SniffSession>  mSniffsession;
 
-    public SniffSessionAdapter(MyFragment fragment, List<SniffSession> sessions) {
-        this.mFragment = fragment;
+    public                      SniffSessionAdapter(Activity activity, List<SniffSession> sessions) {
+        this.mActivity = activity;
         this.mSniffsession = sessions;
     }
 
@@ -69,7 +69,7 @@ public class                    SniffSessionAdapter extends RecyclerView.Adapter
                 shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(photoFile));
                 Intent intent = Intent.createChooser(shareIntent,
                         "Send .pcap saved the " + sniffSession.listPcapRecorded().get(0).getDate());
-                mFragment.getActivity().startActivity(intent);
+                mActivity.startActivity(intent);
             }
         };
     }
@@ -78,7 +78,7 @@ public class                    SniffSessionAdapter extends RecyclerView.Adapter
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new QuestionDialog(mFragment.getActivity())
+                new QuestionDialog(mActivity)
                         .setTitle("Non implementé")
                         .setText("")
                         .onPositiveButton("Je vais le faire", new DialogInterface.OnClickListener() {
@@ -95,7 +95,7 @@ public class                    SniffSessionAdapter extends RecyclerView.Adapter
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new QuestionDialog(mFragment.getActivity())
+                new QuestionDialog(mActivity)
                         .setTitle("Supprimer la session ?")
                         .setText("Cette action est irreversible, etes vous sur d\'etre certains de vouloir supprimer cette record.")
                         .onPositiveButton("Oui", new DialogInterface.OnClickListener() {

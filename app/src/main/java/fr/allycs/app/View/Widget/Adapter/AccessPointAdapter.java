@@ -7,20 +7,20 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import fr.allycs.app.View.Behavior.MyGlideLoader;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Activity.HostDiscovery.FragmentHistoric;
+import fr.allycs.app.View.Activity.HostDiscovery.FragmentHostDiscoveryHistoric;
+import fr.allycs.app.View.Behavior.MyGlideLoader;
 import fr.allycs.app.View.Widget.Adapter.Holder.AccessPointHolder;
 
 public class                    AccessPointAdapter extends RecyclerView.Adapter<AccessPointHolder> {
     private String              TAG = "AccessPointAdapter";
-    private FragmentHistoric    mFragment;
+    private FragmentHostDiscoveryHistoric mFragment;
     private List<AccessPoint>   mSessions;
 
     public enum typeFragment {  HostDetail, HistoricDB }
 
-    public                      AccessPointAdapter(FragmentHistoric fragment, List<AccessPoint> sessions) {
+    public                      AccessPointAdapter(FragmentHostDiscoveryHistoric fragment, List<AccessPoint> sessions) {
         this.mFragment = fragment;
         this.mSessions = sessions;
     }

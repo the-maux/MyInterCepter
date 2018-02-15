@@ -95,7 +95,8 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_below="@+id/tabs"
-				android:visibility="gone" />
+				android:background="#00FFFFFF"
+				android:visibility="visible" />
 		</RelativeLayout>
 	</android.support.design.widget.AppBarLayout>
 

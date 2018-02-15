@@ -60,7 +60,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         mActivity.initSettingsButton();
         if (mSingleton.DebugMode && !mHostLoaded) {
             mActivity.showSnackbar("Debug mode: auto scan started");
-            startNetworkScan();
+            start();
         }
         return rootView;
     }
@@ -94,7 +94,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                     if (mHostAdapter != null)
                         mHostAdapter.notifyDataSetChanged();
                     mActivity.initMonitor();
-                    if (startNetworkScan())
+                    if (start())
                         return;
                 }
                 mActivity.showSnackbar("Scanning already started");
@@ -134,31 +134,29 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     }
 
     public boolean                  start() {
-        return startNetworkScan();
-    }
-
-    public boolean                  startNetworkScan() {
-        Log.d(TAG, "startNetworkScan");
-        if (!mActivity.isWaiting()) {
-                if ((mSingleton.network != null && NetUtils.initNetworkInfo(mActivity)) &&
-                        mSingleton.network.updateInfo().isConnectedToNetwork()) {
-                    mActivity.initTimer();
-                    initHostsRecyclerView();
-                    setTitleToolbar("Scanner", "Discovering network");
-                    mActivity.progressAnimation();
-                    return mScannerControler.run(mHosts);
-                } else {
-                    mActivity.showSnackbar("You need to be connected");
-                    mEmptyList.setVisibility(View.VISIBLE);
-                    mEmptyList.setText("No connection detected");
-                }
+        setTitleToolbar("Scanner", "Discovering network");
+        if (!isWaiting()) {
+            if ((mSingleton.network != null && NetUtils.initNetworkInfo(mActivity)) &&
+                    mSingleton.network.updateInfo().isConnectedToNetwork()) {
+                mActivity.initTimer();
+                initHostsRecyclerView();
+                mActivity.progressAnimation();
+                Log.d(TAG, "start -> true");
+                return mScannerControler.run(mHosts);
+            } else {
+                Log.d(TAG, "start -> false");
+                mActivity.showSnackbar("You need to be connected");
+                mEmptyList.setVisibility(View.VISIBLE);
+                mEmptyList.setText("No connection detected");
+            }
         } else {
+            Log.d(TAG, "start -> false, already loading");
             mActivity.showSnackbar("Patientez, loading en cours");
         }
         return false;
     }
 
-    public ArrayList<Host>         getTargetFromHostList() {
+    public ArrayList<Host>          getTargetFromHostList() {
         ArrayList<Host> selectedHost = new ArrayList<>();
         try {
             boolean noTargetSelected = true;
@@ -268,5 +266,8 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 .createDialog();
     }
 
+    public boolean                  isWaiting() {
+        return mScannerControler.inLoading;
+    }
 }
 

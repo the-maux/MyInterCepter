@@ -165,7 +165,6 @@ public class                    WiresharkFragment extends MyFragment {
             if (startTcpdump()) {
                 mMonitorAgv.setVisibility(View.VISIBLE);
                 mAdapterWireshark.clear();
-                mActivity.updateNotifications();
                 return true;
             }
         } else {
@@ -193,7 +192,8 @@ public class                    WiresharkFragment extends MyFragment {
         String argv = mTcpdump
                 .initCmd(mListHostSelected, mTypeScan, mTcpdump.actualParam)
                 .start(trameDispatcher);
-        mMonitorAgv.setText(argv);
+        mMonitorAgv.setText(argv.replace(mSingleton.PcapPath, ""));
+        mActivity.updateNotifications();
         return true;
     }
 

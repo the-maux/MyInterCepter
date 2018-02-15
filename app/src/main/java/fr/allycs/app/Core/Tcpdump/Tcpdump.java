@@ -65,11 +65,11 @@ public class                        Tcpdump {
 
     public String                   start(final WiresharkDispatcher trameDispatcher) {
         mDispatcher = trameDispatcher;
+        isRunning = true;
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    isRunning = true;
                     ArpSpoof.launchArpSpoof();
                     Log.i(TAG, actualCmd);
                     mTcpDumpProcess = new RootProcess("Wireshark").exec(actualCmd);

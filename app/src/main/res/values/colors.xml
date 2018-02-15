@@ -20,7 +20,7 @@
     <color name="wiresharkPrimary">#263238</color>
     <color name="dnsSpoofPrimary">#102027</color>
     <color name="NmapPrimary">#1c313a</color>
-    <color name="webserverSpoofPrimary">#004d40</color>
+    <color name="webserverSpoofPrimary">#424242</color>
     <color name="settingsPrimary">#4f5b62</color>
 
     <!-- Wireshark color  -->

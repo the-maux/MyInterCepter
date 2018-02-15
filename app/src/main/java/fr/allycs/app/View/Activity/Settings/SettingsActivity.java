@@ -6,12 +6,12 @@ import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.widget.Toast;
 
+import fr.allycs.app.R;
+import fr.allycs.app.View.Activity.HostDiscovery.FragmentHostDiscoveryHistoric;
+import fr.allycs.app.View.Activity.HostDiscovery.FragmentHostDiscoverySettings;
 import fr.allycs.app.View.Behavior.Activity.MyActivity;
 import fr.allycs.app.View.Behavior.Fragment.MyFragment;
 import fr.allycs.app.View.Behavior.MyGlideLoader;
-import fr.allycs.app.R;
-import fr.allycs.app.View.Activity.HostDiscovery.FragmentHistoric;
-import fr.allycs.app.View.Activity.HostDiscovery.HostDiscoverySettingsFragmt;
 
 /**
  * TODO: SSLStrip
@@ -60,7 +60,7 @@ public class                    SettingsActivity extends MyActivity {
         try {
             mFragment = getFragmentFromType(typeFramgent);
             Bundle args = new Bundle();
-            args.putString("mode", FragmentHistoric.HOST_HISTORIC);
+            args.putString("mode", FragmentHostDiscoveryHistoric.HOST_HISTORIC);
             mFragment.setArguments(args);
             getSupportFragmentManager()
                     .beginTransaction()
@@ -88,7 +88,7 @@ public class                    SettingsActivity extends MyActivity {
             case DORA_SETTINGS:
                 return new WiresharkSettingsFragmt();
             case HOSTDISCOVERY_SETTINGS:
-                return new HostDiscoverySettingsFragmt();
+                return new FragmentHostDiscoverySettings();
             default:
                 return new WiresharkSettingsFragmt();
         }

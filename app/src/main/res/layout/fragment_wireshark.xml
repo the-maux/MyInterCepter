@@ -52,7 +52,7 @@
                     android:layout_height="match_parent"
                     android:alpha="0.98"
                     android:scrollbars="vertical"
-
+                    android:background="@color/black_primary"
                     tools:listitem="@layout/item_tcpdump" />
 
             </HorizontalScrollView>

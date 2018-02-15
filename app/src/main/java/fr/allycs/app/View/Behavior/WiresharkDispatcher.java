@@ -53,14 +53,15 @@ public class                        WiresharkDispatcher  {
             @Override
             public void run() {
                 int size = queue.size();
-                for (int i = 0; i < queue.size(); i++) {
-                    ((WiresharkAdapter)mAdapterWireshark).addTrameOnAdapter((Trame)pop());
-//                    mAdapterWireshark.notifyItemInserted(0);
+                if (size > 0) {
+                    for (int i = 0; i < queue.size(); i++) {
+                        ((WiresharkAdapter) mAdapterWireshark).addTrameOnAdapter(pop());
+                    }
+                    Log.d(TAG, "notifyItemRangeInserted(" + size + ");");
+                    mAdapterWireshark.notifyItemRangeInserted(0, size);
+                    if (mAutoscroll)
+                        mRV_Wireshark.smoothScrollToPosition(0);
                 }
-                Log.d(TAG, "notifyItemRangeInserted(0," + size+ ");");
-                mAdapterWireshark.notifyItemRangeInserted(0, size);
-                if (mAutoscroll)
-                    mRV_Wireshark.smoothScrollToPosition(0);
             }
         });
     }

@@ -1,5 +1,6 @@
 package fr.allycs.app.View.Activity.Wireshark;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -11,7 +12,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,11 +19,14 @@ import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
 
 import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Database.DBSniffSession;
 import fr.allycs.app.Core.Tcpdump.Tcpdump;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Behavior.Activity.SniffActivity;
 import fr.allycs.app.View.Behavior.Fragment.MyFragment;
 import fr.allycs.app.View.Behavior.MyGlideLoader;
+import fr.allycs.app.View.Widget.Adapter.SniffSessionAdapter;
+import fr.allycs.app.View.Widget.Dialog.RV_dialog;
 
 public class                    WiresharkActivity extends SniffActivity {
     private String              TAG = this.getClass().getName();
@@ -31,12 +34,10 @@ public class                    WiresharkActivity extends SniffActivity {
     private CoordinatorLayout   mCoordinatorLayout;
     private AppBarLayout        mAppBar;
     private Toolbar             mToolbar;
-    private RelativeLayout      mHeaderConfOFF, mHeaderConfON;
     private ProgressBar         mProgressBar;
     private Singleton           mSingleton = Singleton.getInstance();
     private FrameLayout         mFrame_container;
     private WiresharkFragment   mFragment = null;
-
 
     protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,16 +53,14 @@ public class                    WiresharkActivity extends SniffActivity {
     private void                initXml() {
         mCoordinatorLayout = findViewById(R.id.Coordonitor);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
-        mHeaderConfON = findViewById(R.id.filterPcapLayout);
         mFrame_container = findViewById(R.id.frame_container);
-        mHeaderConfOFF = findViewById(R.id.nmapConfEditorLayout);
         mProgressBar =  findViewById(R.id.progressBar);
         mAppBar = findViewById(R.id.appbar);
         mToolbar = findViewById(R.id.toolbar);
         mFab =  findViewById(R.id.fab);
         mFab.setOnClickListener(onclickFab());
         MyGlideLoader.loadDrawableInImageView(this, R.drawable.wireshark, (ImageView) findViewById(R.id.OsImg), true);
-        findViewById(R.id.history).setOnClickListener(onSwitchHeader());
+        findViewById(R.id.history).setOnClickListener(onClickHistory());
     }
 
     private void                initFragment(MyFragment fragment) {
@@ -70,7 +69,7 @@ public class                    WiresharkActivity extends SniffActivity {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.frame_container, mFragment)
-                    .addToBackStack(fragment.getClass().getName())
+                    //.addToBackStack(fragment.getClass().getName()) TANT KE PAS DE SETTINGS NO BACKSTACK
                     .commit();
         } catch (IllegalStateException e) {
             showSnackbar("Error in fragment: " + e.getCause().getMessage(), -1);
@@ -161,20 +160,21 @@ public class                    WiresharkActivity extends SniffActivity {
         mFab.setImageResource(R.mipmap.ic_play);
     }
 
-    private View.OnClickListener onSwitchHeader() {
+    private View.OnClickListener onClickHistory() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mHeaderConfOFF.getVisibility() == View.GONE &&
-                     mHeaderConfON.getVisibility() == View.GONE) {
-                }
-                if (mHeaderConfOFF.getVisibility() == View.GONE) {
-                    mHeaderConfOFF.setVisibility(View.VISIBLE);
-                    mHeaderConfON.setVisibility(View.GONE);
-                } else {
-                    mHeaderConfOFF.setVisibility(View.GONE);
-                    mHeaderConfON.setVisibility(View.VISIBLE);
-                }
+                SniffSessionAdapter adapter = new SniffSessionAdapter(mInstance, DBSniffSession.getAllSniffSession());
+                new RV_dialog(mInstance)
+                        .setAdapter(adapter, true)
+                        .setTitle("Sniffing sessions recorded")
+                        .onPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .show();
             }
         };
     }
@@ -205,4 +205,8 @@ public class                    WiresharkActivity extends SniffActivity {
         return R.layout.activity_wireshark;
     }
 
+    @Override
+    public void                 onBackPressed() {
+        super.onBackPressed();
+    }
 }

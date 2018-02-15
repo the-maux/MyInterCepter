@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import fr.allycs.app.View.Activity.Settings.SettingsFragment;
 
-public class                        HostDiscoverySettingsFragmt extends SettingsFragment {
+public class FragmentHostDiscoverySettings extends SettingsFragment {
     private HostDiscoveryActivity   mActivity;
 
     public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

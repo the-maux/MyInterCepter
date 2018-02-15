@@ -24,9 +24,6 @@ import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickList
 
 import java.util.List;
 
-import fr.allycs.app.View.Behavior.Activity.MyActivity;
-import fr.allycs.app.View.Behavior.Fragment.MyFragment;
-import fr.allycs.app.View.Behavior.MyGlideLoader;
 import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Database.DBAccessPoint;
 import fr.allycs.app.Core.Database.DBSession;
@@ -39,6 +36,9 @@ import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.Model.Target.SniffSession;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.TargetMenu.TargetMenuActivity;
+import fr.allycs.app.View.Behavior.Activity.MyActivity;
+import fr.allycs.app.View.Behavior.Fragment.MyFragment;
+import fr.allycs.app.View.Behavior.MyGlideLoader;
 import fr.allycs.app.View.Widget.Adapter.AccessPointAdapter;
 import fr.allycs.app.View.Widget.Adapter.HostDiscoveryAdapter;
 import fr.allycs.app.View.Widget.Adapter.SessionAdapter;
@@ -46,9 +46,9 @@ import fr.allycs.app.View.Widget.Adapter.SniffSessionAdapter;
 import fr.allycs.app.View.Widget.Dialog.HostDialogDetail;
 import fr.allycs.app.View.Widget.Dialog.RV_dialog;
 
-public class                        FragmentHistoric extends MyFragment {
-    private String                  TAG = "FragmentHistoric";
-    private FragmentHistoric        mInstance = this;
+public class FragmentHostDiscoveryHistoric extends MyFragment {
+    private String                  TAG = "FragmentHostDiscoveryHistoric";
+    private FragmentHostDiscoveryHistoric mInstance = this;
     private Singleton               mSingleton = Singleton.getInstance();
     private Host                    mFocusedHost = null;
     private List<AccessPoint>       HistoricAps;
@@ -322,7 +322,7 @@ public class                        FragmentHistoric extends MyFragment {
     }
 
     private void                    showSniffSessionList() {
-        SniffSessionAdapter adapter = new SniffSessionAdapter(mInstance, DBSniffSession.getAllSniffSession());
+        SniffSessionAdapter adapter = new SniffSessionAdapter(mActivity, DBSniffSession.getAllSniffSession());
         new RV_dialog(mActivity)
                 .setAdapter(adapter, true)
                 .setTitle("Sniffing sessions recorded")

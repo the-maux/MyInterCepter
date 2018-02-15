@@ -9,20 +9,20 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-import fr.allycs.app.View.Behavior.MyGlideLoader;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Activity.HostDiscovery.FragmentHistoric;
+import fr.allycs.app.View.Activity.HostDiscovery.FragmentHostDiscoveryHistoric;
+import fr.allycs.app.View.Behavior.MyGlideLoader;
 import fr.allycs.app.View.Widget.Adapter.Holder.SessionHolder;
 
 public class                    SessionAdapter extends RecyclerView.Adapter<SessionHolder> {
     private String              TAG = "SessionAdapter";
-    private FragmentHistoric    mFragment;
+    private FragmentHostDiscoveryHistoric mFragment;
     private List<Session>       mSessions;
     private AccessPoint         mAp;
 
-    public                      SessionAdapter(FragmentHistoric fragment, List<Session> sessions, AccessPoint ap) {
+    public                      SessionAdapter(FragmentHostDiscoveryHistoric fragment, List<Session> sessions, AccessPoint ap) {
         this.mFragment = fragment;
         this.mSessions = sessions;
         this.mAp = ap;

@@ -19,7 +19,7 @@ import fr.allycs.app.Core.Nmap.Fingerprint;
 import fr.allycs.app.Model.Net.Pcap;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Activity.HostDiscovery.FragmentHistoric;
+import fr.allycs.app.View.Activity.HostDiscovery.FragmentHostDiscoveryHistoric;
 import fr.allycs.app.View.Activity.Scan.NmapActivity;
 import fr.allycs.app.View.Activity.Wireshark.WiresharkActivity;
 import fr.allycs.app.View.Behavior.Activity.MyActivity;
@@ -134,9 +134,9 @@ public class                    HostDetailActivity extends MyActivity {
     }
 
     private void                displayHistoric() {
-        MyFragment fragment = new FragmentHistoric();
+        MyFragment fragment = new FragmentHostDiscoveryHistoric();
         Bundle args = new Bundle();
-        args.putString("mode", FragmentHistoric.HOST_HISTORIC);
+        args.putString("mode", FragmentHostDiscoveryHistoric.HOST_HISTORIC);
         fragment.setArguments(args);
         initFragment(fragment);
     }

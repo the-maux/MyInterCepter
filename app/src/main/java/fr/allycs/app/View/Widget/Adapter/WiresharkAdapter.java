@@ -121,7 +121,7 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         }
 
     }
-    public void             addTrameOnAdapter(Trame trame) {
+    public synchronized void addTrameOnAdapter(Trame trame) {
         trame.offsett = originalListOfTrames.size();
         addTrameFiltered(trame, true);
         originalListOfTrames.add(0, trame);

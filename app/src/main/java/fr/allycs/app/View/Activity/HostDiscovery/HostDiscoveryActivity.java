@@ -59,7 +59,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private ProgressBar             mProgressBar;
     private MyFragment              HistoricFragment = null, NetDiscoveryFragment = null;
     private MyFragment              mFragment = null, mLastFragment = null;
-    public int                      MAXIMUM_PROGRESS = 8500, MAX_TIME_ONE_HOST = 1;
+    public int                      MAXIMUM_PROGRESS = 1000, MAX_TIME_ONE_HOST = 1;
     public Session                  actualSession;
     public Date                     date;
     private Timer                   timer = new Timer();
@@ -105,7 +105,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
             initFragment(NetDiscoveryFragment);
             initSearchView();
             initTimer();
-
         }
     }
 
@@ -148,16 +147,12 @@ public class                        HostDiscoveryActivity extends MyActivity {
                     case ARP_TAB_NAME:
                         fragment = NetDiscoveryFragment;
                         break;
-/*                    case SERVICES_TAB_NAME:
-                        typeScan = NetworkDiscoveryControler.typeScan.Services;
-                        fragment = NetDiscoveryFragment;
-                        break;*/
                     case HISTORIC_TAB_NAME:
                         if (HistoricFragment == null)
-                            HistoricFragment = new FragmentHistoric();
+                            HistoricFragment = new FragmentHostDiscoveryHistoric();
                         fragment = HistoricFragment;
                         Bundle args = new Bundle();
-                        args.putString("mode", FragmentHistoric.DB_HISTORIC);
+                        args.putString("mode", FragmentHostDiscoveryHistoric.DB_HISTORIC);
                         fragment.setArguments(args);
                         break;
                     default:
@@ -229,10 +224,11 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     public void                     initFragmentSettings() {
-        mFragment = new HostDiscoverySettingsFragmt();
+        mFragment = new FragmentHostDiscoverySettings();
         initFragment(mFragment);
         mFab.setVisibility(View.GONE);
         mTabs.setVisibility(View.GONE);
+        mBottomMonitor.setVisibility(View.GONE);
         mToolbarBackground.startTransition(500);
     }
 
@@ -319,21 +315,21 @@ public class                        HostDiscoveryActivity extends MyActivity {
         new Thread(new Runnable() {
             public void run() {
                 mProgress = 0;
-                while (mProgress <= (MAXIMUM_PROGRESS)) {//1 tour == 0,8s == 1HOST
+                while (mProgress < (MAXIMUM_PROGRESS)) {//1 tour == 0,8s == 1HOST
                     try {
                         Thread.sleep(400);
+                        mProgress += 1;
+                        if (mProgress >= MAXIMUM_PROGRESS)
+                            mProgress -= 100;
+                        final int prog2 = mProgress;
+                        mInstance.runOnUiThread(new Runnable() {
+                            public void run() {
+                                mProgressBar.setProgress(prog2);
+                            }
+                        });
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    mProgress += 1;
-                    if (mProgress == MAXIMUM_PROGRESS && ((FragmentHostDiscoveryScan) mFragment).mHostLoaded)
-                        mProgress -= 100;
-                    final int prog2 = mProgress;
-                    mInstance.runOnUiThread(new Runnable() {
-                        public void run() {
-                            mProgressBar.setProgress(prog2);
-                        }
-                    });
                 }
                 mInstance.runOnUiThread(new Runnable() {
                     public void run() {
@@ -361,17 +357,22 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     public void                     onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-            mFab.setVisibility(View.VISIBLE);
-            mTabs.setVisibility(View.VISIBLE);
-            getSupportFragmentManager().popBackStackImmediate();
-            if (mLastFragment.getClass().getName().contains(FragmentHostDiscoveryScan.class.getName()))
-                mTabs.getTabAt(0).select();
-            else if (mLastFragment.getClass().getName().contains(FragmentHistoric.class.getName()))
-                mTabs.getTabAt(1).select();
-            else
+        if (getSupportFragmentManager().getBackStackEntryCount() >= 1) {
+            Log.d(TAG, "onBackPressed::" + mFragment.getClass().getName());
+            if (mFragment.getClass().getName().contains(FragmentHostDiscoveryScan.class.getName())) {
+                finish();
+            } else if (mFragment.getClass().getName().contains(FragmentHostDiscoveryHistoric.class.getName())) {
+                if (mFragment.onBackPressed())
+                    mTabs.getTabAt(0).select();
+            } else if (mFragment.getClass().getName().contains(FragmentHostDiscoverySettings.class.getName())){
                 mToolbarBackground.reverseTransition(700);
+                mFab.setVisibility(View.VISIBLE);
+                mTabs.setVisibility(View.VISIBLE);
+                getSupportFragmentManager().popBackStackImmediate();
+                mBottomMonitor.setVisibility(View.VISIBLE);
+            }
         } else {
+            Log.e(TAG, "onBackPressed::NOTHING ON STACK");
             finish();
         }
     }
