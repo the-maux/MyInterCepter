@@ -18,7 +18,7 @@ public class                    MyPcapAdapter extends RecyclerView.Adapter<PcapH
     private MyFragment          mFragment;
     private List<Pcap>          mPcaps;
 
-    public                      MyPcapAdapter(PcapFragment fragment, List<Pcap> pcaps, boolean isPcapFiles) {
+    public                      MyPcapAdapter(PcapFragment fragment, List<Pcap> pcaps) {
         this.mFragment = fragment;
         this.mPcaps = pcaps;
     }
