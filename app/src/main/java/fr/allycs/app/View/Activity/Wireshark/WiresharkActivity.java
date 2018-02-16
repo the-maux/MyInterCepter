@@ -1,7 +1,10 @@
 package fr.allycs.app.View.Activity.Wireshark;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -49,7 +52,8 @@ public class                    WiresharkActivity extends SniffActivity {
         initFragment(mFragment);
         initSettings();
         initNavigationBottomBar(SNIFFER, true);
-        setToolbarTitle(null, mSingleton.selectedHostsList.get(0).getName());
+        setToolbarTitle("Wireshark", (mSingleton.selectedHostsList == null) ? "0":mSingleton.selectedHostsList.size() + " target");
+
     }
 
     private void                initXml() {
@@ -190,10 +194,23 @@ public class                    WiresharkActivity extends SniffActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
 
                             }
-                        })
-                        .show();
+                        }).show();
             }
         };
+    }
+
+    public void                 onActivityResult(int requestCode, int resultCode,
+                                 Intent resultData) {
+        if (requestCode == 0x42 && resultCode == Activity.RESULT_OK) {
+            Log.d(TAG, "receiving Pcap");
+            Uri uri = null;
+            if (resultData != null) {
+                uri = resultData.getData();
+                Log.i(TAG, "Uri: " + uri.toString());
+                Log.i(TAG, "Uri:EncodedPath:: " + uri.getEncodedPath());
+                Log.i(TAG, "Uri:Path:: " + uri.getPath());
+            }
+        }
     }
 
     public void                 setToolbarTitle(final String title, final String subtitle) {

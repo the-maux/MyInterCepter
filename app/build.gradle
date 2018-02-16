@@ -4,6 +4,8 @@ allprojects {
         google()
         mavenCentral()
         maven { url 'https://maven.google.com' }
+        maven { url "https://jitpack.io" }
+        maven { url "https://dl.bintray.com/firzenyogesh/maven" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
 }
@@ -49,6 +51,7 @@ dependencies {
     compile 'com.android.support:preference-v7:27.0.2'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.github.bumptech.glide:glide:4.3.1'
+    implementation 'yogesh.firzen:FilesLister:1.0.1.g'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
     compile 'com.jaredrummler:material-spinner:1.1.0'
     compile 'com.aurelhubert:ahbottomnavigation:2.1.0'
