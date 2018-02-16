@@ -16,7 +16,7 @@ import java.util.List;
 
 import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.R;
-import fr.allycs.app.View.Widget.Adapter.Holder.PcapFileAdapter;
+import fr.allycs.app.View.Widget.Adapter.PcapFileAdapter;
 
 public class                PcapListerFragment  extends DialogFragment {
     private Singleton       mSingleton = Singleton.getInstance();

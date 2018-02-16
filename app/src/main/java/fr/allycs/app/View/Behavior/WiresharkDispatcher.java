@@ -19,7 +19,6 @@ public class                        WiresharkDispatcher  {
     private boolean                 mIsRunning = false, mAutoscroll = true;
     private int                     REFRESH_TIME = 1000;
     private java.util.Queue         queue = new java.util.LinkedList();
-    private boolean                 acknowledged = false;
 
     public                          WiresharkDispatcher(RecyclerView.Adapter adapter,
                                                         RecyclerView recyclerView, WiresharkActivity activity) {
@@ -44,11 +43,6 @@ public class                        WiresharkDispatcher  {
     }
 
     private synchronized void       publishNewTrame() {
-        if (!acknowledged) {
-            Log.d(TAG, "ack send to Activity");
-            mActivity.connectionSucceed();
-            acknowledged = true;
-        }
         mRV_Wireshark.post(new Runnable() {
             @Override
             public void run() {

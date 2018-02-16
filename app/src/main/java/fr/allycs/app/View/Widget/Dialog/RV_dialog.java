@@ -20,7 +20,7 @@ public class                    RV_dialog {
         View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_recyclerview, null);
         dialog.setView(dialogView);
         dialog.setIcon(R.drawable.ico);
-        mRV_host = dialogView.findViewById(R.id.RL_host);
+        mRV_host = dialogView.findViewById(R.id.RL_items);
         mRV_host.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(activity);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRV_host.getContext(),

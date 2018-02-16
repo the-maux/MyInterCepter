@@ -1,10 +1,7 @@
 package fr.allycs.app.View.Activity.Wireshark;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -42,18 +39,32 @@ public class                    WiresharkActivity extends SniffActivity {
     private ProgressBar         mProgressBar;
     private Singleton           mSingleton = Singleton.getInstance();
     private FrameLayout         mFrame_container;
-    private WiresharkFragment   mFragment = null;
+    private WiresharkLiveFragment mFragment = null;
 
     protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentViewId());
         initXml();
-        mFragment = new WiresharkFragment();
-        initFragment(mFragment);
-        initSettings();
-        initNavigationBottomBar(SNIFFER, true);
-        setToolbarTitle("Wireshark", (mSingleton.selectedHostsList == null) ? "0":mSingleton.selectedHostsList.size() + " target");
+        init();
+    }
 
+    private void                init() {
+        String PcapFilePath = getIntent().getStringExtra("Pcap");
+        if (PcapFilePath == null) {
+            mFragment = new WiresharkLiveFragment();
+            initSettings();
+            initNavigationBottomBar(SNIFFER, true);
+            setToolbarTitle("Wireshark", (mSingleton.selectedHostsList == null) ? "0" : mSingleton.selectedHostsList.size() + " target");
+        } else {
+            findViewById(R.id.navigation).setVisibility(View.GONE);
+            mFragment = new WiresharkLiveFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("Pcap", PcapFilePath);
+            mFragment.setArguments(bundle);
+            setToolbarTitle("Wireshark", (mSingleton.selectedHostsList == null) ? "0" : mSingleton.selectedHostsList.size() + " target");
+
+        }
+        initFragment(mFragment);
     }
 
     private void                initXml() {
@@ -71,7 +82,7 @@ public class                    WiresharkActivity extends SniffActivity {
 
     private void                initFragment(MyFragment fragment) {
         try {
-            mFragment = (WiresharkFragment) fragment;
+            mFragment = (WiresharkLiveFragment) fragment;
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.frame_container, mFragment)
@@ -96,15 +107,6 @@ public class                    WiresharkActivity extends SniffActivity {
                 }
             }
         };
-    }
-
-    public void                 connectionSucceed() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mProgressBar.setVisibility(View.GONE);
-            }
-        });
     }
 
     private void                initSettings() {
@@ -197,20 +199,6 @@ public class                    WiresharkActivity extends SniffActivity {
                         }).show();
             }
         };
-    }
-
-    public void                 onActivityResult(int requestCode, int resultCode,
-                                 Intent resultData) {
-        if (requestCode == 0x42 && resultCode == Activity.RESULT_OK) {
-            Log.d(TAG, "receiving Pcap");
-            Uri uri = null;
-            if (resultData != null) {
-                uri = resultData.getData();
-                Log.i(TAG, "Uri: " + uri.toString());
-                Log.i(TAG, "Uri:EncodedPath:: " + uri.getEncodedPath());
-                Log.i(TAG, "Uri:Path:: " + uri.getPath());
-            }
-        }
     }
 
     public void                 setToolbarTitle(final String title, final String subtitle) {

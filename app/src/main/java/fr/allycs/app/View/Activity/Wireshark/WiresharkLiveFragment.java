@@ -27,8 +27,8 @@ import fr.allycs.app.View.Widget.Adapter.WiresharkAdapter;
 import fr.allycs.app.View.Widget.Dialog.RV_dialog;
 
 
-public class                    WiresharkFragment extends MyFragment {
-    private String              TAG = "WiresharkFragment";
+public class WiresharkLiveFragment extends MyFragment {
+    private String              TAG = "WiresharkLiveFragment";
     private CoordinatorLayout   mCoordinatorLayout;
     private Singleton           mSingleton = Singleton.getInstance();
     private Host                mFocusedHost;//TODO need to be init
@@ -40,8 +40,7 @@ public class                    WiresharkFragment extends MyFragment {
     private List<Host>          mListHostSelected = new ArrayList<>();
     private TextView            mMonitorAgv;//, mMonitorCmd;
     private Tcpdump             mTcpdump;
-    private String              mTypeScan = "No Filter";
-/*    private CheckBox            Autoscroll;
+    /*    private CheckBox            Autoscroll;
     private TextView            tcp_cb, dns_cb, arp_cb, https_cb, http_cb, udp_cb, ip_cb;*/
 
     
@@ -109,6 +108,65 @@ public class                    WiresharkFragment extends MyFragment {
     private void                initTimer() {
 
     }
+
+    public boolean              start() {
+        Utils.vibrateDevice(mActivity);
+        if (!mTcpdump.isRunning) {
+            if (startTcpdump()) {
+                mMonitorAgv.setVisibility(View.VISIBLE);
+                mAdapterWireshark.clear();
+                return true;
+            }
+        } else {
+            mMonitorAgv.setVisibility(View.GONE);
+            mTcpdump.onTcpDumpStop();
+            mActivity.setToolbarTitle(null, "Sniffing over");
+            mActivity.updateNotifications();
+        }
+        return false;
+    }
+
+    private boolean             startTcpdump() {
+        if (mListHostSelected.isEmpty()) {
+            if (mSingleton.selectedHostsList.size() == 1) {//Automatic selection when 1 target only
+                mListHostSelected.add(mSingleton.selectedHostsList.get(0));
+                mActivity.setToolbarTitle(null,"Listenning " + mSingleton.selectedHostsList.get(0).ip);
+            } else {
+                mActivity.showSnackbar("Selectionner une target", -1);
+                onClickChoiceTarget();
+                return false;
+            }
+        }
+        Log.d(TAG, "mTcpdump.actualParam::" + mTcpdump);
+        WiresharkDispatcher trameDispatcher = new WiresharkDispatcher(mAdapterWireshark, mRV_Wireshark, mActivity);
+        String argv = mTcpdump
+                            .initCmd(mListHostSelected)
+                            .start(trameDispatcher);
+        mMonitorAgv.setText(argv.replace(mSingleton.PcapPath, ""));
+        mActivity.updateNotifications();
+        return true;
+    }
+
+    private void                onClickChoiceTarget() {
+        new RV_dialog(mActivity)
+                .setAdapter(new HostSelectionAdapter(mActivity, mSingleton.selectedHostsList, mListHostSelected), false)
+                .setTitle("Choix des cibles")
+                .onPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (mListHostSelected.isEmpty())
+                            mActivity.showSnackbar("No target selected", -1);
+                        else {
+                            mActivity.setToolbarTitle(null, mListHostSelected.size() + " target" +
+                                    ((mListHostSelected.size() <= 1) ? "" : "s") + " selected");
+                            start();
+                        }
+                    }
+                })
+                .show();
+        mListHostSelected.clear();
+    }
+
     /*private void                initFilter() {
         tcp_cb.setOnClickListener(onChangePermissionFilter(Protocol.TCP, tcp_cb));
         dns_cb.setOnClickListener(onChangePermissionFilter(Protocol.DNS, dns_cb));
@@ -160,64 +218,5 @@ public class                    WiresharkFragment extends MyFragment {
         }
         Log.d(TAG, "initSpinner:: monitor::" + mMonitorCmd.getText().toString());
     }*/
-
-    public boolean              start() {
-        Utils.vibrateDevice(mActivity);
-        if (!mTcpdump.isRunning) {
-            if (startTcpdump()) {
-                mMonitorAgv.setVisibility(View.VISIBLE);
-                mAdapterWireshark.clear();
-                return true;
-            }
-        } else {
-            mMonitorAgv.setVisibility(View.GONE);
-            mTcpdump.onTcpDumpStop();
-            mActivity.setToolbarTitle(null, "Sniffing over");
-            mActivity.updateNotifications();
-        }
-        return false;
-    }
-
-    private boolean             startTcpdump() {
-        if (mListHostSelected.isEmpty()) {
-            if (mSingleton.selectedHostsList.size() == 1) {//Automatic selection when 1 target only
-                mListHostSelected.add(mSingleton.selectedHostsList.get(0));
-                mActivity.setToolbarTitle(null,"Listenning " + mSingleton.selectedHostsList.get(0).ip);
-            } else {
-                mActivity.showSnackbar("Selectionner une target", -1);
-                onClickChoiceTarget();
-                return false;
-            }
-        }
-        Log.d(TAG, "mTcpdump.actualParam::" + mTcpdump.actualParam);
-        WiresharkDispatcher trameDispatcher = new WiresharkDispatcher(mAdapterWireshark, mRV_Wireshark, mActivity);
-        String argv = mTcpdump
-                .initCmd(mListHostSelected, mTypeScan, mTcpdump.actualParam)
-                .start(trameDispatcher);
-        mMonitorAgv.setText(argv.replace(mSingleton.PcapPath, ""));
-        mActivity.updateNotifications();
-        return true;
-    }
-
-    private void                onClickChoiceTarget() {
-        new RV_dialog(mActivity)
-                .setAdapter(new HostSelectionAdapter(mActivity, mSingleton.selectedHostsList, mListHostSelected), false)
-                .setTitle("Choix des cibles")
-                .onPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (mListHostSelected.isEmpty())
-                            mActivity.showSnackbar("No target selected", -1);
-                        else {
-                            mActivity.setToolbarTitle(null, mListHostSelected.size() + " target" +
-                                    ((mListHostSelected.size() <= 1) ? "" : "s") + " selected");
-                            start();
-                        }
-                    }
-                })
-                .show();
-        mListHostSelected.clear();
-    }
-
 
 }

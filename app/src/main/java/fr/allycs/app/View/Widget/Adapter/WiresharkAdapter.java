@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import fr.allycs.app.Core.Configuration.Singleton;
@@ -128,6 +129,10 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         originalListOfTrames.add(0, trame);
     }
 
+    public void             loadListOfTrame(ArrayList<Trame> trames) {
+        listOfTrame.addAll(trames);
+        notifyDataSetChanged();
+    }
     public boolean          changePermissionFilter(Protocol protocol) {
         boolean ret;
         switch (protocol) {

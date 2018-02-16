@@ -2,6 +2,7 @@ package fr.allycs.app.Core.Tcpdump;
 
 import android.util.Log;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -9,8 +10,8 @@ import java.util.List;
 import java.util.Locale;
 
 import fr.allycs.app.Core.Configuration.Singleton;
-import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Net.Pcap;
+import fr.allycs.app.Model.Target.Host;
 
 class                           ConfTcpdump {
     private String              TAG = "ConfTcpdump";
@@ -86,5 +87,8 @@ class                           ConfTcpdump {
         Log.d(TAG, cmd);
         return cmd ;
     }
-    
+
+    public String               buildCmd(File mPcapFile) {
+        return ""
+    }
 }

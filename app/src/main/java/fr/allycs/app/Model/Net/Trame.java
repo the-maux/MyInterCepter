@@ -17,9 +17,7 @@ public class               Trame extends MyObject {
     public boolean         initialised = false, skipped = false;
     public boolean         connectionOver = false;
 
-    public                  Trame(String dump, int verbose_lvl) {
-        this.verbose = verbose_lvl;//0: Nothing; 1 => -v ; 2 -vv ; 3 -vvv ; 4 -X
-
+    public                  Trame(String dump) {
         if (skipUnnecessary(dump)) {
             Log.e(TAG, "Skipped:" + dump);
             return;
