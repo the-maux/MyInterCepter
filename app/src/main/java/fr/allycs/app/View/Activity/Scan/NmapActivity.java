@@ -31,6 +31,7 @@ import fr.allycs.app.Core.Nmap.NmapControler;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Behavior.Activity.SniffActivity;
+import fr.allycs.app.View.Behavior.ViewAnimate;
 import fr.allycs.app.View.Widget.Dialog.DialogQuestionWithInput;
 
 public class                    NmapActivity extends SniffActivity {
@@ -103,6 +104,7 @@ public class                    NmapActivity extends SniffActivity {
             initTabswithTargets(mListHostSelected);
             monitorNmapParam.setText(nmapControler.getNmapParamFromMenuItem(nmapControler.getMenuCommmands().get(0)));
             initUIWithTarget(mListHostSelected.get(0));
+            ViewAnimate.setVisibilityToVisibleQuick(mFab);
         }
         initNavigationBottomBar(SCANNER, true);
     }
@@ -240,8 +242,10 @@ public class                    NmapActivity extends SniffActivity {
             try {
                 address = InetAddress.getByName(externalHost);
                 String ip = address.getHostAddress();
+                //TODO: what when we add someone
                 List<String> listExternalIp = new ArrayList<>();
                 //new NmapControler(listExternalIp);
+                ViewAnimate.setVisibilityToVisibleQuick(mFab);
             } catch (UnknownHostException e) {
                 e.printStackTrace();
                 addExternalHostFailed(externalHost + ": Name or service unknow");

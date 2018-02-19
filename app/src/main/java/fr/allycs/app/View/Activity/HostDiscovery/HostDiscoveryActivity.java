@@ -59,7 +59,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private ProgressBar             mProgressBar;
     private MyFragment              HistoricFragment = null, NetDiscoveryFragment = null;
     private MyFragment              mFragment = null, mLastFragment = null;
-    public int                      MAXIMUM_PROGRESS = 1000, MAX_TIME_ONE_HOST = 1;
+    public int                      MAXIMUM_PROGRESS = 100, MAX_TIME_ONE_HOST = 1;
     public Session                  actualSession;
     public Date                     date;
     private Timer                   timer = new Timer();
@@ -105,6 +105,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
             initFragment(NetDiscoveryFragment);
             initSearchView();
             initTimer();
+
         }
     }
 
@@ -124,25 +125,23 @@ public class                        HostDiscoveryActivity extends MyActivity {
         timer.scheduleAtFixedRate(new UpdateTimer(), 0, 1000);
     }
 
-    public void                     stopTimer() {
+    public void                     onScanOver() {
         if (timer != null) {
             timer.cancel();
             ViewAnimate.setVisibilityToGoneLong(mTimer);
             timer = null;
         }
+        ViewAnimate.setVisibilityToVisibleQuick(mFab);
     }
 
     private void                    initTabs(){
         final String                ARP_TAB_NAME = "Devices\nDiscovery",
-                                    SERVICES_TAB_NAME = "Services\nDiscovery",
                                     HISTORIC_TAB_NAME = "Audit\nHistoric";
         mTabs.addTab(mTabs.newTab().setText(ARP_TAB_NAME), 0);
-        //mTabs.addTab(mTabs.newTab().setText(SERVICES_TAB_NAME), 1);
         mTabs.addTab(mTabs.newTab().setText(HISTORIC_TAB_NAME), 1);
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             public void onTabSelected(TabLayout.Tab tab) {
                 MyFragment fragment;
-                Log.d(TAG, "onTabSelected:[" + tab.getText().toString().replace("\n", " ") + "]");
                 switch (tab.getText().toString()) {
                     case ARP_TAB_NAME:
                         fragment = NetDiscoveryFragment;
@@ -158,6 +157,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                     default:
                         return ;
                 }
+                mFab.setVisibility(View.GONE);
                 initFragment(fragment);
                 initSearchView();
             }
@@ -175,7 +175,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 if (mFragment.getClass().getName().contains("FragmentHostDiscoveryScan") &&
                     ((FragmentHostDiscoveryScan) mFragment).mHostLoaded) {
                     mSingleton.selectedHostsList = ((FragmentHostDiscoveryScan) mFragment).getTargetFromHostList();
-                    if (mSingleton.DebugMode) {
+                    if (mSingleton.UltraDebugMode) {
                         Log.d(TAG, "mSingleton.selectedHostsList" + mSingleton.selectedHostsList);
                         Log.d(TAG, "mSingleton.hostsListSize:" +
                                 ((mSingleton.selectedHostsList != null) ? mSingleton.selectedHostsList.size() : "0"));
@@ -185,7 +185,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 }
                 else if (!mFragment.start()) {
 
-                } else if (mSingleton.DebugMode) {
+                } else if (mSingleton.UltraDebugMode) {
                     Log.i(TAG, "fragment start false");
                 }
             }
@@ -315,12 +315,12 @@ public class                        HostDiscoveryActivity extends MyActivity {
         new Thread(new Runnable() {
             public void run() {
                 mProgress = 0;
-                while (mProgress < (MAXIMUM_PROGRESS)) {//1 tour == 0,8s == 1HOST
+                while (mProgress <= (MAXIMUM_PROGRESS)) {//1 tour == 0,8s == 1HOST
                     try {
-                        Thread.sleep(400);
+                        Thread.sleep(500);
                         mProgress += 1;
                         if (mProgress >= MAXIMUM_PROGRESS)
-                            mProgress -= 100;
+                            mProgress -= MAXIMUM_PROGRESS / 8;
                         final int prog2 = mProgress;
                         mInstance.runOnUiThread(new Runnable() {
                             public void run() {
@@ -334,6 +334,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 mInstance.runOnUiThread(new Runnable() {
                     public void run() {
                         mFab.setImageResource(R.drawable.ic_media_play);
+                        ViewAnimate.setVisibilityToVisibleQuick(mFab);
                         mProgressBar.setVisibility(View.GONE);
                     }
                 });
@@ -342,15 +343,20 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     public void                     setMAXIMUM_PROGRESS(int nbrHost) {
-        int icmpLoopTime = 10;
+        int icmpLoopTime = 4;
         Log.d(TAG, "MAXIMUM PROGRESS SET : [" + icmpLoopTime + (nbrHost) + "] estimation[" + icmpLoopTime + (nbrHost) * 400 / 1000+ "s]");
-        mProgressBar.setMax(icmpLoopTime + (nbrHost)*4);
-        MAXIMUM_PROGRESS = icmpLoopTime + (nbrHost)*4;
+        if (nbrHost < 10) {
+            mProgressBar.setMax(50);
+            MAXIMUM_PROGRESS = 50;
+        } else if (nbrHost < 50) {
+            mProgressBar.setMax(180);
+            MAXIMUM_PROGRESS = 180;
+        } else {
+            mProgressBar.setMax(240);
+            MAXIMUM_PROGRESS = 240;
+        }
     }
 
-    public boolean                  isWaiting() {
-        return mProgressBar.getVisibility() == View.VISIBLE;
-    }
 
     public void                     showSnackbar(String txt) {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();

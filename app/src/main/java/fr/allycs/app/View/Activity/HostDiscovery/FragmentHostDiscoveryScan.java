@@ -53,7 +53,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hostdiscovery_scan, container, false);
         initXml(rootView);
-        this.mActivity = (HostDiscoveryActivity) getActivity();
+        mActivity = (HostDiscoveryActivity) getActivity();
         mScannerControler = NetworkDiscoveryControler.getInstance(this);
 //TODO: else si premier scan du SSID alors re scann (ou last scan past from 1 week)
         initSwipeRefresh();
@@ -86,9 +86,8 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 R.color.NmapPrimary,
                 R.color.webserverSpoofPrimary);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
             public void onRefresh() {
-                if (mActivity.isWaiting()) {
+                if (!mScannerControler.inLoading) {
                     mHosts.clear();
                     mEmptyList.setVisibility(View.GONE);
                     if (mHostAdapter != null)
@@ -190,7 +189,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ?
                         View.VISIBLE : View.GONE);
                 mSwipeRefreshLayout.setRefreshing(false);
-                mActivity.stopTimer();
+                mActivity.onScanOver();
                 mActivity.actualSession =
                         DBSession.buildSession(mSingleton.network.Ssid,
                                 mSingleton.network.gateway,

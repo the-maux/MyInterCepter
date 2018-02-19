@@ -25,6 +25,7 @@ import fr.allycs.app.Core.Dnsmasq.DnsmasqControl;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Behavior.Activity.SniffActivity;
 import fr.allycs.app.View.Behavior.MyGlideLoader;
+import fr.allycs.app.View.Behavior.ViewAnimate;
 import fr.allycs.app.View.Widget.Adapter.DnsLogsAdapter;
 import fr.allycs.app.View.Widget.Adapter.DnsSpoofConfAdapter;
 import fr.allycs.app.View.Widget.Dialog.DialogQuestionWithInput;
@@ -79,12 +80,12 @@ public class                            DnsActivity extends SniffActivity {
     }
 
     private void                        initFab() {
+        ViewAnimate.setVisibilityToVisibleQuick(mFab);
         if (mSingleton.isDnsControlstarted()) {
             mFab.setImageResource(R.mipmap.ic_stop);
         } else {
             mFab.setImageResource(R.drawable.ic_media_play);
         }
-
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -130,7 +130,7 @@
             android:layout_margin="9dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_loop_search"
-            android:visibility="visible"
+            android:visibility="gone"
             app:backgroundTint="@color/fab_color"
             app:fabSize="normal" />
 

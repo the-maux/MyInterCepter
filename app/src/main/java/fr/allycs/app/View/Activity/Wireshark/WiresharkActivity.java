@@ -57,10 +57,10 @@ public class                    WiresharkActivity extends SniffActivity {
             mFragment = new WiresharkLiveFragment();
             initSettings();
             initNavigationBottomBar(SNIFFER, true);
-            ViewAnimate.setVisibilityToGoneLong(mFab);
+            ViewAnimate.setVisibilityToVisibleQuick(mFab);
             setToolbarTitle("Wireshark", (mSingleton.selectedHostsList == null) ? "0" : mSingleton.selectedHostsList.size() + " target");
         } else {
-            ViewAnimate.setVisibilityToVisibleQuick(mFab);
+            ViewAnimate.setVisibilityToGoneLong(mFab);
             Log.d(TAG, "initAsPcapReaderWireshark");
             findViewById(R.id.navigation).setVisibility(View.GONE);
             mFragment = new WiresharkReaderFragment();
