@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,7 +23,7 @@ import fr.allycs.app.View.Behavior.Fragment.MyFragment;
 import fr.allycs.app.View.Widget.Adapter.WiresharkAdapter;
 
 
-public class WiresharkReaderFragment extends MyFragment {
+public class                    WiresharkReaderFragment extends MyFragment {
     private String              TAG = "WiresharkLiveFragment";
     private CoordinatorLayout   mCoordinatorLayout;
     private Singleton           mSingleton = Singleton.getInstance();
@@ -32,7 +33,8 @@ public class WiresharkReaderFragment extends MyFragment {
     private WiresharkAdapter    mAdapterWireshark;
     private Tcpdump             mTcpdump;
     private File                mPcapFile;
-    
+    ProgressDialog dialog;
+
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_wireshark, container, false);
         mCtx = getActivity();
@@ -49,14 +51,17 @@ public class WiresharkReaderFragment extends MyFragment {
     }
 
     public void                 init() {
-        if (getArguments() != null) {
-            mPcapFile = new File(getArguments().getString("message"));
+        if (getArguments() != null && getArguments().getString("Pcap") != null) {
+            mPcapFile = new File(getArguments().getString("Pcap"));
             initRV();
-            mTcpdump.readPcap(mPcapFile, this);
-            ProgressDialog dialog = ProgressDialog.show(mActivity, mPcapFile.getName(),
+
+            dialog = ProgressDialog.show(mActivity, mPcapFile.getName(),
                     "Loading. Please wait...", true);
+            dialog.show();
+            mTcpdump.readPcap(mPcapFile, this);
         } else {
             Log.e(TAG, "no Pcap returned");
+            mActivity.showSnackbar("No Pcap to read",  ContextCompat.getColor(mActivity, R.color.stop_color));
         }
     }
 
@@ -71,7 +76,25 @@ public class WiresharkReaderFragment extends MyFragment {
         mRV_Wireshark.setLayoutManager(new LinearLayoutManager(mActivity));
     }
 
-    public void                 onPcapAnalysed(ArrayList<Trame> mBufferOfTrame) {
-        mAdapterWireshark.loadListOfTrame(mBufferOfTrame);
+
+
+    public void                 onPcapAnalysed(final ArrayList<Trame> mBufferOfTrame) {
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dialog.hide();
+                mAdapterWireshark.loadListOfTrame(mBufferOfTrame);
+            }
+        });
+    }
+    private int rax = 0;
+    public synchronized void    loadingMonitor() {
+        final String monitor = "Loading. Reading " + rax++ + " packets";
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dialog.setMessage(monitor);
+            }
+        });
     }
 }

@@ -5,6 +5,7 @@
     android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:transitionName="appBarTransition"
     android:animateLayoutChanges="true"
     android:background="@drawable/splashscreen">
 
@@ -121,7 +122,7 @@
             android:scaleType="fitCenter"
             android:src="@drawable/ic_media_play"
             android:visibility="visible"
-            app:backgroundTint="@color/stop_color"
+            app:backgroundTint="@color/fab_color"
             app:fabSize="normal" />
 
         <ProgressBar

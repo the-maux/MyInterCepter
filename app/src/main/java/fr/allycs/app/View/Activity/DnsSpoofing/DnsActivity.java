@@ -82,7 +82,7 @@ public class                            DnsActivity extends SniffActivity {
         if (mSingleton.isDnsControlstarted()) {
             mFab.setImageResource(R.mipmap.ic_stop);
         } else {
-            mFab.setImageResource(android.R.drawable.ic_media_play);
+            mFab.setImageResource(R.drawable.ic_media_play);
         }
 
         mFab.setOnClickListener(new View.OnClickListener() {
@@ -94,7 +94,7 @@ public class                            DnsActivity extends SniffActivity {
                     mFab.setImageResource(R.drawable.ic_stop);
                 } else {
                     mDnsSpoof.stop();
-                    mFab.setImageResource(R.mipmap.ic_play);
+                    mFab.setImageResource(R.drawable.ic_media_play);
                 }
                 updateNotifications();
             }

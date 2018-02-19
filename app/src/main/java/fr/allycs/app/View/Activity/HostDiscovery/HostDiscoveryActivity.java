@@ -309,7 +309,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     public void                     progressAnimation() {
         mProgressBar.setVisibility(View.VISIBLE);
-        mFab.setImageResource(R.drawable.my_icon_search);
+        mFab.setImageResource(R.drawable.ic_loop_search);
         mProgressBar.setProgress(0);
         mProgressBar.setMax(MAXIMUM_PROGRESS);
         new Thread(new Runnable() {
@@ -333,7 +333,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 }
                 mInstance.runOnUiThread(new Runnable() {
                     public void run() {
-                        mFab.setImageResource(android.R.drawable.ic_media_play);
+                        mFab.setImageResource(R.drawable.ic_media_play);
                         mProgressBar.setVisibility(View.GONE);
                     }
                 });

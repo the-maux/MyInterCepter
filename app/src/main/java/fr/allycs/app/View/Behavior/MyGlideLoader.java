@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -26,6 +27,7 @@ public class                MyGlideLoader {
                 .apply(RequestOptions.circleCropTransform())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .placeholder(R.drawable.ico)
+                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(imageView);
     }
     public static void      loadDrawableInCircularImageView(Context context, Drawable    ressource, ImageView imageView) {
@@ -34,12 +36,14 @@ public class                MyGlideLoader {
                 .apply(RequestOptions.circleCropTransform())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .placeholder(R.drawable.ico)
+                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(imageView);
     }
     public static void      loadDrawableInImageView(Context context, int ressource, ImageView imageView, boolean override) {
         GlideRequest r = GlideApp.with(context)
                 .load(ressource)
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .transition(DrawableTransitionOptions.withCrossFade());
         if (override)
                 r.apply(new RequestOptions()
                         .fitCenter()

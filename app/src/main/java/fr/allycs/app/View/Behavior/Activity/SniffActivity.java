@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toolbar;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
@@ -113,7 +115,8 @@ public abstract class           SniffActivity extends MyActivity  {
                                     Log.d(TAG, "onNavigationItemSelected::" + position);
                                     Intent intent = null;
                                     Pair<View, String> p1 = Pair.create((View) mBottomBar, "navigation");
-                                    final ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1);
+                                    Pair<View, String> p2 = Pair.create(findViewById(R.id.appbar), "appBarTransition");
+                                    final ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2);
                                     switch (position) {
                                         case 0:
                                             intent = new Intent(mInstance, NmapActivity.class);
@@ -146,7 +149,6 @@ public abstract class           SniffActivity extends MyActivity  {
         };
     }
 
-    @Override
     protected void onResume() {
         super.onResume();
         Log.d(TAG, " onResume::setCurrentItem::" + mType);
@@ -154,7 +156,6 @@ public abstract class           SniffActivity extends MyActivity  {
         updateNotifications();
     }
 
-    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Log.d(TAG, "onNew Intent mTypeRecorded(" + mType + ") currentItem(" + mBottomBar.getCurrentItem() + ") on "+ mBottomBar.getItemsCount() + " items");

@@ -299,7 +299,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:scrollbars="vertical"
-        tools:listitem="@layout/item_accesspoint">
+        tools:listitem="@layout/item_little_cardview">
 
     </android.support.v7.widget.RecyclerView>
 

@@ -27,7 +27,7 @@ public class                    AccessPointAdapter extends RecyclerView.Adapter<
 
     public AccessPointHolder    onCreateViewHolder(ViewGroup parent, int viewType) {
         return new AccessPointHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_accesspoint, parent, false));
+                .inflate(R.layout.item_little_cardview, parent, false));
     }
 
     public void                 onBindViewHolder(AccessPointHolder holder, int position) {

@@ -47,7 +47,8 @@ public class               Trame extends MyObject {
                 line.contains("packets captured") ||
                 line.contains("packets received by filter") ||
                 line.contains("packets dropped by kernel") ||
-                line.contains("Processus over")) {
+                line.contains("Processus over") ||
+                line.contains("reading from file")) {
             skipped = true;
             return true;
         }

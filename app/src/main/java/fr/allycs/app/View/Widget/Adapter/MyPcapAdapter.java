@@ -25,7 +25,7 @@ public class                    MyPcapAdapter extends RecyclerView.Adapter<PcapH
 
     public PcapHolder           onCreateViewHolder(ViewGroup parent, int viewType) {
         return new PcapHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_accesspoint, parent, false));
+                .inflate(R.layout.item_little_cardview, parent, false));
     }
 
     public void                 onBindViewHolder(PcapHolder holder, int position) {

@@ -12,6 +12,7 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:transitionName="appBarTransition"
         android:background="@color/NmapPrimary"
         app:elevation="12dp">
 
@@ -128,9 +129,9 @@
             android:layout_centerVertical="true"
             android:layout_margin="9dp"
             android:scaleType="fitCenter"
-            android:src="?android:attr/actionModeWebSearchDrawable"
+            android:src="@drawable/ic_loop_search"
             android:visibility="visible"
-            app:backgroundTint="@color/material_blue_grey_400"
+            app:backgroundTint="@color/fab_color"
             app:fabSize="normal" />
 
         <ProgressBar

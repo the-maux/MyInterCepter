@@ -89,6 +89,7 @@ class                           ConfTcpdump {
     }
 
     public String               buildCmd(File mPcapFile) {
-        return ""
+        Log.d(TAG, "buildCmd::" + mSingleton.FilesPath + "tcpdump " + "-r " + mPcapFile.getPath());
+        return mSingleton.FilesPath + "tcpdump " + "-r " + mPcapFile.getPath();
     }
 }

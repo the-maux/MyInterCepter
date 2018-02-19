@@ -68,7 +68,7 @@ public class                    DoraActivity extends MyActivity {
 
     private void                getDoraWrapper() {
         mDoraWrapper = Dora.getDora(this);
-        mFab.setImageResource((!mDoraWrapper.isRunning()) ? android.R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
+        mFab.setImageResource((!mDoraWrapper.isRunning()) ? R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
         more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,7 +91,7 @@ public class                    DoraActivity extends MyActivity {
     private void                launchDiagnose() {
         boolean isStarting = mDoraWrapper.onAction();
         mRv_Adapter.setIsRunning(isStarting);
-        mFab.setImageResource((!isStarting) ? android.R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
+        mFab.setImageResource((!isStarting) ? R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
     }
 
     public void                 adapterRefreshDeamon() {

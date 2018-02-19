@@ -2,6 +2,7 @@ package fr.allycs.app.View.Activity.Wireshark;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -21,14 +22,14 @@ import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
 
 import fr.allycs.app.Core.Configuration.Singleton;
-import fr.allycs.app.Core.Database.DBSniffSession;
+import fr.allycs.app.Core.Configuration.Utils;
 import fr.allycs.app.Core.Tcpdump.Tcpdump;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Behavior.Activity.SniffActivity;
 import fr.allycs.app.View.Behavior.Fragment.MyFragment;
 import fr.allycs.app.View.Behavior.MyGlideLoader;
-import fr.allycs.app.View.Widget.Adapter.SniffSessionAdapter;
-import fr.allycs.app.View.Widget.Dialog.RV_dialog;
+import fr.allycs.app.View.Behavior.ViewAnimate;
+import fr.allycs.app.View.Widget.Fragment.PcapListerFragment;
 
 public class                    WiresharkActivity extends SniffActivity {
     private String              TAG = this.getClass().getName();
@@ -39,25 +40,30 @@ public class                    WiresharkActivity extends SniffActivity {
     private ProgressBar         mProgressBar;
     private Singleton           mSingleton = Singleton.getInstance();
     private FrameLayout         mFrame_container;
-    private WiresharkLiveFragment mFragment = null;
+    private MyFragment          mFragment = null;
 
     protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentViewId());
         initXml();
-        init();
+        init(null);
     }
 
-    private void                init() {
-        String PcapFilePath = getIntent().getStringExtra("Pcap");
+    private void                init(Intent intent) {
+
+        String PcapFilePath = intent  == null ? null : intent.getStringExtra("Pcap");
         if (PcapFilePath == null) {
+            Log.d(TAG, "initAsSniffingWireshark");
             mFragment = new WiresharkLiveFragment();
             initSettings();
             initNavigationBottomBar(SNIFFER, true);
+            ViewAnimate.setVisibilityToGoneLong(mFab);
             setToolbarTitle("Wireshark", (mSingleton.selectedHostsList == null) ? "0" : mSingleton.selectedHostsList.size() + " target");
         } else {
+            ViewAnimate.setVisibilityToVisibleQuick(mFab);
+            Log.d(TAG, "initAsPcapReaderWireshark");
             findViewById(R.id.navigation).setVisibility(View.GONE);
-            mFragment = new WiresharkLiveFragment();
+            mFragment = new WiresharkReaderFragment();
             Bundle bundle = new Bundle();
             bundle.putString("Pcap", PcapFilePath);
             mFragment.setArguments(bundle);
@@ -65,6 +71,13 @@ public class                    WiresharkActivity extends SniffActivity {
 
         }
         initFragment(mFragment);
+    }
+
+    protected void              onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.d(TAG, "onIntent Pcap::" + intent.getStringExtra("Pcap"));
+
+        init(intent);
     }
 
     private void                initXml() {
@@ -82,7 +95,7 @@ public class                    WiresharkActivity extends SniffActivity {
 
     private void                initFragment(MyFragment fragment) {
         try {
-            mFragment = (WiresharkLiveFragment) fragment;
+            mFragment =  fragment;
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.frame_container, mFragment)
@@ -185,9 +198,14 @@ public class                    WiresharkActivity extends SniffActivity {
 
     private View.OnClickListener onClickHistory() {
         return new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
-                SniffSessionAdapter adapter = new SniffSessionAdapter(mInstance, DBSniffSession.getAllSniffSession());
+                if (Tcpdump.isRunning()) {
+                    showSnackbar("You cant read while sniffing", -1);
+                } else {
+                    PcapListerFragment.newInstance().show(getSupportFragmentManager(), "");
+
+                }
+                /*SniffSessionAdapter adapter = new SniffSessionAdapter(mInstance, DBSniffSession.getAllSniffSession());
                 new RV_dialog(mInstance)
                         .setAdapter(adapter, true)
                         .setTitle("Sniffing sessions recorded")
@@ -196,7 +214,7 @@ public class                    WiresharkActivity extends SniffActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
 
                             }
-                        }).show();
+                        }).show();*/
             }
         };
     }
@@ -232,7 +250,7 @@ public class                    WiresharkActivity extends SniffActivity {
             @Override
             public void run() {
                 mProgressBar.setVisibility(View.GONE);
-                mFab.setImageResource(R.mipmap.ic_play);
+                mFab.setImageResource(R.drawable.ic_media_play);
             }
         });
     }
