@@ -1,5 +1,7 @@
 package fr.allycs.app.View.Widget.Adapter;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,16 +37,31 @@ public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter
         holder.domain.setText("www." + host.domain + "  " + host.domain);
         holder.ip.setText(host.ip);
         holder.deleteImage.setOnClickListener(onDeleteDns(host));
+
     }
 
     private View.OnClickListener onDeleteDns(final DNSSpoofItem domain) {
         return new View.OnClickListener() {
-            @Override
             public void onClick(View view) {
-                mSingleton.getDnsControler().removeDomain(domain);
-                mActivity.onDnsmasqConfChanged(domain + " deleted from configuration");
-                mActivity.setToolbarTitle(null, mDnsIntercepts.size() + " domain spoofable");
-                notifyDataSetChanged();
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialog.Builder(mActivity)
+                                .setTitle(domain.domain)
+                                .setMessage("Would you like to remove this spoofed domain ?")
+                                .setPositiveButton(mActivity.getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        mSingleton.getDnsControler().removeDomain(domain);
+                                        mActivity.onDnsmasqConfChanged(domain + " deleted from configuration");
+                                        mActivity.setToolbarTitle(null, mDnsIntercepts.size() + " domain spoofable");
+                                        notifyDataSetChanged();
+                                    }
+                                })
+                                .setNegativeButton(mActivity.getResources().getString(android.R.string.no), null)
+                                .show();
+                    }
+                });
+
             }
         };
     }

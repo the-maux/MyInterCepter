@@ -244,6 +244,7 @@ public class                            DnsActivity extends SniffActivity {
 
     private void                        initRVConfiguration() {
         mDnsSpoofAdapter = new DnsSpoofConfAdapter(this, mDnsSpoof.getDnsConf().listDomainSpoofable);
+        ViewAnimate.setVisibilityToVisibleQuick(mDnsSpoof_RV);
         mDnsSpoof_RV.setAdapter(mDnsSpoofAdapter);
         mDnsSpoof_RV.setHasFixedSize(true);
         mDnsSpoof_RV.setLayoutManager(new LinearLayoutManager(mInstance));
