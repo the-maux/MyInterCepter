@@ -26,7 +26,7 @@ import java.util.TimerTask;
 
 import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Configuration.Utils;
-import fr.allycs.app.Core.Network.NetUtils;
+import fr.allycs.app.Core.Network.NetDiscovering;
 import fr.allycs.app.Model.Target.Session;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.Scan.NmapActivity;
@@ -92,7 +92,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     private void                    init()  {
-        NetUtils.initNetworkInfo(this);
+        NetDiscovering.initNetworkInfo(this);
         if (mSingleton.network == null || mSingleton.network.myIp == null) {
             showSnackbar("You need to be connected to a network");
             finish();
@@ -104,8 +104,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
             NetDiscoveryFragment = mFragment;
             initFragment(NetDiscoveryFragment);
             initSearchView();
-            initTimer();
-
         }
     }
 
@@ -131,6 +129,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
             ViewAnimate.setVisibilityToGoneLong(mTimer);
             timer = null;
         }
+        ViewAnimate.setVisibilityToGoneLong(mBottomMonitor);
         ViewAnimate.setVisibilityToVisibleQuick(mFab);
     }
 
@@ -191,7 +190,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
             }
         });
     }
-
 
     private void                    initFragment(MyFragment fragment) {
         try {
@@ -284,15 +282,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
         });
     }
 
-    public void                     setBottombarTitle(final String title) {
-        mInstance.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mBottomMonitor.setText(title);
-            }
-        });
-    }
-
     public void                     setProgressState(final int progress){
         mInstance.runOnUiThread(new Runnable() {
             @Override
@@ -356,7 +345,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
             MAXIMUM_PROGRESS = 240;
         }
     }
-
 
     public void                     showSnackbar(String txt) {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();

@@ -11,7 +11,7 @@ import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Configuration.Utils;
 import fr.allycs.app.Core.Network.BonjourService.BonjourManager;
 import fr.allycs.app.Core.Network.IPv4CIDR;
-import fr.allycs.app.Core.Network.NetUtils;
+import fr.allycs.app.Core.Network.NetDiscovering;
 import fr.allycs.app.Core.Nmap.NmapControler;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.View.Activity.HostDiscovery.FragmentHostDiscoveryScan;
@@ -19,7 +19,6 @@ import fr.allycs.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
 
 public class                        NetworkDiscoveryControler {
     private String                  TAG = "NetworkDiscoveryControler";
-    public enum typeScan {          Arp, Services, Historic }
     private FragmentHostDiscoveryScan mFragment;
     private Singleton               mSingleton = Singleton.getInstance();
     private HostDiscoveryActivity   mActivity;
@@ -70,14 +69,14 @@ public class                        NetworkDiscoveryControler {
         Log.d(TAG, "onReachableScanOver with : "+ ipReachable.size() + " ip(s) reachable");
         mActivity.setToolbarTitle(null, threadSafeArray.size() + " hosts detected");
         mActivity.setMAXIMUM_PROGRESS(threadSafeArray.size());
-        new NmapControler(NetUtils.readARPTable(mActivity, threadSafeArray),this);
+        new NmapControler(NetDiscovering.readARPTable(mActivity, threadSafeArray),this);
     }
 
     public void                     onHostActualized(ArrayList<Host> hosts) {
         Log.d(TAG, "Full scanning in " + Utils.TimeDifference(startScanning));
         String time = Utils.TimeDifference(startScanning);
-        setToolbarTitle(hosts.size() + " device" + ((hosts.size() > 1) ? "s" : "") + " discovered",
-                mSingleton.network.Ssid  + " analyzed in " + time);
+        setToolbarTitle(mSingleton.network.Ssid,
+                hosts.size() + " device" + ((hosts.size() > 1) ? "s" : "") +" analyzed in " + time);
         mFragment.onHostActualized(hosts);
     }
 

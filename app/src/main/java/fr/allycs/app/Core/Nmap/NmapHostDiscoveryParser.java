@@ -175,7 +175,7 @@ class NmapHostDiscoveryParser {
 
     private void                    onAllNodeParsed() {
         Log.d(TAG, "AllNode parsed, inintializing..");
-        Collections.sort(hosts, Host.getComparator());
+        Collections.sort(hosts, Fingerprint.getComparator());
         Iterator<Host> iter = hosts.iterator();
         while (iter.hasNext()) {//ConcurrentModificationException
             Host host = iter.next();

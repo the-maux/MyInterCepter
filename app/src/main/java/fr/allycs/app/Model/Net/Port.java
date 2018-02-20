@@ -46,9 +46,9 @@ public class            Port {
                     return FILTERED;
                 case "UNFILTERED":
                     return UNFILTERED;
-                case "CLOSED":
+                case "OFFLINE":
                     return CLOSED;
-                case "OPEN":
+                case "ONLINE":
                     return OPEN;
                 default:
                     return UNKNOW;
@@ -71,9 +71,9 @@ public class            Port {
                 case UNFILTERED:
                     return "UNFILTERED";
                 case CLOSED:
-                    return "CLOSED";
+                    return "OFFLINE";
                 case OPEN:
-                    return "OPEN";
+                    return "ONLINE";
                 default:
                     return "UNKNOW";
             }

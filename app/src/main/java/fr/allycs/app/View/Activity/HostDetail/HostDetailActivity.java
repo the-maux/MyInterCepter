@@ -60,16 +60,11 @@ public class                    HostDetailActivity extends MyActivity {
         mPortScan  = findViewById(R.id.PortScanTxt);
         mVulnerabilitys  = findViewById(R.id.VulnerabilityScan);
         mFingerprint = findViewById(R.id.OsScanTxt);
-        Fingerprint.setOsIcon(this, mFocusedHost, osHostImage);
         mMitm  = findViewById(R.id.MitmARPTxt);
         Fingerprint.setOsIcon(this, mFocusedHost, osHostImage);
         mToolbar.setTitle(mFocusedHost.ip);
         mTabs  = findViewById(R.id.tabs);
-        if (mFocusedHost.getName().isEmpty()) {
-            mToolbar.setSubtitle(mFocusedHost.mac);
-        } else {
-            mToolbar.setSubtitle(mFocusedHost.getName());
-        }
+        mToolbar.setSubtitle(mFocusedHost.getName());
     }
 
     private void                initMenu() {
@@ -109,7 +104,6 @@ public class                    HostDetailActivity extends MyActivity {
         if (mPcapsList != null && !mPcapsList.isEmpty())
             mTabs.addTab(mTabs.newTab().setText("Pcap"), 0);
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 Log.d(TAG, "tab.getFirstInputQuestion().toString():" + tab.getText().toString());
                 switch (tab.getText().toString().toLowerCase()) {
@@ -124,8 +118,8 @@ public class                    HostDetailActivity extends MyActivity {
                         break;
                 }
             }
-            @Override public void onTabUnselected(TabLayout.Tab tab) {}
-            @Override public void onTabReselected(TabLayout.Tab tab) {}
+            public void onTabUnselected(TabLayout.Tab tab) {}
+            public void onTabReselected(TabLayout.Tab tab) {}
         });
     }
 
@@ -146,7 +140,7 @@ public class                    HostDetailActivity extends MyActivity {
 
         List<Pcap> pcapList = DBManager.getListPcapFormHost(mFocusedHost);
         if (pcapList == null || pcapList.isEmpty())
-            Snackbar.make(mCoordinator, "No Pcap Recorded for " + mFocusedHost.getOneName(), Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mCoordinator, "No Pcap Recorded for " + mFocusedHost.getName(), Snackbar.LENGTH_LONG).show();
         else {
             //TODO: faire l'adapter de pcap
         }

@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Database.DBSession;
 import fr.allycs.app.Core.Network.Discovery.NetworkDiscoveryControler;
-import fr.allycs.app.Core.Network.NetUtils;
+import fr.allycs.app.Core.Network.NetDiscovering;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;
@@ -62,6 +62,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
             mActivity.showSnackbar("Debug mode: auto scan started");
             start();
         }
+        initHostsRecyclerView();
         return rootView;
     }
 
@@ -96,7 +97,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                     if (start())
                         return;
                 }
-                mActivity.showSnackbar("Scanning already started");
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -133,17 +133,17 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     }
 
     public boolean                  start() {
-        setTitleToolbar("Scanner", "Discovering network");
+        mActivity.setToolbarTitle("Scanner", "Discovering network");
         if (!isWaiting()) {
-            if ((mSingleton.network != null && NetUtils.initNetworkInfo(mActivity)) &&
+            if ((NetDiscovering.initNetworkInfo(mActivity)) &&
                     mSingleton.network.updateInfo().isConnectedToNetwork()) {
+                mActivity.initMonitor();
                 mActivity.initTimer();
-                initHostsRecyclerView();
                 mActivity.progressAnimation();
                 Log.d(TAG, "start -> true");
                 return mScannerControler.run(mHosts);
             } else {
-                Log.d(TAG, "start -> false");
+                Log.d(TAG, "start -> false no connection");
                 mActivity.showSnackbar("You need to be connected");
                 mEmptyList.setVisibility(View.VISIBLE);
                 mEmptyList.setText("No connection detected");
@@ -157,23 +157,15 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
 
     public ArrayList<Host>          getTargetFromHostList() {
         ArrayList<Host> selectedHost = new ArrayList<>();
-        try {
-            boolean noTargetSelected = true;
-            for (Host host : mHosts) {
-                if (host.selected) {
-                    selectedHost.add(host);
-                    noTargetSelected = false;
-                }
-            }
-            if (noTargetSelected) {
-                mActivity.showSnackbar("No target selected!");
-                return null;
-            }
-            return selectedHost;
-        } catch (Exception e) {
-            e.getStackTrace();
+        for (Host host : mHosts) {
+            if (host.selected)
+                selectedHost.add(host);
+        }
+        if (selectedHost.isEmpty()) {
+            mActivity.showSnackbar("No target selected!");
             return null;
         }
+        return selectedHost;
     }
 
     public void                     onHostActualized(final ArrayList<Host> hosts) {
@@ -204,15 +196,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     private void                    pushToolbar() {
         mActivity.setToolbarTitle(mTitle, mSubtitle);
         mActivity.initToolbarButton();
-    }
-    public void                     setTitleToolbar(String title, String subtitle) {
-        if (title != null)
-            mTitle = title;
-        if (subtitle != null)
-            mSubtitle = subtitle;
-        if (isVisible()) {
-            mActivity.setToolbarTitle(title, subtitle);
-        }
     }
 
     public void                     osFilterDialog() {

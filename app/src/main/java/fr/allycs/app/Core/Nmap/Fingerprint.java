@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.ImageView;
 
+import java.util.Comparator;
+
 import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Os;
@@ -87,7 +89,7 @@ public class                            Fingerprint {
         host.os = "Unix/(AOSP)";
     }
 
-    public static boolean              isItWindows(Host host) {
+    public static boolean               isItWindows(Host host) {
         /*
                TODO: Do i have to checkd the proto for microsoft|windows|msrpc ?
          */
@@ -166,6 +168,27 @@ public class                            Fingerprint {
                 break;
         }
         MyGlideLoader.loadDrawableInCircularImageView(context, ImageRessource, osImageView);
+    }
+
+    public static Comparator<Host>      getComparator() {
+        return new Comparator<Host>() {
+            @Override
+            public int compare(Host o1, Host o2) {
+                String ip1[] = o1.ip.replace(" ", "").replace(".", "::").split("::");
+                String ip2[] = o2.ip.replace(" ", "").replace(".", "::").split("::");
+                if (Integer.parseInt(ip1[2]) > Integer.parseInt(ip2[2]))
+                    return 1;
+                else if (Integer.parseInt(ip1[2]) < Integer.parseInt(ip2[2]))
+                    return -1;
+                else if (Integer.parseInt(ip1[3]) > Integer.parseInt(ip2[3]))
+                    return 1;
+                else if (Integer.parseInt(ip1[3]) < Integer.parseInt(ip2[3]))
+                    return -1;
+                return 0;
+            }
+
+            ;
+        };
     }
 
 }

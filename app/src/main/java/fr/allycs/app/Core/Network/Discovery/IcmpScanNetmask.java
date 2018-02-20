@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Network.IPv4CIDR;
@@ -29,14 +30,20 @@ public class                        IcmpScanNetmask {
     private ArrayList<String>       mListIpReachable = new ArrayList<>();
     private boolean                 debuglog = Singleton.getInstance().DebugMode;
     private NetworkDiscoveryControler mScanner;
-    private Date                    startScanning, endScanning;
+    private Date                        startScanning, endScanning;
+
     IcmpScanNetmask(IPv4CIDR iPv4CIDR, NetworkDiscoveryControler scanner) {
         ExecutorService service = Executors.newCachedThreadPool();
-        reachableLoop(iPv4CIDR, service);
         this.mScanner = scanner;
+        try {
+            reachableLoop(iPv4CIDR, service);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            IcmpScanOver();
+        }
     }
 
-    private void                    reachableLoop(IPv4CIDR iPv4CIDR, ExecutorService service) {
+    private void                    reachableLoop(IPv4CIDR iPv4CIDR, ExecutorService service) throws InterruptedException {
         startScanning = Calendar.getInstance().getTime();
         mNumberOfHosts = iPv4CIDR.getNumberOfHosts() - 2;
         List<String> availableIPs = iPv4CIDR.getAvailableIPs(mNumberOfHosts);
@@ -45,19 +52,22 @@ public class                        IcmpScanNetmask {
         for (final String ip : availableIPs) {
             mNbrHostScanned = mNbrHostScanned + 1;
             rax = rax + 1;
-            runnableReachable(service, ip, mNbrHostScanned);
-            if (rax >= 12) {
+            service.execute(runnableReachable(ip, mNbrHostScanned));
+            ;
+/*            if (rax >= 12) {
                 try {
                     Thread.sleep(300);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 rax = 0;
-            }
+            }*/
         }
+        service.shutdown();
+        service.awaitTermination(10000, TimeUnit.MILLISECONDS);
     }
 
-    private void                    ScanOver() {
+    private void                    IcmpScanOver() {
         alreadySend = true;
         if (Singleton.getInstance().UltraDebugMode) {
             for (String ipReachable : mListIpReachable) {
@@ -68,11 +78,10 @@ public class                        IcmpScanNetmask {
         mScanner.onReachableScanOver(mListIpReachable);
     }
 
-    private void                    runnableReachable(ExecutorService service, final String ip, final int nbrHostScanned) {
-        new Thread(new Runnable() {
+    private Runnable                    runnableReachable(final String ip, final int nbrHostScanned) {
+       return new Runnable() {
             public void run() {
                 try {
-                    //ping(ip);
                     if (InetAddress.getByName(ip).isReachable(null, 64, 2000)) {//Timeout 2s
                         mListIpReachable.add(ip + ":");
                     } else {
@@ -89,12 +98,12 @@ public class                        IcmpScanNetmask {
                     Log.e(TAG, "IOException: " + ip + " (" + nbrHostScanned + "/" + mNumberOfHosts + ")");
                 } finally {
                     if (nbrHostScanned >= (mNumberOfHosts -1) && nbrHostScanned < mNumberOfHosts && !alreadySend) {
-                        Log.e(TAG, "ScanOver: " + ip + " (" + nbrHostScanned + "/" + mNumberOfHosts + ") with " + mListIpReachable.size() + " host reached");
-                        ScanOver();
+                        Log.e(TAG, "IcmpScanOver: " + ip + " (" + nbrHostScanned + "/" + mNumberOfHosts + ") with " + mListIpReachable.size() + " host reached");
+                        IcmpScanOver();
                     }
                 }
             }
-        }).start();
+        };
     }
 
     public String                   getTimeSpend() {

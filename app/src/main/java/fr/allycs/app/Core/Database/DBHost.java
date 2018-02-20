@@ -46,8 +46,8 @@ public class                                DBHost {
             return myDevice;
         } else {
             deviceFromDB.ip = myDevice.ip;
-            if (!myDevice.getName().isEmpty())
-                deviceFromDB.setName(myDevice.getName());
+            if (!myDevice.getName().contains(myDevice.ip))
+                deviceFromDB.name  = myDevice.getName();
             deviceFromDB.deviceType = myDevice.deviceType;
             deviceFromDB.dumpInfo = myDevice.dumpInfo;
             deviceFromDB.NetworkDistance = myDevice.NetworkDistance;

@@ -12,14 +12,11 @@ import fr.allycs.app.R;
 public class                HostDiscoveryHolder extends RecyclerView.ViewHolder {
     public View             itemView;
     public RelativeLayout   relativeLayout;
-    public TextView         ipHostname;
-    public TextView         mac;
-    public TextView         os;
-    public TextView         vendor;
+    public TextView         mac, os, vendor, ipHostname;
     public CheckBox         selected;
-    public ImageView        osIcon;
+    public ImageView        osIcon, statusIcon;
 
-    public HostDiscoveryHolder(View v) {
+    public                  HostDiscoveryHolder(View v) {
         super(v);
         itemView = v;
         relativeLayout = itemView.findViewById(R.id.relative_layout);
@@ -29,5 +26,6 @@ public class                HostDiscoveryHolder extends RecyclerView.ViewHolder 
         vendor =  itemView.findViewById(R.id.vendor);
         selected =  itemView.findViewById(R.id.checkbox_selected);
         osIcon =  itemView.findViewById(R.id.icon);
+        statusIcon =  itemView.findViewById(R.id.statusIcon);
     }
 }

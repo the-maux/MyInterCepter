@@ -15,13 +15,14 @@ import android.widget.CompoundButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.allycs.app.Core.Configuration.Utils;
 import fr.allycs.app.Core.Configuration.Singleton;
+import fr.allycs.app.Core.Configuration.Utils;
 import fr.allycs.app.Core.Nmap.Fingerprint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.HostDetail.HostDetailActivity;
+import fr.allycs.app.View.Behavior.MyGlideLoader;
 import fr.allycs.app.View.Widget.Adapter.Holder.HostDiscoveryHolder;
 
 
@@ -55,6 +56,31 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
             holder.os.setText(host.osType.name());
         holder.vendor.setText(host.vendor);
         Fingerprint.setOsIcon(mActivity, host, holder.osIcon);
+        printHostState(holder, host);
+        checkedBehavior(holder, host, position);
+        holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity,        /*Special background to notice my device*/
+                (host.ip.contains(Singleton.getInstance().network.myIp)) ?
+                        R.color.primary_dark : R.color.cardview_dark_background));
+
+    }
+
+    private void                printHostState(HostDiscoveryHolder holder, Host host) {
+        int res = R.color.filtered_color;
+        switch (host.state) {
+            case ONLINE:
+                res = R.color.online_color;
+                break;
+            case OFFLINE:
+                res = R.color.offline_color;
+                break;
+            case FILTERED:
+                res = R.color.filtered_color;
+                break;
+        }
+        MyGlideLoader.loadDrawableInCircularImageView(mActivity, res, holder.statusIcon);
+    }
+
+    private void                checkedBehavior(HostDiscoveryHolder holder, final Host host, int position) {
         if (mIsHistoric)
             holder.selected.setVisibility(View.GONE);
         else {
@@ -70,10 +96,6 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                 }
             });
         }
-        /*Special background to notice my device*/
-        holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity,
-                (host.ip.contains(Singleton.getInstance().network.myIp)) ?
-                        R.color.primary_dark : R.color.cardview_dark_background));
     }
 
     private void                 onHostChecked(final HostDiscoveryHolder holder, Host host, final int position) {

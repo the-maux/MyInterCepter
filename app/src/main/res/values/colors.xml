@@ -15,6 +15,9 @@
     <color name="stop_color">@color/material_red_500</color>
     <color name="start_color">@color/material_green_500</color>
     <color name="fab_color">#455A64</color>
+    <color name="online_color">@color/material_red_500</color>
+    <color name="offline_color">@color/material_green_500</color>
+    <color name="filtered_color">@color/material_orange_500</color>
 
     <!-- Activitys color  -->
     <color name="wiresharkPrimary">#263238</color>

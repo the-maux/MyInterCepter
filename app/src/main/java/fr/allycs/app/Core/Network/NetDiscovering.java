@@ -15,32 +15,17 @@ import java.util.regex.Pattern;
 
 import fr.allycs.app.Core.Configuration.Singleton;
 
-public class                NetUtils {
-    private static String   TAG = "NetUtils";
+public class                            NetDiscovering {
+    private static String               TAG = "NetDiscovering";
 
-    public static ArrayList<String> readARPTable(Context context, ArrayList<String> ipReachable) {
-        Log.i(TAG, "Dump list devices from Arp Table");
+    public static ArrayList<String>     readARPTable(Context context, ArrayList<String> ipReachable) {
         ArrayList<String> listIpPlusMac = new ArrayList<>();
         try {
-            ArrayList<String> listOfIpsAlreadyIn = new ArrayList<>();
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"));
-            String MAC_RE = "^%s\\s+0x1\\s+0x2\\s+([:0-9a-fA-F]+)\\s+\\*\\s+\\w+$";
-            String read;
-            while ((read = bufferedReader.readLine()) != null) {
-                String ip = read.substring(0, read.indexOf(" "));
-                Object[] objArr = new Object[1];
-                objArr[0] = ip.replace(".", "\\.");
-                Matcher matcher = Pattern.compile(String.format(MAC_RE, objArr)).matcher(read);
-                if (matcher.matches() && !ip.contains(Singleton.getInstance().network.myIp)) {
-                    listOfIpsAlreadyIn.add(ip);
-                    listIpPlusMac.add(ip + ":" + matcher.group(1));
-                }
-            }
-            Log.d(TAG, listOfIpsAlreadyIn.size() + " new host discovered in /proc/arp");
             boolean already;
-            for (String reachable : ipReachable) {//Don't Foreach
+            ArrayList<String> ipsFromArpFile = readIpsTableFromArp(listIpPlusMac);
+            for (String reachable : ipReachable) {
                 already = false;
-                for (String ip : listOfIpsAlreadyIn) {
+                for (String ip : ipsFromArpFile) {
                     if ((reachable.substring(0, reachable.indexOf(":")) + "..").contains(ip + ".."))
                         already = true;
                 }
@@ -52,14 +37,34 @@ public class                NetUtils {
             }
             String dumpMyDevice = Singleton.getInstance().network.myIp + ":" + Singleton.getInstance().network.mac;
             listIpPlusMac.add(dumpMyDevice);
-            bufferedReader.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
         return listIpPlusMac;
     }
 
-    public static boolean   initNetworkInfo(Activity activity) {
+    private static ArrayList<String>    readIpsTableFromArp(ArrayList<String> listIpPlusMac) throws IOException {
+        ArrayList<String> listOfIpsAlreadyIn = new ArrayList<>();
+        BufferedReader bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"));
+        String MAC_RE = "^%s\\s+0x1\\s+0x2\\s+([:0-9a-fA-F]+)\\s+\\*\\s+\\w+$";
+        String read;
+        while ((read = bufferedReader.readLine()) != null) {
+            String ip = read.substring(0, read.indexOf(" "));
+            Object[] objArr = new Object[1];
+            objArr[0] = ip.replace(".", "\\.");
+            Matcher matcher = Pattern.compile(String.format(MAC_RE, objArr)).matcher(read);
+            if (matcher.matches() && !ip.contains(Singleton.getInstance().network.myIp)) {
+                listOfIpsAlreadyIn.add(ip);
+                listIpPlusMac.add(ip + ":" + matcher.group(1));
+            }
+        }
+        bufferedReader.close();
+        Log.d(TAG, listOfIpsAlreadyIn.size() + " host discovered in /proc/net/arp");
+        return listOfIpsAlreadyIn;
+    }
+
+    public static boolean               initNetworkInfo(Activity activity) {
         WifiManager wifiManager = (WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if (wifiManager == null)
             return false;

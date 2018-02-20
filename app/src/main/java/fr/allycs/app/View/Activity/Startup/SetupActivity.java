@@ -15,12 +15,12 @@ import android.widget.TextView;
 
 import java.io.IOException;
 
-import fr.allycs.app.View.Behavior.Activity.MyActivity;
-import fr.allycs.app.View.Behavior.MyGlideLoader;
 import fr.allycs.app.Core.Configuration.Setup;
-import fr.allycs.app.Core.Network.NetUtils;
+import fr.allycs.app.Core.Network.NetDiscovering;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
+import fr.allycs.app.View.Behavior.Activity.MyActivity;
+import fr.allycs.app.View.Behavior.MyGlideLoader;
 
 public class                    SetupActivity extends MyActivity {
     private String              TAG = "SetupActivity";
@@ -69,7 +69,7 @@ public class                    SetupActivity extends MyActivity {
                     Log.d(TAG, "Installation");
                     new Setup(mInstance).install();
                     monitor("Network initialization");
-                    NetUtils.initNetworkInfo(mInstance);
+                    NetDiscovering.initNetworkInfo(mInstance);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
