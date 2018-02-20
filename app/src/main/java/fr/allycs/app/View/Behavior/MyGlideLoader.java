@@ -26,7 +26,6 @@ public class                MyGlideLoader {
                 .load(ressource)
                 .apply(RequestOptions.circleCropTransform())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .placeholder(R.drawable.ico)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(imageView);
     }
@@ -35,7 +34,6 @@ public class                MyGlideLoader {
                 .load(ressource)
                 .apply(RequestOptions.circleCropTransform())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .placeholder(R.drawable.ico)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(imageView);
     }
@@ -48,8 +46,7 @@ public class                MyGlideLoader {
                 r.apply(new RequestOptions()
                         .fitCenter()
                         .override(100, 100));
-        r.placeholder(R.drawable.ico)
-                .into(imageView);
+        r.into(imageView);
     }
 
     public static void      coordoBackgroundXMM(Activity context, final CoordinatorLayout layout) {

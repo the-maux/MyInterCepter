@@ -68,6 +68,7 @@ public class                    Ports {
     }
 
     public boolean              isPortOpen(int portNumber) {
+        Log.d(TAG, "isPort(" + portNumber + ")Open:" + Port.State.valueOf(primitivePortsLits.get(portNumber)) + " => " + (Port.State.valueOf(primitivePortsLits.get(portNumber)) == Port.State.OPEN));
         return Port.State.valueOf(primitivePortsLits.get(portNumber)) == Port.State.OPEN;
     }
 

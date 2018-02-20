@@ -5,7 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.view.View;
 
 public class                    ViewAnimate {
-    private static int          SHORT_DURATION = 400, LONG_DURATION = 800;
+    private static int          SHORT_DURATION = 250, LONG_DURATION = 800;
 
     public static void          setVisibilityToGoneQuick(final View view) {
         setVisibilty(view, SHORT_DURATION, View.GONE);

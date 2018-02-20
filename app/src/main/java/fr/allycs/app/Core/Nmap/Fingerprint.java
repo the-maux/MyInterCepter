@@ -158,7 +158,7 @@ public class                            Fingerprint {
                 ImageRessource = R.drawable.ps4;
                 break;
             case Unknow:
-                ImageRessource = R.drawable.cyber_security5_rounded2;
+                ImageRessource = R.mipmap.cyber_security5_rounded2;
                 MyGlideLoader.loadDrawableInImageView(context, ImageRessource, osImageView, false);
                 return;
             default:
