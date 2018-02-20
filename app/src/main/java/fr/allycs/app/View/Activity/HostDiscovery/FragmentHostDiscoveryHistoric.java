@@ -49,7 +49,6 @@ import fr.allycs.app.View.Widget.Dialog.RV_dialog;
 public class FragmentHostDiscoveryHistoric extends MyFragment {
     private String                  TAG = "FragmentHostDiscoveryHistoric";
     private FragmentHostDiscoveryHistoric mInstance = this;
-    private Singleton               mSingleton = Singleton.getInstance();
     private Host                    mFocusedHost = null;
     private List<AccessPoint>       HistoricAps;
     private Session                 focusedSession = null;

@@ -10,7 +10,7 @@ import java.util.List;
 import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Configuration.Utils;
 import fr.allycs.app.Core.Network.BonjourService.BonjourManager;
-import fr.allycs.app.Core.Network.IPv4CIDR;
+import fr.allycs.app.Core.Network.IPv4Utils;
 import fr.allycs.app.Core.Network.NetDiscovering;
 import fr.allycs.app.Core.Nmap.NmapControler;
 import fr.allycs.app.Model.Target.Host;
@@ -53,36 +53,37 @@ public class                        NetworkDiscoveryControler {
         mActivity.setToolbarTitle(null, "Icmp scanning");
         mActivity.setProgressState(0);
         new Thread(new Runnable() {
-            @Override
             public void run() {
-                new IcmpScanNetmask(new IPv4CIDR(mSingleton.network), mInstance);
+                new IcmpScanNetmask(new IPv4Utils(mSingleton.network), mInstance);
             }
         }).start();
     }
-    private void                    startBonjourScan(List<Host> listOfHosts) {
-        new BonjourManager(mActivity, listOfHosts, this);
-    }
 
-     synchronized void              onReachableScanOver(ArrayList<String> ipReachable) {
+    synchronized void               onArpScanOver(ArrayList<String> ipReachable) {
         ArrayList<String> threadSafeArray = new ArrayList<>();
         threadSafeArray.addAll(ipReachable);
-        Log.d(TAG, "onReachableScanOver with : "+ ipReachable.size() + " ip(s) reachable");
+        Log.d(TAG, "onArpScanOver with : "+ ipReachable.size() + " ip(s) reachable");
         mActivity.setToolbarTitle(null, threadSafeArray.size() + " hosts detected");
         mActivity.setMAXIMUM_PROGRESS(threadSafeArray.size());
+        mFragment.updateStateOfHost(ipReachable);
         new NmapControler(NetDiscovering.readARPTable(mActivity, threadSafeArray),this);
     }
 
-    public void                     onHostActualized(ArrayList<Host> hosts) {
+    public void                     onNmapScanOver(ArrayList<Host> hosts) {
         Log.d(TAG, "Full scanning in " + Utils.TimeDifference(startScanning));
         String time = Utils.TimeDifference(startScanning);
-        setToolbarTitle(mSingleton.network.Ssid,
-                hosts.size() + " device" + ((hosts.size() > 1) ? "s" : "") +" analyzed in " + time);
+        mActivity.setToolbarTitle(mSingleton.network.Ssid,
+                hosts.size() + " device" + ((hosts.size() > 1) ? "s" : "") +" found in " + time);
         mFragment.onHostActualized(hosts);
     }
 
     public void                     setToolbarTitle(String title, String subtitle) {
         mActivity.setToolbarTitle(title, subtitle);
     }
-
+/*
+    private void                    startBonjourScan(List<Host> listOfHosts) {
+        new BonjourManager(mActivity, listOfHosts, this);
+    }
+ */
 }
 

@@ -84,6 +84,7 @@ class NmapHostDiscoveryParser {
                 i = getPortList(nmapStdoutHost, i +1, host);
             }
         }
+        host.state = Host.State.ONLINE;
         saveHost(host, dump);
     }
 

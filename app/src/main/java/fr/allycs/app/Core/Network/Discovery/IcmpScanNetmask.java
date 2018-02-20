@@ -17,11 +17,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import fr.allycs.app.Core.Configuration.Singleton;
-import fr.allycs.app.Core.Network.IPv4CIDR;
+import fr.allycs.app.Core.Network.IPv4Utils;
 
-/**
- * Scan Netmask check the rechability of devices in file hostfile
- */
 public class                        IcmpScanNetmask {
     private String                  TAG = "IcmpScanNetmask";
     private Integer                 mNumberOfHosts;
@@ -30,41 +27,29 @@ public class                        IcmpScanNetmask {
     private ArrayList<String>       mListIpReachable = new ArrayList<>();
     private boolean                 debuglog = Singleton.getInstance().DebugMode;
     private NetworkDiscoveryControler mScanner;
-    private Date                        startScanning, endScanning;
+    private Date                    startScanning;
 
-    IcmpScanNetmask(IPv4CIDR iPv4CIDR, NetworkDiscoveryControler scanner) {
+    IcmpScanNetmask(IPv4Utils iPv4CIDR, NetworkDiscoveryControler scanner) {
         ExecutorService service = Executors.newCachedThreadPool();
         this.mScanner = scanner;
         try {
-            reachableLoop(iPv4CIDR, service);
+            startScanning = Calendar.getInstance().getTime();
+            mNumberOfHosts = iPv4CIDR.getNumberOfHosts() - 2;
+            List<String> availableIPs = iPv4CIDR.getAvailableIPs(mNumberOfHosts);
+            Log.i(TAG, "mNumberOfHosts:" + mNumberOfHosts + " ipAvailable:" + availableIPs.size());
+            int rax = 0;
+            for (final String ip : availableIPs) {
+                mNbrHostScanned = mNbrHostScanned + 1;
+                rax = rax + 1;
+                service.execute(runnableReachable(ip, mNbrHostScanned));
+            }
+            service.shutdown();
+            service.awaitTermination(10000, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Log.e(TAG, "Icmp scan was interupted");
             IcmpScanOver();
         }
-    }
-
-    private void                    reachableLoop(IPv4CIDR iPv4CIDR, ExecutorService service) throws InterruptedException {
-        startScanning = Calendar.getInstance().getTime();
-        mNumberOfHosts = iPv4CIDR.getNumberOfHosts() - 2;
-        List<String> availableIPs = iPv4CIDR.getAvailableIPs(mNumberOfHosts);
-        Log.i(TAG, "mNumberOfHosts:" + mNumberOfHosts + " ipAvailable:" + availableIPs.size());
-        int rax = 0;
-        for (final String ip : availableIPs) {
-            mNbrHostScanned = mNbrHostScanned + 1;
-            rax = rax + 1;
-            service.execute(runnableReachable(ip, mNbrHostScanned));
-            ;
-/*            if (rax >= 12) {
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                rax = 0;
-            }*/
-        }
-        service.shutdown();
-        service.awaitTermination(10000, TimeUnit.MILLISECONDS);
     }
 
     private void                    IcmpScanOver() {
@@ -74,18 +59,16 @@ public class                        IcmpScanNetmask {
                 Log.d(TAG, ipReachable + " reachable");
             }
         }
-        Log.d(TAG, "Scanned in " + getTimeSpend());
-        mScanner.onReachableScanOver(mListIpReachable);
+        Log.i(TAG, "Icmp scan last for " + getTimeSpend());
+        mScanner.onArpScanOver(mListIpReachable);
     }
 
-    private Runnable                    runnableReachable(final String ip, final int nbrHostScanned) {
+    private Runnable                runnableReachable(final String ip, final int nbrHostScanned) {
        return new Runnable() {
             public void run() {
                 try {
                     if (InetAddress.getByName(ip).isReachable(null, 64, 2000)) {//Timeout 2s
                         mListIpReachable.add(ip + ":");
-                    } else {
-
                     }
                 }  catch (UnknownHostException e) {
                     Log.e(TAG, "UnknownHostException: " + ip + " (" + nbrHostScanned + "/" + mNumberOfHosts + ")");
@@ -106,22 +89,11 @@ public class                        IcmpScanNetmask {
         };
     }
 
-    public String                   getTimeSpend() {
+    private String                  getTimeSpend() {
         Date now = Calendar.getInstance().getTime();
         long restDatesinMillis = now.getTime() - startScanning.getTime();
         Date restdate = new Date(restDatesinMillis);
         return new SimpleDateFormat("mm:ss", Locale.FRANCE).format(restdate);
     }
-    /*public boolean                  ping(String domain) {
-        RootProcess pingProces = new RootProcess("ScanNetMaskPING");
-        pingProces.exec(Singleton.getInstance().BinaryPath + "/busybox ping -c 1 " + domain + "; exit");
-        int res = pingProces.waitFor();
-        Log.d(TAG, domain + " WAITFOR PING = " + res);
-        if (res == 0) {
-            Log.d(TAG, "ping " + domain + " TRUE");
-            return true;
-        } else {
-            return false;
-        }
-    }*/
+
 }

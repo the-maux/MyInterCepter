@@ -20,9 +20,8 @@ import fr.allycs.app.R;
 public class                    SettingsFragment extends MyFragment {
     private String              TAG = "SettingsFragment";
     protected CoordinatorLayout mCoordinatorLayout;
-    protected Singleton         mSingleton = Singleton.getInstance();
     protected MyActivity        mActivity;
-    protected LinearLayout        mCentral_layout;
+    protected LinearLayout      mCentral_layout;
     private LayoutInflater      inflater;
     private ViewGroup           container;
 

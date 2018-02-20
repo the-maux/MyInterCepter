@@ -32,8 +32,8 @@ public class                    MenuAdapter extends RecyclerView.Adapter<MenuIte
 
     public MenuAdapter(TargetMenuActivity activity) {
         this.menuActivity = activity;
-        red = new ColorDrawable(ContextCompat.getColor( activity, R.color.material_red_700));
-        green = new ColorDrawable(ContextCompat.getColor( activity, R.color.material_green_700));
+        red = new ColorDrawable(ContextCompat.getColor( activity, R.color.stop_color));
+        green = new ColorDrawable(ContextCompat.getColor( activity, R.color.start_color));
 
     }
 

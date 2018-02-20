@@ -2,6 +2,7 @@ package fr.allycs.app.View.Widget.Adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
@@ -48,20 +49,22 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
 
     public void                 onBindViewHolder(final HostDiscoveryHolder holder, final int position) {
         final Host host = mHosts.get(position);
-        String ipHostname = host.ip + ((host.getName().isEmpty()) ? "" : " (" + host.getName() + ")");
-        holder.ipHostname.setText(ipHostname);
+        String ipHostname = host.ip + ((host.getName().contains(host.ip)) ? "" : " (" + host.getName() + ")");
+        holder.ipAndHostname.setText(ipHostname);
         holder.mac.setText(host.mac);
+        if (host.state == Host.State.FILTERED) {
+            pushThisShyGuyToFront(holder, host);
+        }
         holder.os.setText(host.os);
         if (host.os.contains("Unknown"))
             holder.os.setText(host.osType.name());
         holder.vendor.setText(host.vendor);
-        Fingerprint.setOsIcon(mActivity, host, holder.osIcon);
         printHostState(holder, host);
         checkedBehavior(holder, host, position);
         holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity,        /*Special background to notice my device*/
                 (host.ip.contains(Singleton.getInstance().network.myIp)) ?
                         R.color.primary_dark : R.color.cardview_dark_background));
-
+        Fingerprint.setOsIcon(mActivity, host, holder.osIcon);
     }
 
     private void                printHostState(HostDiscoveryHolder holder, Host host) {
@@ -77,8 +80,15 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                 res = R.color.filtered_color;
                 break;
         }
-        MyGlideLoader.loadDrawableInCircularImageView(mActivity, res, holder.statusIcon);
+        MyGlideLoader.loadDrawableInCircularImageView(mActivity,
+                new ColorDrawable(ContextCompat.getColor(mActivity, res)), holder.statusIcon);
     }
+
+    private void                pushThisShyGuyToFront(HostDiscoveryHolder holder,Host host) {
+        printHostState(holder, host);
+
+    }
+
 
     private void                checkedBehavior(HostDiscoveryHolder holder, final Host host, int position) {
         if (mIsHistoric)
@@ -134,7 +144,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                         mSingleton.selectedHostsList.add(host);
                         Intent intent = new Intent(mActivity, HostDetailActivity.class);
                         Pair<View, String> p1 = Pair.create((View)holder.osIcon, "hostPicture");
-                        Pair<View, String> p2 = Pair.create((View)holder.ipHostname, "hostTitle");
+                        Pair<View, String> p2 = Pair.create((View)holder.ipAndHostname, "hostTitle");
                         ActivityOptionsCompat options = ActivityOptionsCompat
                                 .makeSceneTransitionAnimation(mActivity, p1, p2);
                         mActivity.startActivity(intent, options.toBundle());

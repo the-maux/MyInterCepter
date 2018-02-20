@@ -39,40 +39,45 @@ import fr.allycs.app.View.Widget.Dialog.RV_dialog;
 public class                        FragmentHostDiscoveryScan extends MyFragment {
     private String                  TAG = "FragmentHostDiscoveryScan";
     private HostDiscoveryActivity   mActivity;
-    private Singleton               mSingleton = Singleton.getInstance();
     private ArrayList<Host>         mHosts = new ArrayList<>();
     private HostDiscoveryAdapter    mHostAdapter;
     private RecyclerView            mHost_RV;
     private TextView                mEmptyList;
     private SwipeRefreshLayout      mSwipeRefreshLayout;
-    private ArrayList<Os>           mListOS = new ArrayList<>();
     private NetworkDiscoveryControler mScannerControler;
-    private String                  mTitle, mSubtitle;
     boolean                         mHostLoaded = false;
 
     public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hostdiscovery_scan, container, false);
         initXml(rootView);
         mActivity = (HostDiscoveryActivity) getActivity();
+        init();
+        return rootView;
+    }
+
+    public void                     init() {
         mScannerControler = NetworkDiscoveryControler.getInstance(this);
-//TODO: else si premier scan du SSID alors re scann (ou last scan past from 1 week)
         initSwipeRefresh();
         mActivity.initSettingsButton();
+        /**
+         * TODO:
+         * + Get Last list of host from this SSID where Gateway.mac.equals(mSingleton.network.gateway.mac)
+         *      -> If not same Mac Alert we détected a roaming. Have to restart the process
+         * + Compare this list with  updateStateOfHost
+         * +
+         */
         if (mSingleton.DebugMode && !mHostLoaded) {
             mActivity.showSnackbar("Debug mode: auto scan started");
             start();
         }
         initHostsRecyclerView();
-        return rootView;
     }
 
     public void                     onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
         mHost_RV.setAdapter(mHostAdapter);
-        mHost_RV.setHasFixedSize(true);
-        mHost_RV.setLayoutManager(new LinearLayoutManager(mActivity));
-        pushToolbar();
+        mActivity.initToolbarButton();
     }
 
     private void                    initXml(View rootView) {
@@ -168,7 +173,17 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         return selectedHost;
     }
 
+    public void                     updateStateOfHost(ArrayList<String> ipReachables) {
+        for (String ipReachable : ipReachables) {
+            Log.d(TAG, "reachable[" + ipReachable + "]");
+        }
+    }
+
     public void                     onHostActualized(final ArrayList<Host> hosts) {
+        /**
+         * TODO: ici faire le tri entre ce que ipReachables contené et tout ce que hosts contient
+         * Tout ce qui n'est pas dans hosts est filtered
+         */
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -193,26 +208,24 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         });
     }
 
-    private void                    pushToolbar() {
-        mActivity.setToolbarTitle(mTitle, mSubtitle);
-        mActivity.initToolbarButton();
-    }
-
     public void                     osFilterDialog() {
-        final RecyclerView.Adapter adapter = new OSFilterAdapter(mActivity, mHostAdapter.getOsList(), mListOS);
-        new RV_dialog(mActivity)
-                .setAdapter(adapter, false)
-                .setTitle("Choix des cibles")
-                .onPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (mListOS.size() > 0) {
-                            mActivity.showSnackbar(mHostAdapter.filterByOs(mListOS) + " devices found");
-                            mListOS.clear();
+        if (!mScannerControler.inLoading) {
+            final ArrayList<Os> osList = mHostAdapter.getOsList();
+            final RecyclerView.Adapter adapter = new OSFilterAdapter(mActivity, osList);
+            new RV_dialog(mActivity)
+                    .setAdapter(adapter, false)
+                    .setTitle("Choix des cibles")
+                    .onPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if (osList.size() > 0) {
+                                mActivity.showSnackbar(mHostAdapter.filterByOs(osList) + " devices found");
+                            }
                         }
-                    }
-                })
-                .show();
+                        })
+                    .show();
+        } else {
+            mActivity.showSnackbar("You can't filter while scanning");
+        }
     }
 
     public BottomSheetMenuDialog    onSettingsClick(final AppBarLayout mAppbar, Activity activity) {
@@ -251,5 +264,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     public boolean                  isWaiting() {
         return mScannerControler.inLoading;
     }
+
 }
 

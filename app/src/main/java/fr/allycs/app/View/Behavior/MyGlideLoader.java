@@ -29,7 +29,7 @@ public class                MyGlideLoader {
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(imageView);
     }
-    public static void      loadDrawableInCircularImageView(Context context, Drawable    ressource, ImageView imageView) {
+    public static void      loadDrawableInCircularImageView(Context context, Drawable ressource, ImageView imageView) {
         GlideApp.with(context)
                 .load(ressource)
                 .apply(RequestOptions.circleCropTransform())

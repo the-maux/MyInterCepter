@@ -30,7 +30,6 @@ public class                    HostDetailFragment extends MyFragment {
     private String              TAG = "HostDetailFragment";
     private CoordinatorLayout   mCoordinatorLayout;
     private List<AccessPoint>   HistoricAps;
-    private Singleton           mSingleton = Singleton.getInstance();
     private RecyclerView        mRV;
     private RelativeLayout      mDetailSessionLayout;
     public enum HistoricDetailMode { ApHistoric, SessionsOfAp, devicesOfSession, detailSession, noHistoric}

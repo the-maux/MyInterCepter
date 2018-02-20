@@ -25,7 +25,6 @@ public class                    NmapOutputFragment extends MyFragment  {
     private String              TAG = "NmapOutputFragment";
     private Host                mFocusedHost;
     private CoordinatorLayout   mCoordinatorLayout;
-    private Singleton           mSingleton = Singleton.getInstance();
     private TextView            Output;
     private Map                 historicByDevice = new HashMap();
     private String              actualOutput = "";

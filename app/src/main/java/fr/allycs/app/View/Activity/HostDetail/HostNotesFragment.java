@@ -21,7 +21,6 @@ import fr.allycs.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
 public class                    HostNotesFragment extends MyFragment {
     private String              TAG = "HostNotesFragment";
     private CoordinatorLayout   mCoordinatorLayout;
-    private Singleton           mSingleton = Singleton.getInstance();
     private Host                mFocusedHost;//TODO need to be init
     private Context             mCtx;
     private HostDiscoveryActivity mActivity;

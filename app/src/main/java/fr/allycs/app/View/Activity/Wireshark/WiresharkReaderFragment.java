@@ -26,7 +26,6 @@ import fr.allycs.app.View.Widget.Adapter.WiresharkAdapter;
 public class                    WiresharkReaderFragment extends MyFragment {
     private String              TAG = "WiresharkLiveFragment";
     private CoordinatorLayout   mCoordinatorLayout;
-    private Singleton           mSingleton = Singleton.getInstance();
     private Context             mCtx;
     private WiresharkActivity   mActivity;
     private RecyclerView        mRV_Wireshark;

@@ -5,11 +5,11 @@ import android.support.v4.view.MotionEventCompat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class                        IPv4CIDR {
+public class                        IPv4Utils {
     private int                     baseIPnumeric;
     private int                     netmaskNumeric;
 
-    public                          IPv4CIDR(NetworkInformation network) throws NumberFormatException {
+    public                          IPv4Utils(NetworkInformation network) throws NumberFormatException {
         String[] st = network.myIp.split("\\.");
         String netmask = network.netmask;
         if (st.length != 4) {

@@ -23,7 +23,6 @@ import fr.allycs.app.View.Widget.Adapter.MyPcapAdapter;
 public class                    PcapFragment extends MyFragment {
     private String              TAG = "HostNotesFragment";
     private CoordinatorLayout   mCoordinatorLayout;
-    private Singleton           mSingleton = Singleton.getInstance();
     private Host                mFocusedHost;
     private Context             mCtx = getActivity();
     private HostDiscoveryActivity mActivity;

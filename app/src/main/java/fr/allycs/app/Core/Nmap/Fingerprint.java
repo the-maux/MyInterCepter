@@ -91,23 +91,27 @@ public class                            Fingerprint {
 
     public static boolean               isItWindows(Host host) {
         /*
-               TODO: Do i have to checkd the proto for microsoft|windows|msrpc ?
+         ** TODO: Do i have to checkd the proto for microsoft|windows|msrpc ?
          */
-        if (host.Ports() == null)
-            return false;
-        return  host.Ports().isPortOpen(135) &&
+        return host.Ports() != null &&
+                host.Ports().isPortOpen(135) &&
                 host.Ports().isPortOpen(445);
     }
 
     public static boolean               isItMyDevice(Host host) {
         if (host.ip.contains(Singleton.getInstance().network.myIp)) {
             host.isItMyDevice = true;
+            host.state = Host.State.ONLINE;
         }
         return host.isItMyDevice;
     }
 
     public static void                  setOsIcon(Context context, Host host,  ImageView osImageView) {
         if (host != null && host.osType != null) {
+            if (host.state == Host.State.FILTERED) {
+                MyGlideLoader.loadDrawableInCircularImageView(context, R.drawable.ic_world_locked, osImageView);
+                return ;
+            }
             setOsIcon(context, host.osType, osImageView);
             return;
         }
@@ -172,18 +176,25 @@ public class                            Fingerprint {
 
     public static Comparator<Host>      getComparator() {
         return new Comparator<Host>() {
-            @Override
+
             public int compare(Host o1, Host o2) {
-                String ip1[] = o1.ip.replace(" ", "").replace(".", "::").split("::");
-                String ip2[] = o2.ip.replace(" ", "").replace(".", "::").split("::");
-                if (Integer.parseInt(ip1[2]) > Integer.parseInt(ip2[2]))
-                    return 1;
-                else if (Integer.parseInt(ip1[2]) < Integer.parseInt(ip2[2]))
-                    return -1;
-                else if (Integer.parseInt(ip1[3]) > Integer.parseInt(ip2[3]))
-                    return 1;
-                else if (Integer.parseInt(ip1[3]) < Integer.parseInt(ip2[3]))
-                    return -1;
+                if (o1.state == o2.state) {
+                    String ip1[] = o1.ip.replace(" ", "").replace(".", "::").split("::");
+                    String ip2[] = o2.ip.replace(" ", "").replace(".", "::").split("::");
+                    if (Integer.parseInt(ip1[2]) > Integer.parseInt(ip2[2]))
+                        return 1;
+                    else if (Integer.parseInt(ip1[2]) < Integer.parseInt(ip2[2]))
+                        return -1;
+                    else if (Integer.parseInt(ip1[3]) > Integer.parseInt(ip2[3]))
+                        return 1;
+                    else if (Integer.parseInt(ip1[3]) < Integer.parseInt(ip2[3]))
+                        return -1;
+                } else {
+                    if (o1.state == Host.State.ONLINE || o2.state == Host.State.OFFLINE)
+                        return 1;
+                    else if (o2.state == Host.State.ONLINE || o1.state == Host.State.OFFLINE)
+                        return -1;
+                }
                 return 0;
             }
 

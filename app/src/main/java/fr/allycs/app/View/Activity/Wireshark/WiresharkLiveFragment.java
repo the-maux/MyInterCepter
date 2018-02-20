@@ -27,10 +27,9 @@ import fr.allycs.app.View.Widget.Adapter.WiresharkAdapter;
 import fr.allycs.app.View.Widget.Dialog.RV_dialog;
 
 
-public class WiresharkLiveFragment extends MyFragment {
+public class                    WiresharkLiveFragment extends MyFragment {
     private String              TAG = "WiresharkLiveFragment";
     private CoordinatorLayout   mCoordinatorLayout;
-    private Singleton           mSingleton = Singleton.getInstance();
     private Host                mFocusedHost;//TODO need to be init
     private Context             mCtx;
     private WiresharkActivity   mActivity;

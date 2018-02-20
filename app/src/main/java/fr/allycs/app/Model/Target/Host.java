@@ -68,7 +68,7 @@ public class                Host extends Model {
     }
     
     public String           getName() {
-        return ((!name.isEmpty() && !name.contains("Unknown")) ? ip : name);
+        return ((name.isEmpty() || name.contains("Unknown")) ? ip : name);
     }
     
     public void             setName(String name) {

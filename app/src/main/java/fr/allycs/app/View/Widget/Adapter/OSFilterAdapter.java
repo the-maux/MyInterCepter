@@ -17,12 +17,11 @@ import fr.allycs.app.View.Widget.Adapter.Holder.HostSelectionHolder;
 public class                    OSFilterAdapter extends RecyclerView.Adapter<HostSelectionHolder> {
     private String              TAG = "OSFilterAdapter";
     private Context             mCtx;
-    private List<Os>            mOsList, mOsListSelected;
+    private ArrayList<Os>       mOsList, mOsListSelected = new ArrayList<>();
 
-    public                      OSFilterAdapter(Activity activity, ArrayList<Os> osList, List<Os> osListSelected) {
+    public                      OSFilterAdapter(Activity activity, ArrayList<Os> osList) {
         this.mOsList = osList;
         this.mCtx = activity;
-        this.mOsListSelected = osListSelected;
     }
 
     public HostSelectionHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -48,6 +47,10 @@ public class                    OSFilterAdapter extends RecyclerView.Adapter<Hos
 
     public int                  getItemCount() {
         return mOsList.size();
+    }
+
+    public ArrayList<Os>        getSelected() {
+        return (mOsListSelected.isEmpty()) ? mOsList : mOsListSelected;
     }
 
 }
