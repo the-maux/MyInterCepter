@@ -204,10 +204,15 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         notifyDataSetChanged();
     }
 
-    public void                 updateHostList(List<Host> hosts) {
-        mHosts = new ArrayList<>();
-        mHosts.addAll(hosts);
-        mOriginalList = hosts;
-        notifyDataSetChanged();
+    public void                 updateHostList(final List<Host> hosts) {
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mHosts = new ArrayList<>();
+                mHosts.addAll(hosts);
+                mOriginalList = hosts;
+                notifyDataSetChanged();
+            }
+        });
     }
 }

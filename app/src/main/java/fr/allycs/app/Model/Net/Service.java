@@ -3,6 +3,7 @@ package fr.allycs.app.Model.Net;
 import android.net.nsd.NsdServiceInfo;
 import android.util.Log;
 
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
@@ -10,9 +11,10 @@ import java.net.InetAddress;
 import java.util.List;
 
 import fr.allycs.app.Model.Target.Host;
+import fr.allycs.app.Model.Target.Network;
 
 @Table(name = "ServiceDiscovery", id = "_id")
-public class            Service {
+public class            Service extends Model {
     private String      TAG = "Service";
     @Column(name ="Host")
     public Host         host;
@@ -22,6 +24,8 @@ public class            Service {
     public String       ServiceName;
     @Column(name ="ServiceType")
     public String       ServiceType;
+    @Column(name = "Network")
+    public Network      network;
 
     private NsdServiceInfo service;
 

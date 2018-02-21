@@ -26,7 +26,7 @@ public class                            Singleton {
     public ArrayList<Host>              selectedHostsList = null;
     public List<ArpSpoof>               ArpSpoofProcessStack = new ArrayList<>();
     public NetworkInformation           network = null;
-    public Network actualSession = null;
+    public Network                      actualNetwork = null;
     private DnsmasqControl              dnsSpoofed = null;
     private SniffSession                actualSniffSession = null;
     private boolean                     sslstripMode = false, LockScreen = false;

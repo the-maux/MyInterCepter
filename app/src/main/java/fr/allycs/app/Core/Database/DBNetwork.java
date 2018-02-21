@@ -63,7 +63,7 @@ public class                                DBNetwork {
             }
         return false;
     }
-    public static Network updateHostOfSessions(Network accessPoint, List<Host> hosts, ArrayList<Os> osList) {
+    public static Network                   updateHostOfSessions(Network accessPoint, List<Host> hosts, ArrayList<Os> osList) {
         accessPoint.lastScanDate = Calendar.getInstance().getTime();
         accessPoint.listDevicesSerialized = DBHost.SerializeListDevices(hosts);
         accessPoint.nbrOs = osList.size();
@@ -76,7 +76,6 @@ public class                                DBNetwork {
         ActiveAndroid.beginTransaction();
         if (Singleton.getInstance().DebugMode)
             Log.d(TAG, "Updating Network::" + accessPoint.Ssid + " discovered " + devicesConnected.size() + " host");
-        accessPoint.services = new ArrayList<>();//TODO: update services ?
         accessPoint.lastScanDate = Calendar.getInstance().getTime();
         accessPoint.listDevicesSerialized = DBHost.SerializeListDevices(devicesConnected);
         accessPoint.nbrOs = osList.size();

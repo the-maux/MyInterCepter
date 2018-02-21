@@ -60,7 +60,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private MyFragment              HistoricFragment = null, NetDiscoveryFragment = null;
     private MyFragment              mFragment = null, mLastFragment = null;
     public int                      MAXIMUM_PROGRESS = 100, MAX_TIME_ONE_HOST = 1;
-    public Network actualSession;
+    public Network actualNetwork;
     public Date                     date;
     private Timer                   timer = new Timer();
 
@@ -179,7 +179,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                         Log.d(TAG, "mSingleton.hostsListSize:" +
                                 ((mSingleton.selectedHostsList != null) ? mSingleton.selectedHostsList.size() : "0"));
                     }
-                    mSingleton.actualSession = actualSession;
+                    mSingleton.actualNetwork = actualNetwork;
                     startActivity(new Intent(mInstance, NmapActivity.class));
                 }
                 else if (!mFragment.start()) {

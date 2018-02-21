@@ -60,12 +60,13 @@ public class                        NetworkDiscoveryControler {
     }
 
     synchronized void               onArpScanOver(ArrayList<String> ipReachable) {
-        ArrayList<String> threadSafeArray = new ArrayList<>();
-        threadSafeArray.addAll(ipReachable);
+        ArrayList<String> ipsreachables = new ArrayList<>();
+        ipsreachables.addAll(ipReachable);
+        Log.d(TAG, "onIcmpScanOver with : "+ ipReachable.size() + " ip(s) reachable");
+        mActivity.setToolbarTitle(null, ipsreachables.size() + " hosts detected");
+        mActivity.setMAXIMUM_PROGRESS(ipsreachables.size());
+        ArrayList<String> basicHost = NetDiscovering.readARPTable(ipsreachables);
         Log.d(TAG, "onArpScanOver with : "+ ipReachable.size() + " ip(s) reachable");
-        mActivity.setToolbarTitle(null, threadSafeArray.size() + " hosts detected");
-        mActivity.setMAXIMUM_PROGRESS(threadSafeArray.size());
-        ArrayList<String> basicHost = NetDiscovering.readARPTable(mActivity, threadSafeArray);
         Network ap = mFragment.updateStateOfHostAfterIcmp(basicHost);
         new NmapControler(basicHost,this, ap);
     }

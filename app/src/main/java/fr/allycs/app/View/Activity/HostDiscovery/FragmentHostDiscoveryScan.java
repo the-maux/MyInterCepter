@@ -182,13 +182,13 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         for (String ipReachable : ipReachables) {
             rax = rax + 1;
             String ip = ipReachable.split(":")[0];
-            String mac = ipReachable.split(":")[1];
+            String mac = ipReachable.replace(ipReachable.split(":")[0]+":", "").toUpperCase();
             boolean isHostInList = false;
             for (Host host : actualNetwork.listDevices()) {
                 if (host.mac.contains(mac)) {
                     host.state = Host.State.FILTERED;
                     isHostInList = true;
-                    Log.d(TAG, "updateStateOfHostAfterIcmp::"+ host.ip + " => ONLINE");
+                    Log.d(TAG, "updateStateOfHostAfterIcmp::" + host.ip + ":" + host.mac + " => ONLINE");
                     break;
                 }
             }
@@ -197,15 +197,16 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 host.ip = ip;
                 host.mac = mac;
                 host.state = Host.State.FILTERED;
-                host.Session().add(actualNetwork);
-                Log.d(TAG, "updateStateOfHostAfterIcmp::"+ host.ip + " => is new");
+                /*host.Network().add(actualNetwork);*/
+                Log.d(TAG, "updateStateOfHostAfterIcmp::"+ host.ip + ":" + host.mac +" => is new");
                 host.save();
+                actualNetwork.listDevices().add(host);
             }
         }
-        Log.d(TAG, "(" + (actualNetwork.listDevices().size() - rax) + " offline/ " + actualNetwork.listDevices() + "inCache) ");
-        mSingleton.actualSession = mActivity.actualSession;
-        mHostAdapter.updateHostList(mSingleton.selectedHostsList);
-        mActivity.finish();
+        Log.d(TAG, "(" + (actualNetwork.listDevices().size() - rax) + " offline/ " + actualNetwork.listDevices().size() + "inCache) ");
+        mSingleton.actualNetwork = actualNetwork;
+        mActivity.actualNetwork = actualNetwork;
+        mHostAdapter.updateHostList(actualNetwork.listDevices());
         return actualNetwork;
     }
 
@@ -222,8 +223,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
                 mSwipeRefreshLayout.setRefreshing(false);
                 mActivity.onScanOver();
-                //TODO: maybe to delete
-                    DBNetwork.updateHostOfSessions(mActivity.actualSession, hosts, mHostAdapter.getOsList());
+                DBNetwork.updateHostOfSessions(mActivity.actualNetwork, hosts, mHostAdapter.getOsList());
             }
         });
     }

@@ -32,10 +32,10 @@ public class            Port {
             }
         }
         public static State valueOf(int pageType) {
-            return (State) State.map.get(pageType);
+            return (State) map.get(pageType);
         }
 
-        public static State valueOf(String pageType, int a) {
+        public static State valueOf(String pageType, int a, int b) {
             pageType = pageType.toUpperCase().replace("|", "_");
             switch (pageType) {
                 case "OPEN_FILTERED":
@@ -91,7 +91,7 @@ public class            Port {
         super();
         //Log.i(TAG, "Building:\t" + port_proto + "  " + state + " -> " + protocolName);
         this.port = port_proto;
-        this.state = State.valueOf(state, 0);
+        this.state = State.valueOf(state, 0, 0);
         this.protocol = protocolName;
     }
 

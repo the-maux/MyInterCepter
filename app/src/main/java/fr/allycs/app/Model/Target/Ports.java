@@ -68,24 +68,24 @@ public class                    Ports {
     }
 
     public boolean              isPortOpen(int portNumber) {
-        Log.d(TAG, "isPort(" + portNumber + ")Open:" + Port.State.valueOf(primitivePortsLits.get(portNumber)) + " => " + (Port.State.valueOf(primitivePortsLits.get(portNumber)) == Port.State.OPEN));
+       // Log.d(TAG, "isPort(" + portNumber + ")Open:" + Port.State.valueOf(primitivePortsLits.get(portNumber)) + " => " + (Port.State.valueOf(primitivePortsLits.get(portNumber)) == Port.State.OPEN));
         return Port.State.valueOf(primitivePortsLits.get(portNumber)) == Port.State.OPEN;
     }
 
     public void                 dump() {
-        Log.i(TAG, "22/tcp       ssh          " + Port.State.valueOf(primitivePortsLits.get(22)));
-        Log.i(TAG, "23/tcp       telnet       " + Port.State.valueOf(primitivePortsLits.get(23)));
-        Log.i(TAG, "25/tcp       smtp         " + Port.State.valueOf(primitivePortsLits.get(25)));
-        Log.i(TAG, "53/udp       domain       " + Port.State.valueOf(primitivePortsLits.get(53)));
-        Log.i(TAG, "80/tcp       http         " + Port.State.valueOf(primitivePortsLits.get(80)));
-        Log.i(TAG, "110/tcp      pop3         " + Port.State.valueOf(primitivePortsLits.get(110)));
-        Log.i(TAG, "135/tcp      msrpx        " + Port.State.valueOf(primitivePortsLits.get(135)));
-        Log.i(TAG, "139/tcp      netbios-ssn  " + Port.State.valueOf(primitivePortsLits.get(139)));
-        Log.i(TAG, "443/tcp      https        " + Port.State.valueOf(primitivePortsLits.get(443)));
-        Log.i(TAG, "445/tcp      microsoft-ds " + Port.State.valueOf(primitivePortsLits.get(445)));
-        Log.i(TAG, "3031/udp     unknow       " + Port.State.valueOf(primitivePortsLits.get(3031)));
-        Log.i(TAG, "3128/tcp     squid-http   " + Port.State.valueOf(primitivePortsLits.get(3128)));
-        Log.i(TAG, "5353/udp     zeroconf     " + Port.State.valueOf(primitivePortsLits.get(5353)));
+        Log.i(TAG, "22/tcp    ssh          " + primitivePortsLits.get(22));
+        Log.i(TAG, "23/tcp    telnet       " + primitivePortsLits.get(23));
+        Log.i(TAG, "25/tcp    smtp         " + primitivePortsLits.get(25));
+        Log.i(TAG, "53/udp    domain       " + primitivePortsLits.get(53));
+        Log.i(TAG, "80/tcp    http         " + primitivePortsLits.get(80));
+        Log.i(TAG, "110/tcp   pop3         " + primitivePortsLits.get(110));
+        Log.i(TAG, "135/tcp   msrpx        " + primitivePortsLits.get(135));
+        Log.i(TAG, "139/tcp   netbios-ssn  " + primitivePortsLits.get(139));
+        Log.i(TAG, "443/tcp   https        " + primitivePortsLits.get(443));
+        Log.i(TAG, "445/tcp   microsoft-ds " + primitivePortsLits.get(445));
+        Log.i(TAG, "3031/udp  unknow       " + primitivePortsLits.get(3031));
+        Log.i(TAG, "3128/tcp  squid-http   " + primitivePortsLits.get(3128));
+        Log.i(TAG, "5353/udp  zeroconf     " + primitivePortsLits.get(5353));
     }
 
     public String               getDump() {

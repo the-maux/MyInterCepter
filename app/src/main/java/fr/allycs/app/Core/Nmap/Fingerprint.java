@@ -108,8 +108,8 @@ public class                            Fingerprint {
 
     public static void                  setOsIcon(Context context, Host host,  ImageView osImageView) {
         if (host != null && host.osType != null) {
-            if (host.state == Host.State.FILTERED) {
-                MyGlideLoader.loadDrawableInCircularImageView(context, R.drawable.ic_world_locked, osImageView);
+            if (host.state == Host.State.FILTERED && host.vendor.contains("Unknown")) {
+                MyGlideLoader.loadDrawableInCircularImageView(context, R.drawable.secure_computer2, osImageView);
                 return ;
             }
             setOsIcon(context, host.osType, osImageView);

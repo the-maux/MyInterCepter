@@ -6,6 +6,9 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Database.DBHost;
@@ -22,37 +25,53 @@ class NmapHostDiscoveryParser {
 
     NmapHostDiscoveryParser(NmapControler nmapControler, String listMacs, String NmapDump, Network ap) {
         this.mNmapControler = nmapControler;
+        Log.d(TAG, "dump list macs[" + listMacs + "]");
         String[] macs = listMacs.split(" ");
         String[] HostNmapDump = NmapDump.split("Nmap scan report for ");
-        LENGTH_NODE = HostNmapDump.length -1;
-        Log.d(TAG, "starting dispatacher");
+        LENGTH_NODE = HostNmapDump.length-1;
+        ExecutorService service = Executors.newCachedThreadPool();
+        Log.i(TAG, "{{{{{{{{{{{{{" + HostNmapDump[0] + "}}}}}}}}}}}}}}}}}");
         for (int i = 1; i < HostNmapDump.length; i++) {/*First node is the nmap preambule*/
-            dispatcher(HostNmapDump[i], macs, ap);
+            service.execute(dispatcher(HostNmapDump[i], macs, ap));
+            Log.i(TAG, "{{{{{{{{{{{{{" + HostNmapDump[i] + "}}}}}}}}}}}}}}}}}");
+        }
+        service.shutdown();
+        try {
+            service.awaitTermination(210, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            nmapIsTooLong();
         }
     }
 
-    private void                    dispatcher(final String node, final String[] macs, final Network ap) {
-        new Thread(new Runnable() {
-            @Override
+    private Runnable                    dispatcher(final String node, final String[] macs, final Network ap) {
+       return new Runnable() {
             public void run() {
                 try {
                     Host host = new Host();
                     getIpHOSTNAME(node.split("\n")[0], host);
                     host.mac = getMACInTmp(macs, host.ip);
                     Host hostInList = ap.getHostFromMac(host.mac);
+//                    Log.d(TAG, "host from mac OK");
                     if (hostInList.name.isEmpty() || hostInList.name.contains("Unknow"))
                         hostInList.name = host.name;
                     if (!Fingerprint.isItMyDevice(host)) {
+                        Log.d(TAG, "buildHostFromNmapDump on " + host.toString());
                         buildHostFromNmapDump(node, hostInList, hosts);
                     } else {
+//                        Log.d(TAG, "myDevice on " + host.toString());
                         initIfItsMyDevice(hostInList, hosts);
                     }
-                    onNodeParsed();
                 } catch (UnknownHostException e) {
+                    Log.e(TAG, "UnknowHost");
                     e.printStackTrace();
+                } catch (Exception e) {
+                    Log.e(TAG, "Error detected in dispatcher");
+                } finally {
+                    onNodeParsed();
                 }
             }
-        }).start();
+        };
     }
 
     private void                    buildHostFromNmapDump(String nmapStdout, Host host, ArrayList<Host> hosts) throws UnknownHostException {
@@ -62,11 +81,11 @@ class NmapHostDiscoveryParser {
             String line = nmapStdoutHost[i];
             if (line.contains("Device type: ")) {
                 dump.append(line).append("\n");
-                //Log.v(TAG,  "buildHostFromNmapDump::" + line);
+//                Log.v(TAG,  "buildHostFromNmapDump::" + line);
                 host.deviceType = line.replace("Device type: ", "");
             } else if (line.contains("Running: ")) {
                 dump.append(line);
-                //Log.v(TAG, "buildHostFromNmapDump::" + line);
+//                Log.v(TAG, "buildHostFromNmapDump::" + line);
                 getOs(line.replace("Running: ", ""), host, nmapStdoutHost);
             } else if (line.contains("Too many fingerprints match this host to give specific OS details")) {
                 dump.append(line);
@@ -101,6 +120,7 @@ class NmapHostDiscoveryParser {
                 host.dumpInfo + '\n' +
                 ((host.Ports() == null) ? " No Port detected ? " : host.Ports().getDump());
         host.save();
+        Log.d(TAG, "saving host:" + host.toString());
         hosts.add(host);
     }
 
@@ -129,6 +149,7 @@ class NmapHostDiscoveryParser {
 
     private int                     getPortList(String[] line, int i, Host host) {
         ArrayList<String> ports = new ArrayList<>();
+ //       Log.d(TAG, "portList");
         for (; i < line.length; i++) {
             if (!(line[i].contains("open") || line[i].contains("close") || line[i].contains("filtered"))) {
                 /*TODO:CHECK DUPLICATA*/
@@ -161,12 +182,12 @@ class NmapHostDiscoveryParser {
         return null;
     }
 
-    private String                  getMACInTmp(String[] macs, String ip) {
-        for (String mac : macs) {
-            if (mac.contains(ip))
+    private String                  getMACInTmp(String[] macsAndIp, String ip) throws UnknownHostException {
+        for (String mac : macsAndIp) {
+            if (mac.contains(ip + ':'))
                 return mac.replace(ip + ':', "").toUpperCase();
         }
-        return null;
+        throw new UnknownHostException("getMACInTmp::no ip[" + ip +"] in list of macts");
     }
 
     private void                    onNodeParsed() {
@@ -175,6 +196,21 @@ class NmapHostDiscoveryParser {
                 "(" + NBR_PARSED_NODE + "/" + LENGTH_NODE + ") devices scanned");
         if (NBR_PARSED_NODE >= LENGTH_NODE)
             onAllNodeParsed();
+    }
+
+    private void                    nmapIsTooLong() {
+        Log.d(TAG, "Some node wasn't parsed, inintializing..");
+        Log.d(TAG, "Analyzing (" + NBR_PARSED_NODE + "/" + LENGTH_NODE + ") devices scanned");
+        Collections.sort(hosts, Fingerprint.getComparator());
+        Iterator<Host> iter = hosts.iterator();
+        while (iter.hasNext()) {//ConcurrentModificationException
+            Host host = iter.next();
+            if (host.osType == Os.Unknow) {
+                host.dumpMe(mSingleton.selectedHostsList);
+                Log.d(TAG, "-------------");
+            }
+        }
+        mNmapControler.onHostActualized(hosts);
     }
 
     private void                    onAllNodeParsed() {

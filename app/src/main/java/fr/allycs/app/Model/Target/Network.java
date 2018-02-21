@@ -6,7 +6,9 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,18 +29,24 @@ public class Network extends Model {
     public Host             Gateway;
     @Column(name = "OsNumber")
     public int              nbrOs;
-    @Column(name = "service")
-    public List<Service>    services;
 
     @Column(name = "Devices")
     public String           listDevicesSerialized;
     private List<Host>      listDevices = null;
     public List<Host>       listDevices() {
         if (listDevices == null) {
+            if (listDevicesSerialized == null) {
+                listDevices = new ArrayList<>();
+                return listDevices;
+            }
             listDevices = DBHost.getListFromSerialized(listDevicesSerialized);
             Log.d(NAME_COLUMN, "liste Network deserialized " + listDevices.size() + " devices");
         }
         return listDevices;
+    }
+
+    public List<Service>    Services() {
+        return getMany(Service.class, "Network");
     }
 
     public List<SniffSession> SniffSessions() {
@@ -54,12 +62,16 @@ public class Network extends Model {
         return new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE).format(lastScanDate);
     }
 
-    public Host             getHostFromMac(String mac) {
-        for (Host host : listDevices()) {
-            if (host.mac.contains(mac))
+    public synchronized Host getHostFromMac(String mac) throws UnknownHostException {
+        List<Host> hosts = listDevices();
+        for (Host host : hosts) {
+            if (host.mac.contains(mac)) {
+                Log.d(NAME_COLUMN, "getHostFromMac(" + host.toString() + ") in list of " + listDevices().size());
                 return host;
+            }
         }
-        return null;
+        Log.d(NAME_COLUMN, "not found");
+        throw new UnknownHostException("Not host found in BDD with this mac[" + mac + "]");
     }
 
     public Network() {

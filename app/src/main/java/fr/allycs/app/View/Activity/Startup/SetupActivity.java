@@ -13,9 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import java.io.File;
 import java.io.IOException;
 
 import fr.allycs.app.Core.Configuration.Setup;
+import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Network.NetDiscovering;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
@@ -62,6 +64,8 @@ public class                    SetupActivity extends MyActivity {
     }
 
     private void                initialisation() {
+        if ((new File(Singleton.getInstance().FilesPath + "version").exists()))
+            finish();
         new Thread(new Runnable() {
             public void run() {
                 try {
@@ -77,7 +81,7 @@ public class                    SetupActivity extends MyActivity {
                             p1 = Pair.create(findViewById(R.id.monitor), "title");
                             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1);
                             startActivity(new Intent(mInstance, HostDiscoveryActivity.class), options.toBundle());
-
+                            finish();
                         }
                     });
                 } catch (IOException e) {

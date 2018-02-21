@@ -189,8 +189,8 @@ public class FragmentHostDiscoveryHistoric extends MyFragment {
         initViewSessionFocus_Wireshark(focusedSession);
         initViewSessionFocus_Services(focusedSession);
         setTitleToolbar(null, focusedSession.getDateString());
-        String nbrService = ((focusedSession.services == null) ? "0" :
-                focusedSession.services.size()) + " services discovered on Network";
+        String nbrService = ((focusedSession.Services() == null) ? "0" :
+                focusedSession.Services().size()) + " Services discovered on Network";
         nbrServiceDiscovered.setText(nbrService);
     }
 
@@ -257,9 +257,9 @@ public class FragmentHostDiscoveryHistoric extends MyFragment {
         }
     }
     private void                    initViewSessionFocus_Services(final Network session) {
-        if (session.services != null && !session.services.isEmpty()) {
-            titleService.setText(session.services.size() + " découvert sur ce réseau");
-            subtitleService.setText("Sur " + ServicesController.howManyHostTheServices(session.services)
+        if (session.Services() != null && !session.Services().isEmpty()) {
+            titleService.setText(session.Services().size() + " découvert sur ce réseau");
+            subtitleService.setText("Sur " + ServicesController.howManyHostTheServices(session.Services())
                     + " devices différents");
             forwardGateway.setOnClickListener(new View.OnClickListener() {
                 @Override

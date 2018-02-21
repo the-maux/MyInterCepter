@@ -17,7 +17,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.Model.Target.Network;
 import fr.allycs.app.R;
@@ -28,7 +27,7 @@ import fr.allycs.app.View.Behavior.Fragment.MyFragment;
 public class                    HostDetailFragment extends MyFragment {
     private String              TAG = "HostDetailFragment";
     private CoordinatorLayout   mCoordinatorLayout;
-    private List<AccessPoint>   HistoricAps;
+    private List<Network>       HistoricAps;
     private RecyclerView        mRV;
     private RelativeLayout      mDetailSessionLayout;
     public enum HistoricDetailMode { ApHistoric, SessionsOfAp, devicesOfSession, detailSession, noHistoric}
@@ -70,7 +69,7 @@ public class                    HostDetailFragment extends MyFragment {
 
 
     public void                 focusOneTarget(Host host) {
-        mSingleton.actualSession = mActivity.actualSession;
+        mSingleton.actualNetwork = mActivity.actualNetwork;
         if (mSingleton.selectedHostsList == null)
             mSingleton.selectedHostsList = new ArrayList<>();
         else

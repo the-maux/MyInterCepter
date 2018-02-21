@@ -25,7 +25,7 @@ public class                SniffSession extends Model {
     public Date             date;
 
     @Column(name = "Network")
-    public Network session;
+    public Network          session;
 
     @Column(name = "Devices")
     public String           listDevicesSerialized;

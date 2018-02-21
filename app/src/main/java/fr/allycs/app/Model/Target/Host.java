@@ -15,7 +15,7 @@ import fr.allycs.app.Core.Nmap.Fingerprint;
 import fr.allycs.app.Model.Net.Service;
 import fr.allycs.app.Model.Unix.Os;
 
-@Table(name = "Device", id = "_id")
+@Table(name = "Host", id = "_id")
 public class                Host extends Model {
     private String          TAG = "Host";
     @Column(name = "ip")
@@ -39,18 +39,18 @@ public class                Host extends Model {
     @Column(name = "TooManyFingerprintMatchForOs")
     public boolean          TooManyFingerprintMatchForOs = false;
     @Column(name = "NetworkDistance")
-    public String           NetworkDistance = "Unknow";
+    public String           NetworkDistance = "Unknown";
     @Column(name = "isSecureComputer")
     public boolean          isSecureComputer = false;
 
     private ArrayList<Service> ServiceActivOnHost = new ArrayList<>();
-    public List<Network>    Session() {
+   /* public List<Network>    Network() {
         return getMany(Network.class, "listDevices");
-    }
+    }*/
 
     public boolean          selected = false;
     public boolean          isItMyDevice = false;
-    public Os               osType;
+    public Os               osType = Os.Unknow;
     public State            state = State.OFFLINE;
 
     private Ports           listPorts = null;
