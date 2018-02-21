@@ -25,7 +25,7 @@ public class                Pcap extends Model {
     private String          TAG = "Pcap";
     private String          NAME_COLUMN = "Pcap";
 
-    @Column(name ="Date")
+    @Column(name ="lastScanDate")
     public Date             date;
     @Column(name ="NameFile")
     public String           nameFile;

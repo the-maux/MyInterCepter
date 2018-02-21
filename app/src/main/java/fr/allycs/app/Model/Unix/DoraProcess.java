@@ -11,9 +11,8 @@ import java.util.Locale;
 
 import fr.allycs.app.Core.Configuration.RootProcess;
 import fr.allycs.app.Model.Target.Host;
-import fr.allycs.app.Model.Target.MyObject;
 
-public class            DoraProcess extends MyObject {
+public class            DoraProcess {
     private String      TAG = getClass().getName();
     public boolean      mIsRunning = false;
     public Host         mhost;

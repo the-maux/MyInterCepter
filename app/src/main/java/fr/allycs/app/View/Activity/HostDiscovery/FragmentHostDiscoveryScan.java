@@ -23,11 +23,11 @@ import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickList
 
 import java.util.ArrayList;
 
-import fr.allycs.app.Core.Configuration.Singleton;
-import fr.allycs.app.Core.Database.DBSession;
+import fr.allycs.app.Core.Database.DBNetwork;
 import fr.allycs.app.Core.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Core.Network.NetDiscovering;
 import fr.allycs.app.Model.Target.Host;
+import fr.allycs.app.Model.Target.Network;
 import fr.allycs.app.Model.Unix.Os;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.Scan.NmapActivity;
@@ -59,23 +59,14 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         mScannerControler = NetworkDiscoveryControler.getInstance(this);
         initSwipeRefresh();
         mActivity.initSettingsButton();
-        /**
-         * TODO:
-         * + Get Last list of host from this SSID where Gateway.mac.equals(mSingleton.network.gateway.mac)
-         *      -> If not same Mac Alert we détected a roaming. Have to restart the process
-         * + Compare this list with  updateStateOfHost
-         * +
-         */
-        if (mSingleton.DebugMode && !mHostLoaded) {
-            mActivity.showSnackbar("Debug mode: auto scan started");
+        initHostsRecyclerView();
+        if (!mHostLoaded) {
             start();
         }
-        initHostsRecyclerView();
     }
 
     public void                     onResume() {
         super.onResume();
-        Log.d(TAG, "onResume");
         mHost_RV.setAdapter(mHostAdapter);
         mActivity.initToolbarButton();
     }
@@ -112,18 +103,15 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         mHost_RV.setAdapter(mHostAdapter);
         mHost_RV.setHasFixedSize(true);
         mHost_RV.setLayoutManager(new LinearLayoutManager(mActivity));
-        Log.d(TAG, "ADAPTER_RV OK");
     }
 
     public void                     initSearchView(SearchView mSearchView) {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
             public boolean onQueryTextSubmit(String query) {
                 mHostAdapter.filterByString(query);
                 return false;
             }
 
-            @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
@@ -138,10 +126,13 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     }
 
     public boolean                  start() {
-        mActivity.setToolbarTitle("Scanner", "Discovering network");
+        mActivity.setToolbarTitle("Scanner", "Discovering Network");
         if (!isWaiting()) {
             if ((NetDiscovering.initNetworkInfo(mActivity)) &&
                     mSingleton.network.updateInfo().isConnectedToNetwork()) {
+
+                //TODO: if its a refreshing don't unload list of host
+                init_prologueScan();
                 mActivity.initMonitor();
                 mActivity.initTimer();
                 mActivity.progressAnimation();
@@ -160,7 +151,19 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         return false;
     }
 
-    public ArrayList<Host>          getTargetFromHostList() {
+    private void                    init_prologueScan() {
+        /**
+         * TODO:
+         * + Get Last list of host from this SSID where Gateway.mac.equals(mSingleton.Network.gateway.mac)
+         *      -> If not same Mac Alert we détected a roaming. Have to restart the process
+         * - IF ITS THE FIST SCAN print the list of host in degraded mode
+         * - IF You already have a lit:
+         *      - If HOST IS KNEW -> Host.state = ONLINE
+         *      - If Host Is NEW -> Host.state = ONLINE and Host.degraded =>  True
+         */
+    }
+
+    public ArrayList<Host>          getTargetSelectedFromHostList() {
         ArrayList<Host> selectedHost = new ArrayList<>();
         for (Host host : mHosts) {
             if (host.selected)
@@ -173,17 +176,40 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         return selectedHost;
     }
 
-    public void                     updateStateOfHost(ArrayList<String> ipReachables) {
+    public Network                  updateStateOfHostAfterIcmp(ArrayList<String> ipReachables) {
+        Network actualNetwork = DBNetwork.getAPFromSSID(mSingleton.network.Ssid);
+        int rax = 0;
         for (String ipReachable : ipReachables) {
-            Log.d(TAG, "reachable[" + ipReachable + "]");
+            rax = rax + 1;
+            String ip = ipReachable.split(":")[0];
+            String mac = ipReachable.split(":")[1];
+            boolean isHostInList = false;
+            for (Host host : actualNetwork.listDevices()) {
+                if (host.mac.contains(mac)) {
+                    host.state = Host.State.FILTERED;
+                    isHostInList = true;
+                    Log.d(TAG, "updateStateOfHostAfterIcmp::"+ host.ip + " => ONLINE");
+                    break;
+                }
+            }
+            if (!isHostInList) {
+                Host host = new Host();
+                host.ip = ip;
+                host.mac = mac;
+                host.state = Host.State.FILTERED;
+                host.Session().add(actualNetwork);
+                Log.d(TAG, "updateStateOfHostAfterIcmp::"+ host.ip + " => is new");
+                host.save();
+            }
         }
+        Log.d(TAG, "(" + (actualNetwork.listDevices().size() - rax) + " offline/ " + actualNetwork.listDevices() + "inCache) ");
+        mSingleton.actualSession = mActivity.actualSession;
+        mHostAdapter.updateHostList(mSingleton.selectedHostsList);
+        mActivity.finish();
+        return actualNetwork;
     }
 
     public void                     onHostActualized(final ArrayList<Host> hosts) {
-        /**
-         * TODO: ici faire le tri entre ce que ipReachables contené et tout ce que hosts contient
-         * Tout ce qui n'est pas dans hosts est filtered
-         */
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -192,18 +218,12 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 mScannerControler.inLoading = false;
                 mActivity.setProgressState(mActivity.MAXIMUM_PROGRESS*2);
                 mSingleton.selectedHostsList = mHosts;
-                mHostAdapter.updateHostList(mSingleton.selectedHostsList);
-                mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ?
-                        View.VISIBLE : View.GONE);
+                mHostAdapter.updateHostList(mHosts);
+                mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
                 mSwipeRefreshLayout.setRefreshing(false);
                 mActivity.onScanOver();
-                mActivity.actualSession =
-                        DBSession.buildSession(mSingleton.network.Ssid,
-                                mSingleton.network.gateway,
-                                hosts,
-                                "Icmp",
-                                mHostAdapter.getOsList());
-                mSingleton.actualSession = mActivity.actualSession;
+                //TODO: maybe to delete
+                    DBNetwork.updateHostOfSessions(mActivity.actualSession, hosts, mHostAdapter.getOsList());
             }
         });
     }

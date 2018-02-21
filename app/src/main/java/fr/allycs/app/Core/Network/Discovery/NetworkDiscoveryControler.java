@@ -9,11 +9,11 @@ import java.util.List;
 
 import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Configuration.Utils;
-import fr.allycs.app.Core.Network.BonjourService.BonjourManager;
 import fr.allycs.app.Core.Network.IPv4Utils;
 import fr.allycs.app.Core.Network.NetDiscovering;
 import fr.allycs.app.Core.Nmap.NmapControler;
 import fr.allycs.app.Model.Target.Host;
+import fr.allycs.app.Model.Target.Network;
 import fr.allycs.app.View.Activity.HostDiscovery.FragmentHostDiscoveryScan;
 import fr.allycs.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
 
@@ -65,8 +65,9 @@ public class                        NetworkDiscoveryControler {
         Log.d(TAG, "onArpScanOver with : "+ ipReachable.size() + " ip(s) reachable");
         mActivity.setToolbarTitle(null, threadSafeArray.size() + " hosts detected");
         mActivity.setMAXIMUM_PROGRESS(threadSafeArray.size());
-        mFragment.updateStateOfHost(ipReachable);
-        new NmapControler(NetDiscovering.readARPTable(mActivity, threadSafeArray),this);
+        ArrayList<String> basicHost = NetDiscovering.readARPTable(mActivity, threadSafeArray);
+        Network ap = mFragment.updateStateOfHostAfterIcmp(basicHost);
+        new NmapControler(basicHost,this, ap);
     }
 
     public void                     onNmapScanOver(ArrayList<Host> hosts) {

@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Locale;
 
 import fr.allycs.app.Core.Database.DBHost;
-import fr.allycs.app.Model.Unix.DNSLog;
 import fr.allycs.app.Model.Net.Pcap;
+import fr.allycs.app.Model.Unix.DNSLog;
 
 //TODO: Create when wireshark is started
 @Table(name = "SniffSession", id = "_id")
@@ -21,11 +21,11 @@ public class                SniffSession extends Model {
     public String           TAG = "SniffSession";
     public String           NAME_COLUMN = "SniffSession";
 
-    @Column(name = "Date")
+    @Column(name = "lastScanDate")
     public Date             date;
 
-    @Column(name = "Session")
-    public Session          session;
+    @Column(name = "Network")
+    public Network session;
 
     @Column(name = "Devices")
     public String           listDevicesSerialized;

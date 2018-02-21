@@ -6,14 +6,14 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.allycs.app.Core.Network.ArpSpoof;
-import fr.allycs.app.Core.Dnsmasq.DnsmasqControl;
-import fr.allycs.app.Core.Tcpdump.Tcpdump;
 import fr.allycs.app.Core.Database.DBSniffSession;
+import fr.allycs.app.Core.Dnsmasq.DnsmasqControl;
+import fr.allycs.app.Core.Network.ArpSpoof;
 import fr.allycs.app.Core.Network.IPTables;
 import fr.allycs.app.Core.Network.NetworkInformation;
+import fr.allycs.app.Core.Tcpdump.Tcpdump;
 import fr.allycs.app.Model.Target.Host;
-import fr.allycs.app.Model.Target.Session;
+import fr.allycs.app.Model.Target.Network;
 import fr.allycs.app.Model.Target.SniffSession;
 
 public class                            Singleton {
@@ -26,7 +26,7 @@ public class                            Singleton {
     public ArrayList<Host>              selectedHostsList = null;
     public List<ArpSpoof>               ArpSpoofProcessStack = new ArrayList<>();
     public NetworkInformation           network = null;
-    public Session                      actualSession = null;
+    public Network actualSession = null;
     private DnsmasqControl              dnsSpoofed = null;
     private SniffSession                actualSniffSession = null;
     private boolean                     sslstripMode = false, LockScreen = false;

@@ -10,6 +10,7 @@ import java.util.Iterator;
 import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Database.DBHost;
 import fr.allycs.app.Model.Target.Host;
+import fr.allycs.app.Model.Target.Network;
 import fr.allycs.app.Model.Unix.Os;
 
 class NmapHostDiscoveryParser {
@@ -19,18 +20,18 @@ class NmapHostDiscoveryParser {
     private NmapControler           mNmapControler;
     private int                     LENGTH_NODE, NBR_PARSED_NODE = 0;
 
-    NmapHostDiscoveryParser(NmapControler nmapControler, String listMacs, String NmapDump) {
+    NmapHostDiscoveryParser(NmapControler nmapControler, String listMacs, String NmapDump, Network ap) {
         this.mNmapControler = nmapControler;
         String[] macs = listMacs.split(" ");
         String[] HostNmapDump = NmapDump.split("Nmap scan report for ");
         LENGTH_NODE = HostNmapDump.length -1;
         Log.d(TAG, "starting dispatacher");
         for (int i = 1; i < HostNmapDump.length; i++) {/*First node is the nmap preambule*/
-            dispatcher(HostNmapDump[i], macs);
+            dispatcher(HostNmapDump[i], macs, ap);
         }
     }
 
-    private void                    dispatcher(final String node, final String[] macs) {
+    private void                    dispatcher(final String node, final String[] macs, final Network ap) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -38,11 +39,13 @@ class NmapHostDiscoveryParser {
                     Host host = new Host();
                     getIpHOSTNAME(node.split("\n")[0], host);
                     host.mac = getMACInTmp(macs, host.ip);
+                    Host hostInList = ap.getHostFromMac(host.mac);
+                    if (hostInList.name.isEmpty() || hostInList.name.contains("Unknow"))
+                        hostInList.name = host.name;
                     if (!Fingerprint.isItMyDevice(host)) {
-                        host = DBHost.saveOrGetInDatabase(host);
-                        buildHostFromNmapDump(node, host, hosts);
+                        buildHostFromNmapDump(node, hostInList, hosts);
                     } else {
-                        initIfItsMyDevice(host, hosts);
+                        initIfItsMyDevice(hostInList, hosts);
                     }
                     onNodeParsed();
                 } catch (UnknownHostException e) {

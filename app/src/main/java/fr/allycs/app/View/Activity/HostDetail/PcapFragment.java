@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Database.DBManager;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
@@ -42,7 +41,7 @@ public class                    PcapFragment extends MyFragment {
 
     public void                 init() {
         if (mSingleton.selectedHostsList == null) {
-            Snackbar.make(mCoordinatorLayout, "No target saved, You need to scan the network", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mCoordinatorLayout, "No target saved, You need to scan the Network", Snackbar.LENGTH_LONG).show();
             startActivity(new Intent(getActivity(), HostDiscoveryActivity.class));
             getActivity().onBackPressed();
         } else {

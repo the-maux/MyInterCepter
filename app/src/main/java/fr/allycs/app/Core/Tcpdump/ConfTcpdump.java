@@ -65,9 +65,9 @@ class                           ConfTcpdump {
         pcap.save();
         if (mSingleton.getActualSniffSession() != null) {
             mSingleton.getActualSniffSession().listPcapRecorded().add(pcap);
-            Log.d(TAG, "Pcap added to Sniff Session");
+            Log.d(TAG, "Pcap added to Sniff Network");
         } else {
-            Log.d(TAG, "Pcap not added to Sniff Session");
+            Log.d(TAG, "Pcap not added to Sniff Network");
         }
         pcapFile =  " -w " + pcapFile;
         Log.d(TAG, pcap.toString());

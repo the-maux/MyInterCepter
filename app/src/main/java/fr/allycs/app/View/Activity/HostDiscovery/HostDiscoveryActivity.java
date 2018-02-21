@@ -27,7 +27,7 @@ import java.util.TimerTask;
 import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Configuration.Utils;
 import fr.allycs.app.Core.Network.NetDiscovering;
-import fr.allycs.app.Model.Target.Session;
+import fr.allycs.app.Model.Target.Network;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.Scan.NmapActivity;
 import fr.allycs.app.View.Behavior.Activity.MyActivity;
@@ -60,7 +60,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private MyFragment              HistoricFragment = null, NetDiscoveryFragment = null;
     private MyFragment              mFragment = null, mLastFragment = null;
     public int                      MAXIMUM_PROGRESS = 100, MAX_TIME_ONE_HOST = 1;
-    public Session                  actualSession;
+    public Network actualSession;
     public Date                     date;
     private Timer                   timer = new Timer();
 
@@ -94,7 +94,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private void                    init()  {
         NetDiscovering.initNetworkInfo(this);
         if (mSingleton.network == null || mSingleton.network.myIp == null) {
-            showSnackbar("You need to be connected to a network");
+            showSnackbar("You need to be connected to a Network");
             finish();
         } else {
             initTabs();
@@ -173,7 +173,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 Utils.vibrateDevice(mInstance);
                 if (mFragment.getClass().getName().contains("FragmentHostDiscoveryScan") &&
                     ((FragmentHostDiscoveryScan) mFragment).mHostLoaded) {
-                    mSingleton.selectedHostsList = ((FragmentHostDiscoveryScan) mFragment).getTargetFromHostList();
+                    mSingleton.selectedHostsList = ((FragmentHostDiscoveryScan) mFragment).getTargetSelectedFromHostList();
                     if (mSingleton.UltraDebugMode) {
                         Log.d(TAG, "mSingleton.selectedHostsList" + mSingleton.selectedHostsList);
                         Log.d(TAG, "mSingleton.hostsListSize:" +

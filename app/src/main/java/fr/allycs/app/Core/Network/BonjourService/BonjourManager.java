@@ -75,7 +75,7 @@ public class                        BonjourManager {
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mActivity.showSnackbar("Scanning service on network finished");
+                mActivity.showSnackbar("Scanning service on Network finished");
                 mActivity.actualSession.services = listOfServiceFound;
                 mActivity.actualSession.save();
             }

@@ -38,8 +38,8 @@ public class                    SniffSessionAdapter extends RecyclerView.Adapter
 
     public void                 onBindViewHolder(SniffSessionHolder holder, int position) {
         final SniffSession sniffSession = mSniffsession.get(position);
-        holder.title.setText(sniffSession.session.name);
-        holder.subtitle.setText(sniffSession.session.Ap.Ssid);
+        holder.title.setText(sniffSession.session.Ssid);
+        String subtitile = "Scanned " + sniffSession.session.nbrScanned + " times";
         List<Pcap> pcaps = sniffSession.listPcapRecorded();
         List<Host> devices = sniffSession.listDevices();
         int nbrDnsIntercepted = (sniffSession.logDnsSpoofed() == null) ? sniffSession.logDnsSpoofed().size() : 0 ;

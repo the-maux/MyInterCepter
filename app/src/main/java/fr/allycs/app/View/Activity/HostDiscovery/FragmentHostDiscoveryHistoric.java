@@ -24,24 +24,20 @@ import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickList
 
 import java.util.List;
 
-import fr.allycs.app.Core.Configuration.Singleton;
-import fr.allycs.app.Core.Database.DBAccessPoint;
-import fr.allycs.app.Core.Database.DBSession;
+import fr.allycs.app.Core.Database.DBNetwork;
 import fr.allycs.app.Core.Database.DBSniffSession;
 import fr.allycs.app.Core.Network.BonjourService.ServicesController;
 import fr.allycs.app.Model.Net.Pcap;
-import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;
-import fr.allycs.app.Model.Target.Session;
+import fr.allycs.app.Model.Target.Network;
 import fr.allycs.app.Model.Target.SniffSession;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.TargetMenu.TargetMenuActivity;
 import fr.allycs.app.View.Behavior.Activity.MyActivity;
 import fr.allycs.app.View.Behavior.Fragment.MyFragment;
 import fr.allycs.app.View.Behavior.MyGlideLoader;
-import fr.allycs.app.View.Widget.Adapter.AccessPointAdapter;
 import fr.allycs.app.View.Widget.Adapter.HostDiscoveryAdapter;
-import fr.allycs.app.View.Widget.Adapter.SessionAdapter;
+import fr.allycs.app.View.Widget.Adapter.NetworksAdapter;
 import fr.allycs.app.View.Widget.Adapter.SniffSessionAdapter;
 import fr.allycs.app.View.Widget.Dialog.HostDialogDetail;
 import fr.allycs.app.View.Widget.Dialog.RV_dialog;
@@ -50,14 +46,14 @@ public class FragmentHostDiscoveryHistoric extends MyFragment {
     private String                  TAG = "FragmentHostDiscoveryHistoric";
     private FragmentHostDiscoveryHistoric mInstance = this;
     private Host                    mFocusedHost = null;
-    private List<AccessPoint>       HistoricAps;
-    private Session                 focusedSession = null;
+    private List<Network>           networksScanned;
+    private Network focusedSession = null;
     private MyActivity              mActivity = null;
     private RecyclerView            mRV;
     private TextView                mEmptyList;
     private RecyclerView.Adapter    RV_AdapterAp = null, RV_AdapterSessions = null, RV_AdapterHostSession = null;
 
-    public enum HistoricDetailMode  { ApHistoric, SessionsOfAp, devicesOfSession, detailSession, WiresharkHistoric, noHistoric}
+    public enum HistoricDetailMode  { ApHistoric, devicesOfSession, detailSession, WiresharkHistoric, noHistoric}
     public static final String      HOST_HISTORIC = "HostDetail", DB_HISTORIC = "HistoricDB";
     public HistoricDetailMode       mActualMode = HistoricDetailMode.noHistoric;
 
@@ -113,7 +109,7 @@ public class FragmentHostDiscoveryHistoric extends MyFragment {
         mDetailSessionLayout = rootView.findViewById(R.id.detailSessionLayout);
         mDetailSessionLayout.setVisibility(View.GONE);
 
-        /* Detail Session */
+        /* Detail Network */
         name = rootView.findViewById(R.id.title);
         date = rootView.findViewById(R.id.dateSession);
         gatewayLine = rootView.findViewById(R.id.gatewayLine);
@@ -141,18 +137,18 @@ public class FragmentHostDiscoveryHistoric extends MyFragment {
         nbrServiceDiscovered = rootView.findViewById(R.id.nbrServiceDiscovered);
     }
 
-    private void                    initHistoricFromDB() /* All Session, no filter*/{
-        HistoricAps = DBAccessPoint.getAllSessionsRecorded();
-        if (HistoricAps.isEmpty()) {
+    private void                    initHistoricFromDB() /* All Network, no filter*/{
+        networksScanned = DBNetwork.getAllAccessPoint();
+        if (networksScanned.isEmpty()) {
             setTitleToolbar("Historic", "No historic");
             mActualMode = HistoricDetailMode.noHistoric;
             mEmptyList.setVisibility(View.VISIBLE);
             mRV.setVisibility(View.GONE);
         } else {
             if (RV_AdapterAp == null) {
-                RV_AdapterAp = new AccessPointAdapter(this, HistoricAps);
+                RV_AdapterAp = new NetworksAdapter(this, networksScanned);
             }
-            setTitleToolbar("Historic", HistoricAps.size() + " wifi scanned");
+            setTitleToolbar("Historic", networksScanned.size() + " wifi scanned");
             mRV.setAdapter(RV_AdapterAp);
             mActualMode = HistoricDetailMode.ApHistoric;
             mEmptyList.setVisibility(View.GONE);
@@ -160,14 +156,14 @@ public class FragmentHostDiscoveryHistoric extends MyFragment {
     }
     private void                    initHistoricFromDB(Host mFocusedHost) {/* Search With Device In*/
         Log.d(TAG, "initHistoricFromDB for host :" + mFocusedHost.getName());
-        HistoricAps = DBSession.getAllAPWithDeviceIn(mFocusedHost);
-        if (HistoricAps.isEmpty()) {
+        networksScanned = DBNetwork.getAllAPWithDeviceIn(mFocusedHost);
+        if (networksScanned.isEmpty()) {
             mActualMode = HistoricDetailMode.noHistoric;
             mEmptyList.setVisibility(View.VISIBLE);
             mRV.setVisibility(View.GONE);
         } else {
             if (RV_AdapterAp == null) {
-                RV_AdapterAp = new AccessPointAdapter(this, HistoricAps);
+                RV_AdapterAp = new NetworksAdapter(this, networksScanned);
             }
             mRV.setAdapter(RV_AdapterAp);
             mActualMode = HistoricDetailMode.ApHistoric;
@@ -175,46 +171,30 @@ public class FragmentHostDiscoveryHistoric extends MyFragment {
         }
     }
 
-    public void                     onAccessPointFocus(AccessPoint ap) {
-        mActualMode = HistoricDetailMode.SessionsOfAp;
-        if (ap != null) {
-            List<Session> allSessionWithDeviceIn  = DBSession.getAllSessionFromApWithDeviceIn(ap.sessions(), mFocusedHost);
-            RV_AdapterSessions = new SessionAdapter(this, allSessionWithDeviceIn, ap);
-        } else {
-            ap = ((SessionAdapter)RV_AdapterSessions).getAccessPoint();
-        }
-        setTitleToolbar(ap.Ssid, ap.nbrSession + " sessions found");
-        mDetailSessionLayout.setVisibility(View.GONE);
-        mRV.setVisibility(View.VISIBLE);
-        mRV.setAdapter(RV_AdapterSessions);
-    }
-
-    public void                     onSessionFocused(final Session session) {
-        Log.d(TAG, "onSessionFocused");
+    public void                     onNetworkFocused(final Network accessPoint) {
+        Log.d(TAG, "onNetworkFocused::(" + accessPoint.Ssid + ")");
         mActualMode = HistoricDetailMode.detailSession;
         mRV.setVisibility(View.GONE);
         mDetailSessionLayout.setVisibility(View.VISIBLE);
-        if (session != null) {
-            focusedSession = session;
+        if (accessPoint != null) {
+            focusedSession = accessPoint;
         }
         if (focusedSession == null) {
             onBackPressed();
         }
         date.setText(focusedSession.getDateString());
-        if (focusedSession.name == null || focusedSession.name.isEmpty())
-            name.setVisibility(View.GONE);
+        name.setVisibility(View.GONE);
         initViewSessionFocus_Gateway(focusedSession);
         initViewSessionFocus_Devices(focusedSession);
         initViewSessionFocus_Wireshark(focusedSession);
         initViewSessionFocus_Services(focusedSession);
         setTitleToolbar(null, focusedSession.getDateString());
-        typeScan.setText("Realised with an " + focusedSession.typeScan + "scan");
         String nbrService = ((focusedSession.services == null) ? "0" :
-                focusedSession.services.size()) + " services discovered on network";
+                focusedSession.services.size()) + " services discovered on Network";
         nbrServiceDiscovered.setText(nbrService);
     }
 
-    private void                    initViewSessionFocus_Gateway(final Session session) {
+    private void                    initViewSessionFocus_Gateway(final Network session) {
         if (session.Gateway != null) {
             titleGateway.setText("Gateway: " + session.Gateway.ip);
             subtitleGateway.setText(session.Gateway.name + " - " + session.Gateway.mac);
@@ -234,7 +214,7 @@ public class FragmentHostDiscoveryHistoric extends MyFragment {
             gatewayLine.setVisibility(View.GONE);
         }
     }
-    private void                    initViewSessionFocus_Devices(final Session session) {
+    private void                    initViewSessionFocus_Devices(final Network session) {
         if (session.listDevices() != null) {
             titleDevices.setText(session.listDevices().size() + " devices decouvert");
             subtitleDevices.setText(session.nbrOs + " Os découvert");
@@ -249,7 +229,7 @@ public class FragmentHostDiscoveryHistoric extends MyFragment {
             subtitleDevices.setText("No scan performed correctly");
         }
     }
-    private void                    initViewSessionFocus_Wireshark(final Session session) {
+    private void                    initViewSessionFocus_Wireshark(final Network session) {
         if (session.SniffSessions() != null && !session.SniffSessions().isEmpty()) {
             titleWireshark.setText(session.SniffSessions().size() + " sessions sniff realise");
             int nbrSession = 0;
@@ -276,7 +256,7 @@ public class FragmentHostDiscoveryHistoric extends MyFragment {
             subtitleWireshark.setText("0 pcap recorded");
         }
     }
-    private void                    initViewSessionFocus_Services(final Session session) {
+    private void                    initViewSessionFocus_Services(final Network session) {
         if (session.services != null && !session.services.isEmpty()) {
             titleService.setText(session.services.size() + " découvert sur ce réseau");
             subtitleService.setText("Sur " + ServicesController.howManyHostTheServices(session.services)
@@ -292,7 +272,7 @@ public class FragmentHostDiscoveryHistoric extends MyFragment {
         }
     }
 
-    public void                     hostOfSessionsFocused(Session session) {
+    public void                     hostOfSessionsFocused(Network session) {
         mDetailSessionLayout.setVisibility(View.GONE);
         mRV.setVisibility(View.VISIBLE);
         mActualMode = HistoricDetailMode.devicesOfSession;
@@ -341,7 +321,7 @@ public class FragmentHostDiscoveryHistoric extends MyFragment {
                 .setAppBarLayout(mAppbar)
                 .addTitleItem("Historic settings")
                 .addItem(0, "Purge all history", R.mipmap.ic_os_filter)
-                .addItem(1, "MITM Session", R.mipmap.ic_os_filter)
+                .addItem(1, "MITM Network", R.mipmap.ic_os_filter)
                 .setItemClickListener(new BottomSheetItemClickListener() {
                     @Override
                     public void onBottomSheetItemClick(MenuItem menuItem) {
@@ -350,7 +330,7 @@ public class FragmentHostDiscoveryHistoric extends MyFragment {
                             case "Purge all history":
                                //osFilterDialog();
                                 break;
-                            case "MITM Session":
+                            case "MITM Network":
                                 showSniffSessionList();
                                 break;
                             case "Mode offline":
@@ -395,14 +375,14 @@ public class FragmentHostDiscoveryHistoric extends MyFragment {
                 return true;
             case noHistoric:
                 return true;
-            case SessionsOfAp:
-                initHistoricFromDB();
-                return false;
             case detailSession:
-                onAccessPointFocus(null);
+                if (mFocusedHost == null)
+                    initHistoricFromDB();
+                else
+                    initHistoricFromDB(mFocusedHost);
                 return false;
             case devicesOfSession:
-                onSessionFocused(null);
+                onNetworkFocused(null);
                 return false;
             case WiresharkHistoric:
                 initHistoricFromDB();

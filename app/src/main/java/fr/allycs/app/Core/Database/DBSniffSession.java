@@ -13,7 +13,7 @@ import java.util.List;
 
 import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Model.Target.Host;
-import fr.allycs.app.Model.Target.Session;
+import fr.allycs.app.Model.Target.Network;
 import fr.allycs.app.Model.Target.SniffSession;
 
 public class                        DBSniffSession {
@@ -21,13 +21,12 @@ public class                        DBSniffSession {
 
     public static SniffSession      buildSniffSession() {
         Log.d(TAG, "buildSniffSession");
-        Session session = Singleton.getInstance().actualSession;
+        Network session = Singleton.getInstance().actualSession;
         SniffSession sniffSession = new SniffSession();
         sniffSession.listDevicesSerialized = DBHost.SerializeListDevices(Singleton.getInstance().selectedHostsList);
         sniffSession.date = Calendar.getInstance().getTime();
         sniffSession.session = session;
         sniffSession.save();
-        session.isSniffed = true;
         session.SniffSessions().add(sniffSession);
         session.save();
         Log.d(TAG, sniffSession.toString());

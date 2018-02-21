@@ -1,8 +1,6 @@
 package fr.allycs.app.Model.Net;
 
-import fr.allycs.app.Model.Target.MyObject;
-
-public class                    DNSPacket extends MyObject {
+public class                    DNSPacket  {
     private String              TAG = getClass().getName();
     String                      request;	//Raw packet on Hex codification
     public byte[]               IP;		//IP Header

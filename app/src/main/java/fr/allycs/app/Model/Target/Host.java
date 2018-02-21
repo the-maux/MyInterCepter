@@ -18,17 +18,17 @@ import fr.allycs.app.Model.Unix.Os;
 @Table(name = "Device", id = "_id")
 public class                Host extends Model {
     private String          TAG = "Host";
-    @Column(name ="ip")
+    @Column(name = "ip")
     public String           ip = "Unknown";
-    @Column(name ="name")
+    @Column(name = "name")
     public String           name = "Unknown";
-    @Column(name ="mac")
+    @Column(name = "mac")
     public String           mac = "Unknown";
-    @Column(name ="os")
+    @Column(name = "os")
     public String           os = "Unknown";
-    @Column(name ="osDetail")
+    @Column(name = "osDetail")
     public String           osDetail = "Unknown";
-    @Column(name ="vendor")
+    @Column(name = "vendor")
     public String           vendor = "Unknown";
     @Column(name = "dump")
     public String           dumpInfo;
@@ -40,15 +40,18 @@ public class                Host extends Model {
     public boolean          TooManyFingerprintMatchForOs = false;
     @Column(name = "NetworkDistance")
     public String           NetworkDistance = "Unknow";
+    @Column(name = "isSecureComputer")
+    public boolean          isSecureComputer = false;
+
     private ArrayList<Service> ServiceActivOnHost = new ArrayList<>();
-    public List<Session>    Session() {
-        return getMany(Session.class, "listDevices");
+    public List<Network>    Session() {
+        return getMany(Network.class, "listDevices");
     }
 
     public boolean          selected = false;
     public boolean          isItMyDevice = false;
     public Os               osType;
-    public State            state = State.FILTERED;
+    public State            state = State.OFFLINE;
 
     private Ports           listPorts = null;
     public Ports            Ports() {
@@ -66,11 +69,11 @@ public class                Host extends Model {
     public void             updateServiceHost(Service service) {
         ServiceActivOnHost.add(service);
     }
-    
+
     public String           getName() {
         return ((name.isEmpty() || name.contains("Unknown")) ? ip : name);
     }
-    
+
     public void             setName(String name) {
         this.name = name;
     }
@@ -107,12 +110,8 @@ public class                Host extends Model {
         return ip + ":" + mac;
     }
 
-    
-    /*
-        TODO when BDD is false and new scan is true don't save
-    */
     public enum         State   {
-        OFFLINE(0), ONLINE(1), FILTERED(2);
+        OFFLINE(0), ONLINE(1), FILTERED(2), UNKNOW(3);
 
 
         private int value;

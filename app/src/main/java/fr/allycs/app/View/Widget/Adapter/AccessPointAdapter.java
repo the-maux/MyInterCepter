@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import fr.allycs.app.Model.Target.AccessPoint;
+import fr.allycs.app.Model.Target.Network;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.HostDiscovery.FragmentHostDiscoveryHistoric;
 import fr.allycs.app.View.Behavior.MyGlideLoader;
@@ -16,11 +16,11 @@ import fr.allycs.app.View.Widget.Adapter.Holder.AccessPointHolder;
 public class                    AccessPointAdapter extends RecyclerView.Adapter<AccessPointHolder> {
     private String              TAG = "AccessPointAdapter";
     private FragmentHostDiscoveryHistoric mFragment;
-    private List<AccessPoint>   mSessions;
+    private List<Network>   mSessions;
 
     public enum typeFragment {  HostDetail, HistoricDB }
 
-    public                      AccessPointAdapter(FragmentHostDiscoveryHistoric fragment, List<AccessPoint> sessions) {
+    public                      AccessPointAdapter(FragmentHostDiscoveryHistoric fragment, List<Network> sessions) {
         this.mFragment = fragment;
         this.mSessions = sessions;
     }
@@ -31,16 +31,16 @@ public class                    AccessPointAdapter extends RecyclerView.Adapter<
     }
 
     public void                 onBindViewHolder(AccessPointHolder holder, int position) {
-        final AccessPoint ap = mSessions.get(position);
+        final Network ap = mSessions.get(position);
         holder.ssid.setText(ap.Ssid);
-        holder.ssid_subtitle.setText(ap.sessions().size() + " session" +
-                ((ap.sessions().size()) >= 2 ? "s" : "") + " recorded");
+        String subtitile = "scanned " + ap.nbrScanned + " times" +
+                ((ap.nbrScanned) >= 2 ? "s" : "") + " recorded";
+        holder.ssid_subtitle.setText(subtitile);
         MyGlideLoader.loadDrawableInImageView(mFragment.getContext(), R.mipmap.ic_wifi_round, holder.wifi_logo, false);
         MyGlideLoader.loadDrawableInImageView(mFragment.getContext(), R.mipmap.ic_forward_round, holder.forward, false);
         View.OnClickListener onClick = new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
-                mFragment.onAccessPointFocus(ap);
+               // mFragment.onAccessPointFocus(ap);
             }
         };
         holder.forward.setOnClickListener(onClick);

@@ -17,13 +17,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.allycs.app.View.Behavior.Fragment.MyFragment;
-import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Model.Target.AccessPoint;
 import fr.allycs.app.Model.Target.Host;
-import fr.allycs.app.Model.Target.Session;
+import fr.allycs.app.Model.Target.Network;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
+import fr.allycs.app.View.Behavior.Fragment.MyFragment;
 
 
 public class                    HostDetailFragment extends MyFragment {
@@ -41,13 +40,13 @@ public class                    HostDetailFragment extends MyFragment {
     private HostDiscoveryActivity mActivity;
 
 
-    private Session             focusedSession = null;
+    private Network focusedSession = null;
 
     public View                 onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_hostdetail, container, false);
         initXml(rootView);
         if (mSingleton.selectedHostsList == null) {
-            Snackbar.make(mCoordinatorLayout, "No target saved, You need to scan the network", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mCoordinatorLayout, "No target saved, You need to scan the Network", Snackbar.LENGTH_LONG).show();
             startActivity(new Intent(getActivity(), HostDiscoveryActivity.class));
             getActivity().finish();
         }

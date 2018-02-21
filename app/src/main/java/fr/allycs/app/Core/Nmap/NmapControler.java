@@ -17,6 +17,7 @@ import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Core.Configuration.Utils;
 import fr.allycs.app.Core.Network.Discovery.NetworkDiscoveryControler;
 import fr.allycs.app.Model.Target.Host;
+import fr.allycs.app.Model.Target.Network;
 import fr.allycs.app.View.Activity.Scan.NmapOutputFragment;
 
 /*
@@ -61,10 +62,11 @@ public class                        NmapControler {
     private List<Host>              mHost = null;
     private Date                    startParsing;
 
+
     /*
     **   HostDiscoveryActivity
     */
-    public                          NmapControler(List<String> ips, NetworkDiscoveryControler networkDiscoveryControler) {/* Parsing mode */
+    public                          NmapControler(List<String> ips, NetworkDiscoveryControler networkDiscoveryControler, Network ap) {/* Parsing mode */
         String NMAP_ARG_SCAN = " -PN -T4 -sS -sU " +
                 "--script nbstat.nse,dns-service-discovery " +
                 "--min-parallelism 100 " +
@@ -82,7 +84,7 @@ public class                        NmapControler {
         String cmd = PATH_NMAP + NMAP_ARG_SCAN + hostCmd.toString();
         Log.d(TAG, "CMD:["+ cmd + "]");
         setTitleToolbar(null, "Scanning " + ips.size() + " devices");
-        hostDiscoveryFromNmap(cmd, hostsMAC.toString());
+        hostDiscoveryFromNmap(cmd, hostsMAC.toString(), ap);
     }
 
     /*
@@ -93,7 +95,7 @@ public class                        NmapControler {
         mIsLiveDump = true;
     }
 
-    private void                    hostDiscoveryFromNmap(final String cmd, final String listMacs) {
+    private void                    hostDiscoveryFromNmap(final String cmd, final String listMacs, final Network ap) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -114,7 +116,7 @@ public class                        NmapControler {
                     String FullDUMP = dumpOutputBuilder.toString().substring(1);
                     Log.d(TAG, "\t\t LastLine[" + tmp + "]");
                     startParsing = Calendar.getInstance().getTime();
-                    new NmapHostDiscoveryParser(mInstance, listMacs, FullDUMP);
+                    new NmapHostDiscoveryParser(mInstance, listMacs, FullDUMP, ap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -208,7 +210,6 @@ public class                        NmapControler {
 
     public void                     onHostActualized(ArrayList<Host> hosts) {
         Log.d(TAG, "All node was parsed in :" + Utils.TimeDifference(startParsing));
-
         mNnetworkDiscoveryControler.onNmapScanOver(hosts);
     }
 

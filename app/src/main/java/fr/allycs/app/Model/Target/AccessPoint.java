@@ -10,6 +10,7 @@ import java.util.List;
 
 import fr.allycs.app.Core.Configuration.Singleton;
 
+@Deprecated
 @Table(name = "AccessPoint", id = "_id")
 public class                AccessPoint extends Model {
     public static String    TAG = "AccessPoint";
@@ -18,17 +19,17 @@ public class                AccessPoint extends Model {
     public String           Ssid;
     public int              nbrSession;
 
-    public List<Session>    sessions() {
-        List<Session> sessions = getMany(Session.class, "AccessPoint");
+    public List<Network>    sessions() {
+        List<Network> sessions = getMany(Network.class, "AccessPoint");
         nbrSession = sessions.size();
         return sessions;
     }
 
     public void             dumpSessions() {
         if (Singleton.getInstance().DebugMode) {
-            for (Session session : sessions()) {
+            for (Network session : sessions()) {
                 if (session.Gateway == null) {
-                    Log.d(TAG, "Session is empty");
+                    Log.d(TAG, "Network is empty");
                 } else {
                     Log.d(TAG, "\t " + Ssid + " : " + session.Gateway.ip + "-[" + session.Gateway.mac + "]");
                     Log.d(TAG, "\t\t" + session.toString());

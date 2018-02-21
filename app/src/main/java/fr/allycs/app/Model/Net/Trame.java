@@ -2,10 +2,9 @@ package fr.allycs.app.Model.Net;
 
 import android.util.Log;
 
-import fr.allycs.app.Model.Target.MyObject;
 import fr.allycs.app.R;
 
-public class               Trame extends MyObject {
+public class               Trame  {
     public String          TAG = "Trame";
     public int             offsett = 0, verbose;
     public String          time;

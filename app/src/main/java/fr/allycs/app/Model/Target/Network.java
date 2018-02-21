@@ -13,55 +13,56 @@ import java.util.Locale;
 import fr.allycs.app.Core.Database.DBHost;
 import fr.allycs.app.Model.Net.Service;
 
-@Table(name = "Session", id = "_id")
-public class                Session extends Model {
-    public static String    NAME_COLUMN = "Session";
+@Table(name = "Network", id = "_id")
+public class Network extends Model {
+    public static String    NAME_COLUMN = "Network";
 
-    @Column(name = "Date")
-    public java.util.Date   Date;
+    @Column(name = "Ssid")
+    public String           Ssid;
+    @Column(name = "lastScanDate")
+    public java.util.Date   lastScanDate;
+    @Column(name = "nbrScanned")
+    public int              nbrScanned;
     @Column(name = "Gateway")
     public Host             Gateway;
     @Column(name = "OsNumber")
     public int              nbrOs;
-    @Column(name = "typeScan")
-    public String           typeScan;
-    @Column(name = "name")
-    public String           name;
-    @Column(name = "isSniffed")
-    public boolean           isSniffed = false;
     @Column(name = "service")
     public List<Service>    services;
-    @Column(name = "AccessPoint")
-    public AccessPoint      Ap;
 
     @Column(name = "Devices")
     public String           listDevicesSerialized;
     private List<Host>      listDevices = null;
-    /**
-     * Create the ManyToMany relation
-     */
     public List<Host>       listDevices() {
         if (listDevices == null) {
             listDevices = DBHost.getListFromSerialized(listDevicesSerialized);
-            Log.d(NAME_COLUMN, "liste Session deserialized " + listDevices.size() + " devices");
+            Log.d(NAME_COLUMN, "liste Network deserialized " + listDevices.size() + " devices");
         }
         return listDevices;
     }
 
     public List<SniffSession> SniffSessions() {
-        return getMany(SniffSession.class, "Session");
+        return getMany(SniffSession.class, "Network");
     }
 
     public String           toString() {
         return new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE)
-                .format(Date) +" " + listDevices().size() + " Devices Connected";
+                .format(lastScanDate) +" " + listDevices().size() + " Devices Connected";
     }
 
     public String           getDateString() {
-        return new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE).format(Date);
+        return new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE).format(lastScanDate);
     }
 
-    public                  Session() {
+    public Host             getHostFromMac(String mac) {
+        for (Host host : listDevices()) {
+            if (host.mac.contains(mac))
+                return host;
+        }
+        return null;
+    }
+
+    public Network() {
         super();
     }
 }

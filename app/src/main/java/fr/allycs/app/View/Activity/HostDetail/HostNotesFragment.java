@@ -11,11 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import fr.allycs.app.View.Behavior.Fragment.MyFragment;
-import fr.allycs.app.Core.Configuration.Singleton;
 import fr.allycs.app.Model.Target.Host;
 import fr.allycs.app.R;
 import fr.allycs.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
+import fr.allycs.app.View.Behavior.Fragment.MyFragment;
 
 
 public class                    HostNotesFragment extends MyFragment {
@@ -38,7 +37,7 @@ public class                    HostNotesFragment extends MyFragment {
         mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
         mCentral_layout = rootView.findViewById(R.id.central_layout);
         if (mSingleton.selectedHostsList == null) {
-            Snackbar.make(mCoordinatorLayout, "No target saved, You need to scan the network", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mCoordinatorLayout, "No target saved, You need to scan the Network", Snackbar.LENGTH_LONG).show();
             startActivity(new Intent(getActivity(), HostDiscoveryActivity.class));
             getActivity().onBackPressed();
         } else {

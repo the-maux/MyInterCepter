@@ -42,7 +42,7 @@ public class FragmentHostDiscoverySettings extends SettingsFragment {
                 null);
 
         addItemMenu("Scan every time",
-                "Start a new scan of the network without loading previous one from database",
+                "Start a new scan of the Network without loading previous one from database",
                 new Thread(new Runnable() {
                     @Override
                     public void run() {

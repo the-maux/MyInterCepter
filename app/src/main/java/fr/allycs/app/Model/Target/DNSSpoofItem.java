@@ -1,6 +1,6 @@
 package fr.allycs.app.Model.Target;
 
-public class            DNSSpoofItem extends MyObject {
+public class            DNSSpoofItem  {
     public String       ip;
     public String       domain;
 
