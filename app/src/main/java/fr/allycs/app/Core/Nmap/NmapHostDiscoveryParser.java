@@ -139,7 +139,6 @@ class NmapHostDiscoveryParser {
     private void                    getIpHOSTNAME(String line, Host host) {
         /* nbl037421.hq.fr.corp.leroymerlin.com (10.16.187.230) */
         if (line.contains("(")) {
-            Log.d(TAG, "getIpHOSTNAME:" + line);
             host.ip = line.split(" ")[1].replace("(", "").replace(")", "");
             host.name = line.split(" ")[0];
         } else {

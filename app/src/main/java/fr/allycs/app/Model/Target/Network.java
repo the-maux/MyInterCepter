@@ -66,11 +66,11 @@ public class Network extends Model {
         List<Host> hosts = listDevices();
         for (Host host : hosts) {
             if (host.mac.contains(mac)) {
-                Log.d(NAME_COLUMN, "getHostFromMac(" + host.toString() + ") in list of " + listDevices().size());
+               // Log.d(NAME_COLUMN, "getHostFromMac(" + host.toString() + ") in list of " + listDevices().size());
                 return host;
             }
         }
-        Log.d(NAME_COLUMN, "not found");
+       // Log.d(NAME_COLUMN, "not found");
         throw new UnknownHostException("Not host found in BDD with this mac[" + mac + "]");
     }
 
