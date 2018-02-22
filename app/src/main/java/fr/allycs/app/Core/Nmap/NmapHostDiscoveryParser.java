@@ -19,7 +19,8 @@ import fr.allycs.app.Model.Unix.Os;
 class NmapHostDiscoveryParser {
     private String                  TAG = "NmapHostDiscoveryParser";
     private Singleton               mSingleton = Singleton.getInstance();
-    private ArrayList<Host>         hosts = new ArrayList<>();
+ //   private ArrayList<Host>         hosts = new ArrayList<>();
+    private Network                 mNetwork;
     private NmapControler           mNmapControler;
     private int                     LENGTH_NODE, NBR_PARSED_NODE = 0;
 
@@ -30,6 +31,7 @@ class NmapHostDiscoveryParser {
         String[] HostNmapDump = NmapDump.split("Nmap scan report for ");
         LENGTH_NODE = HostNmapDump.length-1;
         ExecutorService service = Executors.newCachedThreadPool();
+        mNetwork = ap;
         Log.i(TAG, "{{{{{{{{{{{{{" + HostNmapDump[0] + "}}}}}}}}}}}}}}}}}");
         for (int i = 1; i < HostNmapDump.length; i++) {/*First node is the nmap preambule*/
             service.execute(dispatcher(HostNmapDump[i], macs, ap));
@@ -57,10 +59,10 @@ class NmapHostDiscoveryParser {
                         hostInList.name = host.name;
                     if (!Fingerprint.isItMyDevice(host)) {
                         Log.d(TAG, "buildHostFromNmapDump on " + host.toString());
-                        buildHostFromNmapDump(node, hostInList, hosts);
+                        buildHostFromNmapDump(node, hostInList);
                     } else {
 //                        Log.d(TAG, "myDevice on " + host.toString());
-                        initIfItsMyDevice(hostInList, hosts);
+                        initIfItsMyDevice(hostInList);
                     }
                 } catch (UnknownHostException e) {
                     Log.e(TAG, "UnknowHost");
@@ -74,7 +76,7 @@ class NmapHostDiscoveryParser {
         };
     }
 
-    private void                    buildHostFromNmapDump(String nmapStdout, Host host, ArrayList<Host> hosts) throws UnknownHostException {
+    private void                    buildHostFromNmapDump(String nmapStdout, Host host) throws UnknownHostException {
         String[] nmapStdoutHost = nmapStdout.split("\n");
         StringBuilder dump = new StringBuilder("");
         for (int i = 0; i < nmapStdoutHost.length; i++) {
@@ -116,15 +118,15 @@ class NmapHostDiscoveryParser {
         host.mac = host.mac.toUpperCase();
         if (host.Notes == null)
             host.Notes = "";
-        host.Notes = host.Notes + "-----------------------\n" +
-                host.dumpInfo + '\n' +
-                ((host.Ports() == null) ? " No Port detected ? " : host.Ports().getDump());
+        if (Fingerprint.isItWindows(host)) {
+            host.osType = Os.Windows;
+        }
+        host.Notes = host.dumpInfo + '\n' +
+                    ((host.Ports() == null) ? " No Port detected ? " : host.Ports().getDump());
         host.save();
-        Log.d(TAG, "saving host:" + host.toString());
-        hosts.add(host);
     }
 
-    private void                    initIfItsMyDevice(Host host, ArrayList<Host> hosts) {
+    private void                    initIfItsMyDevice(Host host) {
         host.mac = mSingleton.network.mac;
         host.ip = mSingleton.network.myIp;
         host = DBHost.saveOrGetInDatabase(host);
@@ -133,7 +135,6 @@ class NmapHostDiscoveryParser {
         host.osType = Os.Android;
         host.isItMyDevice = true;
         host.save();
-        hosts.add(host);
     }
 
     private void                    getIpHOSTNAME(String line, Host host) {
@@ -200,8 +201,8 @@ class NmapHostDiscoveryParser {
     private void                    nmapIsTooLong() {
         Log.d(TAG, "Some node wasn't parsed, inintializing..");
         Log.d(TAG, "Analyzing (" + NBR_PARSED_NODE + "/" + LENGTH_NODE + ") devices scanned");
-        Collections.sort(hosts, Fingerprint.getComparator());
-        Iterator<Host> iter = hosts.iterator();
+        Collections.sort(mNetwork.listDevices(), Fingerprint.getComparator());
+        Iterator<Host> iter = mNetwork.listDevices().iterator();
         while (iter.hasNext()) {//ConcurrentModificationException
             Host host = iter.next();
             if (host.osType == Os.Unknow) {
@@ -209,13 +210,14 @@ class NmapHostDiscoveryParser {
                 Log.d(TAG, "-------------");
             }
         }
-        mNmapControler.onHostActualized(hosts);
+        mNmapControler.onHostActualized(mNetwork.listDevices());
     }
 
     private void                    onAllNodeParsed() {
         Log.d(TAG, "AllNode parsed, inintializing..");
-        Collections.sort(hosts, Fingerprint.getComparator());
-        Iterator<Host> iter = hosts.iterator();
+        Collections.sort(mNetwork.listDevices(), Fingerprint.getComparator());
+        //TODO: add offline devices
+        Iterator<Host> iter = mNetwork.listDevices().iterator();
         while (iter.hasNext()) {//ConcurrentModificationException
             Host host = iter.next();
             if (host.osType == Os.Unknow) {
@@ -223,7 +225,7 @@ class NmapHostDiscoveryParser {
                 Log.d(TAG, "-------------");
             }
         }
-        mNmapControler.onHostActualized(hosts);
+        mNmapControler.onHostActualized(mNetwork.listDevices());
     }
 
 }

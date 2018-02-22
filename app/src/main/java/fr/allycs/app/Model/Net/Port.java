@@ -14,6 +14,21 @@ public class            Port {
     public State        state;
     public Host         host;
 
+    public Port(String line) {
+        String[] dumpSplitetd = line.trim().split(" ");
+        this.state = OPEN;
+        this.port = dumpSplitetd[0];
+        this.protocol = dumpSplitetd[1];
+    }
+
+    /*  Exemple port: 22/tcp   closed ssh */
+    public Port(String port_proto, String state, String protocolName) {
+        super();
+        //Log.i(TAG, "Building:\t" + port_proto + "  " + state + " -> " + protocolName);
+        this.port = port_proto;
+        this.state = State.valueOf(state, 0, 0);
+        this.protocol = protocolName;
+    }
 
     public enum         State   {
         CLOSED(0), OPEN(1), FILTERED(2), UNFILTERED(3), OPEN_FILTERED(4), CLOSED_FILTERED(5), UNKNOW(6);
@@ -46,9 +61,9 @@ public class            Port {
                     return FILTERED;
                 case "UNFILTERED":
                     return UNFILTERED;
-                case "OFFLINE":
+                case "CLOSED":
                     return CLOSED;
-                case "ONLINE":
+                case "OPEN":
                     return OPEN;
                 default:
                     return UNKNOW;
@@ -59,7 +74,6 @@ public class            Port {
             return value;
         }
 
-        @Override
         public String           toString() {
             switch (valueOf(value)) {
                 case OPEN_FILTERED:
@@ -71,29 +85,15 @@ public class            Port {
                 case UNFILTERED:
                     return "UNFILTERED";
                 case CLOSED:
-                    return "OFFLINE";
+                    return "CLOSED";
                 case OPEN:
-                    return "ONLINE";
+                    return "OPEN";
                 default:
                     return "UNKNOW";
             }
         }
     }
-    public Port(String line) {
-        String[] dumpSplitetd = line.trim().split(" ");
-        this.state = OPEN;
-        this.port = dumpSplitetd[0];
-        this.protocol = dumpSplitetd[1];
-    }
 
-    /*  Exemple port: 22/tcp   closed ssh */
-    public Port(String port_proto, String state, String protocolName) {
-        super();
-        //Log.i(TAG, "Building:\t" + port_proto + "  " + state + " -> " + protocolName);
-        this.port = port_proto;
-        this.state = State.valueOf(state, 0, 0);
-        this.protocol = protocolName;
-    }
 
     public int          getPort() {
         return Integer.valueOf(port.split("/")[0]);

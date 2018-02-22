@@ -8,7 +8,6 @@ import com.activeandroid.annotation.Table;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import fr.allycs.app.Core.Nmap.Fingerprint;
@@ -102,7 +101,7 @@ public class                Host extends Model {
         else
             Log.d(TAG, "Ports Not found...");
         if (osType == Os.Unknow)
-            Log.d(TAG, "isItWindowsPort() => " + Fingerprint.isItWindows(this));
+            Log.d(TAG, toString() + " isItWindowsPort() => " + Fingerprint.isItWindows(this));
         Log.i(TAG, "END DUMP ---------");
     }
 
@@ -112,7 +111,6 @@ public class                Host extends Model {
 
     public enum         State   {
         OFFLINE(0), ONLINE(1), FILTERED(2), UNKNOW(3);
-
 
         private int value;
         private static Map map = new HashMap<>();

@@ -32,8 +32,8 @@ public class Network extends Model {
 
     @Column(name = "Devices")
     public String           listDevicesSerialized;
-    private List<Host>      listDevices = null;
-    public List<Host>       listDevices() {
+    private ArrayList<Host> listDevices = null;
+    public ArrayList<Host>  listDevices() {
         if (listDevices == null) {
             if (listDevicesSerialized == null) {
                 listDevices = new ArrayList<>();

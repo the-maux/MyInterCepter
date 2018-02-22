@@ -74,8 +74,8 @@ public class                                DBHost {
         return dump.toString();
     }
 
-    public static List<Host>                getListFromSerialized(String listSerializedId) {
-        List<Host> hosts = new ArrayList<>();
+    public static ArrayList<Host>            getListFromSerialized(String listSerializedId) {
+        ArrayList<Host> hosts = new ArrayList<>();
         for (String id : listSerializedId.split(";")) {
             Host device = findDeviceById(id.replace(";", ""));
             try {

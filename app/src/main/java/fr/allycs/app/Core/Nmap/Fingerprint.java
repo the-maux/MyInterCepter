@@ -29,10 +29,6 @@ public class                            Fingerprint {
             host.osType = Os.Unknow;
             return;
         }
-        if (isItWindows(host)) {
-            host.osType = Os.Windows;
-            return;
-        }
         InfoDevice = InfoDevice.toLowerCase();
         if (host.isItMyDevice) {
             host.osType = Os.Android;
@@ -109,7 +105,7 @@ public class                            Fingerprint {
     public static void                  setOsIcon(Context context, Host host,  ImageView osImageView) {
         if (host != null && host.osType != null) {
             if (host.state == Host.State.FILTERED && host.vendor.contains("Unknown")) {
-                MyGlideLoader.loadDrawableInCircularImageView(context, R.drawable.secure_computer2, osImageView);
+                MyGlideLoader.loadDrawableInCircularImageView(context, R.mipmap.ic_secure2, osImageView);
                 return ;
             }
             setOsIcon(context, host.osType, osImageView);
@@ -191,9 +187,9 @@ public class                            Fingerprint {
                         return -1;
                 } else {
                     if (o1.state == Host.State.ONLINE || o2.state == Host.State.OFFLINE)
-                        return 1;
-                    else if (o2.state == Host.State.ONLINE || o1.state == Host.State.OFFLINE)
                         return -1;
+                    else if (o2.state == Host.State.ONLINE || o1.state == Host.State.OFFLINE)
+                        return 1;
                 }
                 return 0;
             }
