@@ -4,7 +4,7 @@ import fr.allycs.app.Model.Net.Port;
 
 public enum Os {
     Windows2000, WindowsXP, Windows, Windows7_8_10,
-    Cisco, QUANTA,
+    Cisco, QUANTA, Gateway,
     Raspberry,
     Bluebird,
     Apple, Ios,

@@ -91,7 +91,7 @@ public class                        NmapControler {
     **   NmapActivity
     */
     public                          NmapControler(boolean execureAllCommandTogether) {/*Live mode*/
-        initMenu();
+        initMenuOptionScan();
         mIsLiveDump = true;
     }
 
@@ -124,32 +124,65 @@ public class                        NmapControler {
         }).start();
     }
 
-    private void                    initMenu() {
+    private void                    initMenuOptionScan() {
         mMenuCommand = new ArrayList<>();
         mNmapParams = new HashMap<>();
-        mMenuCommand.add("Ping scan");
-        mNmapParams.put(mMenuCommand.get(0), " -sn");
+        mMenuCommand.add("");
+        mNmapParams.put(mMenuCommand.get(0), "");
         mMenuCommand.add("Quick scan");
-        mNmapParams.put(mMenuCommand.get(1), " -T4 -F");
-        mMenuCommand.add("Quick scan plus");
-        mNmapParams.put(mMenuCommand.get(2), " -sV -T4 -O -F --version-light");
-        mMenuCommand.add("Quick traceroute");
-        mNmapParams.put(mMenuCommand.get(3), " -sn --traceroute");
+        mNmapParams.put(mMenuCommand.get(1), " -T4 -F -v ");
         mMenuCommand.add("Regular scan");
-        mNmapParams.put(mMenuCommand.get(4), " ");
+        mNmapParams.put(mMenuCommand.get(2), " -PN -T4 -sS -sU -v " +
+                "--script nbstat.nse,dns-service-discovery " +
+                "--min-parallelism 100 " +
+                "-p T:21,T:22,T:23,T:25,T:80,T:110,T:135,T:139,T:3128,T:443,T:445,U:53,U:3031,U:5353  ");
+        mMenuCommand.add("");
+        mNmapParams.put(mMenuCommand.get(3), "");
+        mMenuCommand.add("Os fingerprint");
+        mNmapParams.put(mMenuCommand.get(4), " -O -v ");
         mMenuCommand.add("Intrusive scan");
         mNmapParams.put(mMenuCommand.get(5), " -sS -sU -T4 -A -v -PE -PP -PS80,443 -PA3389 -PU40125 -PY -g 53 ");
+        mMenuCommand.add("Light service discovery");
+        mNmapParams.put(mMenuCommand.get(6), " -sV --version-intensity 5 ");
         mMenuCommand.add("Intense Scan");
-        mNmapParams.put(mMenuCommand.get(6), " -T4 -A -v");
+        mNmapParams.put(mMenuCommand.get(7), " -T4 -A -v");
         mMenuCommand.add("Intense scan plus UDP");
-        mNmapParams.put(mMenuCommand.get(7), " -sS -sU -T4 -A -v");
+        mNmapParams.put(mMenuCommand.get(8), " -sV -sS -sU -T4 -A -v ");
         mMenuCommand.add("Intense scan, all TCP ports");
-        mNmapParams.put(mMenuCommand.get(8), " -p 1-65535 -T4 -A -v");
-        mMenuCommand.add("Intense scan, no ping");
-        mNmapParams.put(mMenuCommand.get(9), " -T4 -A -v -Pn ");
-        mMenuCommand.add("Basic Host discovery");
-        mNmapParams.put(mMenuCommand.get(10), " -O -v ");
+        mNmapParams.put(mMenuCommand.get(9), " -sV -p 1-65535 -T4 -A -v ");
+        mMenuCommand.add("Agressive service discovery");
+        mNmapParams.put(mMenuCommand.get(10), " -sV --version-intensity 0 ");
+        mMenuCommand.add("Ping scan");
+        mNmapParams.put(mMenuCommand.get(11)," -sn -v " );
+        mMenuCommand.add("Traceroute");
+        mNmapParams.put(mMenuCommand.get(12), " -sn --traceroute -v ");
+    }
 
+    private void                    initMenuScript() {
+        ArrayList<String> mMenuCommandScript = new ArrayList<>();
+        Map<String, String> mNmapParamsScript = new HashMap<>();
+        mMenuCommandScript.add("Nbstat");
+        mNmapParamsScript.put(mMenuCommandScript.get(0), " -PN -T4 -sS -sU -v --script nbstat.nse " +
+                "-p T:21,T:22,T:23,T:25,T:80,T:110,T:135,T:139,T:3128,T:443,T:445,U:53,U:3031,U:5353  ");
+        mMenuCommandScript.add("");
+        mNmapParamsScript.put(mMenuCommandScript.get(1), " -PN -T4 -sS -sU -v --script dns-service-discovery " +
+                "-p T:21,T:22,T:23,T:25,T:80,T:110,T:135,T:139,T:3128,T:443,T:445,U:53,U:3031,U:5353  ");
+        mMenuCommandScript.add("Heartbleed check");
+        mNmapParamsScript.put(mMenuCommandScript.get(2), " -sV -p 443 –script=ssl-heartbleed.nse ");
+        mMenuCommandScript.add("Samba search");
+        mNmapParamsScript.put(mMenuCommandScript.get(3), " -sV --script=smb* ");
+        mMenuCommandScript.add("Bruteforcing subdomaine");
+        mNmapParamsScript.put(mMenuCommandScript.get(4), " -p 80 --script dns-brute.nse ");//TODO only domain, not ip
+        mMenuCommandScript.add("Geoloc traceroute");
+        mNmapParamsScript.put(mMenuCommandScript.get(5), " --traceroute --script traceroute-geolocation.nse ");
+        mMenuCommandScript.add("Agressive Http fingerprint");
+        mNmapParamsScript.put(mMenuCommandScript.get(6), " --script http-enum ");
+        mMenuCommandScript.add("Search for http hostname");
+        mNmapParamsScript.put(mMenuCommandScript.get(7), " --script http-title -sV -p 80 ");
+        mMenuCommandScript.add("Samba os discovery");
+        mNmapParamsScript.put(mMenuCommandScript.get(8), " -p 445 --script smb-os-discovery");
+        mMenuCommandScript.add("Http headers");
+        mNmapParamsScript.put(mMenuCommandScript.get(9), " -sV --script=http-headers ");
     }
 
     private String                  buildCommand() {
@@ -192,7 +225,7 @@ public class                        NmapControler {
                             if (!tmp.isEmpty()) {
                                 if (tmp.charAt(0) == '\n')
                                     tmp = tmp.substring(1);
-                                nmapOutputFragment.flushOutput(tmp + '\n', progressBar);
+                                nmapOutputFragment.flushOutput(tmp + '\n', null);
                             }
                         }
                         dumpOutputBuilder.append(tmp);

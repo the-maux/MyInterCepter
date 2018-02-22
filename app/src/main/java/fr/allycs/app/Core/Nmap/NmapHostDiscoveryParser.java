@@ -121,6 +121,9 @@ class NmapHostDiscoveryParser {
         if (Fingerprint.isItWindows(host)) {
             host.osType = Os.Windows;
         }
+        if (Fingerprint.isItMyGateway(host)) {
+            host.osType = Os.Gateway;
+        }
         host.Notes = host.dumpInfo + '\n' +
                     ((host.Ports() == null) ? " No Port detected ? " : host.Ports().getDump());
         host.save();

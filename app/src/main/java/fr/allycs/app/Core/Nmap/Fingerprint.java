@@ -102,6 +102,11 @@ public class                            Fingerprint {
         return host.isItMyDevice;
     }
 
+    public static boolean               isItMyGateway(Host host) {
+        return host.ip.contentEquals(Singleton.getInstance().network.myIp);
+
+    }
+
     public static void                  setOsIcon(Context context, Host host,  ImageView osImageView) {
         if (host != null && host.osType != null) {
             if (host.state == Host.State.FILTERED && host.vendor.contains("Unknown")) {
@@ -158,6 +163,9 @@ public class                            Fingerprint {
                 break;
             case Ps4:
                 ImageRessource = R.drawable.ps4;
+                break;
+            case Gateway:
+                ImageRessource = R.drawable.router1;
                 break;
             case Unknow:
                 ImageRessource = R.mipmap.cyber_security5_rounded2;

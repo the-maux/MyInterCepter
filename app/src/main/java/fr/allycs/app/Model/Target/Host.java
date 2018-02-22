@@ -78,7 +78,7 @@ public class                Host extends Model {
     }
 
     public boolean          equals(Object obj) {
-        return mac.equals(((Host) obj).mac);
+        return mac.contains(((Host) obj).mac);
     }
 
     public void             dumpMe(ArrayList<Host> selectedHostsList) {
