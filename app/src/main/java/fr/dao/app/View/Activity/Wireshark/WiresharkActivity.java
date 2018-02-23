@@ -89,7 +89,7 @@ public class                    WiresharkActivity extends SniffActivity {
         mFab =  findViewById(R.id.fab);
         mFab.setOnClickListener(onclickFab());
         MyGlideLoader.loadDrawableInImageView(this, R.drawable.wireshark, (ImageView) findViewById(R.id.OsImg), true);
-        findViewById(R.id.script).setOnClickListener(onClickHistory());
+        findViewById(R.id.history).setOnClickListener(onClickHistory());
     }
 
     private void                initFragment(MyFragment fragment) {

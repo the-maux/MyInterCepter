@@ -67,8 +67,8 @@ public class                    NmapActivity extends SniffActivity {
         mProgressBar = findViewById(R.id.progressBar);
         mSettingsMenu = findViewById(R.id.settingsMenu);
         MonitorInoptionTheTarget = findViewById(R.id.targetMonitor);
-        mScript = findViewById(R.id.script);
-        mScanType = findViewById(R.id.scanType);
+        mScript = findViewById(R.id.history);
+        mScanType = findViewById(R.id.searchView);
         mNmapConfEditorLayout = findViewById(R.id.nmapConfEditorLayout);
         nmapConfLayout = findViewById(R.id.nmapConfLayout);
         mFab = findViewById(R.id.fab);

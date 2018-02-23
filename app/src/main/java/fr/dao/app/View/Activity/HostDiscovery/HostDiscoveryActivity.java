@@ -82,7 +82,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
         mAddHostBtn = findViewById(R.id.action_add_host);
-        mSettingsBtn = findViewById(R.id.script);
+        mSettingsBtn = findViewById(R.id.history);
         mSearchView = findViewById(R.id.searchView);
         mToolbar = findViewById(R.id.toolbar2);
         mTabs = findViewById(R.id.tabs);

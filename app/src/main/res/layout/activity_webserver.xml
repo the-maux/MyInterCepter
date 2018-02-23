@@ -46,7 +46,7 @@
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toTopOf="@+id/tabs"
                 app:layout_constraintLeft_toRightOf="@+id/OsImg"
-                app:layout_constraintRight_toLeftOf="@+id/script"
+                app:layout_constraintRight_toLeftOf="@+id/history"
                 app:layout_constraintTop_toTopOf="parent"
                 app:subtitle="Spoof any website !"
                 app:title="Webserver spoofing">
@@ -54,7 +54,7 @@
             </android.support.v7.widget.Toolbar>
 
             <ImageButton
-                android:id="@+id/script"
+                android:id="@+id/history"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"

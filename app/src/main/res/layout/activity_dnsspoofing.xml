@@ -58,12 +58,12 @@
                     android:layout_centerVertical="false"
                     android:layout_marginEnd="8dp"
                     android:layout_marginTop="12dp"
-                    android:layout_toLeftOf="@+id/script"
+                    android:layout_toLeftOf="@+id/history"
                     android:background="@android:color/transparent"
                     app:srcCompat="@drawable/ic_add_circle" />
 
                 <ImageButton
-                    android:id="@+id/script"
+                    android:id="@+id/history"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_alignParentRight="true"
