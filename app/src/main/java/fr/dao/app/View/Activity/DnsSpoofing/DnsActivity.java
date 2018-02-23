@@ -140,7 +140,7 @@ public class                            DnsActivity extends SniffActivity {
         mAction_import.setOnClickListener(onClickTopMenu());
         mAction_export.setOnClickListener(onClickTopMenu());
         mClipper.setOnClickListener(onClickTopMenu());
-        setToolbarTitle(null, mDnsSpoof.getDnsConf().listDomainSpoofable.size() + " domain spoofable");
+        setToolbarTitle(null, mDnsSpoof.getDnsConf().listDomainSpoofable.size() + " title spoofable");
     }
 
     private View.OnClickListener        onClickTopMenu() {
@@ -203,7 +203,7 @@ public class                            DnsActivity extends SniffActivity {
     private void                        onAddHostDialog() {
         final DialogQuestionWithInput dialog = new DialogQuestionWithInput(mInstance)
                 .setIcon(R.drawable.dns)
-                .setTitle("Ajouter un domain")
+                .setTitle("Ajouter un title")
                 .setHintToTILFirstQuestion("Domain")
                 .setHintToEDFirstQuestion("Ex: google.com")
                 .setHintToTILSecoundQuestion("Ip address")

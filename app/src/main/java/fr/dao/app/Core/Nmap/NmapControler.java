@@ -172,7 +172,7 @@ public class                        NmapControler {
         mMenuCommandScript.add("Samba search");
         mNmapParamsScript.put(mMenuCommandScript.get(3), " -sV --script=smb* ");
         mMenuCommandScript.add("Bruteforcing subdomaine");
-        mNmapParamsScript.put(mMenuCommandScript.get(4), " -p 80 --script dns-brute.nse ");//TODO only domain, not ip
+        mNmapParamsScript.put(mMenuCommandScript.get(4), " -p 80 --script dns-brute.nse ");//TODO only title, not subtitle
         mMenuCommandScript.add("Geoloc traceroute");
         mNmapParamsScript.put(mMenuCommandScript.get(5), " --traceroute --script traceroute-geolocation.nse ");
         mMenuCommandScript.add("Agressive Http fingerprint");

@@ -17,7 +17,7 @@ import fr.dao.app.Model.Unix.Os;
 @Table(name = "Host", id = "_id")
 public class                Host extends Model {
     private String          TAG = "Host";
-    @Column(name = "ip")
+    @Column(name = "subtitle")
     public String           ip = "Unknown";
     @Column(name = "name")
     public String           name = "Unknown";
@@ -82,7 +82,7 @@ public class                Host extends Model {
     }
 
     public void             dumpMe(ArrayList<Host> selectedHostsList) {
-        Log.i(TAG, "ip: " + ip);// + "]");
+        Log.i(TAG, "subtitle: " + ip);// + "]");
         Log.i(TAG, "mac: " + mac);// + "]");
         Log.i(TAG, "vendor: " + vendor);// + "]" + "VENDOR[" + sameHost.vendor + "]");
         Log.i(TAG, "os: " + os);// + "] OS[" + sameHost.os + "]");

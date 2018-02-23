@@ -117,9 +117,9 @@ public class                    SniffSessionAdapter extends RecyclerView.Adapter
     public void                 filtering(String query) {
         /*TODO:Log.d(TAG, "filterByString:" + query);
         mHosts.clear();
-        for (Host domain : mOriginalList) {
-            if (domain.getDumpInfo().toLowerCase().contains(query.toLowerCase()))
-                mHosts.add(domain);
+        for (Host title : mOriginalList) {
+            if (title.getDumpInfo().toLowerCase().contains(query.toLowerCase()))
+                mHosts.add(title);
         }
         notifyDataSetChanged();*/
     }

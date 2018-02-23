@@ -190,7 +190,7 @@ class NmapHostDiscoveryParser {
             if (mac.contains(ip + ':'))
                 return mac.replace(ip + ':', "").toUpperCase();
         }
-        throw new UnknownHostException("getMACInTmp::no ip[" + ip +"] in list of macts");
+        throw new UnknownHostException("getMACInTmp::no subtitle[" + ip +"] in list of macts");
     }
 
     private void                    onNodeParsed() {
@@ -209,7 +209,7 @@ class NmapHostDiscoveryParser {
         while (iter.hasNext()) {//ConcurrentModificationException
             Host host = iter.next();
             if (host.osType == Os.Unknow) {
-                host.dumpMe(mSingleton.selectedHostsList);
+                host.dumpMe(mSingleton.hostList);
                 Log.d(TAG, "-------------");
             }
         }
@@ -224,7 +224,7 @@ class NmapHostDiscoveryParser {
         while (iter.hasNext()) {//ConcurrentModificationException
             Host host = iter.next();
             if (host.osType == Os.Unknow) {
-                host.dumpMe(mSingleton.selectedHostsList);
+                host.dumpMe(mSingleton.hostList);
                 Log.d(TAG, "-------------");
             }
         }

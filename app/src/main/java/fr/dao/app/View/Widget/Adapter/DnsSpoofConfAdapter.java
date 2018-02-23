@@ -13,11 +13,11 @@ import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Target.DNSSpoofItem;
 import fr.dao.app.R;
 import fr.dao.app.View.Activity.DnsSpoofing.DnsActivity;
-import fr.dao.app.View.Widget.Adapter.Holder.DnsSpoofConfHolder;
+import fr.dao.app.View.Widget.Adapter.Holder.GenericLittleCardAvatarHolder;
 
 
-public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter<DnsSpoofConfHolder> {
-    private String              TAG = this.getClass().getName();
+public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter<GenericLittleCardAvatarHolder> {
+    private String              TAG = "DnsSpoofConfAdapter";
     private DnsActivity         mActivity;
     private List<DNSSpoofItem>  mDnsIntercepts;
     private Singleton           mSingleton = Singleton.getInstance();
@@ -27,17 +27,16 @@ public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter
         this.mActivity = activity;
     }
 
-    public DnsSpoofConfHolder   onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new DnsSpoofConfHolder(LayoutInflater.from(parent.getContext())
+    public GenericLittleCardAvatarHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new GenericLittleCardAvatarHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_dnsspoof, parent, false));
     }
 
-    public void                 onBindViewHolder(DnsSpoofConfHolder holder, int position) {
+    public void                 onBindViewHolder(GenericLittleCardAvatarHolder holder, int position) {
         DNSSpoofItem host = mDnsIntercepts.get(position);
-        holder.domain.setText("www." + host.domain + "  " + host.domain);
-        holder.ip.setText(host.ip);
-        holder.deleteImage.setOnClickListener(onDeleteDns(host));
-
+        holder.title.setText("www." + host.domain + "  " + host.domain);
+        holder.subtitle.setText(host.ip);
+        holder.icon.setOnClickListener(onDeleteDns(host));
     }
 
     private View.OnClickListener onDeleteDns(final DNSSpoofItem domain) {
@@ -48,12 +47,12 @@ public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter
                     public void run() {
                         new AlertDialog.Builder(mActivity)
                                 .setTitle(domain.domain)
-                                .setMessage("Would you like to remove this spoofed domain ?")
+                                .setMessage("Would you like to remove this spoofed title ?")
                                 .setPositiveButton(mActivity.getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         mSingleton.getDnsControler().removeDomain(domain);
                                         mActivity.onDnsmasqConfChanged(domain + " deleted from configuration");
-                                        mActivity.setToolbarTitle(null, mDnsIntercepts.size() + " domain spoofable");
+                                        mActivity.setToolbarTitle(null, mDnsIntercepts.size() + " title spoofable");
                                         notifyDataSetChanged();
                                     }
                                 })
@@ -73,9 +72,9 @@ public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter
     public void                 filtering(String query) {
         /*TODO:Log.d(TAG, "filterByString:" + query);
         mHosts.clear();
-        for (Host domain : mOriginalList) {
-            if (domain.getDumpInfo().toLowerCase().contains(query.toLowerCase()))
-                mHosts.add(domain);
+        for (Host title : mOriginalList) {
+            if (title.getDumpInfo().toLowerCase().contains(query.toLowerCase()))
+                mHosts.add(title);
         }
         notifyDataSetChanged();*/
     }

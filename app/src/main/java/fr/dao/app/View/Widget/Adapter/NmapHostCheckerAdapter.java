@@ -40,7 +40,7 @@ public class                    NmapHostCheckerAdapter extends RecyclerView.Adap
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //((NmapActivity)mActivity).newTarget(domain);
+                //((NmapActivity)mActivity).newTarget(title);
             }
         };
     }

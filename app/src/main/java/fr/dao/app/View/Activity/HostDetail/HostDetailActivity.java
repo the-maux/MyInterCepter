@@ -19,7 +19,7 @@ import fr.dao.app.Core.Nmap.Fingerprint;
 import fr.dao.app.Model.Net.Pcap;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
-import fr.dao.app.View.Activity.HostDiscovery.FragmentHostDiscoveryHistoric;
+import fr.dao.app.View.Activity.HostDiscovery.FragmentHistoric;
 import fr.dao.app.View.Activity.Scan.NmapActivity;
 import fr.dao.app.View.Activity.Wireshark.WiresharkActivity;
 import fr.dao.app.View.Behavior.Activity.MyActivity;
@@ -41,15 +41,20 @@ public class                    HostDetailActivity extends MyActivity {
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hostdetail);
-        if (mSingleton.selectedHostsList == null || mSingleton.selectedHostsList.isEmpty()) {
-            Snackbar.make(findViewById(R.id.Coordonitor), "Vous n'avez selectionner aucune target", Snackbar.LENGTH_LONG).show();
-            onBackPressed();
-        } else {
-            mFocusedHost = mSingleton.selectedHostsList.get(0);
+        init();
+    }
+
+    private void                init() {
+        try {
+            int position = getIntent().getExtras().getInt("position");
+            mFocusedHost = mSingleton.hostList.get(position);
             initXml();
             initMenu();
             initTabs();
             displayHistoric();
+        } catch (Exception e) {
+            Snackbar.make(findViewById(R.id.Coordonitor), "Vous n'avez selectionner aucune target", Snackbar.LENGTH_LONG).show();
+            onBackPressed();
         }
     }
 
@@ -128,9 +133,9 @@ public class                    HostDetailActivity extends MyActivity {
     }
 
     private void                displayHistoric() {
-        MyFragment fragment = new FragmentHostDiscoveryHistoric();
+        MyFragment fragment = new FragmentHistoric();
         Bundle args = new Bundle();
-        args.putString("mode", FragmentHostDiscoveryHistoric.HOST_HISTORIC);
+        args.putString("mode", FragmentHistoric.HOST_HISTORIC);
         fragment.setArguments(args);
         initFragment(fragment);
     }

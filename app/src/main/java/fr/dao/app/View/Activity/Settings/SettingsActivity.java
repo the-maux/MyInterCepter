@@ -7,7 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import fr.dao.app.R;
-import fr.dao.app.View.Activity.HostDiscovery.FragmentHostDiscoveryHistoric;
+import fr.dao.app.View.Activity.HostDiscovery.FragmentHistoric;
 import fr.dao.app.View.Activity.HostDiscovery.FragmentHostDiscoverySettings;
 import fr.dao.app.View.Behavior.Activity.MyActivity;
 import fr.dao.app.View.Behavior.Fragment.MyFragment;
@@ -60,7 +60,7 @@ public class                    SettingsActivity extends MyActivity {
         try {
             mFragment = getFragmentFromType(typeFramgent);
             Bundle args = new Bundle();
-            args.putString("mode", FragmentHostDiscoveryHistoric.HOST_HISTORIC);
+            args.putString("mode", FragmentHistoric.HOST_HISTORIC);
             mFragment.setArguments(args);
             getSupportFragmentManager()
                     .beginTransaction()

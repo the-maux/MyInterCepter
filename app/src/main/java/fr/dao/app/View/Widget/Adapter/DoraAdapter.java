@@ -67,13 +67,13 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
 
     /*private void                playProcess(int position, DoraHolder holder) {
         mHosts.get(position).exec();
-        Log.d(TAG, "Play process:" + mHosts.get(position).mhost.ip);
+        Log.d(TAG, "Play process:" + mHosts.get(position).mhost.subtitle);
         mListHostRunning.set(position, true);
         //holder.fab.setImageDrawable(mActivity.getDrawable(R.drawable.ic_pause));
     }
 
     private void                killProcess(int position, DoraHolder holder) {
-        Log.d(TAG, "kill process:" + mHosts.get(position).mhost.ip + " mPid:" + mHosts.get(position).mPid);
+        Log.d(TAG, "kill process:" + mHosts.get(position).mhost.subtitle + " mPid:" + mHosts.get(position).mPid);
         RootProcess.kill(mHosts.get(position).mPid);
         mListHostRunning.set(position, false);
         //holder.fab.setImageDrawable(mActivity.getDrawable(R.drawable.ic_media_play));

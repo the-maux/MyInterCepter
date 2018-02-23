@@ -1,81 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card_view"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:alpha="0.90"
-    android:padding="16dp"
-    app:cardBackgroundColor="@color/generic_background"
-    app:cardCornerRadius="4dp">
+    android:layout_height="60dp">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@id/rootView"
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cardBackgroundColor="@color/generic_background"
+        app:cardElevation="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_marginTop="1px"
-        android:background="@color/generic_background"
-        android:elevation="1dp"
-        android:paddingBottom="2dp"
-        android:paddingRight="6dp"
-        android:paddingTop="2dp">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
 
-        <ImageView
-            android:id="@+id/imageDNS"
-            android:layout_width="50dp"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"
-            android:elevation="4dp"
-            android:src="@drawable/www" />
+    <ImageView
+        android:id="@+id/imageDNS"
+        android:layout_width="40dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="12dp"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="50dp"
+        app:layout_constraintWidth_min="40dp"
+        app:srcCompat="@drawable/webserver_icon" />
 
-        <TextView
-            android:id="@+id/domain"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="false"
-            android:layout_marginRight="4dp"
-            android:layout_marginTop="8dp"
-            android:layout_toLeftOf="@+id/deleteImage"
-            android:layout_toRightOf="@+id/imageDNS"
-            android:enabled="true"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:paddingLeft="8dp"
-            android:text="www.facebook.com facebook.com"
-            android:textColor="?android:attr/textColorTertiary"
-            android:textSize="14sp"
-            android:typeface="serif" />
+    <TextView
+        android:id="@+id/title_card"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="12dp"
+        android:elevation="4dp"
+        android:enabled="true"
+        android:gravity="bottom|left"
+        android:padding="2dp"
+        android:text="Voici mon subtitle.fr"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline"
+        app:layout_constraintLeft_toRightOf="@+id/imageDNS"
+        app:layout_constraintRight_toLeftOf="@+id/deleteImage"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread" />
 
-        <TextView
-            android:id="@+id/ip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerVertical="false"
-            android:layout_marginBottom="8dp"
-            android:layout_marginRight="4dp"
-            android:layout_toLeftOf="@+id/deleteImage"
-            android:layout_toRightOf="@+id/imageDNS"
-            android:enabled="false"
-            android:gravity="center_vertical"
-            android:maxLines="2"
-            android:paddingLeft="8dp"
-            android:text="192.168.0.1 "
-            android:textColor="?android:attr/textColorTertiary"
-            android:textSize="12sp"
-            android:typeface="normal" />
 
-        <ImageView
-            android:id="@+id/deleteImage"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="8dp"
-            android:src="@mipmap/ic_trash2" />
+    <TextView
+        android:id="@+id/subtitle_card"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:elevation="4dp"
+        android:enabled="false"
+        android:gravity="top|left"
+        android:padding="2dp"
+        android:text="Voici mon title.fr"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/title_card"
+        app:layout_constraintRight_toLeftOf="@+id/deleteImage"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        app:layout_constraintVertical_chainStyle="spread" />
 
-    </RelativeLayout>
+    <ImageView
+        android:id="@+id/deleteImage"
+        android:layout_width="40dp"
+        android:layout_height="0dp"
+        android:layout_marginRight="8dp"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="50dp"
+        app:layout_constraintWidth_min="40dp"
+        app:srcCompat="@mipmap/ic_trash2" />
 
-</android.support.v7.widget.CardView>
+
+
+
+</android.support.constraint.ConstraintLayout>

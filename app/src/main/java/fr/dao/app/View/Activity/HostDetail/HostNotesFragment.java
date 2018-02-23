@@ -36,12 +36,12 @@ public class                    HostNotesFragment extends MyFragment {
     private void                initXml(View rootView) {
         mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
         mCentral_layout = rootView.findViewById(R.id.central_layout);
-        if (mSingleton.selectedHostsList == null) {
+        if (mSingleton.hostList == null) {
             Snackbar.make(mCoordinatorLayout, "No target saved, You need to scan the Network", Snackbar.LENGTH_LONG).show();
             startActivity(new Intent(getActivity(), HostDiscoveryActivity.class));
             getActivity().onBackPressed();
         } else {
-            mFocusedHost = mSingleton.selectedHostsList.get(0);
+            mFocusedHost = mSingleton.hostList.get(0);
         }
         TextView valueTV = new TextView(getContext());
         valueTV.setText(mFocusedHost.Notes);

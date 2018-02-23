@@ -62,11 +62,11 @@ public class                        NetworkDiscoveryControler {
     synchronized void               onArpScanOver(ArrayList<String> ipReachable) {
         ArrayList<String> ipsreachables = new ArrayList<>();
         ipsreachables.addAll(ipReachable);
-        Log.d(TAG, "onIcmpScanOver with : "+ ipReachable.size() + " ip(s) reachable");
+        Log.d(TAG, "onIcmpScanOver with : "+ ipReachable.size() + " subtitle(s) reachable");
         mActivity.setToolbarTitle(null, ipsreachables.size() + " hosts detected");
         mActivity.setMAXIMUM_PROGRESS(ipsreachables.size());
         ArrayList<String> basicHost = NetDiscovering.readARPTable(ipsreachables);
-        Log.d(TAG, "onArpScanOver with : "+ ipReachable.size() + " ip(s) reachable");
+        Log.d(TAG, "onArpScanOver with : "+ ipReachable.size() + " subtitle(s) reachable");
         Network ap = mFragment.updateStateOfHostAfterIcmp(basicHost);
         new NmapControler(basicHost,this, ap);
     }
@@ -74,8 +74,6 @@ public class                        NetworkDiscoveryControler {
     public void                     onNmapScanOver(ArrayList<Host> hosts) {
         Log.d(TAG, "Full scanning in " + Utils.TimeDifference(startScanning));
         String time = Utils.TimeDifference(startScanning);
-        mActivity.setToolbarTitle(mSingleton.network.Ssid,
-                hosts.size() + " device" + ((hosts.size() > 1) ? "s" : "") +" found in " + time);
         mFragment.onHostActualized(hosts);
     }
 

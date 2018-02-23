@@ -94,13 +94,13 @@ public class                    NmapActivity extends SniffActivity {
         initFragment();
         mScript.setOnClickListener(onClickScript());
         mScanType.setOnClickListener(onClickTypeScript());
-        if (mSingleton.selectedHostsList == null || mSingleton.selectedHostsList.isEmpty()) {
+        if (mSingleton.hostList == null || mSingleton.hostList.isEmpty()) {
             MonitorInoptionTheTarget.setText("No target selected");
             isExternalTarget = true;
             askForExternalTarget();
         } else {
             isExternalTarget = false;
-            mListHostSelected = mSingleton.selectedHostsList;
+            mListHostSelected = mSingleton.hostList;
             initTabswithTargets(mListHostSelected);
             monitorNmapParam.setText(nmapControler.getNmapParamFromMenuItem(nmapControler.getMenuCommmands().get(0)));
             initUIWithTarget(mListHostSelected.get(0));

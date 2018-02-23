@@ -126,9 +126,9 @@ public class                    WiresharkLiveFragment extends MyFragment {
 
     private boolean             startTcpdump() {
         if (mListHostSelected.isEmpty()) {
-            if (mSingleton.selectedHostsList.size() == 1) {//Automatic selection when 1 target only
-                mListHostSelected.add(mSingleton.selectedHostsList.get(0));
-                mActivity.setToolbarTitle(null,"Listenning " + mSingleton.selectedHostsList.get(0).ip);
+            if (mSingleton.hostList.size() == 1) {//Automatic selection when 1 target only
+                mListHostSelected.add(mSingleton.hostList.get(0));
+                mActivity.setToolbarTitle(null,"Listenning " + mSingleton.hostList.get(0).ip);
             } else {
                 mActivity.showSnackbar("Selectionner une target", -1);
                 onClickChoiceTarget();
@@ -147,7 +147,7 @@ public class                    WiresharkLiveFragment extends MyFragment {
 
     private void                onClickChoiceTarget() {
         new RV_dialog(mActivity)
-                .setAdapter(new HostSelectionAdapter(mActivity, mSingleton.selectedHostsList, mListHostSelected), false)
+                .setAdapter(new HostSelectionAdapter(mActivity, mSingleton.hostList, mListHostSelected), false)
                 .setTitle("Choix des cibles")
                 .onPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override

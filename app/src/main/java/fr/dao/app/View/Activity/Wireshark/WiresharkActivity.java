@@ -57,7 +57,7 @@ public class                    WiresharkActivity extends SniffActivity {
             initSettings();
             initNavigationBottomBar(SNIFFER, true);
             ViewAnimate.setVisibilityToVisibleQuick(mFab);
-            setToolbarTitle("Wireshark", (mSingleton.selectedHostsList == null) ? "0" : mSingleton.selectedHostsList.size() + " target");
+            setToolbarTitle("Wireshark", (mSingleton.hostList == null) ? "0" : mSingleton.hostList.size() + " target");
         } else {
             ViewAnimate.setVisibilityToGoneLong(mFab);
             Log.d(TAG, "initAsPcapReaderWireshark");
@@ -66,7 +66,7 @@ public class                    WiresharkActivity extends SniffActivity {
             Bundle bundle = new Bundle();
             bundle.putString("Pcap", PcapFilePath);
             mFragment.setArguments(bundle);
-            setToolbarTitle("Wireshark", (mSingleton.selectedHostsList == null) ? "0" : mSingleton.selectedHostsList.size() + " target");
+            setToolbarTitle("Wireshark", (mSingleton.hostList == null) ? "0" : mSingleton.hostList.size() + " target");
 
         }
         initFragment(mFragment);

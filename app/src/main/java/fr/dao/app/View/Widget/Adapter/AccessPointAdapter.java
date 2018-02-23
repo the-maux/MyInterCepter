@@ -9,18 +9,18 @@ import java.util.List;
 
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.R;
-import fr.dao.app.View.Activity.HostDiscovery.FragmentHostDiscoveryHistoric;
+import fr.dao.app.View.Activity.HostDiscovery.FragmentHistoric;
 import fr.dao.app.View.Behavior.MyGlideLoader;
 import fr.dao.app.View.Widget.Adapter.Holder.AccessPointHolder;
 
 public class                    AccessPointAdapter extends RecyclerView.Adapter<AccessPointHolder> {
     private String              TAG = "AccessPointAdapter";
-    private FragmentHostDiscoveryHistoric mFragment;
+    private FragmentHistoric mFragment;
     private List<Network>   mSessions;
 
     public enum typeFragment {  HostDetail, HistoricDB }
 
-    public                      AccessPointAdapter(FragmentHostDiscoveryHistoric fragment, List<Network> sessions) {
+    public                      AccessPointAdapter(FragmentHistoric fragment, List<Network> sessions) {
         this.mFragment = fragment;
         this.mSessions = sessions;
     }
@@ -55,9 +55,9 @@ public class                    AccessPointAdapter extends RecyclerView.Adapter<
     public void                 filtering(String query) {
         /*TODO:Log.d(TAG, "filterByString:" + query);
         mHosts.clear();
-        for (Host domain : mOriginalList) {
-            if (domain.getDumpInfo().toLowerCase().contains(query.toLowerCase()))
-                mHosts.add(domain);
+        for (Host title : mOriginalList) {
+            if (title.getDumpInfo().toLowerCase().contains(query.toLowerCase()))
+                mHosts.add(title);
         }
         notifyDataSetChanged();*/
     }

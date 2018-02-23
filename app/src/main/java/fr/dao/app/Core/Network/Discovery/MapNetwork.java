@@ -57,7 +57,7 @@ public class                        MapNetwork {
         try {
             InetAddress localHost = InetAddress.getByName(ip);
             JmDNS jmdns = JmDNS.create(localHost);
-            //Log.d("MapNetWork", "add Client [" + ip + "]" + jmdns.getHostName());
+            //Log.d("MapNetWork", "add Client [" + subtitle + "]" + jmdns.getHostName());
             return jmdns.getHostName();
         } catch (UnknownHostException e) {
             e.printStackTrace();

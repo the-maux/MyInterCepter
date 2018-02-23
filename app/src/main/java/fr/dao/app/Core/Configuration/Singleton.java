@@ -23,7 +23,7 @@ public class                            Singleton {
     public String                       BinaryPath = null;
     public String                       FilesPath = null;
 
-    public ArrayList<Host>              selectedHostsList = null;
+    public ArrayList<Host>              hostList = null;
     public List<ArpSpoof>               ArpSpoofProcessStack = new ArrayList<>();
     public NetworkInformation           network = null;
     public Network                      actualNetwork = null;

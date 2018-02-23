@@ -89,7 +89,7 @@ public class                    Ports {
         Log.i(TAG, "22/tcp       ssh          " + Port.State.valueOf(primitivePortsLits.get(22)));
         Log.i(TAG, "23/tcp       telnet       " + Port.State.valueOf(primitivePortsLits.get(23)));
         Log.i(TAG, "25/tcp       smtp         " + Port.State.valueOf(primitivePortsLits.get(25)));
-        Log.i(TAG, "53/udp       domain       " + Port.State.valueOf(primitivePortsLits.get(53)));
+        Log.i(TAG, "53/udp       title       " + Port.State.valueOf(primitivePortsLits.get(53)));
         Log.i(TAG, "80/tcp       http         " + Port.State.valueOf(primitivePortsLits.get(80)));
         Log.i(TAG, "110/tcp      pop3         " + Port.State.valueOf(primitivePortsLits.get(110)));
         Log.i(TAG, "135/tcp      msrpx        " + Port.State.valueOf(primitivePortsLits.get(135)));

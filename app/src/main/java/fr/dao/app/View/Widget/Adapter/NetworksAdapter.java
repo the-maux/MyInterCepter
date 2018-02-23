@@ -11,16 +11,16 @@ import java.util.Locale;
 
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.R;
-import fr.dao.app.View.Activity.HostDiscovery.FragmentHostDiscoveryHistoric;
+import fr.dao.app.View.Activity.HostDiscovery.FragmentHistoric;
 import fr.dao.app.View.Behavior.MyGlideLoader;
 import fr.dao.app.View.Widget.Adapter.Holder.SessionHolder;
 
 public class                    NetworksAdapter extends RecyclerView.Adapter<SessionHolder> {
     private String              TAG = "NetworksAdapter";
-    private FragmentHostDiscoveryHistoric mFragment;
+    private FragmentHistoric mFragment;
     private List<Network>       mSessions;
 
-    public                      NetworksAdapter(FragmentHostDiscoveryHistoric fragment, List<Network> sessions) {
+    public                      NetworksAdapter(FragmentHistoric fragment, List<Network> sessions) {
         this.mFragment = fragment;
         this.mSessions = sessions;
     }
@@ -64,9 +64,9 @@ public class                    NetworksAdapter extends RecyclerView.Adapter<Ses
     public void                 filtering(String query) {
 /*
         mHosts.clear();
-        for (Host domain : mOriginalList) {
-            if (domain.getDumpInfo().toLowerCase().contains(query.toLowerCase()))
-                mHosts.add(domain);
+        for (Host title : mOriginalList) {
+            if (title.getDumpInfo().toLowerCase().contains(query.toLowerCase()))
+                mHosts.add(title);
         }
         notifyDataSetChanged();*/
     }

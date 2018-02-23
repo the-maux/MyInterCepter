@@ -7,14 +7,13 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,16 +50,15 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private FloatingActionButton    mFab;
     private TextView                mBottomMonitor, mTimer;
     private int                     mProgress = 0;
-    private ImageButton             mAddHostBtn, mSettingsBtn;
+    private ImageView               mSettingsMenu, mHistory;
     private SearchView              mSearchView;
     private Toolbar                 mToolbar;
-    private TabLayout               mTabs;
     private TransitionDrawable      mToolbarBackground;
     private ProgressBar             mProgressBar;
     private MyFragment              HistoricFragment = null, NetDiscoveryFragment = null;
-    private MyFragment              mFragment = null, mLastFragment = null;
-    public int                      MAXIMUM_PROGRESS = 100, MAX_TIME_ONE_HOST = 1;
-    public Network actualNetwork;
+    private MyFragment              mFragment = null;
+    public int                      MAXIMUM_PROGRESS = 100;
+    public Network                  actualNetwork;
     public Date                     date;
     private Timer                   timer = new Timer();
 
@@ -71,7 +69,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         try {
             init();
         } catch (Exception e) {
-            showSnackbar("Big error lors de l'init:");
+            showSnackbar("Error in discovery");
             e.printStackTrace();
         }
     }
@@ -81,14 +79,15 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mBottomMonitor = ( findViewById(R.id.Message));
         mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
-        mAddHostBtn = findViewById(R.id.action_add_host);
-        mSettingsBtn = findViewById(R.id.history);
+        mHistory = findViewById(R.id.history);
+        mHistory.setOnClickListener(onHistory());
         mSearchView = findViewById(R.id.searchView);
         mToolbar = findViewById(R.id.toolbar2);
-        mTabs = findViewById(R.id.tabs);
+        mSettingsMenu = findViewById(R.id.settingsMenu);
+        findViewById(R.id.OsImg).setOnClickListener(initTabs());
         mTimer = findViewById(R.id.timer);
         mProgressBar = findViewById(R.id.progressBar);
-        mToolbarBackground = (TransitionDrawable)(findViewById(R.id.topToolbar)).getBackground();
+        mToolbarBackground = (TransitionDrawable)mToolbar.getBackground();
     }
 
     private void                    init()  {
@@ -97,7 +96,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
             showSnackbar("You need to be connected to a Network");
             finish();
         } else {
-            initTabs();
             initFabs();
             initMonitor();
             mFragment = new FragmentHostDiscoveryScan();
@@ -133,36 +131,16 @@ public class                        HostDiscoveryActivity extends MyActivity {
         ViewAnimate.setVisibilityToVisibleQuick(mFab);
     }
 
-    private void                    initTabs(){
-        final String                ARP_TAB_NAME = "Devices\nDiscovery",
-                                    HISTORIC_TAB_NAME = "Audit\nHistoric";
-        mTabs.addTab(mTabs.newTab().setText(ARP_TAB_NAME), 0);
-        mTabs.addTab(mTabs.newTab().setText(HISTORIC_TAB_NAME), 1);
-        mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            public void onTabSelected(TabLayout.Tab tab) {
-                MyFragment fragment;
-                switch (tab.getText().toString()) {
-                    case ARP_TAB_NAME:
-                        fragment = NetDiscoveryFragment;
-                        break;
-                    case HISTORIC_TAB_NAME:
-                        if (HistoricFragment == null)
-                            HistoricFragment = new FragmentHostDiscoveryHistoric();
-                        fragment = HistoricFragment;
-                        Bundle args = new Bundle();
-                        args.putString("mode", FragmentHostDiscoveryHistoric.DB_HISTORIC);
-                        fragment.setArguments(args);
-                        break;
-                    default:
-                        return ;
-                }
+    private View.OnClickListener    initTabs(){
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+                MyFragment fragment = NetDiscoveryFragment;
                 mFab.setVisibility(View.GONE);
                 initFragment(fragment);
                 initSearchView();
             }
-            public void onTabUnselected(TabLayout.Tab tab) {}
-            public void onTabReselected(TabLayout.Tab tab) {}
-        });
+        };
+
     }
 
     private void                    initFabs() {
@@ -173,11 +151,11 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 Utils.vibrateDevice(mInstance);
                 if (mFragment.getClass().getName().contains("FragmentHostDiscoveryScan") &&
                     ((FragmentHostDiscoveryScan) mFragment).mHostLoaded) {
-                    mSingleton.selectedHostsList = ((FragmentHostDiscoveryScan) mFragment).getTargetSelectedFromHostList();
+                    mSingleton.hostList = ((FragmentHostDiscoveryScan) mFragment).getTargetSelectedFromHostList();
                     if (mSingleton.UltraDebugMode) {
-                        Log.d(TAG, "mSingleton.selectedHostsList" + mSingleton.selectedHostsList);
+                        Log.d(TAG, "mSingleton.hostList" + mSingleton.hostList);
                         Log.d(TAG, "mSingleton.hostsListSize:" +
-                                ((mSingleton.selectedHostsList != null) ? mSingleton.selectedHostsList.size() : "0"));
+                                ((mSingleton.hostList != null) ? mSingleton.hostList.size() : "0"));
                     }
                     mSingleton.actualNetwork = actualNetwork;
                     startActivity(new Intent(mInstance, NmapActivity.class));
@@ -193,7 +171,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     private void                    initFragment(MyFragment fragment) {
         try {
-            mLastFragment = mFragment;
             mFragment = fragment;
             getSupportFragmentManager()
                     .beginTransaction()
@@ -219,13 +196,14 @@ public class                        HostDiscoveryActivity extends MyActivity {
             mBottomMonitor.setText(monitor);
         else
             mBottomMonitor.setText(mSingleton.network.Ssid + ": No connection");
+        ViewAnimate.setVisibilityToVisibleQuick(mBottomMonitor);
+        ViewAnimate.setVisibilityToVisibleQuick(mTimer);
     }
 
     public void                     initFragmentSettings() {
         mFragment = new FragmentHostDiscoverySettings();
         initFragment(mFragment);
         mFab.setVisibility(View.GONE);
-        mTabs.setVisibility(View.GONE);
         mBottomMonitor.setVisibility(View.GONE);
         mToolbarBackground.startTransition(500);
     }
@@ -236,17 +214,34 @@ public class                        HostDiscoveryActivity extends MyActivity {
                          2 == HISTORIC
                          3 == SETTINGS
          */
-        mSettingsBtn.setOnClickListener(new View.OnClickListener() {
+        mSettingsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NetDiscoveryFragment.onSettingsClick((AppBarLayout) findViewById(R.id.appbar), mInstance).show();
             }
         });
-        mFragment.onAddButtonClick(mAddHostBtn);
     }
 
     private void                    initSearchView() {
         mFragment.initSearchView(mSearchView);
+    }
+
+    private View.OnClickListener    onHistory() {
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+                MyFragment fragment;
+                ViewAnimate.setVisibilityToVisibleQuick(mHistory);
+                if (HistoricFragment == null)
+                    HistoricFragment = new FragmentHistoric();
+                fragment = HistoricFragment;
+                Bundle args = new Bundle();
+                args.putString("mode", FragmentHistoric.DB_HISTORIC);
+                fragment.setArguments(args);
+                mFab.setVisibility(View.GONE);
+                initFragment(fragment);
+                initSearchView();
+            }
+        };
     }
 
     public void                     setToolbarTitle(final String title, final String subtitle) {
@@ -273,7 +268,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 mToolbar.setBackgroundColor(color);
-                mTabs.startAnimation(AnimationUtils.loadAnimation(mInstance, android.R.anim.fade_in));
             }
 
             @Override
@@ -355,15 +349,18 @@ public class                        HostDiscoveryActivity extends MyActivity {
             Log.d(TAG, "onBackPressed::" + mFragment.getClass().getName());
             if (mFragment.getClass().getName().contains(FragmentHostDiscoveryScan.class.getName())) {
                 finish();
-            } else if (mFragment.getClass().getName().contains(FragmentHostDiscoveryHistoric.class.getName())) {
-                if (mFragment.onBackPressed())
-                    mTabs.getTabAt(0).select();
+            } else if (mFragment.getClass().getName().contains(FragmentHistoric.class.getName())) {
+                if (mFragment.onBackPressed()) {
+                    Log.d(TAG, "Fragment historic is over, switching to Netdiscover");
+                    ViewAnimate.setVisibilityToVisibleQuick(mFab);
+                    initFragment(NetDiscoveryFragment);
+                    initSearchView();
+                }
             } else if (mFragment.getClass().getName().contains(FragmentHostDiscoverySettings.class.getName())){
                 mToolbarBackground.reverseTransition(700);
-                mFab.setVisibility(View.VISIBLE);
-                mTabs.setVisibility(View.VISIBLE);
+                ViewAnimate.setVisibilityToVisibleQuick(mFab);
                 getSupportFragmentManager().popBackStackImmediate();
-                mBottomMonitor.setVisibility(View.VISIBLE);
+                ViewAnimate.setVisibilityToVisibleQuick(mBottomMonitor);
             }
         } else {
             Log.e(TAG, "onBackPressed::NOTHING ON STACK");

@@ -33,10 +33,10 @@ package fr.dao.app.Core.Nmap;
  |   udp
  |       MDNS
  |         Generic
- |           ip            ipv6  name
+ |           subtitle            ipv6  name
  |_          192.168.0.24        _nvstream_dbd._tcp.local
  | broadcast-netbios-master-browser:
- | ip           server  domain
+ | subtitle           server  title
  |_192.168.0.2  LABOX   WORKGROUP
  | broadcast-pppoe-discover:
  |_  ERROR: Failed to get source MAC address

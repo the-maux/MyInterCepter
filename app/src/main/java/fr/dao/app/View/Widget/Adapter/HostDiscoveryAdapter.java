@@ -59,7 +59,10 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         if (host.os.contains("Unknown"))
             holder.os.setText(host.osType.name());
         holder.vendor.setText(host.vendor);
-        printHostState(holder, host);
+        if (mIsHistoric)
+            holder.statusIcon.setVisibility(View.GONE);
+        else
+            printHostState(holder, host);
         checkedBehavior(holder, host, position);
         holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity,        /*Special background to notice my device*/
                 (host.ip.contains(Singleton.getInstance().network.myIp)) ?
@@ -89,14 +92,13 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
 
     }
 
-
     private void                checkedBehavior(HostDiscoveryHolder holder, final Host host, int position) {
         if (mIsHistoric)
             holder.selected.setVisibility(View.GONE);
         else {
             holder.selected.setChecked(host.selected);
             holder.relativeLayout.setOnClickListener(onCardClick(position, holder));
-            holder.relativeLayout.setOnLongClickListener(onCardLongClick(host, holder));
+            holder.relativeLayout.setOnLongClickListener(onCardLongClick(host, holder, position));
             holder.selected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -108,7 +110,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         }
     }
 
-    private void                 onHostChecked(final HostDiscoveryHolder holder, Host host, final int position) {
+    private void                onHostChecked(final HostDiscoveryHolder holder, Host host, final int position) {
         Utils.vibrateDevice(mActivity);
         host.selected = !host.selected;
         holder.selected.setSelected(host.selected);
@@ -129,7 +131,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
             }
         };
     }
-    private View.OnLongClickListener onCardLongClick(final Host host, final HostDiscoveryHolder holder) {
+    private View.OnLongClickListener onCardLongClick(final Host host, final HostDiscoveryHolder holder, final int position) {
         return new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -137,16 +139,12 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                     @Override
                     public void run() {
                         Utils.vibrateDevice(mActivity);
-                        if (mSingleton.selectedHostsList == null)
-                            mSingleton.selectedHostsList = new ArrayList<>();
-                        else
-                            mSingleton.selectedHostsList.clear();
-                        mSingleton.selectedHostsList.add(host);
                         Intent intent = new Intent(mActivity, HostDetailActivity.class);
                         Pair<View, String> p1 = Pair.create((View)holder.osIcon, "hostPicture");
                         Pair<View, String> p2 = Pair.create((View)holder.ipAndHostname, "hostTitle");
                         ActivityOptionsCompat options = ActivityOptionsCompat
                                 .makeSceneTransitionAnimation(mActivity, p1, p2);
+                        intent.putExtra("position", position);
                         mActivity.startActivity(intent, options.toBundle());
                     }
                 });

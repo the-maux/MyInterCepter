@@ -22,7 +22,7 @@ public class Dora {
 
     private Dora(DoraActivity activity) {
         this.activity = activity;
-        for (Host host : mSingleton.selectedHostsList) {
+        for (Host host : mSingleton.hostList) {
             mListOfHostDored.add(new DoraProcess(host));
         }
     }
@@ -47,7 +47,7 @@ public class Dora {
     public void                     reset() {
         if (mInstance != null) {
             mListOfHostDored.clear();
-            for (Host host : mSingleton.selectedHostsList) {
+            for (Host host : mSingleton.hostList) {
                 mListOfHostDored.add(new DoraProcess(host));
             }
         }

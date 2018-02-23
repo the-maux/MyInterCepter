@@ -26,7 +26,7 @@ public class                        DialogQuestionWithInput {
         mTIL_firstQuestion = dialogView.findViewById(R.id.TIL_host);
         mED_FirstQuestion = dialogView.findViewById(R.id.host);
         mTIL_SecondQuestion = dialogView.findViewById(R.id.TIL_ip);
-        mED_SeconfQuestion = dialogView.findViewById(R.id.ip);
+        mED_SeconfQuestion = dialogView.findViewById(R.id.subtitle_card);
     }
 
     public DialogQuestionWithInput  setIcon(int ressource) {

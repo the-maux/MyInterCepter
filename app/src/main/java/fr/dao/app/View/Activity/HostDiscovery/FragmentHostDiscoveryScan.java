@@ -48,6 +48,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     boolean                         mHostLoaded = false;
 
     public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView:mSingleton.hostList " + ((mSingleton.hostList == null) ? "null" : mSingleton.hostList.size()));
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hostdiscovery_scan, container, false);
         initXml(rootView);
         mActivity = (HostDiscoveryActivity) getActivity();
@@ -67,6 +68,16 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
 
     public void                     onResume() {
         super.onResume();
+        Log.d(TAG, "onResume::scan discovery host :" + mHostAdapter.getItemCount());
+        Log.d(TAG, "onResume::scan discovery hostList :" + mHosts.size());
+        if (mHosts.size() == 0) {
+            mActivity.setToolbarTitle(mSingleton.network.Ssid,
+                    "Searching devices");
+        } else {
+            mActivity.setToolbarTitle(mSingleton.network.Ssid,
+                    mHosts.size() + " device" + ((mHosts.size() > 1) ? "s" : ""));
+        }
+        mHostAdapter.updateHostList(mHosts);
         mHost_RV.setAdapter(mHostAdapter);
         mActivity.initToolbarButton();
     }
@@ -98,7 +109,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         });
     }
     private void                    initHostsRecyclerView() {
-        mHosts.clear();
         mHostAdapter = new HostDiscoveryAdapter(getActivity(), mHost_RV, false);
         mHost_RV.setAdapter(mHostAdapter);
         mHost_RV.setHasFixedSize(true);
@@ -218,7 +228,10 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 mHostLoaded = true;
                 mScannerControler.inLoading = false;
                 mActivity.setProgressState(mActivity.MAXIMUM_PROGRESS*2);
-                mSingleton.selectedHostsList = mHosts;
+                mSingleton.hostList = mHosts;
+                mActivity.setToolbarTitle(mSingleton.network.Ssid,
+                        hosts.size() + " device" + ((hosts.size() > 1) ? "s" : ""));
+                Log.d(TAG, "onHostActualized: " + ((mSingleton.hostList == null) ? "null" : mSingleton.hostList.size()));
                 mHostAdapter.updateHostList(mHosts);
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
                 mSwipeRefreshLayout.setRefreshing(false);

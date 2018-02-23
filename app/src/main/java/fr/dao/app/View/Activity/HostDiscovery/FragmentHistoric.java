@@ -36,26 +36,27 @@ import fr.dao.app.View.Activity.TargetMenu.TargetMenuActivity;
 import fr.dao.app.View.Behavior.Activity.MyActivity;
 import fr.dao.app.View.Behavior.Fragment.MyFragment;
 import fr.dao.app.View.Behavior.MyGlideLoader;
+import fr.dao.app.View.Behavior.ViewAnimate;
 import fr.dao.app.View.Widget.Adapter.HostDiscoveryAdapter;
 import fr.dao.app.View.Widget.Adapter.NetworksAdapter;
 import fr.dao.app.View.Widget.Adapter.SniffSessionAdapter;
 import fr.dao.app.View.Widget.Dialog.HostDialogDetail;
 import fr.dao.app.View.Widget.Dialog.RV_dialog;
 
-public class FragmentHostDiscoveryHistoric extends MyFragment {
-    private String                  TAG = "FragmentHostDiscoveryHistoric";
-    private FragmentHostDiscoveryHistoric mInstance = this;
+public class FragmentHistoric extends MyFragment {
+    private String                  TAG = "FragmentHistoric";
+    private FragmentHistoric mInstance = this;
     private Host                    mFocusedHost = null;
     private List<Network>           networksScanned;
-    private Network focusedSession = null;
+    private Network focusedNetwork = null;
     private MyActivity              mActivity = null;
     private RecyclerView            mRV;
     private TextView                mEmptyList;
-    private RecyclerView.Adapter    RV_AdapterAp = null, RV_AdapterSessions = null, RV_AdapterHostSession = null;
+    private RecyclerView.Adapter    RV_AdapterAp = null, RV_AdapterHostSession = null;
 
-    public enum HistoricDetailMode  { ApHistoric, devicesOfSession, detailSession, WiresharkHistoric, noHistoric}
+    public enum HistoricDetailMode  {NETWORK_LISTING, DEVICE_OF_NETWORK, DETAIL_NETWORK, WIRESHARK_LISTING, NO_RECORDS}
     public static final String      HOST_HISTORIC = "HostDetail", DB_HISTORIC = "HistoricDB";
-    public HistoricDetailMode       mActualMode = HistoricDetailMode.noHistoric;
+    public HistoricDetailMode       mActualMode = HistoricDetailMode.NO_RECORDS;
 
     private RelativeLayout          mDetailSessionLayout;
     private RelativeLayout          gatewayLine, DevicesLine, WiresharkLine, ServicesLine;
@@ -80,7 +81,7 @@ public class FragmentHostDiscoveryHistoric extends MyFragment {
             switch (getArguments().getString("mode")) {
                 case HOST_HISTORIC:
                     mHistoricMODE = HOST_HISTORIC;
-                    mFocusedHost = mSingleton.selectedHostsList.get(0);
+                    mFocusedHost = mSingleton.hostList.get(0);
                     initHistoricFromDB(mFocusedHost);
                     break;
                 case DB_HISTORIC:
@@ -137,60 +138,66 @@ public class FragmentHostDiscoveryHistoric extends MyFragment {
         nbrServiceDiscovered = rootView.findViewById(R.id.nbrServiceDiscovered);
     }
 
-    private void                    initHistoricFromDB() /* All Network, no filter*/{
+    private void                    initHistoricFromDB() /* omg, plz refacto that*/{
         networksScanned = DBNetwork.getAllAccessPoint();
+        mDetailSessionLayout.setVisibility(View.GONE);
         if (networksScanned.isEmpty()) {
             setTitleToolbar("Historic", "No historic");
-            mActualMode = HistoricDetailMode.noHistoric;
-            mEmptyList.setVisibility(View.VISIBLE);
-            mRV.setVisibility(View.GONE);
+            mActualMode = HistoricDetailMode.NO_RECORDS;
+            ViewAnimate.setVisibilityToVisibleQuick(mEmptyList);
+            ViewAnimate.setVisibilityToGoneQuick(mRV);
         } else {
+            ViewAnimate.setVisibilityToVisibleQuick(mRV);
             if (RV_AdapterAp == null) {
                 RV_AdapterAp = new NetworksAdapter(this, networksScanned);
             }
             setTitleToolbar("Historic", networksScanned.size() + " wifi scanned");
             mRV.setAdapter(RV_AdapterAp);
-            mActualMode = HistoricDetailMode.ApHistoric;
+            mActualMode = HistoricDetailMode.NETWORK_LISTING;
             mEmptyList.setVisibility(View.GONE);
+            ViewAnimate.setVisibilityToVisibleQuick(mRV);
         }
     }
     private void                    initHistoricFromDB(Host mFocusedHost) {/* Search With Device In*/
         Log.d(TAG, "initHistoricFromDB for host :" + mFocusedHost.getName());
+        mDetailSessionLayout.setVisibility(View.GONE);
         networksScanned = DBNetwork.getAllAPWithDeviceIn(mFocusedHost);
         if (networksScanned.isEmpty()) {
-            mActualMode = HistoricDetailMode.noHistoric;
+            mActualMode = HistoricDetailMode.NO_RECORDS;
             mEmptyList.setVisibility(View.VISIBLE);
             mRV.setVisibility(View.GONE);
         } else {
+
             if (RV_AdapterAp == null) {
                 RV_AdapterAp = new NetworksAdapter(this, networksScanned);
             }
             mRV.setAdapter(RV_AdapterAp);
-            mActualMode = HistoricDetailMode.ApHistoric;
+            mActualMode = HistoricDetailMode.NETWORK_LISTING;
             mEmptyList.setVisibility(View.GONE);
+            ViewAnimate.setVisibilityToVisibleQuick(mRV);
         }
     }
 
-    public void                     onNetworkFocused(final Network accessPoint) {
-        Log.d(TAG, "onNetworkFocused::(" + accessPoint.Ssid + ")");
-        mActualMode = HistoricDetailMode.detailSession;
-        mRV.setVisibility(View.GONE);
-        mDetailSessionLayout.setVisibility(View.VISIBLE);
-        if (accessPoint != null) {
-            focusedSession = accessPoint;
+    public void                     onNetworkFocused(final Network network) {
+        mActualMode = HistoricDetailMode.DETAIL_NETWORK;
+        ViewAnimate.setVisibilityToGoneQuick(mRV);
+        ViewAnimate.setVisibilityToVisibleQuick(mDetailSessionLayout);
+        if (network != null) {
+            Log.d(TAG, "onNetworkFocused::(" + network.Ssid + ")");
+            focusedNetwork = network;
         }
-        if (focusedSession == null) {
+        if (focusedNetwork == null) {
             onBackPressed();
         }
-        date.setText(focusedSession.getDateString());
+        date.setText(focusedNetwork.getDateString());
         name.setVisibility(View.GONE);
-        initViewSessionFocus_Gateway(focusedSession);
-        initViewSessionFocus_Devices(focusedSession);
-        initViewSessionFocus_Wireshark(focusedSession);
-        initViewSessionFocus_Services(focusedSession);
-        setTitleToolbar(null, focusedSession.getDateString());
-        String nbrService = ((focusedSession.Services() == null) ? "0" :
-                focusedSession.Services().size()) + " Services discovered on Network";
+        initViewSessionFocus_Gateway(focusedNetwork);
+        initViewSessionFocus_Devices(focusedNetwork);
+        initViewSessionFocus_Wireshark(focusedNetwork);
+        initViewSessionFocus_Services(focusedNetwork);
+        setTitleToolbar(null, focusedNetwork.getDateString());
+        String nbrService = ((focusedNetwork.Services() == null) ? "0" :
+                focusedNetwork.Services().size()) + " Services discovered on Network";
         nbrServiceDiscovered.setText(nbrService);
     }
 
@@ -273,15 +280,15 @@ public class FragmentHostDiscoveryHistoric extends MyFragment {
     }
 
     public void                     hostOfSessionsFocused(Network session) {
-        mDetailSessionLayout.setVisibility(View.GONE);
-        mRV.setVisibility(View.VISIBLE);
-        mActualMode = HistoricDetailMode.devicesOfSession;
+        ViewAnimate.setVisibilityToGoneQuick(mDetailSessionLayout);
+        ViewAnimate.setVisibilityToVisibleQuick(mRV);
+        mActualMode = HistoricDetailMode.DEVICE_OF_NETWORK;
         if (RV_AdapterHostSession == null) {
             HostDiscoveryAdapter hostAdapter = new HostDiscoveryAdapter(getActivity(), mRV, true);
             hostAdapter.updateHostList(session.listDevices());
             RV_AdapterHostSession = hostAdapter;
         }
-        setTitleToolbar(focusedSession.getDateString(),  session.listDevices().size() + " devices");
+        setTitleToolbar(focusedNetwork.getDateString(),  session.listDevices().size() + " devices");
         mRV.setAdapter(RV_AdapterHostSession);
     }
 
@@ -370,21 +377,27 @@ public class FragmentHostDiscoveryHistoric extends MyFragment {
     }
 
     public boolean                  onBackPressed() {
+        Log.d(TAG, "onBackPressed:" + mActualMode);
         switch (mActualMode) {
-            case ApHistoric:
+            case NETWORK_LISTING:
+                Log.i(TAG, "listing SSID so returning to scanning fragment");
                 return true;
-            case noHistoric:
+            case NO_RECORDS:
+                Log.i(TAG, "listing SSID but not wifi so returning to scanning fragment");
                 return true;
-            case detailSession:
+            case DETAIL_NETWORK:
+                Log.i(TAG, "DETAIL_NETWORK so reinit fragment with listing ssid");
                 if (mFocusedHost == null)
                     initHistoricFromDB();
                 else
                     initHistoricFromDB(mFocusedHost);
                 return false;
-            case devicesOfSession:
+            case DEVICE_OF_NETWORK:
+                Log.i(TAG, "returning to network detail");
                 onNetworkFocused(null);
                 return false;
-            case WiresharkHistoric:
+            case WIRESHARK_LISTING:
+                Log.i(TAG, "listing wireshark so, returning to network detail");
                 initHistoricFromDB();
                 return false;
             default:

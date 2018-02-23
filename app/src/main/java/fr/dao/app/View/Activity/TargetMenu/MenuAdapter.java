@@ -134,7 +134,7 @@ public class                    MenuAdapter extends RecyclerView.Adapter<MenuIte
         final ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(menuActivity, p1);
         holder.Button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (Singleton.getInstance().selectedHostsList == null) {
+                if (Singleton.getInstance().hostList == null) {
                     menuActivity.showSnackbar("Wireshark needs target(s) to work");
                 }
                 startActivity(DoraActivity.class, options);
@@ -151,7 +151,7 @@ public class                    MenuAdapter extends RecyclerView.Adapter<MenuIte
         final ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(menuActivity, p1);
         holder.Button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (Singleton.getInstance().selectedHostsList == null) {
+                if (Singleton.getInstance().hostList == null) {
                     menuActivity.showSnackbar("Wireshark needs target(s) to work");
                 }
                 startActivity(WiresharkActivity.class, options);

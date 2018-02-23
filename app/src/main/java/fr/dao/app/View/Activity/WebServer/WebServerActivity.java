@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import fr.dao.app.Core.Configuration.Singleton;
@@ -19,6 +21,7 @@ import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.WebServer.GenericServer;
 import fr.dao.app.R;
 import fr.dao.app.View.Behavior.Activity.SniffActivity;
+import fr.dao.app.View.Behavior.MyGlideLoader;
 import fr.dao.app.View.Behavior.ViewAnimate;
 import fr.dao.app.View.Widget.MyWebViewClient;
 
@@ -27,10 +30,11 @@ public class                    WebServerActivity extends SniffActivity {
     private int                 PORT = 8081;
 
     private Singleton           mSingleton = Singleton.getInstance();
-    private ConstraintLayout    mCoordinatorLayout;
+    private CoordinatorLayout   mCoordinatorLayout;
     private String              myUrl = "http://" + mSingleton.network.myIp + ":" + PORT;
     private Toolbar             mToolbar;
     private GenericServer       mWebServer;
+    private ProgressBar         mProgressBar;
     private BroadcastReceiver   broadcastReceiverNetworkState;
     private WebView             mWebview;
 
@@ -44,8 +48,11 @@ public class                    WebServerActivity extends SniffActivity {
 
     private void                initXml() {
         mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
+        MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
         mWebview = findViewById(R.id.webViewToSeeWebsite);
+        mProgressBar = findViewById(R.id.progressBar);
         mFab = findViewById(R.id.fab);
+        ViewAnimate.setVisibilityToVisibleQuick(mFab);
         mToolbar = findViewById(R.id.toolbar);
     }
 
@@ -64,29 +71,18 @@ public class                    WebServerActivity extends SniffActivity {
             @Override
             public void onClick(View v) {
                 Utils.vibrateDevice(mInstance);
+                ViewAnimate.setVisibilityToVisibleQuick(mProgressBar);
                 if (!mSingleton.iswebSpoofed() && startAndroidWebServer()) {
                     mSingleton.setwebSpoofed(true);
+                    showWebView();
                     mFab.setBackgroundTintList(ContextCompat.getColorStateList(WebServerActivity.this, R.color.start_color));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            showWebView();
-                        }
-                    }, 2000);
                 } else if (stopAndroidWebServer()) {
                     mSingleton.setwebSpoofed(false);
-                    mFab.setBackgroundTintList(ContextCompat.getColorStateList(WebServerActivity.this, R.color.stop_color));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            unShowWebView();
-                        }
-                    }, 1000);
+                    unShowWebView();
                 }
             }
         };
     }
-
 
     private boolean             startAndroidWebServer() {
         if (!mSingleton.iswebSpoofed()) {
@@ -113,7 +109,8 @@ public class                    WebServerActivity extends SniffActivity {
     }
 
     private void                showWebView() {
-        ViewAnimate.setVisibilityToVisibleLong(mWebview);
+        ViewAnimate.setVisibilityToGoneQuick(mProgressBar);
+        ViewAnimate.setVisibilityToVisibleQuick(mWebview);
         updateNotifications();
         updateWebView();
     }
@@ -123,11 +120,9 @@ public class                    WebServerActivity extends SniffActivity {
     }
     private void                unShowWebView() {
         ViewAnimate.setVisibilityToGoneQuick(mWebview);
+        mFab.setBackgroundTintList(ContextCompat.getColorStateList(WebServerActivity.this, R.color.stop_color));
         updateNotifications();
-
     }
-
-
 
     public void                 showSnackbar(String txt) {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
@@ -142,10 +137,6 @@ public class                    WebServerActivity extends SniffActivity {
 
     public int                  getContentViewId() {
         return R.layout.activity_webserver;
-    }
-
-    public int                  getNavigationMenuItemId() {
-        return R.id.navigation_webserver;
     }
 
 }

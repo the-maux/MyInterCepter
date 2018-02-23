@@ -24,7 +24,7 @@ public class                    DNSPacket  {
         //copy the IP header
         IP=new byte[IP_LENGTH];
         java.lang.System.arraycopy(temp_byte, 0, IP, 0, IP_LENGTH);
-        //remove ip header from string/array request
+        //remove subtitle header from string/array request
         temp=temp.substring(IP_LENGTH);
         temp_byte=temp.getBytes();
 

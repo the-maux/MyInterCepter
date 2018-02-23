@@ -130,7 +130,7 @@ public class               Trame  {
         } else {// if -vvv
             time = lineSub[0].substring(0, lineSub[0].indexOf("."));
             StringSrc = lineSub[17];
-            StringDest = lineSub[19].replace(".domain:", "").replace(".DOMAIN:", "");
+            StringDest = lineSub[19].replace(".title:", "").replace(".DOMAIN:", "");
             info = lineSub[25];
         }
     }

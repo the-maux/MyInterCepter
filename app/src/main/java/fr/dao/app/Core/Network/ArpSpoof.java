@@ -33,7 +33,7 @@ public class                        ArpSpoof {
                     String read;
                     try {
                         while ((read = reader.readLine()) != null) {
-                            //Log.d(TAG, mTarget.ip + "::" + read);
+                            //Log.d(TAG, mTarget.subtitle + "::" + read);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -71,7 +71,7 @@ public class                        ArpSpoof {
     }
 
     public static void              launchArpSpoof() {
-        for (Host host : Singleton.getInstance().selectedHostsList) {
+        for (Host host : Singleton.getInstance().hostList) {
             if (host.selected) {
                 new ArpSpoof(host).start();
             }
