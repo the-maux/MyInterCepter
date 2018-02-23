@@ -151,7 +151,7 @@ public class FragmentHistoric extends MyFragment {
             if (RV_AdapterAp == null) {
                 RV_AdapterAp = new NetworksAdapter(this, networksScanned);
             }
-            setTitleToolbar("Historic", networksScanned.size() + " wifi scanned");
+            setTitleToolbar("Historic", networksScanned.size() + " network scanned");
             mRV.setAdapter(RV_AdapterAp);
             mActualMode = HistoricDetailMode.NETWORK_LISTING;
             mEmptyList.setVisibility(View.GONE);

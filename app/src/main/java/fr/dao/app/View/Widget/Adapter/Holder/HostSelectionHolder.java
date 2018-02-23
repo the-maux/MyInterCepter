@@ -20,8 +20,8 @@ public class                HostSelectionHolder extends RecyclerView.ViewHolder 
         super(v);
         itemView = v;
         relativeLayout = itemView.findViewById(R.id.rootView);
-        checkBox = itemView.findViewById(R.id.deleteImage);
-        imageOS = itemView.findViewById(R.id.imageDNS);
+        checkBox = itemView.findViewById(R.id.icon2);
+        imageOS = itemView.findViewById(R.id.icon);
         nameOS = itemView.findViewById(R.id.nameOS);
     }
 }

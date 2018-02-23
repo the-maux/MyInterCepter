@@ -29,7 +29,7 @@ public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter
 
     public GenericLittleCardAvatarHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new GenericLittleCardAvatarHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_dnsspoof, parent, false));
+                .inflate(R.layout.item_generic_little, parent, false));
     }
 
     public void                 onBindViewHolder(GenericLittleCardAvatarHolder holder, int position) {

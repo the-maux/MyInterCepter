@@ -40,11 +40,11 @@ public class                    NetworksAdapter extends RecyclerView.Adapter<Ses
         View.OnClickListener onClick = onClick(accessPoint);
         MyGlideLoader.loadDrawableInCircularImageView(mFragment.getContext(), R.drawable.radar, holder.icon);
         holder.forward.setOnClickListener(onClick);
-        if (accessPoint.SniffSessions() != null && !accessPoint.SniffSessions().isEmpty()) {
+       /* if (accessPoint.SniffSessions() != null && !accessPoint.SniffSessions().isEmpty()) {
             MyGlideLoader.loadDrawableInImageView(mFragment.getContext(), R.mipmap.ic_forward_round,
                     holder.forward, false);
             holder.wiresharkMiniLogo.setVisibility(View.VISIBLE);
-        }
+        }*/
         holder.card_view.setOnClickListener(onClick);
         holder.relative_layout.setOnClickListener(onClick);
     }

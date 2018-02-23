@@ -28,7 +28,7 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <ImageView
-        android:id="@+id/imageDNS"
+        android:id="@+id/icon"
         android:layout_width="40dp"
         android:layout_height="0dp"
         android:layout_marginLeft="12dp"
@@ -41,7 +41,7 @@
         app:srcCompat="@drawable/webserver_icon" />
 
     <TextView
-        android:id="@+id/title_card"
+        android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginLeft="12dp"
@@ -53,8 +53,8 @@
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/guideline"
-        app:layout_constraintLeft_toRightOf="@+id/imageDNS"
-        app:layout_constraintRight_toLeftOf="@+id/deleteImage"
+        app:layout_constraintLeft_toRightOf="@+id/icon"
+        app:layout_constraintRight_toLeftOf="@+id/icon2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread" />
 
@@ -71,13 +71,13 @@
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="@+id/title_card"
-        app:layout_constraintRight_toLeftOf="@+id/deleteImage"
+        app:layout_constraintLeft_toLeftOf="@+id/title"
+        app:layout_constraintRight_toLeftOf="@+id/icon2"
         app:layout_constraintTop_toTopOf="@+id/guideline"
         app:layout_constraintVertical_chainStyle="spread" />
 
     <ImageView
-        android:id="@+id/deleteImage"
+        android:id="@+id/icon2"
         android:layout_width="40dp"
         android:layout_height="0dp"
         android:layout_marginRight="8dp"
