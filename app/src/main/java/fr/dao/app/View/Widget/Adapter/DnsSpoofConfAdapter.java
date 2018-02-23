@@ -1,0 +1,82 @@
+package fr.dao.app.View.Widget.Adapter;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import java.util.List;
+
+import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Model.Target.DNSSpoofItem;
+import fr.dao.app.R;
+import fr.dao.app.View.Activity.DnsSpoofing.DnsActivity;
+import fr.dao.app.View.Widget.Adapter.Holder.DnsSpoofConfHolder;
+
+
+public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter<DnsSpoofConfHolder> {
+    private String              TAG = this.getClass().getName();
+    private DnsActivity         mActivity;
+    private List<DNSSpoofItem>  mDnsIntercepts;
+    private Singleton           mSingleton = Singleton.getInstance();
+
+    public                      DnsSpoofConfAdapter(DnsActivity activity, List<DNSSpoofItem> dnsInterceptList) {
+        this.mDnsIntercepts = dnsInterceptList;
+        this.mActivity = activity;
+    }
+
+    public DnsSpoofConfHolder   onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new DnsSpoofConfHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_dnsspoof, parent, false));
+    }
+
+    public void                 onBindViewHolder(DnsSpoofConfHolder holder, int position) {
+        DNSSpoofItem host = mDnsIntercepts.get(position);
+        holder.domain.setText("www." + host.domain + "  " + host.domain);
+        holder.ip.setText(host.ip);
+        holder.deleteImage.setOnClickListener(onDeleteDns(host));
+
+    }
+
+    private View.OnClickListener onDeleteDns(final DNSSpoofItem domain) {
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialog.Builder(mActivity)
+                                .setTitle(domain.domain)
+                                .setMessage("Would you like to remove this spoofed domain ?")
+                                .setPositiveButton(mActivity.getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        mSingleton.getDnsControler().removeDomain(domain);
+                                        mActivity.onDnsmasqConfChanged(domain + " deleted from configuration");
+                                        mActivity.setToolbarTitle(null, mDnsIntercepts.size() + " domain spoofable");
+                                        notifyDataSetChanged();
+                                    }
+                                })
+                                .setNegativeButton(mActivity.getResources().getString(android.R.string.no), null)
+                                .show();
+                    }
+                });
+
+            }
+        };
+    }
+
+    public int                  getItemCount() {
+        return mDnsIntercepts.size();
+    }
+
+    public void                 filtering(String query) {
+        /*TODO:Log.d(TAG, "filterByString:" + query);
+        mHosts.clear();
+        for (Host domain : mOriginalList) {
+            if (domain.getDumpInfo().toLowerCase().contains(query.toLowerCase()))
+                mHosts.add(domain);
+        }
+        notifyDataSetChanged();*/
+    }
+}
