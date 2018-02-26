@@ -19,7 +19,7 @@ public class                PcapHolder extends RecyclerView.ViewHolder {
         super(itemView);
         card_view = itemView.findViewById(R.id.card_view);
         relative_layout = itemView.findViewById(R.id.relative_layout);
-        title = itemView.findViewById(R.id.ssid);
+        title = itemView.findViewById(R.id.title);
         subtitle = itemView.findViewById(R.id.ssid_subtitle);
         forward = itemView.findViewById(R.id.icon2);
         wifi_logo = itemView.findViewById(R.id.icon);

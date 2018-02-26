@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,12 +44,12 @@ import fr.dao.app.View.Widget.Adapter.SniffSessionAdapter;
 import fr.dao.app.View.Widget.Dialog.HostDialogDetail;
 import fr.dao.app.View.Widget.Dialog.RV_dialog;
 
-public class FragmentHistoric extends MyFragment {
+public class                        FragmentHistoric extends MyFragment {
     private String                  TAG = "FragmentHistoric";
-    private FragmentHistoric mInstance = this;
+    private FragmentHistoric        mInstance = this;
     private Host                    mFocusedHost = null;
     private List<Network>           networksScanned;
-    private Network focusedNetwork = null;
+    private Network                 focusedNetwork = null;
     private MyActivity              mActivity = null;
     private RecyclerView            mRV;
     private TextView                mEmptyList;
@@ -58,13 +59,11 @@ public class FragmentHistoric extends MyFragment {
     public static final String      HOST_HISTORIC = "HostDetail", DB_HISTORIC = "HistoricDB";
     public HistoricDetailMode       mActualMode = HistoricDetailMode.NO_RECORDS;
 
-    private RelativeLayout          mDetailSessionLayout;
-    private RelativeLayout          gatewayLine, DevicesLine, WiresharkLine, ServicesLine;
+    private ConstraintLayout        mDetailSessionLayout;
 
-    private TextView                date, name, nbrServiceDiscovered, typeScan;
+    private TextView                date, name, nbrScanned/*, nbrServiceDiscovered, typeScan*/;
     private TextView                titleGateway, titleWireshark, titleDevices, titleService;
     private TextView                subtitleGateway, subtitleWireshark, subtitleDevices, subtitleService;
-    private ImageView               forwardGateway, forwardWireshark, forwardListDevices, forwardServices;
     private String                  mTitle = "Audit historic", mSubtitle = "", mHistoricMODE;
 
     public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -113,7 +112,8 @@ public class FragmentHistoric extends MyFragment {
         /* Detail Network */
         name = rootView.findViewById(R.id.title);
         date = rootView.findViewById(R.id.dateSession);
-        gatewayLine = rootView.findViewById(R.id.gatewayLine);
+        nbrScanned = rootView.findViewById(R.id.nbrScanned);
+        /*gatewayLine = rootView.findViewById(R.id.gatewayLine);
         DevicesLine = rootView.findViewById(R.id.DevicesLine);
         WiresharkLine = rootView.findViewById(R.id.WiresharkLine);
         ServicesLine = rootView.findViewById(R.id.ServicesLine);
@@ -121,21 +121,21 @@ public class FragmentHistoric extends MyFragment {
         forwardGateway = rootView.findViewById(R.id.forwardGateway);
         forwardWireshark = rootView.findViewById(R.id.forwardWireshark);
         forwardListDevices = rootView.findViewById(R.id.forwardDevice);
-        forwardServices = rootView.findViewById(R.id.forwardServices);
+        forwardServices = rootView.findViewById(R.id.forwardServices);*/
 
         titleGateway = rootView.findViewById(R.id.titleGateway_fix);
-        titleWireshark  = rootView.findViewById(R.id.titleWireshark);
-        titleDevices = rootView.findViewById(R.id.titleDevices);
+        titleWireshark  = rootView.findViewById(R.id.title_wireshark);
+        titleDevices = rootView.findViewById(R.id.SubtitleDevices);
         titleService = rootView.findViewById(R.id.titleServices);
 
         MyGlideLoader.loadDrawableInCircularImageView(mInstance.getContext(), R.drawable.radar,
                 (ImageView) rootView.findViewById(R.id.radar_logo));
-        subtitleGateway = rootView.findViewById(R.id.titleGateway);
+        subtitleGateway = rootView.findViewById(R.id.subtitleGateway);
         subtitleWireshark  = rootView.findViewById(R.id.SubtitleWireshark);
-        subtitleDevices = rootView.findViewById(R.id.SubtitleDevices);
+        subtitleDevices = rootView.findViewById(R.id.footer_devices);
         subtitleService = rootView.findViewById(R.id.SubtitleServices);
-        typeScan = rootView.findViewById(R.id.TypeOfScan);
-        nbrServiceDiscovered = rootView.findViewById(R.id.nbrServiceDiscovered);
+        /*typeScan = rootView.findViewById(R.id.TypeOfScan);
+        nbrServiceDiscovered = rootView.findViewById(R.id.nbrServiceDiscovered)*/;
     }
 
     private void                    initHistoricFromDB() /* omg, plz refacto that*/{
@@ -189,8 +189,9 @@ public class FragmentHistoric extends MyFragment {
         if (focusedNetwork == null) {
             onBackPressed();
         }
-        date.setText(focusedNetwork.getDateString());
-        name.setVisibility(View.GONE);
+        date.setText("Last scan realised the " + focusedNetwork.getDateString());
+        name.setText(focusedNetwork.Ssid);
+        nbrScanned.setText("Scanned " + focusedNetwork.nbrScanned + " times");
         initViewSessionFocus_Gateway(focusedNetwork);
         initViewSessionFocus_Devices(focusedNetwork);
         initViewSessionFocus_Wireshark(focusedNetwork);
@@ -198,14 +199,14 @@ public class FragmentHistoric extends MyFragment {
         setTitleToolbar(null, focusedNetwork.getDateString());
         String nbrService = ((focusedNetwork.Services() == null) ? "0" :
                 focusedNetwork.Services().size()) + " Services discovered on Network";
-        nbrServiceDiscovered.setText(nbrService);
+        titleService.setText(nbrService);
     }
 
     private void                    initViewSessionFocus_Gateway(final Network session) {
         if (session.Gateway != null) {
-            titleGateway.setText("Gateway: " + session.Gateway.ip);
+            titleGateway.setText(session.Gateway.ip);
             subtitleGateway.setText(session.Gateway.name + " - " + session.Gateway.mac);
-            DevicesLine.setOnClickListener(new View.OnClickListener() {
+            /*DevicesLine.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     new HostDialogDetail(session.Gateway).show();
@@ -216,21 +217,21 @@ public class FragmentHistoric extends MyFragment {
                 public void onClick(View v) {
                     new HostDialogDetail(session.Gateway).show();
                 }
-            });
+            });*/
         } else {
-            gatewayLine.setVisibility(View.GONE);
+            //gatewayLine.setVisibility(View.GONE);
         }
     }
     private void                    initViewSessionFocus_Devices(final Network session) {
         if (session.listDevices() != null) {
             titleDevices.setText(session.listDevices().size() + " devices decouvert");
-            subtitleDevices.setText(session.nbrOs + " Os découvert");
-            forwardListDevices.setOnClickListener(new View.OnClickListener() {
+            subtitleDevices.setText(session.nbrOs + " os découvert");
+            /*forwardListDevices.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     hostOfSessionsFocused(session);
                 }
-            });
+            });*/
         } else {
             titleDevices.setText("Aucun device découvert sur ce reseau");
             subtitleDevices.setText("No scan performed correctly");
@@ -251,13 +252,13 @@ public class FragmentHistoric extends MyFragment {
                         }
                     }
             }
-            subtitleWireshark.setText(nbrSession + " sniff avec ce device in");
-            forwardWireshark.setOnClickListener(new View.OnClickListener() {
+            subtitleWireshark.setText(nbrSession + " Sniff session realised");
+            /*forwardWireshark.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //TODO: Faire un listing des Pcap
                 }
-            });
+            });*/
         } else {
             titleWireshark.setText("Aucune sessions realised");
             subtitleWireshark.setText("0 pcap recorded");
@@ -268,14 +269,14 @@ public class FragmentHistoric extends MyFragment {
             titleService.setText(session.Services().size() + " découvert sur ce réseau");
             subtitleService.setText("Sur " + ServicesController.howManyHostTheServices(session.Services())
                     + " devices différents");
-            forwardGateway.setOnClickListener(new View.OnClickListener() {
+            /*forwardGateway.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                 }
-            });
+            });*/
         } else {
-            ServicesLine.setVisibility(View.GONE);
+           // ServicesLine.setVisibility(View.GONE);
         }
     }
 
