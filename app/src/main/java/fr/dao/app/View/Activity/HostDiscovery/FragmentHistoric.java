@@ -123,14 +123,14 @@ public class FragmentHistoric extends MyFragment {
         forwardListDevices = rootView.findViewById(R.id.forwardDevice);
         forwardServices = rootView.findViewById(R.id.forwardServices);
 
-        titleGateway = rootView.findViewById(R.id.titleGateway);
+        titleGateway = rootView.findViewById(R.id.titleGateway_fix);
         titleWireshark  = rootView.findViewById(R.id.titleWireshark);
         titleDevices = rootView.findViewById(R.id.titleDevices);
         titleService = rootView.findViewById(R.id.titleServices);
 
         MyGlideLoader.loadDrawableInCircularImageView(mInstance.getContext(), R.drawable.radar,
                 (ImageView) rootView.findViewById(R.id.radar_logo));
-        subtitleGateway = rootView.findViewById(R.id.SubtitleGateway);
+        subtitleGateway = rootView.findViewById(R.id.titleGateway);
         subtitleWireshark  = rootView.findViewById(R.id.SubtitleWireshark);
         subtitleDevices = rootView.findViewById(R.id.SubtitleDevices);
         subtitleService = rootView.findViewById(R.id.SubtitleServices);

@@ -1,64 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="2dp"
-        app:cardUseCompatPadding="true"
-        app:layout_constraintBottom_toBottomOf="@+id/bottom_header"
-        app:layout_constraintLeft_toLeftOf="@+id/left"
-        app:layout_constraintRight_toRightOf="@+id/right"
-        app:layout_constraintTop_toTopOf="@+id/top" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/bottom_listdevices"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.95" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/bottom_wireshark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.95" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/bottom_gateway"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.95" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/right_icon_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.4" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/bottom_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintGuide_percent="0.30"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.95" />
 
     <android.support.constraint.Guideline
         android:id="@+id/left"
@@ -79,56 +24,176 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/textView4"
-        app:layout_constraintGuide_percent="0.05"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintGuide_percent="0.05" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/mid_04_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/bottom_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintGuide_percent="0.30"
+        app:layout_constraintTop_toBottomOf="@+id/nbrScanned" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/verti_80"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.80" />
+
+
+    <android.support.constraint.Guideline
+        android:id="@+id/midle_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/verti_65"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintGuide_percent="0.65" />
+
+
+    <android.support.constraint.Guideline
+        android:id="@+id/verti_47"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.47" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/gateway_card"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingTop="8dp"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="2dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toBottomOf="@+id/verti_65"
+        app:layout_constraintLeft_toLeftOf="@+id/left"
+        app:layout_constraintRight_toRightOf="@+id/midle_horizontal"
+        app:layout_constraintTop_toTopOf="@+id/bottom_header">
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/devices_card"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="2dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toTopOf="@+id/verti_65"
+        app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
+        app:layout_constraintRight_toRightOf="@+id/right"
+        app:layout_constraintTop_toTopOf="@+id/bottom_header" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/wireshark_card"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="2dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toBottomOf="@+id/bottom"
+        app:layout_constraintLeft_toLeftOf="@+id/left"
+        app:layout_constraintRight_toRightOf="@+id/midle_horizontal"
+        app:layout_constraintTop_toTopOf="@+id/verti_65" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/services_card"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="2dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toBottomOf="@+id/bottom"
+        app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
+        app:layout_constraintRight_toRightOf="@+id/right"
+        app:layout_constraintTop_toTopOf="@+id/verti_65" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardview_header"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="2dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toBottomOf="@+id/bottom_header"
+        app:layout_constraintLeft_toLeftOf="@+id/left"
+        app:layout_constraintRight_toRightOf="@+id/right"
+        app:layout_constraintTop_toTopOf="@+id/top" />
+
 
     <ImageView
         android:id="@+id/logo_network"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="8dp"
+        android:layout_margin="12dp"
         android:elevation="4dp"
-        android:padding="8dp"
+        android:padding="14dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_header"
-        app:layout_constraintEnd_toStartOf="@+id/right_icon_header"
+        app:layout_constraintEnd_toStartOf="@+id/mid_04_horizontal"
         app:layout_constraintStart_toStartOf="@+id/left"
         app:layout_constraintTop_toTopOf="@+id/top"
         app:srcCompat="@drawable/router1" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/ssid"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="16dp"
         android:elevation="4dp"
+        android:fontFamily="@font/helvetica_regular"
         android:gravity="bottom"
         android:paddingBottom="8dp"
         android:paddingLeft="4dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/textView5"
-        app:layout_constraintLeft_toLeftOf="@+id/right_icon_header"
+        android:text="GROUPE ADEO"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/date_last_scan"
+        app:layout_constraintLeft_toLeftOf="@+id/mid_04_horizontal"
         app:layout_constraintRight_toRightOf="@+id/right"
         app:layout_constraintTop_toBottomOf="@+id/top" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/date_last_scan"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:elevation="4dp"
         android:paddingLeft="4dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/textView6"
-        app:layout_constraintLeft_toLeftOf="@+id/right_icon_header"
+        android:text="14 juillet 1993 à 16h34"
+        app:layout_constraintBottom_toTopOf="@+id/nbrScanned"
+        app:layout_constraintLeft_toLeftOf="@+id/mid_04_horizontal"
         app:layout_constraintRight_toRightOf="@+id/right"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/ssid" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/nbrScanned"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -137,9 +202,266 @@
         android:layout_marginTop="8dp"
         android:elevation="4dp"
         android:paddingLeft="4dp"
-        android:text="TextView"
+        android:text="Scanned 42 times"
         app:layout_constraintBottom_toTopOf="@+id/bottom_header"
-        app:layout_constraintLeft_toLeftOf="@+id/right_icon_header"
+        app:layout_constraintLeft_toLeftOf="@+id/mid_04_horizontal"
         app:layout_constraintRight_toRightOf="@+id/right"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toBottomOf="@+id/date_last_scan" />
+
+
+    <ImageView
+        android:id="@+id/gateway_logo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="18dp"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/verti_47"
+        app:layout_constraintLeft_toLeftOf="@+id/left"
+        app:layout_constraintRight_toRightOf="@+id/midle_horizontal"
+        app:layout_constraintTop_toTopOf="@+id/bottom_header"
+        app:srcCompat="@drawable/blue_router2" />
+
+
+    <TextView
+        android:id="@+id/titleGateway_fix"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:elevation="4dp"
+        android:fontFamily="@font/helvetica_regular"
+        android:gravity="center_horizontal"
+        android:text="Gateway"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        app:layout_constraintBottom_toTopOf="@+id/titleGateway"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="@+id/left"
+        app:layout_constraintRight_toRightOf="@+id/midle_horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/verti_47"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/titleGateway"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:elevation="4dp"
+        android:enabled="false"
+        android:fontFamily="@font/montserrat_regular"
+        android:gravity="center_horizontal"
+        android:text="192.168.0.1 (LABOX)"
+        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+        app:layout_constraintBottom_toTopOf="@+id/subtitleGateway"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="@+id/left"
+        app:layout_constraintRight_toRightOf="@+id/midle_horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/titleGateway_fix"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+
+    <TextView
+        android:id="@+id/subtitleGateway"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:elevation="4dp"
+        android:enabled="false"
+        android:fontFamily="@font/montserrat_regular"
+        android:gravity="center_horizontal"
+        android:text="AA:BB:CC:DD:EE:DD"
+        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+        app:layout_constraintBottom_toTopOf="@+id/gateway_card"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="@+id/left"
+        app:layout_constraintRight_toRightOf="@+id/midle_horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/titleGateway"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <ImageView
+        android:id="@+id/iconDevices"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="18dp"
+        android:elevation="4dp"
+        android:paddingTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/verti_47"
+        app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
+        app:layout_constraintRight_toRightOf="@+id/right"
+        app:layout_constraintTop_toTopOf="@+id/bottom_header"
+        app:srcCompat="@drawable/radar1600" />
+
+
+    <TextView
+        android:id="@+id/titleDevices"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:elevation="4dp"
+        android:fontFamily="@font/helvetica_regular"
+        android:gravity="center_horizontal"
+        android:text="Devices"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        app:layout_constraintBottom_toBottomOf="@+id/verti_65"
+        app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
+        app:layout_constraintRight_toRightOf="@+id/right"
+        app:layout_constraintTop_toTopOf="@+id/verti_47"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/SubtitleDevices"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:elevation="4dp"
+        android:enabled="false"
+        android:fontFamily="@font/montserrat_regular"
+        android:gravity="center_horizontal"
+        android:text="42 devices decouvert"
+        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+        app:layout_constraintBottom_toBottomOf="@+id/verti_65"
+        app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
+        app:layout_constraintRight_toRightOf="@+id/right"
+        app:layout_constraintTop_toBottomOf="@+id/titleDevices"
+        app:layout_constraintVertical_bias="0.20" />
+
+    <TextView
+        android:id="@+id/footer_devices"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:elevation="4dp"
+        android:enabled="false"
+        android:fontFamily="@font/montserrat_regular"
+        android:gravity="center_horizontal"
+        android:text="6 Os découvert"
+        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+        app:layout_constraintBottom_toBottomOf="@+id/verti_65"
+        app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
+        app:layout_constraintRight_toRightOf="@+id/right"
+        app:layout_constraintTop_toBottomOf="@+id/SubtitleDevices"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/iconWireshark"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="18dp"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/verti_80"
+        app:layout_constraintLeft_toLeftOf="@+id/left"
+        app:layout_constraintRight_toRightOf="@+id/midle_horizontal"
+        app:layout_constraintTop_toTopOf="@+id/verti_65"
+        app:srcCompat="@drawable/wiresharklogo_trans" />
+
+
+    <TextView
+        android:id="@+id/titleWireshark"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:elevation="4dp"
+        android:fontFamily="@font/helvetica_regular"
+        android:gravity="center_horizontal"
+        android:text="Sniffed sessions"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        app:layout_constraintBottom_toBottomOf="@+id/bottom"
+        app:layout_constraintLeft_toLeftOf="@+id/left"
+        app:layout_constraintRight_toRightOf="@+id/midle_horizontal"
+        app:layout_constraintTop_toTopOf="@+id/verti_80"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/subtitle_wireshark"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:elevation="4dp"
+        android:enabled="false"
+        android:fontFamily="@font/montserrat_regular"
+        android:gravity="center_horizontal"
+        android:text="192.168.0.1 (LABOX)"
+        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+        app:layout_constraintLeft_toLeftOf="@+id/left"
+        app:layout_constraintRight_toRightOf="@+id/midle_horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/titleWireshark" />
+
+    <TextView
+        android:id="@+id/footer_gateway3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:elevation="4dp"
+        android:enabled="false"
+        android:fontFamily="@font/montserrat_regular"
+        android:gravity="center_horizontal"
+        android:text="AA:BB:CC:DD:EE:DD"
+        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+        app:layout_constraintLeft_toLeftOf="@+id/left"
+        app:layout_constraintRight_toRightOf="@+id/midle_horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/subtitle_wireshark" />
+
+    <ImageView
+        android:id="@+id/iconStats"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="18dp"
+        android:elevation="4dp"
+        android:paddingTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/verti_80"
+        app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
+        app:layout_constraintRight_toRightOf="@+id/right"
+        app:layout_constraintTop_toTopOf="@+id/verti_65"
+        app:srcCompat="@mipmap/ic_dashboard" />
+
+
+    <TextView
+        android:id="@+id/titleStats"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:elevation="4dp"
+        android:fontFamily="@font/helvetica_regular"
+        android:gravity="center_horizontal"
+        android:text="Statistique"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
+        app:layout_constraintRight_toRightOf="@+id/right"
+        app:layout_constraintTop_toTopOf="@+id/verti_80" />
+
+    <TextView
+        android:id="@+id/SubtitleServices"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:elevation="4dp"
+        android:enabled="false"
+        android:fontFamily="@font/montserrat_regular"
+        android:gravity="center_horizontal"
+        android:text="8 vulnerability found"
+        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+        app:layout_constraintBottom_toTopOf="@+id/bottom"
+        app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
+        app:layout_constraintRight_toRightOf="@+id/right"
+        app:layout_constraintTop_toBottomOf="@+id/titleServices" />
+
+    <TextView
+        android:id="@+id/titleServices"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_marginTop="44dp"
+        android:elevation="4dp"
+        android:enabled="false"
+        android:fontFamily="@font/montserrat_regular"
+        android:gravity="center_horizontal"
+        android:text="12 services découvert"
+        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+        app:layout_constraintBottom_toTopOf="@+id/SubtitleServices"
+        app:layout_constraintHorizontal_bias="0.058"
+        app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
+        app:layout_constraintRight_toRightOf="@+id/right"
+        app:layout_constraintTop_toBottomOf="@+id/titleStats" />
+
+
 </android.support.constraint.ConstraintLayout>
