@@ -16,7 +16,7 @@ import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Model.Net.Service;
 
 @Table(name = "Network", id = "_id")
-public class Network extends Model {
+public class                Network extends Model {
     public static String    NAME_COLUMN = "Network";
 
     @Column(name = "Ssid")
@@ -74,7 +74,7 @@ public class Network extends Model {
         throw new UnknownHostException("Not host found in BDD with this mac[" + mac + "]");
     }
 
-    public Network() {
+    public              Network() {
         super();
     }
 }

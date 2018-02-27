@@ -96,10 +96,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             public void onRefresh() {
                 if (!mScannerControler.inLoading) {
-                    mHosts.clear();
                     mEmptyList.setVisibility(View.GONE);
-                    if (mHostAdapter != null)
-                        mHostAdapter.notifyDataSetChanged();
                     mActivity.initMonitor();
                     if (start())
                         return;

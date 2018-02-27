@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/Coordonitor"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/splashscreen">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:elevation="6dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:background="@color/primary_text"
+            android:elevation="4dp">
+
+            <ImageView
+                android:id="@+id/OsImg"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:transitionName="hostPicture"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="4dp"
+                />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:transitionName="hostTitle"
+                android:layout_marginLeft="-8dp"
+                android:layout_toLeftOf="@+id/history"
+                android:layout_toRightOf="@+id/OsImg"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:subtitle="THE-MAUX PC"
+                app:title="192.168.124.124">
+
+            </android.support.v7.widget.Toolbar>
+
+            <ImageView
+                android:id="@+id/history"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="false"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                android:transitionName="icone"
+                android:background="@android:color/transparent"
+                android:src="@drawable/scylla_transparent" />
+
+        </RelativeLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/material_grey_800"
+        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black_primary_light">
+
+
+            <LinearLayout
+                android:id="@+id/settingsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_margin="4dp"
+                android:background="@color/black_primary"
+                android:elevation="2dp"
+                android:orientation="vertical"
+                android:weightSum="4">
+
+                <TextView
+                    android:id="@+id/PortScanTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/black_primary_light"
+                    android:ems="10"
+                    android:gravity="center_vertical"
+                    android:inputType="textPersonName"
+                    android:paddingLeft="8dp"
+                    android:text="Port Scan"
+                    android:textColor="@color/material_light_white" />
+
+                <TextView
+                    android:id="@+id/VulnerabilityScan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/black_primary_light"
+                    android:ems="10"
+                    android:gravity="center_vertical"
+                    android:inputType="textPersonName"
+                    android:paddingLeft="8dp"
+                    android:text="Vulnerability Scanner"
+                    android:textColor="@color/material_light_white" />
+
+                <TextView
+                    android:id="@+id/OsScanTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/black_primary_light"
+                    android:ems="10"
+                    android:gravity="center_vertical"
+                    android:inputType="textPersonName"
+                    android:paddingLeft="8dp"
+
+                    android:text="Intrusive Fingerprint Scan"
+                    android:textColor="@color/material_light_white" />
+
+                <TextView
+                    android:id="@+id/MitmARPTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/black_primary_light"
+                    android:ems="10"
+                    android:gravity="center_vertical"
+
+                    android:inputType="textPersonName"
+                    android:paddingLeft="8dp"
+                    android:text="MITM"
+                    android:textColor="@color/material_light_white" />
+
+            </LinearLayout>
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/primary_text"
+                android:layout_below="@+id/settingsLayout"
+                app:tabMode="scrollable">
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/offlinemodeItem2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/subnetMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Notes" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/offlinemodeItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pcap" />
+            </android.support.design.widget.TabLayout>
+            <FrameLayout
+                android:id="@+id/frame_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/tabs"
+                tools:layout="@layout/fragment_hostdetail"
+                >
+
+            </FrameLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

@@ -11,51 +11,65 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name="fr.dao.app.Core.Configuration.ApplicationControl"
+        android:name=".Core.Configuration.ApplicationControl"
         android:allowBackup="true"
         android:icon="@drawable/ico"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name="fr.dao.app.View.Activity.Startup.SplashscreenActivity"
+        <activity
+            android:name=".View.Activity.Startup.SplashscreenActivity"
             android:label="@string/app_name"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="fr.dao.app.View.Activity.Startup.SetupActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name="fr.dao.app.View.Activity.DnsSpoofing.DnsActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name="fr.dao.app.View.Activity.HostDiscovery.HostDiscoveryActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name="fr.dao.app.View.Activity.Settings.SettingsActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name="fr.dao.app.View.Activity.Scan.NmapActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name="fr.dao.app.View.Activity.TargetMenu.TargetMenuActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name="fr.dao.app.View.Activity.Wireshark.WiresharkActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name="fr.dao.app.View.Activity.Dora.DoraActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name="fr.dao.app.View.Activity.WebServer.WebServerActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name="fr.dao.app.View.Activity.HostDetail.HostDetailActivity" />
-
+        <activity
+            android:name=".View.Activity.Startup.SetupActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".View.Activity.DnsSpoofing.DnsActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".View.Activity.HostDiscovery.HostDiscoveryActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".View.Activity.Settings.SettingsActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".View.Activity.Scan.NmapActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".View.Activity.TargetMenu.TargetMenuActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".View.Activity.Wireshark.WiresharkActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".View.Activity.Dora.DoraActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".View.Activity.WebServer.WebServerActivity"
+            android:launchMode="singleTask" />
+        <activity android:name=".View.Activity.HostDetail.HostDetailActivity" />
+        <activity android:name=".ScrollingActivity" />
         <meta-data android:name="AA_MODELS"
             android:value="
-            fr.allycs.app.Model.Target.Network,
-            fr.allycs.app.Model.Target.Host,
-            fr.allycs.app.Model.Target.ExternalHost,
-            fr.allycs.app.Model.Target.SniffSession,
-            fr.allycs.app.Model.Unix.DNSLog,
-            fr.allycs.app.Model.Net.Pcap,
-            fr.allycs.app.Model.Net.ServiceDiscovery" />
-        <meta-data android:name="AA_DB_NAME" android:value="ScyllaDatabase" />
-        <meta-data android:name="AA_DB_VERSION" android:value="8" />
+            fr.dao.app.Model.Target.Network,
+            fr.dao.app.Model.Target.Host,
+            fr.dao.app.Model.Target.ExternalHost,
+            fr.dao.app.Model.Target.SniffSession,
+            fr.dao.app.Model.Unix.DNSLog,
+            fr.dao.app.Model.Net.Pcap,
+            fr.dao.app.Model.Net.ServiceDiscovery" />
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="DaoDatabase" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="9" />
     </application>
 
 </manifest>

@@ -3,7 +3,6 @@ package fr.dao.app.Core.Database;
 import android.util.Log;
 
 import com.activeandroid.ActiveAndroid;
-import com.activeandroid.query.From;
 import com.activeandroid.query.Select;
 
 import java.util.ArrayList;
@@ -25,25 +24,33 @@ public class                                DBNetwork {
                 .orderBy("Ssid ASC")
                 .execute();
     }
-    public static Network getAPFromSSID(String SSID) {
-        From request = new Select()
-                .from(Network.class)
-                .where("Ssid = \"" + SSID + "\"");
-        Network accessPoint = request.executeSingle();
-        Log.d(TAG, "getAPFromSSID::" + request.toSql());
-        if (accessPoint == null) {
-            if (Singleton.getInstance().DebugMode)
-                Log.d(TAG, "AccessPoint::" + SSID + " is new ");
-            accessPoint = new Network();
-            accessPoint.Ssid = SSID;
-        } else {
-            if (Singleton.getInstance().DebugMode)
-                Log.d(TAG, "AccessPoint::" + SSID + " already knew with " + accessPoint.nbrScanned + " previous scan");
-            accessPoint.nbrScanned = accessPoint.nbrScanned + 1;
+    public static Network                   getAPFromSSID(String SSID) {
+        Network network;
+        try {
+            network = new Select()
+                    .from(Network.class)
+                    .where("Ssid = \"" + SSID + "\"").executeSingle();
+            Log.d(TAG, "getAPFromSSID::" + new Select()
+                    .from(Network.class)
+                    .where("Ssid = \"" + SSID + "\"").toSql());
+            if (network != null) {
+                if (Singleton.getInstance().DebugMode)
+                    Log.d(TAG, "AccessPoint::" + SSID + " already knew with " + network.nbrScanned + " previous scan");
+                network.nbrScanned = network.nbrScanned + 1;
+                network.save();
+                return network;
+            }
+        } catch (NullPointerException e) {
+            e.getStackTrace();
         }
-        accessPoint.save();
-        return accessPoint;
+        if (Singleton.getInstance().DebugMode)
+            Log.d(TAG, "AccessPoint::" + SSID + " is new ");
+        network = new Network();
+        network.Ssid = SSID;
+        network.save();
+        return network;
     }
+
     public static List<Network>             getAllAPWithDeviceIn(Host host) {
         List<Network> AllApWithDeviceIn = new ArrayList<>();
 

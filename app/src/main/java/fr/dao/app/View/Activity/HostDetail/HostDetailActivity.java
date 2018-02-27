@@ -19,6 +19,7 @@ import fr.dao.app.Core.Nmap.Fingerprint;
 import fr.dao.app.Model.Net.Pcap;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
+import fr.dao.app.ScrollingActivity;
 import fr.dao.app.View.Activity.HostDiscovery.FragmentHistoric;
 import fr.dao.app.View.Activity.Scan.NmapActivity;
 import fr.dao.app.View.Activity.Wireshark.WiresharkActivity;
@@ -89,7 +90,10 @@ public class                    HostDetailActivity extends MyActivity {
         mFingerprint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Snackbar.make(findViewById(R.id.Coordonitor), "Not implemented yet", Snackbar.LENGTH_LONG).show();
+                Intent intent = new Intent(mInstance, ScrollingActivity.class);
+                startActivity(intent);
             }
         });
         mMitm.setOnClickListener(new View.OnClickListener() {
