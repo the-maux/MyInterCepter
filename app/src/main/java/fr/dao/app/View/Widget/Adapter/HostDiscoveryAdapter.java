@@ -89,7 +89,6 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
 
     private void                pushThisShyGuyToFront(HostDiscoveryHolder holder,Host host) {
         printHostState(holder, host);
-
     }
 
     private void                checkedBehavior(HostDiscoveryHolder holder, final Host host, int position) {

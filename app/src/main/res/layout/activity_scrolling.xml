@@ -15,22 +15,22 @@
         android:paddingBottom="12dp">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
+            android:id="@+id/settings_menu_hostdetail"
             android:layout_width="match_parent"
             android:layout_height="@dimen/app_bar_height"
             android:elevation="2dp"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleGravity="top"
-            app:layout_scrollFlags="scroll|snap"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
 
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="center"
-                android:src="@drawable/bg1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_digital_background"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.5" />
 
@@ -38,7 +38,22 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|snap" />
+
+            <ImageView
+                android:id="@+id/settingsMenu3"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:layout_margin="8dp"
+                android:elevation="4dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:soundEffectsEnabled="true"
+                android:tint="@color/primary_white"
+                app:layout_collapseMode="pin"
+                app:srcCompat="@drawable/ic_more_svg" />
 
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -74,6 +89,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
+        android:soundEffectsEnabled="true"
+        android:tint="@color/primary_white"
+        app:backgroundTint="@color/fab_color"
+        app:elevation="4dp"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@android:drawable/ic_dialog_email" />

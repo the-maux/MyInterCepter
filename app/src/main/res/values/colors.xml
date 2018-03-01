@@ -6,7 +6,7 @@
     <color name="primary">@color/material_blue_grey_400</color>
     <color name="primary_dark">@color/material_blue_grey_800</color>
     <color name="primary_light">@color/material_blue_grey_100</color>
-    <color name="primary_white">#EEEEEE</color>
+    <color name="primary_white">#eeeeee</color>
 
     <color name="accent">#009688</color>
     <color name="primary_text">#212121</color>
@@ -16,7 +16,7 @@
     <color name="generic_background">#ee212121</color>
     <color name="stop_color">@color/material_red_500</color>
     <color name="start_color">@color/material_green_500</color>
-    <color name="fab_color">#455A64</color>
+    <color name="fab_color">#455a64</color>
     <color name="online_color">@color/material_green_500</color>
     <color name="filtered_color">@color/material_orange_500</color>
 

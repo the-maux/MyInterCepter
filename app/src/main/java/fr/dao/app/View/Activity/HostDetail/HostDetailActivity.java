@@ -2,10 +2,12 @@ package fr.dao.app.View.Activity.HostDetail;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -55,6 +57,7 @@ public class                    HostDetailActivity extends MyActivity {
             displayHistoric();
         } catch (Exception e) {
             Snackbar.make(findViewById(R.id.Coordonitor), "Vous n'avez selectionner aucune target", Snackbar.LENGTH_LONG).show();
+            Log.e(TAG, "Error in init, Back to previous fragment");
             onBackPressed();
         }
     }
@@ -71,6 +74,13 @@ public class                    HostDetailActivity extends MyActivity {
         mToolbar.setTitle(mFocusedHost.ip);
         mTabs  = findViewById(R.id.tabs);
         mToolbar.setSubtitle(mFocusedHost.getName());
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int width = displaymetrics.widthPixels;
+        int appbar_height = (int)Math.round(width/1.5);
+        AppBarLayout.LayoutParams layoutParams = new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, appbar_height);
+        AppBarLayout appBarLayout = findViewById(R.id.appbar);
+        appBarLayout.setLayoutParams(layoutParams);
     }
 
     private void                initMenu() {
