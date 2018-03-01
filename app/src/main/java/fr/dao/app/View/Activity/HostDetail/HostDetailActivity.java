@@ -74,13 +74,14 @@ public class                    HostDetailActivity extends MyActivity {
         mToolbar.setTitle(mFocusedHost.ip);
         mTabs  = findViewById(R.id.tabs);
         mToolbar.setSubtitle(mFocusedHost.getName());
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        int width = displaymetrics.widthPixels;
-        int appbar_height = (int)Math.round(width/1.5);
-        AppBarLayout.LayoutParams layoutParams = new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, appbar_height);
-        AppBarLayout appBarLayout = findViewById(R.id.appbar);
-        appBarLayout.setLayoutParams(layoutParams);
+//        DisplayMetrics displaymetrics = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+//        int width = displaymetrics.widthPixels;
+//        int appbar_height = (int)Math.round(width/1.5);
+//        CoordinatorLayout.LayoutParams layoutParams = new CoordinatorLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, appbar_height);
+//        AppBarLayout appBarLayout = findViewById(R.id.appbar);
+//        //AppBarLayout.LayoutParams layoutParams = appBarLayout.getLayoutParams();
+//        appBarLayout.setLayoutParams(layoutParams);
     }
 
     private void                initMenu() {

@@ -10,15 +10,18 @@
 		android:id="@+id/appbar"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:fitsSystemWindows="true"
 		android:paddingBottom="24dp"
-		app:elevation="4dp">
+		app:elevation="2dp">
 
 		<android.support.constraint.ConstraintLayout
 			android:id="@+id/relativeLayout"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:background="@drawable/backgroundtransition"
-			android:elevation="4dp">
+			android:clipToPadding="true"
+			android:elevation="4dp"
+			android:fitsSystemWindows="true">
 
 
 			<ProgressBar
@@ -78,6 +81,7 @@
 				android:layout_height="0dp"
 				android:baselineAlignBottom="false"
 				android:padding="4dp"
+				android:soundEffectsEnabled="true"
 				android:src="@drawable/ic_history_svg"
 				android:tint="@color/primary_white"
 				app:layout_constraintBottom_toTopOf="@+id/guideline2"
@@ -91,6 +95,7 @@
 				android:layout_height="0dp"
 				android:paddingLeft="4dp"
 				android:paddingRight="4dp"
+				android:soundEffectsEnabled="true"
 				android:tint="@color/primary_white"
 				app:layout_constraintBottom_toTopOf="@+id/guideline2"
 				app:layout_constraintRight_toRightOf="parent"
@@ -119,6 +124,7 @@
 		android:layout_marginBottom="16dp"
 		android:layout_marginEnd="16dp"
 		android:scaleType="fitCenter"
+		android:soundEffectsEnabled="true"
 		android:src="@drawable/ic_search_svg"
 		android:tint="@color/primary_white"
 		android:visibility="visible"

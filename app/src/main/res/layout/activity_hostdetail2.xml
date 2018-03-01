@@ -25,10 +25,9 @@
                 android:id="@+id/OsImg"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:transitionName="hostPicture"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="4dp"
-                />
+                android:transitionName="hostPicture" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

@@ -58,6 +58,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="22dp"
+                android:soundEffectsEnabled="true"
                 android:src="@drawable/ms__arrow" />
 
         </RelativeLayout>

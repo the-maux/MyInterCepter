@@ -33,7 +33,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/red_card"
         app:layout_constraintRight_toRightOf="@+id/red_card"
         app:layout_constraintTop_toTopOf="@+id/red_card"
-        app:srcCompat="@drawable/poiz" />
+        app:srcCompat="@drawable/spy" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline_top"
@@ -243,7 +243,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/blue_card"
         app:layout_constraintRight_toRightOf="@+id/blue_card"
         app:layout_constraintTop_toTopOf="@+id/blue_card"
-        app:srcCompat="@drawable/prey" />
+        app:srcCompat="@drawable/unknow" />
 
     <ImageView
         android:id="@+id/logo_settings"
