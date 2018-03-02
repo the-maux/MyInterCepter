@@ -21,6 +21,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
@@ -58,7 +60,6 @@ public class                        FragmentHistoric extends MyFragment {
     private RecyclerView            mRV;
     private TextView                mEmptyList;
     private RecyclerView.Adapter    RV_AdapterAp = null, RV_AdapterHostSession = null;
-
     public enum HistoricDetailMode  {NETWORK_LISTING, DEVICE_OF_NETWORK, DETAIL_NETWORK, WIRESHARK_LISTING, NO_RECORDS}
     public static final String      HOST_HISTORIC = "HostDetail", DB_HISTORIC = "HistoricDB";
     public HistoricDetailMode       mActualMode = HistoricDetailMode.NO_RECORDS;
@@ -95,12 +96,16 @@ public class                        FragmentHistoric extends MyFragment {
             }
             mRV.setAdapter(RV_AdapterAp);
             mRV.setHasFixedSize(true);
-            mRV.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mRV.setLayoutManager(new LinearLayoutManager(mActivity));
+
+
         } else {
             Log.d(TAG, "Historic Mode is not set (referer from User or Discovery)");
             onBackPressed();
         }
     }
+
+
 
     public void                     onResume() {
         super.onResume();
@@ -113,7 +118,7 @@ public class                        FragmentHistoric extends MyFragment {
         mEmptyList = rootView.findViewById(R.id.emptyList);
         mDetailSessionLayout = rootView.findViewById(R.id.detailSessionLayout);
         mDetailSessionLayout.setVisibility(View.GONE);
-        
+
         
         /* Detail Network */
         name = rootView.findViewById(R.id.title);
