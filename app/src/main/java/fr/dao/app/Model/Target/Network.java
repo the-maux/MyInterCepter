@@ -41,6 +41,7 @@ public class                Network extends Model {
             }
             listDevices = DBHost.getListFromSerialized(listDevicesSerialized);
             Log.d(NAME_COLUMN, "liste Network deserialized " + listDevices.size() + " devices");
+
         }
         return listDevices;
     }

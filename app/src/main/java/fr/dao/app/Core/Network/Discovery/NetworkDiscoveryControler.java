@@ -68,6 +68,7 @@ public class                        NetworkDiscoveryControler {
         ArrayList<String> basicHost = NetDiscovering.readARPTable(ipsreachables);
         Log.d(TAG, "onArpScanOver with : "+ ipReachable.size() + " subtitle(s) reachable");
         Network ap = mFragment.updateStateOfHostAfterIcmp(basicHost);
+
         new NmapControler(basicHost,this, ap);
     }
 

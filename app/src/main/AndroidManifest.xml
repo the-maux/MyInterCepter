@@ -63,13 +63,13 @@
             fr.dao.app.Model.Target.SniffSession,
             fr.dao.app.Model.Unix.DNSLog,
             fr.dao.app.Model.Net.Pcap,
-            fr.dao.app.Model.Net.ServiceDiscovery" />
+            fr.dao.app.Model.Net.Service" />
         <meta-data
             android:name="AA_DB_NAME"
             android:value="DaoDatabase" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="9" />
+            android:value="10" />
     </application>
 
 </manifest>

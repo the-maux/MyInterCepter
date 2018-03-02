@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
@@ -41,7 +40,6 @@ import fr.dao.app.View.Behavior.ViewAnimate;
 import fr.dao.app.View.Widget.Adapter.HostDiscoveryAdapter;
 import fr.dao.app.View.Widget.Adapter.NetworksAdapter;
 import fr.dao.app.View.Widget.Adapter.SniffSessionAdapter;
-import fr.dao.app.View.Widget.Dialog.HostDialogDetail;
 import fr.dao.app.View.Widget.Dialog.RV_dialog;
 
 public class                        FragmentHistoric extends MyFragment {
@@ -123,7 +121,7 @@ public class                        FragmentHistoric extends MyFragment {
         forwardListDevices = rootView.findViewById(R.id.forwardDevice);
         forwardServices = rootView.findViewById(R.id.forwardServices);*/
 
-        titleGateway = rootView.findViewById(R.id.titleGateway_fix);
+        titleGateway = rootView.findViewById(R.id.titleGateway_menu);
         titleWireshark  = rootView.findViewById(R.id.title_wireshark);
         titleDevices = rootView.findViewById(R.id.SubtitleDevices);
         titleService = rootView.findViewById(R.id.titleServices);
@@ -183,7 +181,6 @@ public class                        FragmentHistoric extends MyFragment {
         ViewAnimate.setVisibilityToGoneQuick(mRV);
         ViewAnimate.setVisibilityToVisibleQuick(mDetailSessionLayout);
         if (network != null) {
-            Log.d(TAG, "onNetworkFocused::(" + network.Ssid + ")");
             focusedNetwork = network;
         }
         if (focusedNetwork == null) {

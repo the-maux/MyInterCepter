@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import fr.dao.app.Core.Configuration.Singleton;
@@ -205,6 +206,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                Collections.sort(hosts, Fingerprint.getComparator());
                 mHosts = new ArrayList<>();
                 mHosts.addAll(hosts);
                 mOriginalList = hosts;

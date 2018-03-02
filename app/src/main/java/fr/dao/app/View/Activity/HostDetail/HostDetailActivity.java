@@ -1,30 +1,32 @@
 package fr.dao.app.View.Activity.HostDetail;
 
-import android.content.Intent;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
+import fr.dao.app.Core.Configuration.GlideApp;
+import fr.dao.app.Core.Configuration.GlideRequest;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Database.DBManager;
 import fr.dao.app.Core.Nmap.Fingerprint;
 import fr.dao.app.Model.Net.Pcap;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
-import fr.dao.app.ScrollingActivity;
 import fr.dao.app.View.Activity.HostDiscovery.FragmentHistoric;
-import fr.dao.app.View.Activity.Scan.NmapActivity;
-import fr.dao.app.View.Activity.Wireshark.WiresharkActivity;
 import fr.dao.app.View.Behavior.Activity.MyActivity;
 import fr.dao.app.View.Behavior.Fragment.MyFragment;
 
@@ -33,17 +35,18 @@ public class                    HostDetailActivity extends MyActivity {
     private HostDetailActivity  mInstance = this;
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinator;
-    private Toolbar             mToolbar;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
+//    private Toolbar             mToolbar;
     private ImageView           osHostImage;
     private TabLayout           mTabs;
-    private TextView            mPortScan, mVulnerabilitys, mFingerprint, mMitm;
+//    private TextView            mPortScan, mVulnerabilitys, mFingerprint, mMitm;
     private Host                mFocusedHost;
     private MyFragment          mCurrentFragment;
     private List<Pcap>          mPcapsList;
 
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hostdetail);
+        setContentView(R.layout.activity_scrolling);
         init();
     }
 
@@ -54,6 +57,7 @@ public class                    HostDetailActivity extends MyActivity {
             initXml();
             initMenu();
             initTabs();
+            initAppBar();
             displayHistoric();
         } catch (Exception e) {
             Snackbar.make(findViewById(R.id.Coordonitor), "Vous n'avez selectionner aucune target", Snackbar.LENGTH_LONG).show();
@@ -62,18 +66,63 @@ public class                    HostDetailActivity extends MyActivity {
         }
     }
 
+    private void                initAppBar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ImageView collapsBackground = findViewById(R.id.collapsBackground);
+        GlideRequest r = GlideApp.with(this)
+                .load(R.drawable.bg1)
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+        r.into(collapsBackground);
+        AppBarLayout appBarLayout = findViewById(R.id.app_bar);
+        final ImageView osImg = findViewById(R.id.OsImg);
+        collapsingToolbarLayout = findViewById(R.id.settings_menu_hostdetail);
+        collapsingToolbarLayout.setTitle(mFocusedHost.getName());
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                int alpha = appBarLayout.getTotalScrollRange() - Math.abs(verticalOffset);
+                if (alpha < 40) {
+                    if (osImg.getVisibility() == View.VISIBLE)
+                        osImg.animate()
+                                .alpha(0.0f)
+                                .setDuration(250)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        super.onAnimationEnd(animation);
+                                        osImg.setVisibility(View.GONE);
+                                    }
+                                });
+                } else {
+                    if (osImg.getVisibility() == View.GONE)
+                        osImg.animate()
+                                .alpha(1.0f)
+                                .setDuration(250)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        super.onAnimationEnd(animation);
+                                        osImg.setVisibility(View.VISIBLE);
+                                    }
+                                });
+                }
+            }
+        });
+    }
+
     private void                initXml() {
         mCoordinator = findViewById(R.id.Coordonitor);
         osHostImage = findViewById(R.id.OsImg);
-        mToolbar = findViewById(R.id.toolbar);
-        mPortScan  = findViewById(R.id.PortScanTxt);
+  //      mToolbar = findViewById(R.id.toolbar);
+/*        mPortScan  = findViewById(R.id.PortScanTxt);
         mVulnerabilitys  = findViewById(R.id.VulnerabilityScan);
         mFingerprint = findViewById(R.id.OsScanTxt);
-        mMitm  = findViewById(R.id.MitmARPTxt);
+        mMitm  = findViewById(R.id.MitmARPTxt);*/
         Fingerprint.setOsIcon(this, mFocusedHost, osHostImage);
-        mToolbar.setTitle(mFocusedHost.ip);
+    //    mToolbar.setTitle(mFocusedHost.ip);
         mTabs  = findViewById(R.id.tabs);
-        mToolbar.setSubtitle(mFocusedHost.getName());
+//        mToolbar.setSubtitle(mFocusedHost.getName());
 //        DisplayMetrics displaymetrics = new DisplayMetrics();
 //        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 //        int width = displaymetrics.widthPixels;
@@ -85,7 +134,7 @@ public class                    HostDetailActivity extends MyActivity {
     }
 
     private void                initMenu() {
-        mPortScan.setOnClickListener(new View.OnClickListener() {
+/*        mPortScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mInstance, NmapActivity.class);
@@ -113,16 +162,18 @@ public class                    HostDetailActivity extends MyActivity {
                 Intent intent = new Intent(mInstance, WiresharkActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
     }
 
     private void                initTabs() {
+        int rax = 0;
         mTabs.addTab(mTabs.newTab().setText("Historic"), 0);
         if (mFocusedHost.Notes != null && !mFocusedHost.Notes.isEmpty())
-            mTabs.addTab(mTabs.newTab().setText("Notes"), 0);
+            mTabs.addTab(mTabs.newTab().setText("Notes"), ++rax);
+        mTabs.addTab(mTabs.newTab().setText("Infos"), ++rax);
         mPcapsList = DBManager.getListPcapFormHost(mFocusedHost);
         if (mPcapsList != null && !mPcapsList.isEmpty())
-            mTabs.addTab(mTabs.newTab().setText("Pcap"), 0);
+            mTabs.addTab(mTabs.newTab().setText("Pcap"), ++rax);
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             public void onTabSelected(TabLayout.Tab tab) {
                 Log.d(TAG, "tab.getFirstInputQuestion().toString():" + tab.getText().toString());
@@ -135,6 +186,9 @@ public class                    HostDetailActivity extends MyActivity {
                         break;
                     case "pcap":
                         displayPcap();
+                        break;
+                    default:
+                        showSnackbar("Not implemented");
                         break;
                 }
             }
@@ -185,9 +239,9 @@ public class                    HostDetailActivity extends MyActivity {
             @Override
             public void run() {
                 if (title != null)
-                    mToolbar.setTitle(title);
-                if (subtitle != null)
-                    mToolbar.setSubtitle(subtitle);
+                    collapsingToolbarLayout.setTitle(title);
+//                if (subtitle != null)
+//                    mToolbar.setSubtitle(subtitle);
             }
         });
     }
@@ -196,5 +250,9 @@ public class                    HostDetailActivity extends MyActivity {
         if (mCurrentFragment == null || mCurrentFragment.onBackPressed()) {
             super.onBackPressed();
         }
+    }
+
+    public void                     showSnackbar(String txt) {
+        Snackbar.make(mCoordinator, txt, Toast.LENGTH_SHORT).show();
     }
 }

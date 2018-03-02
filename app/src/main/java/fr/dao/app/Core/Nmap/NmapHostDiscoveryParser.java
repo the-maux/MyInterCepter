@@ -26,7 +26,7 @@ class NmapHostDiscoveryParser {
 
     NmapHostDiscoveryParser(NmapControler nmapControler, String listMacs, String NmapDump, Network ap) {
         this.mNmapControler = nmapControler;
-        Log.d(TAG, "dump list macs[" + listMacs + "]");
+        //Log.d(TAG, "dump list macs[" + listMacs + "]");
         String[] macs = listMacs.split(" ");
         String[] HostNmapDump = NmapDump.split("Nmap scan report for ");
         LENGTH_NODE = HostNmapDump.length-1;
@@ -58,7 +58,7 @@ class NmapHostDiscoveryParser {
                     if (hostInList.name.isEmpty() || hostInList.name.contains("Unknow"))
                         hostInList.name = host.name;
                     if (!Fingerprint.isItMyDevice(host)) {
-                        Log.d(TAG, "buildHostFromNmapDump on " + host.toString());
+                        //Log.d(TAG, "buildHostFromNmapDump on " + host.toString());
                         buildHostFromNmapDump(node, hostInList);
                     } else {
 //                        Log.d(TAG, "myDevice on " + host.toString());
@@ -123,6 +123,7 @@ class NmapHostDiscoveryParser {
         }
         if (Fingerprint.isItMyGateway(host)) {
             host.osType = Os.Gateway;
+            mNetwork.Gateway = host;
         }
         host.Notes = host.dumpInfo + '\n' +
                     ((host.Ports() == null) ? " No Port detected ? " : host.Ports().getDump());
@@ -204,7 +205,7 @@ class NmapHostDiscoveryParser {
     private void                    nmapIsTooLong() {
         Log.d(TAG, "Some node wasn't parsed, inintializing..");
         Log.d(TAG, "Analyzing (" + NBR_PARSED_NODE + "/" + LENGTH_NODE + ") devices scanned");
-        Collections.sort(mNetwork.listDevices(), Fingerprint.getComparator());
+       // Collections.sort(mNetwork.listDevices(), Fingerprint.getComparator());
         Iterator<Host> iter = mNetwork.listDevices().iterator();
         while (iter.hasNext()) {//ConcurrentModificationException
             Host host = iter.next();
@@ -219,7 +220,6 @@ class NmapHostDiscoveryParser {
     private void                    onAllNodeParsed() {
         Log.d(TAG, "AllNode parsed, inintializing..");
         Collections.sort(mNetwork.listDevices(), Fingerprint.getComparator());
-        //TODO: add offline devices
         Iterator<Host> iter = mNetwork.listDevices().iterator();
         while (iter.hasNext()) {//ConcurrentModificationException
             Host host = iter.next();

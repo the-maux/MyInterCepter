@@ -33,7 +33,7 @@ public class                    NetworksAdapter extends RecyclerView.Adapter<Ses
     public void                 onBindViewHolder(SessionHolder holder, int position) {
         final Network accessPoint = mSessions.get(position);
         String date = new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE).format(accessPoint.lastScanDate);
-        holder.title.setText(date);
+        holder.title.setText(accessPoint.Ssid);
         int size = accessPoint.listDevicesSerialized.split(";").length;
         String subtitle = size + " device" + ((size >= 2) ? "s" : "")+ " decouvert";
         holder.subtitle.setText(subtitle);
@@ -45,6 +45,7 @@ public class                    NetworksAdapter extends RecyclerView.Adapter<Ses
                     holder.forward, false);
             holder.wiresharkMiniLogo.setVisibility(View.VISIBLE);
         }*/
+        holder.forward.setVisibility(View.GONE);
         holder.card_view.setOnClickListener(onClick);
         holder.relative_layout.setOnClickListener(onClick);
     }

@@ -10,17 +10,14 @@ import java.net.UnknownHostException;
 
 public class                    NetworkInformation {
     private String              TAG = "NetworkInformation";
+    private WifiManager         mWifiManager;
     public String               myIp = "";
     public String               gateway = "";
     public String               mac = "";
-    public String               netmask = "";
-    public String               dns1 = "", dns2 = "";
-    public String               dhcp = "";
     public String               Ssid = "";
-    public DhcpInfo             dhcpInfo;
-    private WifiManager         mWifiManager;
+    String                      netmask = "";
 
-    public                      NetworkInformation(WifiManager wifiManager, String mac) {
+    NetworkInformation(WifiManager wifiManager, String mac) {
         this.mWifiManager = wifiManager;
         this.mac = mac;
         init();
@@ -31,23 +28,24 @@ public class                    NetworkInformation {
     }
 
     private void                init() {
-        this.dhcpInfo = mWifiManager.getDhcpInfo();
+        DhcpInfo dhcpInfo = mWifiManager.getDhcpInfo();
         myIp = intADDRtoStringHostname(dhcpInfo.ipAddress);
         gateway = intADDRtoStringHostname(dhcpInfo.gateway);
         netmask = intADDRtoStringHostname(dhcpInfo.netmask);
         if (netmask.contains("0.0.0.0"))
             netmask = "255.255.255.0";
-        dns1 = intADDRtoStringHostname(dhcpInfo.dns1);
-        dns2 = intADDRtoStringHostname(dhcpInfo.dns2);
-        dhcp = intADDRtoStringHostname(dhcpInfo.serverAddress);
+        String dns1 = intADDRtoStringHostname(dhcpInfo.dns1);
+        String dns2 = intADDRtoStringHostname(dhcpInfo.dns2);
+        String dhcp = intADDRtoStringHostname(dhcpInfo.serverAddress);
         Log.d(TAG, "IP:" + myIp + "&GW:" + gateway + "&netmask=" + netmask + "&mac="+mac);
     }
+
     public NetworkInformation   updateInfo() {
         init();
         return this;
     }
 
-    public String               intADDRtoStringHostname(int hostAddress) {
+    private String              intADDRtoStringHostname(int hostAddress) {
         try {
             byte[] addressBytes = {(byte) (0xff & hostAddress),
                     (byte) (0xff & (hostAddress >> 8)),

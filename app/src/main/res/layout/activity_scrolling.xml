@@ -2,6 +2,7 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -50,19 +51,18 @@
 
 
             <ImageView
-                android:id="@+id/osImg"
+                android:id="@+id/OsImg"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="16dp"
                 android:duplicateParentState="true"
                 android:elevation="4dp"
-                android:src="@drawable/android8"
                 android:transitionName="hostPicture"
                 app:layout_collapseParallaxMultiplier="0.5"
                 app:layout_scrollFlags="scroll|snap" />
 
             <ImageView
-                android:id="@+id/editHostBtn"
+                android:id="@+id/history"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="right"
@@ -101,33 +101,33 @@
         </android.support.design.widget.CollapsingToolbarLayout>
 
         <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:background="@color/generic_background"
             android:elevation="4dp"
             app:layout_scrollFlags="">
 
-            <android.support.design.widget.TabItem
-                android:id="@+id/infoTab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Infos" />
-
-            <android.support.design.widget.TabItem
-                android:id="@+id/historicTab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Historique" />
-
-            <android.support.design.widget.TabItem
-                android:id="@+id/NotesTab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Notes" />
         </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_scrolling" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
+        tools:context="fr.dao.app.ScrollingActivity"
+        tools:showIn="@layout/activity_scrolling">
+
+
+        <FrameLayout
+            android:id="@+id/frame_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tabs"
+            tools:layout="@layout/fragment_hostdetail" />
+
+    </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -140,6 +140,6 @@
         app:elevation="4dp"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:srcCompat="@drawable/ic_launch_svg" />
 
 </android.support.design.widget.CoordinatorLayout>

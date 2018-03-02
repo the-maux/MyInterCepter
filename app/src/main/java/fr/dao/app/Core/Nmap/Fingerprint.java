@@ -103,8 +103,7 @@ public class                            Fingerprint {
     }
 
     public static boolean               isItMyGateway(Host host) {
-        return host.ip.contentEquals(Singleton.getInstance().network.myIp);
-
+        return host.ip.contains(Singleton.getInstance().network.gateway) && host.ip.length() == Singleton.getInstance().network.gateway.length();
     }
 
     public static void                  setOsIcon(Context context, Host host,  ImageView osImageView) {

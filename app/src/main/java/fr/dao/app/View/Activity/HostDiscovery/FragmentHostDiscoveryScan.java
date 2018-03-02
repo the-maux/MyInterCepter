@@ -210,9 +210,11 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 actualNetwork.listDevices().add(host);
             }
         }
+
         Log.d(TAG, "(" + (actualNetwork.listDevices().size() - rax) + " offline/ " + actualNetwork.listDevices().size() + "inCache) ");
         mSingleton.actualNetwork = actualNetwork;
         mActivity.actualNetwork = actualNetwork;
+
         mHostAdapter.updateHostList(actualNetwork.listDevices());
         return actualNetwork;
     }
