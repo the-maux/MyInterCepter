@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.List;
 
@@ -36,6 +38,7 @@ public class                    HostDetailActivity extends MyActivity {
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinator;
     private CollapsingToolbarLayout collapsingToolbarLayout;
+    private FloatingActionMenu  mMenuFAB;
 //    private Toolbar             mToolbar;
     private ImageView           osHostImage;
     private TabLayout           mTabs;
@@ -56,6 +59,7 @@ public class                    HostDetailActivity extends MyActivity {
             mFocusedHost = mSingleton.hostList.get(position);
             initXml();
             initMenu();
+            initMenuFab();
             initTabs();
             initAppBar();
             displayHistoric();
@@ -64,6 +68,33 @@ public class                    HostDetailActivity extends MyActivity {
             Log.e(TAG, "Error in init, Back to previous fragment");
             onBackPressed();
         }
+    }
+
+    private void                 initMenuFab() {
+        FloatingActionButton nmapFAB = new FloatingActionButton(this);
+        FloatingActionButton fingerprintFAB = new FloatingActionButton(this);
+        FloatingActionButton vulnerabilityScanner = new FloatingActionButton(this);
+        FloatingActionButton sniffingFAB = new FloatingActionButton(this);
+        nmapFAB.setButtonSize(FloatingActionButton.SIZE_MINI);
+        nmapFAB.setLabelText("Nmap");
+        nmapFAB.setImageResource(R.drawable.ic_nmap_icon_tabbutton);
+        nmapFAB.setBackgroundColor(getResources().getColor(R.color.fab_color));
+        fingerprintFAB.setButtonSize(FloatingActionButton.SIZE_MINI);
+        fingerprintFAB.setLabelText("Fingerprint");
+        fingerprintFAB.setImageResource(R.drawable.ic_fingerprint_svg);
+        fingerprintFAB.setBackgroundColor(getResources().getColor(R.color.fab_color));
+        vulnerabilityScanner.setButtonSize(FloatingActionButton.SIZE_MINI);
+        vulnerabilityScanner.setLabelText("Vulnerability Scanner");
+        vulnerabilityScanner.setImageResource(R.drawable.ic_search_svg);
+        vulnerabilityScanner.setBackgroundColor(getResources().getColor(R.color.fab_color));
+        sniffingFAB.setButtonSize(FloatingActionButton.SIZE_MINI);
+        sniffingFAB.setLabelText("Sniffing");
+        sniffingFAB.setImageResource(R.drawable.ic_sniff_barbutton);
+        sniffingFAB.setBackgroundColor(getResources().getColor(R.color.fab_color));
+        mMenuFAB.addMenuButton(nmapFAB, 0);
+        mMenuFAB.addMenuButton(sniffingFAB, 1);
+        mMenuFAB.addMenuButton(fingerprintFAB, 2);
+        mMenuFAB.addMenuButton(vulnerabilityScanner, 3);
     }
 
     private void                initAppBar() {
@@ -122,6 +153,7 @@ public class                    HostDetailActivity extends MyActivity {
         Fingerprint.setOsIcon(this, mFocusedHost, osHostImage);
     //    mToolbar.setTitle(mFocusedHost.ip);
         mTabs  = findViewById(R.id.tabs);
+        mMenuFAB = findViewById(R.id.fab_menu);
 //        mToolbar.setSubtitle(mFocusedHost.getName());
 //        DisplayMetrics displaymetrics = new DisplayMetrics();
 //        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
