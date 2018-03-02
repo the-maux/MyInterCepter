@@ -22,6 +22,7 @@ public class                    PcapFileAdapter extends RecyclerView.Adapter<Pca
     private Activity            mActivity;
     private List<File>          mPcaps;
     private PcapListerFragment  pcapListerFragment;
+
     public                      PcapFileAdapter(Activity activity, List<File> pcaps, PcapListerFragment pcapListerFragment) {
         this.mActivity = activity;
         this.mPcaps = pcaps;
@@ -56,7 +57,6 @@ public class                    PcapFileAdapter extends RecyclerView.Adapter<Pca
                 intent.putExtra("Pcap", pcap.getPath());
                 pcapListerFragment.dismiss();
                 mActivity.startActivity(intent);
-
             }
         };
     }

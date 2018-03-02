@@ -31,4 +31,17 @@ public class                    DBManager {
         }
         return false;
     }
+
+    public static List<Pcap>    getListPcapFormSSID(String ssid) {
+        List<Pcap> allPcapsInDdd = new Select()
+                .from(Pcap.class)
+                .orderBy("lastScanDate ASC")
+                .execute();
+        List<Pcap> listPcapWithNetworkIn = new ArrayList<>();
+        for (Pcap pcap : allPcapsInDdd) {
+            if (pcap.sniffSession.session.Ssid.contains(ssid))
+                listPcapWithNetworkIn.add(pcap);
+        }
+        return listPcapWithNetworkIn;
+    }
 }
