@@ -195,7 +195,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 if (host.mac.contains(mac)) {
                     host.state = Host.State.FILTERED;
                     isHostInList = true;
-                    Log.d(TAG, "updateStateOfHostAfterIcmp::" + host.ip + ":" + host.mac + " => ONLINE");
                     break;
                 }
             }
@@ -204,8 +203,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 host.ip = ip;
                 host.mac = mac;
                 host.state = Host.State.FILTERED;
-                /*host.Network().add(actualNetwork);*/
-                Log.d(TAG, "updateStateOfHostAfterIcmp::"+ host.ip + ":" + host.mac +" => is new");
                 host.save();
                 actualNetwork.listDevices().add(host);
             }

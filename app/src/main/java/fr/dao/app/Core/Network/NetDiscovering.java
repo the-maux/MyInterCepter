@@ -31,7 +31,8 @@ public class                            NetDiscovering {
                 }
                 if (!already) {
                     if (!reachable.contains(Singleton.getInstance().network.myIp)) {
-                        Log.d(TAG, "ARP_TABLE FIX:" + reachable);
+                        if (Singleton.getInstance().UltraDebugMode)
+                            Log.d(TAG, "ARP_TABLE FIX:" + reachable);
                         listIpPlusMac.add(reachable);
                     }
                 }
@@ -57,7 +58,8 @@ public class                            NetDiscovering {
             Matcher matcher = Pattern.compile(String.format(MAC_RE, objArr)).matcher(read);
             if (matcher.matches() && !ip.contains(Singleton.getInstance().network.myIp)) {
                 listOfIpsAlreadyIn.add(ip);
-                Log.d(TAG, "ARP_TABLE: " + ip + ":" + matcher.group(1));
+                if (Singleton.getInstance().UltraDebugMode)
+                    Log.d(TAG, "ARP_TABLE: " + ip + ":" + matcher.group(1));
                 listIpPlusMac.add(ip + ":" + matcher.group(1));
             }
         }

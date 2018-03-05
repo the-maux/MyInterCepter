@@ -82,7 +82,8 @@ public class                        NmapControler {
             hostsMAC.append(" ").append(ip);
         }
         String cmd = PATH_NMAP + NMAP_ARG_SCAN + hostCmd.toString();
-        Log.d(TAG, "CMD:["+ cmd + "]");
+        if (mSingleton.UltraDebugMode)
+            Log.d(TAG, "CMD:["+ cmd + "]");
         setTitleToolbar(null, "Scanning " + ips.size() + " devices");
         hostDiscoveryFromNmap(cmd, hostsMAC.toString(), ap);
     }
