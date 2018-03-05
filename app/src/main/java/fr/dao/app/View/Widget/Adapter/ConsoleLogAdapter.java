@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.dao.app.Model.Unix.ConsoleLog;
@@ -18,6 +19,9 @@ public class                    ConsoleLogAdapter extends RecyclerView.Adapter<C
 
     public                      ConsoleLogAdapter(List<ConsoleLog> dnsInterceptList) {
         this.listConsole = dnsInterceptList;
+    }
+
+    public                      ConsoleLogAdapter(ArrayList<String[]> arrayList) {
     }
 
     public ConsoleLogHolder     onCreateViewHolder(ViewGroup parent, int viewType) {

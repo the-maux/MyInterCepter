@@ -17,7 +17,7 @@ import fr.dao.app.Model.Unix.Os;
 @Table(name = "Host", id = "_id")
 public class                Host extends Model {
     private String          TAG = "Host";
-    @Column(name = "subtitle")
+    @Column(name = "ip")
     public String           ip = "Unknown";
     @Column(name = "name")
     public String           name = "Unknown";

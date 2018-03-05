@@ -2,6 +2,8 @@ package fr.dao.app.View.Activity.HostDetail;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -30,6 +32,7 @@ import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.Activity.HostDiscovery.FragmentHistoric;
 import fr.dao.app.View.Behavior.Activity.MyActivity;
+import fr.dao.app.View.Behavior.Coordinator.HostDetail.ImageCollapseBehavior;
 import fr.dao.app.View.Behavior.Fragment.MyFragment;
 
 public class                    HostDetailActivity extends MyActivity {
@@ -62,6 +65,14 @@ public class                    HostDetailActivity extends MyActivity {
             initMenuFab();
             initTabs();
             initAppBar();
+            /**
+             * TODO:
+             * Au lieu de display historic,
+             * Create a framgentHostDetailInfo
+             * Qui contient un recyclerview
+             * 1 ligne = 1 info
+             *
+             */
             displayHistoric();
         } catch (Exception e) {
             Snackbar.make(findViewById(R.id.Coordonitor), "Vous n'avez selectionner aucune target", Snackbar.LENGTH_LONG).show();
@@ -70,27 +81,60 @@ public class                    HostDetailActivity extends MyActivity {
         }
     }
 
-    private void                 initMenuFab() {
+    private void                initXml() {
+        mCoordinator = findViewById(R.id.Coordonitor);
+        osHostImage = findViewById(R.id.OsImg);
+                CoordinatorLayout.LayoutParams params =
+                (CoordinatorLayout.LayoutParams) osHostImage.getLayoutParams();
+       // params.setBehavior(new ImageCollapseBehavior());
+        osHostImage.requestLayout();
+  //      mToolbar = findViewById(R.id.toolbar);
+/*        mPortScan  = findViewById(R.id.PortScanTxt);
+        mVulnerabilitys  = findViewById(R.id.VulnerabilityScan);
+        mFingerprint = findViewById(R.id.OsScanTxt);
+        mMitm  = findViewById(R.id.MitmARPTxt);*/
+        Fingerprint.setOsIcon(this, mFocusedHost, osHostImage);
+    //    mToolbar.setTitle(mFocusedHost.ip);
+        mTabs  = findViewById(R.id.tabs);
+        mMenuFAB = findViewById(R.id.fab_menu);
+//        mToolbar.setSubtitle(mFocusedHost.getName());
+//        DisplayMetrics displaymetrics = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+//        int width = displaymetrics.widthPixels;
+//        int appbar_height = (int)Math.round(width/1.5);
+//        CoordinatorLayout.LayoutParams layoutParams = new CoordinatorLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, appbar_height);
+//        AppBarLayout appBarLayout = findViewById(R.id.appbar);
+//        //AppBarLayout.LayoutParams layoutParams = appBarLayout.getLayoutParams();
+//        appBarLayout.setLayoutParams(layoutParams);
+    }
+
+    private void                initMenuFab() {
         FloatingActionButton nmapFAB = new FloatingActionButton(this);
         FloatingActionButton fingerprintFAB = new FloatingActionButton(this);
         FloatingActionButton vulnerabilityScanner = new FloatingActionButton(this);
         FloatingActionButton sniffingFAB = new FloatingActionButton(this);
+
         nmapFAB.setButtonSize(FloatingActionButton.SIZE_MINI);
         nmapFAB.setLabelText("Nmap");
-        nmapFAB.setImageResource(R.drawable.ic_nmap_icon_tabbutton);
-        nmapFAB.setBackgroundColor(getResources().getColor(R.color.fab_color));
+        nmapFAB.setImageResource(R.mipmap.ic_eye_nosvg);
+        nmapFAB.setColorNormal(getResources().getColor(R.color.fab_color));
+        nmapFAB.setPadding(4, 4, 4, 4);
         fingerprintFAB.setButtonSize(FloatingActionButton.SIZE_MINI);
         fingerprintFAB.setLabelText("Fingerprint");
-        fingerprintFAB.setImageResource(R.drawable.ic_fingerprint_svg);
-        fingerprintFAB.setBackgroundColor(getResources().getColor(R.color.fab_color));
+        fingerprintFAB.setImageResource(R.mipmap.ic_fingerprint_nosvg);
+        fingerprintFAB.setColorNormal(getResources().getColor(R.color.fab_color));
+        fingerprintFAB.setPadding(4, 4, 4, 4);
         vulnerabilityScanner.setButtonSize(FloatingActionButton.SIZE_MINI);
         vulnerabilityScanner.setLabelText("Vulnerability Scanner");
-        vulnerabilityScanner.setImageResource(R.drawable.ic_search_svg);
-        vulnerabilityScanner.setBackgroundColor(getResources().getColor(R.color.fab_color));
+        vulnerabilityScanner.setImageResource(R.drawable.ic_loop_search);
+        vulnerabilityScanner.setColorNormal(getResources().getColor(R.color.fab_color));
+        vulnerabilityScanner.setPadding(4, 4, 4, 4);
         sniffingFAB.setButtonSize(FloatingActionButton.SIZE_MINI);
         sniffingFAB.setLabelText("Sniffing");
-        sniffingFAB.setImageResource(R.drawable.ic_sniff_barbutton);
-        sniffingFAB.setBackgroundColor(getResources().getColor(R.color.fab_color));
+        sniffingFAB.setImageResource(R.mipmap.ic_hearing);
+        sniffingFAB.setPadding(4, 4, 4, 4);
+        sniffingFAB.setColorNormal(getResources().getColor(R.color.fab_color));
+
         mMenuFAB.addMenuButton(nmapFAB, 0);
         mMenuFAB.addMenuButton(sniffingFAB, 1);
         mMenuFAB.addMenuButton(fingerprintFAB, 2);
@@ -140,29 +184,6 @@ public class                    HostDetailActivity extends MyActivity {
                 }
             }
         });
-    }
-
-    private void                initXml() {
-        mCoordinator = findViewById(R.id.Coordonitor);
-        osHostImage = findViewById(R.id.OsImg);
-  //      mToolbar = findViewById(R.id.toolbar);
-/*        mPortScan  = findViewById(R.id.PortScanTxt);
-        mVulnerabilitys  = findViewById(R.id.VulnerabilityScan);
-        mFingerprint = findViewById(R.id.OsScanTxt);
-        mMitm  = findViewById(R.id.MitmARPTxt);*/
-        Fingerprint.setOsIcon(this, mFocusedHost, osHostImage);
-    //    mToolbar.setTitle(mFocusedHost.ip);
-        mTabs  = findViewById(R.id.tabs);
-        mMenuFAB = findViewById(R.id.fab_menu);
-//        mToolbar.setSubtitle(mFocusedHost.getName());
-//        DisplayMetrics displaymetrics = new DisplayMetrics();
-//        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-//        int width = displaymetrics.widthPixels;
-//        int appbar_height = (int)Math.round(width/1.5);
-//        CoordinatorLayout.LayoutParams layoutParams = new CoordinatorLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, appbar_height);
-//        AppBarLayout appBarLayout = findViewById(R.id.appbar);
-//        //AppBarLayout.LayoutParams layoutParams = appBarLayout.getLayoutParams();
-//        appBarLayout.setLayoutParams(layoutParams);
     }
 
     private void                initMenu() {

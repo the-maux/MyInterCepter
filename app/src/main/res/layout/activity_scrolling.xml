@@ -7,7 +7,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+
     tools:context="fr.dao.app.ScrollingActivity">
+
+
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -51,17 +54,8 @@
 
             </android.support.v7.widget.Toolbar>
 
-
-            <ImageView
-                android:id="@+id/OsImg"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="16dp"
-                android:duplicateParentState="true"
-                android:elevation="4dp"
-                android:transitionName="hostPicture"
-                app:layout_collapseParallaxMultiplier="0.5"
-                app:layout_scrollFlags="scroll|snap" />
+            <!--app:layout_collapseParallaxMultiplier="0.5"-->
+            <!--app:layout_scrollFlags="scroll|snap"-->
 
             <ImageView
                 android:id="@+id/history"
@@ -145,8 +139,8 @@
         app:elevation="6dp"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="end"
-        app:layout_behavior="fr.dao.app.View.Behavior.Coordinator.FABCollapseBehavior"
-        app:menu_icon="@mipmap/ic_scylla"
+        app:layout_behavior="fr.dao.app.View.Behavior.Coordinator.HostDetail.FABCollapseBehavior"
+        app:menu_icon="@mipmap/ic_action"
         app:menu_openDirection="down"
         fab:menu_animationDelayPerItem="50"
         fab:menu_colorNormal="@color/fab_color"
@@ -162,5 +156,15 @@
         fab:menu_labels_textSize="14sp">
 
     </com.github.clans.fab.FloatingActionMenu>
+
+
+    <ImageView
+        android:id="@+id/OsImg"
+        android:layout_width="60dp"
+        android:layout_height="@dimen/app_bar_height"
+        android:layout_marginLeft="16dp"
+        android:elevation="12dp"
+        android:transitionName="hostPicture" />
+
 
 </android.support.design.widget.CoordinatorLayout>

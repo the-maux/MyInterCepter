@@ -5,6 +5,7 @@ import android.util.Log;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -218,17 +219,23 @@ class NmapHostDiscoveryParser {
     }
 
     private void                    onAllNodeParsed() {
-        Log.d(TAG, "AllNode parsed, inintializing..");
-        Collections.sort(mNetwork.listDevices(), Fingerprint.getComparator());
-        Iterator<Host> iter = mNetwork.listDevices().iterator();
-        while (iter.hasNext()) {//ConcurrentModificationException
-            Host host = iter.next();
-            if (host.osType == Os.Unknow) {
-                host.dumpMe(mSingleton.hostList);
-                Log.d(TAG, "-------------");
+        try {
+            Log.d(TAG, "AllNode parsed, inintializing..");
+            Collections.sort(mNetwork.listDevices(), Fingerprint.getComparator());
+            Iterator<Host> iter = mNetwork.listDevices().iterator();
+            while (iter.hasNext()) {
+                Host host = iter.next();
+                if (host.osType == Os.Unknow) {
+                    host.dumpMe(mSingleton.hostList);
+                    Log.d(TAG, "-------------");
+                }
             }
+            mNmapControler.onHostActualized(mNetwork.listDevices());
+        } catch (ConcurrentModificationException ex) {
+            ex.getStackTrace();
+            Log.e(TAG, "Thread error detected, restarting analyse");
+            onNodeParsed();
         }
-        mNmapControler.onHostActualized(mNetwork.listDevices());
     }
 
 }
