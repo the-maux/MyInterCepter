@@ -3,6 +3,7 @@ package fr.dao.app.View.Activity.HostDetail;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -50,8 +51,11 @@ public class                    HostDetailFragment extends MyFragment {
         ConsoleLogAdapter adapter = new ConsoleLogAdapter(arrayList);
         mRV.setAdapter(adapter);
         mRV.setHasFixedSize(true);
-        mRV.setLayoutManager(new LinearLayoutManager(mActivity));
-
+        LinearLayoutManager manager = new LinearLayoutManager(mActivity);
+        mRV.setLayoutManager(manager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRV.getContext(),
+                manager.getOrientation());
+        mRV.addItemDecoration(dividerItemDecoration);
     }
 
     private ArrayList<String[]> buildInfoArray() {

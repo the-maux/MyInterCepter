@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -52,14 +51,14 @@ public class                        ImageCollapseBehavior extends CoordinatorLay
         public void                 onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
             float displacementFraction = -verticalOffset / (float) appBarLayout.getTotalScrollRange();
             float oppposite = displacementFraction - (float)1.0;
-            Log.d(TAG, "onOffsetChanged:displacementFraction(" + displacementFraction + ")");
-            Log.d(TAG, "onOffsetChanged:opposite(" + -oppposite + ")");
+//            Log.d(TAG, "onOffsetChanged:displacementFraction(" + displacementFraction + ")");
+//            Log.d(TAG, "onOffsetChanged:opposite(" + -oppposite + ")");
             ViewGroup.LayoutParams params = imageView.getLayoutParams();
             params.height = (int) (-oppposite * hehightImg);
             params.width = (int) (-oppposite * widthImg);
             imageView.setLayoutParams(params);
             imageView.setTranslationY(verticalOffset);
-            Log.d(TAG, "onOffsetChanged:alpha(" + (-oppposite) + ")");
+//            Log.d(TAG, "onOffsetChanged:alpha(" + (-oppposite) + ")");
             imageView.setAlpha(-oppposite);
             imageView.requestLayout();
         }

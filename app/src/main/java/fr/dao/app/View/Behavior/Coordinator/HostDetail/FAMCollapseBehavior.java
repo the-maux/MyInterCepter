@@ -1,6 +1,8 @@
 package fr.dao.app.View.Behavior.Coordinator.HostDetail;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -46,7 +48,34 @@ public class FAMCollapseBehavior extends CoordinatorLayout.Behavior {
         public void                 onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
             if (fam.isOpened())
                 fam.close(true);
+            float displacementFraction = -verticalOffset / (float) appBarLayout.getTotalScrollRange();
+            float oppposite = displacementFraction - (float)1.0;
+            if (oppposite == 0 && fam.getVisibility() == View.VISIBLE) {
+                fam.animate()
+                        .alpha(0.0f)
+                        .setDuration(250)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                fam.setVisibility(View.GONE);
+                            }
+                        });
+            } else if (oppposite > 0.21f && fam.getVisibility() == View.GONE) {
+                fam.animate()
+                        .alpha(1.0f)
+                        .setDuration(250)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                fam.setVisibility(View.VISIBLE);
+                            }
+                        });
+            }
             ViewCompat.setElevation(appBarLayout, (float)8.0);
+            ViewCompat.setElevation(fam, (float)12.0);
+
             fam.setTranslationY(verticalOffset);
         }
 

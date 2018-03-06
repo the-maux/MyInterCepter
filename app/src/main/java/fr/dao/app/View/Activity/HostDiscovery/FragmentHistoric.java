@@ -10,7 +10,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -97,9 +96,7 @@ public class                        FragmentHistoric extends MyFragment {
             mRV.setHasFixedSize(true);
             LinearLayoutManager manager = new LinearLayoutManager(mActivity);
             mRV.setLayoutManager(manager);
-            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRV.getContext(),
-                    manager.getOrientation());
-            mRV.addItemDecoration(dividerItemDecoration);
+
         } else {
             Log.d(TAG, "Historic Mode is not set (referer from User or Discovery)");
             onBackPressed();
