@@ -10,6 +10,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,8 +22,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
@@ -96,9 +95,11 @@ public class                        FragmentHistoric extends MyFragment {
             }
             mRV.setAdapter(RV_AdapterAp);
             mRV.setHasFixedSize(true);
-            mRV.setLayoutManager(new LinearLayoutManager(mActivity));
-
-
+            LinearLayoutManager manager = new LinearLayoutManager(mActivity);
+            mRV.setLayoutManager(manager);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRV.getContext(),
+                    manager.getOrientation());
+            mRV.addItemDecoration(dividerItemDecoration);
         } else {
             Log.d(TAG, "Historic Mode is not set (referer from User or Discovery)");
             onBackPressed();

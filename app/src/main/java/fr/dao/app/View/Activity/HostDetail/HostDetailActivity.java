@@ -2,8 +2,6 @@ package fr.dao.app.View.Activity.HostDetail;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -32,8 +30,8 @@ import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.Activity.HostDiscovery.FragmentHistoric;
 import fr.dao.app.View.Behavior.Activity.MyActivity;
-import fr.dao.app.View.Behavior.Coordinator.HostDetail.ImageCollapseBehavior;
 import fr.dao.app.View.Behavior.Fragment.MyFragment;
+import fr.dao.app.View.Behavior.MyGlideLoader;
 
 public class                    HostDetailActivity extends MyActivity {
     private String              TAG = "HostDetailActivity";
@@ -65,15 +63,7 @@ public class                    HostDetailActivity extends MyActivity {
             initMenuFab();
             initTabs();
             initAppBar();
-            /**
-             * TODO:
-             * Au lieu de display historic,
-             * Create a framgentHostDetailInfo
-             * Qui contient un recyclerview
-             * 1 ligne = 1 info
-             *
-             */
-            displayHistoric();
+            displayInfosHost();
         } catch (Exception e) {
             Snackbar.make(findViewById(R.id.Coordonitor), "Vous n'avez selectionner aucune target", Snackbar.LENGTH_LONG).show();
             Log.e(TAG, "Error in init, Back to previous fragment");
@@ -83,6 +73,7 @@ public class                    HostDetailActivity extends MyActivity {
 
     private void                initXml() {
         mCoordinator = findViewById(R.id.Coordonitor);
+        MyGlideLoader.coordoBackgroundXMM(this, mCoordinator);
         osHostImage = findViewById(R.id.OsImg);
                 CoordinatorLayout.LayoutParams params =
                 (CoordinatorLayout.LayoutParams) osHostImage.getLayoutParams();
@@ -220,10 +211,10 @@ public class                    HostDetailActivity extends MyActivity {
 
     private void                initTabs() {
         int rax = 0;
-        mTabs.addTab(mTabs.newTab().setText("Historic"), 0);
+        mTabs.addTab(mTabs.newTab().setText("Infos"), rax);
+        mTabs.addTab(mTabs.newTab().setText("Historic"), ++rax);
         if (mFocusedHost.Notes != null && !mFocusedHost.Notes.isEmpty())
             mTabs.addTab(mTabs.newTab().setText("Notes"), ++rax);
-        mTabs.addTab(mTabs.newTab().setText("Infos"), ++rax);
         mPcapsList = DBManager.getListPcapFormHost(mFocusedHost);
         if (mPcapsList != null && !mPcapsList.isEmpty())
             mTabs.addTab(mTabs.newTab().setText("Pcap"), ++rax);
@@ -239,6 +230,9 @@ public class                    HostDetailActivity extends MyActivity {
                         break;
                     case "pcap":
                         displayPcap();
+                        break;
+                    case "infos":
+                        displayInfosHost();
                         break;
                     default:
                         showSnackbar("Not implemented");
@@ -259,6 +253,11 @@ public class                    HostDetailActivity extends MyActivity {
         Bundle args = new Bundle();
         args.putString("mode", FragmentHistoric.HOST_HISTORIC);
         fragment.setArguments(args);
+        initFragment(fragment);
+    }
+
+    private void                displayInfosHost() {
+        MyFragment fragment = new HostDetailFragment ();
         initFragment(fragment);
     }
 

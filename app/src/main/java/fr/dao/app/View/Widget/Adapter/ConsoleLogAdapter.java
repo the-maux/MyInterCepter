@@ -1,36 +1,40 @@
 package fr.dao.app.View.Widget.Adapter;
 
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.dao.app.Model.Unix.ConsoleLog;
 import fr.dao.app.R;
-import fr.dao.app.View.Widget.Adapter.Holder.ConsoleLogHolder;
 
 
-public class                    ConsoleLogAdapter extends RecyclerView.Adapter<ConsoleLogHolder> {
+public class                    ConsoleLogAdapter extends RecyclerView.Adapter<ConsoleLogAdapter.ConsoleLogH> {
     private String              TAG = "ConsoleLogAdapter";
-    private List<ConsoleLog>    listConsole;
+    private ArrayList<String[]> listConsole;
     private RecyclerView        mRV;
 
     public                      ConsoleLogAdapter(List<ConsoleLog> dnsInterceptList) {
-        this.listConsole = dnsInterceptList;
+//        this.listConsole = dnsInterceptList;
     }
 
     public                      ConsoleLogAdapter(ArrayList<String[]> arrayList) {
+        this.listConsole = arrayList;
     }
 
-    public ConsoleLogHolder     onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ConsoleLogHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_consolelog, parent, false));
+    public ConsoleLogH     onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new ConsoleLogH(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_consolelog, parent, false));
     }
 
-    public void                 onBindViewHolder(ConsoleLogHolder holder, int position) {
-        ConsoleLog line = listConsole.get(position);
-        holder.lineConsole.setText(line.line);
+    public void                 onBindViewHolder(ConsoleLogH holder, int position) {
+        String[] line = listConsole.get(position);
+        holder.title.setText(line[0]);
+        holder.subtitle.setText(line[1]);
     }
 
     public int                  getItemCount() {
@@ -44,5 +48,17 @@ public class                    ConsoleLogAdapter extends RecyclerView.Adapter<C
 
     public RecyclerView         getRecyclerview() {
         return mRV;
+    }
+
+    class                       ConsoleLogH extends RecyclerView.ViewHolder {
+        public ConstraintLayout relative_layout;
+        public TextView title, subtitle;
+
+        public                  ConsoleLogH(View itemView) {
+            super(itemView);
+            relative_layout = itemView.findViewById(R.id.rootViewCard);
+            title = itemView.findViewById(R.id.title);
+            subtitle = itemView.findViewById(R.id.title_valu);
+        }
     }
 }

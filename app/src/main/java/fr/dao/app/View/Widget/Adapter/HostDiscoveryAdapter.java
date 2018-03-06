@@ -136,7 +136,6 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
             @Override
             public boolean onLongClick(View v) {
                 mActivity.runOnUiThread(new Runnable() {
-                    @Override
                     public void run() {
                         Utils.vibrateDevice(mActivity);
                         Intent intent = new Intent(mActivity, HostDetailActivity.class);

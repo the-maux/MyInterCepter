@@ -327,17 +327,22 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     public void                     setMAXIMUM_PROGRESS(int nbrHost) {
-        int icmpLoopTime = 4;
-        Log.d(TAG, "MAXIMUM PROGRESS SET : [" + icmpLoopTime + (nbrHost) + "] estimation[" + icmpLoopTime + (nbrHost) * 400 / 1000+ "s]");
         if (nbrHost < 10) {
-            mProgressBar.setMax(50);
-            MAXIMUM_PROGRESS = 50;
+            Log.d(TAG, "setMAXIMUM_PROGRESS::35 for nbrHost:" + nbrHost);
+            mProgressBar.setMax(35);
+            MAXIMUM_PROGRESS = 35;
         } else if (nbrHost < 50) {
-            mProgressBar.setMax(180);
-            MAXIMUM_PROGRESS = 180;
+            Log.d(TAG, "setMAXIMUM_PROGRESS::40 for nbrHost:" + nbrHost);
+            mProgressBar.setMax(40);
+            MAXIMUM_PROGRESS = 40;
+        } else if (nbrHost < 100) {
+            Log.d(TAG, "setMAXIMUM_PROGRESS::80 for nbrHost:" + nbrHost);
+            mProgressBar.setMax(80);
+            MAXIMUM_PROGRESS = 80;
         } else {
-            mProgressBar.setMax(240);
-            MAXIMUM_PROGRESS = 240;
+            Log.d(TAG, "setMAXIMUM_PROGRESS::80 for nbrHost:" + nbrHost);
+            mProgressBar.setMax(120);
+            MAXIMUM_PROGRESS = 120;
         }
     }
 

@@ -5,18 +5,19 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
 import com.github.clans.fab.FloatingActionMenu;
 
-public class                        FABCollapseBehavior extends CoordinatorLayout.Behavior {
-    private String                  TAG = "FABCollapseBehavior";
+public class FAMCollapseBehavior extends CoordinatorLayout.Behavior {
+    private String                  TAG = "FAMCollapseBehavior";
 
-    public                          FABCollapseBehavior(){
+    public FAMCollapseBehavior(){
         super();
     }
-    public                          FABCollapseBehavior(Context context, AttributeSet attrs){
+    public FAMCollapseBehavior(Context context, AttributeSet attrs){
         super(context, attrs);
     }
 
@@ -45,6 +46,7 @@ public class                        FABCollapseBehavior extends CoordinatorLayou
         public void                 onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
             if (fam.isOpened())
                 fam.close(true);
+            ViewCompat.setElevation(appBarLayout, (float)8.0);
             fam.setTranslationY(verticalOffset);
         }
 

@@ -11,11 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.github.clans.fab.FloatingActionMenu;
-
 public class                        ImageCollapseBehavior extends CoordinatorLayout.Behavior {
     private String                  TAG = "ImageCollapseBehavior";
-
+    private int                     hehightImg = -42, widthImg = -42;
     public ImageCollapseBehavior(){
         super();
     }
@@ -26,6 +24,10 @@ public class                        ImageCollapseBehavior extends CoordinatorLay
     public boolean                  layoutDependsOn(final CoordinatorLayout parent, final View child, View dependency){
        // Log.d(TAG, "layoutDependsOn::child(" + child.getClass().getName() + ")::parent(" + dependency.getClass().getName() + ")");
         if (dependency instanceof AppBarLayout && child instanceof ImageView) {
+            if (hehightImg == -42 && widthImg == -42) {
+                hehightImg = child.getLayoutParams().height;
+                widthImg = child.getLayoutParams().width;
+            }
             ((AppBarLayout) dependency).addOnOffsetChangedListener(new ImageOffseter(parent, (ImageView) child));
         }
         return dependency instanceof AppBarLayout;
@@ -48,18 +50,17 @@ public class                        ImageCollapseBehavior extends CoordinatorLay
         }
 
         public void                 onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-            // (if displacementFraction == 0.0f then no displacement, appBar is fully expanded;
-            //  if displacementFraction == 1.0f then full displacement, appBar is totally collapsed)
             float displacementFraction = -verticalOffset / (float) appBarLayout.getTotalScrollRange();
             float oppposite = displacementFraction - (float)1.0;
             Log.d(TAG, "onOffsetChanged:displacementFraction(" + displacementFraction + ")");
             Log.d(TAG, "onOffsetChanged:opposite(" + -oppposite + ")");
             ViewGroup.LayoutParams params = imageView.getLayoutParams();
-            params.height = (int) (-oppposite * params.height);
-            params.width = (int) (-oppposite * params.width);
+            params.height = (int) (-oppposite * hehightImg);
+            params.width = (int) (-oppposite * widthImg);
             imageView.setLayoutParams(params);
             imageView.setTranslationY(verticalOffset);
-            imageView.setAlpha(-oppposite -(float)1.0);
+            Log.d(TAG, "onOffsetChanged:alpha(" + (-oppposite) + ")");
+            imageView.setAlpha(-oppposite);
             imageView.requestLayout();
         }
 

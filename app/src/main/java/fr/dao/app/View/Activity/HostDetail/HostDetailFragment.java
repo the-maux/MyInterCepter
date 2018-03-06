@@ -3,14 +3,11 @@ package fr.dao.app.View.Activity.HostDetail;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -38,9 +35,7 @@ public class                    HostDetailFragment extends MyFragment {
     }
     
     private void                initXml(View rootView) {
- //       mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
         mRV = rootView.findViewById(R.id.list);
-
     }
 
     public void                 init() {
@@ -51,9 +46,12 @@ public class                    HostDetailFragment extends MyFragment {
             return;
         }
         mFocusedHost = mSingleton.hostList.get(0);
-
         ArrayList<String[]> arrayList = buildInfoArray();
         ConsoleLogAdapter adapter = new ConsoleLogAdapter(arrayList);
+        mRV.setAdapter(adapter);
+        mRV.setHasFixedSize(true);
+        mRV.setLayoutManager(new LinearLayoutManager(mActivity));
+
     }
 
     private ArrayList<String[]> buildInfoArray() {
@@ -90,4 +88,5 @@ public class                    HostDetailFragment extends MyFragment {
         arrayList.add(title15);
         return arrayList;
     }
+
 }
