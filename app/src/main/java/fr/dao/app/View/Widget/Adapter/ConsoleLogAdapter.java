@@ -10,20 +10,24 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.dao.app.Model.Unix.ConsoleLog;
 import fr.dao.app.R;
 
 
 public class                    ConsoleLogAdapter extends RecyclerView.Adapter<ConsoleLogAdapter.ConsoleLogH> {
     private String              TAG = "ConsoleLogAdapter";
-    private ArrayList<String[]> listConsole;
+    private ArrayList<String[]> listConsole = new ArrayList<String[]>();
     private RecyclerView        mRV;
 
-    public                      ConsoleLogAdapter(List<ConsoleLog> dnsInterceptList) {
+    public                      ConsoleLogAdapter(List<String[]> dumps) {
 //        this.listConsole = dnsInterceptList;
+        for (String[] dump : dumps) {
+            if (!dump[1].isEmpty())
+                listConsole.add(dump);
+        }
     }
 
     public                      ConsoleLogAdapter(ArrayList<String[]> arrayList) {
+
         this.listConsole = arrayList;
     }
 
