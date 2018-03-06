@@ -42,6 +42,28 @@ public class                Host extends Model {
     @Column(name = "isSecureComputer")
     public boolean          isSecureComputer = false;
 
+    @Column(name = "Hostname")
+    public String           Hostname = "Unknown";
+    @Column(name = "NetBIOS_Domain")
+    public String           NetBIOS_Domain = "Unknown";
+    @Column(name = "NetBIOS_Name")
+    public String           NetBIOS_Name = "Unknown";
+    @Column(name = "NetBIOS_Role")
+    public String           NetBIOS_Role = "Unknown";
+    @Column(name = "Brand_and_Model")
+    public String           Brand_and_Model = "Unknown";
+    @Column(name = "Bonjour_Name")
+    public String           Bonjour_Name = "Unknown";
+    @Column(name = "Bonjour_Services")
+    public String           Bonjour_Services = "Unknown";
+    @Column(name = "UPnP_Name")
+    public String           UPnP_Name = "Unknown";
+    @Column(name = "UPnP_Device")
+    public String           UPnP_Device = "Unknown";
+    @Column(name = "UPnP_Services")
+    public String           UPnP_Services = "Unknown";
+
+
     private ArrayList<Service> ServiceActivOnHost = new ArrayList<>();
    /* public List<Network>    Network() {
         return getMany(Network.class, "listDevices");

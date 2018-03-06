@@ -106,7 +106,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         });
     }
     private void                    initHostsRecyclerView() {
-        mHostAdapter = new HostDiscoveryAdapter(getActivity(), mHost_RV, false);
+        mHostAdapter = new HostDiscoveryAdapter(getActivity(), mHost_RV, false, mActivity.mFab);
         mHost_RV.setAdapter(mHostAdapter);
         mHost_RV.setHasFixedSize(true);
         mHost_RV.setLayoutManager(new LinearLayoutManager(mActivity));

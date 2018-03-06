@@ -35,7 +35,6 @@ public class FAMCollapseBehavior extends CoordinatorLayout.Behavior {
                 dependency instanceof AppBarLayout || super.onDependentViewChanged(parent, child, dependency);
     }
 
-
     private class                    FAMOffseter implements AppBarLayout.OnOffsetChangedListener {
         private final CoordinatorLayout parent;
         private final FloatingActionMenu fam;
@@ -50,7 +49,8 @@ public class FAMCollapseBehavior extends CoordinatorLayout.Behavior {
                 fam.close(true);
             float displacementFraction = -verticalOffset / (float) appBarLayout.getTotalScrollRange();
             float oppposite = displacementFraction - (float)1.0;
-            if (oppposite == 0 && fam.getVisibility() == View.VISIBLE) {
+            /*if (oppposite < 0.21f && fam.getVisibility() == View.VISIBLE) {
+                fam.setVisibility(View.GONE);/*
                 fam.animate()
                         .alpha(0.0f)
                         .setDuration(250)
@@ -60,9 +60,9 @@ public class FAMCollapseBehavior extends CoordinatorLayout.Behavior {
                                 super.onAnimationEnd(animation);
                                 fam.setVisibility(View.GONE);
                             }
-                        });
-            } else if (oppposite > 0.21f && fam.getVisibility() == View.GONE) {
-                fam.animate()
+                        });*/
+           /* } else if (oppposite > 0.21f && fam.getVisibility() == View.GONE) {
+               /* fam.animate()
                         .alpha(1.0f)
                         .setDuration(250)
                         .setListener(new AnimatorListenerAdapter() {
@@ -71,9 +71,10 @@ public class FAMCollapseBehavior extends CoordinatorLayout.Behavior {
                                 super.onAnimationEnd(animation);
                                 fam.setVisibility(View.VISIBLE);
                             }
-                        });
-            }
-            ViewCompat.setElevation(appBarLayout, (float)8.0);
+                        });*/
+             //   fam.setVisibility(View.VISIBLE);
+           /* }*/
+            ViewCompat.setElevation(appBarLayout, (float)4.0);
             ViewCompat.setElevation(fam, (float)12.0);
 
             fam.setTranslationY(verticalOffset);

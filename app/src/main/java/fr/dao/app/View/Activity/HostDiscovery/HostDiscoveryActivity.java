@@ -47,7 +47,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private HostDiscoveryActivity   mInstance = this;
     private Singleton               mSingleton = Singleton.getInstance();
     private CoordinatorLayout       mCoordinatorLayout;
-    private FloatingActionButton    mFab;
     private TextView                mBottomMonitor, mTimer;
     private int                     mProgress = 0;
     private ImageView               mSettingsMenu, mHistory;
@@ -61,6 +60,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     public Network                  actualNetwork;
     public Date                     date;
     private Timer                   timer = new Timer();
+    FloatingActionButton            mFab;
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +69,9 @@ public class                        HostDiscoveryActivity extends MyActivity {
         try {
             init();
         } catch (Exception e) {
+            Log.e(TAG, "Big error in init, closing application");
             showSnackbar("Error in discovery");
+            finish();
             e.printStackTrace();
         }
     }
@@ -136,7 +138,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         return new View.OnClickListener() {
             public void onClick(View view) {
                 MyFragment fragment = NetDiscoveryFragment;
-                mFab.setVisibility(View.GONE);
+                //mFab.setVisibility(View.GONE);
                 initFragment(fragment);
                 initSearchView();
             }
@@ -348,6 +350,11 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     public void                     showSnackbar(String txt) {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
+    }
+
+    protected void                  onResume() {
+        super.onResume();
+        ViewAnimate.setVisibilityToVisibleQuick(mFab);
     }
 
     public void                     onBackPressed() {

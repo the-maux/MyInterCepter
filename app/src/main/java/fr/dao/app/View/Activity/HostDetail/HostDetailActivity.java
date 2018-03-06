@@ -2,6 +2,7 @@ package fr.dao.app.View.Activity.HostDetail;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -29,6 +30,8 @@ import fr.dao.app.Model.Net.Pcap;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.Activity.HostDiscovery.FragmentHistoric;
+import fr.dao.app.View.Activity.Scan.NmapActivity;
+import fr.dao.app.View.Activity.Wireshark.WiresharkActivity;
 import fr.dao.app.View.Behavior.Activity.MyActivity;
 import fr.dao.app.View.Behavior.Fragment.MyFragment;
 import fr.dao.app.View.Behavior.MyGlideLoader;
@@ -43,7 +46,6 @@ public class                    HostDetailActivity extends MyActivity {
 //    private Toolbar             mToolbar;
     private ImageView           osHostImage;
     private TabLayout           mTabs;
-//    private TextView            mPortScan, mVulnerabilitys, mFingerprint, mMitm;
     private Host                mFocusedHost;
     private MyFragment          mCurrentFragment;
     private List<Pcap>          mPcapsList;
@@ -51,19 +53,18 @@ public class                    HostDetailActivity extends MyActivity {
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scrolling);
-        init();
+        initXml();
     }
 
     private void                init() {
         try {
             int position = getIntent().getExtras().getInt("position");
             mFocusedHost = mSingleton.hostList.get(position);
-            initXml();
-            initMenu();
+            Fingerprint.setOsIcon(this, mFocusedHost, osHostImage);
             initMenuFab();
             initTabs();
             initAppBar();
-            displayInfosHost();
+            displayInfosHost(position);
         } catch (Exception e) {
             Snackbar.make(findViewById(R.id.Coordonitor), "Vous n'avez selectionner aucune target", Snackbar.LENGTH_LONG).show();
             Log.e(TAG, "Error in init, Back to previous fragment");
@@ -71,32 +72,20 @@ public class                    HostDetailActivity extends MyActivity {
         }
     }
 
+    protected void              onResume() {
+        super.onResume();
+        init();
+    }
+
     private void                initXml() {
         mCoordinator = findViewById(R.id.Coordonitor);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinator);
         osHostImage = findViewById(R.id.OsImg);
-                CoordinatorLayout.LayoutParams params =
-                (CoordinatorLayout.LayoutParams) osHostImage.getLayoutParams();
-       // params.setBehavior(new ImageCollapseBehavior());
-        osHostImage.requestLayout();
-  //      mToolbar = findViewById(R.id.toolbar);
-/*        mPortScan  = findViewById(R.id.PortScanTxt);
-        mVulnerabilitys  = findViewById(R.id.VulnerabilityScan);
-        mFingerprint = findViewById(R.id.OsScanTxt);
-        mMitm  = findViewById(R.id.MitmARPTxt);*/
-        Fingerprint.setOsIcon(this, mFocusedHost, osHostImage);
-    //    mToolbar.setTitle(mFocusedHost.ip);
+//                CoordinatorLayout.LayoutParams params =
+//                (CoordinatorLayout.LayoutParams) osHostImage.getLayoutParams();
+//        osHostImage.requestLayout();
         mTabs  = findViewById(R.id.tabs);
         mMenuFAB = findViewById(R.id.fab_menu);
-//        mToolbar.setSubtitle(mFocusedHost.getName());
-//        DisplayMetrics displaymetrics = new DisplayMetrics();
-//        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-//        int width = displaymetrics.widthPixels;
-//        int appbar_height = (int)Math.round(width/1.5);
-//        CoordinatorLayout.LayoutParams layoutParams = new CoordinatorLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, appbar_height);
-//        AppBarLayout appBarLayout = findViewById(R.id.appbar);
-//        //AppBarLayout.LayoutParams layoutParams = appBarLayout.getLayoutParams();
-//        appBarLayout.setLayoutParams(layoutParams);
     }
 
     private void                initMenuFab() {
@@ -110,22 +99,47 @@ public class                    HostDetailActivity extends MyActivity {
         nmapFAB.setImageResource(R.mipmap.ic_eye_nosvg);
         nmapFAB.setColorNormal(getResources().getColor(R.color.fab_color));
         nmapFAB.setPadding(4, 4, 4, 4);
+        nmapFAB.setColorPressed(getResources().getColor(R.color.generic_background));
+        nmapFAB.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(mInstance, NmapActivity.class);
+                startActivity(intent);
+            }
+        });
         fingerprintFAB.setButtonSize(FloatingActionButton.SIZE_MINI);
         fingerprintFAB.setLabelText("Fingerprint");
         fingerprintFAB.setImageResource(R.mipmap.ic_fingerprint_nosvg);
         fingerprintFAB.setColorNormal(getResources().getColor(R.color.fab_color));
         fingerprintFAB.setPadding(4, 4, 4, 4);
+        fingerprintFAB.setColorPressed(getResources().getColor(R.color.generic_background));
+        fingerprintFAB.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Snackbar.make(findViewById(R.id.Coordonitor), "Not implemented yet", Snackbar.LENGTH_LONG).show();
+            }
+        });
         vulnerabilityScanner.setButtonSize(FloatingActionButton.SIZE_MINI);
         vulnerabilityScanner.setLabelText("Vulnerability Scanner");
         vulnerabilityScanner.setImageResource(R.drawable.ic_loop_search);
         vulnerabilityScanner.setColorNormal(getResources().getColor(R.color.fab_color));
+        vulnerabilityScanner.setColorPressed(getResources().getColor(R.color.generic_background));
         vulnerabilityScanner.setPadding(4, 4, 4, 4);
+        vulnerabilityScanner.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Snackbar.make(findViewById(R.id.Coordonitor), "Not implemented yet", Snackbar.LENGTH_LONG).show();
+            }
+        });
         sniffingFAB.setButtonSize(FloatingActionButton.SIZE_MINI);
         sniffingFAB.setLabelText("Sniffing");
         sniffingFAB.setImageResource(R.mipmap.ic_hearing);
         sniffingFAB.setPadding(4, 4, 4, 4);
         sniffingFAB.setColorNormal(getResources().getColor(R.color.fab_color));
-
+        sniffingFAB.setColorPressed(getResources().getColor(R.color.generic_background));
+        sniffingFAB.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(mInstance, WiresharkActivity.class);
+                startActivity(intent);
+            }
+        });
         mMenuFAB.addMenuButton(nmapFAB, 0);
         mMenuFAB.addMenuButton(sniffingFAB, 1);
         mMenuFAB.addMenuButton(fingerprintFAB, 2);
@@ -177,40 +191,9 @@ public class                    HostDetailActivity extends MyActivity {
         });
     }
 
-    private void                initMenu() {
-/*        mPortScan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mInstance, NmapActivity.class);
-                startActivity(intent);
-            }
-        });
-        mVulnerabilitys.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(findViewById(R.id.Coordonitor), "Not implemented yet", Snackbar.LENGTH_LONG).show();
-            }
-        });
-        mFingerprint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Snackbar.make(findViewById(R.id.Coordonitor), "Not implemented yet", Snackbar.LENGTH_LONG).show();
-                Intent intent = new Intent(mInstance, ScrollingActivity.class);
-                startActivity(intent);
-            }
-        });
-        mMitm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mInstance, WiresharkActivity.class);
-                startActivity(intent);
-            }
-        });*/
-    }
-
     private void                initTabs() {
         int rax = 0;
+        mTabs.removeAllTabs();
         mTabs.addTab(mTabs.newTab().setText("Infos"), rax);
         mTabs.addTab(mTabs.newTab().setText("Historic"), ++rax);
         if (mFocusedHost.Notes != null && !mFocusedHost.Notes.isEmpty())
@@ -232,7 +215,7 @@ public class                    HostDetailActivity extends MyActivity {
                         displayPcap();
                         break;
                     case "infos":
-                        displayInfosHost();
+                        displayInfosHost(getIntent().getExtras().getInt("position"));
                         break;
                     default:
                         showSnackbar("Not implemented");
@@ -256,8 +239,11 @@ public class                    HostDetailActivity extends MyActivity {
         initFragment(fragment);
     }
 
-    private void                displayInfosHost() {
-        MyFragment fragment = new HostDetailFragment ();
+    private void                displayInfosHost(int position) {
+        MyFragment fragment = new HostDetailFragment();
+        Bundle args = new Bundle();
+        args.putInt("position", position);
+        fragment.setArguments(args);
         initFragment(fragment);
     }
 

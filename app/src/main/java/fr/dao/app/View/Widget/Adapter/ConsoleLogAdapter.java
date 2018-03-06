@@ -18,17 +18,8 @@ public class                    ConsoleLogAdapter extends RecyclerView.Adapter<C
     private ArrayList<String[]> listConsole = new ArrayList<String[]>();
     private RecyclerView        mRV;
 
-    public                      ConsoleLogAdapter(List<String[]> dumps) {
+    public                      ConsoleLogAdapter() {
 //        this.listConsole = dnsInterceptList;
-        for (String[] dump : dumps) {
-            if (!dump[1].isEmpty())
-                listConsole.add(dump);
-        }
-    }
-
-    public                      ConsoleLogAdapter(ArrayList<String[]> arrayList) {
-
-        this.listConsole = arrayList;
     }
 
     public ConsoleLogH     onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -52,6 +43,14 @@ public class                    ConsoleLogAdapter extends RecyclerView.Adapter<C
 
     public RecyclerView         getRecyclerview() {
         return mRV;
+    }
+
+    public void                 updateList(ArrayList<String[]> arrayList) {
+        listConsole.clear();
+        for (int i = 0; i < arrayList.size(); i++) {
+            listConsole.add(arrayList.get(i));
+            notifyItemInserted(i);
+        }
     }
 
     class                       ConsoleLogH extends RecyclerView.ViewHolder {

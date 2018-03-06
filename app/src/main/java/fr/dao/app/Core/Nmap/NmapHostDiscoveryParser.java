@@ -106,14 +106,17 @@ class NmapHostDiscoveryParser {
                 if (host.vendor.contains("Unknown"))
                     host.vendor = line.replace("MAC Address: " + host.mac + " (", "").replace(")", "");
             } else if (line.contains("PORT ")) {
-                i = getPortList(nmapStdoutHost, i +1, host);
+                int z = getPortList(nmapStdoutHost, i +1, host, dump);
+                for (; i <= z; i++) {
+                    dump.append(nmapStdoutHost[z]);
+                }
             }
         }
         host.state = Host.State.ONLINE;
-        saveHost(host, dump);
+        saveHost(host, dump, nmapStdout);
     }
 
-    private void                    saveHost(Host host, StringBuilder dump) {
+    private void                    saveHost(Host host, StringBuilder dump, String nmapStdout) {
         host.dumpInfo = dump.toString();
         Fingerprint.initHost(host);
         host.mac = host.mac.toUpperCase();
@@ -126,8 +129,9 @@ class NmapHostDiscoveryParser {
             host.osType = Os.Gateway;
             mNetwork.Gateway = host;
         }
-        host.Notes = host.dumpInfo + '\n' +
-                    ((host.Ports() == null) ? " No Port detected ? " : host.Ports().getDump());
+        host.Notes = nmapStdout;/* host.dumpInfo + '\n' +
+                "---------------------------------\n Analyse is:" +
+                    ((host.Ports() == null) ? " No Port detected ? " : host.Ports().getDump());*/
         host.save();
     }
 
@@ -152,7 +156,7 @@ class NmapHostDiscoveryParser {
         }
     }
 
-    private int                     getPortList(String[] line, int i, Host host) {
+    private int                     getPortList(String[] line, int i, Host host, StringBuilder dump) {
         ArrayList<String> ports = new ArrayList<>();
  //       Log.d(TAG, "portList");
         for (; i < line.length; i++) {
@@ -166,8 +170,9 @@ class NmapHostDiscoveryParser {
                     host.Ports(ports);
                     return i-1;
                 }
-            } else
+            } else {
                 ports.add(line[i].replaceAll("  ", " "));
+            }
         }
         return i;
     }

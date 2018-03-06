@@ -19,7 +19,7 @@ import fr.dao.app.View.Behavior.Fragment.MyFragment;
 import fr.dao.app.View.Widget.Adapter.ConsoleLogAdapter;
 
 
-public class                    HostDetailFragment extends MyFragment {
+public class                        HostDetailFragment extends MyFragment {
     private String              TAG = "HostNotesFragment";
  //   private CoordinatorLayout   mCoordinatorLayout;
     private Host                mFocusedHost;//TODO need to be init
@@ -39,23 +39,36 @@ public class                    HostDetailFragment extends MyFragment {
         mRV = rootView.findViewById(R.id.list);
     }
 
+    final ConsoleLogAdapter adapter = new ConsoleLogAdapter();
     public void                 init() {
         if (mSingleton.hostList == null) {
          //   Snackbar.make(mCoordinatorLayout, "No target saved, You need to scan the Network", Snackbar.LENGTH_LONG).show();
             startActivity(new Intent(getActivity(), HostDiscoveryActivity.class));
             getActivity().onBackPressed();
             return;
+        } else {
+            Bundle args = getArguments();
+            int index = args.getInt("position", 0);
+            mFocusedHost = mSingleton.hostList.get(index);
+            mRV.setAdapter(adapter);
+            mRV.setHasFixedSize(true);
+            LinearLayoutManager manager = new LinearLayoutManager(mActivity);
+            mRV.setLayoutManager(manager);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRV.getContext(),
+                    manager.getOrientation());
+            mRV.addItemDecoration(dividerItemDecoration);
+            mRV.post(new Runnable() {
+                public void run() {
+                    final ArrayList<String[]> arrayList = buildInfoArray();
+                    adapter.updateList(arrayList);
+                }
+            });
         }
-        mFocusedHost = mSingleton.hostList.get(0);
-        ArrayList<String[]> arrayList = buildInfoArray();
-        ConsoleLogAdapter adapter = new ConsoleLogAdapter(arrayList);
-        mRV.setAdapter(adapter);
-        mRV.setHasFixedSize(true);
-        LinearLayoutManager manager = new LinearLayoutManager(mActivity);
-        mRV.setLayoutManager(manager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRV.getContext(),
-                manager.getOrientation());
-        mRV.addItemDecoration(dividerItemDecoration);
+    }
+
+    public void                 onResume() {
+        super.onResume();
+        init();
     }
 
     private ArrayList<String[]> buildInfoArray() {
@@ -65,16 +78,16 @@ public class                    HostDetailFragment extends MyFragment {
         String[] title3 = {"MAC Address", mFocusedHost.mac};
         String[] title4 = {"Hostname", mFocusedHost.name};
         String[] title5 = {"MAC Vendor", mFocusedHost.vendor};
-        String[] title6 = {"NetBIOS Domain", ""};
-        String[] title7 = {"NetBIOS Name", ""};
-        String[] title8 = {"NetBIOS Role", ""};
-        String[] title9 = {"First seen", ""};
-        String[] title10 = {"Brand and Model", ""};
-        String[] title11 = {"Bonjour Name", ""};
-        String[] title12 = {"Bonjour Services", ""};
-        String[] title13 = {"UPnP Name", ""};
-        String[] title14 = {"UPnP Device", ""};
-        String[] title15 = {"UPnP Services", ""};
+        String[] title6 = {"NetBIOS Domain", mFocusedHost.NetBIOS_Domain};
+        String[] title7 = {"NetBIOS Name", mFocusedHost.NetBIOS_Name};
+        String[] title8 = {"NetBIOS Role", mFocusedHost.NetBIOS_Role};
+        String[] title9 = {"First seen", "Unknow"};
+        String[] title10 = {"Brand and Model", mFocusedHost.Brand_and_Model};
+        String[] title11 = {"Bonjour Name", mFocusedHost.Bonjour_Name};
+        String[] title12 = {"Bonjour Services", mFocusedHost.Bonjour_Services};
+        String[] title13 = {"UPnP Name", mFocusedHost.UPnP_Name};
+        String[] title14 = {"UPnP Device", mFocusedHost.UPnP_Device};
+        String[] title15 = {"UPnP Services", mFocusedHost.UPnP_Services};
         arrayList.add(title1);
         arrayList.add(title2);
         arrayList.add(title3);

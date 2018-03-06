@@ -53,8 +53,8 @@
         <activity
             android:name=".View.Activity.WebServer.WebServerActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".View.Activity.HostDetail.HostDetailActivity" />
-        <activity android:name=".ScrollingActivity" />
+        <activity android:name=".View.Activity.HostDetail.HostDetailActivity"
+           />
         <meta-data android:name="AA_MODELS"
             android:value="
             fr.dao.app.Model.Target.Network,

@@ -3,6 +3,7 @@ package fr.dao.app.View.Widget.Adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
@@ -34,13 +35,16 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
     private List<Host>          mHosts = null;
     private List<Host>          mOriginalList;
     private RecyclerView        mHost_RV;
+    private FloatingActionButton mFab;
     private Singleton           mSingleton = Singleton.getInstance();
     private boolean             mIsHistoric = false;
 
-    public                      HostDiscoveryAdapter(Activity activity, RecyclerView Host_RV, boolean mIsHistoric) {
+    public                      HostDiscoveryAdapter(Activity activity, RecyclerView Host_RV,
+                                                     boolean mIsHistoric, FloatingActionButton fab) {
         mActivity = activity;
         mHost_RV = Host_RV;
         this.mIsHistoric = mIsHistoric;
+        mFab = fab;
     }
 
     public HostDiscoveryHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -138,11 +142,18 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                 mActivity.runOnUiThread(new Runnable() {
                     public void run() {
                         Utils.vibrateDevice(mActivity);
+                        ActivityOptionsCompat options;
                         Intent intent = new Intent(mActivity, HostDetailActivity.class);
                         Pair<View, String> p1 = Pair.create((View)holder.osIcon, "hostPicture");
                         Pair<View, String> p2 = Pair.create((View)holder.ipAndHostname, "hostTitle");
-                        ActivityOptionsCompat options = ActivityOptionsCompat
-                                .makeSceneTransitionAnimation(mActivity, p1, p2);
+                        if (mFab != null && 1 == 2) {
+                            Pair<View, String> p3 = Pair.create((View)mFab, "fabTransition");
+                            options = ActivityOptionsCompat
+                                    .makeSceneTransitionAnimation(mActivity, p1, p2, p3);
+                        } else {
+                            options = ActivityOptionsCompat
+                                    .makeSceneTransitionAnimation(mActivity, p1, p2);
+                        }
                         intent.putExtra("position", position);
                         mActivity.startActivity(intent, options.toBundle());
                     }

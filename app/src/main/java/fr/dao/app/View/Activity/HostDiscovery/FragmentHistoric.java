@@ -236,7 +236,7 @@ public class                        FragmentHistoric extends MyFragment {
                 public void onClick(View v) {
                     mActualMode = HistoricDetailMode.DEVICE_OF_NETWORK;
                     if (RV_AdapterHostSession == null) {
-                        HostDiscoveryAdapter hostAdapter = new HostDiscoveryAdapter(getActivity(), mRV, true);
+                        HostDiscoveryAdapter hostAdapter = new HostDiscoveryAdapter(getActivity(), mRV, true, null);
                         hostAdapter.updateHostList(session.listDevices());
                         RV_AdapterHostSession = hostAdapter;
                     }
