@@ -128,10 +128,10 @@ public class                        NmapControler {
     private void                    initMenuOptionScan() {
         mMenuCommand = new ArrayList<>();
         mNmapParams = new HashMap<>();
-        mMenuCommand.add("");
-        mNmapParams.put(mMenuCommand.get(0), "");
         mMenuCommand.add("Quick scan");
-        mNmapParams.put(mMenuCommand.get(1), " -T4 -F -v ");
+        mNmapParams.put(mMenuCommand.get(0), " -T4 -F -v ");
+        mMenuCommand.add("Search services");
+        mNmapParams.put(mMenuCommand.get(1), " -sV -v ");
         mMenuCommand.add("Regular scan");
         mNmapParams.put(mMenuCommand.get(2), " -PN -T4 -sS -sU -v " +
                 "--script nbstat.nse,dns-service-discovery " +
@@ -195,7 +195,7 @@ public class                        NmapControler {
         }
         String hostFilter = res.toString();
         String parameter = getNmapParamFromMenuItem(mActualItemMenu);
-        String cmd = PATH_NMAP + parameter + " " + hostFilter;
+        String cmd = PATH_NMAP + parameter + " " + hostFilter + " -d";
         return cmd.replace("  ", " ").replace("\n", "");
     }
 

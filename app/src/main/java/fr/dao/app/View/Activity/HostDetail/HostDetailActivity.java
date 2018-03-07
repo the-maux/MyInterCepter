@@ -88,6 +88,7 @@ public class                    HostDetailActivity extends MyActivity {
     }
 
     private void                initMenuFab() {
+        mMenuFAB.removeAllMenuButtons();
         FloatingActionButton nmapFAB = new FloatingActionButton(this);
         FloatingActionButton fingerprintFAB = new FloatingActionButton(this);
         FloatingActionButton vulnerabilityScanner = new FloatingActionButton(this);
@@ -101,6 +102,7 @@ public class                    HostDetailActivity extends MyActivity {
         nmapFAB.setColorPressed(getResources().getColor(R.color.generic_background));
         nmapFAB.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                mMenuFAB.close(true);
                 Intent intent = new Intent(mInstance, NmapActivity.class);
                 intent.putExtra("position", getIntent().getExtras().getInt("position"));
                 startActivity(intent);
@@ -115,6 +117,7 @@ public class                    HostDetailActivity extends MyActivity {
         fingerprintFAB.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Snackbar.make(findViewById(R.id.Coordonitor), "Not implemented yet", Snackbar.LENGTH_LONG).show();
+                mMenuFAB.close(true);
             }
         });
         vulnerabilityScanner.setButtonSize(FloatingActionButton.SIZE_MINI);
@@ -126,6 +129,7 @@ public class                    HostDetailActivity extends MyActivity {
         vulnerabilityScanner.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Snackbar.make(findViewById(R.id.Coordonitor), "Not implemented yet", Snackbar.LENGTH_LONG).show();
+                mMenuFAB.close(true);
             }
         });
         sniffingFAB.setButtonSize(FloatingActionButton.SIZE_MINI);
@@ -136,7 +140,9 @@ public class                    HostDetailActivity extends MyActivity {
         sniffingFAB.setColorPressed(getResources().getColor(R.color.generic_background));
         sniffingFAB.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                mMenuFAB.close(true);
                 Intent intent = new Intent(mInstance, WiresharkActivity.class);
+                intent.putExtra("position", getIntent().getExtras().getInt("position"));
                 startActivity(intent);
             }
         });

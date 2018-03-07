@@ -33,6 +33,7 @@ public abstract class           SniffActivity extends MyActivity  {
     protected static final int   SCANNER=0, SNIFFER=1, DNS=2, WEB=3;
     private int                  mType;
     private Singleton           mSingleton = Singleton.getInstance();
+    private boolean             hideBottomBar = false;
 
     public void                 onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
@@ -45,6 +46,8 @@ public abstract class           SniffActivity extends MyActivity  {
             mBottomBar = findViewById(R.id.navigation);
             //mBottomBar.setOnNavigationPositionListener(this);
         }
+        if (hideBottomBar)
+            mBottomBar.setVisibility(View.GONE);
     }
 
     protected void               initNavigationBottomBar(int position, boolean useCallback) {
@@ -101,7 +104,6 @@ public abstract class           SniffActivity extends MyActivity  {
 
     private AHBottomNavigation.OnTabSelectedListener onSelectedListener() {
         return new AHBottomNavigation.OnTabSelectedListener() {
-            @Override
             public boolean onTabSelected(final int position, boolean wasSelected) {
                 if (position != mType) {
                     mBottomBar.post(new Runnable() {
@@ -163,7 +165,7 @@ public abstract class           SniffActivity extends MyActivity  {
     }
 
     protected void              hideBottomBar() {
-        mBottomBar.setVisibility(View.GONE);
+        hideBottomBar = true;
     }
     protected void              showBottomBar() {
         mBottomBar.setVisibility(View.VISIBLE);
