@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import fr.dao.app.R;
 
@@ -47,17 +46,15 @@ public class                    ConsoleLogAdapter extends RecyclerView.Adapter<C
 
     public void                 updateList(ArrayList<String[]> arrayList) {
         listConsole.clear();
-        for (int i = 0; i < arrayList.size(); i++) {
-            listConsole.add(arrayList.get(i));
-            notifyItemInserted(i);
-        }
+        listConsole.addAll(arrayList);
+        notifyItemRangeInserted(0, arrayList.size());
     }
 
     class                       ConsoleLogH extends RecyclerView.ViewHolder {
         public ConstraintLayout relative_layout;
         public TextView title, subtitle;
 
-        public                  ConsoleLogH(View itemView) {
+        ConsoleLogH(View itemView) {
             super(itemView);
             relative_layout = itemView.findViewById(R.id.rootViewCard);
             title = itemView.findViewById(R.id.title);

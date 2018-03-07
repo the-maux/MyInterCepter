@@ -24,10 +24,9 @@
             android:layout_height="8dp"
             android:layout_alignRight="@+id/icon"
             android:layout_alignTop="@+id/icon"
-            android:layout_centerVertical="false"
             android:layout_marginRight="4dp"
-            android:layout_marginTop="16dp"
-            android:elevation="8dp"
+            android:layout_marginTop="12dp"
+            android:elevation="5dp"
             android:transitionName="hostPicture" />
 
         <ImageView
@@ -35,8 +34,9 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_centerVertical="true"
-            android:layout_margin="2dp"
+            android:layout_margin="4dp"
             android:elevation="4dp"
+            android:src="@drawable/android_logo"
             android:transitionName="hostPicture" />
 
         <LinearLayout
@@ -93,7 +93,8 @@
                 android:maxLines="1"
                 android:text="Intel Corporate"
                 android:textColor="?android:attr/textColorSecondary"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:visibility="visible" />
         </LinearLayout>
 
         <CheckBox

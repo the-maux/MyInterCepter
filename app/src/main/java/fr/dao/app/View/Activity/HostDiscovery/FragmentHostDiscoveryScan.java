@@ -186,16 +186,22 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     public Network                  updateStateOfHostAfterIcmp(ArrayList<String> ipReachables) {
         Network actualNetwork = DBNetwork.getAPFromSSID(mSingleton.network.Ssid);
         int rax = 0;
-        for (String ipReachable : ipReachables) {
+        for (Host host : actualNetwork.listDevices()) {
+            host.state = Host.State.OFFLINE;
+        }
+        for (String ipAndMacReachable : ipReachables) {
             rax = rax + 1;
-            String ip = ipReachable.split(":")[0];
-            String mac = ipReachable.replace(ipReachable.split(":")[0]+":", "").toUpperCase();
+            String ip = ipAndMacReachable.split(":")[0];
+            String mac = ipAndMacReachable.replace(ipAndMacReachable.split(":")[0]+":", "").toUpperCase();
             boolean isHostInList = false;
             for (Host host : actualNetwork.listDevices()) {
                 if (host.mac.contains(mac)) {
                     host.state = Host.State.FILTERED;
                     isHostInList = true;
                     break;
+                }
+                if (host.mac.contains(mSingleton.network.mac)) {
+                    host.state = Host.State.FILTERED;
                 }
             }
             if (!isHostInList) {
@@ -207,11 +213,9 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 actualNetwork.listDevices().add(host);
             }
         }
-
         Log.d(TAG, "(" + (actualNetwork.listDevices().size() - rax) + " offline/ " + actualNetwork.listDevices().size() + "inCache) ");
         mSingleton.actualNetwork = actualNetwork;
         mActivity.actualNetwork = actualNetwork;
-
         mHostAdapter.updateHostList(actualNetwork.listDevices());
         return actualNetwork;
     }

@@ -51,18 +51,11 @@ public class                        HostDetailFragment extends MyFragment {
             int index = args.getInt("position", 0);
             mFocusedHost = mSingleton.hostList.get(index);
             mRV.setAdapter(adapter);
-            mRV.setHasFixedSize(true);
             LinearLayoutManager manager = new LinearLayoutManager(mActivity);
             mRV.setLayoutManager(manager);
-            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRV.getContext(),
-                    manager.getOrientation());
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRV.getContext(), manager.getOrientation());
             mRV.addItemDecoration(dividerItemDecoration);
-            mRV.post(new Runnable() {
-                public void run() {
-                    final ArrayList<String[]> arrayList = buildInfoArray();
-                    adapter.updateList(arrayList);
-                }
-            });
+            adapter.updateList(buildInfoArray());
         }
     }
 

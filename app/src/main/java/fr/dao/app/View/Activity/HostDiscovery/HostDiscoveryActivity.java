@@ -341,10 +341,14 @@ public class                        HostDiscoveryActivity extends MyActivity {
             Log.d(TAG, "setMAXIMUM_PROGRESS::80 for nbrHost:" + nbrHost);
             mProgressBar.setMax(80);
             MAXIMUM_PROGRESS = 80;
+        } else if (nbrHost < 160) {
+            Log.d(TAG, "setMAXIMUM_PROGRESS::80 for nbrHost:" + nbrHost);
+            mProgressBar.setMax(100);
+            MAXIMUM_PROGRESS = 100;
         } else {
             Log.d(TAG, "setMAXIMUM_PROGRESS::80 for nbrHost:" + nbrHost);
-            mProgressBar.setMax(120);
-            MAXIMUM_PROGRESS = 120;
+            mProgressBar.setMax(140);
+            MAXIMUM_PROGRESS = 140;
         }
     }
 

@@ -206,10 +206,10 @@ public class                    HostDetailActivity extends MyActivity {
                 Log.d(TAG, "tab.getFirstInputQuestion().toString():" + tab.getText().toString());
                 switch (tab.getText().toString().toLowerCase()) {
                     case "historic":
-                        displayHistoric();
+                        displayHistoric(getIntent().getExtras().getInt("position"));
                         break;
                     case "notes":
-                        displayNotes();
+                        displayNotes(getIntent().getExtras().getInt("position"));
                         break;
                     case "pcap":
                         displayPcap();
@@ -227,14 +227,19 @@ public class                    HostDetailActivity extends MyActivity {
         });
     }
 
-    private void                displayNotes() {
-        initFragment(new HostNotesFragment());
+    private void                displayNotes(int position) {
+        MyFragment fragment = new HostNotesFragment();
+        Bundle args = new Bundle();
+        args.putInt("position", position);
+        fragment.setArguments(args);
+        initFragment(fragment);
     }
 
-    private void                displayHistoric() {
+    private void                displayHistoric(int position) {
         MyFragment fragment = new FragmentHistoric();
         Bundle args = new Bundle();
         args.putString("mode", FragmentHistoric.HOST_HISTORIC);
+        args.putInt("position", position);
         fragment.setArguments(args);
         initFragment(fragment);
     }
@@ -248,8 +253,6 @@ public class                    HostDetailActivity extends MyActivity {
     }
 
     private void                displayPcap() {
-        Log.d(TAG, "SHOW Pcaps OF " + mFocusedHost.ip);
-
         List<Pcap> pcapList = DBManager.getListPcapFormHost(mFocusedHost);
         if (pcapList == null || pcapList.isEmpty())
             Snackbar.make(mCoordinator, "No Pcap Recorded for " + mFocusedHost.getName(), Snackbar.LENGTH_LONG).show();

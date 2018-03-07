@@ -84,7 +84,9 @@ public class                        FragmentHistoric extends MyFragment {
             switch (getArguments().getString("mode")) {
                 case HOST_HISTORIC:
                     mHistoricMODE = HOST_HISTORIC;
-                    mFocusedHost = mSingleton.hostList.get(0);
+                    Bundle args = getArguments();
+                    int index = args.getInt("position", 0);
+                    mFocusedHost = mSingleton.hostList.get(index);
                     initHistoricFromDB(mFocusedHost);
                     break;
                 case DB_HISTORIC:

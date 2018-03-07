@@ -104,7 +104,7 @@ public class                Host extends Model {
     }
 
     public void             dumpMe(ArrayList<Host> selectedHostsList) {
-        Log.i(TAG, "subtitle: " + ip);// + "]");
+        Log.i(TAG, "ip: " + ip);// + "]");
         Log.i(TAG, "mac: " + mac);// + "]");
         Log.i(TAG, "vendor: " + vendor);// + "]" + "VENDOR[" + sameHost.vendor + "]");
         Log.i(TAG, "os: " + os);// + "] OS[" + sameHost.os + "]");

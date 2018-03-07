@@ -64,6 +64,8 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         if (host.os.contains("Unknown"))
             holder.os.setText(host.osType.name());
         holder.vendor.setText(host.vendor);
+        //holder.os.setVisibility((host.os.contains("Unknown")) ? View.GONE: View.VISIBLE);
+        //holder.vendor.setVisibility((host.vendor.contains("Unknown")) ? View.GONE: View.VISIBLE);
         if (mIsHistoric)
             holder.statusIcon.setVisibility(View.GONE);
         else
@@ -137,7 +139,6 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
     }
     private View.OnLongClickListener onCardLongClick(final Host host, final HostDiscoveryHolder holder, final int position) {
         return new View.OnLongClickListener() {
-            @Override
             public boolean onLongClick(View v) {
                 mActivity.runOnUiThread(new Runnable() {
                     public void run() {

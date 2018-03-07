@@ -1,7 +1,6 @@
 package fr.dao.app.Core.Nmap;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.ImageView;
 
 import java.util.Comparator;
@@ -21,15 +20,15 @@ public class                            Fingerprint {
     public static void                  initHost(Host host) {
         //Log.d(TAG, "initHost:\t" + host.toString());
         isItMyDevice(host);
-        guessosType(host.dumpInfo, host);
+        guessosType(host);
     }
 
-    private static void                 guessosType(String InfoDevice, Host host) {
-        if (InfoDevice == null) {
+    private static void                 guessosType(Host host) {
+        if (host.dumpInfo == null) {
             host.osType = Os.Unknow;
             return;
         }
-        InfoDevice = InfoDevice.toLowerCase();
+        host.dumpInfo = host.dumpInfo.toLowerCase();
         if (host.isItMyDevice) {
             host.osType = Os.Android;
             host.vendor = "Your Device";
@@ -43,28 +42,27 @@ public class                            Fingerprint {
              */
             host.osType = Os.Ps4;
             host.os = "FreeBSD 10.X, Sony embedded";
-        } else if (InfoDevice.contains("bluebird")) {
+        } else if (host.dumpInfo.contains("bluebird")) {
             host.osType = Os.Bluebird;
             host.os = "Unix/(Aosp)";
-        } else if (InfoDevice.contains("cisco")) {
+        } else if (host.dumpInfo.contains("cisco")) {
             host.osType = Os.Cisco;
             host.os = "BSD/(Cisco NX-OS)";
-        } else if (InfoDevice.contains("raspberry")) {
+        } else if (host.dumpInfo.contains("raspberry")) {
             host.osType = Os.Raspberry;
             host.os = "Unix/(Raspbian)";
-        } else if (InfoDevice.contains("quanta")) {
+        } else if (host.dumpInfo.contains("quanta")) {
             host.osType = Os.QUANTA;
             host.os = "Unix/(RedHat 3)";
-        } else if (InfoDevice.contains("android") || InfoDevice.contains("mobile") || InfoDevice.contains("samsung") ||
-                InfoDevice.contains("murata") || InfoDevice.contains("huawei") || InfoDevice.contains("oneplus") ||
-                InfoDevice.contains("lg") || InfoDevice.contains("motorola")) {
-            fingerprintMobile(host, InfoDevice);
-        } else if (InfoDevice.contains("apple") || host.vendor.toLowerCase().contains("apple") || host.osType == Os.Apple) {
-            fingerprintApple(host, InfoDevice);
-        } else if (!(!InfoDevice.contains("unix") && !InfoDevice.contains("linux") && !InfoDevice.contains("bsd"))) {
+        } else if (host.dumpInfo.contains("android") || host.dumpInfo.contains("mobile") || host.dumpInfo.contains("samsung") ||
+                host.dumpInfo.contains("murata") || host.dumpInfo.contains("huawei") || host.dumpInfo.contains("oneplus") ||
+                host.dumpInfo.contains("lg") || host.dumpInfo.contains("motorola")) {
+            fingerprintMobile(host, host.dumpInfo);
+        } else if (host.dumpInfo.contains("apple") || host.vendor.toLowerCase().contains("apple") || host.osType == Os.Apple) {
+            fingerprintApple(host, host.dumpInfo);
+        } else if (!(!host.dumpInfo.contains("unix") && !host.dumpInfo.contains("linux") && !host.dumpInfo.contains("bsd"))) {
             host.osType = Os.Linux_Unix;
-        } else if (InfoDevice.contains("windows") || InfoDevice.contains("microsoft")) {
-            Log.i(TAG, "WINDOWS OR MICROSOFT HERE:" + InfoDevice);
+        } else if (host.dumpInfo.contains("windows") || host.dumpInfo.contains("microsoft")) {
             host.osType = Os.Windows;
         } else
             host.osType = Os.Unknow;
@@ -86,9 +84,6 @@ public class                            Fingerprint {
     }
 
     public static boolean               isItWindows(Host host) {
-        /*
-         ** TODO: Do i have to checkd the proto for microsoft|windows|msrpc ?
-         */
         return host.Ports() != null &&
                 host.Ports().isPortOpen(135) &&
                 host.Ports().isPortOpen(445);

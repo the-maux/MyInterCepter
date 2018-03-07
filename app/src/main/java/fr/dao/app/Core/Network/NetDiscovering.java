@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
 
 public class                            NetDiscovering {
@@ -87,10 +88,19 @@ public class                            NetDiscovering {
         }
         if (res[netmask].contains("0.0.0.0")) res[netmask] = "255.255.255.0";
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        Singleton.getInstance().network = new NetworkInformation(wifiManager, wifiInfo.getMacAddress());
+        Singleton.getInstance().network = new NetworkInformation(wifiManager, getMac(wifiInfo));
         if ((activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)) != null)
             wifiInfo = ((WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
         Singleton.getInstance().network.Ssid = wifiInfo.getSSID().replace("\"", "");
         return true;
+    }
+
+    public static String                    getMac(WifiInfo wifiInfo) {
+        try {
+            return new BufferedReader(new RootProcess("GetMacADDR").exec("cat /sys/class/net/wlan0/address").getInputStreamReader()).readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return wifiInfo.getMacAddress();
+        }
     }
 }

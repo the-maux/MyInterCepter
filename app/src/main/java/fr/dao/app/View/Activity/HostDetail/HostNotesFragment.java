@@ -23,7 +23,7 @@ public class                    HostNotesFragment extends MyFragment {
     private Host                mFocusedHost;//TODO need to be init
     private Context             mCtx;
     private HostDiscoveryActivity mActivity;
-    private ScrollView mCentral_layout;
+    private ScrollView          mCentral_layout;
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_notes, container, false);
@@ -36,22 +36,26 @@ public class                    HostNotesFragment extends MyFragment {
     private void                initXml(View rootView) {
         mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
         mCentral_layout = rootView.findViewById(R.id.central_layout);
+    }
+
+    public void                 init() {
         if (mSingleton.hostList == null) {
             Snackbar.make(mCoordinatorLayout, "No target saved, You need to scan the Network", Snackbar.LENGTH_LONG).show();
             startActivity(new Intent(getActivity(), HostDiscoveryActivity.class));
             getActivity().onBackPressed();
         } else {
-            mFocusedHost = mSingleton.hostList.get(0);
+            Bundle args = getArguments();
+            int index = args.getInt("position", 0);
+            mFocusedHost = mSingleton.hostList.get(index);
         }
         TextView valueTV = new TextView(getContext());
         valueTV.setText(mFocusedHost.Notes);
+        mCentral_layout.removeAllViews();
         mCentral_layout.addView(valueTV);
     }
 
-    public void                 init() {
-
-//        for (String note : mFocusedHost.Notes) {
-//
-//        }
+    public void                 onResume() {
+        super.onResume();
+        init();
     }
 }
