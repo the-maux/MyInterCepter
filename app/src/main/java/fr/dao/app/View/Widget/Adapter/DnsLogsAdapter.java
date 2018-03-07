@@ -72,31 +72,17 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
         MyGlideLoader.loadDrawableInImageView(activity, TypeLogo, DNSTypeImg, true);
     }
 
-    private RecyclerView.Adapter<ConsoleLogHolder> setDetailLogsAdapter(final DNSLog logs, RecyclerView dnsRVLogs) {
-        RecyclerView.Adapter<ConsoleLogHolder> adapter =  new RecyclerView.Adapter<ConsoleLogHolder>() {
-            @Override
-            public ConsoleLogHolder     onCreateViewHolder(ViewGroup parent, int viewType) {
-                return new ConsoleLogHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_consolelog, parent, false));
-            }
-
-            @Override
-            public void                 onBindViewHolder(ConsoleLogHolder holder, int position) {
-                DNSLog log = logs.logs.get(position);
-                holder.lineConsole.setText(log.data);
-                //holder.lineConsole.setTextColor(log.color);
-            }
-
-            @Override
-            public int                  getItemCount() {
-                return logs.logs.size();
-            }
-        };
-        logs.setAdapter(adapter, dnsRVLogs);
-        return adapter;
-    }
-
     public RecyclerView         getRecyclerview() {
         return mRV;
+    }
+
+    public void                 onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mRV = recyclerView;
+    }
+
+    public int                  getItemCount() {
+        return mListConsole.size();
     }
 
     public void                 filtering(String query) {
@@ -109,13 +95,24 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
         notifyDataSetChanged();*/
     }
 
-    public void                 onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        mRV = recyclerView;
+    private RecyclerView.Adapter<ConsoleLogHolder>  setDetailLogsAdapter(final DNSLog logs, RecyclerView dnsRVLogs) {
+        RecyclerView.Adapter<ConsoleLogHolder> adapter =  new RecyclerView.Adapter<ConsoleLogHolder>() {
+            public ConsoleLogHolder                 onCreateViewHolder(ViewGroup parent, int viewType) {
+                return new ConsoleLogHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_consolelog, parent, false));
+            }
+
+            public void                             onBindViewHolder(ConsoleLogHolder holder, int position) {
+                DNSLog log = logs.logs.get(position);
+                holder.subtitle.setText(log.data);
+                holder.title.setVisibility(View.GONE);
+            }
+            public int                              getItemCount() {
+                return logs.logs.size();
+            }
+        };
+        logs.setAdapter(adapter, dnsRVLogs);
+        return adapter;
     }
 
-    public int                  getItemCount() {
-        return mListConsole.size();
-    }
 
 }

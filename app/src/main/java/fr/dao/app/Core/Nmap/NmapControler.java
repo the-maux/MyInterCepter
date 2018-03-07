@@ -68,9 +68,9 @@ public class                        NmapControler {
     */
     public                          NmapControler(List<String> ips, NetworkDiscoveryControler networkDiscoveryControler, Network ap) {/* Parsing mode */
         String NMAP_ARG_SCAN = " -PN -T4 -sS -sU " +
-                "--script nbstat.nse,dns-service-discovery " +
+                "--script nbstat.nse,dns-service-discovery,upnp-info " +
                 "--min-parallelism 100 " +
-                "-p T:21,T:22,T:23,T:25,T:80,T:110,T:135,T:139,T:3128,T:443,T:445,U:53,U:3031,U:5353  ";
+                "-p T:21,T:22,T:23,T:25,T:80,T:110,T:135,T:139,T:3128,T:443,T:445,U:53,U:1900,U:3031,U:5353  ";
         mIsLiveDump = false;
         mNnetworkDiscoveryControler = networkDiscoveryControler;
         mActualItemMenu = "Basic Host discovery";

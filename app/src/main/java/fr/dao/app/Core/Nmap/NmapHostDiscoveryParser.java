@@ -185,8 +185,10 @@ class NmapHostDiscoveryParser {
         for (String line : dumpHostScript) {
             if (line.contains("NetBIOS name")) {
                 String[] splitted = line.split(",");
-                Log.d(TAG, "NetBIOS name:[" + splitted[0].replace("NetBIOS name: ", "").replaceAll("  ", " ").replace("|", "") + "]");
-                Log.d(TAG, "NetBIOS user:[" + splitted[1].replace("NetBIOS user: ", "").replaceAll("  ", " ") + "]");
+                host.NetBIOS_Name = splitted[0].replace("NetBIOS name: ", "").replace("|", "").trim();
+                Log.d(TAG, "NetBIOS name:[" + host.NetBIOS_Name + "]");
+                host.NetBIOS_Role = splitted[1].replace("NetBIOS user: ", "").trim();
+                Log.d(TAG, "NetBIOS user:[" + host.NetBIOS_Role + "]");
                 //TODO: get le groupe ->  Flags: <group>
             }
         }

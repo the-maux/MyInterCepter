@@ -94,13 +94,18 @@ public class                    NmapActivity extends SniffActivity {
         initFragment();
         mScript.setOnClickListener(onClickScript());
         mScanType.setOnClickListener(onClickTypeScript());
-        if (mSingleton.hostList == null || mSingleton.hostList.isEmpty()) {
+        if (mSingleton.hostList == null || mSingleton.hostList.isEmpty()) {//MODE: No targert
             MonitorInoptionTheTarget.setText("No target selected");
             isExternalTarget = true;
             askForExternalTarget();
         } else {
             isExternalTarget = false;
-            mListHostSelected = mSingleton.hostList;
+            if (getIntent() != null && getIntent().getExtras() != null) {//MODE: FOCUSED TARGETx
+                int position = getIntent().getExtras().getInt("position", 0);
+                mListHostSelected.add(mSingleton.hostList.get(position));
+                hideBottomBar();
+            } else //MODE: TARGET LIST
+                mListHostSelected = mSingleton.hostList;
             initTabswithTargets(mListHostSelected);
             monitorNmapParam.setText(nmapControler.getNmapParamFromMenuItem(nmapControler.getMenuCommmands().get(0)));
             initUIWithTarget(mListHostSelected.get(0));
@@ -158,7 +163,6 @@ public class                    NmapActivity extends SniffActivity {
 
     private View.OnClickListener    onClickScript() {
         return new View.OnClickListener() {
-            @Override
             public void onClick(View view) {
 
             }

@@ -147,19 +147,26 @@ public abstract class           SniffActivity extends MyActivity  {
         };
     }
 
-    protected void onResume() {
+    protected void              onResume() {
         super.onResume();
         Log.d(TAG, " onResume::setCurrentItem::" + mType);
         mBottomBar.setCurrentItem(mType, false);
         updateNotifications();
     }
 
-    protected void onNewIntent(Intent intent) {
+    protected void              onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Log.d(TAG, "onNew Intent mTypeRecorded(" + mType + ") currentItem(" + mBottomBar.getCurrentItem() + ") on "+ mBottomBar.getItemsCount() + " items");
         Log.d(TAG, " onNewIntent::setCurrentItem::" + mType);
         mBottomBar.setCurrentItem(mType, false);
         updateNotifications();
+    }
+
+    protected void              hideBottomBar() {
+        mBottomBar.setVisibility(View.GONE);
+    }
+    protected void              showBottomBar() {
+        mBottomBar.setVisibility(View.VISIBLE);
     }
 
     public abstract int         getContentViewId();

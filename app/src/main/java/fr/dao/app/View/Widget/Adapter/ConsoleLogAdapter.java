@@ -50,7 +50,7 @@ public class                    ConsoleLogAdapter extends RecyclerView.Adapter<C
         notifyItemRangeInserted(0, arrayList.size());
     }
 
-    class                       ConsoleLogH extends RecyclerView.ViewHolder {
+    public class                       ConsoleLogH extends RecyclerView.ViewHolder {
         public ConstraintLayout relative_layout;
         public TextView title, subtitle;
 

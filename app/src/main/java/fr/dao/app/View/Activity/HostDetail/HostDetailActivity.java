@@ -40,13 +40,12 @@ public class                    HostDetailActivity extends MyActivity {
     private String              TAG = "HostDetailActivity";
     private HostDetailActivity  mInstance = this;
     private Singleton           mSingleton = Singleton.getInstance();
+    private Host                mFocusedHost;
     private CoordinatorLayout   mCoordinator;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private FloatingActionMenu  mMenuFAB;
-//    private Toolbar             mToolbar;
     private ImageView           osHostImage;
     private TabLayout           mTabs;
-    private Host                mFocusedHost;
     private MyFragment          mCurrentFragment;
     private List<Pcap>          mPcapsList;
 
@@ -54,6 +53,22 @@ public class                    HostDetailActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scrolling);
         initXml();
+    }
+
+    private void                initXml() {
+        mCoordinator = findViewById(R.id.Coordonitor);
+        MyGlideLoader.coordoBackgroundXMM(this, mCoordinator);
+        osHostImage = findViewById(R.id.OsImg);
+//                CoordinatorLayout.LayoutParams params =
+//                (CoordinatorLayout.LayoutParams) osHostImage.getLayoutParams();
+//        osHostImage.requestLayout();
+        mTabs  = findViewById(R.id.tabs);
+        mMenuFAB = findViewById(R.id.fab_menu);
+    }
+
+    protected void              onResume() {
+        super.onResume();
+        init();
     }
 
     private void                init() {
@@ -72,22 +87,6 @@ public class                    HostDetailActivity extends MyActivity {
         }
     }
 
-    protected void              onResume() {
-        super.onResume();
-        init();
-    }
-
-    private void                initXml() {
-        mCoordinator = findViewById(R.id.Coordonitor);
-        MyGlideLoader.coordoBackgroundXMM(this, mCoordinator);
-        osHostImage = findViewById(R.id.OsImg);
-//                CoordinatorLayout.LayoutParams params =
-//                (CoordinatorLayout.LayoutParams) osHostImage.getLayoutParams();
-//        osHostImage.requestLayout();
-        mTabs  = findViewById(R.id.tabs);
-        mMenuFAB = findViewById(R.id.fab_menu);
-    }
-
     private void                initMenuFab() {
         FloatingActionButton nmapFAB = new FloatingActionButton(this);
         FloatingActionButton fingerprintFAB = new FloatingActionButton(this);
@@ -103,6 +102,7 @@ public class                    HostDetailActivity extends MyActivity {
         nmapFAB.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent intent = new Intent(mInstance, NmapActivity.class);
+                intent.putExtra("position", getIntent().getExtras().getInt("position"));
                 startActivity(intent);
             }
         });
@@ -287,13 +287,14 @@ public class                    HostDetailActivity extends MyActivity {
         });
     }
 
+    public void                 showSnackbar(String txt) {
+        Snackbar.make(mCoordinator, txt, Toast.LENGTH_SHORT).show();
+    }
+
     public void                 onBackPressed() {
         if (mCurrentFragment == null || mCurrentFragment.onBackPressed()) {
             super.onBackPressed();
         }
     }
 
-    public void                     showSnackbar(String txt) {
-        Snackbar.make(mCoordinator, txt, Toast.LENGTH_SHORT).show();
-    }
 }

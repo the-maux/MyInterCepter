@@ -36,7 +36,6 @@
             android:layout_centerVertical="true"
             android:layout_margin="4dp"
             android:elevation="4dp"
-            android:src="@drawable/android_logo"
             android:transitionName="hostPicture" />
 
         <LinearLayout
