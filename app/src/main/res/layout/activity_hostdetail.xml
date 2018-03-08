@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Coordonitor"
@@ -26,19 +25,18 @@
                 android:id="@+id/OsImg"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:transitionName="hostPicture"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="4dp"
-                />
+                android:transitionName="hostPicture" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:transitionName="hostTitle"
                 android:layout_marginLeft="-8dp"
-                android:layout_toLeftOf="@+id/settings"
+                android:layout_toLeftOf="@+id/history"
                 android:layout_toRightOf="@+id/OsImg"
+                android:transitionName="hostTitle"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:subtitle="THE-MAUX PC"
                 app:title="192.168.124.124">
@@ -46,16 +44,16 @@
             </android.support.v7.widget.Toolbar>
 
             <ImageView
-                android:id="@+id/settings"
+                android:id="@+id/history"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="false"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="8dp"
-                android:transitionName="icone"
                 android:background="@android:color/transparent"
-                android:src="@drawable/scylla_transparent" />
+                android:src="@drawable/scylla_transparent"
+                android:transitionName="icone" />
 
         </RelativeLayout>
 
@@ -152,12 +150,13 @@
                     android:textColor="@color/material_light_white" />
 
             </LinearLayout>
+
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/primary_text"
                 android:layout_below="@+id/settingsLayout"
+                android:background="@color/primary_text"
                 app:tabMode="scrollable">
 
                 <android.support.design.widget.TabItem
@@ -177,13 +176,13 @@
                     android:layout_height="wrap_content"
                     android:text="Pcap" />
             </android.support.design.widget.TabLayout>
+
             <FrameLayout
                 android:id="@+id/frame_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/tabs"
-                tools:layout="@layout/fragment_hostdetail"
-                >
+                tools:layout="@layout/fragment_hostdetail">
 
             </FrameLayout>
         </RelativeLayout>

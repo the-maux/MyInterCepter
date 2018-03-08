@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/tools"
     android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,6 +13,7 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:transitionName="appBarTransition"
         android:background="@color/NmapPrimary"
         app:elevation="12dp">
 
@@ -43,20 +45,34 @@
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toTopOf="@+id/tabs"
                 app:layout_constraintLeft_toRightOf="@+id/OsImg"
-                app:layout_constraintRight_toLeftOf="@+id/settings"
+                app:layout_constraintRight_toLeftOf="@+id/history"
                 app:layout_constraintTop_toTopOf="parent"
                 app:subtitle="v6.40"
                 app:title="Nmap">
 
             </android.support.v7.widget.Toolbar>
 
-            <ImageButton
-                android:id="@+id/settings"
+            <ImageView
+                android:id="@+id/searchView"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
                 android:baselineAlignBottom="false"
-                android:src="@android:drawable/ic_menu_manage"
+                android:soundEffectsEnabled="true"
+                android:src="@mipmap/ic_nmap_type_foreground"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/tabs"
+                app:layout_constraintRight_toLeftOf="@+id/history"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_min="45dp" />
+
+            <ImageView
+                android:id="@+id/history"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:baselineAlignBottom="false"
+                android:soundEffectsEnabled="true"
+                android:src="@mipmap/ic_script"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/tabs"
                 app:layout_constraintRight_toLeftOf="@+id/settingsMenu"
@@ -69,6 +85,7 @@
                 android:layout_height="0dp"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
+                android:soundEffectsEnabled="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/tabs"
                 app:layout_constraintRight_toRightOf="parent"
@@ -116,9 +133,9 @@
             android:layout_centerVertical="true"
             android:layout_margin="9dp"
             android:scaleType="fitCenter"
-            android:src="?android:attr/actionModeWebSearchDrawable"
-            android:visibility="visible"
-            app:backgroundTint="@color/material_blue_grey_400"
+            android:src="@drawable/ic_loop_search"
+            android:visibility="gone"
+            app:backgroundTint="@color/fab_color"
             app:fabSize="normal" />
 
         <ProgressBar

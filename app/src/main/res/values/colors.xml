@@ -2,22 +2,31 @@
 <resources>
     <!-- App color  -->
     <color name="black_primary">#f7000000</color>
-    <color name="black_primary_light">#ff313131</color>
+    <color name="black_primary_light">#313131</color>
     <color name="primary">@color/material_blue_grey_400</color>
     <color name="primary_dark">@color/material_blue_grey_800</color>
     <color name="primary_light">@color/material_blue_grey_100</color>
+    <color name="primary_white">#eeeeee</color>
+
     <color name="accent">#009688</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
     <color name="generic_background">#ee212121</color>
+    <color name="stop_color">@color/material_red_500</color>
+    <color name="start_color">@color/material_green_500</color>
+    <color name="fab_color">#455a64</color>
+    <color name="online_color">@color/material_green_500</color>
+    <color name="filtered_color">@color/material_orange_500</color>
+
+    <color name="offline_color">@color/material_red_500</color>
 
     <!-- Activitys color  -->
     <color name="wiresharkPrimary">#263238</color>
     <color name="dnsSpoofPrimary">#102027</color>
     <color name="NmapPrimary">#1c313a</color>
-    <color name="webserverSpoofPrimary">#004d40</color>
+    <color name="webserverSpoofPrimary">#424242</color>
     <color name="settingsPrimary">#4f5b62</color>
 
     <!-- Wireshark color  -->

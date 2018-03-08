@@ -1,21 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootViewCard"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/material_light_black">
+    android:layout_height="42dp">
 
     <TextView
-        android:id="@+id/line"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:background="@android:color/background_dark"
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:gravity="center_vertical"
-        android:paddingBottom="2dp"
         android:paddingLeft="8dp"
-        android:paddingTop="2dp"
-        android:singleLine="true"
-        android:text="assets.onestore.ms.assets.onestore.ms.assets.onestore.ms.assets.onestore.ms.assets.onestore.ms."
-        android:textColor="@color/material_light_white"
-        android:textSize="12sp" />
-</RelativeLayout>
+        android:paddingRight="8dp"
+        android:text="Bonjour Services"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="14sp"
+        android:typeface="monospace"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/title_valu"
+        app:layout_constraintHorizontal_weight="0.35"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/title_valu"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="right|center_vertical"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="TextView"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_weight="0.65"
+        app:layout_constraintStart_toEndOf="@+id/title"
+        app:layout_constraintTop_toTopOf="parent" />
+</android.support.constraint.ConstraintLayout>

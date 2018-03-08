@@ -5,6 +5,8 @@
     android:id="@+id/lllayout"
     android:layout_width="match_parent"
     android:layout_height="16dp"
+    android:layout_alignParentLeft="false"
+    android:layout_alignParentRight="false"
     android:layout_marginTop="1dp"
     android:background="@color/cardview_shadow_start_color"
     android:minWidth="650dp"

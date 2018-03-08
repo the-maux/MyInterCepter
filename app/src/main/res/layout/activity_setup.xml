@@ -38,4 +38,5 @@
             android:typeface="monospace" />
 
     </RelativeLayout>
+
 </android.support.design.widget.CoordinatorLayout>
