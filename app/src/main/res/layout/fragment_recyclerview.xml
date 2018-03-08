@@ -9,5 +9,4 @@
     android:paddingBottom="@dimen/list_item_spacing_half"
     android:paddingTop="@dimen/list_item_spacing_half"
     android:animateLayoutChanges="true"
-    tools:context="fr.dao.app.ItemListDialogFragment"
     tools:listitem="@layout/item_consolelog" />
