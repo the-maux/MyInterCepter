@@ -31,9 +31,7 @@
             app:expandedTitleMarginStart="90dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:statusBarScrim="@drawable/backgroundtransition"
-            app:subtitle="646464"
-            app:title="424242"
-
+            android:transitionName="hostTitle"
             app:toolbarId="@+id/toolbar">
 
             <ImageView

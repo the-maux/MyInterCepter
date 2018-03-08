@@ -16,6 +16,10 @@ public class                    ViewAnimate {
     public static void          setVisibilityToVisibleQuick(final View view) {
         setVisibilty(view, SHORT_DURATION, View.VISIBLE);
     }
+    public static void          setVisibilityToVisibleQuick(final View view, int millisecond) {
+        setVisibilty(view, SHORT_DURATION, View.VISIBLE);
+    }
+
     public static void          setVisibilityToVisibleLong(final View view) {
         setVisibilty(view, LONG_DURATION, View.VISIBLE);
     }

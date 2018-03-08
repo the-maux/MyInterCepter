@@ -97,10 +97,11 @@ public class                            NetDiscovering {
 
     public static String                    getMac(WifiInfo wifiInfo) {
         try {
-            return new BufferedReader(new RootProcess("GetMacADDR").exec("cat /sys/class/net/wlan0/address").getInputStreamReader()).readLine();
+            return new BufferedReader(new RootProcess("GetMacADDR")
+                    .exec("cat /sys/class/net/wlan0/address").getInputStreamReader()).readLine().toUpperCase();
         } catch (IOException e) {
             e.printStackTrace();
-            return wifiInfo.getMacAddress();
+            return wifiInfo.getMacAddress().toUpperCase();//Using getMacAddress() is not recommended, gna gna gna
         }
     }
 }

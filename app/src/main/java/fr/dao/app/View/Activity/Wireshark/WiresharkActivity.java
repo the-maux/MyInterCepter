@@ -38,36 +38,34 @@ public class                    WiresharkActivity extends SniffActivity {
     private Toolbar             mToolbar;
     private ProgressBar         mProgressBar;
     private Singleton           mSingleton = Singleton.getInstance();
-    private FrameLayout         mFrame_container;
     private MyFragment          mFragment = null;
 
     protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentViewId());
         initXml();
-        init(null);
+        init(getIntent());
     }
 
     private void                init(Intent intent) {
-
         String PcapFilePath = intent  == null ? null : intent.getStringExtra("Pcap");
         if (PcapFilePath == null) {
-            Log.d(TAG, "initAsSniffingWireshark");
+            hideBottomBar();
             mFragment = new WiresharkLiveFragment();
             initSettings();
             initNavigationBottomBar(SNIFFER, true);
             ViewAnimate.setVisibilityToVisibleQuick(mFab);
             setToolbarTitle("Wireshark", (mSingleton.hostList == null) ? "0" : mSingleton.hostList.size() + " target");
         } else {
+            showBottomBar();
             ViewAnimate.setVisibilityToGoneLong(mFab);
-            Log.d(TAG, "initAsPcapReaderWireshark");
             findViewById(R.id.navigation).setVisibility(View.GONE);
             mFragment = new WiresharkReaderFragment();
             Bundle bundle = new Bundle();
             bundle.putString("Pcap", PcapFilePath);
             mFragment.setArguments(bundle);
-            setToolbarTitle("Wireshark", (mSingleton.hostList == null) ? "0" : mSingleton.hostList.size() + " target");
-
+            setToolbarTitle(PcapFilePath.replace(mSingleton.PcapPath, "")
+                    .replace("_", " ").replace(".pcap", ""),"Loading");
         }
         initFragment(mFragment);
     }
@@ -75,14 +73,13 @@ public class                    WiresharkActivity extends SniffActivity {
     protected void              onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Log.d(TAG, "onIntent Pcap::" + intent.getStringExtra("Pcap"));
-
         init(intent);
     }
 
     private void                initXml() {
         mCoordinatorLayout = findViewById(R.id.Coordonitor);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
-        mFrame_container = findViewById(R.id.frame_container);
+        //mFrame_container = findViewById(R.id.frame_container);
         mProgressBar =  findViewById(R.id.progressBar);
         mAppBar = findViewById(R.id.appbar);
         mToolbar = findViewById(R.id.toolbar);

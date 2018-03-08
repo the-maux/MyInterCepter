@@ -2,6 +2,7 @@ package fr.dao.app.Core.Database;
 
 import com.activeandroid.query.Select;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,5 +44,14 @@ public class                    DBManager {
                 listPcapWithNetworkIn.add(pcap);
         }
         return listPcapWithNetworkIn;
+    }
+
+    public static List<File>    getListPcapFormSSIDFile(String ssid) {
+        List<Pcap> allPcapsInDdd = getListPcapFormSSID(ssid);
+        List<File> arrayPcaps = new ArrayList<>();
+        for (Pcap pcap : allPcapsInDdd) {
+            arrayPcaps.add(pcap.getFile());
+        }
+        return arrayPcaps;
     }
 }

@@ -44,8 +44,8 @@ public class                    PcapFileAdapter extends RecyclerView.Adapter<Pca
             holder.subtitle.setText(size + "kb");
         holder.title.setOnClickListener(onFocusPcapFile(pcap));
         holder.subtitle.setOnClickListener(onFocusPcapFile(pcap));
-        holder.wifi_logo.setOnClickListener(onFocusPcapFile(pcap));
-        MyGlideLoader.loadDrawableInImageView(mActivity, R.drawable.pcapfile, holder.wifi_logo, false);
+        holder.icon.setOnClickListener(onFocusPcapFile(pcap));
+        MyGlideLoader.loadDrawableInImageView(mActivity, R.drawable.pcapfile, holder.icon, false);
     }
 
     private View.OnClickListener onFocusPcapFile(final File pcap) {
@@ -55,7 +55,8 @@ public class                    PcapFileAdapter extends RecyclerView.Adapter<Pca
                 Intent intent = new Intent(mActivity, WiresharkActivity.class);
                 Log.d(TAG, "newIntent Pcap:"+pcap.getPath());
                 intent.putExtra("Pcap", pcap.getPath());
-                pcapListerFragment.dismiss();
+                if (pcapListerFragment != null)
+                    pcapListerFragment.dismiss();
                 mActivity.startActivity(intent);
             }
         };

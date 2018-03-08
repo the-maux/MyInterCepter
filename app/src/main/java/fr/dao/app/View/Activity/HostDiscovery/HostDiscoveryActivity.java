@@ -104,7 +104,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
             NetDiscoveryFragment = mFragment;
             initFragment(NetDiscoveryFragment);
             initSearchView();
-
         }
     }
 
@@ -220,7 +219,11 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mSettingsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NetDiscoveryFragment.onSettingsClick((AppBarLayout) findViewById(R.id.appbar), mInstance).show();
+                try {
+                    NetDiscoveryFragment.onSettingsClick((AppBarLayout) findViewById(R.id.appbar), mInstance).show();
+                } catch (NoSuchFieldError error) {
+                    showSnackbar("BottomSheet is shitty");
+                }
             }
         });
     }
@@ -240,7 +243,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 Bundle args = new Bundle();
                 args.putString("mode", FragmentHistoric.DB_HISTORIC);
                 fragment.setArguments(args);
-                mFab.setVisibility(View.GONE);
+                ViewAnimate.setVisibilityToGoneQuick(mHistory);
+                ViewAnimate.setVisibilityToGoneQuick(mFab);
                 initFragment(fragment);
                 initSearchView();
             }
@@ -370,14 +374,16 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 if (mFragment.onBackPressed()) {
                     Log.d(TAG, "Fragment historic is over, switching to Netdiscover");
                     ViewAnimate.setVisibilityToVisibleQuick(mFab);
+                    ViewAnimate.setVisibilityToVisibleQuick(mHistory);
                     initFragment(NetDiscoveryFragment);
                     initSearchView();
                 }
             } else if (mFragment.getClass().getName().contains(FragmentHostDiscoverySettings.class.getName())){
-                mToolbarBackground.reverseTransition(700);
+                mToolbarBackground.reverseTransition(450);
                 ViewAnimate.setVisibilityToVisibleQuick(mFab);
-                getSupportFragmentManager().popBackStackImmediate();
+                ViewAnimate.setVisibilityToVisibleQuick(mHistory);
                 ViewAnimate.setVisibilityToVisibleQuick(mBottomMonitor);
+                getSupportFragmentManager().popBackStackImmediate();
             }
         } else {
             Log.e(TAG, "onBackPressed::NOTHING ON STACK");

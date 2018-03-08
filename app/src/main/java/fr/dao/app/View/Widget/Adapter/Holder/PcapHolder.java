@@ -12,7 +12,7 @@ import fr.dao.app.R;
 public class                PcapHolder extends RecyclerView.ViewHolder {
     public CardView         card_view;
     public RelativeLayout   relative_layout;
-    public ImageView        forward, wifi_logo;
+    public ImageView        forward, icon;
     public TextView         title, subtitle;
 
     public                  PcapHolder(View itemView) {
@@ -22,6 +22,6 @@ public class                PcapHolder extends RecyclerView.ViewHolder {
         title = itemView.findViewById(R.id.title);
         subtitle = itemView.findViewById(R.id.ssid_subtitle);
         forward = itemView.findViewById(R.id.icon2);
-        wifi_logo = itemView.findViewById(R.id.icon);
+        icon = itemView.findViewById(R.id.icon);
     }
 }

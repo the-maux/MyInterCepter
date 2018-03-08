@@ -1,14 +1,14 @@
 package fr.dao.app.View.Activity.HostDiscovery;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,8 +25,10 @@ import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
 
+import java.io.File;
 import java.util.List;
 
+import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Database.DBManager;
 import fr.dao.app.Core.Database.DBNetwork;
 import fr.dao.app.Core.Database.DBSniffSession;
@@ -36,16 +38,16 @@ import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.Model.Target.SniffSession;
 import fr.dao.app.R;
+import fr.dao.app.View.Activity.HostDetail.HostDetailActivity;
 import fr.dao.app.View.Activity.TargetMenu.TargetMenuActivity;
 import fr.dao.app.View.Behavior.Activity.MyActivity;
 import fr.dao.app.View.Behavior.Fragment.MyFragment;
 import fr.dao.app.View.Behavior.MyGlideLoader;
 import fr.dao.app.View.Behavior.ViewAnimate;
 import fr.dao.app.View.Widget.Adapter.HostDiscoveryAdapter;
-import fr.dao.app.View.Widget.Adapter.MyPcapAdapter;
 import fr.dao.app.View.Widget.Adapter.NetworksAdapter;
+import fr.dao.app.View.Widget.Adapter.PcapFileAdapter;
 import fr.dao.app.View.Widget.Adapter.SniffSessionAdapter;
-import fr.dao.app.View.Widget.Dialog.HostDialogDetail;
 import fr.dao.app.View.Widget.Dialog.RV_dialog;
 
 public class                        FragmentHistoric extends MyFragment {
@@ -57,13 +59,14 @@ public class                        FragmentHistoric extends MyFragment {
     private MyActivity              mActivity = null;
     private RecyclerView            mRV;
     private TextView                mEmptyList;
-    private RecyclerView.Adapter    RV_AdapterAp = null, RV_AdapterHostSession = null;
+    private RecyclerView.Adapter    RV_AdapterAp = null;
+    private HostDiscoveryAdapter    RV_AdapterHostSession = null;
     public enum HistoricDetailMode  {NETWORK_LISTING, DEVICE_OF_NETWORK, DETAIL_NETWORK, WIRESHARK_LISTING, NO_RECORDS}
     public static final String      HOST_HISTORIC = "HostDetail", DB_HISTORIC = "HistoricDB";
     public HistoricDetailMode       mActualMode = HistoricDetailMode.NO_RECORDS;
 
     private ConstraintLayout        mDetailSessionLayout;
-    
+    private ImageView               gateway_logo;
     private TextView                date, name, nbrScanned/*, nbrServiceDiscovered, typeScan*/;
     private CardView                cardGateway, cardWireshark, cardDevices, cardService;
     private TextView                titleGateway, titleWireshark, titleDevices, titleService;
@@ -85,8 +88,7 @@ public class                        FragmentHistoric extends MyFragment {
                 case HOST_HISTORIC:
                     mHistoricMODE = HOST_HISTORIC;
                     Bundle args = getArguments();
-                    int index = args.getInt("position", 0);
-                    mFocusedHost = mSingleton.hostList.get(index);
+                    mFocusedHost = DBHost.getDevicesFromMAC(args.getString("macAddress"));
                     initHistoricFromDB(mFocusedHost);
                     break;
                 case DB_HISTORIC:
@@ -104,8 +106,6 @@ public class                        FragmentHistoric extends MyFragment {
             onBackPressed();
         }
     }
-
-
 
     public void                     onResume() {
         super.onResume();
@@ -130,6 +130,8 @@ public class                        FragmentHistoric extends MyFragment {
         cardWireshark = rootView.findViewById(R.id.wireshark_card);
         cardDevices = rootView.findViewById(R.id.devices_card);
         cardService = rootView.findViewById(R.id.services_card);
+
+        gateway_logo = rootView.findViewById(R.id.gateway_logo);
 
         titleGateway = rootView.findViewById(R.id.titleGateway_menu);
         titleWireshark  = rootView.findViewById(R.id.title_wireshark);
@@ -203,6 +205,10 @@ public class                        FragmentHistoric extends MyFragment {
         initViewSessionFocus_Devices(focusedNetwork);
         initViewSessionFocus_Wireshark(focusedNetwork);
         initViewSessionFocus_Services(focusedNetwork);
+        ViewAnimate.setVisibilityToVisibleQuick(cardGateway, 250);
+        ViewAnimate.setVisibilityToVisibleQuick(cardWireshark, 300);
+        ViewAnimate.setVisibilityToVisibleQuick(cardDevices, 350);
+        ViewAnimate.setVisibilityToVisibleQuick(cardService, 400);
         setTitleToolbar(null, focusedNetwork.getDateString());
         String nbrService = ((focusedNetwork.Services() == null) ? "0" :
                 focusedNetwork.Services().size()) + " Services discovered on Network";
@@ -211,23 +217,25 @@ public class                        FragmentHistoric extends MyFragment {
 
     private void                    initViewSessionFocus_Gateway(final Network session) {
         if (session.Gateway != null) {
-            titleGateway.setText(session.Gateway.ip);
-            subtitleGateway.setText(session.Gateway.name + " - " + session.Gateway.mac);
+            titleGateway.setText(session.Gateway.getName());
+            subtitleGateway.setText(session.Gateway.mac);
             cardGateway.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new HostDialogDetail(session.Gateway).show();
-                }
-            });
-            cardGateway.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new HostDialogDetail(session.Gateway).show();
+                    ActivityOptionsCompat options;
+                    Intent intent = new Intent(mActivity, HostDetailActivity.class);
+                    Pair<View, String> p1 = Pair.create((View)gateway_logo, "hostPicture");
+                    Pair<View, String> p2 = Pair.create((View)titleGateway, "hostTitle");
+                    options = ActivityOptionsCompat
+                            .makeSceneTransitionAnimation(mActivity, p1, p2);
+                    intent.putExtra("mode", "Recorded");
+                    intent.putExtra("macAddress", session.Gateway.mac);
+                    mActivity.startActivity(intent, options.toBundle());
                 }
             });
         } else {
-            titleGateway.setText("Gateway is hided");
-            titleGateway.setText("No record");
+            titleGateway.setText("Gateway not in database");
+            subtitleGateway.setText("Did you deleted it ?");
         }
     }
     private void                    initViewSessionFocus_Devices(final Network session) {
@@ -237,23 +245,12 @@ public class                        FragmentHistoric extends MyFragment {
             cardDevices.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     mActualMode = HistoricDetailMode.DEVICE_OF_NETWORK;
-                    if (RV_AdapterHostSession == null) {
-                        HostDiscoveryAdapter hostAdapter = new HostDiscoveryAdapter(getActivity(), mRV, true, null);
-                        hostAdapter.updateHostList(session.listDevices());
-                        RV_AdapterHostSession = hostAdapter;
-                    }
-                    mDetailSessionLayout.animate()
-                            .alpha(0.0f)
-                            .setDuration(250)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    mDetailSessionLayout.setVisibility(View.GONE);
-                                    mRV.setVisibility(View.VISIBLE);
-                                }
-                            });
-                    setTitleToolbar(focusedNetwork.getDateString(),  session.listDevices().size() + " devices");
+                    if (RV_AdapterHostSession == null)
+                        RV_AdapterHostSession = new HostDiscoveryAdapter(getActivity(), mRV, true, null);
+                    RV_AdapterHostSession.updateHostList(session.listDevices());
+                    ViewAnimate.setVisibilityToGoneQuick(mDetailSessionLayout);
+                    ViewAnimate.setVisibilityToVisibleQuick(mRV);
+                    setTitleToolbar(session.Ssid,  session.listDevices().size() + " devices discovered");
                     mRV.setAdapter(RV_AdapterHostSession);
                 }
             });
@@ -280,9 +277,14 @@ public class                        FragmentHistoric extends MyFragment {
             subtitleWireshark.setText(nbrSession + " sniffing recorded");
             cardWireshark.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    mRV.setAdapter(new MyPcapAdapter(mActivity, DBManager.getListPcapFormSSID(session.Ssid)));
+                    mActualMode = HistoricDetailMode.WIRESHARK_LISTING;
+                    ViewAnimate.setVisibilityToGoneQuick(mDetailSessionLayout);
+                    ViewAnimate.setVisibilityToVisibleQuick(mRV);
+                    List<File> pcaps = DBManager.getListPcapFormSSIDFile(session.Ssid);
+                    mRV.setAdapter(new PcapFileAdapter(mActivity, pcaps, null));
                     mRV.setHasFixedSize(true);
                     mRV.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    setTitleToolbar(session.Ssid,  pcaps.size() + "records");
                 }
             });
         } else {
@@ -297,7 +299,7 @@ public class                        FragmentHistoric extends MyFragment {
     }
     private void                    initViewSessionFocus_Services(final Network session) {
         if (session.Services() != null && !session.Services().isEmpty()) {
-            titleService.setText(session.Services().size() + " découvert sur ce réseau");
+            titleService.setText("No stats recorded");
             String subtitle = ServicesController.howManyHostTheServices(session.Services()) + " devices différents";
             subtitleService.setText(subtitle);
             /*forwardGateway.setOnClickListener(new View.OnClickListener() {
@@ -417,7 +419,7 @@ public class                        FragmentHistoric extends MyFragment {
                 return false;
             case WIRESHARK_LISTING:
                 Log.i(TAG, "listing wireshark so, returning to network detail");
-                initHistoricFromDB();
+                onNetworkFocused(null);
                 return false;
             default:
                 return true;

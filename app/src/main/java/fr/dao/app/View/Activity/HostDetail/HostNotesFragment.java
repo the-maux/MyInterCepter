@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
@@ -39,15 +40,8 @@ public class                    HostNotesFragment extends MyFragment {
     }
 
     public void                 init() {
-        if (mSingleton.hostList == null) {
-            Snackbar.make(mCoordinatorLayout, "No target saved, You need to scan the Network", Snackbar.LENGTH_LONG).show();
-            startActivity(new Intent(getActivity(), HostDiscoveryActivity.class));
-            getActivity().onBackPressed();
-        } else {
-            Bundle args = getArguments();
-            int index = args.getInt("position", 0);
-            mFocusedHost = mSingleton.hostList.get(index);
-        }
+        Bundle args = getArguments();
+        mFocusedHost = DBHost.getDevicesFromMAC(args.getString("macAddress"));
         TextView valueTV = new TextView(getContext());
         valueTV.setText(mFocusedHost.Notes);
         mCentral_layout.removeAllViews();

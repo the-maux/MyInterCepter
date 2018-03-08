@@ -24,6 +24,7 @@ import java.util.List;
 import fr.dao.app.Core.Configuration.GlideApp;
 import fr.dao.app.Core.Configuration.GlideRequest;
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Database.DBManager;
 import fr.dao.app.Core.Nmap.Fingerprint;
 import fr.dao.app.Model.Net.Pcap;
@@ -72,14 +73,21 @@ public class                    HostDetailActivity extends MyActivity {
     }
 
     private void                init() {
+        Bundle bundle = getIntent().getExtras();
         try {
-            int position = getIntent().getExtras().getInt("position");
-            mFocusedHost = mSingleton.hostList.get(position);
+            String mode = bundle.getString("mode");
+            if (mode.contains("Live")) {
+                int position = bundle.getInt("position");
+                mFocusedHost = mSingleton.hostList.get(position);
+            } else if (mode.contains("Recorded")) {
+                mFocusedHost = DBHost.getDevicesFromMAC(bundle.getString("macAddress"));
+                mMenuFAB.setVisibility(View.GONE);
+            }
             Fingerprint.setOsIcon(this, mFocusedHost, osHostImage);
             initMenuFab();
             initTabs();
             initAppBar();
-            displayInfosHost(position);
+            displayInfosHost(mFocusedHost.mac);
         } catch (Exception e) {
             Snackbar.make(findViewById(R.id.Coordonitor), "Vous n'avez selectionner aucune target", Snackbar.LENGTH_LONG).show();
             Log.e(TAG, "Error in init, Back to previous fragment");
@@ -212,16 +220,16 @@ public class                    HostDetailActivity extends MyActivity {
                 Log.d(TAG, "tab.getFirstInputQuestion().toString():" + tab.getText().toString());
                 switch (tab.getText().toString().toLowerCase()) {
                     case "historic":
-                        displayHistoric(getIntent().getExtras().getInt("position"));
+                        displayHistoric(mFocusedHost.mac);
                         break;
                     case "notes":
-                        displayNotes(getIntent().getExtras().getInt("position"));
+                        displayNotes(mFocusedHost.mac);
                         break;
                     case "pcap":
                         displayPcap();
                         break;
                     case "infos":
-                        displayInfosHost(getIntent().getExtras().getInt("position"));
+                        displayInfosHost(mFocusedHost.mac);
                         break;
                     default:
                         showSnackbar("Not implemented");
@@ -233,27 +241,27 @@ public class                    HostDetailActivity extends MyActivity {
         });
     }
 
-    private void                displayNotes(int position) {
+    private void                displayNotes(String macOfHostFocused) {
         MyFragment fragment = new HostNotesFragment();
         Bundle args = new Bundle();
-        args.putInt("position", position);
+        args.putString("macAddress", macOfHostFocused);
         fragment.setArguments(args);
         initFragment(fragment);
     }
 
-    private void                displayHistoric(int position) {
+    private void                displayHistoric(String macOfHostFocused) {
         MyFragment fragment = new FragmentHistoric();
         Bundle args = new Bundle();
         args.putString("mode", FragmentHistoric.HOST_HISTORIC);
-        args.putInt("position", position);
+        args.putString("macAddress", macOfHostFocused);
         fragment.setArguments(args);
         initFragment(fragment);
     }
 
-    private void                displayInfosHost(int position) {
+    private void                displayInfosHost(String macOfHostFocused) {
         MyFragment fragment = new HostDetailFragment();
         Bundle args = new Bundle();
-        args.putInt("position", position);
+        args.putString("macAddress", macOfHostFocused);
         fragment.setArguments(args);
         initFragment(fragment);
     }

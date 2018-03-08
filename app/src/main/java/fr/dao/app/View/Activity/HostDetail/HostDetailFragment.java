@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
@@ -19,7 +20,7 @@ import fr.dao.app.View.Behavior.Fragment.MyFragment;
 import fr.dao.app.View.Widget.Adapter.ConsoleLogAdapter;
 
 
-public class                        HostDetailFragment extends MyFragment {
+public class                    HostDetailFragment extends MyFragment {
     private String              TAG = "HostNotesFragment";
  //   private CoordinatorLayout   mCoordinatorLayout;
     private Host                mFocusedHost;//TODO need to be init
@@ -41,15 +42,12 @@ public class                        HostDetailFragment extends MyFragment {
 
     final ConsoleLogAdapter adapter = new ConsoleLogAdapter();
     public void                 init() {
-        if (mSingleton.hostList == null) {
-         //   Snackbar.make(mCoordinatorLayout, "No target saved, You need to scan the Network", Snackbar.LENGTH_LONG).show();
+        Bundle args = getArguments();
+        if (args == null || args.getString("macAddress") == null) {
             startActivity(new Intent(getActivity(), HostDiscoveryActivity.class));
-            getActivity().onBackPressed();
             return;
         } else {
-            Bundle args = getArguments();
-            int index = args.getInt("position", 0);
-            mFocusedHost = mSingleton.hostList.get(index);
+            mFocusedHost = DBHost.getDevicesFromMAC(args.getString("macAddress"));
             mRV.setAdapter(adapter);
             LinearLayoutManager manager = new LinearLayoutManager(mActivity);
             mRV.setLayoutManager(manager);

@@ -1,6 +1,7 @@
 package fr.dao.app.View.Widget.Adapter;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -129,9 +130,10 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         originalListOfTrames.add(0, trame);
     }
 
-    public void             loadListOfTrame(ArrayList<Trame> trames) {
+    public void             loadListOfTrame(ArrayList<Trame> trames, ProgressDialog dialog) {
         listOfTrame.addAll(trames);
         notifyDataSetChanged();
+        dialog.hide();
     }
     public boolean          changePermissionFilter(Protocol protocol) {
         boolean ret;

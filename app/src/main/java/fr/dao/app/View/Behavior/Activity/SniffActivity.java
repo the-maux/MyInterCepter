@@ -83,23 +83,25 @@ public abstract class           SniffActivity extends MyActivity  {
     }
 
     public void                    updateNotifications() {
-        AHNotification greenNotif = new AHNotification.Builder()
-                .setText(" ")
-                .setBackgroundColor(ContextCompat.getColor(mInstance, R.color.start_color))
-                .setTextColor(ContextCompat.getColor(mInstance, R.color.primary_text))
-                .build();
-        AHNotification redNotif = new AHNotification.Builder()
-                .setText(" ")
-                .setBackgroundColor(ContextCompat.getColor(mInstance, R.color.stop_color))
-                .setTextColor(ContextCompat.getColor(mInstance, R.color.primary_text))
-                .build();
-        Tcpdump tcpdump = Tcpdump.getTcpdump(this, false);
-        if (tcpdump != null)
-            mBottomBar.setNotification(tcpdump.isRunning ? greenNotif : redNotif, 1);
-        else
-            mBottomBar.setNotification(redNotif, 1);
-        mBottomBar.setNotification(mSingleton.isDnsControlstarted() ? greenNotif : redNotif, 2);
-        mBottomBar.setNotification(mSingleton.iswebSpoofed() ? greenNotif : redNotif, 3);
+        if (!hideBottomBar && mBottomBar.getItemsCount() > 2) {
+            AHNotification greenNotif = new AHNotification.Builder()
+                    .setText(" ")
+                    .setBackgroundColor(ContextCompat.getColor(mInstance, R.color.start_color))
+                    .setTextColor(ContextCompat.getColor(mInstance, R.color.primary_text))
+                    .build();
+            AHNotification redNotif = new AHNotification.Builder()
+                    .setText(" ")
+                    .setBackgroundColor(ContextCompat.getColor(mInstance, R.color.stop_color))
+                    .setTextColor(ContextCompat.getColor(mInstance, R.color.primary_text))
+                    .build();
+            Tcpdump tcpdump = Tcpdump.getTcpdump(this, false);
+            if (tcpdump != null)
+                mBottomBar.setNotification(tcpdump.isRunning ? greenNotif : redNotif, 1);
+            else
+                mBottomBar.setNotification(redNotif, 1);
+            mBottomBar.setNotification(mSingleton.isDnsControlstarted() ? greenNotif : redNotif, 2);
+            mBottomBar.setNotification(mSingleton.iswebSpoofed() ? greenNotif : redNotif, 3);
+        }
     }
 
     private AHBottomNavigation.OnTabSelectedListener onSelectedListener() {
@@ -153,7 +155,8 @@ public abstract class           SniffActivity extends MyActivity  {
         super.onResume();
         Log.d(TAG, " onResume::setCurrentItem::" + mType);
         mBottomBar.setCurrentItem(mType, false);
-        updateNotifications();
+        if (!hideBottomBar)
+            updateNotifications();
     }
 
     protected void              onNewIntent(Intent intent) {
@@ -168,7 +171,7 @@ public abstract class           SniffActivity extends MyActivity  {
         hideBottomBar = true;
     }
     protected void              showBottomBar() {
-        mBottomBar.setVisibility(View.VISIBLE);
+        hideBottomBar = false;
     }
 
     public abstract int         getContentViewId();

@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.05" />
+            app:layout_constraintGuide_percent="0.01" />
 
         <android.support.constraint.Guideline
             android:id="@+id/bottom"
@@ -167,7 +167,7 @@
             app:layout_constraintEnd_toStartOf="@+id/mid_04_horizontal"
             app:layout_constraintStart_toStartOf="@+id/left"
             app:layout_constraintTop_toTopOf="@+id/top"
-            app:srcCompat="@drawable/router1" />
+            app:srcCompat="@drawable/blue_router2" />
 
         <TextView
             android:id="@+id/title"
@@ -177,7 +177,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="16dp"
             android:elevation="4dp"
-            android:fontFamily="@font/helvetica_regular"
+            android:fontFamily="@font/montserrat_regular"
             android:gravity="bottom"
             android:paddingBottom="8dp"
             android:paddingLeft="4dp"
@@ -226,11 +226,11 @@
             android:layout_height="0dp"
             android:layout_margin="18dp"
             android:elevation="4dp"
+            android:src="@drawable/router1"
             app:layout_constraintBottom_toTopOf="@+id/verti_47"
             app:layout_constraintLeft_toLeftOf="@+id/left"
             app:layout_constraintRight_toRightOf="@+id/midle_horizontal"
-            app:layout_constraintTop_toTopOf="@+id/bottom_header"
-            app:srcCompat="@drawable/blue_router2" />
+            app:layout_constraintTop_toTopOf="@+id/bottom_header" />
 
 
         <TextView
@@ -240,7 +240,7 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:elevation="4dp"
-            android:fontFamily="@font/helvetica_regular"
+            android:fontFamily="@font/montserrat_regular"
             android:gravity="center_horizontal"
             android:text="Gateway"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
@@ -253,24 +253,23 @@
             app:layout_constraintVertical_bias="0.0"
             app:layout_constraintVertical_chainStyle="packed" />
 
+
         <TextView
             android:id="@+id/titleGateway_menu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
+            android:layout_marginTop="4dp"
             android:elevation="4dp"
-            android:enabled="false"
             android:gravity="center_horizontal"
-            android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
-            android:textSize="14sp"
+            android:text="AAAAAAAAAAA"
             app:layout_constraintBottom_toTopOf="@+id/subtitleGateway"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="@+id/left"
             app:layout_constraintRight_toRightOf="@+id/midle_horizontal"
             app:layout_constraintTop_toBottomOf="@+id/titleGateway_fix"
+            app:layout_constraintVertical_bias="0.0"
             app:layout_constraintVertical_chainStyle="packed" />
-
 
         <TextView
             android:id="@+id/subtitleGateway"
@@ -280,11 +279,8 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:elevation="4dp"
-            android:enabled="false"
             android:gravity="center_horizontal"
-            android:paddingBottom="8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
-            android:textSize="14sp"
+            android:text="AAAAAAAAAAA"
             app:layout_constraintBottom_toBottomOf="@+id/gateway_card"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="@+id/left"
@@ -313,16 +309,16 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:elevation="4dp"
-            android:fontFamily="@font/helvetica_regular"
+            android:fontFamily="@font/montserrat_regular"
             android:gravity="center_horizontal"
             android:text="Devices"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/SubtitleDevices"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
             app:layout_constraintRight_toRightOf="@+id/right"
             app:layout_constraintTop_toBottomOf="@+id/verti_47"
-            app:layout_constraintVertical_bias="0.0"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
@@ -331,11 +327,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
+            android:layout_marginTop="4dp"
             android:elevation="4dp"
-            android:enabled="false"
             android:gravity="center_horizontal"
-            android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
-            android:textSize="14sp"
+            android:text="AAAAAAAAAAA"
             app:layout_constraintBottom_toTopOf="@+id/footer_devices"
             app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
             app:layout_constraintRight_toRightOf="@+id/right"
@@ -350,12 +345,11 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:elevation="4dp"
-            android:enabled="false"
             android:gravity="center_horizontal"
             android:paddingBottom="8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
-            android:textSize="14sp"
+            android:text="AAAAAAAAAAA"
             app:layout_constraintBottom_toBottomOf="@+id/devices_card"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
             app:layout_constraintRight_toRightOf="@+id/right"
             app:layout_constraintTop_toBottomOf="@+id/SubtitleDevices"
@@ -382,16 +376,16 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:elevation="4dp"
-            android:fontFamily="@font/helvetica_regular"
+            android:fontFamily="@font/montserrat_regular"
             android:gravity="center_horizontal"
             android:text="Sniffed sessions"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/title_wireshark"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="@+id/left"
             app:layout_constraintRight_toRightOf="@+id/midle_horizontal"
-            app:layout_constraintTop_toTopOf="@+id/verti_80"
-            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintTop_toBottomOf="@+id/iconWireshark"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
@@ -400,11 +394,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
+            android:layout_marginTop="4dp"
             android:elevation="4dp"
-            android:enabled="false"
             android:gravity="center_horizontal"
-            android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
-            android:textSize="14sp"
+            android:text="AAAAAAAAAAA"
             app:layout_constraintBottom_toTopOf="@+id/SubtitleWireshark"
             app:layout_constraintLeft_toLeftOf="@+id/left"
             app:layout_constraintRight_toRightOf="@+id/midle_horizontal"
@@ -418,11 +411,9 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:elevation="4dp"
-            android:enabled="false"
             android:gravity="center_horizontal"
             android:paddingBottom="8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
-            android:textSize="14sp"
+            android:text="AAAAAAAAAAA"
             app:layout_constraintBottom_toBottomOf="@+id/wireshark_card"
             app:layout_constraintLeft_toLeftOf="@+id/left"
             app:layout_constraintRight_toRightOf="@+id/midle_horizontal"
@@ -449,17 +440,18 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:elevation="4dp"
-            android:fontFamily="@font/helvetica_regular"
+            android:fontFamily="@font/montserrat_regular"
             android:gravity="center_horizontal"
             android:text="Statistique"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/titleServices"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
             app:layout_constraintRight_toRightOf="@+id/right"
-            app:layout_constraintTop_toTopOf="@+id/verti_80"
-            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintTop_toBottomOf="@+id/iconStats"
             app:layout_constraintVertical_chainStyle="packed" />
+
 
         <TextView
             android:id="@+id/titleServices"
@@ -467,17 +459,15 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
+            android:layout_marginTop="4dp"
             android:elevation="4dp"
-            android:enabled="false"
             android:gravity="center_horizontal"
-            android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
-            android:textSize="14sp"
+            android:text="AAAAAAAAAAA"
             app:layout_constraintBottom_toTopOf="@+id/SubtitleServices"
             app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
             app:layout_constraintRight_toRightOf="@+id/right"
             app:layout_constraintTop_toBottomOf="@+id/titleStats"
             app:layout_constraintVertical_chainStyle="packed" />
-
 
         <TextView
             android:id="@+id/SubtitleServices"
@@ -486,11 +476,9 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:elevation="4dp"
-            android:enabled="false"
             android:gravity="center_horizontal"
             android:paddingBottom="8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
-            android:textSize="14sp"
+            android:text="AAAAAAAAAAA"
             android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/bottom"
             app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"

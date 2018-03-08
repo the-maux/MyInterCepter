@@ -104,7 +104,7 @@ public class                            Fingerprint {
     public static void                  setOsIcon(Context context, Host host,  ImageView osImageView) {
         if (host != null && host.osType != null) {
             if (host.state == Host.State.FILTERED && host.vendor.contains("Unknown")) {
-                MyGlideLoader.loadDrawableInCircularImageView(context, R.mipmap.ic_secure2, osImageView);
+                MyGlideLoader.loadDrawableInCircularImageView(context, R.drawable.secure_computer1, osImageView);
                 return ;
             }
             setOsIcon(context, host.osType, osImageView);

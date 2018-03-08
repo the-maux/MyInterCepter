@@ -19,7 +19,7 @@ public class                    NetworkInformation {
 
     NetworkInformation(WifiManager wifiManager, String mac) {
         this.mWifiManager = wifiManager;
-        this.mac = mac;
+        this.mac = mac.replace("\n", "").trim();
         init();
     }
 

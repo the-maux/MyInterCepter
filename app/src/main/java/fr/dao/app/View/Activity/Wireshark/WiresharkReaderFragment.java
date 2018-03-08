@@ -31,7 +31,7 @@ public class                    WiresharkReaderFragment extends MyFragment {
     private WiresharkAdapter    mAdapterWireshark;
     private Tcpdump             mTcpdump;
     private File                mPcapFile;
-    ProgressDialog dialog;
+    ProgressDialog              dialog;
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_wireshark, container, false);
@@ -51,20 +51,15 @@ public class                    WiresharkReaderFragment extends MyFragment {
     public void                 init() {
         if (getArguments() != null && getArguments().getString("Pcap") != null) {
             mPcapFile = new File(getArguments().getString("Pcap"));
+            Log.d(TAG, "reading:" + mPcapFile.getPath());
             initRV();
-
-            dialog = ProgressDialog.show(mActivity, mPcapFile.getName(),
-                    "Loading. Please wait...", true);
+            dialog = ProgressDialog.show(mActivity, mPcapFile.getName(), "Loading. Please wait...", true);
             dialog.show();
             mTcpdump.readPcap(mPcapFile, this);
         } else {
             Log.e(TAG, "no Pcap returned");
             mActivity.showSnackbar("No Pcap to read",  ContextCompat.getColor(mActivity, R.color.stop_color));
         }
-    }
-
-    private File                getFile() {
-        return null;
     }
 
     private void                initRV() {
@@ -74,14 +69,11 @@ public class                    WiresharkReaderFragment extends MyFragment {
         mRV_Wireshark.setLayoutManager(new LinearLayoutManager(mActivity));
     }
 
-
-
     public void                 onPcapAnalysed(final ArrayList<Trame> mBufferOfTrame) {
         mActivity.runOnUiThread(new Runnable() {
-            @Override
             public void run() {
-                dialog.hide();
-                mAdapterWireshark.loadListOfTrame(mBufferOfTrame);
+                mAdapterWireshark.loadListOfTrame(mBufferOfTrame, dialog);
+                mActivity.setToolbarTitle(null, mBufferOfTrame.size() + " packets");
             }
         });
     }

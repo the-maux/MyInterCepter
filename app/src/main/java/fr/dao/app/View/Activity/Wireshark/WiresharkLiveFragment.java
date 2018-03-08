@@ -97,8 +97,8 @@ public class                    WiresharkLiveFragment extends MyFragment {
     private void                initRV() {
         mAdapterWireshark = new WiresharkAdapter(mActivity, mRV_Wireshark);
         mRV_Wireshark.setAdapter(mAdapterWireshark);
-        //mRV_Wireshark.hasFixedSize();
         WrapContentLinearLayoutManager layoutManager = new WrapContentLinearLayoutManager(mActivity);
+        //mRV_Wireshark.hasFixedSize();
         layoutManager.setAutoMeasureEnabled(false);
         mRV_Wireshark.setItemAnimator(null);
         mRV_Wireshark.setLayoutManager(layoutManager);
