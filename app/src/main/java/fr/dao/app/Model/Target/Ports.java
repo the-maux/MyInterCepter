@@ -96,6 +96,7 @@ public class                    Ports {
         Log.i(TAG, "139/tcp      netbios-ssn  " + Port.State.valueOf(primitivePortsLits.get(139)));
         Log.i(TAG, "443/tcp      https        " + Port.State.valueOf(primitivePortsLits.get(443)));
         Log.i(TAG, "445/tcp      microsoft-ds " + Port.State.valueOf(primitivePortsLits.get(445)));
+        Log.i(TAG, "2869/tcp     upnp Server " + Port.State.valueOf(primitivePortsLits.get(2869)));
         Log.i(TAG, "3031/udp     unknow       " + Port.State.valueOf(primitivePortsLits.get(3031)));
         Log.i(TAG, "3128/tcp     squid-http   " + Port.State.valueOf(primitivePortsLits.get(3128)));
         Log.i(TAG, "5353/udp     zeroconf     " + Port.State.valueOf(primitivePortsLits.get(5353)));

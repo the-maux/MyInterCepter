@@ -1,6 +1,7 @@
 package fr.dao.app.Core.Nmap;
 
 import android.content.Context;
+import android.os.Build;
 import android.widget.ImageView;
 
 import java.util.Comparator;
@@ -23,16 +24,15 @@ public class                            Fingerprint {
     }
 
     private static void                 guessosType(Host host) {
+        if (host.isItMyDevice) {
+           return;
+        }
         if (host.dumpInfo == null) {
             host.osType = Os.Unknow;
             return;
         }
         host.dumpInfo = host.dumpInfo.toLowerCase();
-        if (host.isItMyDevice) {
-            host.osType = Os.Android;
-            host.vendor = "Your Device";
-            host.os = "Unix/(AOSP)";
-        } if (host.vendor.contains("Sony")) {
+        if (host.vendor.contains("Sony")) {
             /**
              * TODO: faire un Thread qui check les port, si c'est open, c'est une ps4
              * 9295/tcp  open  unknown
@@ -92,6 +92,8 @@ public class                            Fingerprint {
         if (host.ip.contains(Singleton.getInstance().network.myIp)) {
             host.isItMyDevice = true;
             host.state = Host.State.ONLINE;
+            host.os = "Unix/(AOSP)";
+            host.osType = Os.Android;
         }
         return host.isItMyDevice;
     }

@@ -60,6 +60,7 @@ dependencies {
     compile 'com.dmitrymalkovich.android:material-design-dimens:1.2'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.github.clans:fab:1.6.4'
+    compile 'com.android.volley:volley:1.1.0'
     compile 'com.hendraanggrian:collapsingtoolbarlayout-subtitle:27.0.1'
     compile 'org.nanohttpd:nanohttpd:2.2.0'
     compile 'com.github.rubensousa:bottomsheetbuilder:1.6.0'
