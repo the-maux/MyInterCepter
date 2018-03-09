@@ -55,16 +55,12 @@ class NmapHostDiscoveryParser {
                     getIpHOSTNAME(node.split("\n")[0], host);
                     host.mac = getMACInTmp(macs, host.ip);
                     Host hostInList = ap.getHostFromMac(host.mac);
-//                    Log.d(TAG, "host from mac OK");
                     if (hostInList.name.isEmpty() || hostInList.name.contains("Unknow"))
                         hostInList.name = host.name;
-                    if (!Fingerprint.isItMyDevice(host)) {
-                        //Log.d(TAG, "buildHostFromNmapDump on " + host.toString());
+                    if (!Fingerprint.isItMyDevice(host))
                         buildHostFromNmapDump(node, hostInList);
-                    } else {
-//                        Log.d(TAG, "myDevice on " + host.toString());
+                    else
                         initIfItsMyDevice(hostInList);
-                    }
                 } catch (UnknownHostException e) {
                     Log.e(TAG, "UnknowHost");
                     e.printStackTrace();
@@ -121,13 +117,14 @@ class NmapHostDiscoveryParser {
 
 
     private void                    saveHost(Host host, StringBuilder dump, String nmapStdout) {
+        host.mac = host.mac.toUpperCase();
         host.dumpInfo = dump.toString();
         Fingerprint.initHost(host);
-        host.mac = host.mac.toUpperCase();
         if (host.Notes == null)
             host.Notes = "";
         if (Fingerprint.isItWindows(host)) {
             host.osType = Os.Windows;
+            host.os = "Windows";
         }
         if (Fingerprint.isItMyGateway(host)) {
             host.osType = Os.Gateway;
@@ -174,7 +171,7 @@ class NmapHostDiscoveryParser {
      * @param i
      * @param host
      * @param dump
-     * @return
+     * @return;
      */
     private int                     analyseHostScriptResult(String[] nmapStdoutHost, int i, Host host, StringBuilder dump) {
         ArrayList<String> dumpHostScript = new ArrayList<>();
@@ -283,7 +280,7 @@ class NmapHostDiscoveryParser {
             while (iter.hasNext()) {
                 Host host = iter.next();
                 if (host.osType == Os.Unknow) {
-                    host.dumpMe(mSingleton.hostList);
+                    host.dumpMe(mNetwork.listDevices());
                     Log.d(TAG, "-------------");
                 }
             }

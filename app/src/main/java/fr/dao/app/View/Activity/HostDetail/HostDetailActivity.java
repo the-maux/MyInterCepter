@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -51,6 +52,7 @@ public class                    HostDetailActivity extends MyActivity {
     private TabLayout           mTabs;
     private MyFragment          mCurrentFragment;
     private List<Pcap>          mPcapsList;
+    private ImageView           collapsBackground;
 
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,10 +78,21 @@ public class                    HostDetailActivity extends MyActivity {
         init();
     }
 
-    protected void onPostResume() {
+    protected void              onPostResume() {
         super.onPostResume();
+        collapsBackground = findViewById(R.id.collapsBackground);
+        collapsBackground.postDelayed(new Runnable() {
+            public void run() {
+                GlideRequest r = GlideApp.with(mInstance)
+                        .load(R.drawable.bg1)
+                        .centerCrop()
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+                r.into(collapsBackground);
+            }
+        }, 800);
         ViewAnimate.setVisibilityToVisibleQuick(settingsMenuDetail, 800);
-        ViewAnimate.setVisibilityToVisibleQuick(history, 1000);
+        ViewAnimate.setVisibilityToVisibleQuick(history, 500);
     }
 
     private void                init() {
@@ -176,12 +189,6 @@ public class                    HostDetailActivity extends MyActivity {
     private void                initAppBar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ImageView collapsBackground = findViewById(R.id.collapsBackground);
-        GlideRequest r = GlideApp.with(this)
-                .load(R.drawable.bg1)
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
-        r.into(collapsBackground);
         AppBarLayout appBarLayout = findViewById(R.id.app_bar);
         final ImageView osImg = findViewById(R.id.OsImg);
         collapsingToolbarLayout = findViewById(R.id.settings_menu_hostdetail);
@@ -320,6 +327,9 @@ public class                    HostDetailActivity extends MyActivity {
 
     public void                 onBackPressed() {
         if (mCurrentFragment == null || mCurrentFragment.onBackPressed()) {
+            settingsMenuDetail.setVisibility(View.GONE);
+            history.setVisibility(View.GONE);
+            collapsBackground.setImageResource(0);
             super.onBackPressed();
         }
     }

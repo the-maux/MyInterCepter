@@ -69,7 +69,7 @@
             android:value="DaoDatabase" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="10" />
+            android:value="11" />
     </application>
 
 </manifest>

@@ -6,8 +6,11 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import fr.dao.app.Core.Nmap.Fingerprint;
@@ -41,7 +44,8 @@ public class                Host extends Model {
     public String           NetworkDistance = "Unknown";
     @Column(name = "isSecureComputer")
     public boolean          isSecureComputer = false;
-
+    @Column(name = "firstSeen")
+    public Date             firstSeen;
     @Column(name = "Hostname")
     public String           Hostname = "Unknown";
     @Column(name = "NetBIOS_Domain")
@@ -181,5 +185,11 @@ public class                Host extends Model {
             }
         }
     }
-    
+    public String           getDateString() {
+        if (firstSeen == null)
+            return "Not recorded";
+        return new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE).format(firstSeen);
+    }
+
+
 }

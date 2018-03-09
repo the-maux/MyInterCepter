@@ -67,12 +67,12 @@ public class                    HostDetailFragment extends MyFragment {
         String[] title1 = {"Name", mFocusedHost.name};
         String[] title2 = {"IP Address", mFocusedHost.ip};
         String[] title3 = {"MAC Address", mFocusedHost.mac};
-        String[] title4 = {"Hostname", mFocusedHost.name};
+        String[] title4 = {"Device Type", mFocusedHost.osType.name().toUpperCase()};
         String[] title5 = {"MAC Vendor", mFocusedHost.vendor};
         String[] title6 = {"NetBIOS Domain", mFocusedHost.NetBIOS_Domain};
         String[] title7 = {"NetBIOS Name", mFocusedHost.NetBIOS_Name};
         String[] title8 = {"NetBIOS Role", mFocusedHost.NetBIOS_Role};
-        String[] title9 = {"First seen", "Unknow"};
+        String[] title9 = {"First seen", mFocusedHost.getDateString()};
         String[] title10 = {"Brand and Model", mFocusedHost.Brand_and_Model};
         String[] title11 = {"Bonjour Name", mFocusedHost.Bonjour_Name};
         String[] title12 = {"Bonjour Services", mFocusedHost.Bonjour_Services};

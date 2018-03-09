@@ -10,6 +10,9 @@ public class                    ViewAnimate {
     public static void          setVisibilityToGoneQuick(final View view) {
         setVisibilty(view, SHORT_DURATION, View.GONE);
     }
+    public static void          setVisibilityToInvisibleQuick(final View view) {
+        setVisibilty(view, SHORT_DURATION, View.INVISIBLE);
+    }
     public static void          setVisibilityToGoneLong(final View view) {
         setVisibilty(view, LONG_DURATION, View.GONE);
     }

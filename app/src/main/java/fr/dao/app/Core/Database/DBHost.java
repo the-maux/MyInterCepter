@@ -6,6 +6,7 @@ import com.activeandroid.query.From;
 import com.activeandroid.query.Select;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import fr.dao.app.Core.Configuration.Singleton;
@@ -38,12 +39,11 @@ public class                                DBHost {
     }
 
     public static Host                      saveOrGetInDatabase(Host myDevice) {
-        //ActiveAndroid.beginTransaction();
         Host deviceFromDB = DBHost.getDevicesFromMAC(myDevice.mac);
         if (deviceFromDB == null) {
-            Fingerprint.initHost(myDevice);
-            myDevice.save();
-            return myDevice;
+            deviceFromDB = myDevice;
+            deviceFromDB.firstSeen = Calendar.getInstance().getTime();
+            deviceFromDB.mac = deviceFromDB.mac.toUpperCase();
         } else {
             deviceFromDB.ip = myDevice.ip;
             if (!myDevice.getName().contains(myDevice.ip))
@@ -55,11 +55,9 @@ public class                                DBHost {
             deviceFromDB.vendor = myDevice.vendor;
             deviceFromDB.deviceType = myDevice.deviceType;
             deviceFromDB.TooManyFingerprintMatchForOs = myDevice.TooManyFingerprintMatchForOs;
-            Fingerprint.initHost(deviceFromDB);
-            deviceFromDB.save();
-//            ActiveAndroid.setTransactionSuccessful();
-//            ActiveAndroid.endTransaction();
         }
+        Fingerprint.initHost(deviceFromDB);
+        deviceFromDB.save();
         return deviceFromDB;
     }
 

@@ -18,7 +18,6 @@ public class                            Fingerprint {
     private static String               TAG = "Fingerprint";
 
     public static void                  initHost(Host host) {
-        //Log.d(TAG, "initHost:\t" + host.toString());
         isItMyDevice(host);
         guessosType(host);
     }
@@ -98,7 +97,8 @@ public class                            Fingerprint {
     }
 
     public static boolean               isItMyGateway(Host host) {
-        return host.ip.contains(Singleton.getInstance().network.gateway) && host.ip.length() == Singleton.getInstance().network.gateway.length();
+        return host.ip.contains(Singleton.getInstance().network.gateway) &&
+                host.ip.length() == Singleton.getInstance().network.gateway.length();
     }
 
     public static void                  setOsIcon(Context context, Host host,  ImageView osImageView) {

@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickList
 
 import java.util.ArrayList;
 
+import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Database.DBNetwork;
 import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
 import fr.dao.app.Core.Network.NetDiscovering;
@@ -113,14 +115,15 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         mHost_RV.setLayoutManager(new LinearLayoutManager(mActivity));
     }
 
-    public void                     initSearchView(SearchView mSearchView, final Toolbar toolbar) {
-        mSearchView.setOnSearchClickListener(new View.OnClickListener() {
+    public void                     initSearchView(SearchView searchView, final Toolbar toolbar) {
+        searchView.setGravity(Gravity.END);
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toolbar.setVisibility(View.GONE);
             }
         });
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             public boolean onQueryTextSubmit(String query) {
                 mHostAdapter.filterByString(query);
@@ -131,7 +134,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 return false;
             }
         });
-        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
                 mHostAdapter.filterByString("");
@@ -217,6 +220,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 Host host = new Host();
                 host.ip = ip;
                 host.mac = mac;
+                DBHost.saveOrGetInDatabase(host);
                 host.state = Host.State.FILTERED;
                 host.save();
                 actualNetwork.listDevices().add(host);
@@ -225,6 +229,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         Log.d(TAG, "(" + (actualNetwork.listDevices().size() - rax) + " offline/ " + actualNetwork.listDevices().size() + "inCache) ");
         mSingleton.actualNetwork = actualNetwork;
         mActivity.actualNetwork = actualNetwork;
+        mHosts = actualNetwork.listDevices();
         mHostAdapter.updateHostList(actualNetwork.listDevices());
         return actualNetwork;
     }

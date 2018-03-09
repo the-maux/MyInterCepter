@@ -243,7 +243,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 Bundle args = new Bundle();
                 args.putString("mode", FragmentHistoric.DB_HISTORIC);
                 fragment.setArguments(args);
-                ViewAnimate.setVisibilityToGoneQuick(mHistory);
+                ViewAnimate.setVisibilityToInvisibleQuick(mHistory);
+                ViewAnimate.setVisibilityToInvisibleQuick(mSearchView);
                 ViewAnimate.setVisibilityToGoneQuick(mFab);
                 initFragment(fragment);
                 initSearchView();
@@ -373,16 +374,18 @@ public class                        HostDiscoveryActivity extends MyActivity {
             } else if (mFragment.getClass().getName().contains(FragmentHistoric.class.getName())) {
                 if (mFragment.onBackPressed()) {
                     Log.d(TAG, "Fragment historic is over, switching to Netdiscover");
-                    ViewAnimate.setVisibilityToVisibleQuick(mFab);
-                    ViewAnimate.setVisibilityToVisibleQuick(mHistory);
+                    ViewAnimate.setVisibilityToVisibleQuick(mHistory, 300);
+                    ViewAnimate.setVisibilityToVisibleQuick(mSearchView, 400);
+                    ViewAnimate.setVisibilityToVisibleQuick(mFab, 500);
                     initFragment(NetDiscoveryFragment);
                     initSearchView();
                 }
             } else if (mFragment.getClass().getName().contains(FragmentHostDiscoverySettings.class.getName())){
                 mToolbarBackground.reverseTransition(450);
-                ViewAnimate.setVisibilityToVisibleQuick(mFab);
-                ViewAnimate.setVisibilityToVisibleQuick(mHistory);
-                ViewAnimate.setVisibilityToVisibleQuick(mBottomMonitor);
+                ViewAnimate.setVisibilityToVisibleQuick(mHistory, 300);
+                ViewAnimate.setVisibilityToVisibleQuick(mSearchView, 400);
+                ViewAnimate.setVisibilityToVisibleQuick(mFab, 500);
+                ViewAnimate.setVisibilityToVisibleQuick(mBottomMonitor, 600);
                 getSupportFragmentManager().popBackStackImmediate();
             }
         } else {

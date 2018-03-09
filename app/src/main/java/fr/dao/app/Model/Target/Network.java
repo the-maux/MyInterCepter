@@ -29,7 +29,6 @@ public class                Network extends Model {
     public Host             Gateway;
     @Column(name = "OsNumber")
     public int              nbrOs;
-
     @Column(name = "Devices")
     public String           listDevicesSerialized;
     private ArrayList<Host> listDevices = null;

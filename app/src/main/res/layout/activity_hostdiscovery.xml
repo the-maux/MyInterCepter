@@ -71,7 +71,6 @@
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
                 android:baselineAlignBottom="false"
-                android:gravity="end"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toStartOf="@+id/history"
                 app:layout_constraintHorizontal_weight="1"
