@@ -117,7 +117,7 @@ public class                            Fingerprint {
         int ImageRessource;
         switch (os) {
             case Windows:
-                ImageRessource = R.drawable.winicon;
+                ImageRessource = R.drawable.windows;
                 break;
             case Cisco:
                 ImageRessource = R.drawable.cisco;

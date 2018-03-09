@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -112,8 +113,15 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         mHost_RV.setLayoutManager(new LinearLayoutManager(mActivity));
     }
 
-    public void                     initSearchView(SearchView mSearchView) {
+    public void                     initSearchView(SearchView mSearchView, final Toolbar toolbar) {
+        mSearchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+            }
+        });
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             public boolean onQueryTextSubmit(String query) {
                 mHostAdapter.filterByString(query);
                 return false;
@@ -127,6 +135,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
             @Override
             public boolean onClose() {
                 mHostAdapter.filterByString("");
+                toolbar.setVisibility(View.VISIBLE);
                 return false;
             }
         });
@@ -244,14 +253,14 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     public void                     osFilterDialog() {
         if (!mScannerControler.inLoading) {
             final ArrayList<Os> osList = mHostAdapter.getOsList();
-            final RecyclerView.Adapter adapter = new OSFilterAdapter(mActivity, osList);
+            final OSFilterAdapter adapter = new OSFilterAdapter(mActivity, osList);
             new RV_dialog(mActivity)
                     .setAdapter(adapter, false)
                     .setTitle("Choix des cibles")
                     .onPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             if (osList.size() > 0) {
-                                mActivity.showSnackbar(mHostAdapter.filterByOs(osList) + " devices found");
+                                mActivity.showSnackbar(mHostAdapter.filterByOs(adapter.getSelected()) + " devices found");
                             }
                         }
                         })

@@ -275,27 +275,35 @@ public class                        FragmentHistoric extends MyFragment {
                     }
             }
             subtitleWireshark.setText(nbrSession + " sniffing recorded");
-            cardWireshark.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    mActualMode = HistoricDetailMode.WIRESHARK_LISTING;
-                    ViewAnimate.setVisibilityToGoneQuick(mDetailSessionLayout);
-                    ViewAnimate.setVisibilityToVisibleQuick(mRV);
-                    List<File> pcaps = DBManager.getListPcapFormSSIDFile(session.Ssid);
-                    mRV.setAdapter(new PcapFileAdapter(mActivity, pcaps, null));
-                    mRV.setHasFixedSize(true);
-                    mRV.setLayoutManager(new LinearLayoutManager(getActivity()));
-                    setTitleToolbar(session.Ssid,  pcaps.size() + "records");
-                }
-            });
         } else {
-            titleWireshark.setText("Aucune sessions recorded");
+            titleWireshark.setText("No recorded sessions");
             subtitleWireshark.setText("0 pcap recorded");
             cardWireshark.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-
+                    mActivity.showSnackbar("No recorded session");
                 }
             });
         }
+        cardWireshark.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mActualMode = HistoricDetailMode.WIRESHARK_LISTING;
+                ViewAnimate.setVisibilityToGoneQuick(mDetailSessionLayout);
+                ViewAnimate.setVisibilityToVisibleQuick(mRV);
+                List<File> pcaps;
+                if (session.SniffSessions() == null || session.SniffSessions().isEmpty()) {
+                    pcaps = Pcap.getListFiles(new File(mSingleton.PcapPath));
+                    mActivity.showSnackbar("No session recorded, showing all pcaps");
+                    setTitleToolbar("/sdcard/Pcap",  pcaps.size() + "records");
+                } else {
+                    pcaps = DBManager.getListPcapFormSSIDFile(session.Ssid);
+                    setTitleToolbar(session.Ssid,  pcaps.size() + "records");
+                }
+                mRV.setAdapter(new PcapFileAdapter(mActivity, pcaps, null));
+                mRV.setHasFixedSize(true);
+                mRV.setLayoutManager(new LinearLayoutManager(getActivity()));
+            }
+        });
+
     }
     private void                    initViewSessionFocus_Services(final Network session) {
         if (session.Services() != null && !session.Services().isEmpty()) {

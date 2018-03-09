@@ -229,7 +229,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     private void                    initSearchView() {
-        mFragment.initSearchView(mSearchView);
+        mFragment.initSearchView(mSearchView, mToolbar);
     }
 
     private View.OnClickListener    onHistory() {

@@ -32,8 +32,7 @@ import fr.dao.app.View.Widget.Adapter.Holder.HostDiscoveryHolder;
 public class                    HostDiscoveryAdapter extends RecyclerView.Adapter<HostDiscoveryHolder> {
     private String              TAG = "HostDiscoveryAdapter";
     private Activity            mActivity;
-    private List<Host>          mHosts = null;
-    private List<Host>          mOriginalList;
+    private List<Host>          mHosts = null, mOriginalList = new ArrayList<>();
     private RecyclerView        mHost_RV;
     private FloatingActionButton mFab;
     private Singleton           mSingleton = Singleton.getInstance();
@@ -64,8 +63,6 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         if (host.os.contains("Unknown"))
             holder.os.setText(host.osType.name());
         holder.vendor.setText(host.vendor);
-        //holder.os.setVisibility((host.os.contains("Unknown")) ? View.GONE: View.VISIBLE);
-        //holder.vendor.setVisibility((host.vendor.contains("Unknown")) ? View.GONE: View.VISIBLE);
         if (mIsHistoric)
             holder.statusIcon.setVisibility(View.GONE);
         else
@@ -155,7 +152,8 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                             options = ActivityOptionsCompat
                                     .makeSceneTransitionAnimation(mActivity, p1, p2);
                         }
-                        intent.putExtra("position", position);
+                        intent.putExtra("mode", "Live");
+                        intent.putExtra("macAddress", host.mac);
                         mActivity.startActivity(intent, options.toBundle());
                     }
                 });
@@ -191,7 +189,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         mHosts.clear();
         for (Host host : mOriginalList) {
             for (Os os : Os) {
-                if (os.name().contains(host.osType.name())) {
+                if (os.name().contentEquals(host.osType.name())) {
                     mHosts.add(host);
                     break;
                 }
@@ -220,7 +218,8 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                 Collections.sort(hosts, Fingerprint.getComparator());
                 mHosts = new ArrayList<>();
                 mHosts.addAll(hosts);
-                mOriginalList = hosts;
+                mOriginalList.clear();
+                mOriginalList.addAll(hosts);
                 notifyDataSetChanged();
             }
         });

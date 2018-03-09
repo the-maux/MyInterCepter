@@ -84,7 +84,7 @@ public class                        NmapControler {
         String cmd = PATH_NMAP + NMAP_ARG_SCAN + hostCmd.toString();
         if (mSingleton.UltraDebugMode)
             Log.d(TAG, "CMD:["+ cmd + "]");
-        setTitleToolbar(null, "Scanning " + ips.size() + " devices");
+        setTitleToolbar(null, ips.size() + " devices online");
         hostDiscoveryFromNmap(cmd, hostsMAC.toString(), ap);
     }
 

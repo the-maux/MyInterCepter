@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -50,15 +49,15 @@ public class                    WiresharkActivity extends SniffActivity {
     private void                init(Intent intent) {
         String PcapFilePath = intent  == null ? null : intent.getStringExtra("Pcap");
         if (PcapFilePath == null) {
-            hideBottomBar();
             mFragment = new WiresharkLiveFragment();
+            showBottomBar();
             initSettings();
             initNavigationBottomBar(SNIFFER, true);
             ViewAnimate.setVisibilityToVisibleQuick(mFab);
             setToolbarTitle("Wireshark", (mSingleton.hostList == null) ? "0" : mSingleton.hostList.size() + " target");
         } else {
-            showBottomBar();
-            ViewAnimate.setVisibilityToGoneLong(mFab);
+            hideBottomBar();
+            ViewAnimate.setVisibilityToGoneQuick(mFab);
             findViewById(R.id.navigation).setVisibility(View.GONE);
             mFragment = new WiresharkReaderFragment();
             Bundle bundle = new Bundle();

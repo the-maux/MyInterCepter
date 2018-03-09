@@ -21,14 +21,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.05" />
+            app:layout_constraintGuide_percent="0.02" />
 
         <android.support.constraint.Guideline
             android:id="@+id/right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.95" />
+            app:layout_constraintGuide_percent="0.98" />
 
         <android.support.constraint.Guideline
             android:id="@+id/top"
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.95" />
+            app:layout_constraintGuide_percent="0.98" />
 
         <android.support.constraint.Guideline
             android:id="@+id/mid_04_horizontal"
@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintGuide_percent="0.60" />
+            app:layout_constraintGuide_percent="0.65" />
 
         <android.support.constraint.Guideline
             android:id="@+id/verti_80"
@@ -224,8 +224,10 @@
             android:id="@+id/gateway_logo"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="18dp"
+            android:layout_margin="8dp"
             android:elevation="4dp"
+            android:padding="2dp"
+            android:scaleType="fitCenter"
             android:src="@drawable/router1"
             app:layout_constraintBottom_toTopOf="@+id/verti_47"
             app:layout_constraintLeft_toLeftOf="@+id/left"
@@ -292,9 +294,10 @@
             android:id="@+id/radar_logo"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="18dp"
+            android:layout_margin="8dp"
             android:elevation="4dp"
-            android:paddingTop="8dp"
+            android:padding="2dp"
+            android:scaleType="fitCenter"
             app:layout_constraintBottom_toTopOf="@+id/verti_47"
             app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
             app:layout_constraintRight_toRightOf="@+id/right"
@@ -319,6 +322,7 @@
             app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
             app:layout_constraintRight_toRightOf="@+id/right"
             app:layout_constraintTop_toBottomOf="@+id/verti_47"
+            app:layout_constraintVertical_bias="0.0"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
@@ -346,7 +350,6 @@
             android:layout_marginRight="4dp"
             android:elevation="4dp"
             android:gravity="center_horizontal"
-            android:paddingBottom="8dp"
             android:text="AAAAAAAAAAA"
             app:layout_constraintBottom_toBottomOf="@+id/devices_card"
             app:layout_constraintHorizontal_bias="0.5"
@@ -359,9 +362,10 @@
             android:id="@+id/iconWireshark"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="18dp"
+            android:layout_margin="8dp"
             android:elevation="4dp"
-            android:padding="12dp"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
             app:layout_constraintBottom_toTopOf="@+id/verti_80"
             app:layout_constraintLeft_toLeftOf="@+id/left"
             app:layout_constraintRight_toRightOf="@+id/midle_horizontal"
@@ -378,7 +382,7 @@
             android:elevation="4dp"
             android:fontFamily="@font/montserrat_regular"
             android:gravity="center_horizontal"
-            android:text="Sniffed sessions"
+            android:text="Sniffed record"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/title_wireshark"
@@ -424,9 +428,9 @@
             android:id="@+id/iconStats"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="18dp"
+            android:layout_margin="8dp"
             android:elevation="4dp"
-            android:paddingTop="8dp"
+            android:scaleType="fitCenter"
             app:layout_constraintBottom_toTopOf="@+id/verti_80"
             app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
             app:layout_constraintRight_toRightOf="@+id/right"
@@ -450,6 +454,7 @@
             app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
             app:layout_constraintRight_toRightOf="@+id/right"
             app:layout_constraintTop_toBottomOf="@+id/iconStats"
+            app:layout_constraintVertical_bias="0.49"
             app:layout_constraintVertical_chainStyle="packed" />
 
 

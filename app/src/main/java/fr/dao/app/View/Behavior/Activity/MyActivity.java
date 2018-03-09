@@ -29,4 +29,8 @@ public class                    MyActivity extends AppCompatActivity {
 
     public void                 initSettingsButton() {}
 
+    public void                 showSnackbar(String txt) {
+
+    }
+
 }

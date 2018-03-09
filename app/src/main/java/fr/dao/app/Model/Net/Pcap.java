@@ -8,6 +8,7 @@ import com.activeandroid.annotation.Table;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -68,5 +69,20 @@ public class                Pcap extends Model {
     public String           toString() {
         return "Pcap: create the [" + new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE)
                 .format(date)+ "] at [" + nameFile + "]";
+    }
+
+    public static List<File> getListFiles(File parentDir) {
+        ArrayList<File> inFiles = new ArrayList<>();
+        File[] files = parentDir.listFiles();
+        for (File file : files) {
+            if (file.isDirectory()) {
+                inFiles.addAll(getListFiles(file));
+            } else {
+                if(file.getName().endsWith(".pcap")){
+                    inFiles.add(file);
+                }
+            }
+        }
+        return inFiles;
     }
 }
