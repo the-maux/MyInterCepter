@@ -21,6 +21,14 @@ public class                            Fingerprint {
     public static void                  initHost(Host host) {
         isItMyDevice(host);
         guessosType(host);
+        if (Fingerprint.isItWindows(host)) {
+            host.osType = Os.Windows;
+            host.os = "Windows";
+            host.osDetail = "Windows";
+        }
+        if (host.osType == Os.Unknow) {
+            host.osType = Os.fromString(host.osDetail);
+        }
     }
 
     private static void                 guessosType(Host host) {

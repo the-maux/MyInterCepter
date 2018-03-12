@@ -43,7 +43,7 @@ public class                    HostNotesFragment extends MyFragment {
         TextView valueTV = new TextView(getContext());
         StringBuilder buuilder = new StringBuilder("");
         int rax = 0;
-        for (String note : mFocusedHost.Notes) {
+        for (String note : mFocusedHost.Notes.split("OxBABOBAB")) {
             buuilder.append(note).append("\n");
             if (rax++ > 0)
                 buuilder.append("-------------------------------------").append("\n");

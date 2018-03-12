@@ -140,22 +140,23 @@ class NmapHostDiscoveryParser {
         host.mac = host.mac.toUpperCase();
         host.dumpInfo = dump.toString();
         Fingerprint.initHost(host);
-        if (host.Notes == null)
-            host.Notes = new ArrayList<>();
-        if (Fingerprint.isItWindows(host)) {
-            host.osType = Os.Windows;
-            host.os = "Windows";
-        }
         if (Fingerprint.isItMyGateway(host)) {
             host.osType = Os.Gateway;
+            if (host.osDetail.contains("Unknown"))
+                host.osDetail = "Gateway";
             mNetwork.Gateway = host;
         }
-        if (host.Ports().isPortOpen(2869))
-        Log.d(TAG, "SAVING HOST:" + host.dumpInfo);
+        if (host.Notes == null)
+            host.Notes = "";
 
-        host.Notes.add(nmapStdout);/* host.dumpInfo + '\n' +
+       // if (host.Ports().isPortOpen(2869))
+
+
+        host.Notes = host.Notes.concat("OxBABOBAB").concat(nmapStdout);/* host.dumpInfo + '\n' +
                 "---------------------------------\n Analyse is:" +
                     ((host.Ports() == null) ? " No Port detected ? " : host.Ports().getDump());*/
+        Log.d(TAG, "SAVING HOST");
+        host.dumpMe(null);
         host.save();
     }
 
@@ -248,7 +249,7 @@ class NmapHostDiscoveryParser {
                 StringRequest request = new StringRequest(Request.Method.GET, urlUPnP,
                         new Response.Listener<String>() {
                             public void onResponse(String response) {
-                                host.Notes.add(response);
+                                host.Notes = host.Notes.concat("OxBABOBAB").concat(response);
                                 try {
                                     XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                                     factory.setNamespaceAware(true);
@@ -388,13 +389,13 @@ class NmapHostDiscoveryParser {
         Log.d(TAG, "Analyzing (" + NBR_PARSED_NODE + "/" + LENGTH_NODE + ") devices scanned");
        // Collections.sort(mNetwork.listDevices(), Fingerprint.getComparator());
         Iterator<Host> iter = mNetwork.listDevices().iterator();
-        while (iter.hasNext()) {//ConcurrentModificationException
-            Host host = iter.next();
-            if (host.osType == Os.Unknow) {
-                host.dumpMe(mSingleton.hostList);
-                Log.d(TAG, "-------------");
-            }
-        }
+//        while (iter.hasNext()) {//ConcurrentModificationException
+//            Host host = iter.next();
+//            if (host.osType == Os.Unknow) {
+//                host.dumpMe(mSingleton.hostList);
+//                Log.d(TAG, "-------------");
+//            }
+//        }
         mNmapControler.onHostActualized(mNetwork.listDevices());
     }
 

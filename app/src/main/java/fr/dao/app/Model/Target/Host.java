@@ -33,11 +33,11 @@ public class                Host extends Model {
     @Column(name = "vendor")
     public String           vendor = "Unknown";
     @Column(name = "dump")
-    public String           dumpInfo;
+    public String           dumpInfo = null;
     @Column(name = "Notes")
-    public ArrayList<String> Notes;
+    public String           Notes = null;
     @Column(name = "deviceType")
-    public String           deviceType;
+    public String           deviceType = "Unknown";
     @Column(name = "TooManyFingerprintMatchForOs")
     public boolean          TooManyFingerprintMatchForOs = false;
     @Column(name = "NetworkDistance")
@@ -108,27 +108,30 @@ public class                Host extends Model {
     }
 
     public void             dumpMe(ArrayList<Host> selectedHostsList) {
-        Log.i(TAG, "ip: " + ip);// + "]");
-        Log.i(TAG, "mac: " + mac);// + "]");
-        Log.i(TAG, "vendor: " + vendor);// + "]" + "VENDOR[" + sameHost.vendor + "]");
-        Log.i(TAG, "os: " + os);// + "] OS[" + sameHost.os + "]");
-        Log.i(TAG, "osType: " + osType.name());// + "] OSTYPE[" + sameHost.osType + "]");
-        Log.i(TAG, "osDetail: " + osDetail);// + "] OSDETAIL[" + osDetail + "]");
-        Log.i(TAG, "name: " + getName());// + "] NAME[" + sameHost.getName() +"]");
-        Log.i(TAG, "NetworkDistance: " + NetworkDistance );//+ "]");
-        Log.i(TAG, "TooManyFingerprintMatchForOs: " + TooManyFingerprintMatchForOs );//+ "]");
-        Log.i(TAG, "deviceType: " + deviceType );//+ "]");
-        if (dumpInfo == null)
-            Log.d(TAG, "NO DUMP /!\\ : " + ip);
-        else
-            Log.i(TAG, "DUMPINFO::" + dumpInfo);
-        if (Ports() != null)
-            Ports().dump();
-        else
-            Log.d(TAG, "Ports Not found...");
-        if (osType == Os.Unknow)
-            Log.d(TAG, toString() + " isItWindowsPort() => " + Fingerprint.isItWindows(this));
-        Log.i(TAG, "END DUMP ---------");
+        if (ip.contains("0.2")) {
+            Log.i(TAG, "ip: " + ip);// + "]");
+            Log.i(TAG, "mac: " + mac);// + "]");
+            Log.i(TAG, "vendor: " + vendor);// + "]" + "VENDOR[" + sameHost.vendor + "]");
+            Log.i(TAG, "os: " + os);// + "] OS[" + sameHost.os + "]");
+            Log.i(TAG, "osType: " + osType.name());// + "] OSTYPE[" + sameHost.osType + "]");
+            Log.i(TAG, "osDetail: " + osDetail);// + "] OSDETAIL[" + osDetail + "]");
+            Log.i(TAG, "name: " + getName());// + "] NAME[" + sameHost.getName() +"]");
+            Log.i(TAG, "NetworkDistance: " + NetworkDistance );//+ "]");
+            Log.i(TAG, "TooManyFingerprintMatchForOs: " + TooManyFingerprintMatchForOs );//+ "]");
+            Log.i(TAG, "deviceType: " + deviceType );//+ "]");
+            if (dumpInfo == null)
+                Log.d(TAG, "NO DUMP /!\\ : " + ip);
+            else
+                Log.i(TAG, "DUMPINFO::" + dumpInfo);
+            if (Ports() != null)
+                Ports().dump();
+            else
+                Log.d(TAG, "Ports Not found...");
+            if (osType == Os.Unknow)
+                Log.d(TAG, toString() + " isItWindowsPort() => " + Fingerprint.isItWindows(this));
+            Log.i(TAG, "END DUMP ------------------------------------------");
+        }
+
     }
 
     public String           toString() {

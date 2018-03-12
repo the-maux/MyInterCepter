@@ -35,6 +35,8 @@ public class                                DBHost {
                 Log.d(TAG, "SQL STRING [" + from.toSql() + "]: NOT FOUND");
             }
         }
+        if (tmp != null)
+        tmp.dumpMe(null);
         return tmp;
     }
 
@@ -44,20 +46,11 @@ public class                                DBHost {
             deviceFromDB = myDevice;
             deviceFromDB.firstSeen = Calendar.getInstance().getTime();
             deviceFromDB.mac = deviceFromDB.mac.toUpperCase();
+            deviceFromDB.save();
         } else {
             deviceFromDB.ip = myDevice.ip;
-            if (!myDevice.getName().contains(myDevice.ip))
-                deviceFromDB.name  = myDevice.getName();
-            deviceFromDB.deviceType = myDevice.deviceType;
-            deviceFromDB.dumpInfo = myDevice.dumpInfo;
-            deviceFromDB.NetworkDistance = myDevice.NetworkDistance;
-            deviceFromDB.osDetail = myDevice.osDetail;
-            deviceFromDB.vendor = myDevice.vendor;
-            deviceFromDB.deviceType = myDevice.deviceType;
-            deviceFromDB.TooManyFingerprintMatchForOs = myDevice.TooManyFingerprintMatchForOs;
         }
         Fingerprint.initHost(deviceFromDB);
-        deviceFromDB.save();
         return deviceFromDB;
     }
 
