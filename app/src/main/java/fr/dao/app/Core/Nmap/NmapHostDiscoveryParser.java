@@ -141,7 +141,7 @@ class NmapHostDiscoveryParser {
         host.dumpInfo = dump.toString();
         Fingerprint.initHost(host);
         if (host.Notes == null)
-            host.Notes = "";
+            host.Notes = new ArrayList<>();
         if (Fingerprint.isItWindows(host)) {
             host.osType = Os.Windows;
             host.os = "Windows";
@@ -152,7 +152,8 @@ class NmapHostDiscoveryParser {
         }
         if (host.Ports().isPortOpen(2869))
         Log.d(TAG, "SAVING HOST:" + host.dumpInfo);
-        host.Notes = nmapStdout;/* host.dumpInfo + '\n' +
+
+        host.Notes.add(nmapStdout);/* host.dumpInfo + '\n' +
                 "---------------------------------\n Analyse is:" +
                     ((host.Ports() == null) ? " No Port detected ? " : host.Ports().getDump());*/
         host.save();
@@ -247,6 +248,7 @@ class NmapHostDiscoveryParser {
                 StringRequest request = new StringRequest(Request.Method.GET, urlUPnP,
                         new Response.Listener<String>() {
                             public void onResponse(String response) {
+                                host.Notes.add(response);
                                 try {
                                     XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                                     factory.setNamespaceAware(true);
@@ -263,7 +265,8 @@ class NmapHostDiscoveryParser {
                                                 Log.d(TAG, "serialNumber " + xpp.getText());
                                             } else if (xpp.getName().contains("friendlyName")) {
                                                 xpp.next();
-                                                host.UPnP_Name = xpp.getText();
+                                                if (!xpp.getText().contains("http"))
+                                                    host.UPnP_Name = xpp.getText();
                                                 Log.d(TAG, "friendlyName " + xpp.getText());
                                             } else if (xpp.getName().contains("deviceType")) {
                                                 xpp.next();

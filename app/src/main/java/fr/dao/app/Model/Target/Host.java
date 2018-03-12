@@ -35,7 +35,7 @@ public class                Host extends Model {
     @Column(name = "dump")
     public String           dumpInfo;
     @Column(name = "Notes")
-    public String           Notes;
+    public ArrayList<String> Notes;
     @Column(name = "deviceType")
     public String           deviceType;
     @Column(name = "TooManyFingerprintMatchForOs")
