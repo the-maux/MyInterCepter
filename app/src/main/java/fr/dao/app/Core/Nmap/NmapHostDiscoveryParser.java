@@ -16,9 +16,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,10 +50,10 @@ class NmapHostDiscoveryParser {
         LENGTH_NODE = HostNmapDump.length-1;
         ExecutorService service = Executors.newCachedThreadPool();
         mNetwork = ap;
-        Log.i(TAG, "{{{{{{{{{{{{{" + HostNmapDump[0] + "}}}}}}}}}}}}}}}}}");
+        //Log.i(TAG, "{{{{{{{{{{{{{" + HostNmapDump[0] + "}}}}}}}}}}}}}}}}}");
         for (int i = 1; i < HostNmapDump.length; i++) {/*First node is the nmap preambule*/
             service.execute(dispatcher(HostNmapDump[i], macs, ap));
-            Log.i(TAG, "{{{{{{{{{{{{{" + HostNmapDump[i] + "}}}}}}}}}}}}}}}}}");
+          //  Log.i(TAG, "{{{{{{{{{{{{{" + HostNmapDump[i] + "}}}}}}}}}}}}}}}}}");
         }
         service.shutdown();
         try {
@@ -116,7 +114,7 @@ class NmapHostDiscoveryParser {
                         .replace("|   ", "");
             } else if (line.contains("MAC Address: ")) {
                 dump.append(line).append("\n");
-                Log.i(TAG, "MAC:[" + line + "]");
+              //  Log.i(TAG, "MAC:[" + line + "]");
                 host.mac = line.replace("MAC Address: ", "").split(" ")[0];
                 host.vendor = line.replace("MAC Address: " + host.mac + " (", "").replace(")", "");
             } else if (line.contains("PORT ")) {
@@ -222,12 +220,13 @@ class NmapHostDiscoveryParser {
      |     server: microsoft-windows/10.0 upnp/1.0 upnp-device-host/1.0
      |_    location: http://192.168.0.12:2869/upnphost/udhisapi.dll?content=uuid:b0a22e22-1541-424f-bd84-cfda678aaa4d
      */
-    private int                     analyseUPnPtResult(String[] nmapStdoutHost, int i, Host host) {
+    private int                     analyseUPnPtResult(String[] nmapStdoutHost, int i, final Host host) {
         ArrayList<String> dumpHostScript = new ArrayList<>();
         String urlUPnP = "";
-        while (i < nmapStdoutHost.length && !nmapStdoutHost[i].startsWith("|_")){
-            dumpHostScript.add(nmapStdoutHost[i++]);
+        while (i < nmapStdoutHost.length && !nmapStdoutHost[i].startsWith("|_")) {
+            dumpHostScript.add(nmapStdoutHost[i++].toLowerCase().replace("|", "").trim());
         }
+        dumpHostScript.add(nmapStdoutHost[i++].toLowerCase().replace("|_", "").trim());
         Log.d(TAG, "UPnP:[" + dumpHostScript+ "]");
         for (String line : dumpHostScript) {
             if (line.contains("server:")) {
@@ -235,6 +234,7 @@ class NmapHostDiscoveryParser {
                 host.os = splitted[0].replace("microsoft-", "").replace("|", "").trim();
                 Log.d(TAG, "server::[" + host.os + "]");
                 host.UPnP_Device = splitted[0].replace("microsoft-", "").replace("|", "").trim();
+                host.vendor = host.UPnP_Device;
             } else if (line.contains("location: ")) {
                 urlUPnP = line.replace("location: ", "");
                 Log.d(TAG, "LOCATION UPnP:[" + urlUPnP + "]");
@@ -242,6 +242,7 @@ class NmapHostDiscoveryParser {
             }
         }
         if (!urlUPnP.isEmpty()) {//GET HTTP XML UPnP
+            Log.d(TAG, "Trying to GET /upnp-info [" + urlUPnP + "]");
             try {//YOU HAVE TO LET THE ALL NODE WAIT THE HTTP RESPONSE
                 StringRequest request = new StringRequest(Request.Method.GET, urlUPnP,
                         new Response.Listener<String>() {
@@ -256,11 +257,31 @@ class NmapHostDiscoveryParser {
                                         if (eventType == XmlPullParser.START_DOCUMENT) {
                                             Log.d(TAG, "Start Upnp document");
                                         } else if (eventType == XmlPullParser.START_TAG) {
-                                            Log.d(TAG, "Start tag " + xpp.getName());
+                                            if (xpp.getName().contains("serialNumber")) {
+                                                xpp.next();
+                                                host.Brand_and_Model = xpp.getText();
+                                                Log.d(TAG, "serialNumber " + xpp.getText());
+                                            } else if (xpp.getName().contains("friendlyName")) {
+                                                xpp.next();
+                                                host.UPnP_Name = xpp.getText();
+                                                Log.d(TAG, "friendlyName " + xpp.getText());
+                                            } else if (xpp.getName().contains("deviceType")) {
+                                                xpp.next();
+                                                host.UPnP_Device = xpp.getText();
+                                                Log.d(TAG, "Start tag " + xpp.getText());
+                                            } else if (xpp.getName().contains("manufacturer")) {
+                                                xpp.next();
+                                                host.vendor = xpp.getText();
+                                                Log.d(TAG, "mMnufacturer " + xpp.getText());
+                                            } else if (xpp.getName().contains("modelName")) {
+                                                xpp.next();
+                                                host.UPnP_Services = xpp.getText();
+                                                Log.d(TAG, "ModelName " + xpp.getText());
+                                            }
                                         } else if (eventType == XmlPullParser.END_TAG) {
-                                            Log.d(TAG, "End tag " + xpp.getName());
+                                           // Log.d(TAG, "End tag " + xpp.getName());
                                         } else if (eventType == XmlPullParser.TEXT) {
-                                            Log.d(TAG, "Text " + xpp.getText()); // here you get the text from xml
+                                           // Log.d(TAG, "Text " + xpp.getText()); // here you get the text from xml
                                         }
                                         eventType = xpp.next();
                                     }
