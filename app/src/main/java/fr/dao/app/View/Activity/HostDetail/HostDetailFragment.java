@@ -39,7 +39,7 @@ public class                    HostDetailFragment extends MyFragment {
         mRV = rootView.findViewById(R.id.list);
     }
 
-    final ConsoleLogAdapter adapter = new ConsoleLogAdapter();
+    final ConsoleLogAdapter adapter = new ConsoleLogAdapter(mActivity);
     public void                 init() {
         Bundle args = getArguments();
         if (args == null || args.getString("macAddress") == null) {
@@ -75,8 +75,10 @@ public class                    HostDetailFragment extends MyFragment {
         arrayList.add(title1);
         String[] titleOs = {"Operating System", mFocusedHost.osType.name()};
         arrayList.add(titleOs);
-        String[] titleOsDetail = {"Os Detail", mFocusedHost.osDetail};
-        arrayList.add(titleOsDetail);
+        if (!mFocusedHost.osDetail.contains("Unknown")) {
+            String[] titleOsDetail = {"Os Detail", mFocusedHost.osDetail};
+            arrayList.add(titleOsDetail);
+        }
         String[] title2 = {"IP Address", mFocusedHost.ip};
         arrayList.add(title2);
         String[] title3 = {"MAC Address", mFocusedHost.mac};

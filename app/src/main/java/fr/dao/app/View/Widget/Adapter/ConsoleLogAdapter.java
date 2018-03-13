@@ -1,5 +1,8 @@
 package fr.dao.app.View.Widget.Adapter;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,25 +13,42 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import fr.dao.app.R;
+import fr.dao.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
+import fr.dao.app.View.Behavior.Activity.MyActivity;
 
 
 public class                    ConsoleLogAdapter extends RecyclerView.Adapter<ConsoleLogAdapter.ConsoleLogH> {
     private String              TAG = "ConsoleLogAdapter";
     private ArrayList<String[]> listConsole = new ArrayList<String[]>();
     private RecyclerView        mRV;
+    private MyActivity          context;
 
-    public                      ConsoleLogAdapter() {
-//        this.listConsole = dnsInterceptList;
+    public                      ConsoleLogAdapter(HostDiscoveryActivity activity) {
+        this.context = activity;
     }
 
-    public ConsoleLogH     onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ConsoleLogH          onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ConsoleLogH(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_consolelog, parent, false));
     }
 
     public void                 onBindViewHolder(ConsoleLogH holder, int position) {
-        String[] line = listConsole.get(position);
+        final String[] line = listConsole.get(position);
         holder.title.setText(line[0]);
         holder.subtitle.setText(line[1]);
+        holder.relative_layout.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                if (line[0].contains("Ports")) {
+
+                } else {
+                    ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText(line[0], line[1]);
+                    if (clipboard != null) {
+                        clipboard.setPrimaryClip(clip);
+                        context.showSnackbar(line[0] + " is in clipboard");
+                    }
+                }
+            }
+        });
     }
 
     public int                  getItemCount() {
