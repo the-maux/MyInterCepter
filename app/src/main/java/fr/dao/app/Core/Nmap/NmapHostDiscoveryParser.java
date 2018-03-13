@@ -148,15 +148,9 @@ class NmapHostDiscoveryParser {
         }
         if (host.Notes == null)
             host.Notes = "";
-
-       // if (host.Ports().isPortOpen(2869))
-
-
-        host.Notes = host.Notes.concat("OxBABOBAB").concat(nmapStdout);/* host.dumpInfo + '\n' +
-                "---------------------------------\n Analyse is:" +
-                    ((host.Ports() == null) ? " No Port detected ? " : host.Ports().getDump());*/
-        Log.d(TAG, "SAVING HOST");
-        host.dumpMe(null);
+        host.Notes = host.Notes.concat("OxBABOBAB").concat(nmapStdout);
+        if (host.ip.contains("10.16.186.227"))
+            host.dumpMe();
         host.save();
     }
 
@@ -175,7 +169,7 @@ class NmapHostDiscoveryParser {
         /* nbl037421.hq.fr.corp.leroymerlin.com (10.16.187.230) */
         if (line.contains("(")) {
             host.ip = line.split(" ")[1].replace("(", "").replace(")", "");
-            host.name = line.split(" ")[0];
+            host.Hostname = line.split(" ")[0];
         } else {
             host.ip = line.split(" ")[0];
         }
@@ -234,13 +228,11 @@ class NmapHostDiscoveryParser {
             if (line.contains("server:")) {
                 String[] splitted = line.replace("server: ","").split(" ");
                 host.os = splitted[0].replace("microsoft-", "").replace("|", "").trim();
-                Log.d(TAG, "server::[" + host.os + "]");
                 host.UPnP_Device = splitted[0].replace("microsoft-", "").replace("|", "").trim();
                 host.vendor = host.UPnP_Device;
             } else if (line.contains("location: ")) {
                 urlUPnP = line.replace("location: ", "");
-                Log.d(TAG, "LOCATION UPnP:[" + urlUPnP + "]");
-                host.UPnP_Name = urlUPnP;
+                host.UPnP_Infos = urlUPnP;
             }
         }
         if (!urlUPnP.isEmpty()) {//GET HTTP XML UPnP
@@ -258,7 +250,6 @@ class NmapHostDiscoveryParser {
                                     int eventType = xpp.getEventType();
                                     while (eventType != XmlPullParser.END_DOCUMENT) {
                                         if (eventType == XmlPullParser.START_DOCUMENT) {
-                                            Log.d(TAG, "Start Upnp document");
                                         } else if (eventType == XmlPullParser.START_TAG) {
                                             if (xpp.getName().contains("serialNumber")) {
                                                 xpp.next();
@@ -271,16 +262,16 @@ class NmapHostDiscoveryParser {
                                                 Log.d(TAG, "friendlyName " + xpp.getText());
                                             } else if (xpp.getName().contains("deviceType")) {
                                                 xpp.next();
-                                                host.UPnP_Device = xpp.getText();
-                                                Log.d(TAG, "Start tag " + xpp.getText());
+                                                host.osDetail = xpp.getText();
+                                                Log.d(TAG, "deviceType::" + xpp.getText());
                                             } else if (xpp.getName().contains("manufacturer")) {
                                                 xpp.next();
-                                                host.vendor = xpp.getText();
-                                                Log.d(TAG, "mMnufacturer " + xpp.getText());
+                                                host.UPnP_Device = xpp.getText();
+                                                Log.d(TAG, "manufacturer::" + xpp.getText());
                                             } else if (xpp.getName().contains("modelName")) {
                                                 xpp.next();
                                                 host.UPnP_Services = xpp.getText();
-                                                Log.d(TAG, "ModelName " + xpp.getText());
+                                                Log.d(TAG, "ModelName::" + xpp.getText());
                                             }
                                         } else if (eventType == XmlPullParser.END_TAG) {
                                            // Log.d(TAG, "End tag " + xpp.getName());
@@ -289,7 +280,6 @@ class NmapHostDiscoveryParser {
                                         }
                                         eventType = xpp.next();
                                     }
-                                    Log.d(TAG, "End document");
                                 } catch (XmlPullParserException e) {
                                     e.printStackTrace();
                                 } catch (IOException e) {
@@ -406,10 +396,10 @@ class NmapHostDiscoveryParser {
             Iterator<Host> iter = mNetwork.listDevices().iterator();
             while (iter.hasNext()) {
                 Host host = iter.next();
-                if (host.osType == Os.Unknow) {
-                    host.dumpMe(mNetwork.listDevices());
+                /*if (host.osType == Os.Unknow) {
+                    host.dumpMe();
                     Log.d(TAG, "-------------");
-                }
+                }*/
             }
             mNmapControler.onHostActualized(mNetwork.listDevices());
         } catch (ConcurrentModificationException ex) {

@@ -46,6 +46,7 @@ public class                    HostDetailFragment extends MyFragment {
             mActivity.showSnackbar("Error in focus device (no MAC) in bundle");
         } else {
             mFocusedHost = DBHost.getDevicesFromMAC(args.getString("macAddress"));
+            mFocusedHost.dumpMe();
             mRV.setAdapter(adapter);
             LinearLayoutManager manager = new LinearLayoutManager(mActivity);
             mRV.setLayoutManager(manager);
@@ -72,6 +73,10 @@ public class                    HostDetailFragment extends MyFragment {
     private void                buildBasicInfos(ArrayList<String[]> arrayList) {
         String[] title1 = {"Name", mFocusedHost.name};
         arrayList.add(title1);
+        String[] titleOs = {"Operating System", mFocusedHost.osType.name()};
+        arrayList.add(titleOs);
+        String[] titleOsDetail = {"Os Detail", mFocusedHost.osDetail};
+        arrayList.add(titleOsDetail);
         String[] title2 = {"IP Address", mFocusedHost.ip};
         arrayList.add(title2);
         String[] title3 = {"MAC Address", mFocusedHost.mac};

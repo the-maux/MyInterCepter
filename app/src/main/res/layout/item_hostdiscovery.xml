@@ -56,7 +56,6 @@
                 android:layout_marginBottom="2dp"
                 android:layout_weight="1"
                 android:maxLines="1"
-                android:text="192.128.0.28 (tnbl037421.hq.fr.corp.leroymerlin.com)"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="12sp"
                 android:transitionName="hostTitle" />
@@ -67,7 +66,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:layout_weight="1"
-                android:text="[B8-81-60-9C-C4-7A]"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="12sp"
                 android:transitionName="hostTitle"
@@ -80,7 +78,6 @@
                 android:layout_marginBottom="2dp"
                 android:layout_weight="1"
                 android:maxLines="1"
-                android:text="[Windows]"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="12sp" />
 
@@ -90,7 +87,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:maxLines="1"
-                android:text="Intel Corporate"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="12sp"
                 android:visibility="visible" />

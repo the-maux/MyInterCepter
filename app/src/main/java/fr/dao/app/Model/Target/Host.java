@@ -34,6 +34,8 @@ public class                Host extends Model {
     public String           vendor = "Unknown";
     @Column(name = "dump")
     public String           dumpInfo = null;
+    @Column(name = "dumpPort")
+    public String           dumpPort = null;
     @Column(name = "Notes")
     public String           Notes = null;
     @Column(name = "deviceType")
@@ -45,7 +47,7 @@ public class                Host extends Model {
     @Column(name = "isSecureComputer")
     public boolean          isSecureComputer = false;
     @Column(name = "firstSeen")
-    public Date             firstSeen;
+    public Date             firstSeen = null;
     @Column(name = "Hostname")
     public String           Hostname = "Unknown";
     @Column(name = "NetBIOS_Domain")
@@ -66,12 +68,11 @@ public class                Host extends Model {
     public String           UPnP_Device = "Unknown";
     @Column(name = "UPnP_Services")
     public String           UPnP_Services = "Unknown";
+    @Column(name = "UPnP_Infos")
+    public String           UPnP_Infos = "Unknown";
 
 
     private ArrayList<Service> ServiceActivOnHost = new ArrayList<>();
-   /* public List<Network>    Network() {
-        return getMany(Network.class, "listDevices");
-    }*/
 
     public boolean          selected = false;
     public boolean          isItMyDevice = false;
@@ -96,46 +97,97 @@ public class                Host extends Model {
     }
 
     public String           getName() {
+        if (!NetBIOS_Name.contains("Unknown"))
+            return NetBIOS_Name;
+        if (!UPnP_Name.contains("Unknown"))
+            return UPnP_Name;
+        if (!Bonjour_Name.contains("Unknown"))
+            return Bonjour_Name;
         return ((name.isEmpty() || name.contains("Unknown")) ? ip : name);
-    }
-
-    public void             setName(String name) {
-        this.name = name;
     }
 
     public boolean          equals(Object obj) {
         return mac.contains(((Host) obj).mac);
     }
 
-    public void             dumpMe(ArrayList<Host> selectedHostsList) {
-        if (ip.contains("0.2")) {
-            Log.i(TAG, "ip: " + ip);// + "]");
-            Log.i(TAG, "mac: " + mac);// + "]");
-            Log.i(TAG, "vendor: " + vendor);// + "]" + "VENDOR[" + sameHost.vendor + "]");
-            Log.i(TAG, "os: " + os);// + "] OS[" + sameHost.os + "]");
-            Log.i(TAG, "osType: " + osType.name());// + "] OSTYPE[" + sameHost.osType + "]");
-            Log.i(TAG, "osDetail: " + osDetail);// + "] OSDETAIL[" + osDetail + "]");
-            Log.i(TAG, "name: " + getName());// + "] NAME[" + sameHost.getName() +"]");
-            Log.i(TAG, "NetworkDistance: " + NetworkDistance );//+ "]");
-            Log.i(TAG, "TooManyFingerprintMatchForOs: " + TooManyFingerprintMatchForOs );//+ "]");
-            Log.i(TAG, "deviceType: " + deviceType );//+ "]");
-            if (dumpInfo == null)
-                Log.d(TAG, "NO DUMP /!\\ : " + ip);
-            else
-                Log.i(TAG, "DUMPINFO::" + dumpInfo);
-            if (Ports() != null)
-                Ports().dump();
-            else
-                Log.d(TAG, "Ports Not found...");
-            if (osType == Os.Unknow)
-                Log.d(TAG, toString() + " isItWindowsPort() => " + Fingerprint.isItWindows(this));
-            Log.i(TAG, "END DUMP ------------------------------------------");
-        }
-
+    public void             dumpMe() {
+        Log.i(TAG, "ip: " + ip);// + "]");
+        Log.i(TAG, "mac: " + mac);// + "]");
+        Log.i(TAG, "vendor: " + vendor);// + "]" + "VENDOR[" + sameHost.vendor + "]");
+        Log.i(TAG, "os: " + os);// + "] OS[" + sameHost.os + "]");
+        Log.i(TAG, "osType: " + osType.name());// + "] OSTYPE[" + sameHost.osType + "]");
+        Log.i(TAG, "osDetail: " + osDetail);// + "] OSDETAIL[" + osDetail + "]");
+        Log.i(TAG, "name: " + getName());// + "] NAME[" + sameHost.getName() +"]");
+        Log.i(TAG, "NetworkDistance: " + NetworkDistance);//+ "]");
+        Log.i(TAG, "TooManyFingerprintMatchForOs: " + TooManyFingerprintMatchForOs);//+ "]");
+        Log.i(TAG, "deviceType: " + deviceType);//+ "]");
+        if (dumpInfo == null)
+            Log.d(TAG, "NO DUMP /!\\ : " + ip);
+        else
+            Log.i(TAG, "DUMPINFO::" + dumpInfo);
+        if (Ports() != null)
+            Ports().dump();
+        else
+            Log.d(TAG, "Ports Not found...");
+        if (osType == Os.Unknow)
+            Log.d(TAG, toString() + " isItWindowsPort() => " + Fingerprint.isItWindows(this));
+        Log.i(TAG, "END DUMP ---------------------------------------" + ip);
     }
 
     public String           toString() {
         return ip + ":" + mac;
+    }
+
+    public void             copy(Host myDevice) {
+        if (osType == Os.Unknow)
+            osType = myDevice.osType;
+        if (mac.contains("Unknown"))
+            mac = myDevice.mac;
+        if (vendor.contains("Unknown"))
+            vendor = myDevice.vendor;
+        if (os.contains("Unknown"))
+            os = myDevice.os;
+        if (osDetail.contains("Unknown"))
+            osDetail = myDevice.osDetail;
+        if (name.contains("Unknown"))
+            name = myDevice.name;
+        if (NetworkDistance.contains("Unknown"))
+            NetworkDistance = myDevice.NetworkDistance;
+        if (deviceType.contains("Unknown"))
+            deviceType = myDevice.deviceType;
+        if (firstSeen == null)
+            firstSeen = myDevice.firstSeen;
+        if (dumpPort == null)
+            dumpPort = myDevice.dumpPort;
+        if (dumpInfo == null)
+            dumpInfo = myDevice.dumpInfo;
+
+        if (Hostname.contains("Unknown"))
+            Hostname = myDevice.Hostname;
+
+        if (NetBIOS_Domain.contains("Unknown"))
+            NetBIOS_Domain = myDevice.NetBIOS_Domain;
+        if (NetBIOS_Name.contains("Unknown"))
+            NetBIOS_Name = myDevice.NetBIOS_Name;
+        if (NetBIOS_Role.contains("Unknown"))
+            NetBIOS_Role = myDevice.NetBIOS_Role;
+
+        if (Bonjour_Name.contains("Unknown"))
+            Bonjour_Name = myDevice.Bonjour_Name;
+        if (Bonjour_Services.contains("Unknown"))
+            Bonjour_Services = myDevice.Bonjour_Services;
+
+        if (UPnP_Name.contains("Unknown"))
+            UPnP_Name = myDevice.UPnP_Name;
+        if (UPnP_Services.contains("Unknown"))
+            UPnP_Services = myDevice.UPnP_Services;
+
+        dumpInfo = myDevice.dumpInfo;
+    }
+
+    public void             build() {
+        listPorts = new Ports(dumpPort, this);
+        //dumpMe();
     }
 
     public enum         State   {
@@ -184,7 +236,7 @@ public class                Host extends Model {
                 case ONLINE:
                     return "ONLINE";
                 default:
-                    return "UNKNOW";
+                    return "UNKNOWN";
             }
         }
     }

@@ -35,8 +35,10 @@ public class                                DBHost {
                 Log.d(TAG, "SQL STRING [" + from.toSql() + "]: NOT FOUND");
             }
         }
+        //if (tmp != null)
+            //tmp.dumpMe();
         if (tmp != null)
-        tmp.dumpMe(null);
+            Fingerprint.initHost(tmp);
         return tmp;
     }
 
@@ -49,6 +51,7 @@ public class                                DBHost {
             deviceFromDB.save();
         } else {
             deviceFromDB.ip = myDevice.ip;
+            deviceFromDB.copy(myDevice);
         }
         Fingerprint.initHost(deviceFromDB);
         return deviceFromDB;
@@ -71,6 +74,7 @@ public class                                DBHost {
             Host device = findDeviceById(id.replace(";", ""));
             try {
                 Fingerprint.initHost(device);
+                device.build();
                 hosts.add(device);
             } catch (NullPointerException e) {
                 Log.e(TAG, "id[" + id + "] was not found in BDD");

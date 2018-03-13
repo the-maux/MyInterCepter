@@ -1,7 +1,6 @@
 package fr.dao.app.Core.Nmap;
 
 import android.content.Context;
-import android.os.Build;
 import android.widget.ImageView;
 
 import java.util.Comparator;
@@ -19,6 +18,7 @@ public class                            Fingerprint {
     private static String               TAG = "Fingerprint";
 
     public static void                  initHost(Host host) {
+        host.build();
         isItMyDevice(host);
         guessosType(host);
         if (Fingerprint.isItWindows(host)) {
@@ -79,7 +79,7 @@ public class                            Fingerprint {
         host.os = "FreeBSD";
         host.osType = Os.Apple;
         host.os = "Unix/(Mac OS X)";//TODO FINGERPRINT WITH MAC NAME ON zeroconf
-        if (host.getName().isEmpty() && host.Ports().dump.contains("model=")) {
+        if (host.getName().isEmpty() && host.dumpPort.contains("model=")) {
             String name = host.mac.split(":")[4] + host.mac.split(":")[5];
             host.name = host.vendor.toUpperCase().replaceAll("\\d","") + "-" + name;
         }

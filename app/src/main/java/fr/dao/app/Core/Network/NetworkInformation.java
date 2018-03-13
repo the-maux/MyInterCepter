@@ -2,7 +2,6 @@ package fr.dao.app.Core.Network;
 
 import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
-import android.util.Log;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -20,14 +19,13 @@ public class                    NetworkInformation {
     NetworkInformation(WifiManager wifiManager, String mac) {
         this.mWifiManager = wifiManager;
         this.mac = mac.replace("\n", "").trim();
-        init();
     }
 
     public boolean              isConnectedToNetwork() {
         return !(myIp.contains("0.0.0.0") || gateway.contains("0.0.0.0"));
     }
 
-    private void                init() {
+    public void                init() {
         DhcpInfo dhcpInfo = mWifiManager.getDhcpInfo();
         myIp = intADDRtoStringHostname(dhcpInfo.ipAddress);
         gateway = intADDRtoStringHostname(dhcpInfo.gateway);
@@ -37,7 +35,6 @@ public class                    NetworkInformation {
         String dns1 = intADDRtoStringHostname(dhcpInfo.dns1);
         String dns2 = intADDRtoStringHostname(dhcpInfo.dns2);
         String dhcp = intADDRtoStringHostname(dhcpInfo.serverAddress);
-        Log.d(TAG, "IP:" + myIp + "&GW:" + gateway + "&netmask=" + netmask + "&mac="+mac);
     }
 
     public NetworkInformation   updateInfo() {

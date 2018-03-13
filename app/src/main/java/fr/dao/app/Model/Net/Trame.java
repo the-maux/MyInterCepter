@@ -94,7 +94,7 @@ public class               Trame  {
                     NBNSParsing(line);
                     break;
                 case IP:
-                    //Log.e(TAG, "UNKNOW IP trame " + line);
+                    //Log.e(TAG, "UNKNOWN IP trame " + line);
                     IParsing(line);
                     break;
                 default:

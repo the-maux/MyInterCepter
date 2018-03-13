@@ -31,7 +31,7 @@ public class            Port {
     }
 
     public enum         State   {
-        CLOSED(0), OPEN(1), FILTERED(2), UNFILTERED(3), OPEN_FILTERED(4), CLOSED_FILTERED(5), UNKNOW(6);
+        CLOSED(0), OPEN(1), FILTERED(2), UNFILTERED(3), OPEN_FILTERED(4), CLOSED_FILTERED(5), UNKNOWN(6);
 
 
         private int value;
@@ -66,7 +66,7 @@ public class            Port {
                 case "OPEN":
                     return OPEN;
                 default:
-                    return UNKNOW;
+                    return UNKNOWN;
             }
         }
 
@@ -89,7 +89,7 @@ public class            Port {
                 case OPEN:
                     return "OPEN";
                 default:
-                    return "UNKNOW";
+                    return "UNKNOWN";
             }
         }
     }
