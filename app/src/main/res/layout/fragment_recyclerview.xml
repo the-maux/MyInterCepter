@@ -9,4 +9,4 @@
     android:paddingBottom="@dimen/list_item_spacing_half"
     android:paddingTop="@dimen/list_item_spacing_half"
     android:animateLayoutChanges="true"
-    tools:listitem="@layout/item_consolelog" />
+    tools:listitem="@layout/item_hostdetail" />

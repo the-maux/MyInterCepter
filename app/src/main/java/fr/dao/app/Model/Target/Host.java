@@ -70,6 +70,8 @@ public class                Host extends Model {
     public String           UPnP_Services = "Unknown";
     @Column(name = "UPnP_Infos")
     public String           UPnP_Infos = "Unknown";
+    @Column(name = "PortDump")
+    public String           PortDump = "";
 
 
     private ArrayList<Service> ServiceActivOnHost = new ArrayList<>();
@@ -83,7 +85,7 @@ public class                Host extends Model {
     public Ports            Ports() {
         return listPorts;
     }
-    public Ports            Ports(ArrayList<String> dumpsPorts) {
+    public Ports            Ports(ArrayList<String> dumpsPorts) throws Exception {
         listPorts = new Ports(dumpsPorts, this);
         return listPorts;
     }

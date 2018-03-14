@@ -26,6 +26,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import fr.dao.app.Core.Configuration.Comparator.Comparators;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Model.Target.Host;
@@ -35,7 +36,6 @@ import fr.dao.app.Model.Unix.Os;
 class NmapHostDiscoveryParser {
     private String                  TAG = "NmapHostDiscoveryParser";
     private Singleton               mSingleton = Singleton.getInstance();
- //   private ArrayList<Host>         hosts = new ArrayList<>();
     private Network                 mNetwork;
     private NmapControler           mNmapControler;
     private int                     LENGTH_NODE, NBR_PARSED_NODE = 0;
@@ -64,7 +64,7 @@ class NmapHostDiscoveryParser {
         }
     }
 
-    private Runnable                    dispatcher(final String node, final String[] macs, final Network ap) {
+    private Runnable                dispatcher(final String node, final String[] macs, final Network ap) {
        return new Runnable() {
             public void run() {
                 try {
@@ -118,7 +118,13 @@ class NmapHostDiscoveryParser {
                 host.mac = line.replace("MAC Address: ", "").split(" ")[0];
                 host.vendor = line.replace("MAC Address: " + host.mac + " (", "").replace(")", "");
             } else if (line.contains("PORT ")) {
-                int z = getPortList(nmapStdoutHost, i +1, host, dump);
+                int z = 0;
+                try {
+                    z = getPortList(nmapStdoutHost, i +1, host);
+                } catch (Exception e) {
+                    Log.e(TAG, "Error in analyzing nmap dump");
+                    e.printStackTrace();
+                }
                 for (; i < z; i++) {
                     if (nmapStdoutHost[i].contains("upnp-info:")) {
                         analyseUPnPtResult(nmapStdoutHost, i + 1, host);
@@ -303,12 +309,6 @@ class NmapHostDiscoveryParser {
         return i;
     }
 
-    private InputStream getUrlData(String url) {
-
-        return null;
-    }
-
-
     /**
      * 5353/udp open   zeroconf
      | dns-service-discovery:
@@ -324,7 +324,7 @@ class NmapHostDiscoveryParser {
      |     osxvers=17
      |_    Address=10.16.186.167 fe80:0:0:0:8c1:dc67:c4cc:4b15
      */
-    private int                     getPortList(String[] line, int i, Host host, StringBuilder dump) {
+    private int                     getPortList(String[] line, int i, Host host) throws Exception {
         ArrayList<String> ports = new ArrayList<>();
         for (; i < line.length; i++) {
             if (!(line[i].contains("open") || line[i].contains("close") || line[i].contains("filtered"))) {
@@ -392,7 +392,7 @@ class NmapHostDiscoveryParser {
     private void                    onAllNodeParsed() {
         try {
             Log.d(TAG, "AllNode parsed, inintializing..");
-            Collections.sort(mNetwork.listDevices(), Fingerprint.getComparator());
+            Collections.sort(mNetwork.listDevices(), Comparators.getHostComparator());
             Iterator<Host> iter = mNetwork.listDevices().iterator();
             while (iter.hasNext()) {
                 Host host = iter.next();

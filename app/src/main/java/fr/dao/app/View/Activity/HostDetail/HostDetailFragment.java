@@ -14,8 +14,9 @@ import java.util.ArrayList;
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
+import fr.dao.app.View.Behavior.Activity.MyActivity;
 import fr.dao.app.View.Behavior.Fragment.MyFragment;
-import fr.dao.app.View.Widget.Adapter.ConsoleLogAdapter;
+import fr.dao.app.View.Widget.Adapter.HostDetailAdapter;
 
 
 public class                    HostDetailFragment extends MyFragment {
@@ -30,7 +31,7 @@ public class                    HostDetailFragment extends MyFragment {
         View rootView = inflater.inflate(R.layout.fragment_recyclerview, container, false);
         initXml(rootView);
         init();
-        mActivity = (HostDetailActivity )getActivity();
+        mActivity = (HostDetailActivity) getActivity();
         mCtx = getActivity();
         return rootView;
     }
@@ -39,12 +40,13 @@ public class                    HostDetailFragment extends MyFragment {
         mRV = rootView.findViewById(R.id.list);
     }
 
-    final ConsoleLogAdapter adapter = new ConsoleLogAdapter(mActivity);
+    HostDetailAdapter adapter;
     public void                 init() {
         Bundle args = getArguments();
         if (args == null || args.getString("macAddress") == null) {
             mActivity.showSnackbar("Error in focus device (no MAC) in bundle");
         } else {
+            adapter = new HostDetailAdapter((MyActivity)getActivity());
             mFocusedHost = DBHost.getDevicesFromMAC(args.getString("macAddress"));
             mFocusedHost.dumpMe();
             mRV.setAdapter(adapter);
@@ -52,7 +54,7 @@ public class                    HostDetailFragment extends MyFragment {
             mRV.setLayoutManager(manager);
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRV.getContext(), manager.getOrientation());
             mRV.addItemDecoration(dividerItemDecoration);
-            adapter.updateList(buildInfoArray());
+            adapter.updateList(buildInfoArray(), mFocusedHost);
         }
     }
 
@@ -95,7 +97,14 @@ public class                    HostDetailFragment extends MyFragment {
             String[] title10 = {"Brand and Model", mFocusedHost.Brand_and_Model};
             arrayList.add(title10);
         }
-
+        try {
+            if (mFocusedHost.Ports(null) != null) {
+                String[] title11 = {"First seen", mFocusedHost.Ports().portArrayList().size() + " ports scanned"};
+                arrayList.add(title11);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void                buildBonjour(ArrayList<String[]> arrayList) {

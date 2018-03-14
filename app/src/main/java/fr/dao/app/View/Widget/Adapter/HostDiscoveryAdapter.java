@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import fr.dao.app.Core.Configuration.Comparator.Comparators;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Nmap.Fingerprint;
@@ -216,7 +217,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Collections.sort(hosts, Fingerprint.getComparator());
+                Collections.sort(hosts, Comparators.getHostComparator());
                 mHosts = new ArrayList<>();
                 mHosts.addAll(hosts);
                 mOriginalList.clear();

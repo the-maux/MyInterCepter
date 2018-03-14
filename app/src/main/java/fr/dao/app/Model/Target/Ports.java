@@ -7,7 +7,9 @@ import android.util.SparseIntArray;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
+import fr.dao.app.Core.Configuration.Comparator.Comparators;
 import fr.dao.app.Model.Net.Port;
 import fr.dao.app.Model.Unix.Os;
 
@@ -16,9 +18,12 @@ public class                    Ports {
     private ArrayList<Port>     mPorts = new ArrayList<>();
     private SparseIntArray      primitivePortsLits = new SparseIntArray();
 
-
-    public                      Ports(ArrayList<String> lines, Host host) {
-        host.dumpPort = StringUtils.join(lines, "\n");
+    public                      Ports(ArrayList<String> lines, Host host) throws Exception {
+        if (lines != null) {
+            host.dumpPort = StringUtils.join(lines, "\n");
+        } else if (host.dumpPort == null) {
+            throw new Exception("No dump to analyze");
+        }
         init(host.dumpPort, host);
     }
     public                      Ports(String lines, Host host) {
@@ -110,4 +115,8 @@ public class                    Ports {
         Log.i(TAG, "5353/udp     zeroconf     " + Port.State.valueOf(primitivePortsLits.get(5353)));
     }
 
+    public ArrayList<Port>      portArrayList() {
+        Collections.sort(mPorts, Comparators.getPortComparator());
+        return mPorts;
+    }
 }

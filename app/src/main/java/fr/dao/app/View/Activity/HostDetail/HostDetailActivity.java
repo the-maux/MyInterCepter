@@ -315,8 +315,6 @@ public class                    HostDetailActivity extends MyActivity {
             public void run() {
                 if (title != null)
                     collapsingToolbarLayout.setTitle(title);
-//                if (subtitle != null)
-//                    mToolbar.setSubtitle(subtitle);
             }
         });
     }
@@ -329,7 +327,8 @@ public class                    HostDetailActivity extends MyActivity {
         if (mCurrentFragment == null || mCurrentFragment.onBackPressed()) {
             settingsMenuDetail.setVisibility(View.GONE);
             history.setVisibility(View.GONE);
-            collapsBackground.setImageResource(0);
+            if (collapsBackground != null)
+                collapsBackground.setImageResource(0);
             super.onBackPressed();
         }
     }

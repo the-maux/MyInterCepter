@@ -182,32 +182,4 @@ public class                            Fingerprint {
         MyGlideLoader.loadDrawableInCircularImageView(context, ImageRessource, osImageView);
     }
 
-    public static Comparator<Host>      getComparator() {
-        return new Comparator<Host>() {
-
-            public int compare(Host o1, Host o2) {
-                if (o1.state == o2.state) {
-                    String ip1[] = o1.ip.replace(" ", "").replace(".", "::").split("::");
-                    String ip2[] = o2.ip.replace(" ", "").replace(".", "::").split("::");
-                    if (Integer.parseInt(ip1[2]) > Integer.parseInt(ip2[2]))
-                        return 1;
-                    else if (Integer.parseInt(ip1[2]) < Integer.parseInt(ip2[2]))
-                        return -1;
-                    else if (Integer.parseInt(ip1[3]) > Integer.parseInt(ip2[3]))
-                        return 1;
-                    else if (Integer.parseInt(ip1[3]) < Integer.parseInt(ip2[3]))
-                        return -1;
-                } else {
-                    if (o1.state == Host.State.ONLINE || o2.state == Host.State.OFFLINE)
-                        return -1;
-                    else if (o2.state == Host.State.ONLINE || o1.state == Host.State.OFFLINE)
-                        return 1;
-                }
-                return 0;
-            }
-
-            ;
-        };
-    }
-
 }

@@ -12,6 +12,7 @@ public class            Port {
     public String       port;
     public String       protocol;
     public State        state;
+    public String       service;
     public Host         host;
 
     public Port(String line) {
