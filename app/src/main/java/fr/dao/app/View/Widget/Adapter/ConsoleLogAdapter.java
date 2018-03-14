@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import fr.dao.app.R;
-import fr.dao.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
+import fr.dao.app.View.Activity.HostDetail.HostDetailActivity;
 import fr.dao.app.View.Behavior.Activity.MyActivity;
 
 
@@ -23,7 +23,7 @@ public class                    ConsoleLogAdapter extends RecyclerView.Adapter<C
     private RecyclerView        mRV;
     private MyActivity          context;
 
-    public                      ConsoleLogAdapter(HostDiscoveryActivity activity) {
+    public                      ConsoleLogAdapter(HostDetailActivity activity) {
         this.context = activity;
     }
 

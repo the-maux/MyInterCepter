@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
-import fr.dao.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
 import fr.dao.app.View.Behavior.Fragment.MyFragment;
 import fr.dao.app.View.Widget.Adapter.ConsoleLogAdapter;
 
@@ -24,13 +23,14 @@ public class                    HostDetailFragment extends MyFragment {
  //   private CoordinatorLayout   mCoordinatorLayout;
     private Host                mFocusedHost;//TODO need to be init
     private Context             mCtx;
-    private HostDiscoveryActivity mActivity;
+    private HostDetailActivity mActivity;
     private RecyclerView        mRV;
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_recyclerview, container, false);
         initXml(rootView);
         init();
+        mActivity = (HostDetailActivity )getActivity();
         mCtx = getActivity();
         return rootView;
     }
