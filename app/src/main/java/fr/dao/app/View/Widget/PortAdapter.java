@@ -1,8 +1,10 @@
 package fr.dao.app.View.Widget;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -31,13 +33,18 @@ public class                    PortAdapter extends RecyclerView.Adapter<PortHol
 
     public void                 onBindViewHolder(PortHolder holder, int position) {
         if (position == 0) {
-
+            holder.port.setTypeface(holder.port.getTypeface(), Typeface.BOLD);
+            holder.state.setTypeface(holder.state.getTypeface(), Typeface.BOLD);
+            holder.service.setTypeface(holder.service.getTypeface(), Typeface.BOLD);
         } else {
             Port port = mPorts.get(position - 1);
-            String portTitle = port.getPort() + "/" + port.protocol;
+            String portTitle = port.port;
             holder.port.setText(portTitle);
+            holder.port.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
             holder.state.setText(port.state.toString());
-            holder.service.setText(port.service);
+            holder.state.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+            holder.service.setText(port.protocol);
+            holder.service.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
         }
     }
 

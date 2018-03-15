@@ -80,17 +80,22 @@ public class                    HostDetailActivity extends MyActivity {
 
     protected void              onPostResume() {
         super.onPostResume();
-        collapsBackground = findViewById(R.id.collapsBackground);
-        collapsBackground.postDelayed(new Runnable() {
-            public void run() {
-                GlideRequest r = GlideApp.with(mInstance)
-                        .load(R.drawable.bg1)
-                        .centerCrop()
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
-                r.into(collapsBackground);
-            }
-        }, 800);
+        try {
+            collapsBackground = findViewById(R.id.collapsBackground);
+            collapsBackground.postDelayed(new Runnable() {
+                public void run() {
+                    GlideRequest r = GlideApp.with(mInstance)
+                            .load(R.drawable.bg1)
+                            .centerCrop()
+                            .transition(DrawableTransitionOptions.withCrossFade())
+                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+                    r.into(collapsBackground);
+                }
+            }, 800);
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
         ViewAnimate.setVisibilityToVisibleQuick(settingsMenuDetail, 800);
         ViewAnimate.setVisibilityToVisibleQuick(history, 500);
     }

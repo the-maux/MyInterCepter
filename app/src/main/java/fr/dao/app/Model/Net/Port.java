@@ -1,5 +1,7 @@
 package fr.dao.app.Model.Net;
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +27,7 @@ public class            Port {
     /*  Exemple port: 22/tcp   closed ssh */
     public Port(String port_proto, String state, String protocolName) {
         super();
-        //Log.i(TAG, "Building:\t" + port_proto + "  " + state + " -> " + protocolName);
+        Log.w(TAG, "Building:\t" + port_proto + "  " + state + " -> " + protocolName);
         this.port = port_proto;
         this.state = State.valueOf(state, 0, 0);
         this.protocol = protocolName;
@@ -94,8 +96,6 @@ public class            Port {
             }
         }
     }
-
-
     public int          getPort() {
         return Integer.valueOf(port.split("/")[0]);
     }
