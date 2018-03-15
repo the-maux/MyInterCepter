@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,8 +47,8 @@ public class                    HostDetailFragment extends MyFragment {
         if (args == null || args.getString("macAddress") == null) {
             mActivity.showSnackbar("Error in focus device (no MAC) in bundle");
         } else {
-            adapter = new HostDetailAdapter((MyActivity)getActivity());
             mFocusedHost = DBHost.getDevicesFromMAC(args.getString("macAddress"));
+            adapter = new HostDetailAdapter((MyActivity)getActivity(), mFocusedHost);
             mFocusedHost.dumpMe();
             mRV.setAdapter(adapter);
             LinearLayoutManager manager = new LinearLayoutManager(mActivity);
@@ -99,8 +100,10 @@ public class                    HostDetailFragment extends MyFragment {
         }
         try {
             if (mFocusedHost.Ports(null) != null) {
-                String[] title11 = {"First seen", mFocusedHost.Ports().portArrayList().size() + " ports scanned"};
+                String[] title11 = {"Ports", mFocusedHost.Ports().portArrayList().size() + " ports scanned"};
                 arrayList.add(title11);
+            } else {
+                Log.d(TAG, "NO DUMP IN PORTS");
             }
         } catch (Exception e) {
             e.printStackTrace();

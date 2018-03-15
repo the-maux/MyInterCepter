@@ -20,8 +20,10 @@ public class                    Ports {
 
     public                      Ports(ArrayList<String> lines, Host host) throws Exception {
         if (lines != null) {
+            Log.d(TAG, "dump port was recorded");
             host.dumpPort = StringUtils.join(lines, "\n");
         } else if (host.dumpPort == null) {
+            Log.d(TAG, "dump port was not recorded");
             throw new Exception("No dump to analyze");
         }
         init(host.dumpPort, host);

@@ -28,10 +28,10 @@ public class                    HostDetailAdapter extends RecyclerView.Adapter<H
     private ArrayList<String[]> listDetail = new ArrayList<String[]>();
     private Host                mFocusedHost;
 
-    public                      HostDetailAdapter(MyActivity activity) {
-      //  Log.d(TAG, "activity==" + ((activity == null) ? "null": "notnull"));
+    public                      HostDetailAdapter(MyActivity activity, Host host) {
         this.clipboardManager = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
         this.myActivity = activity;
+        this.mFocusedHost = host;
     }
 
     public HostDetailHolder onCreateViewHolder(ViewGroup parent, int viewType) {

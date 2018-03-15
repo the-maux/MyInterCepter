@@ -1,26 +1,17 @@
 package fr.dao.app.View.Widget;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import fr.dao.app.Model.Net.Port;
-import fr.dao.app.Model.Target.Ports;
 import fr.dao.app.R;
-import fr.dao.app.View.Activity.Wireshark.WiresharkActivity;
 import fr.dao.app.View.Behavior.Activity.MyActivity;
-import fr.dao.app.View.Behavior.MyGlideLoader;
-import fr.dao.app.View.Widget.Adapter.Holder.PcapHolder;
 import fr.dao.app.View.Widget.Adapter.Holder.PortHolder;
-import fr.dao.app.View.Widget.Fragment.PcapListerFragment;
 
 public class                    PortAdapter extends RecyclerView.Adapter<PortHolder> {
     private String              TAG = "PortAdapter";
@@ -32,21 +23,26 @@ public class                    PortAdapter extends RecyclerView.Adapter<PortHol
         this.mPorts = ports;
     }
 
+    @NonNull
     public PortHolder           onCreateViewHolder(ViewGroup parent, int viewType) {
         return new PortHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_little_cardview, parent, false));
+                .inflate(R.layout.item_port, parent, false));
     }
 
     public void                 onBindViewHolder(PortHolder holder, int position) {
-        final Port port = mPorts.get(position);
-        String portTitle = port.getPort() + "/" + port.protocol;
-        holder.port.setText(portTitle);
-        holder.state.setText(port.state.toString());
-        holder.service.setText(port.service);
+        if (position == 0) {
+
+        } else {
+            Port port = mPorts.get(position - 1);
+            String portTitle = port.getPort() + "/" + port.protocol;
+            holder.port.setText(portTitle);
+            holder.state.setText(port.state.toString());
+            holder.service.setText(port.service);
+        }
     }
 
     public int                  getItemCount() {
-        return mPorts.size();
+        return mPorts.size() + 1;
     }
 
 }
