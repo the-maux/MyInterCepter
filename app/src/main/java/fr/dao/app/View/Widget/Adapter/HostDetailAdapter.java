@@ -62,7 +62,7 @@ public class                    HostDetailAdapter extends RecyclerView.Adapter<H
             PortAdapter adapter = new PortAdapter(myActivity, mFocusedHost.Ports().portArrayList());
             new RV_dialog(myActivity)
                     .setAdapter(adapter, false)
-                    .setTitle("Choix des cibles")
+                    .setTitle("Ports : " + mFocusedHost.ip )
                     .onPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dialogInterface.dismiss();
