@@ -93,6 +93,7 @@ public class                    NmapActivity extends SniffActivity {
         nmapControler = new NmapControler(false);
         mScript.setOnClickListener(onClickScript());
         mScanType.setOnClickListener(onClickTypeScript());
+        initFragment();
         if (mSingleton.hostList == null || mSingleton.hostList.isEmpty()) {//MODE: No targert
             Log.d(TAG, "MODE: NO TARGET");
             MonitorInoptionTheTarget.setText("No target selected");
@@ -114,7 +115,6 @@ public class                    NmapActivity extends SniffActivity {
             initUIWithTarget(mListHostSelected.get(0));
             ViewAnimate.setVisibilityToVisibleQuick(mFab);
         }
-        initFragment();
         initNavigationBottomBar(SCANNER, true);
     }
 

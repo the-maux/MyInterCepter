@@ -118,9 +118,10 @@
             android:layout_alignParentRight="true"
             android:layout_marginBottom="16dp"
             android:layout_marginRight="16dp"
+            android:baselineAlignBottom="true"
             android:soundEffectsEnabled="true"
             android:src="@drawable/ic_media_play"
-            android:visibility="gone"
+            android:visibility="visible"
             app:backgroundTint="@color/fab_color"
             app:fabSize="normal"
             app:layout_anchorGravity="bottom|right|end" />

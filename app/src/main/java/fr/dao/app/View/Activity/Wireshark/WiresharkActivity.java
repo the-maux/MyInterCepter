@@ -47,17 +47,24 @@ public class                    WiresharkActivity extends SniffActivity {
         init(getIntent());
     }
 
+    /**
+     * /data/user/0/fr.dao.app/files/tcpdump -w /storage/emulated/0/Pcap/SFR-4328_19_mars_19h50m32.pcap ' ( host 192.168.0.24)'
+     * /data/user/0/fr.dao.app/files/tcpdump -w /storage/emulated/0/Pcap/SFR-4328_19_mars_19h50m32.pcap ' ( host 192.168.0.24)'
+     * /data/user/0/fr.dao.app/files/tcpdump -w /storage/emulated/0/Pcap/SFR-4328_19_mars_19h49m17.pcap ' ( host 192.168.0.24)'
+     * @param intent
+     */
     private void                init(Intent intent) {
         String PcapFilePath = intent  == null ? null : intent.getStringExtra("Pcap");
         if (PcapFilePath == null) {
             Log.d(TAG, "MODE: LIVE");
             mFragment = new WiresharkLiveFragment();
+            hideBottomBar();
             if (intent != null && intent.getStringExtra("macAddress") != null) {// FROM HOSTDETAILACTIVITY
                 int position = DBHost.getPositionFromMacaddress(mSingleton.hostList, intent.getStringExtra("macAddress"));
                 Bundle args = new Bundle();
+                Log.d(TAG, "HOST IS AT POSITION:[" + position + "] AND HE IS [" + mSingleton.hostList.get(position).ip +"]");
                 args.putInt("position", position);
                 mFragment.setArguments(args);
-                hideBottomBar();
                 setToolbarTitle("Sniffer", mSingleton.hostList.get(position).getName());
             } else if (getIntent() != null && getIntent().getExtras() != null &&
                     getIntent().getExtras().getInt("position", -1) != -1) {//MODE: FROM MITM STATION SINGLE TARGET
@@ -66,7 +73,6 @@ public class                    WiresharkActivity extends SniffActivity {
                 Bundle args = new Bundle();
                 args.putInt("position", position);
                 mFragment.setArguments(args);
-                hideBottomBar();
                 setToolbarTitle("Sniffer", mSingleton.hostList.get(position).getName());
             } else {
                 Log.d(TAG, "FROM MITM STATION MODE: MULTIPLE TARGET");

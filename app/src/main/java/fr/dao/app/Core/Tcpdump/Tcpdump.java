@@ -56,6 +56,7 @@ public class                        Tcpdump {
 
     public Tcpdump                  initCmd(List<Host> hosts) {
         actualCmd = mTcpdumpConf.buildCmd(actualParam, isDumpingInFile, "No Filter", hosts);
+        ArpSpoof.launchArpSpoof(hosts);
         IPTables.InterceptWithoutSSL();
         return this;
     }
@@ -68,7 +69,6 @@ public class                        Tcpdump {
             @Override
             public void run() {
                 try {
-                    ArpSpoof.launchArpSpoof();
                     Log.i(TAG, actualCmd);
                     mTcpDumpProcess = new RootProcess("Wireshark").exec(actualCmd);
                     execTcpDump(mTcpDumpProcess.getReader());

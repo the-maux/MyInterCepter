@@ -27,7 +27,6 @@ public class                    SplashscreenActivity extends AppCompatActivity {
     private void             getRootPermission() {
         Intent intent;
         if (rootCheck()) {
-            /** TODO: Versionning */
             if ((new File(Singleton.getInstance().FilesPath + "version").exists()))
                 intent = new Intent(this, HostDiscoveryActivity.class);
             else
@@ -47,6 +46,7 @@ public class                    SplashscreenActivity extends AppCompatActivity {
     }
     private boolean             rootCheck() {
         try {
+            String RootOkTest = new RootProcess("RootCheckTest").exec("ls /data/data").getReader().readLine();
             String RootOk = new RootProcess("RootCheck").exec("id").getReader().readLine();
             return (RootOk != null && RootOk.contains("uid=0(root)"));
         } catch (IOException e) {

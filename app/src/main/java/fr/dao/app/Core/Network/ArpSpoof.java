@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.List;
 
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
@@ -70,11 +71,9 @@ public class                        ArpSpoof {
         }).start();
     }
 
-    public static void              launchArpSpoof() {
-        for (Host host : Singleton.getInstance().hostList) {
-            if (host.selected) {
-                new ArpSpoof(host).start();
-            }
+    public static void              launchArpSpoof(List<Host> hosts) {
+        for (Host host : hosts) {
+            new ArpSpoof(host).start();
         }
     }
 }

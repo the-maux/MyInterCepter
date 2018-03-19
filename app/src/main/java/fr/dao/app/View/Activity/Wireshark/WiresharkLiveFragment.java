@@ -2,6 +2,7 @@ package fr.dao.app.View.Activity.Wireshark;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -96,6 +97,9 @@ public class                    WiresharkLiveFragment extends MyFragment {
                 });
                 Log.d("ERROR", e.getMessage());
                 Log.e("ERROR", "O.M.G::IndexOutOfBoundsException in RecyclerView happens");
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+                mActivity.onBackPressed();
             }
         }
     }
@@ -114,9 +118,9 @@ public class                    WiresharkLiveFragment extends MyFragment {
     public boolean              start() {
         Utils.vibrateDevice(mActivity);
         if (!mTcpdump.isRunning) {
+            mAdapterWireshark.clear();
             if (startTcpdump()) {
                 mMonitorAgv.setVisibility(View.VISIBLE);
-                mAdapterWireshark.clear();
                 return true;
             }
         } else {
