@@ -83,4 +83,13 @@ public class                                DBHost {
         }
         return hosts;
     }
+
+    public static int                           getPositionFromMacaddress(ArrayList<Host> hostList, String macAddress) {
+
+        for (int i = 0; i < hostList.size(); i++) {
+            if (hostList.get(i).mac.contentEquals(macAddress))
+                return i;
+        }
+        return -1;
+    }
 }

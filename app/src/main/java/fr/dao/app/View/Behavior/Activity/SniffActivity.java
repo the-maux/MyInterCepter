@@ -24,23 +24,22 @@ import fr.dao.app.View.Activity.WebServer.WebServerActivity;
 import fr.dao.app.View.Activity.Wireshark.WiresharkActivity;
 
 
-public abstract class           SniffActivity extends MyActivity  {
-    protected String            TAG = "SniffActivity";
-    protected SniffActivity     mInstance = this;
-    protected Bundle            bundle = null;
-    protected AHBottomNavigation mBottomBar;
-    protected FloatingActionButton mFab;
-    protected static final int   SCANNER=0, SNIFFER=1, DNS=2, WEB=3;
-    private int                  mType;
-    private Singleton           mSingleton = Singleton.getInstance();
-    private boolean             hideBottomBar = false;
+public abstract class               SniffActivity extends MyActivity  {
+    protected String                TAG = "SniffActivity";
+    protected SniffActivity         mInstance = this;
+    protected Bundle                bundle = null;
+    protected AHBottomNavigation    mBottomBar;
+    protected FloatingActionButton  mFab;
+    protected static final int      SCANNER=0, SNIFFER=1, DNS=2, WEB=3;
+    private int                     mType;
+    private Singleton               mSingleton = Singleton.getInstance();
+    private boolean                 hideBottomBar = false;
 
-    public void                 onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+    public void                     onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
-        setContentView(getContentViewId());
     }
 
-    protected void              onStart() {
+    protected void                  onStart() {
         super.onStart();
         if (mBottomBar == null) {
             mBottomBar = findViewById(R.id.navigation);
@@ -50,7 +49,7 @@ public abstract class           SniffActivity extends MyActivity  {
             mBottomBar.setVisibility(View.GONE);
     }
 
-    protected void               initNavigationBottomBar(int position, boolean useCallback) {
+    protected void                  initNavigationBottomBar(int position, boolean useCallback) {
 // Create items
         mType = position;
         mBottomBar = findViewById(R.id.navigation);
@@ -82,7 +81,7 @@ public abstract class           SniffActivity extends MyActivity  {
         }
     }
 
-    public void                    updateNotifications() {
+    public void                     updateNotifications() {
         if (!hideBottomBar && mBottomBar.getItemsCount() > 2) {
             AHNotification greenNotif = new AHNotification.Builder()
                     .setText(" ")
@@ -151,7 +150,7 @@ public abstract class           SniffActivity extends MyActivity  {
         };
     }
 
-    protected void              onResume() {
+    protected void                  onResume() {
         super.onResume();
         Log.d(TAG, " onResume::setCurrentItem::" + mType);
         mBottomBar.setCurrentItem(mType, false);
@@ -159,7 +158,7 @@ public abstract class           SniffActivity extends MyActivity  {
             updateNotifications();
     }
 
-    protected void              onNewIntent(Intent intent) {
+    protected void                  onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Log.d(TAG, "onNew Intent mTypeRecorded(" + mType + ") currentItem(" + mBottomBar.getCurrentItem() + ") on "+ mBottomBar.getItemsCount() + " items");
         Log.d(TAG, " onNewIntent::setCurrentItem::" + mType);
@@ -167,12 +166,11 @@ public abstract class           SniffActivity extends MyActivity  {
         updateNotifications();
     }
 
-    protected void              hideBottomBar() {
+    protected void                  hideBottomBar() {
         hideBottomBar = true;
     }
-    protected void              showBottomBar() {
+    protected void                  showBottomBar() {
         hideBottomBar = false;
     }
 
-    public abstract int         getContentViewId();
 }

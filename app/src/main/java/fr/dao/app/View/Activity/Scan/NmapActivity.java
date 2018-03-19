@@ -53,7 +53,7 @@ public class                    NmapActivity extends SniffActivity {
 
     protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getContentViewId());
+        setContentView(R.layout.activity_nmap);
         initXml();
         init();
     }
@@ -91,26 +91,30 @@ public class                    NmapActivity extends SniffActivity {
 
     private void                init() {
         nmapControler = new NmapControler(false);
-        initFragment();
         mScript.setOnClickListener(onClickScript());
         mScanType.setOnClickListener(onClickTypeScript());
         if (mSingleton.hostList == null || mSingleton.hostList.isEmpty()) {//MODE: No targert
+            Log.d(TAG, "MODE: NO TARGET");
             MonitorInoptionTheTarget.setText("No target selected");
             isExternalTarget = true;
             askForExternalTarget();
         } else {
             isExternalTarget = false;
             if (getIntent() != null && getIntent().getExtras() != null) {//MODE: FOCUSED TARGETx
+                Log.d(TAG, "MODE: SINGLE TARGET");
                 int position = getIntent().getExtras().getInt("position", 0);
                 mListHostSelected.add(mSingleton.hostList.get(position));
                 hideBottomBar();
-            } else //MODE: TARGET LIST
+            } else { //MODE: TARGET LIST {
+                Log.d(TAG, "MODE: LIST OF TARGET");
                 mListHostSelected = mSingleton.hostList;
+            }
             initTabswithTargets(mListHostSelected);
             monitorNmapParam.setText(nmapControler.getNmapParamFromMenuItem(nmapControler.getMenuCommmands().get(0)));
             initUIWithTarget(mListHostSelected.get(0));
             ViewAnimate.setVisibilityToVisibleQuick(mFab);
         }
+        initFragment();
         initNavigationBottomBar(SCANNER, true);
     }
 
@@ -126,47 +130,6 @@ public class                    NmapActivity extends SniffActivity {
             e.getStackTrace();
             super.onBackPressed();
         }
-    }
-
-    private View.OnClickListener onClickTypeScript() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ArrayList<String> list = nmapControler.getMenuCommmands();
-                final CharSequence[] charSequenceItems = list.toArray(new CharSequence[list.size()]);
-                int i = 0;
-                for (; i < charSequenceItems.length; i++) {
-                    if (charSequenceItems[i].toString().contains(nmapControler.getActualCmd()))
-                        break;
-                }
-                new AlertDialog.Builder(mInstance)
-                        .setSingleChoiceItems(charSequenceItems, i, null)
-                        .setTitle("Type of scan")
-                        .setIcon(R.drawable.ic_nmap_icon_tabbutton)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.dismiss();
-                                String typeScan = charSequenceItems[((AlertDialog)dialog).getListView().getCheckedItemPosition()].toString();
-                                Log.d(TAG, "NEW Nmap TypeScan:" + typeScan);
-                                String param = nmapControler.getNmapParamFromMenuItem(typeScan);
-                                Log.d(TAG, "NEW Nmap Param:" + param);
-                                monitorNmapParam.setText(param);
-                                nmapControler.setmActualItemMenu(typeScan);
-                                if (param != null)
-                                    setToolbarTitle(null, typeScan);
-                            }
-                        })
-                        .show();
-            }
-        };
-    }
-
-    private View.OnClickListener    onClickScript() {
-        return new View.OnClickListener() {
-            public void onClick(View view) {
-
-            }
-        };
     }
 
     public void                 initTabswithTargets(final List<Host> hosts) {
@@ -263,8 +226,45 @@ public class                    NmapActivity extends SniffActivity {
         askForExternalTarget();
     }
 
-    public int                  getContentViewId() {
-        return R.layout.activity_nmap;
+    private View.OnClickListener onClickTypeScript() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<String> list = nmapControler.getMenuCommmands();
+                final CharSequence[] charSequenceItems = list.toArray(new CharSequence[list.size()]);
+                int i = 0;
+                for (; i < charSequenceItems.length; i++) {
+                    if (charSequenceItems[i].toString().contains(nmapControler.getActualCmd()))
+                        break;
+                }
+                new AlertDialog.Builder(mInstance)
+                        .setSingleChoiceItems(charSequenceItems, i, null)
+                        .setTitle("Type of scan")
+                        .setIcon(R.drawable.ic_nmap_icon_tabbutton)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.dismiss();
+                                String typeScan = charSequenceItems[((AlertDialog)dialog).getListView().getCheckedItemPosition()].toString();
+                                Log.d(TAG, "NEW Nmap TypeScan:" + typeScan);
+                                String param = nmapControler.getNmapParamFromMenuItem(typeScan);
+                                Log.d(TAG, "NEW Nmap Param:" + param);
+                                monitorNmapParam.setText(param);
+                                nmapControler.setmActualItemMenu(typeScan);
+                                if (param != null)
+                                    setToolbarTitle(null, typeScan);
+                            }
+                        })
+                        .show();
+            }
+        };
+    }
+
+    private View.OnClickListener onClickScript() {
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+
+            }
+        };
     }
 
     public void                 onBackPressed() {

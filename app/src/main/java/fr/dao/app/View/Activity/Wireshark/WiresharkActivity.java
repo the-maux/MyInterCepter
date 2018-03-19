@@ -21,6 +21,7 @@ import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
 
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.R;
 import fr.dao.app.View.Behavior.Activity.SniffActivity;
@@ -41,7 +42,7 @@ public class                    WiresharkActivity extends SniffActivity {
 
     protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getContentViewId());
+        setContentView(R.layout.activity_wireshark);
         initXml();
         init(getIntent());
     }
@@ -49,13 +50,34 @@ public class                    WiresharkActivity extends SniffActivity {
     private void                init(Intent intent) {
         String PcapFilePath = intent  == null ? null : intent.getStringExtra("Pcap");
         if (PcapFilePath == null) {
+            Log.d(TAG, "MODE: LIVE");
             mFragment = new WiresharkLiveFragment();
-            showBottomBar();
+            if (intent != null && intent.getStringExtra("macAddress") != null) {// FROM HOSTDETAILACTIVITY
+                int position = DBHost.getPositionFromMacaddress(mSingleton.hostList, intent.getStringExtra("macAddress"));
+                Bundle args = new Bundle();
+                args.putInt("position", position);
+                mFragment.setArguments(args);
+                hideBottomBar();
+                setToolbarTitle("Sniffer", mSingleton.hostList.get(position).getName());
+            } else if (getIntent() != null && getIntent().getExtras() != null &&
+                    getIntent().getExtras().getInt("position", -1) != -1) {//MODE: FROM MITM STATION SINGLE TARGET
+                Log.d(TAG, "FROM MITM STATION SINGLE TARGET");
+                int position = getIntent().getExtras().getInt("position", 0);
+                Bundle args = new Bundle();
+                args.putInt("position", position);
+                mFragment.setArguments(args);
+                hideBottomBar();
+                setToolbarTitle("Sniffer", mSingleton.hostList.get(position).getName());
+            } else {
+                Log.d(TAG, "FROM MITM STATION MODE: MULTIPLE TARGET");
+                showBottomBar();
+                setToolbarTitle("Wireshark", (mSingleton.hostList == null) ? "0" : mSingleton.hostList.size() + " target");
+            }
             initSettings();
             initNavigationBottomBar(SNIFFER, true);
             ViewAnimate.setVisibilityToVisibleQuick(mFab);
-            setToolbarTitle("Wireshark", (mSingleton.hostList == null) ? "0" : mSingleton.hostList.size() + " target");
         } else {
+            Log.d(TAG, "MODE: READER");
             hideBottomBar();
             ViewAnimate.setVisibilityToGoneQuick(mFab);
             findViewById(R.id.navigation).setVisibility(View.GONE);
@@ -234,10 +256,6 @@ public class                    WiresharkActivity extends SniffActivity {
         ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text))
                 .setTextColor(color);
         snackbar.show();
-    }
-
-    public int                  getContentViewId() {
-        return R.layout.activity_wireshark;
     }
 
     public void                 onTcpdumpstopped() {

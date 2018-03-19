@@ -143,7 +143,7 @@ public class                    HostDetailActivity extends MyActivity {
             public void onClick(View view) {
                 mMenuFAB.close(true);
                 Intent intent = new Intent(mInstance, NmapActivity.class);
-                intent.putExtra("position", getIntent().getExtras().getInt("position"));
+                intent.putExtra("macAddress", getIntent().getExtras().getString("macAddress"));
                 startActivity(intent);
             }
         });
@@ -181,7 +181,8 @@ public class                    HostDetailActivity extends MyActivity {
             public void onClick(View view) {
                 mMenuFAB.close(true);
                 Intent intent = new Intent(mInstance, WiresharkActivity.class);
-                intent.putExtra("position", getIntent().getExtras().getInt("position"));
+                Log.d(TAG, "Sending mac[" + getIntent().getExtras().getString("macAddress") + "]");
+                intent.putExtra("macAddress", getIntent().getExtras().getString("macAddress"));
                 startActivity(intent);
             }
         });

@@ -71,6 +71,11 @@ public class                    WiresharkLiveFragment extends MyFragment {
     public void                 init() {
         //initSpinner();
         //initFilter();
+        if (getArguments() != null && getArguments().getInt("position") != -1) {
+            Log.d(TAG, "init in mode:[" + getArguments().getInt("position") + "]");
+            mListHostSelected.clear();
+            mListHostSelected.add(mSingleton.hostList.get(getArguments().getInt("position")));
+        }
         initRV();
         initTimer();
     }
@@ -98,7 +103,6 @@ public class                    WiresharkLiveFragment extends MyFragment {
         mAdapterWireshark = new WiresharkAdapter(mActivity, mRV_Wireshark);
         mRV_Wireshark.setAdapter(mAdapterWireshark);
         WrapContentLinearLayoutManager layoutManager = new WrapContentLinearLayoutManager(mActivity);
-        //mRV_Wireshark.hasFixedSize();
         layoutManager.setAutoMeasureEnabled(false);
         mRV_Wireshark.setItemAnimator(null);
         mRV_Wireshark.setLayoutManager(layoutManager);
@@ -118,7 +122,7 @@ public class                    WiresharkLiveFragment extends MyFragment {
         } else {
             mMonitorAgv.setVisibility(View.GONE);
             mTcpdump.onTcpDumpStop();
-            mActivity.setToolbarTitle(null, "Sniffing over");
+            mActivity.setToolbarTitle(null, "Sniffing finished");
             mActivity.updateNotifications();
         }
         return false;
@@ -127,6 +131,7 @@ public class                    WiresharkLiveFragment extends MyFragment {
     private boolean             startTcpdump() {
         if (mListHostSelected.isEmpty()) {
             if (mSingleton.hostList.size() == 1) {//Automatic selection when 1 target only
+                mListHostSelected.clear();
                 mListHostSelected.add(mSingleton.hostList.get(0));
                 mActivity.setToolbarTitle(null,"Listenning " + mSingleton.hostList.get(0).ip);
             } else {
