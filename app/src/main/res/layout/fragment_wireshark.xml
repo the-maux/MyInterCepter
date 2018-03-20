@@ -23,11 +23,10 @@
             android:id="@+id/cardViewHeader"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="8dp"
             android:clipToPadding="true"
             app:cardBackgroundColor="@color/generic_background"
             app:cardCornerRadius="4dp"
-            app:cardElevation="4dp"
+            app:cardElevation="8dp"
             app:layout_constraintBottom_toTopOf="@+id/verti_035"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -69,7 +68,7 @@
                     android:layout_marginTop="8dp"
                     android:gravity="left"
                     android:singleLine="true"
-                    android:text="Dump size: 231 Mb"
+                    android:text="Time: 7m32s"
                     app:layout_constraintLeft_toLeftOf="@+id/textView6"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -98,7 +97,9 @@
                     app:layout_constraintDimensionRatio="w,1:1"
                     app:layout_constraintHeight_max="150dp"
                     app:layout_constraintHeight_min="40dp"
+                    app:layout_constraintHorizontal_bias="0.05"
                     app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_max="80dp"
                     app:layout_constraintWidth_min="40dp"
@@ -110,11 +111,11 @@
             android:id="@+id/dashboard_RV"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardViewHeader" />
+            app:layout_constraintTop_toBottomOf="@+id/cardViewHeader"
+            tools:listitem="@layout/item_packets_type" />
 
     </android.support.constraint.ConstraintLayout>
 
