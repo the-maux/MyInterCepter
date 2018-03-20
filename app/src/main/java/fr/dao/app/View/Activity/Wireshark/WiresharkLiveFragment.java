@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.dao.app.Core.Configuration.Utils;
+import fr.dao.app.Core.Tcpdump.DashboardSniff;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
@@ -33,15 +34,12 @@ public class                    WiresharkLiveFragment extends MyFragment {
     private Host                mFocusedHost;//TODO need to be init
     private Context             mCtx;
     private WiresharkActivity   mActivity;
-//    private MaterialSpinner     mSpiner;
     private RecyclerView        mRV_Wireshark;
     private WiresharkAdapter    mAdapterWireshark;
     private List<Host>          mListHostSelected = new ArrayList<>();
     private TextView            mMonitorAgv;//, mMonitorCmd;
     private Tcpdump             mTcpdump;
-    /*    private CheckBox            Autoscroll;
-    private TextView            tcp_cb, dns_cb, arp_cb, https_cb, http_cb, udp_cb, ip_cb;*/
-
+    private boolean             isDashboardMode = false;
     
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_wireshark, container, false);
@@ -77,9 +75,16 @@ public class                    WiresharkLiveFragment extends MyFragment {
             mListHostSelected.clear();
             mListHostSelected.add(mSingleton.hostList.get(getArguments().getInt("position")));
         }
-        initRV();
+        if (isDashboardMode)
+            initDashboard();
+        else
+            initRV();
         initTimer();
     }
+
+    private void                initDashboard() {
+    }
+
     public class WrapContentLinearLayoutManager extends LinearLayoutManager {
         public WrapContentLinearLayoutManager(Context context) {
             super(context);
@@ -146,9 +151,8 @@ public class                    WiresharkLiveFragment extends MyFragment {
         }
         Log.d(TAG, "mTcpdump.actualParam::" + mTcpdump);
         WiresharkDispatcher trameDispatcher = new WiresharkDispatcher(mAdapterWireshark, mRV_Wireshark, mActivity);
-        String argv = mTcpdump
-                            .initCmd(mListHostSelected)
-                            .start(trameDispatcher);
+        String argv = mTcpdump.initCmd(mListHostSelected);
+        DashboardSniff dashboardSniff = mTcpdump.start(trameDispatcher);
         mMonitorAgv.setText(argv.replace(mSingleton.PcapPath, ""));
         mActivity.updateNotifications();
         return true;

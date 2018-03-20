@@ -234,7 +234,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         return actualNetwork;
     }
 
-    public void                     onHostActualized(final ArrayList<Host> hosts) {
+    public void                     onHostActualized(final ArrayList<Host> hosts, final int online, final int offline) {
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -244,7 +244,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 mActivity.setProgressState(mActivity.MAXIMUM_PROGRESS*2);
                 mSingleton.hostList = mHosts;
                 mActivity.setToolbarTitle(mSingleton.network.Ssid,
-                        hosts.size() + " device" + ((hosts.size() > 1) ? "s" : ""));
+                        "(" + online + "/" + hosts.size()+ ") device" + ((hosts.size() > 1) ? "s" : ""));
                 Log.d(TAG, "onHostActualized: " + ((mSingleton.hostList == null) ? "null" : mSingleton.hostList.size()));
                 mHostAdapter.updateHostList(mHosts);
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);

@@ -54,30 +54,31 @@ public class                        Tcpdump {
         return mInstance != null && mInstance.isRunning;
     }
 
-    public Tcpdump                  initCmd(List<Host> hosts) {
+    public String                  initCmd(List<Host> hosts) {
         actualCmd = mTcpdumpConf.buildCmd(actualParam, isDumpingInFile, "No Filter", hosts);
         ArpSpoof.launchArpSpoof(hosts);
         IPTables.InterceptWithoutSSL();
-        return this;
+        return actualCmd.replace("nmap/nmap", "nmap")
+                .replace(mSingleton.FilesPath, "");
     }
 
-    public String                   start(final WiresharkDispatcher trameDispatcher) {
+    public DashboardSniff          start(final WiresharkDispatcher trameDispatcher) {
         isPcapReading = false;
         mDispatcher = trameDispatcher;
         isRunning = true;
+        final DashboardSniff dashboardSniff = new DashboardSniff();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     Log.i(TAG, actualCmd);
                     mTcpDumpProcess = new RootProcess("Wireshark").exec(actualCmd);
-                    execTcpDump(mTcpDumpProcess.getReader());
+                    execTcpDump(mTcpDumpProcess.getReader(), dashboardSniff);
                     Log.i(TAG, "Tcpdump execution over");
                     onTcpDumpStop();
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.e(TAG, "Process Error: " + e.getMessage());
-                    //TODO: ask if he wants to retry sniff
                     mActivity.showSnackbar(e.getMessage(), ContextCompat.getColor(mActivity, R.color.stop_color));
                     mActivity.setToolbarTitle("Execution stopped", e.getMessage());
                     onTcpDumpStop();
@@ -85,13 +86,12 @@ public class                        Tcpdump {
                 } finally {
                     if (mTcpDumpProcess != null)
                         mTcpDumpProcess.closeProcess();
-                    readLineForLivePrint("Quiting...");
+                    readLineForLivePrint("Quiting...", dashboardSniff);
                 }
                 Log.i(TAG, "End of Tcpdump thread");
             }
         }).start();
-        return actualCmd.replace("nmap/nmap", "nmap")
-                .replace(mSingleton.FilesPath, "");//trimmed cmd
+        return dashboardSniff;
     }
 
     public void                     readPcap(File pcapFile, WiresharkReaderFragment fragment) {
@@ -106,7 +106,7 @@ public class                        Tcpdump {
                 try {
                     mTcpDumpProcess = new RootProcess("Wireshark")
                             .exec(actualCmd);
-                    execTcpDump(mTcpDumpProcess.getReader());
+                    execTcpDump(mTcpDumpProcess.getReader(), null);
                     Log.i(TAG, "Tcpdump execution over");
                     onTcpDumpStop();
                 } catch (IOException e) {
@@ -125,7 +125,7 @@ public class                        Tcpdump {
         }).start();
     }
 
-    private void                    execTcpDump(final BufferedReader reader) throws IOException {
+    private void                    execTcpDump(final BufferedReader reader, final DashboardSniff dashboardSniff) throws IOException {
         String buffer;
         while ((buffer = reader.readLine()) != null) {
             final String line = buffer;
@@ -136,13 +136,17 @@ public class                        Tcpdump {
                             readAndAnalyse(line);
                             mFragment.loadingMonitor();
                         } else
-                            readLineForLivePrint(line);
+                            readLineForLivePrint(line, dashboardSniff);
                     }
                 }
             }).start();
         }
     }
 
+    /**
+     * Trame sended to mBufferOfTrame
+     * TODO: big analyse with dump of each packets
+     */
     private void                    readAndAnalyse(String line) {
         Log.d(TAG, "readAndAnalyse[" + line + "]");
         if (line.contains("Quiting...")) {
@@ -153,7 +157,6 @@ public class                        Tcpdump {
             onTcpDumpStop();
             return;
         }
-
         Trame trame = new Trame(line);
         if (trame.initialised && !trame.skipped) {
             mBufferOfTrame.add(trame);
@@ -162,21 +165,25 @@ public class                        Tcpdump {
             mActivity.onError(/*trame*/);
             onTcpDumpStop();
         }//else skipped
-
     }
 
-    private void                    readLineForLivePrint(String line) {
+    /**
+     * Trame sended to trame dispatcher
+     */
+    private void                    readLineForLivePrint(String line, DashboardSniff dashboardSniff) {
         Log.d(TAG, "readLineForLivePrint::" + line);
         if (line.contains("Quiting...")) {
             Log.d(TAG, "Finishing Adapter trame");
             Trame trame = new Trame("Processus over");
             trame.connectionOver = true;
             mDispatcher.addToQueue(trame);
+            dashboardSniff.stop();
             onTcpDumpStop();
             return;
         }
         Trame trame = new Trame(line);
         if (trame.initialised && !trame.skipped) {
+            dashboardSniff.addTrame(trame);
             mDispatcher.addToQueue(trame);
         } else if (!trame.skipped) {
             Log.d(TAG, "trame created not initialized and not skipped, STOP TCPDUMP");
