@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme" parent="android:Theme.Material.NoActionBar">
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:colorPrimaryDark">@color/generic_background</item>
+        <item name="android:colorPrimaryDark">#212121</item>
+        <item name="android:statusBarColor">#212121</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">

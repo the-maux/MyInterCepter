@@ -313,7 +313,6 @@ public class               Trame  {
         return extracted;
     }
 
-    @Override
     public String          toString() {
         return  "Trame n°" + offsett + " " +
                 ((protocol != null) ? protocol.name() : "") + ":" +

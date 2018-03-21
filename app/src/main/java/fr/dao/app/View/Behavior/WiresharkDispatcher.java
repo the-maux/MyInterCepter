@@ -51,7 +51,7 @@ public class                        WiresharkDispatcher  {
                     for (int i = 0; i < size; i++) {
                         ((WiresharkAdapter) mAdapterWireshark).addTrameOnAdapter(pop());
                     }
-                    Log.d(TAG, "notifyItemRangeInserted(" + size + ");");
+//                    Log.d(TAG, "notifyItemRangeInserted(" + size + ");");
                     if (size == 1)
                         mAdapterWireshark.notifyItemInserted(0);
                     else
