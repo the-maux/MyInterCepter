@@ -35,10 +35,11 @@
     <color name="ftp">#e7e5ff</color>
     <color name="green">#00aa00</color>
     <color name="http">#2196f3</color>
+    <color name="https">#1565c0</color>
     <color name="icmp">#75b6f7</color>
     <color name="smb">#fff999</color>
     <color name="udp">#29b6f6</color>
-    <color name="tcp">#d50000</color>
+    <color name="tcp">#f44336</color>
     <color name="dns">#66bb6a</color>
 
 </resources>

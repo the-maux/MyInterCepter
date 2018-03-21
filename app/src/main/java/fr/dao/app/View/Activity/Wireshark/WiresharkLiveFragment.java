@@ -25,6 +25,7 @@ import fr.dao.app.View.Behavior.Fragment.MyFragment;
 import fr.dao.app.View.Behavior.WiresharkDispatcher;
 import fr.dao.app.View.Widget.Adapter.HostSelectionAdapter;
 import fr.dao.app.View.Widget.Adapter.WiresharkAdapter;
+import fr.dao.app.View.Widget.Adapter.WireshrakDashboardAdapter;
 import fr.dao.app.View.Widget.Dialog.RV_dialog;
 
 
@@ -36,6 +37,7 @@ public class                    WiresharkLiveFragment extends MyFragment {
     private WiresharkActivity   mActivity;
     private RecyclerView        mRV_Wireshark;
     private WiresharkAdapter    mAdapterWireshark;
+    private WireshrakDashboardAdapter mAdapterDashboardWireshark;
     private List<Host>          mListHostSelected = new ArrayList<>();
     private TextView            mMonitorAgv;//, mMonitorCmd;
     private Tcpdump             mTcpdump;
@@ -75,14 +77,17 @@ public class                    WiresharkLiveFragment extends MyFragment {
             mListHostSelected.clear();
             mListHostSelected.add(mSingleton.hostList.get(getArguments().getInt("position")));
         }
-        if (isDashboardMode)
-            initDashboard();
-        else
-            initRV();
+        mActivity.findViewById(isDashboardMode ? R.id.rootViewForLiveFlux : R.id.rootViewForDashboard).setVisibility(View.GONE);
+        initDashboard();
+        initRV();
         initTimer();
     }
 
     private void                initDashboard() {
+        mAdapterDashboardWireshark = new WireshrakDashboardAdapter(mActivity);
+        mRV_Wireshark.setAdapter(mAdapterWireshark);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity);
+        mRV_Wireshark.setLayoutManager(layoutManager);
     }
 
     public class WrapContentLinearLayoutManager extends LinearLayoutManager {
