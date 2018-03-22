@@ -74,10 +74,10 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         Log.d(TAG, "onResume::scan discovery host :" + mHostAdapter.getItemCount());
         Log.d(TAG, "onResume::scan discovery hostList :" + mHosts.size());
         if (mHosts.size() == 0) {
-            mActivity.setToolbarTitle(mSingleton.network.Ssid,
+            mActivity.setToolbarTitle(mSingleton.network.ssid,
                     "Searching devices");
         } else {
-            mActivity.setToolbarTitle(mSingleton.network.Ssid,
+            mActivity.setToolbarTitle(mSingleton.network.ssid,
                     mHosts.size() + " device" + ((mHosts.size() > 1) ? "s" : ""));
         }
         mHostAdapter.updateHostList(mHosts);
@@ -196,7 +196,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     }
 
     public Network                  updateStateOfHostAfterIcmp(ArrayList<String> ipReachables) {
-        Network actualNetwork = DBNetwork.getAPFromSSID(mSingleton.network.Ssid);
+        Network actualNetwork = DBNetwork.getAPFromSSID(mSingleton.network.ssid);
         int rax = 0;
         for (Host host : actualNetwork.listDevices()) {
             host.state = Host.State.OFFLINE;
@@ -243,7 +243,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 mScannerControler.inLoading = false;
                 mActivity.setProgressState(mActivity.MAXIMUM_PROGRESS*2);
                 mSingleton.hostList = mHosts;
-                mActivity.setToolbarTitle(mSingleton.network.Ssid,
+                mActivity.setToolbarTitle(mSingleton.network.ssid,
                         "(" + online + "/" + hosts.size()+ ") device" + ((hosts.size() > 1) ? "s" : ""));
                 Log.d(TAG, "onHostActualized: " + ((mSingleton.hostList == null) ? "null" : mSingleton.hostList.size()));
                 mHostAdapter.updateHostList(mHosts);

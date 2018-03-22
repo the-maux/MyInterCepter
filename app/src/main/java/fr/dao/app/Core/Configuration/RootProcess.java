@@ -29,7 +29,10 @@ public class                    RootProcess {
     public                      RootProcess(String LogID, String workingDirectory) {
         this.mLogID = LogID;
         try {
-            mProcess = Runtime.getRuntime().exec("su", null, new File(workingDirectory));
+            if (workingDirectory == null)
+                mProcess = Runtime.getRuntime().exec("su", null);
+            else
+                mProcess = Runtime.getRuntime().exec("su", null, new File(workingDirectory));
             mOutputStream = new DataOutputStream(mProcess.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();

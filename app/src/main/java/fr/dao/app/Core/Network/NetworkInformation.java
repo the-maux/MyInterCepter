@@ -13,7 +13,7 @@ public class                    NetworkInformation {
     public String               myIp = "";
     public String               gateway = "";
     public String               mac = "";
-    public String               Ssid = "";
+    public String ssid = "";
     String                      netmask = "";
 
     NetworkInformation(WifiManager wifiManager, String mac) {

@@ -67,6 +67,7 @@ public class                        Tcpdump {
         mDispatcher = trameDispatcher;
         isRunning = true;
         final DashboardSniff dashboardSniff = new DashboardSniff();
+        mDispatcher.setDashboard(dashboardSniff);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -183,7 +184,6 @@ public class                        Tcpdump {
         }
         Trame trame = new Trame(line);
         if (trame.initialised && !trame.skipped) {
-            dashboardSniff.addTrame(trame);
             mDispatcher.addToQueue(trame);
         } else if (!trame.skipped) {
             Log.d(TAG, "trame created not initialized and not skipped, STOP TCPDUMP");

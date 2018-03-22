@@ -3,14 +3,19 @@ package fr.dao.app.View.Activity.Wireshark;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,6 +27,7 @@ import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.Behavior.Fragment.MyFragment;
+import fr.dao.app.View.Behavior.MyGlideLoader;
 import fr.dao.app.View.Behavior.WiresharkDispatcher;
 import fr.dao.app.View.Widget.Adapter.HostSelectionAdapter;
 import fr.dao.app.View.Widget.Adapter.WiresharkAdapter;
@@ -32,22 +38,27 @@ import fr.dao.app.View.Widget.Dialog.RV_dialog;
 public class                    WiresharkLiveFragment extends MyFragment {
     private String              TAG = "WiresharkLiveFragment";
     private CoordinatorLayout   mCoordinatorLayout;
+    private ConstraintLayout    rootViewForDashboard;
+    private RelativeLayout      rootViewForLiveFlux;
     private Host                mFocusedHost;//TODO need to be init
     private Context             mCtx;
     private WiresharkActivity   mActivity;
     private RecyclerView        mRV_Wireshark;
-    private WiresharkAdapter    mAdapterWireshark;
+    private WiresharkAdapter mAdapterDetailWireshark;
     private WireshrakDashboardAdapter mAdapterDashboardWireshark;
     private List<Host>          mListHostSelected = new ArrayList<>();
     private TextView            mMonitorAgv;//, mMonitorCmd;
     private Tcpdump             mTcpdump;
-    private boolean             isDashboardMode = false;
-    
+    private boolean             isDashboardMode = true;
+
+    private ImageView           statusIconSniffing, headerWifi;
+    private TextView            title_sniffer, subtitle_sniffer, bottom_title_sniffer, bottom_subtitle_sniffer;
+
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_wireshark, container, false);
         mCtx = getActivity();
-        initXml(rootView);
         mActivity = (WiresharkActivity) getActivity();
+        initXml(rootView);
         mTcpdump = Tcpdump.getTcpdump(mActivity, true);
         init();
         return rootView;
@@ -57,6 +68,13 @@ public class                    WiresharkLiveFragment extends MyFragment {
         mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
         mRV_Wireshark = rootView.findViewById(R.id.RV_Wireshark);
         mMonitorAgv =  rootView.findViewById(R.id.Monitor);
+        rootViewForLiveFlux = rootView.findViewById(R.id.rootViewForLiveFlux);
+        rootViewForDashboard = rootView.findViewById(R.id.rootViewForDashboard);
+        statusIconSniffing = rootView.findViewById(R.id.statusIconSniffing);
+        title_sniffer = rootView.findViewById(R.id.title_sniffer);
+        subtitle_sniffer = rootView.findViewById(R.id.subtitle_sniffer);
+        bottom_title_sniffer = rootView.findViewById(R.id.bottom_title_sniffer);
+        bottom_subtitle_sniffer = rootView.findViewById(R.id.bottom_subtitle_sniffer);
   //      mMonitorCmd =  rootView.findViewById(R.id.cmd);
 //        mSpiner =  rootView.findViewById(R.id.spinnerTypeScan);
 //        Autoscroll =  rootView.findViewById(R.id.Autoscroll);
@@ -77,15 +95,23 @@ public class                    WiresharkLiveFragment extends MyFragment {
             mListHostSelected.clear();
             mListHostSelected.add(mSingleton.hostList.get(getArguments().getInt("position")));
         }
-        mActivity.findViewById(isDashboardMode ? R.id.rootViewForLiveFlux : R.id.rootViewForDashboard).setVisibility(View.GONE);
+        rootViewForDashboard.setVisibility((isDashboardMode) ? View.VISIBLE : View.GONE);
+        rootViewForLiveFlux.setVisibility((isDashboardMode) ? View.GONE : View.VISIBLE);
         initDashboard();
         initRV();
         initTimer();
     }
 
     private void                initDashboard() {
-        mAdapterDashboardWireshark = new WireshrakDashboardAdapter(mActivity);
-        mRV_Wireshark.setAdapter(mAdapterWireshark);
+        int res = (mTcpdump.isRunning) ? R.color.online_color : R.color.offline_color;
+        title_sniffer.setText(mSingleton.network.ssid);
+        subtitle_sniffer.setText("");
+        bottom_title_sniffer.setText("Sniffed since 40s");
+        bottom_subtitle_sniffer.setText(mListHostSelected.size() + " targets");
+        MyGlideLoader.loadDrawableInCircularImageView(mActivity,
+                new ColorDrawable(ContextCompat.getColor(mActivity, res)), statusIconSniffing);
+        mAdapterDashboardWireshark = new WireshrakDashboardAdapter(mActivity, subtitle_sniffer);
+        mRV_Wireshark.setAdapter(mAdapterDetailWireshark);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity);
         mRV_Wireshark.setLayoutManager(layoutManager);
     }
@@ -102,7 +128,7 @@ public class                    WiresharkLiveFragment extends MyFragment {
                 mRV_Wireshark.post(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapterWireshark.notifyDataSetChanged();
+                        mAdapterDetailWireshark.notifyDataSetChanged();
                     }
                 });
                 Log.d("ERROR", e.getMessage());
@@ -114,8 +140,8 @@ public class                    WiresharkLiveFragment extends MyFragment {
         }
     }
     private void                initRV() {
-        mAdapterWireshark = new WiresharkAdapter(mActivity, mRV_Wireshark);
-        mRV_Wireshark.setAdapter(mAdapterWireshark);
+        mAdapterDetailWireshark = new WiresharkAdapter(mActivity, mRV_Wireshark);
+        mRV_Wireshark.setAdapter(mAdapterDetailWireshark);
         WrapContentLinearLayoutManager layoutManager = new WrapContentLinearLayoutManager(mActivity);
         layoutManager.setAutoMeasureEnabled(false);
         mRV_Wireshark.setItemAnimator(null);
@@ -128,7 +154,7 @@ public class                    WiresharkLiveFragment extends MyFragment {
     public boolean              start() {
         Utils.vibrateDevice(mActivity);
         if (!mTcpdump.isRunning) {
-            mAdapterWireshark.clear();
+            mAdapterDetailWireshark.clear();
             if (startTcpdump()) {
                 mMonitorAgv.setVisibility(View.VISIBLE);
                 return true;
@@ -155,9 +181,10 @@ public class                    WiresharkLiveFragment extends MyFragment {
             }
         }
         Log.d(TAG, "mTcpdump.actualParam::" + mTcpdump);
-        WiresharkDispatcher trameDispatcher = new WiresharkDispatcher(mAdapterWireshark, mRV_Wireshark, mActivity);
+        WiresharkDispatcher trameDispatcher = new WiresharkDispatcher(mAdapterDetailWireshark, mRV_Wireshark, mActivity);
         String argv = mTcpdump.initCmd(mListHostSelected);
         DashboardSniff dashboardSniff = mTcpdump.start(trameDispatcher);
+        mAdapterDashboardWireshark.setDashboard(dashboardSniff);
         mMonitorAgv.setText(argv.replace(mSingleton.PcapPath, ""));
         mActivity.updateNotifications();
         return true;
@@ -201,7 +228,7 @@ public class                    WiresharkLiveFragment extends MyFragment {
                 int pR = tv.getPaddingRight();
                 int pB = tv.getPaddingBottom();
                 tv.setBackgroundResource(
-                        (mAdapterWireshark.changePermissionFilter(protocol)) ?
+                        (mAdapterDetailWireshark.changePermissionFilter(protocol)) ?
                                 R.drawable.rounded_corner_on : R.drawable.rounded_corner_off);
                 tv.setPadding(pL, pT, pR, pB);
             }

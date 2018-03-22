@@ -1,5 +1,7 @@
 package fr.dao.app.Core.Tcpdump;
 
+import android.widget.TextView;
+
 import fr.dao.app.Model.Net.Trame;
 /**
  * TODO:
@@ -23,6 +25,7 @@ public class                DashboardSniff {
     private int             nbrPackets = 0;
     private int             UDP_packet = 0, TCP_packet = 0, FTP_packet = 0, ICMP_packet = 0;
     private int             HTTP_packet = 0, HTTPS_packet = 0, DNS_packet = 0, ARP_Packet = 0;
+    private TextView        monitorPackets;
 
     public                  DashboardSniff() {
 
@@ -60,5 +63,9 @@ public class                DashboardSniff {
 
     public void             stop() {
         mIsRunning = false;
+    }
+
+    public void             setMonitorPackets(TextView monitorPackets) {
+        this.monitorPackets = monitorPackets;
     }
 }

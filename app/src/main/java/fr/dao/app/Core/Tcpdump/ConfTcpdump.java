@@ -79,7 +79,7 @@ class                           ConfTcpdump {
         String hostFilter = buildHostFilterCommand(hosts, typeScan);
         String date =  new SimpleDateFormat("dd_MMMM_HH#mm-ss", Locale.FRANCE).format(new Date())
                 .replace("#", "h").replace("-", "m").replace("é", "e");
-        String nameFile = mSingleton.network.Ssid  + "_" + date;
+        String nameFile = mSingleton.network.ssid + "_" + date;
         String pcapFile = (isDumpingInFile) ? buildForDumpingPcap(nameFile, hosts) : "";
         String cmd = (mSingleton.FilesPath + "tcpdump " +
                 pcapFile + actualParam + hostFilter)

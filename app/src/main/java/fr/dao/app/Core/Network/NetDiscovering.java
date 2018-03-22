@@ -92,7 +92,7 @@ public class                            NetDiscovering {
         Singleton.getInstance().network.init();
         if ((activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)) != null)
             wifiInfo = ((WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
-        Singleton.getInstance().network.Ssid = wifiInfo.getSSID().replace("\"", "");
+        Singleton.getInstance().network.ssid = wifiInfo.getSSID().replace("\"", "");
         return true;
     }
 

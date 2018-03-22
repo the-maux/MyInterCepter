@@ -12,9 +12,6 @@ import fr.dao.app.Core.Configuration.Setup;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
 
-/**
- * Baigne toi dans le sang des mots si ils te plaisent, leurs sens ne t'appartiendra jamais. KT
- */
 public class                    SplashscreenActivity extends AppCompatActivity {
     private int                 MAXIMUM_TRY_PERMISSION = 42, try_permission = 0;
 
@@ -46,7 +43,7 @@ public class                    SplashscreenActivity extends AppCompatActivity {
     }
     private boolean             rootCheck() {
         try {
-            String RootOkTest = new RootProcess("RootCheckTest").exec("ls /data/data").getReader().readLine();
+       //     String RootOkTest = new RootProcess("RootCheckTest").exec("ls /data/data").getReader().readLine();
             String RootOk = new RootProcess("RootCheck").exec("id").getReader().readLine();
             return (RootOk != null && RootOk.contains("uid=0(root)"));
         } catch (IOException e) {

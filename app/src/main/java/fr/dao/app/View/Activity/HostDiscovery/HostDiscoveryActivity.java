@@ -190,14 +190,14 @@ public class                        HostDiscoveryActivity extends MyActivity {
         String monitor = "";
         if (!monitor.contains("WiFi")) {
             monitor += " Ip Address : " + mSingleton.network.myIp;
-            monitor += "\n" + mSingleton.network.Ssid + " : " + mSingleton.network.gateway;
+            monitor += "\n" + mSingleton.network.ssid + " : " + mSingleton.network.gateway;
         } else {
             monitor += "Not Connected";
         }
         if (Singleton.getInstance().network.isConnectedToNetwork())
             mBottomMonitor.setText(monitor);
         else
-            mBottomMonitor.setText(mSingleton.network.Ssid + ": No connection");
+            mBottomMonitor.setText(mSingleton.network.ssid + ": No connection");
         ViewAnimate.setVisibilityToVisibleQuick(mBottomMonitor);
         ViewAnimate.setVisibilityToVisibleQuick(mTimer);
     }
