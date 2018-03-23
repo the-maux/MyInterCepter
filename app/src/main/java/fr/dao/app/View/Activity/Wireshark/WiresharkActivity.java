@@ -112,7 +112,7 @@ public class                    WiresharkActivity extends SniffActivity {
         mToolbar = findViewById(R.id.toolbar);
         mFab =  findViewById(R.id.fab);
         mFab.setOnClickListener(onclickFab());
-        MyGlideLoader.loadDrawableInImageView(this, R.drawable.wireshark, (ImageView) findViewById(R.id.OsImg), true);
+        MyGlideLoader.loadDrawableInImageView(this, R.drawable.ic_sniff_barbutton, (ImageView) findViewById(R.id.OsImg), true);
         findViewById(R.id.history).setOnClickListener(onClickHistory());
     }
 

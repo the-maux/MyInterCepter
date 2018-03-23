@@ -3,11 +3,10 @@ package fr.dao.app.View.Activity.Wireshark;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,6 +20,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.dao.app.Core.Configuration.GlideApp;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Tcpdump.DashboardSniff;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
@@ -43,7 +43,7 @@ public class                    WiresharkLiveFragment extends MyFragment {
     private Host                mFocusedHost;//TODO need to be init
     private Context             mCtx;
     private WiresharkActivity   mActivity;
-    private RecyclerView        mRV_Wireshark;
+    private RecyclerView        mRV_Wireshark, dashboard_RV;
     private WiresharkAdapter mAdapterDetailWireshark;
     private WireshrakDashboardAdapter mAdapterDashboardWireshark;
     private List<Host>          mListHostSelected = new ArrayList<>();
@@ -51,7 +51,7 @@ public class                    WiresharkLiveFragment extends MyFragment {
     private Tcpdump             mTcpdump;
     private boolean             isDashboardMode = true;
 
-    private ImageView           statusIconSniffing, headerWifi;
+    private ImageView           statusIconSniffing, headerWifi, SwitchViewBtn;
     private TextView            title_sniffer, subtitle_sniffer, bottom_title_sniffer, bottom_subtitle_sniffer;
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
@@ -75,6 +75,9 @@ public class                    WiresharkLiveFragment extends MyFragment {
         subtitle_sniffer = rootView.findViewById(R.id.subtitle_sniffer);
         bottom_title_sniffer = rootView.findViewById(R.id.bottom_title_sniffer);
         bottom_subtitle_sniffer = rootView.findViewById(R.id.bottom_subtitle_sniffer);
+        headerWifi = rootView.findViewById(R.id.headerWifi);
+        dashboard_RV = rootView.findViewById(R.id.dashboard_RV);
+        SwitchViewBtn = rootView.findViewById(R.id.SwitchViewBtn);
   //      mMonitorCmd =  rootView.findViewById(R.id.cmd);
 //        mSpiner =  rootView.findViewById(R.id.spinnerTypeScan);
 //        Autoscroll =  rootView.findViewById(R.id.Autoscroll);
@@ -100,20 +103,32 @@ public class                    WiresharkLiveFragment extends MyFragment {
         initDashboard();
         initRV();
         initTimer();
+        SwitchViewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isDashboardMode = !isDashboardMode;
+                init();
+            }
+        });
     }
 
     private void                initDashboard() {
         int res = (mTcpdump.isRunning) ? R.color.online_color : R.color.offline_color;
         title_sniffer.setText(mSingleton.network.ssid);
-        subtitle_sniffer.setText("");
+        subtitle_sniffer.setText("No packets recorded");
         bottom_title_sniffer.setText("Sniffed since 40s");
         bottom_subtitle_sniffer.setText(mListHostSelected.size() + " targets");
-        MyGlideLoader.loadDrawableInCircularImageView(mActivity,
-                new ColorDrawable(ContextCompat.getColor(mActivity, res)), statusIconSniffing);
+      /*  MyGlideLoader.loadDrawableInCircularImageView(mActivity,
+                new ColorDrawable(ContextCompat.getColor(mActivity, res)), statusIconSniffing);*/
+        MyGlideLoader.loadDrawableInImageView(mActivity, R.drawable.wireshark, headerWifi, false);
+
+        GlideApp.with(mActivity)
+                .load(res)
+                .into(statusIconSniffing);
         mAdapterDashboardWireshark = new WireshrakDashboardAdapter(mActivity, subtitle_sniffer);
-        mRV_Wireshark.setAdapter(mAdapterDetailWireshark);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity);
-        mRV_Wireshark.setLayoutManager(layoutManager);
+        dashboard_RV.setAdapter(mAdapterDashboardWireshark);
+        LinearLayoutManager layoutManager = new GridLayoutManager(mActivity, 3);
+        dashboard_RV.setLayoutManager(layoutManager);
     }
 
     public class WrapContentLinearLayoutManager extends LinearLayoutManager {
