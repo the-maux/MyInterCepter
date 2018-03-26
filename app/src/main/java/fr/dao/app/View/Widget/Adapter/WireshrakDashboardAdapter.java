@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Core.Tcpdump.DashboardSniff;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.R;
@@ -17,13 +18,18 @@ public class                    WireshrakDashboardAdapter extends RecyclerView.A
     private String              TAG = "NetworksAdapter";
     private MyActivity          mActivity;
     private DashboardSniff      wiresharkDashboard;
-    private TextView            subtitle_sniffer;
+    private TextView            packetsNumber, nbrTargets, timerMonitor;
+    private CircleImageView     status;
 
     public final int            TCP = 0, UDP = 1, HTTP = 2, HTTPS = 3, DNS = 4, SPY = 5;
 
-    public WireshrakDashboardAdapter(MyActivity activity, TextView subtitle_sniffer) {
+    public WireshrakDashboardAdapter(MyActivity activity, TextView packetsNumber, TextView nbrTargets,
+                                     TextView timerMonitor, CircleImageView status) {
         this.mActivity = activity;
-        this.subtitle_sniffer = subtitle_sniffer;
+        this.packetsNumber = packetsNumber;
+        this.nbrTargets = nbrTargets;
+        this.timerMonitor = timerMonitor;
+        this.status = status;
     }
 
     public PacketHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -115,6 +121,6 @@ public class                    WireshrakDashboardAdapter extends RecyclerView.A
 
     public void                 setDashboard(DashboardSniff dashboard) {
         this.wiresharkDashboard = dashboard;
-        dashboard.setMonitorPackets(subtitle_sniffer);
+        dashboard.setMonitorView(packetsNumber, nbrTargets, timerMonitor, status);
     }
 }

@@ -39,7 +39,8 @@ public class                    WiresharkActivity extends SniffActivity {
     private ProgressBar         mProgressBar;
     private Singleton           mSingleton = Singleton.getInstance();
     private MyFragment          mFragment = null;
-
+    private ImageView           SwitchViewBackBtn;
+    private boolean             readerFragment = false;
     protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wireshark);
@@ -56,26 +57,22 @@ public class                    WiresharkActivity extends SniffActivity {
     private void                init(Intent intent) {
         String PcapFilePath = intent  == null ? null : intent.getStringExtra("Pcap");
         if (PcapFilePath == null) {
-            Log.d(TAG, "MODE: LIVE");
             mFragment = new WiresharkLiveFragment();
             hideBottomBar();
             if (intent != null && intent.getStringExtra("macAddress") != null) {// FROM HOSTDETAILACTIVITY
                 int position = DBHost.getPositionFromMacaddress(mSingleton.hostList, intent.getStringExtra("macAddress"));
                 Bundle args = new Bundle();
-                Log.d(TAG, "HOST IS AT POSITION:[" + position + "] AND HE IS [" + mSingleton.hostList.get(position).ip +"]");
                 args.putInt("position", position);
                 mFragment.setArguments(args);
                 setToolbarTitle("Sniffer", mSingleton.hostList.get(position).getName());
             } else if (getIntent() != null && getIntent().getExtras() != null &&
                     getIntent().getExtras().getInt("position", -1) != -1) {//MODE: FROM MITM STATION SINGLE TARGET
-                Log.d(TAG, "FROM MITM STATION SINGLE TARGET");
                 int position = getIntent().getExtras().getInt("position", 0);
                 Bundle args = new Bundle();
                 args.putInt("position", position);
                 mFragment.setArguments(args);
                 setToolbarTitle("Sniffer", mSingleton.hostList.get(position).getName());
             } else {
-                Log.d(TAG, "FROM MITM STATION MODE: MULTIPLE TARGET");
                 showBottomBar();
                 setToolbarTitle("Wireshark", (mSingleton.hostList == null) ? "0" : mSingleton.hostList.size() + " target");
             }
@@ -83,10 +80,10 @@ public class                    WiresharkActivity extends SniffActivity {
             initNavigationBottomBar(SNIFFER, true);
             ViewAnimate.setVisibilityToVisibleQuick(mFab);
         } else {
-            Log.d(TAG, "MODE: READER");
             hideBottomBar();
             ViewAnimate.setVisibilityToGoneQuick(mFab);
             findViewById(R.id.navigation).setVisibility(View.GONE);
+            readerFragment = true;
             mFragment = new WiresharkReaderFragment();
             Bundle bundle = new Bundle();
             bundle.putString("Pcap", PcapFilePath);
@@ -94,6 +91,8 @@ public class                    WiresharkActivity extends SniffActivity {
             setToolbarTitle(PcapFilePath.replace(mSingleton.PcapPath, "")
                     .replace("_", " ").replace(".pcap", ""),"Loading");
         }
+        if (!readerFragment)
+            ViewAnimate.setVisibilityToVisibleQuick(SwitchViewBackBtn);
         initFragment(mFragment);
     }
 
@@ -113,12 +112,28 @@ public class                    WiresharkActivity extends SniffActivity {
         mFab =  findViewById(R.id.fab);
         mFab.setOnClickListener(onclickFab());
         MyGlideLoader.loadDrawableInImageView(this, R.drawable.ic_sniff_barbutton, (ImageView) findViewById(R.id.OsImg), true);
+        SwitchViewBackBtn = findViewById(R.id.SwitchViewBackBtn);
         findViewById(R.id.history).setOnClickListener(onClickHistory());
+        onSwitchViewClicked();
+    }
+
+    private void                onSwitchViewClicked() {
+        SwitchViewBackBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (!readerFragment) {
+                    boolean isDashboard = ((WiresharkLiveFragment)mFragment).onSwitchView();
+                    int res = isDashboard ? R.drawable.ic_flip_to_front_svg: R.drawable.ic_flip_to_back_black_svg;
+                    MyGlideLoader.loadDrawableInImageView(mInstance, res, SwitchViewBackBtn, false);
+                    Log.d(TAG, "swithed has " + ((isDashboard) ? "dashboard" : "Live packets" ));
+                } else {
+                    Log.d(TAG, "not in readerFragment");
+                }
+            }
+        });
     }
 
     private void                initFragment(MyFragment fragment) {
         try {
-            mFragment =  fragment;
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.frame_container, mFragment)

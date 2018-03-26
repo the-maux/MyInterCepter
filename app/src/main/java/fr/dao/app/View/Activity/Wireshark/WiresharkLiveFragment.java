@@ -20,7 +20,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.dao.app.Core.Configuration.GlideApp;
+import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Tcpdump.DashboardSniff;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
@@ -50,8 +50,8 @@ public class                    WiresharkLiveFragment extends MyFragment {
     private TextView            mMonitorAgv;//, mMonitorCmd;
     private Tcpdump             mTcpdump;
     private boolean             isDashboardMode = true;
-
-    private ImageView           statusIconSniffing, headerWifi, SwitchViewBtn;
+    private CircleImageView     statusIconSniffing;
+    private ImageView           headerWifi;
     private TextView            title_sniffer, subtitle_sniffer, bottom_title_sniffer, bottom_subtitle_sniffer;
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
@@ -77,7 +77,6 @@ public class                    WiresharkLiveFragment extends MyFragment {
         bottom_subtitle_sniffer = rootView.findViewById(R.id.bottom_subtitle_sniffer);
         headerWifi = rootView.findViewById(R.id.headerWifi);
         dashboard_RV = rootView.findViewById(R.id.dashboard_RV);
-        SwitchViewBtn = rootView.findViewById(R.id.SwitchViewBtn);
   //      mMonitorCmd =  rootView.findViewById(R.id.cmd);
 //        mSpiner =  rootView.findViewById(R.id.spinnerTypeScan);
 //        Autoscroll =  rootView.findViewById(R.id.Autoscroll);
@@ -103,13 +102,6 @@ public class                    WiresharkLiveFragment extends MyFragment {
         initDashboard();
         initRV();
         initTimer();
-        SwitchViewBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isDashboardMode = !isDashboardMode;
-                init();
-            }
-        });
     }
 
     private void                initDashboard() {
@@ -121,14 +113,21 @@ public class                    WiresharkLiveFragment extends MyFragment {
       /*  MyGlideLoader.loadDrawableInCircularImageView(mActivity,
                 new ColorDrawable(ContextCompat.getColor(mActivity, res)), statusIconSniffing);*/
         MyGlideLoader.loadDrawableInImageView(mActivity, R.drawable.wireshark, headerWifi, false);
-
-        GlideApp.with(mActivity)
-                .load(res)
-                .into(statusIconSniffing);
-        mAdapterDashboardWireshark = new WireshrakDashboardAdapter(mActivity, subtitle_sniffer);
+//        GlideApp.with(mActivity)
+//                .load(res)
+//                .into(statusIconSniffing);
+        statusIconSniffing.setImageResource(res);
+        mAdapterDashboardWireshark = new WireshrakDashboardAdapter(mActivity, subtitle_sniffer,
+                bottom_title_sniffer, bottom_subtitle_sniffer, statusIconSniffing);
         dashboard_RV.setAdapter(mAdapterDashboardWireshark);
         LinearLayoutManager layoutManager = new GridLayoutManager(mActivity, 3);
         dashboard_RV.setLayoutManager(layoutManager);
+    }
+
+    public boolean              onSwitchView() {
+        isDashboardMode = !isDashboardMode;
+        init();
+        return isDashboardMode;
     }
 
     public class WrapContentLinearLayoutManager extends LinearLayoutManager {
@@ -171,6 +170,10 @@ public class                    WiresharkLiveFragment extends MyFragment {
         if (!mTcpdump.isRunning) {
             mAdapterDetailWireshark.clear();
             if (startTcpdump()) {
+                if (isDashboardMode) {
+                    int color = R.color.filtered_color;
+                    statusIconSniffing.setImageResource(color);
+                }
                 mMonitorAgv.setVisibility(View.VISIBLE);
                 return true;
             }
@@ -200,6 +203,8 @@ public class                    WiresharkLiveFragment extends MyFragment {
         String argv = mTcpdump.initCmd(mListHostSelected);
         DashboardSniff dashboardSniff = mTcpdump.start(trameDispatcher);
         mAdapterDashboardWireshark.setDashboard(dashboardSniff);
+        if (isDashboardMode)
+            bottom_subtitle_sniffer.setText(mListHostSelected.size() + " clients");
         mMonitorAgv.setText(argv.replace(mSingleton.PcapPath, ""));
         mActivity.updateNotifications();
         return true;
@@ -225,56 +230,60 @@ public class                    WiresharkLiveFragment extends MyFragment {
         mListHostSelected.clear();
     }
 
-    /*private void                initFilter() {
-        tcp_cb.setOnClickListener(onChangePermissionFilter(Protocol.TCP, tcp_cb));
-        dns_cb.setOnClickListener(onChangePermissionFilter(Protocol.DNS, dns_cb));
-        http_cb.setOnClickListener(onChangePermissionFilter(Protocol.HTTP, http_cb));
-        https_cb.setOnClickListener(onChangePermissionFilter(Protocol.HTTPS, https_cb));
-        udp_cb.setOnClickListener(onChangePermissionFilter(Protocol.UDP, udp_cb));
-        arp_cb.setOnClickListener(onChangePermissionFilter(Protocol.ARP, arp_cb));
-        ip_cb.setOnClickListener(onChangePermissionFilter(Protocol.IP, ip_cb));
-    }
-    private View.OnClickListener onChangePermissionFilter(final Protocol protocol, final TextView tv) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int pL = tv.getPaddingLeft();
-                int pT = tv.getPaddingTop();
-                int pR = tv.getPaddingRight();
-                int pB = tv.getPaddingBottom();
-                tv.setBackgroundResource(
-                        (mAdapterDetailWireshark.changePermissionFilter(protocol)) ?
-                                R.drawable.rounded_corner_on : R.drawable.rounded_corner_off);
-                tv.setPadding(pL, pT, pR, pB);
-            }
-        };
-    }
 
+    /**
+     *
+     * private void                initFilter() {
+     tcp_cb.setOnClickListener(onChangePermissionFilter(Protocol.TCP, tcp_cb));
+     dns_cb.setOnClickListener(onChangePermissionFilter(Protocol.DNS, dns_cb));
+     http_cb.setOnClickListener(onChangePermissionFilter(Protocol.HTTP, http_cb));
+     https_cb.setOnClickListener(onChangePermissionFilter(Protocol.HTTPS, https_cb));
+     udp_cb.setOnClickListener(onChangePermissionFilter(Protocol.UDP, udp_cb));
+     arp_cb.setOnClickListener(onChangePermissionFilter(Protocol.ARP, arp_cb));
+     ip_cb.setOnClickListener(onChangePermissionFilter(Protocol.IP, ip_cb));
+     }
+     private View.OnClickListener onChangePermissionFilter(final Protocol protocol, final TextView tv) {
+     return new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+    int pL = tv.getPaddingLeft();
+    int pT = tv.getPaddingTop();
+    int pR = tv.getPaddingRight();
+    int pB = tv.getPaddingBottom();
+    tv.setBackgroundResource(
+    (mAdapterDetailWireshark.changePermissionFilter(protocol)) ?
+    R.drawable.rounded_corner_on : R.drawable.rounded_corner_off);
+    tv.setPadding(pL, pT, pR, pB);
+    }
+    };
+     }
+     private void                initSpinner() {
+     final Map<String, String> mParams = new HashMap<>();
+     Iterator it = mTcpdump.getCmdsWithArgsInMap().entrySet().iterator();
+     ArrayList<String> cmds = new ArrayList<>();
+     while (it.hasNext()) {
+     Map.Entry pair = (Map.Entry)it.next();
+     mParams.put((String)pair.getKey(), (String)pair.getValue());
+     Log.d(TAG, "initspinner::add to cmds:" + pair.getKey());
+     cmds.add((String)pair.getKey());
+     it.remove(); // avoids a ConcurrentModificationException
+     }
+     if (!cmds.isEmpty()) {
+     mSpiner.setItems(cmds);
+     mSpiner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+    @Override
+    public void onItemSelected(MaterialSpinner view, int position, long id, String typeScan) {
+    mMonitorCmd.setText(mParams.get(typeScan));
+    mTypeScan = typeScan;
+    mMonitorAgv.setText("./tcpdump " + mParams.get(typeScan).replace("  ", " "));
+    }
+    });
+     mMonitorCmd.setText(mParams.get(cmds.get(0)));
+     }
+     Log.d(TAG, "initSpinner:: monitor::" + mMonitorCmd.getText().toString());
+     }
+     *
+     */
 
-/*    private void                initSpinner() {
-        final Map<String, String> mParams = new HashMap<>();
-        Iterator it = mTcpdump.getCmdsWithArgsInMap().entrySet().iterator();
-        ArrayList<String> cmds = new ArrayList<>();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            mParams.put((String)pair.getKey(), (String)pair.getValue());
-            Log.d(TAG, "initspinner::add to cmds:" + pair.getKey());
-            cmds.add((String)pair.getKey());
-            it.remove(); // avoids a ConcurrentModificationException
-        }
-        if (!cmds.isEmpty()) {
-            mSpiner.setItems(cmds);
-            mSpiner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-                @Override
-                public void onItemSelected(MaterialSpinner view, int position, long id, String typeScan) {
-                    mMonitorCmd.setText(mParams.get(typeScan));
-                    mTypeScan = typeScan;
-                    mMonitorAgv.setText("./tcpdump " + mParams.get(typeScan).replace("  ", " "));
-                }
-            });
-            mMonitorCmd.setText(mParams.get(cmds.get(0)));
-        }
-        Log.d(TAG, "initSpinner:: monitor::" + mMonitorCmd.getText().toString());
-    }*/
 
 }

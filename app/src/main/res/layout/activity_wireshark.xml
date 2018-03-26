@@ -25,11 +25,13 @@
             android:paddingLeft="8dp"
             android:visibility="visible">
 
+
             <ImageView
                 android:id="@+id/OsImg"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:elevation="4dp"
+                android:padding="2dp"
                 android:tint="@color/material_light_white"
                 android:transitionName="wiresharkIcon"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -42,13 +44,26 @@
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/history"
+                app:layout_constraintRight_toLeftOf="@+id/SwitchViewBackBtn"
                 app:layout_constraintStart_toEndOf="@+id/OsImg"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:title="wireshark">
 
             </android.support.v7.widget.Toolbar>
+
+            <ImageView
+                android:id="@+id/SwitchViewBackBtn"
+                android:layout_width="45dp"
+                android:layout_height="0dp"
+                android:padding="8dp"
+                android:soundEffectsEnabled="true"
+                android:src="@drawable/ic_flip_to_front_svg"
+                android:tint="@color/material_light_white"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/settingsMenu"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/history"
@@ -59,7 +74,7 @@
                 android:src="@drawable/ic_history_svg"
                 android:tint="@color/material_light_white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/settingsMenu"
+                app:layout_constraintRight_toLeftOf="@+id/SwitchViewBackBtn"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView

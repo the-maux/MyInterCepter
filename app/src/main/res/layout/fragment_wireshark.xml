@@ -38,25 +38,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="-5dp">
 
-                <ImageView
-                    android:id="@+id/SwitchViewBtn"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="6dp"
-                    android:adjustViewBounds="true"
-                    android:background="@color/blue_grey_10000"
-                    android:cropToPadding="true"
-                    android:elevation="8dp"
-                    android:padding="4dp"
-                    android:tint="@color/material_light_white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0"
-                    app:srcCompat="@drawable/ic_flip_to_back_black_svg" />
-
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/statusIconSniffing"
                     android:layout_width="16dp"
@@ -64,18 +45,17 @@
                     android:layout_alignRight="@+id/icon"
                     android:layout_alignTop="@+id/icon"
                     android:layout_margin="8dp"
-                    android:adjustViewBounds="false"
-                    android:elevation="5dp"
+                    android:elevation="0dp"
+                    android:src="@color/stop_color"
                     android:transitionName="statusSniffing"
-                    app:civ_border_color="#313131"
-                    app:civ_border_width="2dp"
+                    app:civ_border_color="#212121"
+                    app:civ_border_width="3px"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_bias="0.9"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.100000024" />
+                    app:layout_constraintVertical_bias="0.01999998" />
 
 
                 <TextView
