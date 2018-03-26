@@ -41,6 +41,7 @@ public class                    WiresharkActivity extends SniffActivity {
     private MyFragment          mFragment = null;
     private ImageView           SwitchViewBackBtn;
     private boolean             readerFragment = false;
+
     protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wireshark);
@@ -64,28 +65,25 @@ public class                    WiresharkActivity extends SniffActivity {
                 Bundle args = new Bundle();
                 args.putInt("position", position);
                 mFragment.setArguments(args);
-                setToolbarTitle("Sniffer", mSingleton.hostList.get(position).getName());
+                setToolbarTitle("Sniffer detail", mSingleton.hostList.get(position).getName());
             } else if (getIntent() != null && getIntent().getExtras() != null &&
                     getIntent().getExtras().getInt("position", -1) != -1) {//MODE: FROM MITM STATION SINGLE TARGET
                 int position = getIntent().getExtras().getInt("position", 0);
                 Bundle args = new Bundle();
                 args.putInt("position", position);
                 mFragment.setArguments(args);
-                setToolbarTitle("Sniffer", mSingleton.hostList.get(position).getName());
+                setToolbarTitle("Sniffer discovery", mSingleton.hostList.get(position).getName());
+                showBottomBar();
             } else {
                 showBottomBar();
-                setToolbarTitle("Wireshark", (mSingleton.hostList == null) ? "0" : mSingleton.hostList.size() + " target");
+                setToolbarTitle("Sniffer-discovery", (mSingleton.hostList == null) ? "0" : mSingleton.hostList.size() + " target");
             }
             initSettings();
             initNavigationBottomBar(SNIFFER, true);
-            //ViewAnimate.setVisibilityToVisibleQuick(mFab);
-//            mFab.show();
             ViewAnimate.FabAnimateReveal(mInstance, mFab);
         } else {
             hideBottomBar();
-           // ViewAnimate.setVisibilityToGoneQuick(mFab);
             ViewAnimate.FabAnimateHide(mInstance, mFab);
-            //mFab.hide();
             findViewById(R.id.navigation).setVisibility(View.GONE);
             readerFragment = true;
             mFragment = new WiresharkReaderFragment();

@@ -116,6 +116,8 @@ public abstract class               SniffActivity extends MyActivity  {
                                 public void run() {
                                    //Log.d(TAG, "onNavigationItemSelected::" + position);
                                     Intent intent = null;
+                                    if (mFab != null)
+                                        ViewAnimate.FabAnimateHide(mInstance, mFab);
                                     Pair<View, String> p1 = Pair.create((View) mBottomBar, "navigation");
                                     //Pair<View, String> p2 = Pair.create(findViewById(R.id.appbar), "appBarTransition");
                                     final ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1/*, p2*/);
@@ -161,16 +163,8 @@ public abstract class               SniffActivity extends MyActivity  {
             updateNotifications();
     }
 
-    protected void                  onStop() {
-        if (mFab != null)
-            ViewAnimate.FabAnimateHide(mInstance, mFab);
-        super.onStop();
-    }
-
     protected void                  onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Log.d(TAG, "onNew Intent mTypeRecorded(" + mType + ") currentItem(" + mBottomBar.getCurrentItem() + ") on "+ mBottomBar.getItemsCount() + " items");
-        Log.d(TAG, " onNewIntent::setCurrentItem::" + mType);
         mBottomBar.setCurrentItem(mType, false);
         updateNotifications();
     }

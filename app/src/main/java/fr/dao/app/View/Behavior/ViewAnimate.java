@@ -47,12 +47,12 @@ public class                    ViewAnimate {
 
     public static void         FabAnimateReveal(Context context, FloatingActionButton fab) {
         Animation scaleDown = AnimationUtils.loadAnimation(context, R.anim.fab_scale_up);
-        scaleDown.setDuration(600);
+        scaleDown.setDuration(800);
         fab.startAnimation(scaleDown);
     }
     public  static void         FabAnimateHide(Context context, FloatingActionButton fab) {
         Animation scaleDown = AnimationUtils.loadAnimation(context, R.anim.fab_scale_down);
-        scaleDown.setDuration(600);
+        scaleDown.setDuration(800);
         fab.startAnimation(scaleDown);
     }
 
