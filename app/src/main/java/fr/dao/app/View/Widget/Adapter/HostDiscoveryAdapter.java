@@ -2,7 +2,6 @@ package fr.dao.app.View.Widget.Adapter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
@@ -26,7 +25,6 @@ import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
 import fr.dao.app.View.Activity.HostDetail.HostDetailActivity;
-import fr.dao.app.View.Behavior.MyGlideLoader;
 import fr.dao.app.View.Widget.Adapter.Holder.HostDiscoveryHolder;
 
 
@@ -88,8 +86,10 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                 res = R.color.filtered_color;
                 break;
         }
+        holder.statusIcon.setImageResource(res);
+        /*
         MyGlideLoader.loadDrawableInCircularImageView(mActivity,
-                new ColorDrawable(ContextCompat.getColor(mActivity, res)), holder.statusIcon);
+                new ColorDrawable(ContextCompat.getColor(mActivity, res)), holder.statusIcon);*/
     }
 
     private void                pushThisShyGuyToFront(HostDiscoveryHolder holder,Host host) {

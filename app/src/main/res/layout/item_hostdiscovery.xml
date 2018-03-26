@@ -18,25 +18,29 @@
         android:clickable="true"
         android:padding="4dp">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/statusIcon"
             android:layout_width="8dp"
             android:layout_height="8dp"
             android:layout_alignRight="@+id/icon"
             android:layout_alignTop="@+id/icon"
             android:layout_marginRight="4dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="14dp"
             android:elevation="5dp"
-            android:transitionName="hostPicture" />
+            android:transitionName="hostPicture"
+            app:civ_border_width="1dp"
+            app:civ_border_color="#FF313131"/>
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/icon"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_centerVertical="true"
             android:layout_margin="4dp"
-            android:elevation="4dp"
-            android:transitionName="hostPicture" />
+            android:elevation="2dp"
+            android:transitionName="hostPicture"
+            app:civ_border_width="1dp"
+            app:civ_border_color="#FF313131"/>
 
         <LinearLayout
             android:layout_width="match_parent"
