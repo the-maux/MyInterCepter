@@ -125,17 +125,17 @@ public class                    IPTables {
 
     public static void          stopIpTable() {
         new RootProcess("IpTable stop")
-                .noDebugOutput()
-                .exec("iptables -F;")
-                .exec("iptables -X;")
-                .exec("iptables -t nat -F;")
-                .exec("iptables -t nat -X;")
-                .exec("iptables -t mangle -F;")
-                .exec("iptables -t mangle -X;")
-                .exec("iptables -P INPUT ACCEPT;")
-                .exec("iptables -P FORWARD ACCEPT;")
-                .exec("iptables -P OUTPUT ACCEPT")
-                .closeProcess();
+                    .noDebugOutput()
+                    .exec("iptables -F;")
+                    .exec("iptables -X;")
+                    .exec("iptables -t nat -F;")
+                    .exec("iptables -t nat -X;")
+                    .exec("iptables -t mangle -F;")
+                    .exec("iptables -t mangle -X;")
+                    .exec("iptables -P INPUT ACCEPT;")
+                    .exec("iptables -P FORWARD ACCEPT;")
+                    .exec("iptables -P OUTPUT ACCEPT")
+                    .closeProcess();
     }
 
     public static void          sslConf() {

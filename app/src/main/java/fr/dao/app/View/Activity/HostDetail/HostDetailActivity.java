@@ -16,9 +16,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 
 import fr.dao.app.Core.Configuration.GlideApp;
@@ -36,6 +38,7 @@ import fr.dao.app.View.Activity.Wireshark.WiresharkActivity;
 import fr.dao.app.View.Behavior.Activity.MyActivity;
 import fr.dao.app.View.Behavior.Fragment.MyFragment;
 import fr.dao.app.View.Behavior.MyGlideLoader;
+import fr.dao.app.View.Behavior.ViewAnimate;
 
 public class                    HostDetailActivity extends MyActivity {
     private String              TAG = "HostDetailActivity";
@@ -45,14 +48,15 @@ public class                    HostDetailActivity extends MyActivity {
     private CoordinatorLayout   mCoordinator;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private FloatingActionMenu  mMenuFAB;
-    private ImageView           osHostImage;
+    private ImageView           osHostImage, history, settingsMenuDetail;
     private TabLayout           mTabs;
     private MyFragment          mCurrentFragment;
     private List<Pcap>          mPcapsList;
+    private ImageView           collapsBackground;
 
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scrolling);
+        setContentView(R.layout.activity_hostdetail);
         initXml();
     }
 
@@ -60,6 +64,8 @@ public class                    HostDetailActivity extends MyActivity {
         mCoordinator = findViewById(R.id.Coordonitor);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinator);
         osHostImage = findViewById(R.id.OsImg);
+        history = findViewById(R.id.history);
+        settingsMenuDetail = findViewById(R.id.settingsMenuDetail);
 //                CoordinatorLayout.LayoutParams params =
 //                (CoordinatorLayout.LayoutParams) osHostImage.getLayoutParams();
 //        osHostImage.requestLayout();
@@ -72,25 +78,50 @@ public class                    HostDetailActivity extends MyActivity {
         init();
     }
 
+    protected void              onPostResume() {
+        super.onPostResume();
+        try {
+            collapsBackground = findViewById(R.id.collapsBackground);
+            collapsBackground.postDelayed(new Runnable() {
+                public void run() {
+                    GlideRequest r = GlideApp.with(mInstance)
+                            .load(R.drawable.bg1)
+                            .centerCrop()
+                            .transition(DrawableTransitionOptions.withCrossFade())
+                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+                    r.into(collapsBackground);
+                }
+            }, 800);
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        ViewAnimate.setVisibilityToVisibleQuick(settingsMenuDetail, 800);
+        ViewAnimate.setVisibilityToVisibleQuick(history, 500);
+    }
+
     private void                init() {
         Bundle bundle = getIntent().getExtras();
         try {
+            if (bundle == null)
+                throw new InvalidParameterException("NO BUNDLE TRANSMITED");
             String mode = bundle.getString("mode");
-            if (mode.contains("Live")) {
-                int position = bundle.getInt("position");
-                mFocusedHost = mSingleton.hostList.get(position);
+            if (mode == null) {
+                throw new InvalidParameterException("NO MODE TRANSMITED IN BUNDLE");
+            } else if (mode.contains("Live")) {
+                ViewAnimate.setVisibilityToVisibleQuick(mMenuFAB, 1250);
             } else if (mode.contains("Recorded")) {
-                mFocusedHost = DBHost.getDevicesFromMAC(bundle.getString("macAddress"));
                 mMenuFAB.setVisibility(View.GONE);
             }
+            mFocusedHost = DBHost.getDevicesFromMAC(bundle.getString("macAddress"));
             Fingerprint.setOsIcon(this, mFocusedHost, osHostImage);
             initMenuFab();
             initTabs();
             initAppBar();
             displayInfosHost(mFocusedHost.mac);
         } catch (Exception e) {
-            Snackbar.make(findViewById(R.id.Coordonitor), "Vous n'avez selectionner aucune target", Snackbar.LENGTH_LONG).show();
             Log.e(TAG, "Error in init, Back to previous fragment");
+            e.printStackTrace();
             onBackPressed();
         }
     }
@@ -112,7 +143,7 @@ public class                    HostDetailActivity extends MyActivity {
             public void onClick(View view) {
                 mMenuFAB.close(true);
                 Intent intent = new Intent(mInstance, NmapActivity.class);
-                intent.putExtra("position", getIntent().getExtras().getInt("position"));
+                intent.putExtra("macAddress", getIntent().getExtras().getString("macAddress"));
                 startActivity(intent);
             }
         });
@@ -150,7 +181,8 @@ public class                    HostDetailActivity extends MyActivity {
             public void onClick(View view) {
                 mMenuFAB.close(true);
                 Intent intent = new Intent(mInstance, WiresharkActivity.class);
-                intent.putExtra("position", getIntent().getExtras().getInt("position"));
+                Log.d(TAG, "Sending mac[" + getIntent().getExtras().getString("macAddress") + "]");
+                intent.putExtra("macAddress", getIntent().getExtras().getString("macAddress"));
                 startActivity(intent);
             }
         });
@@ -163,12 +195,6 @@ public class                    HostDetailActivity extends MyActivity {
     private void                initAppBar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ImageView collapsBackground = findViewById(R.id.collapsBackground);
-        GlideRequest r = GlideApp.with(this)
-                .load(R.drawable.bg1)
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
-        r.into(collapsBackground);
         AppBarLayout appBarLayout = findViewById(R.id.app_bar);
         final ImageView osImg = findViewById(R.id.OsImg);
         collapsingToolbarLayout = findViewById(R.id.settings_menu_hostdetail);
@@ -295,8 +321,6 @@ public class                    HostDetailActivity extends MyActivity {
             public void run() {
                 if (title != null)
                     collapsingToolbarLayout.setTitle(title);
-//                if (subtitle != null)
-//                    mToolbar.setSubtitle(subtitle);
             }
         });
     }
@@ -307,6 +331,10 @@ public class                    HostDetailActivity extends MyActivity {
 
     public void                 onBackPressed() {
         if (mCurrentFragment == null || mCurrentFragment.onBackPressed()) {
+            settingsMenuDetail.setVisibility(View.GONE);
+            history.setVisibility(View.GONE);
+            if (collapsBackground != null)
+                collapsBackground.setImageResource(0);
             super.onBackPressed();
         }
     }

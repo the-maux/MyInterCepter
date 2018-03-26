@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootViewItemPort"
+    android:layout_width="match_parent"
+    android:layout_height="32dp"
+    android:layout_marginTop="1dp"
+    android:background="@color/black_primary_light"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:layout_editor_absoluteY="26dp">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline060verti"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.55" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline020verti"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <TextView
+        android:id="@+id/PORT"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/material_light_white"
+        android:gravity="center_vertical"
+        android:paddingLeft="4dp"
+        android:singleLine="true"
+        android:text="Port"
+        android:textAppearance="@android:style/TextAppearance.Inverse"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/guideline020verti"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/State"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="1dp"
+        android:background="@color/material_light_white"
+        android:gravity="center_vertical"
+        android:paddingLeft="4dp"
+        android:singleLine="true"
+        android:text="State"
+        android:textAppearance="@android:style/TextAppearance.Inverse"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/guideline020verti"
+        app:layout_constraintRight_toLeftOf="@+id/guideline060verti"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Source"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="1dp"
+        android:background="@color/material_light_white"
+        android:ellipsize="end"
+        android:gravity="right|center_vertical"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:singleLine="true"
+        android:text=" Source"
+        android:textAppearance="@android:style/TextAppearance.Inverse"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/State"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</android.support.constraint.ConstraintLayout>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -19,9 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/backgroundtransition"
-            android:clipToPadding="true"
-            android:elevation="4dp"
-            android:fitsSystemWindows="true">
+            android:elevation="4dp">
 
 
             <ProgressBar
@@ -39,45 +36,60 @@
 
             <ImageView
                 android:id="@+id/OsImg"
-                android:layout_width="0dp"
+                android:layout_width="40dp"
                 android:layout_height="0dp"
-                android:layout_margin="8dp"
+                android:layout_marginStart="8dp"
                 android:elevation="4dp"
                 android:tint="@color/primary_white"
                 android:transitionName="logo_activity"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                app:layout_constraintEnd_toStartOf="@+id/toolbar2"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_min="40dp"
                 app:srcCompat="@drawable/ic_fingerprint_svg" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar2"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:visibility="visible"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
-                app:layout_constraintLeft_toRightOf="@+id/OsImg"
-                app:layout_constraintRight_toLeftOf="@+id/searchView"
+                app:layout_constraintEnd_toStartOf="@+id/searchViewRelative"
+                app:layout_constraintStart_toEndOf="@+id/OsImg"
                 app:layout_constraintTop_toTopOf="parent"
-                app:subtitle="Scanning"
-                app:title="D.A.O">
+                app:subtitle="Subtitle"
+                app:title="Title">
 
             </android.support.v7.widget.Toolbar>
-
-            <android.support.v7.widget.SearchView
-                android:id="@+id/searchView"
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:id="@+id/searchViewRelative"
                 android:background="@android:color/transparent"
                 android:baselineAlignBottom="false"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
-                app:layout_constraintRight_toLeftOf="@+id/history"
+                app:layout_constraintEnd_toStartOf="@+id/history"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/toolbar2"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_min="45dp" />
+                app:layout_constraintWidth_max="150dp">
+
+                <android.support.v7.widget.SearchView
+                    android:id="@+id/searchView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:background="@android:color/transparent"
+                    android:gravity="right" />
+            </RelativeLayout>
+
 
             <ImageView
                 android:id="@+id/history"
-                android:layout_width="0dp"
+                android:layout_width="40dp"
                 android:layout_height="0dp"
                 android:baselineAlignBottom="false"
                 android:padding="4dp"
@@ -85,20 +97,25 @@
                 android:src="@drawable/ic_history_svg"
                 android:tint="@color/primary_white"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
-                app:layout_constraintRight_toLeftOf="@+id/settingsMenu"
+                app:layout_constraintEnd_toStartOf="@+id/settingsMenu"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/searchViewRelative"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_min="45dp" />
+                />
 
             <ImageView
                 android:id="@+id/settingsMenu"
-                android:layout_width="0dp"
+                android:layout_width="40dp"
                 android:layout_height="0dp"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/primary_white"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/history"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_min="45dp"
                 app:srcCompat="@drawable/ic_more_svg" />
@@ -128,7 +145,6 @@
         android:src="@drawable/ic_search_svg"
         android:tint="@color/primary_white"
         android:transitionName="fab"
-        android:visibility="visible"
         app:backgroundTint="@color/fab_color"
         app:fabSize="normal"
         app:layout_anchor="@id/appbar"

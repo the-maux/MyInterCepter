@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Model.Net.Pcap;
 import fr.dao.app.R;
 import fr.dao.app.View.Widget.Adapter.PcapFileAdapter;
 
@@ -35,7 +36,7 @@ import fr.dao.app.View.Widget.Adapter.PcapFileAdapter;
     }
 
     private void            init() {
-        for (File file : getListFiles(new File(mSingleton.PcapPath))) {
+        for (File file : Pcap.getListFiles(new File(mSingleton.PcapPath))) {
             if (file.getPath().endsWith(".pcap"))
                 files.add(file);
         }
@@ -44,20 +45,7 @@ import fr.dao.app.View.Widget.Adapter.PcapFileAdapter;
         mRV_files.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private List<File>      getListFiles(File parentDir) {
-        ArrayList<File> inFiles = new ArrayList<File>();
-        File[] files = parentDir.listFiles();
-        for (File file : files) {
-            if (file.isDirectory()) {
-                inFiles.addAll(getListFiles(file));
-            } else {
-                if(file.getName().endsWith(".pcap")){
-                    inFiles.add(file);
-                }
-            }
-        }
-        return inFiles;
-    }
+
 
     public static PcapListerFragment newInstance() {
         return new PcapListerFragment();

@@ -6,6 +6,7 @@ import com.activeandroid.query.From;
 import com.activeandroid.query.Select;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import fr.dao.app.Core.Configuration.Singleton;
@@ -34,32 +35,25 @@ public class                                DBHost {
                 Log.d(TAG, "SQL STRING [" + from.toSql() + "]: NOT FOUND");
             }
         }
+        //if (tmp != null)
+            //tmp.dumpMe();
+        if (tmp != null)
+            Fingerprint.initHost(tmp);
         return tmp;
     }
 
     public static Host                      saveOrGetInDatabase(Host myDevice) {
-        //ActiveAndroid.beginTransaction();
         Host deviceFromDB = DBHost.getDevicesFromMAC(myDevice.mac);
         if (deviceFromDB == null) {
-            Fingerprint.initHost(myDevice);
-            myDevice.save();
-            return myDevice;
+            deviceFromDB = myDevice;
+            deviceFromDB.firstSeen = Calendar.getInstance().getTime();
+            deviceFromDB.mac = deviceFromDB.mac.toUpperCase();
+            deviceFromDB.save();
         } else {
             deviceFromDB.ip = myDevice.ip;
-            if (!myDevice.getName().contains(myDevice.ip))
-                deviceFromDB.name  = myDevice.getName();
-            deviceFromDB.deviceType = myDevice.deviceType;
-            deviceFromDB.dumpInfo = myDevice.dumpInfo;
-            deviceFromDB.NetworkDistance = myDevice.NetworkDistance;
-            deviceFromDB.osDetail = myDevice.osDetail;
-            deviceFromDB.vendor = myDevice.vendor;
-            deviceFromDB.deviceType = myDevice.deviceType;
-            deviceFromDB.TooManyFingerprintMatchForOs = myDevice.TooManyFingerprintMatchForOs;
-            Fingerprint.initHost(deviceFromDB);
-            deviceFromDB.save();
-//            ActiveAndroid.setTransactionSuccessful();
-//            ActiveAndroid.endTransaction();
+            deviceFromDB.copy(myDevice);
         }
+        Fingerprint.initHost(deviceFromDB);
         return deviceFromDB;
     }
 
@@ -80,6 +74,7 @@ public class                                DBHost {
             Host device = findDeviceById(id.replace(";", ""));
             try {
                 Fingerprint.initHost(device);
+                device.build();
                 hosts.add(device);
             } catch (NullPointerException e) {
                 Log.e(TAG, "id[" + id + "] was not found in BDD");
@@ -87,5 +82,14 @@ public class                                DBHost {
             }
         }
         return hosts;
+    }
+
+    public static int                           getPositionFromMacaddress(ArrayList<Host> hostList, String macAddress) {
+
+        for (int i = 0; i < hostList.size(); i++) {
+            if (hostList.get(i).mac.contentEquals(macAddress))
+                return i;
+        }
+        return -1;
     }
 }

@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -22,6 +21,7 @@ import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
 
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.R;
 import fr.dao.app.View.Behavior.Activity.SniffActivity;
@@ -39,27 +39,53 @@ public class                    WiresharkActivity extends SniffActivity {
     private ProgressBar         mProgressBar;
     private Singleton           mSingleton = Singleton.getInstance();
     private MyFragment          mFragment = null;
+    private ImageView           SwitchViewBackBtn;
+    private boolean             readerFragment = false;
 
     protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getContentViewId());
+        setContentView(R.layout.activity_wireshark);
         initXml();
         init(getIntent());
     }
 
+    /**
+     * /data/user/0/fr.dao.app/files/tcpdump -w /storage/emulated/0/Pcap/SFR-4328_19_mars_19h50m32.pcap ' ( host 192.168.0.24)'
+     * /data/user/0/fr.dao.app/files/tcpdump -w /storage/emulated/0/Pcap/SFR-4328_19_mars_19h50m32.pcap ' ( host 192.168.0.24)'
+     * /data/user/0/fr.dao.app/files/tcpdump -w /storage/emulated/0/Pcap/SFR-4328_19_mars_19h49m17.pcap ' ( host 192.168.0.24)'
+     * @param intent
+     */
     private void                init(Intent intent) {
         String PcapFilePath = intent  == null ? null : intent.getStringExtra("Pcap");
         if (PcapFilePath == null) {
-            hideBottomBar();
             mFragment = new WiresharkLiveFragment();
+            hideBottomBar();
+            if (intent != null && intent.getStringExtra("macAddress") != null) {// FROM HOSTDETAILACTIVITY
+                int position = DBHost.getPositionFromMacaddress(mSingleton.hostList, intent.getStringExtra("macAddress"));
+                Bundle args = new Bundle();
+                args.putInt("position", position);
+                mFragment.setArguments(args);
+                setToolbarTitle("Sniffer detail", mSingleton.hostList.get(position).getName());
+            } else if (getIntent() != null && getIntent().getExtras() != null &&
+                    getIntent().getExtras().getInt("position", -1) != -1) {//MODE: FROM MITM STATION SINGLE TARGET
+                int position = getIntent().getExtras().getInt("position", 0);
+                Bundle args = new Bundle();
+                args.putInt("position", position);
+                mFragment.setArguments(args);
+                setToolbarTitle("Sniffer discovery", mSingleton.hostList.get(position).getName());
+                showBottomBar();
+            } else {
+                showBottomBar();
+                setToolbarTitle("Sniffer-discovery", (mSingleton.hostList == null) ? "0" : mSingleton.hostList.size() + " target");
+            }
             initSettings();
             initNavigationBottomBar(SNIFFER, true);
-            ViewAnimate.setVisibilityToVisibleQuick(mFab);
-            setToolbarTitle("Wireshark", (mSingleton.hostList == null) ? "0" : mSingleton.hostList.size() + " target");
+            ViewAnimate.FabAnimateReveal(mInstance, mFab);
         } else {
-            showBottomBar();
-            ViewAnimate.setVisibilityToGoneLong(mFab);
+            hideBottomBar();
+            ViewAnimate.FabAnimateHide(mInstance, mFab);
             findViewById(R.id.navigation).setVisibility(View.GONE);
+            readerFragment = true;
             mFragment = new WiresharkReaderFragment();
             Bundle bundle = new Bundle();
             bundle.putString("Pcap", PcapFilePath);
@@ -67,6 +93,8 @@ public class                    WiresharkActivity extends SniffActivity {
             setToolbarTitle(PcapFilePath.replace(mSingleton.PcapPath, "")
                     .replace("_", " ").replace(".pcap", ""),"Loading");
         }
+        if (!readerFragment)
+            ViewAnimate.setVisibilityToVisibleQuick(SwitchViewBackBtn);
         initFragment(mFragment);
     }
 
@@ -85,13 +113,29 @@ public class                    WiresharkActivity extends SniffActivity {
         mToolbar = findViewById(R.id.toolbar);
         mFab =  findViewById(R.id.fab);
         mFab.setOnClickListener(onclickFab());
-        MyGlideLoader.loadDrawableInImageView(this, R.drawable.wireshark, (ImageView) findViewById(R.id.OsImg), true);
+        MyGlideLoader.loadDrawableInImageView(this, R.drawable.ic_sniff_barbutton, (ImageView) findViewById(R.id.OsImg), true);
+        SwitchViewBackBtn = findViewById(R.id.SwitchViewBackBtn);
         findViewById(R.id.history).setOnClickListener(onClickHistory());
+        onSwitchViewClicked();
+    }
+
+    private void                onSwitchViewClicked() {
+        SwitchViewBackBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (!readerFragment) {
+                    boolean isDashboard = ((WiresharkLiveFragment)mFragment).onSwitchView();
+                    int res = isDashboard ? R.drawable.ic_flip_to_front_svg: R.drawable.ic_flip_to_back_black_svg;
+                    MyGlideLoader.loadDrawableInImageView(mInstance, res, SwitchViewBackBtn, false);
+                    Log.d(TAG, "swithed has " + ((isDashboard) ? "dashboard" : "Live packets" ));
+                } else {
+                    Log.d(TAG, "not in readerFragment");
+                }
+            }
+        });
     }
 
     private void                initFragment(MyFragment fragment) {
         try {
-            mFragment =  fragment;
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.frame_container, mFragment)
@@ -235,10 +279,6 @@ public class                    WiresharkActivity extends SniffActivity {
         ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text))
                 .setTextColor(color);
         snackbar.show();
-    }
-
-    public int                  getContentViewId() {
-        return R.layout.activity_wireshark;
     }
 
     public void                 onTcpdumpstopped() {

@@ -3,8 +3,6 @@ package fr.dao.app.Core.Nmap;
 import android.content.Context;
 import android.widget.ImageView;
 
-import java.util.Comparator;
-
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Unix.Os;
@@ -18,22 +16,29 @@ public class                            Fingerprint {
     private static String               TAG = "Fingerprint";
 
     public static void                  initHost(Host host) {
-        //Log.d(TAG, "initHost:\t" + host.toString());
+        host.build();
         isItMyDevice(host);
         guessosType(host);
+        if (Fingerprint.isItWindows(host)) {
+            host.osType = Os.Windows;
+            host.os = "Windows";
+            host.osDetail = "Windows";
+        }
+        if (host.osType == Os.Unknow) {
+            host.osType = Os.fromString(host.osDetail);
+        }
     }
 
     private static void                 guessosType(Host host) {
+        if (host.isItMyDevice) {
+           return;
+        }
         if (host.dumpInfo == null) {
             host.osType = Os.Unknow;
             return;
         }
         host.dumpInfo = host.dumpInfo.toLowerCase();
-        if (host.isItMyDevice) {
-            host.osType = Os.Android;
-            host.vendor = "Your Device";
-            host.os = "Unix/(AOSP)";
-        } if (host.vendor.contains("Sony")) {
+        if (host.vendor.contains("Sony")) {
             /**
              * TODO: faire un Thread qui check les port, si c'est open, c'est une ps4
              * 9295/tcp  open  unknown
@@ -72,7 +77,7 @@ public class                            Fingerprint {
         host.os = "FreeBSD";
         host.osType = Os.Apple;
         host.os = "Unix/(Mac OS X)";//TODO FINGERPRINT WITH MAC NAME ON zeroconf
-        if (host.getName().isEmpty() && host.Ports().dump.contains("model=")) {
+        if (host.getName().isEmpty() && host.dumpPort.contains("model=")) {
             String name = host.mac.split(":")[4] + host.mac.split(":")[5];
             host.name = host.vendor.toUpperCase().replaceAll("\\d","") + "-" + name;
         }
@@ -93,15 +98,18 @@ public class                            Fingerprint {
         if (host.ip.contains(Singleton.getInstance().network.myIp)) {
             host.isItMyDevice = true;
             host.state = Host.State.ONLINE;
+            host.os = "Unix/(AOSP)";
+            host.osType = Os.Android;
         }
         return host.isItMyDevice;
     }
 
     public static boolean               isItMyGateway(Host host) {
-        return host.ip.contains(Singleton.getInstance().network.gateway) && host.ip.length() == Singleton.getInstance().network.gateway.length();
+        return host.ip.contains(Singleton.getInstance().network.gateway) &&
+                host.ip.length() == Singleton.getInstance().network.gateway.length();
     }
 
-    public static void                  setOsIcon(Context context, Host host,  ImageView osImageView) {
+    public static void                  setOsIcon(Context context, Host host, ImageView osImageView) {
         if (host != null && host.osType != null) {
             if (host.state == Host.State.FILTERED && host.vendor.contains("Unknown")) {
                 MyGlideLoader.loadDrawableInCircularImageView(context, R.drawable.secure_computer1, osImageView);
@@ -117,7 +125,7 @@ public class                            Fingerprint {
         int ImageRessource;
         switch (os) {
             case Windows:
-                ImageRessource = R.drawable.winicon;
+                ImageRessource = R.drawable.windows;
                 break;
             case Cisco:
                 ImageRessource = R.drawable.cisco;
@@ -169,35 +177,16 @@ public class                            Fingerprint {
                 ImageRessource = R.drawable.router3;
                 break;
         }
-        MyGlideLoader.loadDrawableInCircularImageView(context, ImageRessource, osImageView);
-    }
+        //MyGlideLoader.loadDrawableInCircularImageView(context, ImageRessource, osImageView);
+        osImageView.setImageResource(ImageRessource);
+        /*GlideApp.with(context)
+                .load(ImageRessource)
+                //.apply(RequestOptions.circleCropTransform())
+                //.diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                //.transition(DrawableTransitionOptions.withCrossFade())
+                //.dontAnimate()
 
-    public static Comparator<Host>      getComparator() {
-        return new Comparator<Host>() {
-
-            public int compare(Host o1, Host o2) {
-                if (o1.state == o2.state) {
-                    String ip1[] = o1.ip.replace(" ", "").replace(".", "::").split("::");
-                    String ip2[] = o2.ip.replace(" ", "").replace(".", "::").split("::");
-                    if (Integer.parseInt(ip1[2]) > Integer.parseInt(ip2[2]))
-                        return 1;
-                    else if (Integer.parseInt(ip1[2]) < Integer.parseInt(ip2[2]))
-                        return -1;
-                    else if (Integer.parseInt(ip1[3]) > Integer.parseInt(ip2[3]))
-                        return 1;
-                    else if (Integer.parseInt(ip1[3]) < Integer.parseInt(ip2[3]))
-                        return -1;
-                } else {
-                    if (o1.state == Host.State.ONLINE || o2.state == Host.State.OFFLINE)
-                        return -1;
-                    else if (o2.state == Host.State.ONLINE || o1.state == Host.State.OFFLINE)
-                        return 1;
-                }
-                return 0;
-            }
-
-            ;
-        };
+                .into(osImageView);*/
     }
 
 }

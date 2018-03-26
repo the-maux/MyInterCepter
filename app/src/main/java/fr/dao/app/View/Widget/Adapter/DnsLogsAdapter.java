@@ -98,7 +98,7 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
     private RecyclerView.Adapter<ConsoleLogHolder>  setDetailLogsAdapter(final DNSLog logs, RecyclerView dnsRVLogs) {
         RecyclerView.Adapter<ConsoleLogHolder> adapter =  new RecyclerView.Adapter<ConsoleLogHolder>() {
             public ConsoleLogHolder                 onCreateViewHolder(ViewGroup parent, int viewType) {
-                return new ConsoleLogHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_consolelog, parent, false));
+                return new ConsoleLogHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_hostdetail, parent, false));
             }
 
             public void                             onBindViewHolder(ConsoleLogHolder holder, int position) {

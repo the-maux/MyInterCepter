@@ -3,10 +3,10 @@ package fr.dao.app.View.Widget.Adapter.Holder;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.R;
 
 public class                HostDiscoveryHolder extends RecyclerView.ViewHolder {
@@ -14,7 +14,8 @@ public class                HostDiscoveryHolder extends RecyclerView.ViewHolder 
     public RelativeLayout   relativeLayout;
     public TextView         mac, os, vendor, ipAndHostname;
     public CheckBox         selected;
-    public ImageView        osIcon, statusIcon;
+    public CircleImageView  osIcon, statusIcon;
+//    public ImageView        ;
 
     public                  HostDiscoveryHolder(View v) {
         super(v);

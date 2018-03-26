@@ -68,13 +68,20 @@ public class                        NetworkDiscoveryControler {
         Log.d(TAG, "onArpScanOver with : "+ ipReachable.size() + " subtitle(s) reachable");
         Network ap = mFragment.updateStateOfHostAfterIcmp(basicHost);
         mActivity.setMAXIMUM_PROGRESS(basicHost.size());
-        new NmapControler(basicHost,this, ap);
+        new NmapControler(basicHost,this, ap, mActivity);
     }
 
     public void                     onNmapScanOver(ArrayList<Host> hosts) {
         Log.d(TAG, "Full scanning in " + Utils.TimeDifference(startScanning));
         String time = Utils.TimeDifference(startScanning);
-        mFragment.onHostActualized(hosts);
+        int online = 0, offline = 0;
+        for (Host host : hosts) {
+            if (host.state == Host.State.ONLINE)
+                online++;
+            else if (host.state == Host.State.OFFLINE || host.state == Host.State.FILTERED)
+                offline++;
+        }
+        mFragment.onHostActualized(hosts, online, offline);
     }
 
     public void                     setToolbarTitle(String title, String subtitle) {

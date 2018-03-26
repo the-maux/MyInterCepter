@@ -2,7 +2,6 @@ package fr.dao.app.View.Widget.Adapter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
@@ -18,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import fr.dao.app.Core.Configuration.Comparator.Comparators;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Nmap.Fingerprint;
@@ -25,15 +25,13 @@ import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
 import fr.dao.app.View.Activity.HostDetail.HostDetailActivity;
-import fr.dao.app.View.Behavior.MyGlideLoader;
 import fr.dao.app.View.Widget.Adapter.Holder.HostDiscoveryHolder;
 
 
 public class                    HostDiscoveryAdapter extends RecyclerView.Adapter<HostDiscoveryHolder> {
     private String              TAG = "HostDiscoveryAdapter";
     private Activity            mActivity;
-    private List<Host>          mHosts = null;
-    private List<Host>          mOriginalList;
+    private List<Host>          mHosts = null, mOriginalList = new ArrayList<>();
     private RecyclerView        mHost_RV;
     private FloatingActionButton mFab;
     private Singleton           mSingleton = Singleton.getInstance();
@@ -64,8 +62,6 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         if (host.os.contains("Unknown"))
             holder.os.setText(host.osType.name());
         holder.vendor.setText(host.vendor);
-        //holder.os.setVisibility((host.os.contains("Unknown")) ? View.GONE: View.VISIBLE);
-        //holder.vendor.setVisibility((host.vendor.contains("Unknown")) ? View.GONE: View.VISIBLE);
         if (mIsHistoric)
             holder.statusIcon.setVisibility(View.GONE);
         else
@@ -90,8 +86,10 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                 res = R.color.filtered_color;
                 break;
         }
+        holder.statusIcon.setImageResource(res);
+        /*
         MyGlideLoader.loadDrawableInCircularImageView(mActivity,
-                new ColorDrawable(ContextCompat.getColor(mActivity, res)), holder.statusIcon);
+                new ColorDrawable(ContextCompat.getColor(mActivity, res)), holder.statusIcon);*/
     }
 
     private void                pushThisShyGuyToFront(HostDiscoveryHolder holder,Host host) {
@@ -142,6 +140,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
             public boolean onLongClick(View v) {
                 mActivity.runOnUiThread(new Runnable() {
                     public void run() {
+                        host.dumpMe();
                         Utils.vibrateDevice(mActivity);
                         ActivityOptionsCompat options;
                         Intent intent = new Intent(mActivity, HostDetailActivity.class);
@@ -155,7 +154,8 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                             options = ActivityOptionsCompat
                                     .makeSceneTransitionAnimation(mActivity, p1, p2);
                         }
-                        intent.putExtra("position", position);
+                        intent.putExtra("mode", "Live");
+                        intent.putExtra("macAddress", host.mac);
                         mActivity.startActivity(intent, options.toBundle());
                     }
                 });
@@ -191,7 +191,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         mHosts.clear();
         for (Host host : mOriginalList) {
             for (Os os : Os) {
-                if (os.name().contains(host.osType.name())) {
+                if (os.name().contentEquals(host.osType.name())) {
                     mHosts.add(host);
                     break;
                 }
@@ -217,10 +217,11 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Collections.sort(hosts, Fingerprint.getComparator());
+                Collections.sort(hosts, Comparators.getHostComparator());
                 mHosts = new ArrayList<>();
                 mHosts.addAll(hosts);
-                mOriginalList = hosts;
+                mOriginalList.clear();
+                mOriginalList.addAll(hosts);
                 notifyDataSetChanged();
             }
         });

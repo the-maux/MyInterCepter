@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ImageButton;
 
@@ -28,7 +29,7 @@ public class                        MyFragment extends Fragment implements MyFra
         return null;
     }
 
-    public void                     initSearchView(SearchView mSearchView) {}
+    public void                     initSearchView(SearchView mSearchView, Toolbar toolbar) {}
 
     public void                     onAddButtonClick(ImageButton mAddHostBtn) {}
 

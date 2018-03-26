@@ -19,7 +19,7 @@ import fr.dao.app.Model.Net.Service;
 public class                Network extends Model {
     public static String    NAME_COLUMN = "Network";
 
-    @Column(name = "Ssid")
+    @Column(name = "ssid")
     public String           Ssid;
     @Column(name = "lastScanDate")
     public java.util.Date   lastScanDate;
@@ -29,7 +29,6 @@ public class                Network extends Model {
     public Host             Gateway;
     @Column(name = "OsNumber")
     public int              nbrOs;
-
     @Column(name = "Devices")
     public String           listDevicesSerialized;
     private ArrayList<Host> listDevices = null;

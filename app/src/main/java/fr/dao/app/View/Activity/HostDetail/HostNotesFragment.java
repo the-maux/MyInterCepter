@@ -1,10 +1,8 @@
 package fr.dao.app.View.Activity.HostDetail;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +41,14 @@ public class                    HostNotesFragment extends MyFragment {
         Bundle args = getArguments();
         mFocusedHost = DBHost.getDevicesFromMAC(args.getString("macAddress"));
         TextView valueTV = new TextView(getContext());
-        valueTV.setText(mFocusedHost.Notes);
+        StringBuilder buuilder = new StringBuilder("");
+        int rax = 0;
+        for (String note : mFocusedHost.Notes.split("OxBABOBAB")) {
+            buuilder.append(note).append("\n");
+            if (rax++ > 0)
+                buuilder.append("-------------------------------------").append("\n");
+        }
+        valueTV.setText(buuilder.toString());
         mCentral_layout.removeAllViews();
         mCentral_layout.addView(valueTV);
     }

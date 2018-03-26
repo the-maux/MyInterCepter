@@ -1,5 +1,6 @@
 package fr.dao.app.Core.Nmap;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.ProgressBar;
 
@@ -66,11 +67,12 @@ public class                        NmapControler {
     /*
     **   HostDiscoveryActivity
     */
-    public                          NmapControler(List<String> ips, NetworkDiscoveryControler networkDiscoveryControler, Network ap) {/* Parsing mode */
-        String NMAP_ARG_SCAN = " -PN -T4 -sS -sU " +
+    public                          NmapControler(List<String> ips, NetworkDiscoveryControler networkDiscoveryControler,
+                                                  Network ap, Context context) {/* Parsing mode */
+        String NMAP_ARG_SCAN = " -PN -sS -T3 -sU " +
                 "--script nbstat.nse,dns-service-discovery,upnp-info " +
                 "--min-parallelism 100 " +
-                "-p T:21,T:22,T:23,T:25,T:80,T:110,T:135,T:139,T:3128,T:443,T:445,U:53,U:1900,U:3031,U:5353  ";
+                "-p T:21,T:22,T:23,T:25,T:80,T:110,T:135,T:139,T:3128,T:443,T:445,T:2869,U:53,U:1900,U:3031,U:5353  ";
         mIsLiveDump = false;
         mNnetworkDiscoveryControler = networkDiscoveryControler;
         mActualItemMenu = "Basic Host discovery";
@@ -85,7 +87,7 @@ public class                        NmapControler {
         if (mSingleton.UltraDebugMode)
             Log.d(TAG, "CMD:["+ cmd + "]");
         setTitleToolbar(null, "Scanning " + ips.size() + " devices");
-        hostDiscoveryFromNmap(cmd, hostsMAC.toString(), ap);
+        hostDiscoveryFromNmap(cmd, hostsMAC.toString(), ap, context);
     }
 
     /*
@@ -96,7 +98,7 @@ public class                        NmapControler {
         mIsLiveDump = true;
     }
 
-    private void                    hostDiscoveryFromNmap(final String cmd, final String listMacs, final Network ap) {
+    private void                    hostDiscoveryFromNmap(final String cmd, final String listMacs, final Network ap, final Context context) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -110,6 +112,8 @@ public class                        NmapControler {
                     }
                     if (tmp == null || !tmp.startsWith("Nmap done")) {
                         Log.d(TAG, "Error in nmap execution, Nmap didn't end");
+                        dumpOutputBuilder.append(tmp);
+                        Log.e(TAG, dumpOutputBuilder.toString());
                         setTitleToolbar("Network scan", "Nmap Error");
                         return;
                     }
@@ -117,7 +121,7 @@ public class                        NmapControler {
                     String FullDUMP = dumpOutputBuilder.toString().substring(1);
                     Log.d(TAG, "\t\t LastLine[" + tmp + "]");
                     startParsing = Calendar.getInstance().getTime();
-                    new NmapHostDiscoveryParser(mInstance, listMacs, FullDUMP, ap);
+                    new NmapHostDiscoveryParser(mInstance, listMacs, FullDUMP, ap, context);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -133,10 +137,10 @@ public class                        NmapControler {
         mMenuCommand.add("Search services");
         mNmapParams.put(mMenuCommand.get(1), " -sV -v ");
         mMenuCommand.add("Regular scan");
-        mNmapParams.put(mMenuCommand.get(2), " -PN -T4 -sS -sU -v " +
+        mNmapParams.put(mMenuCommand.get(2), " -PN -sS -sU -v " +
                 "--script nbstat.nse,dns-service-discovery " +
-                "--min-parallelism 100 " +
-                "-p T:21,T:22,T:23,T:25,T:80,T:110,T:135,T:139,T:3128,T:443,T:445,U:53,U:3031,U:5353  ");
+                " " +
+                "-p T:21,T:22,T:23,T:25,T:80,T:110,T:135,T:139,T:3128,T:443,T:445,T:2869,U:53,U:3031,U:5353  ");
         mMenuCommand.add("");
         mNmapParams.put(mMenuCommand.get(3), "");
         mMenuCommand.add("Os fingerprint");

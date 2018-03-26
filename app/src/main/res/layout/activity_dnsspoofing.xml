@@ -106,22 +106,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="16dp"
-        android:layout_marginRight="16dp"
-        android:src="@drawable/ic_stop"
-        android:visibility="gone"
-        app:backgroundTint="@color/fab_color"
-        app:fabSize="normal"
-        app:layout_anchor="@id/appbar"
-        app:layout_anchorGravity="bottom|right|end" />
-
     <android.support.constraint.ConstraintLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
@@ -188,6 +172,17 @@
             android:transitionName="navigation"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_stop"
+            app:backgroundTint="@color/fab_color"
+            app:fabSize="normal"
+            app:layout_constraintBottom_toTopOf="@+id/navigation"
             app:layout_constraintRight_toRightOf="parent" />
 
     </android.support.constraint.ConstraintLayout>

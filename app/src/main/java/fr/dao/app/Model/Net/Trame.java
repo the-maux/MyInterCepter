@@ -94,7 +94,7 @@ public class               Trame  {
                     NBNSParsing(line);
                     break;
                 case IP:
-                    //Log.e(TAG, "UNKNOW IP trame " + line);
+                    //Log.e(TAG, "UNKNOWN IP trame " + line);
                     IParsing(line);
                     break;
                 default:
@@ -313,7 +313,6 @@ public class               Trame  {
         return extracted;
     }
 
-    @Override
     public String          toString() {
         return  "Trame n°" + offsett + " " +
                 ((protocol != null) ? protocol.name() : "") + ":" +

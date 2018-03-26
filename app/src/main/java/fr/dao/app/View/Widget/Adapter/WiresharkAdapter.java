@@ -42,8 +42,8 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
 
     public void             onBindViewHolder(WiresharkHolder holder, int position) {
         Trame trame = listOfTrame.get(position);
-        String s = "" + position;
-        holder.No.setText(s);
+        String tmp = "" + trame.offsett;
+        holder.No.setText(tmp);
         holder.time.setText(trame.time);
         holder.source.setText(trame.StringSrc);
         holder.dest.setText(trame.StringDest.toUpperCase());
@@ -124,8 +124,13 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
                 //                Log.e(TAG, "Trame unknow:" + trame.toString());
             }
     }
+
+    private static  int         offsetList = 0;
+    private synchronized int    buildOffset() {
+        return offsetList++;
+    }
     public synchronized void addTrameOnAdapter(Trame trame) {
-        trame.offsett = originalListOfTrames.size();
+        trame.offsett = buildOffset();
         addTrameFiltered(trame, true);
         originalListOfTrames.add(0, trame);
     }

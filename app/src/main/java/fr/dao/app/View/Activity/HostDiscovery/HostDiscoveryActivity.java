@@ -130,7 +130,9 @@ public class                        HostDiscoveryActivity extends MyActivity {
             timer = null;
         }
         ViewAnimate.setVisibilityToGoneLong(mBottomMonitor);
-        ViewAnimate.setVisibilityToVisibleQuick(mFab);
+        ViewAnimate.FabAnimateReveal(mInstance, mFab);
+        //mFab.show();
+       // ViewAnimate.setVisibilityToVisibleQuick(mFab);
     }
 
     private View.OnClickListener    initTabs(){
@@ -190,14 +192,14 @@ public class                        HostDiscoveryActivity extends MyActivity {
         String monitor = "";
         if (!monitor.contains("WiFi")) {
             monitor += " Ip Address : " + mSingleton.network.myIp;
-            monitor += "\n" + mSingleton.network.Ssid + " : " + mSingleton.network.gateway;
+            monitor += "\n" + mSingleton.network.ssid + " : " + mSingleton.network.gateway;
         } else {
             monitor += "Not Connected";
         }
         if (Singleton.getInstance().network.isConnectedToNetwork())
             mBottomMonitor.setText(monitor);
         else
-            mBottomMonitor.setText(mSingleton.network.Ssid + ": No connection");
+            mBottomMonitor.setText(mSingleton.network.ssid + ": No connection");
         ViewAnimate.setVisibilityToVisibleQuick(mBottomMonitor);
         ViewAnimate.setVisibilityToVisibleQuick(mTimer);
     }
@@ -205,7 +207,9 @@ public class                        HostDiscoveryActivity extends MyActivity {
     public void                     initFragmentSettings() {
         mFragment = new FragmentHostDiscoverySettings();
         initFragment(mFragment);
-        mFab.setVisibility(View.GONE);
+//        mFab.setVisibility(View.GONE);
+        ViewAnimate.FabAnimateHide(mInstance, mFab);
+        //mFab.hide();
         mBottomMonitor.setVisibility(View.GONE);
         mToolbarBackground.startTransition(500);
     }
@@ -229,7 +233,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     private void                    initSearchView() {
-        mFragment.initSearchView(mSearchView);
+        mFragment.initSearchView(mSearchView, mToolbar);
     }
 
     private View.OnClickListener    onHistory() {
@@ -243,8 +247,11 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 Bundle args = new Bundle();
                 args.putString("mode", FragmentHistoric.DB_HISTORIC);
                 fragment.setArguments(args);
-                ViewAnimate.setVisibilityToGoneQuick(mHistory);
-                ViewAnimate.setVisibilityToGoneQuick(mFab);
+                ViewAnimate.setVisibilityToInvisibleQuick(mHistory);
+                ViewAnimate.setVisibilityToInvisibleQuick(mSearchView);
+                ViewAnimate.FabAnimateHide(mInstance, mFab);
+                //ViewAnimate.setVisibilityToGoneQuick(mFab);
+                //mFab.hide();
                 initFragment(fragment);
                 initSearchView();
             }
@@ -324,7 +331,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 mInstance.runOnUiThread(new Runnable() {
                     public void run() {
                         mFab.setImageResource(R.drawable.ic_media_play);
-                        ViewAnimate.setVisibilityToVisibleQuick(mFab);
+                        //ViewAnimate.setVisibilityToVisibleQuick(mFab);
+                        //mFab.show();
                         mProgressBar.setVisibility(View.GONE);
                     }
                 });
@@ -335,12 +343,12 @@ public class                        HostDiscoveryActivity extends MyActivity {
     public void                     setMAXIMUM_PROGRESS(int nbrHost) {
         if (nbrHost < 10) {
             Log.d(TAG, "setMAXIMUM_PROGRESS::35 for nbrHost:" + nbrHost);
-            mProgressBar.setMax(35);
-            MAXIMUM_PROGRESS = 35;
+            mProgressBar.setMax(45);
+            MAXIMUM_PROGRESS = 45;
         } else if (nbrHost < 50) {
-            Log.d(TAG, "setMAXIMUM_PROGRESS::40 for nbrHost:" + nbrHost);
-            mProgressBar.setMax(40);
-            MAXIMUM_PROGRESS = 40;
+            Log.d(TAG, "setMAXIMUM_PROGRESS::60 for nbrHost:" + nbrHost);
+            mProgressBar.setMax(60);
+            MAXIMUM_PROGRESS = 60;
         } else if (nbrHost < 100) {
             Log.d(TAG, "setMAXIMUM_PROGRESS::80 for nbrHost:" + nbrHost);
             mProgressBar.setMax(80);
@@ -349,10 +357,14 @@ public class                        HostDiscoveryActivity extends MyActivity {
             Log.d(TAG, "setMAXIMUM_PROGRESS::80 for nbrHost:" + nbrHost);
             mProgressBar.setMax(100);
             MAXIMUM_PROGRESS = 100;
-        } else {
+        } else if (nbrHost < 200) {
             Log.d(TAG, "setMAXIMUM_PROGRESS::80 for nbrHost:" + nbrHost);
             mProgressBar.setMax(140);
             MAXIMUM_PROGRESS = 140;
+        } else {
+            Log.d(TAG, "setMAXIMUM_PROGRESS::80 for nbrHost:" + nbrHost);
+            mProgressBar.setMax(160);
+            MAXIMUM_PROGRESS = 160;
         }
     }
 
@@ -362,7 +374,11 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     protected void                  onResume() {
         super.onResume();
-        ViewAnimate.setVisibilityToVisibleQuick(mFab);
+        //mFab.show();
+        Animation scaleDown = AnimationUtils.loadAnimation(this, R.anim.fab_scale_up);
+        scaleDown.setDuration(1000);
+        mFab.startAnimation(scaleDown);
+//        ViewAnimate.setVisibilityToVisibleQuick(mFab);
     }
 
     public void                     onBackPressed() {
@@ -373,16 +389,22 @@ public class                        HostDiscoveryActivity extends MyActivity {
             } else if (mFragment.getClass().getName().contains(FragmentHistoric.class.getName())) {
                 if (mFragment.onBackPressed()) {
                     Log.d(TAG, "Fragment historic is over, switching to Netdiscover");
-                    ViewAnimate.setVisibilityToVisibleQuick(mFab);
-                    ViewAnimate.setVisibilityToVisibleQuick(mHistory);
+                    ViewAnimate.setVisibilityToVisibleQuick(mHistory, 300);
+                    ViewAnimate.setVisibilityToVisibleQuick(mSearchView, 400);
+                    //ViewAnimate.setVisibilityToVisibleQuick(mFab, 500);
+                    ViewAnimate.FabAnimateReveal(mInstance, mFab);
+                    //mFab.show();
                     initFragment(NetDiscoveryFragment);
                     initSearchView();
                 }
             } else if (mFragment.getClass().getName().contains(FragmentHostDiscoverySettings.class.getName())){
                 mToolbarBackground.reverseTransition(450);
-                ViewAnimate.setVisibilityToVisibleQuick(mFab);
-                ViewAnimate.setVisibilityToVisibleQuick(mHistory);
-                ViewAnimate.setVisibilityToVisibleQuick(mBottomMonitor);
+                ViewAnimate.setVisibilityToVisibleQuick(mHistory, 300);
+                ViewAnimate.setVisibilityToVisibleQuick(mSearchView, 400);
+                ViewAnimate.FabAnimateReveal(mInstance, mFab);
+                //mFab.show();
+               // ViewAnimate.setVisibilityToVisibleQuick(mFab, 500);
+                ViewAnimate.setVisibilityToVisibleQuick(mBottomMonitor, 600);
                 getSupportFragmentManager().popBackStackImmediate();
             }
         } else {

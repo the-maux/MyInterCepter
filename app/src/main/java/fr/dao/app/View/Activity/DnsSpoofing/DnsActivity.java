@@ -80,7 +80,9 @@ public class                            DnsActivity extends SniffActivity {
     }
 
     private void                        initFab() {
-        ViewAnimate.setVisibilityToVisibleQuick(mFab);
+//        ViewAnimate.setVisibilityToVisibleQuick(mFab);
+        ViewAnimate.FabAnimateReveal(mInstance, mFab);
+//        mFab.show();
         if (mSingleton.isDnsControlstarted()) {
             mFab.setImageResource(R.mipmap.ic_stop);
         } else {

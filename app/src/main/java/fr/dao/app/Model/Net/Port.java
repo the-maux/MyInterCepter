@@ -12,6 +12,7 @@ public class            Port {
     public String       port;
     public String       protocol;
     public State        state;
+    public String       service;
     public Host         host;
 
     public Port(String line) {
@@ -24,14 +25,14 @@ public class            Port {
     /*  Exemple port: 22/tcp   closed ssh */
     public Port(String port_proto, String state, String protocolName) {
         super();
-        //Log.i(TAG, "Building:\t" + port_proto + "  " + state + " -> " + protocolName);
+       // Log.w(TAG, "Building:\t" + port_proto + "  " + state + " -> " + protocolName);
         this.port = port_proto;
         this.state = State.valueOf(state, 0, 0);
         this.protocol = protocolName;
     }
 
     public enum         State   {
-        CLOSED(0), OPEN(1), FILTERED(2), UNFILTERED(3), OPEN_FILTERED(4), CLOSED_FILTERED(5), UNKNOW(6);
+        CLOSED(0), OPEN(1), FILTERED(2), UNFILTERED(3), OPEN_FILTERED(4), CLOSED_FILTERED(5), UNKNOWN(6);
 
 
         private int value;
@@ -66,7 +67,7 @@ public class            Port {
                 case "OPEN":
                     return OPEN;
                 default:
-                    return UNKNOW;
+                    return UNKNOWN;
             }
         }
 
@@ -89,12 +90,10 @@ public class            Port {
                 case OPEN:
                     return "OPEN";
                 default:
-                    return "UNKNOW";
+                    return "UNKNOWN";
             }
         }
     }
-
-
     public int          getPort() {
         return Integer.valueOf(port.split("/")[0]);
     }

@@ -10,7 +10,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +25,7 @@ import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickList
 
 import java.util.ArrayList;
 
+import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Database.DBNetwork;
 import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
 import fr.dao.app.Core.Network.NetDiscovering;
@@ -71,10 +74,10 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         Log.d(TAG, "onResume::scan discovery host :" + mHostAdapter.getItemCount());
         Log.d(TAG, "onResume::scan discovery hostList :" + mHosts.size());
         if (mHosts.size() == 0) {
-            mActivity.setToolbarTitle(mSingleton.network.Ssid,
+            mActivity.setToolbarTitle(mSingleton.network.ssid,
                     "Searching devices");
         } else {
-            mActivity.setToolbarTitle(mSingleton.network.Ssid,
+            mActivity.setToolbarTitle(mSingleton.network.ssid,
                     mHosts.size() + " device" + ((mHosts.size() > 1) ? "s" : ""));
         }
         mHostAdapter.updateHostList(mHosts);
@@ -112,8 +115,16 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         mHost_RV.setLayoutManager(new LinearLayoutManager(mActivity));
     }
 
-    public void                     initSearchView(SearchView mSearchView) {
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+    public void                     initSearchView(SearchView searchView, final Toolbar toolbar) {
+        searchView.setGravity(Gravity.END);
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             public boolean onQueryTextSubmit(String query) {
                 mHostAdapter.filterByString(query);
                 return false;
@@ -123,10 +134,11 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 return false;
             }
         });
-        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
                 mHostAdapter.filterByString("");
+                toolbar.setVisibility(View.VISIBLE);
                 return false;
             }
         });
@@ -184,7 +196,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     }
 
     public Network                  updateStateOfHostAfterIcmp(ArrayList<String> ipReachables) {
-        Network actualNetwork = DBNetwork.getAPFromSSID(mSingleton.network.Ssid);
+        Network actualNetwork = DBNetwork.getAPFromSSID(mSingleton.network.ssid);
         int rax = 0;
         for (Host host : actualNetwork.listDevices()) {
             host.state = Host.State.OFFLINE;
@@ -208,6 +220,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 Host host = new Host();
                 host.ip = ip;
                 host.mac = mac;
+                DBHost.saveOrGetInDatabase(host);
                 host.state = Host.State.FILTERED;
                 host.save();
                 actualNetwork.listDevices().add(host);
@@ -216,11 +229,12 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         Log.d(TAG, "(" + (actualNetwork.listDevices().size() - rax) + " offline/ " + actualNetwork.listDevices().size() + "inCache) ");
         mSingleton.actualNetwork = actualNetwork;
         mActivity.actualNetwork = actualNetwork;
+        mHosts = actualNetwork.listDevices();
         mHostAdapter.updateHostList(actualNetwork.listDevices());
         return actualNetwork;
     }
 
-    public void                     onHostActualized(final ArrayList<Host> hosts) {
+    public void                     onHostActualized(final ArrayList<Host> hosts, final int online, final int offline) {
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -229,8 +243,8 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 mScannerControler.inLoading = false;
                 mActivity.setProgressState(mActivity.MAXIMUM_PROGRESS*2);
                 mSingleton.hostList = mHosts;
-                mActivity.setToolbarTitle(mSingleton.network.Ssid,
-                        hosts.size() + " device" + ((hosts.size() > 1) ? "s" : ""));
+                mActivity.setToolbarTitle(mSingleton.network.ssid,
+                        "(" + online + "/" + hosts.size()+ ") device" + ((hosts.size() > 1) ? "s" : ""));
                 Log.d(TAG, "onHostActualized: " + ((mSingleton.hostList == null) ? "null" : mSingleton.hostList.size()));
                 mHostAdapter.updateHostList(mHosts);
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
@@ -244,14 +258,14 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     public void                     osFilterDialog() {
         if (!mScannerControler.inLoading) {
             final ArrayList<Os> osList = mHostAdapter.getOsList();
-            final RecyclerView.Adapter adapter = new OSFilterAdapter(mActivity, osList);
+            final OSFilterAdapter adapter = new OSFilterAdapter(mActivity, osList);
             new RV_dialog(mActivity)
                     .setAdapter(adapter, false)
                     .setTitle("Choix des cibles")
                     .onPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             if (osList.size() > 0) {
-                                mActivity.showSnackbar(mHostAdapter.filterByOs(osList) + " devices found");
+                                mActivity.showSnackbar(mHostAdapter.filterByOs(adapter.getSelected()) + " devices found");
                             }
                         }
                         })

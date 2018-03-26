@@ -1,7 +1,22 @@
 package fr.dao.app.Core.Nmap;
 
+import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,6 +26,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import fr.dao.app.Core.Configuration.Comparator.Comparators;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Model.Target.Host;
@@ -20,23 +36,24 @@ import fr.dao.app.Model.Unix.Os;
 class NmapHostDiscoveryParser {
     private String                  TAG = "NmapHostDiscoveryParser";
     private Singleton               mSingleton = Singleton.getInstance();
- //   private ArrayList<Host>         hosts = new ArrayList<>();
     private Network                 mNetwork;
     private NmapControler           mNmapControler;
     private int                     LENGTH_NODE, NBR_PARSED_NODE = 0;
+    private RequestQueue            listRequestApi;
 
-    NmapHostDiscoveryParser(NmapControler nmapControler, String listMacs, String NmapDump, Network ap) {
+    NmapHostDiscoveryParser(NmapControler nmapControler, String listMacs, String NmapDump, Network ap, Context context) {
         this.mNmapControler = nmapControler;
+        listRequestApi = Volley.newRequestQueue(context);
         //Log.d(TAG, "dump list macs[" + listMacs + "]");
         String[] macs = listMacs.split(" ");
         String[] HostNmapDump = NmapDump.split("Nmap scan report for ");
         LENGTH_NODE = HostNmapDump.length-1;
         ExecutorService service = Executors.newCachedThreadPool();
         mNetwork = ap;
-        Log.i(TAG, "{{{{{{{{{{{{{" + HostNmapDump[0] + "}}}}}}}}}}}}}}}}}");
+        //Log.i(TAG, "{{{{{{{{{{{{{" + HostNmapDump[0] + "}}}}}}}}}}}}}}}}}");
         for (int i = 1; i < HostNmapDump.length; i++) {/*First node is the nmap preambule*/
             service.execute(dispatcher(HostNmapDump[i], macs, ap));
-            Log.i(TAG, "{{{{{{{{{{{{{" + HostNmapDump[i] + "}}}}}}}}}}}}}}}}}");
+          //  Log.i(TAG, "{{{{{{{{{{{{{" + HostNmapDump[i] + "}}}}}}}}}}}}}}}}}");
         }
         service.shutdown();
         try {
@@ -47,7 +64,7 @@ class NmapHostDiscoveryParser {
         }
     }
 
-    private Runnable                    dispatcher(final String node, final String[] macs, final Network ap) {
+    private Runnable                dispatcher(final String node, final String[] macs, final Network ap) {
        return new Runnable() {
             public void run() {
                 try {
@@ -55,16 +72,12 @@ class NmapHostDiscoveryParser {
                     getIpHOSTNAME(node.split("\n")[0], host);
                     host.mac = getMACInTmp(macs, host.ip);
                     Host hostInList = ap.getHostFromMac(host.mac);
-//                    Log.d(TAG, "host from mac OK");
                     if (hostInList.name.isEmpty() || hostInList.name.contains("Unknow"))
                         hostInList.name = host.name;
-                    if (!Fingerprint.isItMyDevice(host)) {
-                        //Log.d(TAG, "buildHostFromNmapDump on " + host.toString());
+                    if (!Fingerprint.isItMyDevice(host))
                         buildHostFromNmapDump(node, hostInList);
-                    } else {
-//                        Log.d(TAG, "myDevice on " + host.toString());
+                    else
                         initIfItsMyDevice(hostInList);
-                    }
                 } catch (UnknownHostException e) {
                     Log.e(TAG, "UnknowHost");
                     e.printStackTrace();
@@ -101,15 +114,25 @@ class NmapHostDiscoveryParser {
                         .replace("|   ", "");
             } else if (line.contains("MAC Address: ")) {
                 dump.append(line).append("\n");
+              //  Log.i(TAG, "MAC:[" + line + "]");
                 host.mac = line.replace("MAC Address: ", "").split(" ")[0];
                 host.vendor = line.replace("MAC Address: " + host.mac + " (", "").replace(")", "");
             } else if (line.contains("PORT ")) {
-                int z = getPortList(nmapStdoutHost, i +1, host, dump);
+                int z = 0;
+                try {
+                    z = getPortList(nmapStdoutHost, i +1, host);
+                } catch (Exception e) {
+                    Log.e(TAG, "Error in analyzing nmap dump");
+                    e.printStackTrace();
+                }
                 for (; i < z; i++) {
+                    if (nmapStdoutHost[i].contains("upnp-info:")) {
+                        analyseUPnPtResult(nmapStdoutHost, i + 1, host);
+                    }
                     dump.append(nmapStdoutHost[i]).append("\n");
                 }
             } else if (line.contains("Host script results:")) {
-                int z = analyseHostScriptResult(nmapStdoutHost, i + 1, host, dump);
+                int z = analyseHostScriptResult(nmapStdoutHost, i + 1, host);
                 for (; i < z; i++) {
                     dump.append(nmapStdoutHost[i]).append("\n");
                 }
@@ -119,23 +142,21 @@ class NmapHostDiscoveryParser {
         saveHost(host, dump, nmapStdout);
     }
 
-
     private void                    saveHost(Host host, StringBuilder dump, String nmapStdout) {
+        host.mac = host.mac.toUpperCase();
         host.dumpInfo = dump.toString();
         Fingerprint.initHost(host);
-        host.mac = host.mac.toUpperCase();
-        if (host.Notes == null)
-            host.Notes = "";
-        if (Fingerprint.isItWindows(host)) {
-            host.osType = Os.Windows;
-        }
         if (Fingerprint.isItMyGateway(host)) {
             host.osType = Os.Gateway;
+            if (host.osDetail.contains("Unknown"))
+                host.osDetail = "Gateway";
             mNetwork.Gateway = host;
         }
-        host.Notes = nmapStdout;/* host.dumpInfo + '\n' +
-                "---------------------------------\n Analyse is:" +
-                    ((host.Ports() == null) ? " No Port detected ? " : host.Ports().getDump());*/
+        if (host.Notes == null)
+            host.Notes = "";
+        host.Notes = host.Notes.concat("OxBABOBAB").concat(nmapStdout);
+        if (host.ip.contains("10.16.186.227"))
+            host.dumpMe();
         host.save();
     }
 
@@ -154,7 +175,7 @@ class NmapHostDiscoveryParser {
         /* nbl037421.hq.fr.corp.leroymerlin.com (10.16.187.230) */
         if (line.contains("(")) {
             host.ip = line.split(" ")[1].replace("(", "").replace(")", "");
-            host.name = line.split(" ")[0];
+            host.Hostname = line.split(" ")[0];
         } else {
             host.ip = line.split(" ")[0];
         }
@@ -173,10 +194,9 @@ class NmapHostDiscoveryParser {
      * @param nmapStdoutHost
      * @param i
      * @param host
-     * @param dump
-     * @return
+     * @return;
      */
-    private int                     analyseHostScriptResult(String[] nmapStdoutHost, int i, Host host, StringBuilder dump) {
+    private int                     analyseHostScriptResult(String[] nmapStdoutHost, int i, Host host) {
         ArrayList<String> dumpHostScript = new ArrayList<>();
         while (i < nmapStdoutHost.length && !nmapStdoutHost[i].startsWith("|_")){
             dumpHostScript.add(nmapStdoutHost[i++]);
@@ -190,6 +210,100 @@ class NmapHostDiscoveryParser {
                 host.NetBIOS_Role = splitted[1].replace("NetBIOS user: ", "").trim();
                 Log.d(TAG, "NetBIOS user:[" + host.NetBIOS_Role + "]");
                 //TODO: get le groupe ->  Flags: <group>
+            }
+        }
+        return i;
+    }
+    ArrayList<String> items = new ArrayList<>();
+    /**
+     * 1900/udp open          upnp
+     | upnp-info:
+     | 192.168.0.12
+     |     server: microsoft-windows/10.0 upnp/1.0 upnp-device-host/1.0
+     |_    location: http://192.168.0.12:2869/upnphost/udhisapi.dll?content=uuid:b0a22e22-1541-424f-bd84-cfda678aaa4d
+     */
+    private int                     analyseUPnPtResult(String[] nmapStdoutHost, int i, final Host host) {
+        ArrayList<String> dumpHostScript = new ArrayList<>();
+        String urlUPnP = "";
+        while (i < nmapStdoutHost.length && !nmapStdoutHost[i].startsWith("|_")) {
+            dumpHostScript.add(nmapStdoutHost[i++].toLowerCase().replace("|", "").trim());
+        }
+        dumpHostScript.add(nmapStdoutHost[i++].toLowerCase().replace("|_", "").trim());
+        Log.d(TAG, "UPnP:[" + dumpHostScript+ "]");
+        for (String line : dumpHostScript) {
+            if (line.contains("server:")) {
+                String[] splitted = line.replace("server: ","").split(" ");
+                host.os = splitted[0].replace("microsoft-", "").replace("|", "").trim();
+                host.UPnP_Device = splitted[0].replace("microsoft-", "").replace("|", "").trim();
+                host.vendor = host.UPnP_Device;
+            } else if (line.contains("location: ")) {
+                urlUPnP = line.replace("location: ", "");
+                host.UPnP_Infos = urlUPnP;
+            }
+        }
+        if (!urlUPnP.isEmpty()) {//GET HTTP XML UPnP
+            Log.d(TAG, "Trying to GET /upnp-info [" + urlUPnP + "]");
+            try {//YOU HAVE TO LET THE ALL NODE WAIT THE HTTP RESPONSE
+                StringRequest request = new StringRequest(Request.Method.GET, urlUPnP,
+                        new Response.Listener<String>() {
+                            public void onResponse(String response) {
+                                host.Notes = host.Notes.concat("OxBABOBAB").concat(response);
+                                try {
+                                    XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+                                    factory.setNamespaceAware(true);
+                                    XmlPullParser xpp = factory.newPullParser();
+                                    xpp.setInput(new StringReader(response));
+                                    int eventType = xpp.getEventType();
+                                    while (eventType != XmlPullParser.END_DOCUMENT) {
+                                        if (eventType == XmlPullParser.START_DOCUMENT) {
+                                        } else if (eventType == XmlPullParser.START_TAG) {
+                                            if (xpp.getName().contains("serialNumber")) {
+                                                xpp.next();
+                                                host.Brand_and_Model = xpp.getText();
+                                                Log.d(TAG, "serialNumber " + xpp.getText());
+                                            } else if (xpp.getName().contains("friendlyName")) {
+                                                xpp.next();
+                                                if (!xpp.getText().contains("http"))
+                                                    host.UPnP_Name = xpp.getText();
+                                                Log.d(TAG, "friendlyName " + xpp.getText());
+                                            } else if (xpp.getName().contains("deviceType")) {
+                                                xpp.next();
+                                                host.osDetail = xpp.getText();
+                                                Log.d(TAG, "deviceType::" + xpp.getText());
+                                            } else if (xpp.getName().contains("manufacturer")) {
+                                                xpp.next();
+                                                host.UPnP_Device = xpp.getText();
+                                                Log.d(TAG, "manufacturer::" + xpp.getText());
+                                            } else if (xpp.getName().contains("modelName")) {
+                                                xpp.next();
+                                                host.UPnP_Services = xpp.getText();
+                                                Log.d(TAG, "ModelName::" + xpp.getText());
+                                            }
+                                        } else if (eventType == XmlPullParser.END_TAG) {
+                                           // Log.d(TAG, "End tag " + xpp.getName());
+                                        } else if (eventType == XmlPullParser.TEXT) {
+                                           // Log.d(TAG, "Text " + xpp.getText()); // here you get the text from xml
+                                        }
+                                        eventType = xpp.next();
+                                    }
+                                } catch (XmlPullParserException e) {
+                                    e.printStackTrace();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                    public void onErrorResponse(VolleyError error) {
+                        Log.w(TAG, "getModules::VolleyError:"  + error.getMessage());
+                        error.getStackTrace();
+                    }
+                });
+                listRequestApi.add(request);
+            } catch (Throwable t) {
+                Log.e(TAG, "error in getting UpnP XML");
+            }
+            for (String item : items) {
+                Log.d(TAG, "UPnP[" + item + "]");
             }
         }
         return i;
@@ -210,7 +324,7 @@ class NmapHostDiscoveryParser {
      |     osxvers=17
      |_    Address=10.16.186.167 fe80:0:0:0:8c1:dc67:c4cc:4b15
      */
-    private int                     getPortList(String[] line, int i, Host host, StringBuilder dump) {
+    private int                     getPortList(String[] line, int i, Host host) throws Exception {
         ArrayList<String> ports = new ArrayList<>();
         for (; i < line.length; i++) {
             if (!(line[i].contains("open") || line[i].contains("close") || line[i].contains("filtered"))) {
@@ -265,27 +379,27 @@ class NmapHostDiscoveryParser {
         Log.d(TAG, "Analyzing (" + NBR_PARSED_NODE + "/" + LENGTH_NODE + ") devices scanned");
        // Collections.sort(mNetwork.listDevices(), Fingerprint.getComparator());
         Iterator<Host> iter = mNetwork.listDevices().iterator();
-        while (iter.hasNext()) {//ConcurrentModificationException
-            Host host = iter.next();
-            if (host.osType == Os.Unknow) {
-                host.dumpMe(mSingleton.hostList);
-                Log.d(TAG, "-------------");
-            }
-        }
+//        while (iter.hasNext()) {//ConcurrentModificationException
+//            Host host = iter.next();
+//            if (host.osType == Os.Unknow) {
+//                host.dumpMe(mSingleton.hostList);
+//                Log.d(TAG, "-------------");
+//            }
+//        }
         mNmapControler.onHostActualized(mNetwork.listDevices());
     }
 
     private void                    onAllNodeParsed() {
         try {
             Log.d(TAG, "AllNode parsed, inintializing..");
-            Collections.sort(mNetwork.listDevices(), Fingerprint.getComparator());
+            Collections.sort(mNetwork.listDevices(), Comparators.getHostComparator());
             Iterator<Host> iter = mNetwork.listDevices().iterator();
             while (iter.hasNext()) {
                 Host host = iter.next();
-                if (host.osType == Os.Unknow) {
-                    host.dumpMe(mSingleton.hostList);
+                /*if (host.osType == Os.Unknow) {
+                    host.dumpMe();
                     Log.d(TAG, "-------------");
-                }
+                }*/
             }
             mNmapControler.onHostActualized(mNetwork.listDevices());
         } catch (ConcurrentModificationException ex) {

@@ -21,7 +21,7 @@ public class                                DBNetwork {
         return new Select()
                 .all()
                 .from(Network.class)
-                .orderBy("Ssid ASC")
+                .orderBy("ssid ASC")
                 .execute();
     }
     public static Network                   getAPFromSSID(String SSID) {
@@ -29,10 +29,10 @@ public class                                DBNetwork {
         try {
             network = new Select()
                     .from(Network.class)
-                    .where("Ssid = \"" + SSID + "\"").executeSingle();
+                    .where("ssid = \"" + SSID + "\"").executeSingle();
             Log.d(TAG, "getAPFromSSID::" + new Select()
                     .from(Network.class)
-                    .where("Ssid = \"" + SSID + "\"").toSql());
+                    .where("ssid = \"" + SSID + "\"").toSql());
             if (network != null) {
                 if (Singleton.getInstance().DebugMode)
                     Log.d(TAG, "AccessPoint::" + SSID + " already knew with " + network.nbrScanned + " previous scan");
