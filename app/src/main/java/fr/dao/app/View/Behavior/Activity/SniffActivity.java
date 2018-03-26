@@ -22,6 +22,7 @@ import fr.dao.app.View.Activity.DnsSpoofing.DnsActivity;
 import fr.dao.app.View.Activity.Scan.NmapActivity;
 import fr.dao.app.View.Activity.WebServer.WebServerActivity;
 import fr.dao.app.View.Activity.Wireshark.WiresharkActivity;
+import fr.dao.app.View.Behavior.ViewAnimate;
 
 
 public abstract class               SniffActivity extends MyActivity  {
@@ -113,11 +114,11 @@ public abstract class               SniffActivity extends MyActivity  {
                             mInstance.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Log.d(TAG, "onNavigationItemSelected::" + position);
+                                   //Log.d(TAG, "onNavigationItemSelected::" + position);
                                     Intent intent = null;
                                     Pair<View, String> p1 = Pair.create((View) mBottomBar, "navigation");
-                                    Pair<View, String> p2 = Pair.create(findViewById(R.id.appbar), "appBarTransition");
-                                    final ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2);
+                                    //Pair<View, String> p2 = Pair.create(findViewById(R.id.appbar), "appBarTransition");
+                                    final ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1/*, p2*/);
                                     switch (position) {
                                         case 0:
                                             intent = new Intent(mInstance, NmapActivity.class);
@@ -151,11 +152,19 @@ public abstract class               SniffActivity extends MyActivity  {
     }
 
     protected void                  onResume() {
+        if (mFab != null)
+            ViewAnimate.FabAnimateReveal(mInstance, mFab);
         super.onResume();
         Log.d(TAG, " onResume::setCurrentItem::" + mType);
         mBottomBar.setCurrentItem(mType, false);
         if (!hideBottomBar)
             updateNotifications();
+    }
+
+    protected void                  onStop() {
+        if (mFab != null)
+            ViewAnimate.FabAnimateHide(mInstance, mFab);
+        super.onStop();
     }
 
     protected void                  onNewIntent(Intent intent) {

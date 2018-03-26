@@ -52,7 +52,9 @@ public class                    WebServerActivity extends SniffActivity {
         mWebview = findViewById(R.id.webViewToSeeWebsite);
         mProgressBar = findViewById(R.id.progressBar);
         mFab = findViewById(R.id.fab);
-        ViewAnimate.setVisibilityToVisibleQuick(mFab);
+//        ViewAnimate.setVisibilityToVisibleQuick(mFab);
+        //mFab.show();
+        ViewAnimate.FabAnimateReveal(mInstance, mFab);
         mToolbar = findViewById(R.id.toolbar);
     }
 

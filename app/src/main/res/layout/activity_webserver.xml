@@ -119,7 +119,6 @@
         android:soundEffectsEnabled="true"
         android:src="@drawable/ic_media_play"
         android:tint="@color/primary_white"
-        android:visibility="gone"
         app:backgroundTint="@color/fab_color"
         app:fabSize="normal"
         app:layout_anchor="@id/appbar"

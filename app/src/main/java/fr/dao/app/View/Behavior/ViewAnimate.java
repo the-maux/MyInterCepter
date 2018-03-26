@@ -2,7 +2,13 @@ package fr.dao.app.View.Behavior;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Context;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+
+import fr.dao.app.R;
 
 public class                    ViewAnimate {
     private static int          SHORT_DURATION = 250, LONG_DURATION = 800;
@@ -38,4 +44,16 @@ public class                    ViewAnimate {
                     }
                 });
     }
+
+    public static void         FabAnimateReveal(Context context, FloatingActionButton fab) {
+        Animation scaleDown = AnimationUtils.loadAnimation(context, R.anim.fab_scale_up);
+        scaleDown.setDuration(600);
+        fab.startAnimation(scaleDown);
+    }
+    public  static void         FabAnimateHide(Context context, FloatingActionButton fab) {
+        Animation scaleDown = AnimationUtils.loadAnimation(context, R.anim.fab_scale_down);
+        scaleDown.setDuration(600);
+        fab.startAnimation(scaleDown);
+    }
+
 }

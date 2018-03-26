@@ -78,10 +78,14 @@ public class                    WiresharkActivity extends SniffActivity {
             }
             initSettings();
             initNavigationBottomBar(SNIFFER, true);
-            ViewAnimate.setVisibilityToVisibleQuick(mFab);
+            //ViewAnimate.setVisibilityToVisibleQuick(mFab);
+//            mFab.show();
+            ViewAnimate.FabAnimateReveal(mInstance, mFab);
         } else {
             hideBottomBar();
-            ViewAnimate.setVisibilityToGoneQuick(mFab);
+           // ViewAnimate.setVisibilityToGoneQuick(mFab);
+            ViewAnimate.FabAnimateHide(mInstance, mFab);
+            //mFab.hide();
             findViewById(R.id.navigation).setVisibility(View.GONE);
             readerFragment = true;
             mFragment = new WiresharkReaderFragment();

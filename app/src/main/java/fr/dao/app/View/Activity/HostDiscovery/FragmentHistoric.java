@@ -158,6 +158,7 @@ public class                        FragmentHistoric extends MyFragment {
             ViewAnimate.setVisibilityToGoneQuick(mRV);
         } else {
             ViewAnimate.setVisibilityToVisibleQuick(mRV);
+
             if (RV_AdapterAp == null) {
                 RV_AdapterAp = new NetworksAdapter(this, networksScanned);
             }
