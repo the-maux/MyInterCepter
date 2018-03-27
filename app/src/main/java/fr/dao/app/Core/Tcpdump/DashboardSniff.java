@@ -28,12 +28,11 @@ public class                DashboardSniff {
     private String          TAG = "DashboardSniff";
     private boolean         mIsRunning = false;
     private int             nbrPackets = 0;
-    private int             UDP_packet = 0, TCP_packet = 0, FTP_packet = 0, ICMP_packet = 0;
-    private int             HTTP_packet = 0, HTTPS_packet = 0, DNS_packet = 0, ARP_Packet = 0;
     private TextView        monitorPackets, nbrTargets, timer;
     private CircleImageView status;
     private boolean         isStatusUpdated = false;
-
+    public int              UDP_packet = 0, TCP_packet = 0, FTP_packet = 0, ICMP_packet = 0;
+    public int              HTTP_packet = 0, HTTPS_packet = 0, DNS_packet = 0, ARP_Packet = 0;
 
     public                  DashboardSniff() {
 

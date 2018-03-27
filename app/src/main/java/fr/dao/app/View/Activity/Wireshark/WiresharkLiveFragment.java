@@ -34,7 +34,9 @@ import fr.dao.app.View.Widget.Adapter.WiresharkAdapter;
 import fr.dao.app.View.Widget.Adapter.WireshrakDashboardAdapter;
 import fr.dao.app.View.Widget.Dialog.RV_dialog;
 
-
+/**
+ * TODO: tu dois trouver un moye, de flush l'ensemble des trames du dispatcher dans le RV live
+ */
 public class                    WiresharkLiveFragment extends MyFragment {
     private String              TAG = "WiresharkLiveFragment";
     private CoordinatorLayout   mCoordinatorLayout;
@@ -44,7 +46,7 @@ public class                    WiresharkLiveFragment extends MyFragment {
     private Context             mCtx;
     private WiresharkActivity   mActivity;
     private RecyclerView        mRV_Wireshark, dashboard_RV;
-    private WiresharkAdapter mAdapterDetailWireshark;
+    private WiresharkAdapter    mAdapterDetailWireshark;
     private WireshrakDashboardAdapter mAdapterDashboardWireshark;
     private List<Host>          mListHostSelected = new ArrayList<>();
     private TextView            mMonitorAgv;//, mMonitorCmd;
@@ -99,6 +101,8 @@ public class                    WiresharkLiveFragment extends MyFragment {
         }
         rootViewForDashboard.setVisibility((isDashboardMode) ? View.VISIBLE : View.GONE);
         rootViewForLiveFlux.setVisibility((isDashboardMode) ? View.GONE : View.VISIBLE);
+        mAdapterDetailWireshark = new WiresharkAdapter(mActivity, mRV_Wireshark);
+
         initDashboard();
         initRV();
         initTimer();
@@ -154,7 +158,7 @@ public class                    WiresharkLiveFragment extends MyFragment {
         }
     }
     private void                initRV() {
-        mAdapterDetailWireshark = new WiresharkAdapter(mActivity, mRV_Wireshark);
+        mAdapterDetailWireshark.notifyDataSetChanged();
         mRV_Wireshark.setAdapter(mAdapterDetailWireshark);
         WrapContentLinearLayoutManager layoutManager = new WrapContentLinearLayoutManager(mActivity);
         layoutManager.setAutoMeasureEnabled(false);

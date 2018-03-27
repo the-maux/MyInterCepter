@@ -15,12 +15,11 @@ import fr.dao.app.View.Behavior.MyGlideLoader;
 import fr.dao.app.View.Widget.Adapter.Holder.PacketHolder;
 
 public class                    WireshrakDashboardAdapter extends RecyclerView.Adapter<PacketHolder> {
-    private String              TAG = "NetworksAdapter";
+    private String              TAG = "WireshrakDashboardAdapter";
     private MyActivity          mActivity;
-    private DashboardSniff      wiresharkDashboard;
+    private DashboardSniff      wiresharkDashboard = new DashboardSniff();
     private TextView            packetsNumber, nbrTargets, timerMonitor;
     private CircleImageView     status;
-
     public final int            TCP = 0, UDP = 1, HTTP = 2, HTTPS = 3, DNS = 4, SPY = 5;
 
     public WireshrakDashboardAdapter(MyActivity activity, TextView packetsNumber, TextView nbrTargets,
@@ -32,7 +31,7 @@ public class                    WireshrakDashboardAdapter extends RecyclerView.A
         this.status = status;
     }
 
-    public PacketHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PacketHolder         onCreateViewHolder(ViewGroup parent, int viewType) {
         return new PacketHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_packets_type, parent, false));
     }
@@ -40,22 +39,22 @@ public class                    WireshrakDashboardAdapter extends RecyclerView.A
     public void                 onBindViewHolder(PacketHolder holder, final int position) {
         switch (position) {
             case TCP:
-                initTcpCard(holder);
+                initCard(holder, wiresharkDashboard.TCP_packet, "TCP");
                 break;
             case UDP:
-                initUdpCard(holder);
+                initCard(holder, wiresharkDashboard.UDP_packet, "UDP");
                 break;
             case HTTP:
-                initHTTPCard(holder);
+                initCard(holder, wiresharkDashboard.HTTP_packet, "HTTP");
                 break;
             case HTTPS:
-                initHTTPSCard(holder);
+                initCard(holder, wiresharkDashboard.HTTPS_packet, "HTTPS");
                 break;
             case DNS:
-                initDNSCard(holder);
+                initCard(holder, wiresharkDashboard.DNS_packet, "DNS");
                 break;
             case SPY:
-                initSpyCard(holder);
+                initCard(holder, 0, " credential");
                 break;
             case 6:
                 break;
@@ -67,34 +66,10 @@ public class                    WireshrakDashboardAdapter extends RecyclerView.A
         });
     }
 
-    private void                initSpyCard(PacketHolder holder) {
-        MyGlideLoader.loadDrawableInImageView(mActivity, R.drawable.spy, holder.logo_protocol, false);
-        holder.nbr_packets_protocol.setText("Creds");
-    }
-
-    private void                initDNSCard(PacketHolder holder) {
-        MyGlideLoader.loadDrawableInImageView(mActivity, R.mipmap.ic_dns, holder.logo_protocol, false);
-        holder.nbr_packets_protocol.setText("DNS");
-    }
-
-    private void                initHTTPSCard(PacketHolder holder) {
+    private void                initCard(PacketHolder holder, int nbrPackets, String protocol) {
         MyGlideLoader.loadDrawableInImageView(mActivity, R.mipmap.ic_https, holder.logo_protocol, false);
-        holder.nbr_packets_protocol.setText("HTTPS");
-    }
-
-    private void                initHTTPCard(PacketHolder holder) {
-        MyGlideLoader.loadDrawableInImageView(mActivity, R.mipmap.ic_http, holder.logo_protocol, false);
-        holder.nbr_packets_protocol.setText("HTTP");
-    }
-
-    private void                initUdpCard(PacketHolder holder) {
-        MyGlideLoader.loadDrawableInImageView(mActivity, R.mipmap.ic_udp, holder.logo_protocol, false);
-        holder.nbr_packets_protocol.setText("UDP");
-    }
-
-    private void                initTcpCard(PacketHolder holder) {
-        MyGlideLoader.loadDrawableInImageView(mActivity, R.mipmap.ic_tcp, holder.logo_protocol, false);
-        holder.nbr_packets_protocol.setText("TCP");
+        String title = (nbrPackets == 0) ? "No " + protocol + " packets": nbrPackets + " packets";
+        holder.nbr_packets_protocol.setText(title);
     }
 
     private View.OnClickListener onClick(final Network accessPoint) {

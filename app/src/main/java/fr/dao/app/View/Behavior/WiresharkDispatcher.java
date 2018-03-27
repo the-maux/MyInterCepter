@@ -13,13 +13,14 @@ import fr.dao.app.View.Widget.Adapter.WiresharkAdapter;
 
 public class                        WiresharkDispatcher  {
     private String                  TAG = "WiresharkDispatcher";
+    private java.util.Queue         queue = new java.util.LinkedList();
     private WiresharkActivity       mActivity;
     private RecyclerView.Adapter    mAdapterWireshark;
     private RecyclerView            mRV_Wireshark;
-    private ArrayList               tmp = new ArrayList();
+    private ArrayList<Trame>        TrameBuffer = new ArrayList();
     private boolean                 mIsRunning = false, mAutoscroll = true;
     private int                     REFRESH_TIME = 1000;
-    private java.util.Queue         queue = new java.util.LinkedList();
+
     private DashboardSniff          mDashboard;
     private boolean                 isDashboardMode = false;
 
@@ -32,8 +33,8 @@ public class                        WiresharkDispatcher  {
         adapterRefreshDeamon();
     }
 
-    public void                     updateOutputMode() {
-
+    public ArrayList<Trame>         flush() {
+        return TrameBuffer;
     }
 
     private void                    adapterRefreshDeamon() {
@@ -58,6 +59,7 @@ public class                        WiresharkDispatcher  {
                     for (int i = 0; i < size; i++) {
                         Trame poppedTrame = pop();
                         ((WiresharkAdapter) mAdapterWireshark).addTrameOnAdapter(poppedTrame);
+                        TrameBuffer.add(poppedTrame);
                         mDashboard.addTrame(poppedTrame);
                     }
                     if (!isDashboardMode) {
