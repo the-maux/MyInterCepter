@@ -45,19 +45,19 @@ public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialog.Builder(mActivity)
-                                .setTitle(domain.domain)
-                                .setMessage("Would you like to remove this spoofed title ?")
-                                .setPositiveButton(mActivity.getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        mSingleton.getDnsControler().removeDomain(domain);
-                                        mActivity.onDnsmasqConfChanged(domain + " deleted from configuration");
-                                        mActivity.setToolbarTitle(null, mDnsIntercepts.size() + " title spoofable");
-                                        notifyDataSetChanged();
-                                    }
-                                })
-                                .setNegativeButton(mActivity.getResources().getString(android.R.string.no), null)
-                                .show();
+                    new AlertDialog.Builder(mActivity)
+                        .setTitle(domain.domain)
+                        .setMessage("Would you like to remove this spoofed title ?")
+                        .setPositiveButton(mActivity.getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                mSingleton.getDnsControler().removeDomain(domain);
+                                mActivity.onDnsmasqConfChanged(domain + " deleted from configuration");
+                                mActivity.setToolbarTitle(null, mDnsIntercepts.size() + " title spoofable");
+                                notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton(mActivity.getResources().getString(android.R.string.no), null)
+                        .show();
                     }
                 });
 

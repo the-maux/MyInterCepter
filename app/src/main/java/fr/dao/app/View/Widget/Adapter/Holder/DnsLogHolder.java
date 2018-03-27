@@ -8,9 +8,6 @@ import android.widget.TextView;
 
 import fr.dao.app.R;
 
-/**
- * Host holder
- */
 public class                DnsLogHolder extends RecyclerView.ViewHolder {
     public View             itemView;
     public RelativeLayout   RV_layout;
@@ -21,10 +18,10 @@ public class                DnsLogHolder extends RecyclerView.ViewHolder {
     public                  DnsLogHolder(View v) {
         super(v);
         itemView = v;
-        RV_layout = (RelativeLayout) itemView.findViewById(R.id.RV_layout);
-        nameHost = (TextView) itemView.findViewById(R.id.host);
-        DNSTypeImg = (ImageView) itemView.findViewById(R.id.DNSTypeImg);
-        viewFullLogsBtn = (ImageView) itemView.findViewById(R.id.viewFullLogsBtn);
-        DnsRVLogs = (RecyclerView) itemView.findViewById(R.id.DnsRVLogs);
+        RV_layout = itemView.findViewById(R.id.RV_layout);
+        nameHost = itemView.findViewById(R.id.host);
+        DNSTypeImg = itemView.findViewById(R.id.DNSTypeImg);
+        viewFullLogsBtn = itemView.findViewById(R.id.viewFullLogsBtn);
+        DnsRVLogs = itemView.findViewById(R.id.DnsRVLogs);
     }
 }

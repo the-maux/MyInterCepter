@@ -143,7 +143,7 @@ public abstract class               SniffActivity extends MyActivity  {
                                     }
                                     if (intent != null) {
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(intent, options.toBundle());
+                                        startActivity(intent/*, options.toBundle()*/);
                                     }
                                 }
                             });

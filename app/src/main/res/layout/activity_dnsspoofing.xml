@@ -15,94 +15,84 @@
         app:elevation="4dp">
 
         <RelativeLayout
+            android:id="@+id/topToolbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <RelativeLayout
-                android:id="@+id/topToolbar"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="right">
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/searchView"
+                android:addStatesFromChildren="true"
+                android:minWidth="100dp"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:title="Dnsmasq">
 
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_toLeftOf="@+id/searchView"
-                    android:addStatesFromChildren="true"
-                    android:minWidth="100dp"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    app:title="Dnsmasq">
+            </android.support.v7.widget.Toolbar>
 
-                </android.support.v7.widget.Toolbar>
+            <android.support.v7.widget.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerVertical="false"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="12dp"
+                android:layout_toLeftOf="@+id/action_add_host" />
 
-                <android.support.v7.widget.SearchView
-                    android:id="@+id/searchView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerVertical="false"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_toLeftOf="@+id/action_add_host" />
+            <ImageButton
+                android:id="@+id/action_add_host"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerVertical="false"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="12dp"
+                android:layout_toLeftOf="@+id/history"
+                android:background="@android:color/transparent"
+                android:soundEffectsEnabled="true"
+                app:srcCompat="@drawable/ic_add_circle" />
 
-                <ImageButton
-                    android:id="@+id/action_add_host"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerVertical="false"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_toLeftOf="@+id/history"
-                    android:background="@android:color/transparent"
-                    android:soundEffectsEnabled="true"
-                    app:srcCompat="@drawable/ic_add_circle" />
-
-                <ImageButton
-                    android:id="@+id/history"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerVertical="false"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="12dp"
-                    android:background="@android:color/transparent"
-                    android:soundEffectsEnabled="true"
-                    android:src="@drawable/ic_more_vert" />
-
-            </RelativeLayout>
-
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/topToolbar"
-                android:visibility="visible"
-                app:tabMode="scrollable">
-
-                <android.support.design.widget.TabItem
-                    android:id="@+id/listSpoof"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:soundEffectsEnabled="true"
-                    android:text="Domain" />
-
-                <android.support.design.widget.TabItem
-                    android:id="@+id/historique"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:soundEffectsEnabled="true"
-                    android:text="Console" />
-
-            </android.support.design.widget.TabLayout>
+            <ImageButton
+                android:id="@+id/history"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_centerVertical="false"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="12dp"
+                android:background="@android:color/transparent"
+                android:soundEffectsEnabled="true"
+                android:src="@drawable/ic_more_vert" />
 
         </RelativeLayout>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/topToolbar"
+            app:tabMode="scrollable">
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/listSpoof"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:soundEffectsEnabled="true"
+                android:text="Domain" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/historique"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:soundEffectsEnabled="true"
+                android:text="Console" />
+
+        </android.support.design.widget.TabLayout>
 
     </android.support.design.widget.AppBarLayout>
 

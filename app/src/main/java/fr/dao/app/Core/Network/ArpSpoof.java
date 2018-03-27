@@ -72,6 +72,7 @@ public class                        ArpSpoof {
     }
 
     public static void              launchArpSpoof(List<Host> hosts) {
+        Log.d(TAG, "Arp spoofing " + hosts.size() + " targets");
         for (Host host : hosts) {
             new ArpSpoof(host).start();
         }

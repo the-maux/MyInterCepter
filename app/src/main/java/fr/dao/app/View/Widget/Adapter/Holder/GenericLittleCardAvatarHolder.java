@@ -6,12 +6,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.R;
 
 public class                GenericLittleCardAvatarHolder extends RecyclerView.ViewHolder {
     public View             itemView;
     public ConstraintLayout relativeLayout;
-    public ImageView        logo, icon;
+    public CircleImageView  logo;
+    public ImageView        icon;
     public TextView         title, subtitle;
 
     public                  GenericLittleCardAvatarHolder(View v) {

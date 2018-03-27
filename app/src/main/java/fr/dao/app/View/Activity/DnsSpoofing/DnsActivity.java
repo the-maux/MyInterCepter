@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
+import fr.dao.app.Core.Dnsmasq.DnsmasqConfig;
 import fr.dao.app.Core.Dnsmasq.DnsmasqControl;
 import fr.dao.app.R;
 import fr.dao.app.View.Behavior.Activity.SniffActivity;
@@ -87,7 +88,7 @@ public class                            DnsActivity extends SniffActivity {
         appBarLayout = findViewById(R.id.appBarLayout);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                ViewCompat.setElevation(findViewById(R.id.topToolbar), 2);
+                ViewCompat.setElevation(findViewById(R.id.topToolbar), 4);
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
@@ -170,7 +171,7 @@ public class                            DnsActivity extends SniffActivity {
                         final DialogQuestionWithInput dialog = new DialogQuestionWithInput(mInstance)
                                 .setIcon(R.drawable.dns)
                                 .setTitle("Exporter la liste des dns")
-                                .setHintToEDFirstQuestion(mDnsSpoof.getDnsConf().PATH_HOST_FILE)
+                                .setHintToEDFirstQuestion(DnsmasqConfig.PATH_HOST_FILE)
                                 .hideSecondInput()
                                 .setHintToTILFirstQuestion("Name of conf file");
                         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -196,7 +197,7 @@ public class                            DnsActivity extends SniffActivity {
                                 .setTitle("Importez la liste des dns")
                                 .hideSecondInput()
                                 .setHintToTILFirstQuestion("Name of file")
-                                .setHintToEDFirstQuestion(mDnsSpoof.getDnsConf().PATH_HOST_FILE);
+                                .setHintToEDFirstQuestion(DnsmasqConfig.PATH_HOST_FILE);
                         dialog2.onPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface d, int which) {

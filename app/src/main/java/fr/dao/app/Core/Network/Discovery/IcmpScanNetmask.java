@@ -18,7 +18,13 @@ import java.util.concurrent.TimeUnit;
 
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Network.IPv4Utils;
-
+/*
+ * TODO: Challenge make this ok :
+ *         - Free wifi:
+ *                      + Ip : 10.50.41.195
+ *                      + Gateway : 10.55.255.254
+ *                      mNumberOfHosts:524286 ipAvailable:524285
+ */
 public class                        IcmpScanNetmask {
     private String                  TAG = "IcmpScanNetmask";
     private Integer                 mNumberOfHosts;
@@ -45,6 +51,7 @@ public class                        IcmpScanNetmask {
             }
             service.shutdown();
             service.awaitTermination(10000, TimeUnit.MILLISECONDS);
+
         } catch (InterruptedException e) {
             e.printStackTrace();
             Log.e(TAG, "Icmp scan was interupted");

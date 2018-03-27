@@ -55,9 +55,10 @@ public class                        Tcpdump {
     }
 
     public String                  initCmd(List<Host> hosts) {
-        actualCmd = mTcpdumpConf.buildCmd(actualParam, isDumpingInFile, "No Filter", hosts);
+        int a = IPTables.InterceptWithoutSSL();
+        Log.d(TAG, "IPtable returned: " + a);
         ArpSpoof.launchArpSpoof(hosts);
-        IPTables.InterceptWithoutSSL();
+        actualCmd = mTcpdumpConf.buildCmd(actualParam, isDumpingInFile, "No Filter", hosts);
         return actualCmd.replace("nmap/nmap", "nmap")
                 .replace(mSingleton.FilesPath, "");
     }
