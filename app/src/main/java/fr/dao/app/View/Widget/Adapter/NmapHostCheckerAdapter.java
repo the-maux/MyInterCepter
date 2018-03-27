@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import fr.dao.app.Core.Nmap.Fingerprint;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
+import fr.dao.app.View.Behavior.MyGlideLoader;
 import fr.dao.app.View.Widget.Adapter.Holder.HostSelectionHolder;
 
 public class                    NmapHostCheckerAdapter extends RecyclerView.Adapter<HostSelectionHolder> {
@@ -33,7 +33,7 @@ public class                    NmapHostCheckerAdapter extends RecyclerView.Adap
         holder.itemView.setOnClickListener(onClickCard(host));
         holder.nameOS.setText(host.ip);
         holder.checkBox.setVisibility(View.INVISIBLE);
-        Fingerprint.setOsIcon(mActivity, host, holder.imageOS);
+        MyGlideLoader.setOsIcon(mActivity, host, holder.imageOS);
     }
 
     private View.OnClickListener onClickCard(final Host host) {

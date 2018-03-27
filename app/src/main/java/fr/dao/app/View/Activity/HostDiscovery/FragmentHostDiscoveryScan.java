@@ -208,12 +208,9 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
             boolean isHostInList = false;
             for (Host host : actualNetwork.listDevices()) {
                 if (host.mac.contains(mac)) {
-                    host.state = Host.State.FILTERED;
+                    host.state = Host.State.ONLINE;
                     isHostInList = true;
                     break;
-                }
-                if (host.mac.contains(mSingleton.network.mac)) {
-                    host.state = Host.State.FILTERED;
                 }
             }
             if (!isHostInList) {

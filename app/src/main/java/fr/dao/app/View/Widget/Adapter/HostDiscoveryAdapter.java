@@ -20,11 +20,11 @@ import java.util.List;
 import fr.dao.app.Core.Configuration.Comparator.Comparators;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
-import fr.dao.app.Core.Nmap.Fingerprint;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
 import fr.dao.app.View.Activity.HostDetail.HostDetailActivity;
+import fr.dao.app.View.Behavior.MyGlideLoader;
 import fr.dao.app.View.Widget.Adapter.Holder.HostDiscoveryHolder;
 
 
@@ -70,7 +70,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity,        /*Special background to notice my device*/
                 (host.ip.contains(Singleton.getInstance().network.myIp)) ?
                         R.color.primary_dark : R.color.cardview_dark_background));
-        Fingerprint.setOsIcon(mActivity, host, holder.osIcon);
+        MyGlideLoader.setOsIcon(mActivity, host, holder.osIcon);
     }
 
     private void                printHostState(HostDiscoveryHolder holder, Host host) {

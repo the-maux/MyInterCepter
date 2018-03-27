@@ -9,9 +9,9 @@ import android.widget.CompoundButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.dao.app.Core.Nmap.Fingerprint;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
+import fr.dao.app.View.Behavior.MyGlideLoader;
 import fr.dao.app.View.Widget.Adapter.Holder.HostSelectionHolder;
 
 
@@ -37,7 +37,7 @@ public class                    HostSelectionAdapter extends RecyclerView.Adapte
     public void                 onBindViewHolder(HostSelectionHolder holder, int position) {
         final Host host = mHosts.get(position);
         holder.nameOS.setText(host.ip);
-        Fingerprint.setOsIcon(mActivity, host, holder.imageOS);
+        MyGlideLoader.setOsIcon(mActivity, host, holder.imageOS);
         holder.checkBox.setChecked(false);
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

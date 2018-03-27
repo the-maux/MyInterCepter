@@ -1,13 +1,8 @@
 package fr.dao.app.Core.Nmap;
 
-import android.content.Context;
-import android.widget.ImageView;
-
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Unix.Os;
-import fr.dao.app.R;
-import fr.dao.app.View.Behavior.MyGlideLoader;
 
 /**
  * Supprimer les duplicata External & Host
@@ -69,8 +64,9 @@ public class                            Fingerprint {
             host.osType = Os.Linux_Unix;
         } else if (host.dumpInfo.contains("windows") || host.dumpInfo.contains("microsoft")) {
             host.osType = Os.Windows;
-        } else
+        } else {
             host.osType = Os.Unknow;
+        }
     }
 
     private static void                 fingerprintApple(Host host, String infoDevice) {
@@ -109,84 +105,6 @@ public class                            Fingerprint {
                 host.ip.length() == Singleton.getInstance().network.gateway.length();
     }
 
-    public static void                  setOsIcon(Context context, Host host, ImageView osImageView) {
-        if (host != null && host.osType != null) {
-            if (host.state == Host.State.FILTERED && host.vendor.contains("Unknown")) {
-                MyGlideLoader.loadDrawableInCircularImageView(context, R.drawable.secure_computer1, osImageView);
-                return ;
-            }
-            setOsIcon(context, host.osType, osImageView);
-            return;
-        }
-        MyGlideLoader.loadDrawableInCircularImageView(context, R.drawable.monitor, osImageView);
-    }
 
-    public static void                  setOsIcon(Context context, Os os,  ImageView osImageView) {
-        int ImageRessource;
-        switch (os) {
-            case Windows:
-                ImageRessource = R.drawable.windows;
-                break;
-            case Cisco:
-                ImageRessource = R.drawable.cisco;
-                break;
-            case Raspberry:
-                ImageRessource = R.drawable.rasp;
-                break;
-            case QUANTA:
-                ImageRessource = R.drawable.quanta;
-                break;
-            case Bluebird:
-                ImageRessource = R.drawable.bluebird;
-                break;
-            case Apple://Need MacBOOK, MacAIR, Iphone, AppleTV
-                ImageRessource = R.drawable.ios;
-                break;
-            case Ios:
-                ImageRessource = R.drawable.ios;
-                break;
-            case Unix:
-                ImageRessource = R.drawable.linuxicon;
-                break;
-            case Linux_Unix:
-                ImageRessource = R.drawable.linuxicon;
-                break;
-            case OpenBSD:
-                ImageRessource = R.drawable.linuxicon;
-                break;
-            case Android:
-                ImageRessource = R.drawable.android_winner;
-                break;
-            case Mobile:
-                ImageRessource = R.mipmap.ic_logo_android_trans_round;
-                break;
-            case Samsung:
-                ImageRessource = R.mipmap.ic_logo_android_trans_round;
-                break;
-            case Ps4:
-                ImageRessource = R.drawable.ps4;
-                break;
-            case Gateway:
-                ImageRessource = R.drawable.router1;
-                break;
-            case Unknow:
-                ImageRessource = R.mipmap.ic_unknow;
-                MyGlideLoader.loadDrawableInImageView(context, ImageRessource, osImageView, false);
-                return;
-            default:
-                ImageRessource = R.drawable.router3;
-                break;
-        }
-        //MyGlideLoader.loadDrawableInCircularImageView(context, ImageRessource, osImageView);
-        osImageView.setImageResource(ImageRessource);
-        /*GlideApp.with(context)
-                .load(ImageRessource)
-                //.apply(RequestOptions.circleCropTransform())
-                //.diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                //.transition(DrawableTransitionOptions.withCrossFade())
-                //.dontAnimate()
-
-                .into(osImageView);*/
-    }
 
 }

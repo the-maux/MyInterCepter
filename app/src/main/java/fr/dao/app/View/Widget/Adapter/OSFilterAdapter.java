@@ -9,9 +9,9 @@ import android.widget.CompoundButton;
 
 import java.util.ArrayList;
 
-import fr.dao.app.Core.Nmap.Fingerprint;
 import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
+import fr.dao.app.View.Behavior.MyGlideLoader;
 import fr.dao.app.View.Widget.Adapter.Holder.HostSelectionHolder;
 
 public class                    OSFilterAdapter extends RecyclerView.Adapter<HostSelectionHolder> {
@@ -32,7 +32,7 @@ public class                    OSFilterAdapter extends RecyclerView.Adapter<Hos
     public void                 onBindViewHolder(HostSelectionHolder holder, int position) {
         final Os os = mOsList.get(position);
         holder.nameOS.setText(os.name().replace("_", "/"));
-        Fingerprint.setOsIcon(mCtx, os, holder.imageOS);
+        MyGlideLoader.setOsIcon(mCtx, os, holder.imageOS);
         holder.checkBox.setChecked(false);
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

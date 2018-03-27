@@ -28,7 +28,6 @@ import fr.dao.app.Core.Configuration.GlideRequest;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Database.DBManager;
-import fr.dao.app.Core.Nmap.Fingerprint;
 import fr.dao.app.Model.Net.Pcap;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
@@ -114,7 +113,7 @@ public class                    HostDetailActivity extends MyActivity {
                 mMenuFAB.setVisibility(View.GONE);
             }
             mFocusedHost = DBHost.getDevicesFromMAC(bundle.getString("macAddress"));
-            Fingerprint.setOsIcon(this, mFocusedHost, osHostImage);
+            MyGlideLoader.setOsIcon(this, mFocusedHost, osHostImage);
             initMenuFab();
             initTabs();
             initAppBar();
