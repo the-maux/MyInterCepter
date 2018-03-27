@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
@@ -147,7 +147,7 @@
         android:transitionName="fab"
         app:backgroundTint="@color/fab_color"
         app:fabSize="normal"
-        app:layout_anchor="@id/appbar"
+        app:layout_anchor="@id/appBarLayout"
         app:layout_anchorGravity="bottom|right|end" />
 
 
@@ -193,6 +193,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/primary_text"
+            android:elevation="2dp"
             android:gravity="right|center_vertical"
             android:lines="2"
             android:padding="8dp"

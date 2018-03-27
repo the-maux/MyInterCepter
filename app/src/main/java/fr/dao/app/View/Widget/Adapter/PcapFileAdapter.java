@@ -39,9 +39,11 @@ public class                    PcapFileAdapter extends RecyclerView.Adapter<Pca
         holder.title.setText(pcap.getName());
         long size = (pcap.length() / 1024);
         if (size >= 1024)
-            holder.subtitle.setText((size / 1024) + "Mb");
+            holder.subtitle.setText((size / 1024) + " Megabyte");
+        else if (size > 0)
+            holder.subtitle.setText(size + " kilobyte");
         else
-            holder.subtitle.setText(size + "kb");
+            holder.subtitle.setText(pcap.length() + " byte");
         holder.title.setOnClickListener(onFocusPcapFile(pcap));
         holder.subtitle.setOnClickListener(onFocusPcapFile(pcap));
         holder.icon.setOnClickListener(onFocusPcapFile(pcap));

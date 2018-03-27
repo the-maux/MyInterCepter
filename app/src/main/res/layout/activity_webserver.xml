@@ -9,7 +9,7 @@
 
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/NmapPrimary"
@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:background="@color/webserverSpoofPrimary"
             android:elevation="4dp"
-            android:paddingBottom="24dp">
+            android:paddingBottom="8dp">
 
 
             <ImageView
@@ -30,8 +30,9 @@
                 android:layout_height="0dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
-                android:elevation="4dp"
-                android:src="@drawable/logo155_grey"
+                android:padding="8dp"
+                android:src="@drawable/ic_vpn_lock_svg"
+                android:tint="@color/material_light_white"
                 android:transitionName="NmapIconTransition"
                 app:layout_constraintHeight_min="50dp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -115,7 +116,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="5dp"
         android:visibility="gone"
-        app:layout_anchor="@id/appbar"
+        app:layout_anchor="@id/appBarLayout"
         app:layout_anchorGravity="bottom|right|end" />
 
 

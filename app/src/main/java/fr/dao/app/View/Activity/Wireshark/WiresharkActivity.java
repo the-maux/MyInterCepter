@@ -8,6 +8,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -49,12 +50,6 @@ public class                    WiresharkActivity extends SniffActivity {
         init(getIntent());
     }
 
-    /**
-     * /data/user/0/fr.dao.app/files/tcpdump -w /storage/emulated/0/Pcap/SFR-4328_19_mars_19h50m32.pcap ' ( host 192.168.0.24)'
-     * /data/user/0/fr.dao.app/files/tcpdump -w /storage/emulated/0/Pcap/SFR-4328_19_mars_19h50m32.pcap ' ( host 192.168.0.24)'
-     * /data/user/0/fr.dao.app/files/tcpdump -w /storage/emulated/0/Pcap/SFR-4328_19_mars_19h49m17.pcap ' ( host 192.168.0.24)'
-     * @param intent
-     */
     private void                init(Intent intent) {
         String PcapFilePath = intent  == null ? null : intent.getStringExtra("Pcap");
         if (PcapFilePath == null) {
@@ -109,7 +104,7 @@ public class                    WiresharkActivity extends SniffActivity {
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
         //mFrame_container = findViewById(R.id.frame_container);
         mProgressBar =  findViewById(R.id.progressBar);
-        mAppBar = findViewById(R.id.appbar);
+        mAppBar = findViewById(R.id.appBarLayout);
         mToolbar = findViewById(R.id.toolbar);
         mFab =  findViewById(R.id.fab);
         mFab.setOnClickListener(onclickFab());
@@ -117,6 +112,12 @@ public class                    WiresharkActivity extends SniffActivity {
         SwitchViewBackBtn = findViewById(R.id.SwitchViewBackBtn);
         findViewById(R.id.history).setOnClickListener(onClickHistory());
         onSwitchViewClicked();
+        mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                ViewCompat.setElevation(findViewById(R.id.appBarConstraint), 2);
+                ViewCompat.setElevation(mAppBar, 4);
+            }
+        });
     }
 
     private void                onSwitchViewClicked() {

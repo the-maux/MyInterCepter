@@ -7,6 +7,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -47,6 +48,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private HostDiscoveryActivity   mInstance = this;
     private Singleton               mSingleton = Singleton.getInstance();
     private CoordinatorLayout       mCoordinatorLayout;
+    private AppBarLayout            appBarLayout;
     private TextView                mBottomMonitor, mTimer;
     private int                     mProgress = 0;
     private ImageView               mSettingsMenu, mHistory;
@@ -79,6 +81,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private void                    initXml() {
         mFab = findViewById(R.id.fab);
         mBottomMonitor = ( findViewById(R.id.Message));
+        ViewCompat.setElevation(mBottomMonitor, 2);
         mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
         mHistory = findViewById(R.id.history);
@@ -90,6 +93,12 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mTimer = findViewById(R.id.timer);
         mProgressBar = findViewById(R.id.progressBar);
         mToolbarBackground = (TransitionDrawable)mToolbar.getBackground();
+        appBarLayout = findViewById(R.id.appBarLayout);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                ViewCompat.setElevation(appBarLayout, 4);
+            }
+        });
     }
 
     private void                    init()  {
@@ -224,7 +233,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    NetDiscoveryFragment.onSettingsClick((AppBarLayout) findViewById(R.id.appbar), mInstance).show();
+                    NetDiscoveryFragment.onSettingsClick((AppBarLayout) findViewById(R.id.appBarLayout), mInstance).show();
                 } catch (NoSuchFieldError error) {
                     showSnackbar("BottomSheet is shitty");
                 }

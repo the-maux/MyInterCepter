@@ -7,7 +7,7 @@
 
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/wiresharkPrimary"
@@ -45,8 +45,7 @@
                 app:layout_constraintRight_toLeftOf="@+id/SwitchViewBackBtn"
                 app:layout_constraintStart_toEndOf="@+id/OsImg"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:title="wireshark">
+                app:layout_scrollFlags="scroll|enterAlways">
 
             </android.support.v7.widget.Toolbar>
 
@@ -67,10 +66,9 @@
                 android:id="@+id/history"
                 android:layout_width="45dp"
                 android:layout_height="0dp"
-                android:padding="8dp"
+                android:padding="10dp"
                 android:soundEffectsEnabled="true"
-                android:src="@drawable/ic_history_svg"
-                android:tint="@color/material_light_white"
+                android:src="@drawable/pcapfile"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/SwitchViewBackBtn"
                 app:layout_constraintTop_toTopOf="parent" />

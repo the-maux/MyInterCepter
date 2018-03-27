@@ -1,7 +1,6 @@
 package fr.dao.app.View.Widget.Dialog.BottomSheet;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -16,7 +15,6 @@ import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickList
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.R;
-import fr.dao.app.View.Activity.TargetMenu.TargetMenuActivity;
 
 public class                    GeneralSettings {
     private String              TAG = "GeneralSettings";
@@ -84,7 +82,7 @@ public class                    GeneralSettings {
                         onPortMitm(false);
                         break;
                     default:
-                        mActivity.startActivity(new Intent(mActivity, TargetMenuActivity.class));
+                        //mActivity.startActivity(new Intent(mActivity, TargetMenuActivity.class));
                         break;
                 }
             }

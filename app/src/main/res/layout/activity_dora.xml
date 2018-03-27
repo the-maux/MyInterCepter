@@ -9,7 +9,7 @@
     android:animationCache="true">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:transitionName="appBarTransition"
 
@@ -122,7 +122,7 @@
         android:src="@drawable/ic_media_play"
         app:backgroundTint="@color/fab_color"
         app:fabSize="normal"
-        app:layout_anchor="@id/appbar"
+        app:layout_anchor="@id/appBarLayout"
         app:layout_anchorGravity="bottom|right|end" />
 
     <android.support.v7.widget.RecyclerView

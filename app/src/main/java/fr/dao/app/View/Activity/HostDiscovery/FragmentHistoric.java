@@ -39,7 +39,6 @@ import fr.dao.app.Model.Target.Network;
 import fr.dao.app.Model.Target.SniffSession;
 import fr.dao.app.R;
 import fr.dao.app.View.Activity.HostDetail.HostDetailActivity;
-import fr.dao.app.View.Activity.TargetMenu.TargetMenuActivity;
 import fr.dao.app.View.Behavior.Activity.MyActivity;
 import fr.dao.app.View.Behavior.Fragment.MyFragment;
 import fr.dao.app.View.Behavior.MyGlideLoader;
@@ -294,7 +293,7 @@ public class                        FragmentHistoric extends MyFragment {
                 if (session.SniffSessions() == null || session.SniffSessions().isEmpty()) {
                     pcaps = Pcap.getListFiles(new File(mSingleton.PcapPath));
                     mActivity.showSnackbar("No session recorded, showing all pcaps");
-                    setTitleToolbar("/sdcard/Pcap",  pcaps.size() + "records");
+                    setTitleToolbar("/sdcard/Pcap",  pcaps.size() + " records");
                 } else {
                     pcaps = DBManager.getListPcapFormSSIDFile(session.Ssid);
                     setTitleToolbar(session.Ssid,  pcaps.size() + "records");
@@ -371,7 +370,7 @@ public class                        FragmentHistoric extends MyFragment {
                                 showSniffSessionList();
                                 break;
                             case "Mode offline":
-                                startActivity(new Intent(mActivity, TargetMenuActivity.class));
+                                //startActivity(new Intent(mActivity, TargetMenuActivity.class));
                                 break;
                         }
                     }

@@ -3,9 +3,11 @@ package fr.dao.app.View.Activity.Dora;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabItem;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -23,9 +25,10 @@ import fr.dao.app.View.Widget.Adapter.DoraAdapter;
 public class                    DoraActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
     private DoraActivity        mInstance = this;
-    private Dora mDoraWrapper;
+    private Dora                mDoraWrapper;
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
+    private AppBarLayout        appBarLayout;
     private SearchView          searchView;
     private TabItem             radar, signalQuality;
     private ImageView           add, more;
@@ -34,13 +37,12 @@ public class                    DoraActivity extends MyActivity {
     private FloatingActionButton mFab;
     private int                 REFRESH_TIME = 1000;// == 1seconde
 
-    @Override protected void    onCreate(@Nullable Bundle savedInstanceState) {
+    protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dora);
         initXml();
     }
 
-    @Override
     protected void              onResume() {
         super.onResume();
         getDoraWrapper();
@@ -63,7 +65,12 @@ public class                    DoraActivity extends MyActivity {
                 launchDiagnose();
             }
         });
-
+        appBarLayout = findViewById(R.id.appBarLayout);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                ViewCompat.setElevation(appBarLayout, 4);
+            }
+        });
     }
 
     private void                getDoraWrapper() {

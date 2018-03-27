@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
+import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.View;
 
@@ -48,6 +49,8 @@ public abstract class               SniffActivity extends MyActivity  {
         }
         if (hideBottomBar)
             mBottomBar.setVisibility(View.GONE);
+        else
+            ViewCompat.setElevation(mBottomBar, 2);
     }
 
     protected void                  initNavigationBottomBar(int position, boolean useCallback) {

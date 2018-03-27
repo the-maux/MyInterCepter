@@ -3,9 +3,11 @@ package fr.dao.app.View.Activity.DnsSpoofing;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -35,6 +37,7 @@ public class                            DnsActivity extends SniffActivity {
     private String                      TAG = "DnsActivity";
     private DnsActivity                 mInstance = this;
     private CoordinatorLayout           mCoordinatorLayout;
+    private AppBarLayout                appBarLayout;
     private Toolbar                     mToolbar;
     private SearchView                  mSearchView;
     private ImageButton                 mAction_add_host, mSettingsBtn;
@@ -50,8 +53,12 @@ public class                            DnsActivity extends SniffActivity {
 
     public void                         onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getContentViewId());
+        setContentView(R.layout.activity_dnsspoofing);
         initXml();
+        init();
+    }
+
+    private void                        init() {
         initFab();
         initMenu();
         initTabs();
@@ -77,6 +84,13 @@ public class                            DnsActivity extends SniffActivity {
         textEmpty = findViewById(R.id.textEmpty);
         mTabs = findViewById(R.id.tabs);
         MyGlideLoader.coordoBackgroundXMM(this, mDnsSpoof_RV);
+        appBarLayout = findViewById(R.id.appBarLayout);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                ViewCompat.setElevation(findViewById(R.id.topToolbar), 2);
+                ViewCompat.setElevation(appBarLayout, 4);
+            }
+        });
     }
 
     private void                        initFab() {
@@ -268,7 +282,6 @@ public class                            DnsActivity extends SniffActivity {
 
     private void                        initSearchView() {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
             public boolean onQueryTextSubmit(String query) {
                 if (title.getText().toString().contains(NAME_CONF_MENU)) {//CONF VIEW
                     mDnsSpoofAdapter.filtering(query);
@@ -278,7 +291,6 @@ public class                            DnsActivity extends SniffActivity {
                 return false;
             }
 
-            @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
@@ -324,10 +336,6 @@ public class                            DnsActivity extends SniffActivity {
         if (title.getText().toString().contains(NAME_LOGS_MENU) ) {
             initRVConfiguration();
         }
-    }
-
-    public int                          getContentViewId() {
-        return R.layout.activity_dnsspoofing;
     }
 
     public void                         onError(String error) {

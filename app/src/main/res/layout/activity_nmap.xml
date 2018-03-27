@@ -8,19 +8,18 @@
 
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/NmapPrimary"
-        android:transitionName="appBarTransition"
-        app:elevation="12dp">
+        android:transitionName="appBarTransition">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/NmapPrimary"
-            android:elevation="4dp">
+            android:paddingBottom="4dp">
 
 
             <ImageView
@@ -41,9 +40,9 @@
                 android:id="@+id/toolbar"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@+id/tabs"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/OsImg"
-                app:layout_constraintRight_toLeftOf="@+id/history"
+                app:layout_constraintRight_toLeftOf="@+id/searchView"
                 app:layout_constraintTop_toTopOf="parent"
                 app:subtitle="v6.40"
                 app:title="Nmap">
@@ -59,7 +58,6 @@
                 android:soundEffectsEnabled="true"
                 android:src="@mipmap/ic_nmap_type_foreground"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/tabs"
                 app:layout_constraintRight_toLeftOf="@+id/history"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_min="45dp" />
@@ -72,7 +70,6 @@
                 android:soundEffectsEnabled="true"
                 android:src="@mipmap/ic_script"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/tabs"
                 app:layout_constraintRight_toLeftOf="@+id/settingsMenu"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_min="45dp" />
@@ -85,33 +82,31 @@
                 android:paddingRight="4dp"
                 android:soundEffectsEnabled="true"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/tabs"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_min="45dp"
                 app:srcCompat="@drawable/ic_more_vert_white_24dp" />
 
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@color/NmapPrimary"
-                app:layout_constraintHeight_min="56dp"
-                app:layout_constraintLeft_toLeftOf="@+id/OsImg"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/OsImg"
-                app:tabMode="scrollable">
-
-                <android.support.design.widget.TabItem
-                    android:id="@+id/tabItem"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tab1" />
-            </android.support.design.widget.TabLayout>
-
-
         </android.support.constraint.ConstraintLayout>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/NmapPrimary"
+            app:layout_constraintHeight_min="56dp"
+            app:layout_constraintLeft_toLeftOf="@+id/OsImg"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/OsImg"
+            app:tabMode="scrollable">
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tab1" />
+        </android.support.design.widget.TabLayout>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -120,7 +115,7 @@
         android:layout_height="70dp"
         android:layout_marginRight="16dp"
         android:elevation="12dp"
-        app:layout_anchor="@id/appbar"
+        app:layout_anchor="@id/appBarLayout"
         app:layout_anchorGravity="bottom|right|end">
 
 

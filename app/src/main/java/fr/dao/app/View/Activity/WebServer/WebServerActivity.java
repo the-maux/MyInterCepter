@@ -3,11 +3,11 @@ package fr.dao.app.View.Activity.WebServer;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -28,9 +28,9 @@ import fr.dao.app.View.Widget.MyWebViewClient;
 public class                    WebServerActivity extends SniffActivity {
     private String              TAG = "WebServerActivity";
     private int                 PORT = 8081;
-
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
+    private AppBarLayout        appBarLayout;
     private String              myUrl = "http://" + mSingleton.network.myIp + ":" + PORT;
     private Toolbar             mToolbar;
     private GenericServer       mWebServer;
@@ -56,6 +56,12 @@ public class                    WebServerActivity extends SniffActivity {
         //mFab.show();
         ViewAnimate.FabAnimateReveal(mInstance, mFab);
         mToolbar = findViewById(R.id.toolbar);
+        appBarLayout = findViewById(R.id.appBarLayout);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                ViewCompat.setElevation(appBarLayout, 4);
+            }
+        });
     }
 
     @SuppressLint("SetJavaScriptEnabled")

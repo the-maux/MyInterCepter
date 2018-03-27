@@ -3,9 +3,11 @@ package fr.dao.app.View.Activity.Scan;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -40,6 +42,7 @@ public class                    NmapActivity extends SniffActivity {
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
     private NmapOutputFragment  nmapOutputFragment;
+    private AppBarLayout        appBarLayout;
     private TextView            monitorHostTargeted, monitorNmapParam;
     private TextView            MonitorInoptionTheTarget;
     private RelativeLayout      mNmapConfEditorLayout, nmapConfLayout;
@@ -85,6 +88,13 @@ public class                    NmapActivity extends SniffActivity {
                     return true;
                 }
                 return false;
+            }
+        });
+        appBarLayout = findViewById(R.id.appBarLayout);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                ViewCompat.setElevation(findViewById(R.id.relativeLayout), 2);
+                ViewCompat.setElevation(appBarLayout, 4);
             }
         });
     }
