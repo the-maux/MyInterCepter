@@ -30,8 +30,8 @@ import fr.dao.app.View.Behavior.Fragment.MyFragment;
 import fr.dao.app.View.Behavior.MyGlideLoader;
 import fr.dao.app.View.Behavior.WiresharkDispatcher;
 import fr.dao.app.View.Widget.Adapter.HostSelectionAdapter;
-import fr.dao.app.View.Widget.Adapter.WiresharkAdapter;
-import fr.dao.app.View.Widget.Adapter.WireshrakDashboardAdapter;
+import fr.dao.app.View.Widget.Adapter.WiresharkDashboardAdapter;
+import fr.dao.app.View.Widget.Adapter.WiresharkPacketsAdapter;
 import fr.dao.app.View.Widget.Dialog.RV_dialog;
 
 /**
@@ -46,8 +46,8 @@ public class                    WiresharkLiveFragment extends MyFragment {
     private Context             mCtx;
     private WiresharkActivity   mActivity;
     private RecyclerView        mRV_Wireshark, dashboard_RV;
-    private WiresharkAdapter    mAdapterDetailWireshark;
-    private WireshrakDashboardAdapter mAdapterDashboardWireshark;
+    private WiresharkPacketsAdapter mAdapterDetailWireshark;
+    private WiresharkDashboardAdapter mAdapterDashboardWireshark;
     private List<Host>          mListHostSelected = new ArrayList<>();
     private TextView            mMonitorAgv;//, mMonitorCmd;
     private Tcpdump             mTcpdump;
@@ -92,36 +92,32 @@ public class                    WiresharkLiveFragment extends MyFragment {
     }
 
     public void                 init() {
-        //initSpinner();
-        //initFilter();
         if (getArguments() != null && getArguments().getInt("position") != -1) {
             Log.d(TAG, "init in mode:[" + getArguments().getInt("position") + "]");
             mListHostSelected.clear();
             mListHostSelected.add(mSingleton.hostList.get(getArguments().getInt("position")));
         }
+        Log.d(TAG, "isDashboardMode:" + isDashboardMode);
         rootViewForDashboard.setVisibility((isDashboardMode) ? View.VISIBLE : View.GONE);
         rootViewForLiveFlux.setVisibility((isDashboardMode) ? View.GONE : View.VISIBLE);
-        mAdapterDetailWireshark = new WiresharkAdapter(mActivity, mRV_Wireshark);
-
+        mAdapterDetailWireshark = new WiresharkPacketsAdapter(mActivity, mRV_Wireshark);
         initDashboard();
         initRV();
         initTimer();
+        if (Tcpdump.isRunning()) {
+            mTcpdump.flushToAdapter();
+        }
     }
 
     private void                initDashboard() {
-        int res = (mTcpdump.isRunning) ? R.color.online_color : R.color.offline_color;
+        int res = (Tcpdump.isRunning()) ? R.color.online_color : R.color.offline_color;
         title_sniffer.setText(mSingleton.network.ssid);
         subtitle_sniffer.setText("No packets recorded");
         bottom_title_sniffer.setText("Sniffed since 40s");
         bottom_subtitle_sniffer.setText(mListHostSelected.size() + " targets");
-      /*  MyGlideLoader.loadDrawableInCircularImageView(mActivity,
-                new ColorDrawable(ContextCompat.getColor(mActivity, res)), statusIconSniffing);*/
         MyGlideLoader.loadDrawableInImageView(mActivity, R.drawable.wireshark, headerWifi, false);
-//        GlideApp.with(mActivity)
-//                .load(res)
-//                .into(statusIconSniffing);
         statusIconSniffing.setImageResource(res);
-        mAdapterDashboardWireshark = new WireshrakDashboardAdapter(mActivity, subtitle_sniffer,
+        mAdapterDashboardWireshark = new WiresharkDashboardAdapter(mActivity, subtitle_sniffer,
                 bottom_title_sniffer, bottom_subtitle_sniffer, statusIconSniffing);
         dashboard_RV.setAdapter(mAdapterDashboardWireshark);
         LinearLayoutManager layoutManager = new GridLayoutManager(mActivity, 3);
@@ -132,6 +128,10 @@ public class                    WiresharkLiveFragment extends MyFragment {
         isDashboardMode = !isDashboardMode;
         init();
         return isDashboardMode;
+    }
+
+    public void                 switchOutputType(boolean isDashboard) {
+        mTcpdump.switchOutputType(isDashboard);
     }
 
     public class WrapContentLinearLayoutManager extends LinearLayoutManager {
@@ -171,7 +171,7 @@ public class                    WiresharkLiveFragment extends MyFragment {
 
     public boolean              start() {
         Utils.vibrateDevice(mActivity);
-        if (!mTcpdump.isRunning) {
+        if (!Tcpdump.isRunning()) {
             mAdapterDetailWireshark.clear();
             if (startTcpdump()) {
                 if (isDashboardMode) {
@@ -203,7 +203,7 @@ public class                    WiresharkLiveFragment extends MyFragment {
             }
         }
         Log.d(TAG, "mTcpdump.actualParam::" + mTcpdump);
-        WiresharkDispatcher trameDispatcher = new WiresharkDispatcher(mAdapterDetailWireshark, mRV_Wireshark, mActivity);
+        WiresharkDispatcher trameDispatcher = new WiresharkDispatcher(mAdapterDetailWireshark, isDashboardMode, mRV_Wireshark, mActivity);
         String argv = mTcpdump.initCmd(mListHostSelected);
         DashboardSniff dashboardSniff = mTcpdump.start(trameDispatcher);
         mAdapterDashboardWireshark.setDashboard(dashboardSniff);

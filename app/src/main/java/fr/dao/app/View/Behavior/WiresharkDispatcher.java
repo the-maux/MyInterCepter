@@ -9,32 +9,33 @@ import java.util.ArrayList;
 import fr.dao.app.Core.Tcpdump.DashboardSniff;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.View.Activity.Wireshark.WiresharkActivity;
-import fr.dao.app.View.Widget.Adapter.WiresharkAdapter;
+import fr.dao.app.View.Widget.Adapter.WiresharkPacketsAdapter;
 
 public class                        WiresharkDispatcher  {
     private String                  TAG = "WiresharkDispatcher";
     private java.util.Queue         queue = new java.util.LinkedList();
     private WiresharkActivity       mActivity;
-    private RecyclerView.Adapter    mAdapterWireshark;
     private RecyclerView            mRV_Wireshark;
-    private ArrayList<Trame>        TrameBuffer = new ArrayList();
-    private boolean                 mIsRunning = false, mAutoscroll = true;
+    private boolean                 mIsRunning = false, mAutoscroll = true, isDashboardMode;
     private int                     REFRESH_TIME = 1000;
-
+    private ArrayList<Trame>        TrameBuffer = new ArrayList();
     private DashboardSniff          mDashboard;
-    private boolean                 isDashboardMode = false;
+    private RecyclerView.Adapter    mAdapterWireshark;
 
-    public                          WiresharkDispatcher(RecyclerView.Adapter adapter,
+
+    public                          WiresharkDispatcher(RecyclerView.Adapter adapter, boolean isDashboardMode,
                                                         RecyclerView recyclerView, WiresharkActivity activity) {
         mAdapterWireshark = adapter;
         mIsRunning = true;
         mActivity = activity;
         mRV_Wireshark = recyclerView;
+        this.isDashboardMode = isDashboardMode;
         adapterRefreshDeamon();
     }
 
-    public ArrayList<Trame>         flush() {
-        return TrameBuffer;
+    public int                      flush() {
+        Log.d(TAG, "flushing");
+        return ((WiresharkPacketsAdapter) mAdapterWireshark).flush(TrameBuffer);
     }
 
     private void                    adapterRefreshDeamon() {
@@ -58,12 +59,12 @@ public class                        WiresharkDispatcher  {
                 if (size > 0) {
                     for (int i = 0; i < size; i++) {
                         Trame poppedTrame = pop();
-                        ((WiresharkAdapter) mAdapterWireshark).addTrameOnAdapter(poppedTrame);
+                        ((WiresharkPacketsAdapter) mAdapterWireshark).addTrameOnAdapter(poppedTrame);
                         TrameBuffer.add(poppedTrame);
                         mDashboard.addTrame(poppedTrame);
                     }
                     if (!isDashboardMode) {
-//                    Log.d(TAG, "notifyItemRangeInserted(" + size + ");");
+                        Log.d(TAG, "notifyItemRangeInserted(" + size + ");");
                         if (size == 1)
                             mAdapterWireshark.notifyItemInserted(0);
                         else
@@ -101,5 +102,9 @@ public class                        WiresharkDispatcher  {
 
     public void                     setDashboard(DashboardSniff dashboard) {
         this.mDashboard = dashboard;
+    }
+
+    public void                     switchOutputType(boolean isDashboard) {
+        this.isDashboardMode = isDashboard;
     }
 }
