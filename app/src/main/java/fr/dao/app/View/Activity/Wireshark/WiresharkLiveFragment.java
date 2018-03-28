@@ -42,14 +42,13 @@ public class                    WiresharkLiveFragment extends MyFragment {
     private CoordinatorLayout   mCoordinatorLayout;
     private ConstraintLayout    rootViewForDashboard;
     private RelativeLayout      rootViewForLiveFlux;
-    private Host                mFocusedHost;//TODO need to be init
-    private Context             mCtx;
+    private WiresharkDispatcher mTrameDispatcher;
     private WiresharkActivity   mActivity;
     private RecyclerView        mRV_Wireshark, dashboard_RV;
     private WiresharkPacketsAdapter mAdapterDetailWireshark;
     private WiresharkDashboardAdapter mAdapterDashboardWireshark;
     private List<Host>          mListHostSelected = new ArrayList<>();
-    private TextView            mMonitorAgv;//, mMonitorCmd;
+    private TextView            mMonitorAgv;
     private Tcpdump             mTcpdump;
     private boolean             isDashboardMode = true;
     private CircleImageView     statusIconSniffing;
@@ -58,7 +57,6 @@ public class                    WiresharkLiveFragment extends MyFragment {
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_wireshark, container, false);
-        mCtx = getActivity();
         mActivity = (WiresharkActivity) getActivity();
         initXml(rootView);
         mTcpdump = Tcpdump.getTcpdump(mActivity, true);
@@ -100,9 +98,8 @@ public class                    WiresharkLiveFragment extends MyFragment {
         Log.d(TAG, "isDashboardMode:" + isDashboardMode);
         rootViewForDashboard.setVisibility((isDashboardMode) ? View.VISIBLE : View.GONE);
         rootViewForLiveFlux.setVisibility((isDashboardMode) ? View.GONE : View.VISIBLE);
-        mAdapterDetailWireshark = new WiresharkPacketsAdapter(mActivity, mRV_Wireshark);
-        initDashboard();
         initRV();
+        initDashboard();
         initTimer();
         if (Tcpdump.isRunning()) {
             mTcpdump.flushToAdapter();
@@ -111,17 +108,19 @@ public class                    WiresharkLiveFragment extends MyFragment {
 
     private void                initDashboard() {
         int res = (Tcpdump.isRunning()) ? R.color.online_color : R.color.offline_color;
-        title_sniffer.setText(mSingleton.network.ssid);
-        subtitle_sniffer.setText("No packets recorded");
-        bottom_title_sniffer.setText("Sniffed since 40s");
-        bottom_subtitle_sniffer.setText(mListHostSelected.size() + " targets");
-        MyGlideLoader.loadDrawableInImageView(mActivity, R.drawable.wireshark, headerWifi, false);
         statusIconSniffing.setImageResource(res);
-        mAdapterDashboardWireshark = new WiresharkDashboardAdapter(mActivity, subtitle_sniffer,
-                bottom_title_sniffer, bottom_subtitle_sniffer, statusIconSniffing);
-        dashboard_RV.setAdapter(mAdapterDashboardWireshark);
-        LinearLayoutManager layoutManager = new GridLayoutManager(mActivity, 3);
-        dashboard_RV.setLayoutManager(layoutManager);
+        if (mAdapterDashboardWireshark == null) {
+            title_sniffer.setText(mSingleton.network.ssid);
+            subtitle_sniffer.setText("No packets recorded");
+            bottom_title_sniffer.setText("Sniffed since 40s");
+            bottom_subtitle_sniffer.setText(mListHostSelected.size() + " targets");
+            MyGlideLoader.loadDrawableInImageView(mActivity, R.drawable.wireshark, headerWifi, false);
+            mAdapterDashboardWireshark = new WiresharkDashboardAdapter(mActivity, subtitle_sniffer,
+                    bottom_title_sniffer, bottom_subtitle_sniffer, statusIconSniffing);
+            dashboard_RV.setAdapter(mAdapterDashboardWireshark);
+            LinearLayoutManager layoutManager = new GridLayoutManager(mActivity, 3);
+            dashboard_RV.setLayoutManager(layoutManager);
+        }
     }
 
     public boolean              onSwitchView() {
@@ -158,12 +157,14 @@ public class                    WiresharkLiveFragment extends MyFragment {
         }
     }
     private void                initRV() {
-        mAdapterDetailWireshark.notifyDataSetChanged();
-        mRV_Wireshark.setAdapter(mAdapterDetailWireshark);
-        WrapContentLinearLayoutManager layoutManager = new WrapContentLinearLayoutManager(mActivity);
-        layoutManager.setAutoMeasureEnabled(false);
-        mRV_Wireshark.setItemAnimator(null);
-        mRV_Wireshark.setLayoutManager(layoutManager);
+        if (mAdapterDetailWireshark == null) {
+            mAdapterDetailWireshark = new WiresharkPacketsAdapter(mActivity, mRV_Wireshark);
+            mRV_Wireshark.setAdapter(mAdapterDetailWireshark);
+            WrapContentLinearLayoutManager layoutManager = new WrapContentLinearLayoutManager(mActivity);
+            layoutManager.setAutoMeasureEnabled(false);
+            mRV_Wireshark.setItemAnimator(null);
+            mRV_Wireshark.setLayoutManager(layoutManager);
+        }
     }
     private void                initTimer() {
 
@@ -202,10 +203,13 @@ public class                    WiresharkLiveFragment extends MyFragment {
                 return false;
             }
         }
-        Log.d(TAG, "mTcpdump.actualParam::" + mTcpdump);
-        WiresharkDispatcher trameDispatcher = new WiresharkDispatcher(mAdapterDetailWireshark, isDashboardMode, mRV_Wireshark, mActivity);
+        if (mTrameDispatcher == null) {
+            mTrameDispatcher = new WiresharkDispatcher(mAdapterDetailWireshark, isDashboardMode, mRV_Wireshark, mActivity);
+        } else {
+
+        }
         String argv = mTcpdump.initCmd(mListHostSelected);
-        DashboardSniff dashboardSniff = mTcpdump.start(trameDispatcher);
+        DashboardSniff dashboardSniff = mTcpdump.start(mTrameDispatcher);
         mAdapterDashboardWireshark.setDashboard(dashboardSniff);
         if (isDashboardMode)
             bottom_subtitle_sniffer.setText(mListHostSelected.size() + " clients");

@@ -34,7 +34,7 @@ public class                        WiresharkDispatcher  {
     }
 
     public int                      flush() {
-        Log.d(TAG, "flushing");
+        //Log.d(TAG, "flushing");
         return ((WiresharkPacketsAdapter) mAdapterWireshark).flush(TrameBuffer);
     }
 
@@ -59,12 +59,15 @@ public class                        WiresharkDispatcher  {
                 if (size > 0) {
                     for (int i = 0; i < size; i++) {
                         Trame poppedTrame = pop();
-                        ((WiresharkPacketsAdapter) mAdapterWireshark).addTrameOnAdapter(poppedTrame);
                         TrameBuffer.add(poppedTrame);
+                        if (poppedTrame != null) {
+                            poppedTrame.offsett = TrameBuffer.indexOf(poppedTrame);
+                        }
+                        ((WiresharkPacketsAdapter) mAdapterWireshark).addTrameOnAdapter(poppedTrame);
                         mDashboard.addTrame(poppedTrame);
                     }
                     if (!isDashboardMode) {
-                        Log.d(TAG, "notifyItemRangeInserted(" + size + ");");
+//                        Log.d(TAG, "notifyItemRangeInserted(" + size + ");");
                         if (size == 1)
                             mAdapterWireshark.notifyItemInserted(0);
                         else
@@ -97,7 +100,6 @@ public class                        WiresharkDispatcher  {
 
     public synchronized void        stop() {
         mIsRunning = false;
-
     }
 
     public void                     setDashboard(DashboardSniff dashboard) {

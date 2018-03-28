@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Net.Protocol;
@@ -20,9 +21,8 @@ public class                    WiresharkPacketsAdapter extends RecyclerView.Ada
     private String              TAG = "WiresharkPacketsAdapter";
 /*    private CopyOnWriteArrayList<Trame> originalListOfTrames;
     private CopyOnWriteArrayList<Trame> listOfTrame;*/
-
-    private ArrayList<Trame> originalListOfTrames;
-    private ArrayList<Trame> listOfTrame;
+    private ArrayList<Trame>    originalListOfTrames;
+    private ArrayList<Trame>    listOfTrame;
     private Activity            mActivity;
     private boolean             mActualize = false;
     private RecyclerView        mRV_Wireshark;
@@ -61,17 +61,14 @@ public class                    WiresharkPacketsAdapter extends RecyclerView.Ada
         holder.proto.setBackgroundColor(ContextCompat.getColor(mActivity, color));
         holder.info.setBackgroundColor(ContextCompat.getColor(mActivity, color));
         holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.material_grey_700));
-
     }
 
-    @Override
     public int                  getItemCount() {
-        Log.i(TAG, "ItemsCount[" + listOfTrame.size()+ "]");
         return listOfTrame.size();
     }
 
-    private void                addOnList(final Trame trame, final boolean reverse) {
-        //Log.d(TAG, "addOnList:trame:" + trame.offsett);
+    private void                putOnListOfTrame(final Trame trame, final boolean reverse) {
+        //Log.d(TAG, "putOnListOfTrame:trame:" + trame.offsett);
         if (mActualize) {
             if (reverse) {
                 listOfTrame.add(0, trame);
@@ -91,36 +88,36 @@ public class                    WiresharkPacketsAdapter extends RecyclerView.Ada
             });
         }
     }
-    private synchronized void   addTrameFiltered(Trame trame, boolean reverse) {
+    private synchronized void       putTrameFilteredInLiveList(Trame trame, boolean reverse) {
         if (trame.protocol != null)
             switch (trame.protocol) {
                 case ARP:
                     if (arp)
-                        addOnList(trame, reverse);
+                        putOnListOfTrame(trame, reverse);
                     break;
                 case HTTP:
                     if (http)
-                        addOnList(trame, reverse);
+                        putOnListOfTrame(trame, reverse);
                     break;
                 case HTTPS:
                     if (https)
-                        addOnList(trame, reverse);
+                        putOnListOfTrame(trame, reverse);
                     break;
                 case DNS:
                     if (dns)
-                        addOnList(trame, reverse);
+                        putOnListOfTrame(trame, reverse);
                     break;
                 case TCP:
                     if (tcp)
-                        addOnList(trame, reverse);
+                        putOnListOfTrame(trame, reverse);
                     break;
                 case UDP:
                     if (udp)
-                        addOnList(trame, reverse);
+                        putOnListOfTrame(trame, reverse);
                     break;
                 case IP:
                     if (ip)
-                        addOnList(trame, reverse);
+                        putOnListOfTrame(trame, reverse);
                     break;
                 default:
                     break;
@@ -128,13 +125,13 @@ public class                    WiresharkPacketsAdapter extends RecyclerView.Ada
             }
     }
 
-    private static  int         offsetList = 0;
-    private synchronized int    buildOffset() {
-        return offsetList++;
-    }
+    /**
+     * From Wireshark Dispatcher
+     * @param trame
+     */
     public synchronized void    addTrameOnAdapter(Trame trame) {
-        trame.offsett = buildOffset();
-        addTrameFiltered(trame, true);
+        //trame.offsett = buildOffset();
+        putTrameFilteredInLiveList(trame, true);
         originalListOfTrames.add(0, trame);
     }
 
@@ -185,7 +182,7 @@ public class                    WiresharkPacketsAdapter extends RecyclerView.Ada
                 if (Singleton.getInstance().UltraDebugMode)
                     dump();
                 for (Trame trame : originalListOfTrames) {
-                    addTrameFiltered(trame, false);
+                    putTrameFilteredInLiveList(trame, false);
                 }
                 notifyDataSetChanged();
                 mActualize = false;
@@ -221,6 +218,8 @@ public class                    WiresharkPacketsAdapter extends RecyclerView.Ada
                 originalListOfTrames.clear();
                 originalListOfTrames.addAll(trames);
                 listOfTrame.addAll(trames);
+                Collections.reverse(originalListOfTrames);
+                Collections.reverse(listOfTrame);
                 Log.d(TAG, "notify the flush in Adapter");
                 notifyDataSetChanged();
             }

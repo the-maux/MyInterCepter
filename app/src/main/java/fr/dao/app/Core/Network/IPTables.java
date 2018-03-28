@@ -87,20 +87,32 @@ public class                    IPTables {
                 .exec("iptables " + "-t nat -D PREROUTING -j DNAT -p tcp --dport " + from + " --to " + Singleton.getInstance().network.myIp + ":" + to);// remove rule
     }
 
+    private static  void        InterceptWithSSlStrip() {
+        InterceptWithoutSSL();
+        new RootProcess("IpTable::InterceptWithSSlStrip")
+                .noDebugOutput()
+                .exec("iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8081");
+    }
+
+    /**
+     * Classic :
+     * iptables -F; iptables -X; iptables -t nat -F; iptables -t nat -X; iptables -t mangle -F; iptables -t mangle -X;
+     * iptables -P INPUT ACCEPT; iptables -P FORWARD ACCEPT; iptables -P OUTPUT ACCEPT ; echo '1' > /proc/sys/net/ipv4/ip_forward
+     * @return
+     */
     public static int          InterceptWithoutSSL() {
         Log.d(TAG, "IPTable configuration for MITM");
         RootProcess process = new RootProcess("IpTable::InitWithoutSSL");
-        process.exec("iptables -F;")
-                .noDebugOutput()
-                .exec("iptables -X;")
-                .exec("iptables -t nat -F;")
-                .exec("iptables -t nat -X;")
-                .exec("iptables -t mangle -F;")
-                .exec("iptables -t mangle -X;")
-                .exec("iptables -P INPUT ACCEPT;")
-                .exec("iptables -P FORWARD ACCEPT;")
-                .exec("iptables -P OUTPUT ACCEPT")
-                .exec("echo '1' > /proc/sys/net/ipv4/ip_forward");
+        process.exec("iptables -F; " +
+                "iptables -X; " +
+                "iptables -t nat -F; " +
+                "iptables -t nat -X; " +
+                "iptables -t mangle -F; " +
+                "iptables -t mangle -X; " +
+                "iptables -P INPUT ACCEPT; " +
+                "iptables -P FORWARD ACCEPT; " +
+                "iptables -P OUTPUT ACCEPT ; " +
+                "echo '1' > /proc/sys/net/ipv4/ip_forward");
         return process.closeProcess();
     }
 
@@ -117,17 +129,9 @@ public class                    IPTables {
                 .closeProcess();
     }
 
-    private static  void        InterceptWithSSlStrip() {
-        InterceptWithoutSSL();
-        new RootProcess("IpTable::InterceptWithSSlStrip")
-                .noDebugOutput()
-                .exec("iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8081");
-    }
-
     public static void          stopIpTable() {
         Log.d(TAG, "Stopping IPTable configuration for MITM");
         new RootProcess("IpTable stop")
-                    .noDebugOutput()
                     .exec("iptables -F;")
                     .exec("iptables -X;")
                     .exec("iptables -t nat -F;")
@@ -136,7 +140,7 @@ public class                    IPTables {
                     .exec("iptables -t mangle -X;")
                     .exec("iptables -P INPUT ACCEPT;")
                     .exec("iptables -P FORWARD ACCEPT;")
-                    .exec("iptables -P OUTPUT ACCEPT")
+                    .exec("iptables -P OUTPUT ACCEPT;")
                     .closeProcess();
     }
 

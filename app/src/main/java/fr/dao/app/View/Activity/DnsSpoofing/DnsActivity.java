@@ -84,7 +84,7 @@ public class                            DnsActivity extends SniffActivity {
         mAction_export = findViewById(R.id.action_export);
         textEmpty = findViewById(R.id.textEmpty);
         mTabs = findViewById(R.id.tabs);
-        MyGlideLoader.coordoBackgroundXMM(this, mDnsSpoof_RV);
+        MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
         appBarLayout = findViewById(R.id.appBarLayout);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {

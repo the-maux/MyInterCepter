@@ -189,8 +189,6 @@
                 android:id="@+id/RV_Wireshark"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:alpha="0.98"
-                android:background="@color/material_yellow_300"
                 android:scrollbars="vertical"
                 tools:listitem="@layout/item_tcpdump" />
 

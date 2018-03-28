@@ -100,7 +100,6 @@
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/generic_background"
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
 
@@ -123,9 +122,6 @@
             android:id="@+id/spinnerTypeScan_cardiview"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="30dp"
-            android:background="@color/generic_background"
-            app:cardBackgroundColor="@color/generic_background"
             app:cardCornerRadius="@dimen/cardview_default_radius"
             app:layout_constraintBottom_toTopOf="@+id/navigation"
             app:layout_constraintLeft_toLeftOf="parent"

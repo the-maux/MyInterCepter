@@ -33,6 +33,7 @@ import fr.dao.app.Core.Nmap.NmapControler;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.Behavior.Activity.SniffActivity;
+import fr.dao.app.View.Behavior.MyGlideLoader;
 import fr.dao.app.View.Behavior.ViewAnimate;
 import fr.dao.app.View.Widget.Dialog.DialogQuestionWithInput;
 
@@ -97,6 +98,7 @@ public class                    NmapActivity extends SniffActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
+        MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
     }
 
     private void                init() {
