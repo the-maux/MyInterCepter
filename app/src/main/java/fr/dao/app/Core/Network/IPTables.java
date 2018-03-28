@@ -70,8 +70,8 @@ public class                    IPTables {
         Log.d(TAG, "Redirecting traffic from port " + from + " to port " + to);
         new RootProcess("IPTable::portRedirect")
                 .noDebugOutput()
-                .exec("iptables " + "-t nat -F")// clear nat
-                .exec("iptables " + "-F")// clear
+                .exec("iptables " + "-t nat -F")// reset nat
+                .exec("iptables " + "-F")// reset
                 .exec("iptables " + "-t nat -I POSTROUTING -s 0/0 -j MASQUERADE")// post route
                 .exec("iptables " + "-P FORWARD ACCEPT")// accept all
                 .exec("iptables " + "-t nat -A PREROUTING -j DNAT -p tcp --dport " + from + " --to " + Singleton.getInstance().network.myIp + ":" + to);// add rule;
@@ -81,8 +81,8 @@ public class                    IPTables {
         Log.d(TAG, "Undoing port redirection");
         new RootProcess("IPTable::undoPortRedirect")
                 .noDebugOutput()
-                .exec("iptables " + "-t nat -F") // clear nat
-                .exec("iptables " + "-F")// clear
+                .exec("iptables " + "-t nat -F") // reset nat
+                .exec("iptables " + "-F")// reset
                 .exec("iptables " + "-t nat -D POSTROUTING -s 0/0 -j MASQUERADE")  // remove post route
                 .exec("iptables " + "-t nat -D PREROUTING -j DNAT -p tcp --dport " + from + " --to " + Singleton.getInstance().network.myIp + ":" + to);// remove rule
     }

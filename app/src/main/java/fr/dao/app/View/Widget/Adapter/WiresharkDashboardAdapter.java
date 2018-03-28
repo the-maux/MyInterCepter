@@ -36,40 +36,45 @@ public class WiresharkDashboardAdapter extends RecyclerView.Adapter<PacketHolder
                 .inflate(R.layout.item_packets_type, parent, false));
     }
 
-    public void                 onBindViewHolder(PacketHolder holder, final int position) {
-        switch (position) {
+    public void                 onBindViewHolder(final PacketHolder holder, int position) {
+        switch (holder.getAdapterPosition()) {
             case TCP:
-                initCard(holder, wiresharkDashboard.TCP_packet, "TCP");
+                initCard(holder, wiresharkDashboard.TCP_packet, mActivity.getString(R.string.tcp), R.mipmap.ic_tcp);
                 break;
             case UDP:
-                initCard(holder, wiresharkDashboard.UDP_packet, "UDP");
+                initCard(holder, wiresharkDashboard.UDP_packet, "UDP", R.mipmap.ic_udp);
                 break;
             case HTTP:
-                initCard(holder, wiresharkDashboard.HTTP_packet, "HTTP");
+                initCard(holder, wiresharkDashboard.HTTP_packet, "HTTP", R.mipmap.ic_http);
                 break;
             case HTTPS:
-                initCard(holder, wiresharkDashboard.HTTPS_packet, "HTTPS");
+                initCard(holder, wiresharkDashboard.HTTPS_packet, "HTTPS", R.mipmap.ic_https);
                 break;
             case DNS:
-                initCard(holder, wiresharkDashboard.DNS_packet, "DNS");
+                initCard(holder, wiresharkDashboard.DNS_packet, "DNS", R.mipmap.ic_dns);
                 break;
             case SPY:
-                initCard(holder, 0, " credential");
+                initCard(holder, 0, " credential", R.mipmap.ic_spy);
                 break;
             case 6:
                 break;
         }
         holder.card_view.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mActivity.showSnackbar("CARD " + position + "CLICKED");
+                mActivity.showSnackbar("CARD " + holder.getAdapterPosition() + "CLICKED");
             }
         });
     }
 
-    private void                initCard(PacketHolder holder, int nbrPackets, String protocol) {
-        MyGlideLoader.loadDrawableInImageView(mActivity, R.mipmap.ic_https, holder.logo_protocol, false);
+    private void                initCard(PacketHolder holder, int nbrPackets, String protocol, int res) {
+        MyGlideLoader.loadDrawableInImageView(mActivity, res, holder.logo_protocol, false);
         String title = (nbrPackets == 0) ? "No " + protocol + " packets": nbrPackets + " packets";
         holder.nbr_packets_protocol.setText(title);
+    }
+
+    public void                 setDashboard(DashboardSniff dashboard) {
+        this.wiresharkDashboard = dashboard;
+        dashboard.setMonitorView(packetsNumber, nbrTargets, timerMonitor, status);
     }
 
     private View.OnClickListener onClick(final Network accessPoint) {
@@ -80,22 +85,13 @@ public class WiresharkDashboardAdapter extends RecyclerView.Adapter<PacketHolder
         };
     }
 
+    public void                 reset() {
+        wiresharkDashboard.reset();
+        notifyDataSetChanged();
+    }
+
     public int                  getItemCount() {
         return 6;
     }
 
-    public void                 filtering(String query) {
-/*
-        mHosts.clear();
-        for (Host title : mOriginalList) {
-            if (title.getDumpInfo().toLowerCase().contains(query.toLowerCase()))
-                mHosts.add(title);
-        }
-        notifyDataSetChanged();*/
-    }
-
-    public void                 setDashboard(DashboardSniff dashboard) {
-        this.wiresharkDashboard = dashboard;
-        dashboard.setMonitorView(packetsNumber, nbrTargets, timerMonitor, status);
-    }
 }

@@ -1,4 +1,4 @@
-package fr.dao.app.View.Behavior;
+package fr.dao.app.View.Activity.Wireshark;
 
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import fr.dao.app.Core.Tcpdump.DashboardSniff;
 import fr.dao.app.Model.Net.Trame;
-import fr.dao.app.View.Activity.Wireshark.WiresharkActivity;
 import fr.dao.app.View.Widget.Adapter.WiresharkPacketsAdapter;
 
 public class                        WiresharkDispatcher  {
@@ -17,11 +16,10 @@ public class                        WiresharkDispatcher  {
     private WiresharkActivity       mActivity;
     private RecyclerView            mRV_Wireshark;
     private boolean                 mIsRunning = false, mAutoscroll = true, isDashboardMode;
-    private int                     REFRESH_TIME = 1000;
+    private int                     REFRESH_TIME = 800;
     private ArrayList<Trame>        TrameBuffer = new ArrayList();
     private DashboardSniff          mDashboard;
     private RecyclerView.Adapter    mAdapterWireshark;
-
 
     public                          WiresharkDispatcher(RecyclerView.Adapter adapter, boolean isDashboardMode,
                                                         RecyclerView recyclerView, WiresharkActivity activity) {
@@ -47,7 +45,7 @@ public class                        WiresharkDispatcher  {
                 }
             }, REFRESH_TIME);
         } else {
-            Log.d(TAG, "Dispatcher closing");
+            Log.i(TAG, "Dispatcher closing");
         }
     }
 
@@ -67,13 +65,14 @@ public class                        WiresharkDispatcher  {
                         mDashboard.addTrame(poppedTrame);
                     }
                     if (!isDashboardMode) {
-//                        Log.d(TAG, "notifyItemRangeInserted(" + size + ");");
                         if (size == 1)
                             mAdapterWireshark.notifyItemInserted(0);
                         else
                             mAdapterWireshark.notifyItemRangeInserted(0, size);
                         if (mAutoscroll)
                             mRV_Wireshark.smoothScrollToPosition(0);
+                    } else {
+                        mDashboard.notifyAdapterPackets();
                     }
                 }
             }
@@ -108,5 +107,11 @@ public class                        WiresharkDispatcher  {
 
     public void                     switchOutputType(boolean isDashboard) {
         this.isDashboardMode = isDashboard;
+    }
+
+    public void                     reset() {
+        TrameBuffer.clear();
+        mIsRunning = true;
+        adapterRefreshDeamon();
     }
 }

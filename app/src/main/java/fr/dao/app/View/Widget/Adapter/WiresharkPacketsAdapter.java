@@ -190,16 +190,10 @@ public class                    WiresharkPacketsAdapter extends RecyclerView.Ada
         });
         return ret;
     }
-    public void                 clear() {
-        this.mRV_Wireshark.post(new Runnable() {
-            @Override
-            public void run() {
-                listOfTrame.clear();
-                originalListOfTrames.clear();
-                notifyDataSetChanged();
-            }
-        });
-
+    public void                 reset() {
+        listOfTrame.clear();
+        originalListOfTrames.clear();
+        notifyDataSetChanged();
     }
     private void                dump() {
         Log.d(TAG, "--------------------------------");

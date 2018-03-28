@@ -28,7 +28,6 @@ import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.Behavior.Fragment.MyFragment;
 import fr.dao.app.View.Behavior.MyGlideLoader;
-import fr.dao.app.View.Behavior.WiresharkDispatcher;
 import fr.dao.app.View.Widget.Adapter.HostSelectionAdapter;
 import fr.dao.app.View.Widget.Adapter.WiresharkDashboardAdapter;
 import fr.dao.app.View.Widget.Adapter.WiresharkPacketsAdapter;
@@ -50,7 +49,7 @@ public class                    WiresharkLiveFragment extends MyFragment {
     private List<Host>          mListHostSelected = new ArrayList<>();
     private TextView            mMonitorAgv;
     private Tcpdump             mTcpdump;
-    private boolean             isDashboardMode = true;
+    private boolean             isDashboardMode = true, wasLaunched = false;
     private CircleImageView     statusIconSniffing;
     private ImageView           headerWifi;
     private TextView            title_sniffer, subtitle_sniffer, bottom_title_sniffer, bottom_subtitle_sniffer;
@@ -173,13 +172,13 @@ public class                    WiresharkLiveFragment extends MyFragment {
     public boolean              start() {
         Utils.vibrateDevice(mActivity);
         if (!Tcpdump.isRunning()) {
-            mAdapterDetailWireshark.clear();
             if (startTcpdump()) {
                 if (isDashboardMode) {
                     int color = R.color.filtered_color;
                     statusIconSniffing.setImageResource(color);
                 }
                 mMonitorAgv.setVisibility(View.VISIBLE);
+                wasLaunched = true;
                 return true;
             }
         } else {
@@ -205,14 +204,16 @@ public class                    WiresharkLiveFragment extends MyFragment {
         }
         if (mTrameDispatcher == null) {
             mTrameDispatcher = new WiresharkDispatcher(mAdapterDetailWireshark, isDashboardMode, mRV_Wireshark, mActivity);
-        } else {
-
+        } else if (wasLaunched && !Tcpdump.isRunning()) {/* Clear shit its a restart*/
+            mAdapterDetailWireshark.reset();
+            mAdapterDashboardWireshark.reset();
+            mTrameDispatcher.reset();
         }
         String argv = mTcpdump.initCmd(mListHostSelected);
         DashboardSniff dashboardSniff = mTcpdump.start(mTrameDispatcher);
         mAdapterDashboardWireshark.setDashboard(dashboardSniff);
-        if (isDashboardMode)
-            bottom_subtitle_sniffer.setText(mListHostSelected.size() + " clients");
+        dashboardSniff.setAdapter(mAdapterDashboardWireshark);
+        bottom_subtitle_sniffer.setText(mListHostSelected.size() + " clients");
         mMonitorAgv.setText(argv.replace(mSingleton.PcapPath, ""));
         mActivity.updateNotifications();
         return true;

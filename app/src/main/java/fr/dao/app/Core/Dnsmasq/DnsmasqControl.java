@@ -115,7 +115,7 @@ public class                    DnsmasqControl {
             mRV_Adapter.getRecyclerview().post(new Runnable() {
                 @Override
                 public void run() {
-                    //mDnsLogs.clear();
+                    //mDnsLogs.reset();
                     if (mRV_Adapter != null)
                         mRV_Adapter.notifyDataSetChanged();
                 }

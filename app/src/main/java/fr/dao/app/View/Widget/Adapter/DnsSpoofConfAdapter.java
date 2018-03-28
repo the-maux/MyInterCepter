@@ -71,7 +71,7 @@ public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter
 
     public void                 filtering(String query) {
         /*TODO:Log.d(TAG, "filterByString:" + query);
-        mHosts.clear();
+        mHosts.reset();
         for (Host title : mOriginalList) {
             if (title.getDumpInfo().toLowerCase().contains(query.toLowerCase()))
                 mHosts.add(title);
