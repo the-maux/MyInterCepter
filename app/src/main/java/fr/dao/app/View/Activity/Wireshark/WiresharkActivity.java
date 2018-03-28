@@ -128,6 +128,7 @@ public class                    WiresharkActivity extends SniffActivity {
                     int res = isDashboard ? R.drawable.ic_flip_to_front_svg: R.drawable.ic_flip_to_back_black_svg;
                     MyGlideLoader.loadDrawableInImageView(mInstance, res, SwitchViewBackBtn, false);
                     Log.d(TAG, "swithed has " + ((isDashboard) ? "dashboard" : "Live packets" ));
+                    ((WiresharkLiveFragment)mFragment).switchOutputType(isDashboard);
                 } else {
                     Log.d(TAG, "not in readerFragment");
                 }

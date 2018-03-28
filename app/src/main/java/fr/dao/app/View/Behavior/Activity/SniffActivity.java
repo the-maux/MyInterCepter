@@ -99,7 +99,7 @@ public abstract class               SniffActivity extends MyActivity  {
                     .build();
             Tcpdump tcpdump = Tcpdump.getTcpdump(this, false);
             if (tcpdump != null)
-                mBottomBar.setNotification(tcpdump.isRunning ? greenNotif : redNotif, 1);
+                mBottomBar.setNotification(Tcpdump.isRunning() ? greenNotif : redNotif, 1);
             else
                 mBottomBar.setNotification(redNotif, 1);
             mBottomBar.setNotification(mSingleton.isDnsControlstarted() ? greenNotif : redNotif, 2);

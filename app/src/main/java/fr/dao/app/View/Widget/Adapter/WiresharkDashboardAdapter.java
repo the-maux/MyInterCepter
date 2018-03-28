@@ -14,15 +14,15 @@ import fr.dao.app.View.Behavior.Activity.MyActivity;
 import fr.dao.app.View.Behavior.MyGlideLoader;
 import fr.dao.app.View.Widget.Adapter.Holder.PacketHolder;
 
-public class                    WireshrakDashboardAdapter extends RecyclerView.Adapter<PacketHolder> {
-    private String              TAG = "WireshrakDashboardAdapter";
+public class WiresharkDashboardAdapter extends RecyclerView.Adapter<PacketHolder> {
+    private String              TAG = "WiresharkDashboardAdapter";
     private MyActivity          mActivity;
     private DashboardSniff      wiresharkDashboard = new DashboardSniff();
     private TextView            packetsNumber, nbrTargets, timerMonitor;
     private CircleImageView     status;
     public final int            TCP = 0, UDP = 1, HTTP = 2, HTTPS = 3, DNS = 4, SPY = 5;
 
-    public WireshrakDashboardAdapter(MyActivity activity, TextView packetsNumber, TextView nbrTargets,
+    public WiresharkDashboardAdapter(MyActivity activity, TextView packetsNumber, TextView nbrTargets,
                                      TextView timerMonitor, CircleImageView status) {
         this.mActivity = activity;
         this.packetsNumber = packetsNumber;

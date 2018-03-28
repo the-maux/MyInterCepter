@@ -87,7 +87,7 @@ public class                            Singleton {
 
     public void                         closeEverySniffService(Activity activity) {
         Tcpdump tcpdump = Tcpdump.getTcpdump(activity, false);
-        if (tcpdump.isRunning) {
+        if (Tcpdump.isRunning()) {
             Log.e("Singleton", "Stopping tcpdump not implemented");
         }
         if (!ArpSpoofProcessStack.isEmpty()) {
@@ -104,7 +104,7 @@ public class                            Singleton {
 
     public boolean                      isSniffServiceActif(Activity activity) {
         Tcpdump tcpdump = Tcpdump.getTcpdump(activity, false);
-        return tcpdump != null && tcpdump.isRunning ||
+        return tcpdump != null && Tcpdump.isRunning() ||
                 !(!sslstripMode && !isDnsControlstarted() && !webSpoofedstarted);
     }
 }

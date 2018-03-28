@@ -19,7 +19,7 @@ import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.R;
 import fr.dao.app.View.Behavior.Fragment.MyFragment;
-import fr.dao.app.View.Widget.Adapter.WiresharkAdapter;
+import fr.dao.app.View.Widget.Adapter.WiresharkPacketsAdapter;
 
 
 public class                    WiresharkReaderFragment extends MyFragment {
@@ -28,7 +28,7 @@ public class                    WiresharkReaderFragment extends MyFragment {
     private Context             mCtx;
     private WiresharkActivity   mActivity;
     private RecyclerView        mRV_Wireshark;
-    private WiresharkAdapter    mAdapterWireshark;
+    private WiresharkPacketsAdapter mAdapterWireshark;
     private Tcpdump             mTcpdump;
     private File                mPcapFile;
     ProgressDialog              dialog;
@@ -63,7 +63,7 @@ public class                    WiresharkReaderFragment extends MyFragment {
     }
 
     private void                initRV() {
-        mAdapterWireshark = new WiresharkAdapter(mActivity, mRV_Wireshark);
+        mAdapterWireshark = new WiresharkPacketsAdapter(mActivity, mRV_Wireshark);
         mRV_Wireshark.setAdapter(mAdapterWireshark);
         mRV_Wireshark.setItemAnimator(null);
         mRV_Wireshark.setLayoutManager(new LinearLayoutManager(mActivity));

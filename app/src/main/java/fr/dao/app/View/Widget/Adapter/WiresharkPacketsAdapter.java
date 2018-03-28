@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Net.Protocol;
@@ -17,30 +16,32 @@ import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.R;
 import fr.dao.app.View.Widget.Adapter.Holder.WiresharkHolder;
 
-public class                WiresharkAdapter extends RecyclerView.Adapter<WiresharkHolder> {
-    private String          TAG = "WiresharkAdapter";
-    private CopyOnWriteArrayList<Trame> originalListOfTrames;
-    private CopyOnWriteArrayList<Trame> listOfTrame;
-    private Activity        mActivity;
-    private boolean         mActualize = false;
-    private RecyclerView    mRV_Wireshark;
-    private boolean         arp = true, http = true, https = true,
-                            tcp = true, dns = true, udp = true, ip = true;
+public class                    WiresharkPacketsAdapter extends RecyclerView.Adapter<WiresharkHolder> {
+    private String              TAG = "WiresharkPacketsAdapter";
+/*    private CopyOnWriteArrayList<Trame> originalListOfTrames;
+    private CopyOnWriteArrayList<Trame> listOfTrame;*/
 
-    public                  WiresharkAdapter(Activity activity, RecyclerView recyclerView) {
-        this.listOfTrame = new CopyOnWriteArrayList<>();
-        this.originalListOfTrames = new CopyOnWriteArrayList<>();
-        listOfTrame.addAll(originalListOfTrames);
+    private ArrayList<Trame> originalListOfTrames;
+    private ArrayList<Trame> listOfTrame;
+    private Activity            mActivity;
+    private boolean             mActualize = false;
+    private RecyclerView        mRV_Wireshark;
+    private boolean             arp = true, http = true, https = true,
+                                tcp = true, dns = true, udp = true, ip = true;
+
+    public WiresharkPacketsAdapter(Activity activity, RecyclerView recyclerView) {
+        this.listOfTrame = new ArrayList<>();
+        this.originalListOfTrames = new ArrayList<>();
         this.mActivity = activity;
         this.mRV_Wireshark = recyclerView;
     }
 
-    public WiresharkHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
+    public WiresharkHolder      onCreateViewHolder(ViewGroup parent, int viewType) {
         return new WiresharkHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_tcpdump, parent, false), false);
     }
 
-    public void             onBindViewHolder(WiresharkHolder holder, int position) {
+    public void                 onBindViewHolder(WiresharkHolder holder, int position) {
         Trame trame = listOfTrame.get(position);
         String tmp = "" + trame.offsett;
         holder.No.setText(tmp);
@@ -52,7 +53,7 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         setBackgroundColor(trame.backgroundColor, holder);
     }
 
-    private void            setBackgroundColor(int color, WiresharkHolder holder) {
+    private void                setBackgroundColor(int color, WiresharkHolder holder) {
         holder.No.setBackgroundColor(ContextCompat.getColor(mActivity, color));
         holder.time.setBackgroundColor(ContextCompat.getColor(mActivity, color));
         holder.source.setBackgroundColor(ContextCompat.getColor(mActivity, color));
@@ -63,11 +64,13 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
 
     }
 
-    public int              getItemCount() {
+    @Override
+    public int                  getItemCount() {
+        Log.i(TAG, "ItemsCount[" + listOfTrame.size()+ "]");
         return listOfTrame.size();
     }
 
-    private void            addOnList(final Trame trame, final boolean reverse) {
+    private void                addOnList(final Trame trame, final boolean reverse) {
         //Log.d(TAG, "addOnList:trame:" + trame.offsett);
         if (mActualize) {
             if (reverse) {
@@ -88,7 +91,7 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
             });
         }
     }
-    private synchronized void addTrameFiltered(Trame trame, boolean reverse) {
+    private synchronized void   addTrameFiltered(Trame trame, boolean reverse) {
         if (trame.protocol != null)
             switch (trame.protocol) {
                 case ARP:
@@ -129,18 +132,18 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
     private synchronized int    buildOffset() {
         return offsetList++;
     }
-    public synchronized void addTrameOnAdapter(Trame trame) {
+    public synchronized void    addTrameOnAdapter(Trame trame) {
         trame.offsett = buildOffset();
         addTrameFiltered(trame, true);
         originalListOfTrames.add(0, trame);
     }
 
-    public void             loadListOfTrame(ArrayList<Trame> trames, ProgressDialog dialog) {
+    public void                 loadListOfTrame(ArrayList<Trame> trames, ProgressDialog dialog) {
         listOfTrame.addAll(trames);
         notifyDataSetChanged();
         dialog.hide();
     }
-    public boolean          changePermissionFilter(Protocol protocol) {
+    public boolean              changePermissionFilter(Protocol protocol) {
         boolean ret;
         switch (protocol) {
             case ARP:
@@ -190,7 +193,7 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         });
         return ret;
     }
-    public void             clear() {
+    public void                 clear() {
         this.mRV_Wireshark.post(new Runnable() {
             @Override
             public void run() {
@@ -201,11 +204,27 @@ public class                WiresharkAdapter extends RecyclerView.Adapter<Wiresh
         });
 
     }
-    private void            dump() {
+    private void                dump() {
         Log.d(TAG, "--------------------------------");
         for (Trame trame : originalListOfTrames) {
             Log.d(TAG, "OFFSET:" + trame.offsett);
         }
         Log.d(TAG, "--------------------------------");
+    }
+
+    public int                  flush(final ArrayList<Trame> trames) {
+        this.mRV_Wireshark.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "Flushing " + trames.size() + " trames in Adapter");
+                listOfTrame.clear();
+                originalListOfTrames.clear();
+                originalListOfTrames.addAll(trames);
+                listOfTrame.addAll(trames);
+                Log.d(TAG, "notify the flush in Adapter");
+                notifyDataSetChanged();
+            }
+        });
+        return trames.size();
     }
 }

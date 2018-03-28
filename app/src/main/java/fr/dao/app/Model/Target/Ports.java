@@ -64,11 +64,11 @@ public class                    Ports {
             host.vendor = host.vendor.replace("|", "").trim();
             if (Character.isDigit(host.vendor.charAt(host.vendor.length()-1))) {
                 if (Character.isDigit(host.vendor.charAt(host.vendor.length()-2))) {
-                    host.vendor = host.vendor.substring(0, host.vendor.length()-3) +
-                            " " + host.vendor.substring(host.vendor.length()-3, host.vendor.length());
-                } else {
                     host.vendor = host.vendor.substring(0, host.vendor.length()-2) +
                             " " + host.vendor.substring(host.vendor.length()-2, host.vendor.length());
+                } else {
+                    host.vendor = host.vendor.substring(0, host.vendor.length()-1) +
+                            " " + host.vendor.substring(host.vendor.length()-1, host.vendor.length());
                 }
             }
             host.osType = Os.Apple;

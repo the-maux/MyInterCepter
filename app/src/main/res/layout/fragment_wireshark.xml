@@ -9,7 +9,8 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/rootViewForDashboard"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <android.support.constraint.Guideline
             android:id="@+id/verti_035"
@@ -145,7 +146,7 @@
         android:id="@+id/rootViewForLiveFlux"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <include
             android:id="@+id/topBar"
@@ -189,7 +190,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:alpha="0.98"
-                android:background="@color/black_primary"
+                android:background="@color/material_yellow_300"
                 android:scrollbars="vertical"
                 tools:listitem="@layout/item_tcpdump" />
 

@@ -25,20 +25,20 @@ import fr.dao.app.View.Behavior.WiresharkDispatcher;
 public class                        Tcpdump {
     private String                  TAG = "Tcpdump";
     private static Tcpdump          mInstance = null;
+    private RootProcess             mTcpDumpProcess;
     private Singleton               mSingleton = Singleton.getInstance();
-    private LinkedHashMap<String, String> mCmds;
-    private RootProcess mTcpDumpProcess;
     private WiresharkActivity       mActivity;
     private ConfTcpdump             mTcpdumpConf = new ConfTcpdump();
-    public  boolean                 isRunning = false, isDumpingInFile = true, isPcapReading;
-    private String                  actualParam = "", actualCmd = "";
+    private boolean                 isRunning = false;
+    public  boolean                 isDumpingInFile = true, isPcapReading;
+    private String                  actualCmd = "";
     private WiresharkDispatcher     mDispatcher = null;
     private WiresharkReaderFragment mFragment = null;
     private ArrayList<Trame>        mBufferOfTrame = new ArrayList<>();
 
     private                         Tcpdump(WiresharkActivity activity) {
         this.mActivity = activity;
-        mCmds = mTcpdumpConf.initCmds();
+        LinkedHashMap<String, String> mCmds = mTcpdumpConf.initCmds();
     }
 
     public static synchronized Tcpdump getTcpdump(Activity activity, boolean isWiresharkActivity) {
@@ -54,16 +54,17 @@ public class                        Tcpdump {
         return mInstance != null && mInstance.isRunning;
     }
 
-    public String                  initCmd(List<Host> hosts) {
+    public String                   initCmd(List<Host> hosts) {
         int a = IPTables.InterceptWithoutSSL();
         Log.d(TAG, "IPtable returned: " + a);
         ArpSpoof.launchArpSpoof(hosts);
+        String actualParam = "";
         actualCmd = mTcpdumpConf.buildCmd(actualParam, isDumpingInFile, "No Filter", hosts);
         return actualCmd.replace("nmap/nmap", "nmap")
                 .replace(mSingleton.FilesPath, "");
     }
 
-    public DashboardSniff          start(final WiresharkDispatcher trameDispatcher) {
+    public DashboardSniff           start(final WiresharkDispatcher trameDispatcher) {
         isPcapReading = false;
         mDispatcher = trameDispatcher;
         isRunning = true;
@@ -215,4 +216,15 @@ public class                        Tcpdump {
         }
     }
 
+    public void                     flushToAdapter() {
+        Log.d(TAG, "flushToAdapter");
+        if (mDispatcher != null)
+            mDispatcher.flush();
+    }
+
+    public void                     switchOutputType(boolean isDashboard) {
+        if (mDispatcher != null) {
+            mDispatcher.switchOutputType(isDashboard);
+        }
+    }
 }
