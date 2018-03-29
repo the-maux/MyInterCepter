@@ -2,7 +2,6 @@ package fr.dao.app.View.Widget;
 
 import android.app.Activity;
 import android.graphics.Typeface;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -25,7 +24,6 @@ public class                    PortAdapter extends RecyclerView.Adapter<PortHol
         this.mPorts = ports;
     }
 
-    @NonNull
     public PortHolder           onCreateViewHolder(ViewGroup parent, int viewType) {
         return new PortHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_port, parent, false));

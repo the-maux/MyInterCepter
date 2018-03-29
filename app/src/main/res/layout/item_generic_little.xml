@@ -1,96 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rootView"
+    android:id="@+id/rt"
     android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_height="60dp"
+    android:layout_margin="8dp"
+    app:cardBackgroundColor="#515151"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="4dp">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:cardBackgroundColor="@color/generic_background"
-        app:cardElevation="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </android.support.v7.widget.CardView>
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/icon"
-        android:layout_width="40dp"
-        android:layout_height="0dp"
-        android:layout_marginLeft="12dp"
-        android:elevation="4dp"
-        android:src="@drawable/webserver_icon"
-        app:civ_border_color="#FFFFFF"
-        app:civ_border_width="3dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="50dp"
-        app:layout_constraintWidth_min="40dp" />
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginLeft="12dp"
-        android:elevation="4dp"
-        android:enabled="true"
-        android:gravity="bottom|left"
-        android:padding="2dp"
-        android:text="Voici mon subtitle.fr"
-        android:textColor="?android:attr/textColorPrimary"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/guideline"
-        app:layout_constraintLeft_toRightOf="@+id/icon"
-        app:layout_constraintRight_toLeftOf="@+id/icon2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="spread" />
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
 
-    <TextView
-        android:id="@+id/subtitle_card"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:elevation="4dp"
-        android:enabled="false"
-        android:gravity="top|left"
-        android:padding="2dp"
-        android:text="Voici mon title.fr"
-        android:textColor="?android:attr/textColorPrimary"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="@+id/title"
-        app:layout_constraintRight_toLeftOf="@+id/icon2"
-        app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:layout_constraintVertical_chainStyle="spread" />
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
 
-    <ImageView
-        android:id="@+id/icon2"
-        android:layout_width="40dp"
-        android:layout_height="0dp"
-        android:layout_marginRight="8dp"
-        android:elevation="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="50dp"
-        app:layout_constraintWidth_min="40dp"
-        app:srcCompat="@mipmap/ic_trash2" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/icon"
+            android:layout_width="40dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="12dp"
+            android:elevation="4dp"
+            android:src="@drawable/webserver_icon"
+            app:civ_border_color="#FFFFFF"
+            app:civ_border_width="3dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="50dp"
+            app:layout_constraintWidth_min="40dp" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="12dp"
+            android:elevation="4dp"
+            android:enabled="true"
+            android:gravity="bottom|left"
+            android:padding="2dp"
+            android:singleLine="true"
+            android:text="Voici mon subtitle.fr"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/guideline"
+            app:layout_constraintLeft_toRightOf="@+id/icon"
+            app:layout_constraintRight_toLeftOf="@+id/icon2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="spread" />
 
 
+        <TextView
+            android:id="@+id/subtitle_card"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:elevation="4dp"
+            android:enabled="false"
+            android:gravity="top|left"
+            android:padding="2dp"
+            android:singleLine="true"
+            android:text="Voici mon title.fr"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/title"
+            app:layout_constraintRight_toLeftOf="@+id/icon2"
+            app:layout_constraintTop_toTopOf="@+id/guideline"
+            app:layout_constraintVertical_chainStyle="spread" />
+
+        <ImageView
+            android:id="@+id/icon2"
+            android:layout_width="40dp"
+            android:layout_height="0dp"
+            android:layout_marginRight="8dp"
+            android:elevation="4dp"
+            android:padding="2dp"
+            android:tint="@color/material_light_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="50dp"
+            app:layout_constraintWidth_min="40dp"
+            app:srcCompat="@drawable/ic_trash_svg" />
 
 
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

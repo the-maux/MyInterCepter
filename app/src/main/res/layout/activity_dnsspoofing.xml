@@ -118,27 +118,6 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/spinnerTypeScan_cardiview"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:cardCornerRadius="@dimen/cardview_default_radius"
-            app:layout_constraintBottom_toTopOf="@+id/navigation"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/host">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/dnsSpoof_RV"
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="vertical"
-                tools:listitem="@layout/item_generic_little">
-
-            </android.support.v7.widget.RecyclerView>
-        </android.support.v7.widget.CardView>
-
         <TextView
             android:id="@+id/textEmpty"
             android:layout_width="0dp"
@@ -150,16 +129,6 @@
             app:layout_constraintLeft_toLeftOf="@+id/navigation"
             app:layout_constraintRight_toRightOf="@+id/navigation" />
 
-        <include
-            android:id="@+id/navigation"
-            layout="@layout/item_nav_bottom"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:transitionName="navigation"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
-
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="56dp"
@@ -169,6 +138,31 @@
             app:backgroundTint="@color/fab_color"
             app:fabSize="normal"
             app:layout_constraintBottom_toTopOf="@+id/navigation"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/dnsSpoof_RV"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/navigation"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/host"
+            app:layout_constraintVertical_bias="0.0"
+            tools:listitem="@layout/item_generic_little">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <include
+            android:id="@+id/navigation"
+            layout="@layout/item_nav_bottom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:transitionName="navigation"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
