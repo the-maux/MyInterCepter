@@ -81,10 +81,12 @@ public class                DashboardSniff {
 
     public void             stop() {
         mIsRunning = false;
+        mAdapterDashboardWireshark.stopTimer();
     }
 
     public void             setAdapter(WiresharkDashboardAdapter adapterDashboardWireshark) {
         this.mAdapterDashboardWireshark = adapterDashboardWireshark;
+        this.mAdapterDashboardWireshark.startTimer();
     }
 
     public void             notifyAdapterPackets() {
@@ -104,7 +106,9 @@ public class                DashboardSniff {
         UDP_packet = 0; TCP_packet = 0; FTP_packet = 0; ICMP_packet = 0;
         HTTP_packet = 0; HTTPS_packet = 0; DNS_packet = 0; ARP_Packet = 0;
         monitorPackets.setText("0 packets");
-        //TODO: restart timer
+        if (mAdapterDashboardWireshark != null) {
+            mAdapterDashboardWireshark.startTimer();
+        }
     }
 
 }

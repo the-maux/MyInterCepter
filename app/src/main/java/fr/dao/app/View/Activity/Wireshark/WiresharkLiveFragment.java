@@ -94,12 +94,10 @@ public class                    WiresharkLiveFragment extends MyFragment {
             mListHostSelected.clear();
             mListHostSelected.add(mSingleton.hostList.get(getArguments().getInt("position")));
         }
-        Log.d(TAG, "isDashboardMode:" + isDashboardMode);
         rootViewForDashboard.setVisibility((isDashboardMode) ? View.VISIBLE : View.GONE);
         rootViewForLiveFlux.setVisibility((isDashboardMode) ? View.GONE : View.VISIBLE);
         initRV();
         initDashboard();
-        initTimer();
         if (Tcpdump.isRunning()) {
             mTcpdump.flushToAdapter();
         }
@@ -111,8 +109,8 @@ public class                    WiresharkLiveFragment extends MyFragment {
         if (mAdapterDashboardWireshark == null) {
             title_sniffer.setText(mSingleton.network.ssid);
             subtitle_sniffer.setText("No packets recorded");
-            bottom_title_sniffer.setText("Sniffed since 40s");
-            bottom_subtitle_sniffer.setText(mListHostSelected.size() + " targets");
+            bottom_title_sniffer.setText("Not started");
+            bottom_subtitle_sniffer.setText("");
             MyGlideLoader.loadDrawableInImageView(mActivity, R.drawable.wireshark, headerWifi, false);
             mAdapterDashboardWireshark = new WiresharkDashboardAdapter(mActivity, subtitle_sniffer,
                     bottom_title_sniffer, bottom_subtitle_sniffer, statusIconSniffing);
@@ -165,9 +163,7 @@ public class                    WiresharkLiveFragment extends MyFragment {
             mRV_Wireshark.setLayoutManager(layoutManager);
         }
     }
-    private void                initTimer() {
 
-    }
 
     public boolean              start() {
         Utils.vibrateDevice(mActivity);

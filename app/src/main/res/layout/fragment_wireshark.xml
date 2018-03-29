@@ -65,7 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:gravity="right"
-                    android:text="Groupe ADEO"
+                    android:singleLine="true"
                     app:layout_constraintHorizontal_bias="0.05"
                     app:layout_constraintLeft_toRightOf="@+id/headerWifi"
                     app:layout_constraintRight_toRightOf="parent"
@@ -78,7 +78,6 @@
                     android:layout_marginTop="8dp"
                     android:gravity="left"
                     android:singleLine="true"
-                    android:text="Packets number : 42"
                     app:layout_constraintLeft_toLeftOf="@+id/title_sniffer"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/title_sniffer" />
@@ -90,7 +89,6 @@
                     android:layout_marginTop="8dp"
                     android:gravity="left"
                     android:singleLine="true"
-                    android:text="Time: 7m32s"
                     app:layout_constraintLeft_toLeftOf="@+id/title_sniffer"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/subtitle_sniffer" />
@@ -102,7 +100,6 @@
                     android:layout_marginTop="8dp"
                     android:gravity="left"
                     android:singleLine="true"
-                    android:text="3 clients"
                     app:layout_constraintLeft_toLeftOf="@+id/title_sniffer"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/bottom_subtitle_sniffer" />
@@ -124,8 +121,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_max="80dp"
-                    app:layout_constraintWidth_min="40dp"
-                    app:srcCompat="@drawable/spy" />
+                    app:layout_constraintWidth_min="40dp" />
             </android.support.constraint.ConstraintLayout>
         </android.support.v7.widget.CardView>
 
@@ -146,7 +142,7 @@
         android:id="@+id/rootViewForLiveFlux"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <include
             android:id="@+id/topBar"

@@ -60,18 +60,18 @@ public class                    WiresharkActivity extends SniffActivity {
                 Bundle args = new Bundle();
                 args.putInt("position", position);
                 mFragment.setArguments(args);
-                setToolbarTitle("Sniffer detail", mSingleton.hostList.get(position).getName());
+                setToolbarTitle("Sniffer", mSingleton.hostList.get(position).getName());
             } else if (getIntent() != null && getIntent().getExtras() != null &&
                     getIntent().getExtras().getInt("position", -1) != -1) {//MODE: FROM MITM STATION SINGLE TARGET
                 int position = getIntent().getExtras().getInt("position", 0);
                 Bundle args = new Bundle();
                 args.putInt("position", position);
                 mFragment.setArguments(args);
-                setToolbarTitle("Sniffer discovery", mSingleton.hostList.get(position).getName());
+                setToolbarTitle("Sniffer", mSingleton.hostList.get(position).getName());
                 showBottomBar();
             } else {
                 showBottomBar();
-                setToolbarTitle("Sniffer-discovery", (mSingleton.hostList == null) ? "0" : mSingleton.hostList.size() + " target");
+                setToolbarTitle("Sniffer", (mSingleton.hostList == null) ? "0" : mSingleton.hostList.size() + " target");
             }
             initSettings();
             initNavigationBottomBar(SNIFFER, true);

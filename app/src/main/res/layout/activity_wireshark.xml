@@ -43,7 +43,7 @@
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/SwitchViewBackBtn"
+                app:layout_constraintRight_toLeftOf="@+id/history"
                 app:layout_constraintStart_toEndOf="@+id/OsImg"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_scrollFlags="scroll|enterAlways">
@@ -67,7 +67,7 @@
                 android:id="@+id/history"
                 android:layout_width="45dp"
                 android:layout_height="0dp"
-                android:padding="10dp"
+                android:padding="8dp"
                 android:soundEffectsEnabled="true"
                 android:src="@drawable/pcapfile"
                 app:layout_constraintBottom_toBottomOf="parent"

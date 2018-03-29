@@ -143,8 +143,8 @@ public class                MyGlideLoader {
                 break;
             case Unknow:
                 ImageRessource = R.mipmap.ic_unknow;
-                MyGlideLoader.loadDrawableInImageView(context, ImageRessource, osImageView, false);
-                return;
+                //MyGlideLoader.loadDrawableInImageView(context, ImageRessource, osImageView, false);
+                break;
             default:
                 ImageRessource = R.drawable.router3;
                 break;
