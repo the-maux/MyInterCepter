@@ -13,20 +13,24 @@
     <color name="secondary_text">#757575</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
+    <color name="white_secondary">#EEEEEE</color>
     <color name="generic_background">#ee212121</color>
     <color name="stop_color">@color/material_red_500</color>
     <color name="start_color">@color/material_green_500</color>
     <color name="fab_color">#455a64</color>
     <color name="online_color">@color/material_green_500</color>
     <color name="filtered_color">@color/material_orange_500</color>
+    <color name="tint_svg">#ddcccccc</color>
+
 
     <color name="offline_color">@color/material_red_500</color>
 
     <!-- Activitys color  -->
+    <color name="NmapPrimary">#006064</color>
+    <color name="spyPrimary">#01579B</color>
     <color name="wiresharkPrimary">#263238</color>
-    <color name="dnsSpoofPrimary">#102027</color>
-    <color name="NmapPrimary">#3c3f41</color>
-    <color name="webserverSpoofPrimary">#424242</color>
+    <color name="dnsSpoofPrimary">#004D40</color>
+    <color name="webserverSpoofPrimary">#3E2723</color>
     <color name="settingsPrimary">#4f5b62</color>
 
     <!-- Wireshark color  -->

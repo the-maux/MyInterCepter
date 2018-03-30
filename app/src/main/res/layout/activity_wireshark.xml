@@ -135,7 +135,7 @@
             android:layout_marginRight="16dp"
             android:soundEffectsEnabled="true"
             android:src="@drawable/ic_media_play"
-            app:backgroundTint="@color/fab_color"
+            app:backgroundTint="@color/wiresharkPrimary"
             app:fabSize="normal" />
 
         <include

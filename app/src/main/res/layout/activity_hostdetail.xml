@@ -67,7 +67,7 @@
                 android:elevation="4dp"
                 android:padding="6dp"
                 android:soundEffectsEnabled="true"
-                android:tint="@color/primary_white"
+                android:tint="@color/tint_svg"
                 android:visibility="gone"
                 app:layout_collapseMode="pin"
                 app:srcCompat="@drawable/ic_edit_svg" />
@@ -85,7 +85,7 @@
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:soundEffectsEnabled="true"
-                android:tint="@color/primary_white"
+                android:tint="@color/tint_svg"
                 android:visibility="gone"
                 app:layout_collapseMode="pin"
                 app:srcCompat="@drawable/ic_more_svg" />
@@ -132,7 +132,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="8dp"
         android:layout_marginTop="216dp"
-        android:tint="@color/primary_white"
+        android:tint="@color/tint_svg"
         android:transitionName="fabTransition"
         android:visibility="gone"
         app:elevation="10dp"

@@ -61,7 +61,7 @@
 
                 android:padding="6dp"
                 android:soundEffectsEnabled="true"
-                android:tint="@color/primary_white"
+                android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/tabs"
                 app:layout_constraintRight_toLeftOf="@+id/settingsMenu"
@@ -75,7 +75,7 @@
                 android:layout_height="0dp"
                 android:padding="4dp"
                 android:soundEffectsEnabled="true"
-                android:tint="@color/primary_white"
+                android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/tabs"
                 app:layout_constraintRight_toRightOf="parent"
@@ -150,8 +150,8 @@
             android:scaleType="fitCenter"
             android:soundEffectsEnabled="true"
             android:src="@drawable/ic_media_play"
-            android:tint="@color/primary_white"
-            app:backgroundTint="@color/fab_color"
+            android:tint="@color/tint_svg"
+            app:backgroundTint="@color/webserverSpoofPrimary"
             app:fabSize="normal"
             app:layout_constraintBottom_toTopOf="@+id/navigation"
             app:layout_constraintRight_toRightOf="parent" />

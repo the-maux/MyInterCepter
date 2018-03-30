@@ -55,8 +55,10 @@
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
                 android:baselineAlignBottom="false"
+                android:padding="6dp"
                 android:soundEffectsEnabled="true"
-                android:src="@mipmap/ic_nmap_type_foreground"
+                android:src="@drawable/ic_list_svg"
+                android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/history"
                 app:layout_constraintTop_toTopOf="parent"
@@ -67,8 +69,10 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:baselineAlignBottom="false"
+                android:padding="6dp"
                 android:soundEffectsEnabled="true"
-                android:src="@mipmap/ic_script"
+                android:src="@drawable/ic_event_note_svg"
+                android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/settingsMenu"
                 app:layout_constraintTop_toTopOf="parent"
@@ -81,11 +85,12 @@
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:soundEffectsEnabled="true"
+                android:tint="#ddcccccc"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_min="45dp"
-                app:srcCompat="@drawable/ic_more_vert_white_24dp" />
+                app:srcCompat="@drawable/ic_more_svg" />
 
 
         </android.support.constraint.ConstraintLayout>
@@ -317,7 +322,7 @@
             android:layout_margin="16dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_loop_search"
-            app:backgroundTint="@color/fab_color"
+            app:backgroundTint="@color/NmapPrimary"
             app:fabSize="normal"
             app:layout_constraintBottom_toTopOf="@+id/navigation"
             app:layout_constraintRight_toRightOf="parent" />
