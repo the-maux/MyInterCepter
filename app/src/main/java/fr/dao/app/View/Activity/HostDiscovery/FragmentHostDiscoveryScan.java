@@ -149,7 +149,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         if (!isWaiting()) {
             if ((NetDiscovering.initNetworkInfo(mActivity)) &&
                     mSingleton.network.updateInfo().isConnectedToNetwork()) {
-
                 //TODO: if its a refreshing don't unload list of host
                 init_prologueScan();
                 mActivity.initMonitor();

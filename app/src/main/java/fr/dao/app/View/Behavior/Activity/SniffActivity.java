@@ -20,7 +20,7 @@ import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.R;
 import fr.dao.app.View.Activity.DnsSpoofing.DnsActivity;
-import fr.dao.app.View.Activity.Scan.NmapActivity;
+import fr.dao.app.View.Activity.SPY.SpyActivity;
 import fr.dao.app.View.Activity.WebServer.WebServerActivity;
 import fr.dao.app.View.Activity.Wireshark.WiresharkActivity;
 import fr.dao.app.View.Behavior.ViewAnimate;
@@ -63,7 +63,7 @@ public abstract class               SniffActivity extends MyActivity  {
             Log.d(TAG, "initNavigationBottomBar(" + position + ":" + useCallback + ")");
             AHBottomNavigationItem[] bottomItems = new AHBottomNavigationItem[4];
             bottomItems[0] = new AHBottomNavigationItem(R.string.SCANNER,
-                    R.drawable.ic_nmap_icon_tabbutton, R.color.NmapPrimary);
+                    R.drawable.spy, R.color.spyPrimary);
             bottomItems[1] = new AHBottomNavigationItem(R.string.SNIFFER,
                     R.drawable.ic_sniff_barbutton, R.color.wiresharkPrimary);
             bottomItems[2] = new AHBottomNavigationItem(R.string.DNS_SPOOFER,
@@ -126,7 +126,7 @@ public abstract class               SniffActivity extends MyActivity  {
                                     final ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1/*, p2*/);
                                     switch (position) {
                                         case 0:
-                                            intent = new Intent(mInstance, NmapActivity.class);
+                                            intent = new Intent(mInstance, SpyActivity.class);
                                             break;
                                         case 1:
                                             intent = new Intent(mInstance, WiresharkActivity.class);

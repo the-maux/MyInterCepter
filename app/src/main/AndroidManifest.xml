@@ -42,7 +42,7 @@
             android:name=".View.Activity.Scan.NmapActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".View.Activity.TargetMenu.TargetMenuActivity"
+            android:name=".View.Activity.SPY.SpyActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".View.Activity.Wireshark.WiresharkActivity"

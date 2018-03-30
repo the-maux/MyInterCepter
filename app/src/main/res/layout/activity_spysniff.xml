@@ -54,7 +54,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_toLeftOf="@+id/history"
                 android:soundEffectsEnabled="true"
-                android:tint="@color/material_light_white"
+                android:tint="@color/tint_svg"
                 app:srcCompat="@drawable/ic_add_svg" />
 
             <ImageView
@@ -85,14 +85,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:soundEffectsEnabled="true"
-                android:text="Domain" />
+                android:text="GLOBAL" />
+
 
             <android.support.design.widget.TabItem
                 android:id="@+id/historique"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:soundEffectsEnabled="true"
-                android:text="Console" />
+                android:text="CREDENTIALS" />
+
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/historique2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:soundEffectsEnabled="true"
+                android:text="RESSOURCES" />
 
         </android.support.design.widget.TabLayout>
 
@@ -104,32 +113,6 @@
         android:layout_height="match_parent"
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
-
-        <TextView
-            android:id="@+id/host"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:padding="4dp"
-            android:text="Spoofable domain:"
-            android:textColor="@color/material_light_white"
-            android:textSize="18sp"
-            android:visibility="gone"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textEmpty"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:elevation="5dp"
-            android:text="No domain recorded"
-            android:textColor="@color/material_light_white"
-            app:layout_constraintBottom_toTopOf="@+id/navigation"
-            app:layout_constraintLeft_toLeftOf="@+id/navigation"
-            app:layout_constraintRight_toRightOf="@+id/navigation" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
@@ -147,12 +130,10 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scrollbars="vertical"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/navigation"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/host"
-            app:layout_constraintVertical_bias="0.0"
             tools:listitem="@layout/item_dnsdetail_log">
 
         </android.support.v7.widget.RecyclerView>

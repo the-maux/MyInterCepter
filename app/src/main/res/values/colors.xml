@@ -27,11 +27,11 @@
 
     <!-- Activitys color  -->
     <color name="NmapPrimary">#006064</color>
-    <color name="spyPrimary">#01579B</color>
+    <color name="spyPrimary">#4f5b62</color>
     <color name="wiresharkPrimary">#263238</color>
     <color name="dnsSpoofPrimary">#004D40</color>
     <color name="webserverSpoofPrimary">#3E2723</color>
-    <color name="settingsPrimary">#4f5b62</color>
+    <color name="settingsPrimary">#01579B</color>
 
     <!-- Wireshark color  -->
     <color name="arp">#d6e7ff</color>

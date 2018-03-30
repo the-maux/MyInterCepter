@@ -29,7 +29,7 @@ import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Network.NetDiscovering;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.R;
-import fr.dao.app.View.Activity.Scan.NmapActivity;
+import fr.dao.app.View.Activity.SPY.SpyActivity;
 import fr.dao.app.View.Behavior.Activity.MyActivity;
 import fr.dao.app.View.Behavior.Fragment.MyFragment;
 import fr.dao.app.View.Behavior.MyGlideLoader;
@@ -158,7 +158,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     private void                    initFabs() {
         mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
                 mFab.startAnimation(AnimationUtils.loadAnimation(mInstance, R.anim.shake));
                 Utils.vibrateDevice(mInstance);
@@ -171,7 +170,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                                 ((mSingleton.hostList != null) ? mSingleton.hostList.size() : "0"));
                     }
                     mSingleton.actualNetwork = actualNetwork;
-                    startActivity(new Intent(mInstance, NmapActivity.class));
+                    startActivity(new Intent(mInstance, SpyActivity.class));
                 }
                 else if (!mFragment.start()) {
 
