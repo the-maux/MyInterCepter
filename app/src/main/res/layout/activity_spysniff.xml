@@ -20,50 +20,58 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="@dimen/icon_toolbar_size"
+                android:layout_height="@dimen/icon_toolbar_size"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:padding="6dp"
+                app:srcCompat="@mipmap/ic_spy" />
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_toLeftOf="@+id/searchView"
+                android:layout_toRightOf="@+id/imageView2"
                 android:addStatesFromChildren="true"
                 android:minWidth="100dp"
                 app:layout_scrollFlags="scroll|enterAlways"
-                app:title="SpyDash">
+                app:subtitleTextColor="@color/tint_svg"
+                app:title="Dashboard"
+                app:titleTextColor="@android:color/primary_text_dark">
 
             </android.support.v7.widget.Toolbar>
 
             <android.support.v7.widget.SearchView
                 android:id="@+id/searchView"
                 android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerVertical="false"
+                android:layout_height="@dimen/btn_toolbar_size"
+                android:layout_centerVertical="true"
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="12dp"
                 android:layout_toLeftOf="@+id/action_add_host" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/action_add_host"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerVertical="false"
+                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_height="@dimen/btn_toolbar_size"
+                android:layout_centerVertical="true"
                 android:layout_marginEnd="8dp"
-                android:layout_marginTop="12dp"
                 android:layout_toLeftOf="@+id/history"
+                android:background="@android:color/transparent"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/tint_svg"
                 app:srcCompat="@drawable/ic_add_svg" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/history"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_centerVertical="false"
+                android:layout_centerVertical="true"
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="12dp"
                 android:background="@android:color/transparent"

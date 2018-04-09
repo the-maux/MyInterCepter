@@ -22,16 +22,17 @@
             android:elevation="6dp"
             android:paddingBottom="8dp"
             android:paddingLeft="8dp"
+            android:paddingTop="8dp"
             android:visibility="visible">
 
 
             <ImageView
                 android:id="@+id/OsImg"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/icon_toolbar_size"
+                android:layout_height="@dimen/icon_toolbar_size"
                 android:elevation="4dp"
-                android:padding="2dp"
-                android:tint="@color/material_light_white"
+                android:padding="8dp"
+                android:tint="@color/tint_svg"
                 android:transitionName="wiresharkIcon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -41,23 +42,26 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="0dp"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/history"
                 app:layout_constraintStart_toEndOf="@+id/OsImg"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_scrollFlags="scroll|enterAlways">
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:subtitleTextColor="@color/tint_svg"
+                app:titleTextColor="@android:color/primary_text_dark">
 
             </android.support.v7.widget.Toolbar>
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/SwitchViewBackBtn"
-                android:layout_width="45dp"
-                android:layout_height="0dp"
-                android:padding="8dp"
+                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_height="@dimen/btn_toolbar_size"
+                android:background="@android:color/transparent"
                 android:soundEffectsEnabled="true"
                 android:src="@drawable/ic_flip_to_front_svg"
-                android:tint="@color/material_light_white"
+                android:tint="@color/tint_svg"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/settingsMenu"
@@ -65,7 +69,7 @@
 
             <ImageView
                 android:id="@+id/history"
-                android:layout_width="45dp"
+                android:layout_width="@dimen/btn_toolbar_size"
                 android:layout_height="0dp"
                 android:padding="8dp"
                 android:soundEffectsEnabled="true"
@@ -74,14 +78,14 @@
                 app:layout_constraintRight_toLeftOf="@+id/SwitchViewBackBtn"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/settingsMenu"
-                android:layout_width="40dp"
+                android:layout_width="@dimen/btn_toolbar_size"
                 android:layout_height="0dp"
                 android:layout_marginRight="8dp"
-                android:padding="4dp"
+                android:background="@android:color/transparent"
                 android:soundEffectsEnabled="true"
-                android:tint="@color/material_light_white"
+                android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -50,7 +51,7 @@ public class                    NmapActivity extends SniffActivity {
     private Toolbar             mToolbar;
     private List<Host>          mListHostSelected = new ArrayList<>();
     private TabLayout           mTabs;
-    private ImageView           mSettingsMenu, mScript, mScanType;
+    private ImageButton         mSettingsMenu, mScript, mScanType;
     private NmapControler       nmapControler;
     private ProgressBar         mProgressBar;
     private boolean             isExternalTarget;

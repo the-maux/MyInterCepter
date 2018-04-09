@@ -59,10 +59,9 @@
 
                 <ImageButton
                     android:id="@+id/action_add_host"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerVertical="false"
+                    android:layout_width="@dimen/btn_toolbar_size"
+                    android:layout_height="@dimen/btn_toolbar_size"
+                    android:layout_centerVertical="true"
                     android:layout_marginEnd="8dp"
                     android:layout_marginTop="12dp"
                     android:layout_toLeftOf="@+id/history"
@@ -72,13 +71,11 @@
 
                 <ImageButton
                     android:id="@+id/history"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="@dimen/btn_toolbar_size"
+                    android:layout_height="@dimen/btn_toolbar_size"
                     android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerVertical="false"
+                    android:layout_centerVertical="true"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginTop="12dp"
                     android:background="@android:color/transparent"
                     android:soundEffectsEnabled="true"
                     android:src="@drawable/ic_more_vert" />

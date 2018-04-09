@@ -40,9 +40,8 @@ public class                    WebServerActivity extends SniffActivity {
 
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getContentViewId());
+        setContentView(R.layout.activity_webserver);
         initXml();
-
         init();
     }
 
@@ -52,8 +51,6 @@ public class                    WebServerActivity extends SniffActivity {
         mWebview = findViewById(R.id.webViewToSeeWebsite);
         mProgressBar = findViewById(R.id.progressBar);
         mFab = findViewById(R.id.fab);
-//        ViewAnimate.setVisibilityToVisibleQuick(mFab);
-        //mFab.show();
         ViewAnimate.FabAnimateReveal(mInstance, mFab);
         mToolbar = findViewById(R.id.toolbar);
         appBarLayout = findViewById(R.id.appBarLayout);
@@ -142,9 +139,5 @@ public class                    WebServerActivity extends SniffActivity {
         stopAndroidWebServer();
         mSingleton.setwebSpoofed(false);
    }
-
-    public int                  getContentViewId() {
-        return R.layout.activity_webserver;
-    }
 
 }

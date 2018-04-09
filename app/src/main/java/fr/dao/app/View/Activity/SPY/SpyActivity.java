@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import fr.dao.app.Core.Configuration.Singleton;
@@ -35,7 +36,7 @@ public class                            SpyActivity extends SniffActivity {
     private AppBarLayout                appBarLayout;
     private Toolbar                     mToolbar;
     private SearchView                  mSearchView;
-    private ImageView                   mAction_add_host, mSettingsBtn;
+    private ImageButton                 mAction_add_host, mSettingsBtn;
     private TabLayout                   mTabs;
     private RecyclerView                mDnsSpoof_RV;
     private Singleton                   mSingleton = Singleton.getInstance();

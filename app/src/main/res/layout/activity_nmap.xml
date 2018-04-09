@@ -19,16 +19,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/NmapPrimary"
-            android:paddingBottom="4dp">
+            android:paddingBottom="8dp">
 
 
             <ImageView
                 android:id="@+id/OsImg"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/icon_toolbar_size"
+                android:layout_height="@dimen/icon_toolbar_size"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:elevation="4dp"
+                android:padding="4dp"
                 android:src="@drawable/nmap"
                 android:transitionName="NmapIconTransition"
                 app:layout_constraintHeight_min="50dp"
@@ -39,23 +40,24 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/OsImg"
                 app:layout_constraintRight_toLeftOf="@+id/searchView"
                 app:layout_constraintTop_toTopOf="parent"
                 app:subtitle="v6.40"
-                app:title="Nmap">
+                app:subtitleTextColor="@color/tint_svg"
+                app:title="Nmap"
+                app:titleTextColor="@android:color/primary_text_dark">
 
             </android.support.v7.widget.Toolbar>
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/searchView"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/btn_toolbar_size"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
                 android:baselineAlignBottom="false"
-                android:padding="2dp"
                 android:soundEffectsEnabled="true"
                 android:src="@drawable/ic_list_svg"
                 android:tint="@color/tint_svg"
@@ -64,10 +66,11 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_min="45dp" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/history"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/btn_toolbar_size"
                 android:layout_height="0dp"
+                android:background="@android:color/transparent"
                 android:baselineAlignBottom="false"
                 android:padding="8dp"
                 android:soundEffectsEnabled="true"
@@ -78,10 +81,11 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_min="45dp" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/settingsMenu"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/btn_toolbar_size"
                 android:layout_height="0dp"
+                android:background="@android:color/transparent"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:soundEffectsEnabled="true"

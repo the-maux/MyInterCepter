@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -40,7 +41,7 @@ public class                    WiresharkActivity extends SniffActivity {
     private ProgressBar         mProgressBar;
     private Singleton           mSingleton = Singleton.getInstance();
     private MyFragment          mFragment = null;
-    private ImageView           SwitchViewBackBtn;
+    private ImageButton         SwitchViewBackBtn;
     private boolean             readerFragment = false;
 
     protected void              onCreate(Bundle savedInstanceState) {
