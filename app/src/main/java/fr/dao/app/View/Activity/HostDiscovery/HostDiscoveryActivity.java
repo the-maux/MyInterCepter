@@ -26,6 +26,7 @@ import java.util.TimerTask;
 
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
+import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
 import fr.dao.app.Core.Network.NetDiscovering;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.R;
@@ -259,7 +260,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 ViewAnimate.setVisibilityToInvisibleQuick(mSearchView);
                 ViewAnimate.FabAnimateHide(mInstance, mFab);
                 //ViewAnimate.setVisibilityToGoneQuick(mFab);
-                //mFab.hide();
+                mFab.hide();
                 initFragment(fragment);
                 initSearchView();
             }
@@ -383,10 +384,14 @@ public class                        HostDiscoveryActivity extends MyActivity {
     protected void                  onResume() {
         super.onResume();
         //mFab.show();
-        Animation scaleDown = AnimationUtils.loadAnimation(this, R.anim.fab_scale_up);
-        scaleDown.setDuration(1000);
-        mFab.startAnimation(scaleDown);
-//        ViewAnimate.setVisibilityToVisibleQuick(mFab);
+//        ViewAnimate.setVisibilityTo:VisibleQuick(mFab);
+        if (NetworkDiscoveryControler.over())
+            ViewAnimate.FabAnimateReveal(mInstance, mFab);
+    }
+
+    protected void onPause() {
+        ViewAnimate.FabAnimateHide(mInstance, mFab);
+        super.onPause();
     }
 
     public void                     onBackPressed() {

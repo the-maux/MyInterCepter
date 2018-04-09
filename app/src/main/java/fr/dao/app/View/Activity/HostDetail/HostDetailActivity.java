@@ -9,9 +9,12 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -108,7 +111,16 @@ public class                    HostDetailActivity extends MyActivity {
             if (mode == null) {
                 throw new InvalidParameterException("NO MODE TRANSMITED IN BUNDLE");
             } else if (mode.contains("Live")) {
-                ViewAnimate.setVisibilityToVisibleQuick(mMenuFAB, 1250);
+                Animation scaleUp = AnimationUtils.loadAnimation(this, R.anim.fab_scale_up);
+                scaleUp.setDuration(1250);
+                scaleUp.setAnimationListener(new Animation.AnimationListener() {
+                    public void onAnimationStart(Animation animation) {
+                        mMenuFAB.setVisibility(View.VISIBLE);
+                    }
+                    public void onAnimationEnd(Animation animation) {}
+                    public void onAnimationRepeat(Animation animation) {}
+                });
+                mMenuFAB.startAnimation(scaleUp);
             } else if (mode.contains("Recorded")) {
                 mMenuFAB.setVisibility(View.GONE);
             }
@@ -200,7 +212,9 @@ public class                    HostDetailActivity extends MyActivity {
         collapsingToolbarLayout.setTitle(mFocusedHost.getName());
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                ViewCompat.setElevation(collapsingToolbarLayout, 4);
                 int alpha = appBarLayout.getTotalScrollRange() - Math.abs(verticalOffset);
+                Log.d(TAG, "alpha:"+alpha);
                 if (alpha < 40) {
                     if (osImg.getVisibility() == View.VISIBLE)
                         osImg.animate()
@@ -210,6 +224,7 @@ public class                    HostDetailActivity extends MyActivity {
                                     @Override
                                     public void onAnimationEnd(Animator animation) {
                                         super.onAnimationEnd(animation);
+                                        collapsingToolbarLayout.setScrimsShown(true);
                                         osImg.setVisibility(View.GONE);
                                     }
                                 });
@@ -222,6 +237,7 @@ public class                    HostDetailActivity extends MyActivity {
                                     @Override
                                     public void onAnimationEnd(Animator animation) {
                                         super.onAnimationEnd(animation);
+                                        collapsingToolbarLayout.setScrimsShown(false);
                                         osImg.setVisibility(View.VISIBLE);
                                     }
                                 });
@@ -334,8 +350,22 @@ public class                    HostDetailActivity extends MyActivity {
             history.setVisibility(View.GONE);
             if (collapsBackground != null)
                 collapsBackground.setImageResource(0);
-            super.onBackPressed();
+            Animation scaleDown = AnimationUtils.loadAnimation(mInstance, R.anim.fab_scale_down);
+            scaleDown.setDuration(450);
+            mMenuFAB.startAnimation(scaleDown);
+            scaleDown.setAnimationListener(new Animation.AnimationListener() {
+                public void onAnimationStart(Animation animation) {}
+                public void onAnimationEnd(Animation animation) {
+                    mMenuFAB.setVisibility(View.GONE);
+                }
+                public void onAnimationRepeat(Animation animation) {}
+            });
+            onBackMe();
+
         }
     }
 
+    protected void              onBackMe() {
+        super.onBackPressed();
+    }
 }

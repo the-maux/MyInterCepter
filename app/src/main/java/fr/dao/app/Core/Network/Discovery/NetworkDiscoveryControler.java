@@ -27,6 +27,12 @@ public class                        NetworkDiscoveryControler {
 
     private static                  NetworkDiscoveryControler            mInstance = null;
 
+    public static boolean           over() {
+        if (mInstance == null)
+            return false;
+        return true;
+    }
+
     public static synchronized      NetworkDiscoveryControler getInstance(final FragmentHostDiscoveryScan fragmentHostDiscoveryScan) {
         if(mInstance == null)
             mInstance = new NetworkDiscoveryControler();

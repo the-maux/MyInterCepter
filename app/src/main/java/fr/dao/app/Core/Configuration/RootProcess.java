@@ -16,6 +16,7 @@ public class                    RootProcess {
     private int                 mPid;
     private String              mLogID;
     private boolean             mDebugLog = false;
+    private boolean             noRootAllowed = true;
 
     public                      RootProcess(String LogID) {
         this.mLogID = LogID;
@@ -23,7 +24,12 @@ public class                    RootProcess {
             mProcess = Runtime.getRuntime().exec("su");
             mOutputStream = new DataOutputStream(mProcess.getOutputStream());
         } catch (IOException e) {
+            Log.d(TAG, "e:[" + e.getMessage()+ "]");
             e.printStackTrace();
+            if (e.getMessage().contains("Permission denied")) {
+                Log.e(TAG, "permission denied");
+                noRootAllowed = true;
+            }
         }
     }
     public                      RootProcess(String LogID, String workingDirectory) {
@@ -149,5 +155,9 @@ public class                    RootProcess {
         new RootProcess("KILLALL")
                 .exec(Singleton.getInstance().BinaryPath + "busybox killall " + binary)
                 .closeProcess();
+    }
+
+    public boolean              isNoRootAllowed() {
+        return noRootAllowed;
     }
 }

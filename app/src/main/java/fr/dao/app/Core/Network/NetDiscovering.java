@@ -26,16 +26,20 @@ public class                            NetDiscovering {
             ArrayList<String> ipsFromArpFile = readIpsTableFromArp(listIpPlusMac);
             for (String reachable : ipReachable) {
                 already = false;
-                for (String ip : ipsFromArpFile) {
-                    if ((reachable.substring(0, reachable.indexOf(":")) + "..").contains(ip + ".."))
-                        already = true;
-                }
-                if (!already) {
-                    if (!reachable.contains(Singleton.getInstance().network.myIp)) {
-                        if (Singleton.getInstance().UltraDebugMode)
-                            Log.d(TAG, "ARP_TABLE FIX:" + reachable);
-                        listIpPlusMac.add(reachable);
+                if (reachable != null) {
+                    for (String ip : ipsFromArpFile) {
+                        if ((reachable.substring(0, reachable.indexOf(":")) + "..").contains(ip + ".."))
+                            already = true;
                     }
+                    if (!already) {
+                        if (!reachable.contains(Singleton.getInstance().network.myIp)) {
+                            if (Singleton.getInstance().UltraDebugMode)
+                                Log.d(TAG, "ARP_TABLE FIX:" + reachable);
+                            listIpPlusMac.add(reachable);
+                        }
+                    }
+                } else {
+                    Log.e(TAG, "WTF reachable is null ?");
                 }
             }
             String dumpMyDevice = Singleton.getInstance().network.myIp + ":" + Singleton.getInstance().network.mac;

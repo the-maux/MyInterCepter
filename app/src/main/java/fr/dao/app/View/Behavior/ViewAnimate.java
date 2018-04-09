@@ -45,15 +45,60 @@ public class                    ViewAnimate {
                 });
     }
 
-    public static void         FabAnimateReveal(Context context, FloatingActionButton fab) {
-        Animation scaleDown = AnimationUtils.loadAnimation(context, R.anim.fab_scale_up);
-        scaleDown.setDuration(800);
-        fab.startAnimation(scaleDown);
+    public static void          FabAnimateReveal(Context context, final FloatingActionButton fab,  final Runnable runnable) {
+        Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.fab_scale_up);
+        scaleUp.setDuration(LONG_DURATION);
+        scaleUp.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+                fab.setVisibility(View.VISIBLE);
+            }
+            public void onAnimationEnd(Animation animation) {
+                if (runnable != null) {
+                    new Thread(runnable).start();
+                }
+            }
+            public void onAnimationRepeat(Animation animation) {}
+        });
+        fab.startAnimation(scaleUp);
     }
-    public  static void         FabAnimateHide(Context context, FloatingActionButton fab) {
+    public static void          FabAnimateHide(Context context, final FloatingActionButton fab, final Runnable runnable) {
         Animation scaleDown = AnimationUtils.loadAnimation(context, R.anim.fab_scale_down);
-        scaleDown.setDuration(800);
+        scaleDown.setDuration(LONG_DURATION);
         fab.startAnimation(scaleDown);
+        scaleDown.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {}
+            public void onAnimationEnd(Animation animation) {
+                fab.setVisibility(View.GONE);
+                if (runnable != null) {
+                    new Thread(runnable).start();
+                }
+            }
+            public void onAnimationRepeat(Animation animation) {}
+        });
+    }
+    public static void          FabAnimateReveal(Context context, final FloatingActionButton fab) {
+        Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.fab_scale_up);
+        scaleUp.setDuration(LONG_DURATION);
+        scaleUp.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+                fab.setVisibility(View.VISIBLE);
+            }
+            public void onAnimationEnd(Animation animation) {}
+            public void onAnimationRepeat(Animation animation) {}
+        });
+        fab.startAnimation(scaleUp);
+    }
+    public static void          FabAnimateHide(Context context, final FloatingActionButton fab) {
+        Animation scaleDown = AnimationUtils.loadAnimation(context, R.anim.fab_scale_down);
+        scaleDown.setDuration(LONG_DURATION);
+        fab.startAnimation(scaleDown);
+        scaleDown.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {}
+            public void onAnimationEnd(Animation animation) {
+                fab.setVisibility(View.GONE);
+            }
+            public void onAnimationRepeat(Animation animation) {}
+        });
     }
 
 }

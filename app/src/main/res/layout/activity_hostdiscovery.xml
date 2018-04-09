@@ -145,6 +145,7 @@
         android:src="@drawable/ic_search_svg"
         android:tint="@color/tint_svg"
         android:transitionName="fab"
+        android:visibility="gone"
         app:backgroundTint="@color/fab_color"
         app:fabSize="normal"
         app:layout_anchor="@id/appBarLayout"

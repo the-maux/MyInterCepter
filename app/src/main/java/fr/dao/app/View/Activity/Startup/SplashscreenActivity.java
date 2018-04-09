@@ -3,6 +3,7 @@ package fr.dao.app.View.Activity.Startup;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +33,6 @@ public class                    SplashscreenActivity extends AppCompatActivity {
             finish();
         } else {
             new Handler().postDelayed(new Runnable() {
-                @Override
                 public void run() {
                     if (try_permission++ > MAXIMUM_TRY_PERMISSION)
                         finish();
@@ -43,8 +43,11 @@ public class                    SplashscreenActivity extends AppCompatActivity {
     }
     private boolean             rootCheck() {
         try {
-       //     String RootOkTest = new RootProcess("RootCheckTest").exec("ls /data/data").getReader().readLine();
-            String RootOk = new RootProcess("RootCheck").exec("id").getReader().readLine();
+            RootProcess rootProcess = new RootProcess("RootCheck");
+            if (!rootProcess.isNoRootAllowed()) {
+                return false;
+            }
+            String RootOk = rootProcess.exec("id").getReader().readLine();
             return (RootOk != null && RootOk.contains("uid=0(root)"));
         } catch (IOException e) {
             e.printStackTrace();

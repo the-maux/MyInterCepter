@@ -35,6 +35,7 @@ import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
 import fr.dao.app.View.Activity.Scan.NmapActivity;
 import fr.dao.app.View.Behavior.Fragment.MyFragment;
+import fr.dao.app.View.Behavior.ViewAnimate;
 import fr.dao.app.View.Widget.Adapter.HostDiscoveryAdapter;
 import fr.dao.app.View.Widget.Adapter.OSFilterAdapter;
 import fr.dao.app.View.Widget.Dialog.RV_dialog;
@@ -80,6 +81,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
             mActivity.setToolbarTitle(mSingleton.network.ssid,
                     mHosts.size() + " device" + ((mHosts.size() > 1) ? "s" : ""));
         }
+
         mHostAdapter.updateHostList(mHosts);
         mHost_RV.setAdapter(mHostAdapter);
         mActivity.initToolbarButton();
@@ -232,7 +234,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
 
     public void                     onHostActualized(final ArrayList<Host> hosts, final int online, final int offline) {
         mActivity.runOnUiThread(new Runnable() {
-            @Override
             public void run() {
                 mHosts = hosts;
                 mHostLoaded = true;
@@ -246,6 +247,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
                 mSwipeRefreshLayout.setRefreshing(false);
                 mActivity.onScanOver();
+
                 DBNetwork.updateHostOfSessions(mActivity.actualNetwork, hosts, mHostAdapter.getOsList());
             }
         });
