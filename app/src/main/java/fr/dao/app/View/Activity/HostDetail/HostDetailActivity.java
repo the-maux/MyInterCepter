@@ -68,9 +68,6 @@ public class                    HostDetailActivity extends MyActivity {
         osHostImage = findViewById(R.id.OsImg);
         history = findViewById(R.id.history);
         settingsMenuDetail = findViewById(R.id.settingsMenuDetail);
-//                CoordinatorLayout.LayoutParams params =
-//                (CoordinatorLayout.LayoutParams) osHostImage.getLayoutParams();
-//        osHostImage.requestLayout();
         mTabs  = findViewById(R.id.tabs);
         mMenuFAB = findViewById(R.id.fab_menu);
     }
@@ -214,9 +211,10 @@ public class                    HostDetailActivity extends MyActivity {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewCompat.setElevation(collapsingToolbarLayout, 4);
                 int alpha = appBarLayout.getTotalScrollRange() - Math.abs(verticalOffset);
-                Log.d(TAG, "alpha:"+alpha);
+                Log.d(TAG, "alpha:" + alpha);
                 if (alpha < 40) {
-                    if (osImg.getVisibility() == View.VISIBLE)
+                    if (osImg.getVisibility() == View.VISIBLE) {
+                        Log.d(TAG, "osImg: To Gone");
                         osImg.animate()
                                 .alpha(0.0f)
                                 .setDuration(250)
@@ -224,11 +222,12 @@ public class                    HostDetailActivity extends MyActivity {
                                     @Override
                                     public void onAnimationEnd(Animator animation) {
                                         super.onAnimationEnd(animation);
-                                        collapsingToolbarLayout.setScrimsShown(true);
                                         osImg.setVisibility(View.GONE);
                                     }
                                 });
+                    }
                 } else {
+                    Log.d(TAG, "osImg: To Visible");
                     if (osImg.getVisibility() == View.GONE)
                         osImg.animate()
                                 .alpha(1.0f)
@@ -237,10 +236,10 @@ public class                    HostDetailActivity extends MyActivity {
                                     @Override
                                     public void onAnimationEnd(Animator animation) {
                                         super.onAnimationEnd(animation);
-                                        collapsingToolbarLayout.setScrimsShown(false);
                                         osImg.setVisibility(View.VISIBLE);
                                     }
                                 });
+
                 }
             }
         });

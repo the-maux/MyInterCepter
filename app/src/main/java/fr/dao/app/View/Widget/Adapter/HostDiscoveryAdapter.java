@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
     private FloatingActionButton mFab;
     private Singleton           mSingleton = Singleton.getInstance();
     private boolean             mIsHistoric = false;
+    private int                 nbrPrinted = 0;
 
     public                      HostDiscoveryAdapter(Activity activity, RecyclerView Host_RV,
                                                      boolean mIsHistoric, FloatingActionButton fab) {
@@ -71,6 +73,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                 (host.ip.contains(Singleton.getInstance().network.myIp)) ?
                         R.color.primary_dark : R.color.cardview_dark_background));
         MyGlideLoader.setOsIcon(mActivity, host, holder.osIcon);
+        setAnimation(holder.cardView, holder);
     }
 
     private void                printHostState(HostDiscoveryHolder holder, Host host) {
@@ -225,5 +228,11 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                 notifyDataSetChanged();
             }
         });
+    }
+
+    public void                 setAnimation(CardView cardView, HostDiscoveryHolder holder) {
+        if (!holder.animate) {
+
+        }
     }
 }
