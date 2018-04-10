@@ -70,8 +70,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
             printHostState(holder, host);
         checkedBehavior(holder, host, position);
         holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity,        /*Special background to notice my device*/
-                (host.ip.contains(Singleton.getInstance().network.myIp)) ?
-                        R.color.primary_dark : R.color.cardview_dark_background));
+                (host.isItMyDevice) ? R.color.primary_dark : R.color.cardview_dark_background));
         MyGlideLoader.setOsIcon(mActivity, host, holder.osIcon);
         setAnimation(holder.cardView, holder);
     }

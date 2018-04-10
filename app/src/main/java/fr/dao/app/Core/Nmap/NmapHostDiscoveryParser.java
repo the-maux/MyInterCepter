@@ -1,6 +1,7 @@
 package fr.dao.app.Core.Nmap;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -15,7 +16,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -161,12 +161,14 @@ class NmapHostDiscoveryParser {
     }
 
     private void                    initIfItsMyDevice(Host host) {
+        Log.i(TAG, "THIS IS MY DEVICE DETECTED");
         host.mac = mSingleton.network.mac;
         host.ip = mSingleton.network.myIp;
         host = DBHost.saveOrGetInDatabase(host);
         host.name = "My Device";
         host.os = "Android/(AOSP)";
         host.osType = Os.Android;
+        host.vendor = Build.BRAND + " " + Build.DEVICE;
         host.isItMyDevice = true;
         host.save();
     }

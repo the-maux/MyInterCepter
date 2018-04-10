@@ -137,7 +137,7 @@ public class                    HostDetailActivity extends MyActivity {
     private void                initMenuFab() {
         mMenuFAB.removeAllMenuButtons();
         FloatingActionButton nmapFAB = new FloatingActionButton(this);
-        FloatingActionButton fingerprintFAB = new FloatingActionButton(this);
+        FloatingActionButton cutInternet = new FloatingActionButton(this);
         FloatingActionButton vulnerabilityScanner = new FloatingActionButton(this);
         FloatingActionButton sniffingFAB = new FloatingActionButton(this);
 
@@ -155,13 +155,13 @@ public class                    HostDetailActivity extends MyActivity {
                 startActivity(intent);
             }
         });
-        fingerprintFAB.setButtonSize(FloatingActionButton.SIZE_MINI);
-        fingerprintFAB.setLabelText("Fingerprint");
-        fingerprintFAB.setImageResource(R.mipmap.ic_fingerprint_nosvg);
-        fingerprintFAB.setColorNormal(getResources().getColor(R.color.fab_color));
-        fingerprintFAB.setPadding(4, 4, 4, 4);
-        fingerprintFAB.setColorPressed(getResources().getColor(R.color.generic_background));
-        fingerprintFAB.setOnClickListener(new View.OnClickListener() {
+        cutInternet.setButtonSize(FloatingActionButton.SIZE_MINI);
+        cutInternet.setLabelText("Strip connection");
+        cutInternet.setImageResource(R.mipmap.ic_cut_internet);
+        cutInternet.setColorNormal(getResources().getColor(R.color.fab_color));
+        cutInternet.setPadding(4, 4, 4, 4);
+        cutInternet.setColorPressed(getResources().getColor(R.color.generic_background));
+        cutInternet.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Snackbar.make(findViewById(R.id.Coordonitor), "Not implemented yet", Snackbar.LENGTH_LONG).show();
                 mMenuFAB.close(true);
@@ -196,7 +196,7 @@ public class                    HostDetailActivity extends MyActivity {
         });
         mMenuFAB.addMenuButton(nmapFAB, 0);
         mMenuFAB.addMenuButton(sniffingFAB, 1);
-        mMenuFAB.addMenuButton(fingerprintFAB, 2);
+        mMenuFAB.addMenuButton(cutInternet, 2);
         mMenuFAB.addMenuButton(vulnerabilityScanner, 3);
     }
 
@@ -211,10 +211,8 @@ public class                    HostDetailActivity extends MyActivity {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewCompat.setElevation(collapsingToolbarLayout, 4);
                 int alpha = appBarLayout.getTotalScrollRange() - Math.abs(verticalOffset);
-                Log.d(TAG, "alpha:" + alpha);
                 if (alpha < 40) {
                     if (osImg.getVisibility() == View.VISIBLE) {
-                        Log.d(TAG, "osImg: To Gone");
                         osImg.animate()
                                 .alpha(0.0f)
                                 .setDuration(250)
@@ -227,7 +225,6 @@ public class                    HostDetailActivity extends MyActivity {
                                 });
                     }
                 } else {
-                    Log.d(TAG, "osImg: To Visible");
                     if (osImg.getVisibility() == View.GONE)
                         osImg.animate()
                                 .alpha(1.0f)
