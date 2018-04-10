@@ -33,7 +33,7 @@ public class                    NmapHostCheckerAdapter extends RecyclerView.Adap
         holder.itemView.setOnClickListener(onClickCard(host));
         holder.nameOS.setText(host.ip);
         holder.checkBox.setVisibility(View.INVISIBLE);
-        MyGlideLoader.setOsIcon(mActivity, host, holder.imageOS);
+        MyGlideLoader.setOsIcon(host, holder.imageOS);
     }
 
     private View.OnClickListener onClickCard(final Host host) {

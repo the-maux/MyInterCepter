@@ -54,7 +54,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
 
     public void                 onBindViewHolder(final HostDiscoveryHolder holder, final int position) {
         final Host host = mHosts.get(position);
-        String ipHostname = host.ip + ((host.getName().contains(host.ip)) ? "" : " (" + host.getName() + ")");
+        String ipHostname = host.ip + ((host.getName().contains(host.ip)) ? "" : " [" + host.getName() + "]");
         holder.ipAndHostname.setText(ipHostname);
         holder.mac.setText(host.mac);
         if (host.state == Host.State.FILTERED) {
@@ -71,7 +71,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         checkedBehavior(holder, host, position);
         holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity,        /*Special background to notice my device*/
                 (host.isItMyDevice) ? R.color.primary_dark : R.color.cardview_dark_background));
-        MyGlideLoader.setOsIcon(mActivity, host, holder.osIcon);
+        MyGlideLoader.setOsIcon(host, holder.osIcon);
         setAnimation(holder.cardView, holder);
     }
 
@@ -89,9 +89,6 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                 break;
         }
         holder.statusIcon.setImageResource(res);
-        /*
-        MyGlideLoader.loadDrawableInCircularImageView(mActivity,
-                new ColorDrawable(ContextCompat.getColor(mActivity, res)), holder.statusIcon);*/
     }
 
     private void                pushThisShyGuyToFront(HostDiscoveryHolder holder,Host host) {
@@ -120,7 +117,6 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         Utils.vibrateDevice(mActivity);
         host.selected = !host.selected;
         holder.selected.setSelected(host.selected);
-        Log.d(TAG, "onHostChecked::" + host.ip + ":" + host.selected);
         mHost_RV.post(new Runnable() {
             @Override
             public void run() {

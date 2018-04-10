@@ -15,13 +15,13 @@ public class                    RootProcess {
     private DataOutputStream    mOutputStream;
     private int                 mPid;
     private String              mLogID;
-    private boolean             mDebugLog = false;
+    private boolean             mDebugLog = true;
     private boolean             noRootAllowed = true;
 
     public                      RootProcess(String LogID) {
         this.mLogID = LogID;
         try {
-            mProcess = Runtime.getRuntime().exec("su");
+            mProcess = Runtime.getRuntime().exec("su", null);
             mOutputStream = new DataOutputStream(mProcess.getOutputStream());
         } catch (IOException e) {
             Log.d(TAG, "e:[" + e.getMessage()+ "]");
@@ -67,7 +67,7 @@ public class                    RootProcess {
             mPid = f.getInt(mProcess);
             if (mDebugLog)
                 Log.d(TAG, mLogID + "[PID:" + mPid + "]::" + cmd);
-            f.setAccessible(false);
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -136,9 +136,6 @@ public class                    RootProcess {
 
     RootProcess                 closeDontWait() {
         try {
-            //Log.d(TAG, this.mLogID + "::Close");
-            //mOutputStream.writeBytes("exit\n");
-            //mOutputStream.flush();
             mOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();

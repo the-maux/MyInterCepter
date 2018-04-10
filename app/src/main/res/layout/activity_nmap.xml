@@ -30,7 +30,7 @@
                 android:layout_marginTop="8dp"
                 android:elevation="4dp"
                 android:padding="4dp"
-                android:src="@drawable/nmap"
+                android:src="@drawable/nmap2"
                 android:transitionName="NmapIconTransition"
                 app:layout_constraintHeight_min="50dp"
                 app:layout_constraintLeft_toLeftOf="parent"

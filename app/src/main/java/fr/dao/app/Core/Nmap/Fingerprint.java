@@ -1,5 +1,9 @@
 package fr.dao.app.Core.Nmap;
 
+import android.util.Log;
+
+import java.net.InetAddress;
+
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Unix.Os;
@@ -12,20 +16,23 @@ public class                            Fingerprint {
 
     public static void                  initHost(Host host) {
         host.build();
-        isItMyDevice(host);
         guessosType(host);
-        if (Fingerprint.isItWindows(host)) {
+        if (host.name.contains("My Device")) {/* host.isItMyDevice is not saved on BDD for optimiz*/
+            host.isItMyDevice = true;
+            host.state = Host.State.ONLINE;
+            host.osType = Os.Android;
+        } else if (Fingerprint.isItWindows(host)) {
             host.osType = Os.Windows;
             host.os = "Windows";
             host.osDetail = "Windows";
-        }
-        if (host.osType == Os.Unknow) {
+        } else if (host.osType == Os.Unknow) {
             host.osType = Os.fromString(host.osDetail);
         }
     }
 
     private static void                 guessosType(Host host) {
         if (host.isItMyDevice) {
+            host.osType = Os.Android;
            return;
         }
         if (host.dumpInfo == null) {
@@ -88,16 +95,6 @@ public class                            Fingerprint {
         return host.Ports() != null &&
                 host.Ports().isPortOpen(135) &&
                 host.Ports().isPortOpen(445);
-    }
-
-    public static boolean               isItMyDevice(Host host) {
-        if (host.ip.contains(Singleton.getInstance().network.myIp)) {
-            host.isItMyDevice = true;
-            host.state = Host.State.ONLINE;
-            host.os = "Unix/(AOSP)";
-            host.osType = Os.Android;
-        }
-        return host.isItMyDevice;
     }
 
     public static boolean               isItMyGateway(Host host) {

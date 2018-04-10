@@ -122,7 +122,7 @@ public class                    HostDetailActivity extends MyActivity {
                 mMenuFAB.setVisibility(View.GONE);
             }
             mFocusedHost = DBHost.getDevicesFromMAC(bundle.getString("macAddress"));
-            MyGlideLoader.setOsIcon(this, mFocusedHost, osHostImage);
+            MyGlideLoader.setOsIcon(mFocusedHost, osHostImage);
             initMenuFab();
             initTabs();
             initAppBar();

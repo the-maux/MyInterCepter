@@ -15,12 +15,17 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -28,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 import fr.dao.app.Core.Configuration.Comparator.Comparators;
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Core.Configuration.Words;
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
@@ -46,6 +52,8 @@ class NmapHostDiscoveryParser {
         listRequestApi = Volley.newRequestQueue(context);
         //Log.d(TAG, "dump list macs[" + listMacs + "]");
         String[] macs = listMacs.split(" ");
+        if (mSingleton.isAllNmapDumped)
+            dumpToFile(NmapDump);
         String[] HostNmapDump = NmapDump.split("Nmap scan report for ");
         LENGTH_NODE = HostNmapDump.length-1;
         ExecutorService service = Executors.newCachedThreadPool();
@@ -64,6 +72,24 @@ class NmapHostDiscoveryParser {
         }
     }
 
+    private void                    dumpToFile(String nmapDump) {
+        final File file = new File(mSingleton.DumpsPath, mSingleton.network.ssid + Words.getGenericDateFormat(new Date()));
+        try {
+            file.createNewFile();
+            file.setReadable(true, false);
+            file.setWritable(true, false);
+            FileOutputStream fOut = new FileOutputStream(file);
+            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+            myOutWriter.append(nmapDump);
+            myOutWriter.close();
+            fOut.flush();
+            fOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG, "ERROR IN DUMPING NMAP SCAN");
+        }
+    }
+
     private Runnable                dispatcher(final String node, final String[] macs, final Network ap) {
        return new Runnable() {
             public void run() {
@@ -74,7 +100,7 @@ class NmapHostDiscoveryParser {
                     Host hostInList = ap.getHostFromMac(host.mac);
                     if (hostInList.name.isEmpty() || hostInList.name.contains("Unknow"))
                         hostInList.name = host.name;
-                    if (!Fingerprint.isItMyDevice(host))
+                    if (!host.ip.contains(Singleton.getInstance().network.myIp))/* Its my device*/
                         buildHostFromNmapDump(node, hostInList);
                     else
                         initIfItsMyDevice(hostInList);
@@ -117,6 +143,7 @@ class NmapHostDiscoveryParser {
               //  Log.i(TAG, "MAC:[" + line + "]");
                 host.mac = line.replace("MAC Address: ", "").split(" ")[0];
                 host.vendor = line.replace("MAC Address: " + host.mac + " (", "").replace(")", "");
+                host.vendor = host.vendor.substring(0, 1).toUpperCase() + host.vendor.substring(1);
             } else if (line.contains("PORT ")) {
                 int z = 0;
                 try {
@@ -155,8 +182,18 @@ class NmapHostDiscoveryParser {
         if (host.Notes == null)
             host.Notes = "";
         host.Notes = host.Notes.concat("OxBABOBAB").concat(nmapStdout);
-        if (host.ip.contains("10.16.186.227"))
-            host.dumpMe();
+        if (host.osType == Os.Unknow || (host.osType == Os.Android && !host.isItMyDevice)) {
+            Log.i(TAG, "HOST[" + host.ip + "] STILL UNKNOW !");
+            InetAddress inetAddress = null;
+            try {
+                inetAddress = InetAddress.getByName(host.ip);
+                String name = inetAddress.getCanonicalHostName();
+                Log.i(TAG, "HOST[" + host.ip + "] DNS NAME[" + name + "] !");
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+                Log.e(TAG, "HOST NO DNS FOUND");
+            }
+        }
         host.save();
     }
 
@@ -166,9 +203,10 @@ class NmapHostDiscoveryParser {
         host.ip = mSingleton.network.myIp;
         host = DBHost.saveOrGetInDatabase(host);
         host.name = "My Device";
-        host.os = "Android/(AOSP)";
+        host.os = "Android API " + Build.VERSION.SDK_INT;
         host.osType = Os.Android;
-        host.vendor = Build.BRAND + " " + Build.DEVICE;
+        host.osDetail = Build.BRAND.substring(0, 1).toUpperCase() + Build.BRAND.substring(1) + " " + Build.DEVICE;
+        host.vendor = host.osDetail;
         host.isItMyDevice = true;
         host.save();
     }

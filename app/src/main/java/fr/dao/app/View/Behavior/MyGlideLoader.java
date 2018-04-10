@@ -21,8 +21,6 @@ import fr.dao.app.R;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
-;
-
 public class                MyGlideLoader {
 
     public static void      loadDrawableInCircularImageView(Context context, int ressource, ImageView imageView) {
@@ -42,15 +40,15 @@ public class                MyGlideLoader {
                 .into(imageView);
     }
     public static void      loadDrawableInImageView(Context context, int ressource, ImageView imageView, boolean override) {
-        GlideRequest r = GlideApp.with(context)
+        GlideRequest builder = GlideApp.with(context)
                 .load(ressource)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .transition(DrawableTransitionOptions.withCrossFade());
         if (override)
-                r.apply(new RequestOptions()
+                builder.apply(new RequestOptions()
                         .fitCenter()
                         .override(100, 100));
-        r.into(imageView);
+        builder.into(imageView);
     }
 
     public static void      coordoBackgroundXMM(Activity context, final CoordinatorLayout layout) {
@@ -80,20 +78,19 @@ public class                MyGlideLoader {
                 });
     }
 
-    public static void                  setOsIcon(Context context, Host host, ImageView osImageView) {
+    public static void                  setOsIcon(Host host, ImageView osImageView) {
         if (host != null && host.osType != null) {
             if (host.state == Host.State.FILTERED && host.vendor.contains("Unknown")) {
-                osImageView.setImageResource(R.drawable.secure_computer1);
-                //MyGlideLoader.loadDrawableInCircularImageView(context, R.drawable.secure_computer1, osImageView);
+                osImageView.setImageResource(R.mipmap.ic_unknow);
                 return ;
             }
-            setOsIcon(context, host.osType, osImageView);
+            setOsIcon(host.osType, osImageView);
             return;
         }
         osImageView.setImageResource(R.drawable.monitor);
     }
 
-    public static void                  setOsIcon(Context context, Os os, ImageView osImageView) {
+    public static void                  setOsIcon(Os os, ImageView osImageView) {
         int ImageRessource;
         switch (os) {
             case Windows:
@@ -127,7 +124,7 @@ public class                MyGlideLoader {
                 ImageRessource = R.drawable.linuxicon;
                 break;
             case Android:
-                ImageRessource = R.drawable.android_winner;
+                ImageRessource = R.drawable.android8;
                 break;
             case Mobile:
                 ImageRessource = R.mipmap.ic_logo_android_trans_round;
@@ -142,22 +139,12 @@ public class                MyGlideLoader {
                 ImageRessource = R.drawable.router1;
                 break;
             case Unknow:
-                ImageRessource = R.mipmap.ic_unknow;
-                //MyGlideLoader.loadDrawableInImageView(context, ImageRessource, osImageView, false);
+                ImageRessource = R.drawable.secure_computer1;
                 break;
             default:
                 ImageRessource = R.drawable.router3;
                 break;
         }
-        //MyGlideLoader.loadDrawableInCircularImageView(context, ImageRessource, osImageView);
         osImageView.setImageResource(ImageRessource);
-        /*GlideApp.with(context)
-                .load(ImageRessource)
-                //.apply(RequestOptions.circleCropTransform())
-                //.diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                //.transition(DrawableTransitionOptions.withCrossFade())
-                //.dontAnimate()
-
-                .into(osImageView);*/
     }
 }

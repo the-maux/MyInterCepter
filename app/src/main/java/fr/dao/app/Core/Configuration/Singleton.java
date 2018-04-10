@@ -22,6 +22,7 @@ public class                            Singleton {
     public String                       PcapPath;
     public String                       BinaryPath = null;
     public String                       FilesPath = null;
+    public String                       DumpsPath = null;
 
     public ArrayList<Host>              hostList = null;
     public List<ArpSpoof>               ArpSpoofProcessStack = new ArrayList<>();
@@ -31,7 +32,7 @@ public class                            Singleton {
     private SniffSession                actualSniffSession = null;
     private boolean                     sslstripMode = false, LockScreen = false;
     private boolean                     webSpoofedstarted = false;
-    public boolean                      isNmapRunning = false;
+    public boolean                      isNmapRunning = false, isAllNmapDumped = true;
 
     private static Singleton            mInstance = null;
     String                              VERSION = "0xDEADBEEF";

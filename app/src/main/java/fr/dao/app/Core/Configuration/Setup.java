@@ -25,6 +25,8 @@ public class                    Setup {
     }
 
     public void                 install() throws IOException, InterruptedException {
+        exec("Creating Directory:", "mkdir -p " + Environment.getExternalStorageDirectory().getPath() + "/Dao/");
+        exec("Creating Directory:", "mkdir -p " + mSingleton.DumpsPath);
         exec("Creating Directory:", "mkdir -p " + mSingleton.PcapPath);/*  Build directory    */
         exec("Creating Directory:", "mkdir -p " + mSingleton.FilesPath);
         exec("Creating Directory:", "chmod 777 " + mSingleton.FilesPath);
@@ -92,7 +94,8 @@ public class                    Setup {
         Singleton singleton = Singleton.getInstance();
         singleton.FilesPath = activity.getFilesDir().getPath() + '/';
         singleton.BinaryPath = singleton.FilesPath;
-        singleton.PcapPath = Environment.getExternalStorageDirectory().getPath() + "/Pcap/";
+        singleton.PcapPath = Environment.getExternalStorageDirectory().getPath() + "/Dao/Pcap/";
+        singleton.DumpsPath = Environment.getExternalStorageDirectory().getPath() + "/Dao/Nmap/";
         singleton.userPreference = new PreferenceControler(singleton.FilesPath);
     }
 

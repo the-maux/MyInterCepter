@@ -32,10 +32,10 @@ public class                    NetworksAdapter extends RecyclerView.Adapter<Ses
 
     public void                 onBindViewHolder(SessionHolder holder, int position) {
         final Network accessPoint = mSessions.get(position);
-        String date = new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE).format(accessPoint.lastScanDate);
+//        String date = new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE).format(accessPoint.lastScanDate);
         holder.title.setText(accessPoint.Ssid);
-        int size = accessPoint.listDevicesSerialized.split(";").length;
-        String subtitle = size + " device" + ((size >= 2) ? "s" : "")+ " decouvert";
+        int size = accessPoint.listDevicesSerialized == null ? 0 : accessPoint.listDevicesSerialized.split(";").length;
+        String subtitle = size + " device" + (size >= 2 ? "s" : "") + " decouvert";
         holder.subtitle.setText(subtitle);
         View.OnClickListener onClick = onClick(accessPoint);
         MyGlideLoader.loadDrawableInCircularImageView(mFragment.getContext(), R.drawable.radar, holder.icon);

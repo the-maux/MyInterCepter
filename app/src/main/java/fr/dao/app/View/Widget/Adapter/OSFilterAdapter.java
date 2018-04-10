@@ -32,7 +32,7 @@ public class                    OSFilterAdapter extends RecyclerView.Adapter<Hos
     public void                 onBindViewHolder(HostSelectionHolder holder, int position) {
         final Os os = mOsList.get(position);
         holder.nameOS.setText(os.name().replace("_", "/"));
-        MyGlideLoader.setOsIcon(mCtx, os, holder.imageOS);
+        MyGlideLoader.setOsIcon(os, holder.imageOS);
         holder.checkBox.setChecked(false);
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Core.Configuration.Words;
 import fr.dao.app.Model.Net.Pcap;
 import fr.dao.app.Model.Target.Host;
 
@@ -77,8 +78,7 @@ class                           ConfTcpdump {
     String                      buildCmd(String actualParam, boolean isDumpingInFile,
                                             String typeScan, List<Host> hosts) {
         String hostFilter = buildHostFilterCommand(hosts, typeScan);
-        String date =  new SimpleDateFormat("dd_MMMM_HH#mm-ss", Locale.FRANCE).format(new Date())
-                .replace("#", "h").replace("-", "m").replace("é", "e");
+        String date =  Words.getGenericDateFormat(new Date());
         String nameFile = mSingleton.network.ssid + "_" + date;
         String pcapFile = (isDumpingInFile) ? buildForDumpingPcap(nameFile, hosts) : "";
         String cmd = (mSingleton.FilesPath + "tcpdump " +
