@@ -67,7 +67,7 @@ public class                        NmapControler {
     /*
     **   HostDiscoveryActivity
     */
-    public                          NmapControler(List<String> ips, NetworkDiscoveryControler networkDiscoveryControler,
+    public                          NmapControler(ArrayList<Host> hosts, NetworkDiscoveryControler networkDiscoveryControler,
                                                   Network ap, Context context) {/* Parsing mode */
         String NMAP_ARG_SCAN = " -PN -sS -T3 -sU " +
                 "--script nbstat.nse,dns-service-discovery,upnp-info " +
@@ -78,17 +78,14 @@ public class                        NmapControler {
         mNnetworkDiscoveryControler = networkDiscoveryControler;
         mActualItemMenu = "Basic Host discovery";
         StringBuilder hostCmd = new StringBuilder("");
-        StringBuilder hostsMAC = new StringBuilder("");
-        for (String ip : ips) {
-            String[] tmp = ip.split(":");
-            hostCmd.append(" ").append(tmp[0]);
-            hostsMAC.append(" ").append(ip);
+        for (Host host : hosts) {
+            if (host.Deepest_Scan == 0)
+                hostCmd.append(" ").append(host.ip);
         }
         String cmd = PATH_NMAP + NMAP_ARG_SCAN + hostCmd.toString();
-        if (mSingleton.UltraDebugMode)
-            Log.d(TAG, "CMD:["+ cmd + "]");
-        setTitleToolbar(null, "Scanning " + ips.size() + " devices");
-        hostDiscoveryFromNmap(cmd, hostsMAC.toString(), ap, context);
+        Log.d(TAG, "CMD:["+ cmd + "]");
+        setTitleToolbar(null, "Scanning " + hostCmd.toString().split(" ").length + " devices");
+        hostDiscoveryFromNmap(cmd, hosts, ap, context);
     }
 
     /*
@@ -99,7 +96,7 @@ public class                        NmapControler {
         mIsLiveDump = true;
     }
 
-    private void                    hostDiscoveryFromNmap(final String cmd, final String listMacs, final Network ap, final Context context) {
+    private void                    hostDiscoveryFromNmap(final String cmd, final ArrayList<Host> hosts, final Network ap, final Context context) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -122,7 +119,7 @@ public class                        NmapControler {
                     String FullDUMP = dumpOutputBuilder.toString().substring(1);
                     Log.d(TAG, "\t\t LastLine[" + tmp + "]");
                     startParsing = Calendar.getInstance().getTime();
-                    new NmapHostDiscoveryParser(mInstance, listMacs, FullDUMP, ap, context);
+                    new NmapHostDiscoveryParser(mInstance, hosts, FullDUMP, ap, context);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

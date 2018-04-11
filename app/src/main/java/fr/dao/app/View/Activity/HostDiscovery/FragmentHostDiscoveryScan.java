@@ -35,7 +35,6 @@ import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
 import fr.dao.app.View.Activity.Scan.NmapActivity;
 import fr.dao.app.View.Behavior.Fragment.MyFragment;
-import fr.dao.app.View.Behavior.ViewAnimate;
 import fr.dao.app.View.Widget.Adapter.HostDiscoveryAdapter;
 import fr.dao.app.View.Widget.Adapter.OSFilterAdapter;
 import fr.dao.app.View.Widget.Dialog.RV_dialog;
@@ -219,7 +218,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 host.ip = ip;
                 host.mac = mac;
                 DBHost.saveOrGetInDatabase(host);
-                host.state = Host.State.FILTERED;
+                host.state = Host.State.ONLINE;
                 host.save();
                 actualNetwork.listDevices().add(host);
             }

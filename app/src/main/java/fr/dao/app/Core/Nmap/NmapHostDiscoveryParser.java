@@ -47,11 +47,10 @@ class NmapHostDiscoveryParser {
     private int                     LENGTH_NODE, NBR_PARSED_NODE = 0;
     private RequestQueue            listRequestApi;
 
-    NmapHostDiscoveryParser(NmapControler nmapControler, String listMacs, String NmapDump, Network ap, Context context) {
+    NmapHostDiscoveryParser(NmapControler nmapControler, ArrayList<Host> hosts, String NmapDump, Network ap, Context context) {
         this.mNmapControler = nmapControler;
         listRequestApi = Volley.newRequestQueue(context);
         //Log.d(TAG, "dump list macs[" + listMacs + "]");
-        String[] macs = listMacs.split(" ");
         if (mSingleton.isAllNmapDumped)
             dumpToFile(NmapDump);
         String[] HostNmapDump = NmapDump.split("Nmap scan report for ");
@@ -60,7 +59,7 @@ class NmapHostDiscoveryParser {
         mNetwork = ap;
         //Log.i(TAG, "{{{{{{{{{{{{{" + HostNmapDump[0] + "}}}}}}}}}}}}}}}}}");
         for (int i = 1; i < HostNmapDump.length; i++) {/*First node is the nmap preambule*/
-            service.execute(dispatcher(HostNmapDump[i], macs, ap));
+            service.execute(dispatcher(HostNmapDump[i], hosts, ap));
           //  Log.i(TAG, "{{{{{{{{{{{{{" + HostNmapDump[i] + "}}}}}}}}}}}}}}}}}");
         }
         service.shutdown();
@@ -90,17 +89,14 @@ class NmapHostDiscoveryParser {
         }
     }
 
-    private Runnable                dispatcher(final String node, final String[] macs, final Network ap) {
+    private Runnable                dispatcher(final String node, final ArrayList<Host> hosts, final Network ap) {
        return new Runnable() {
             public void run() {
                 try {
-                    Host host = new Host();
-                    getIpHOSTNAME(node.split("\n")[0], host);
-                    host.mac = getMACInTmp(macs, host.ip);
-                    Host hostInList = ap.getHostFromMac(host.mac);
-                    if (hostInList.name.isEmpty() || hostInList.name.contains("Unknow"))
-                        hostInList.name = host.name;
-                    if (!host.ip.contains(Singleton.getInstance().network.myIp))/* Its my device*/
+                    Host hostInList = getIpHOSTNAME(node.split("\n")[0], hosts);
+                    //host.mac = getMACInTmp(hosts, host.ip);
+                    //Host hostInList = ap.getHostFromMac(host.mac);
+                    if (!hostInList.ip.contains(Singleton.getInstance().network.myIp))/* Its my device*/
                         buildHostFromNmapDump(node, hostInList);
                     else
                         initIfItsMyDevice(hostInList);
@@ -183,7 +179,7 @@ class NmapHostDiscoveryParser {
             host.Notes = "";
         host.Notes = host.Notes.concat("OxBABOBAB").concat(nmapStdout);
         if (host.osType == Os.Unknow || (host.osType == Os.Android && !host.isItMyDevice)) {
-            Log.i(TAG, "HOST[" + host.ip + "] STILL UNKNOW !");
+            Log.i(TAG, "HOST[" + host.ip + "] STILL UNKNOWN !");
             InetAddress inetAddress = null;
             try {
                 inetAddress = InetAddress.getByName(host.ip);
@@ -194,7 +190,12 @@ class NmapHostDiscoveryParser {
                 Log.e(TAG, "HOST NO DNS FOUND");
             }
         }
-        host.save();
+        if (host.Deepest_Scan >= 1) {
+            Log.d(TAG, "Host[" + host.ip + "] was already Nmap scanned");
+        } else {
+            host.Deepest_Scan = 1;
+            host.save();
+        }
     }
 
     private void                    initIfItsMyDevice(Host host) {
@@ -211,14 +212,25 @@ class NmapHostDiscoveryParser {
         host.save();
     }
 
-    private void                    getIpHOSTNAME(String line, Host host) {
+    private Host                    getIpHOSTNAME(String line, ArrayList<Host> hosts) {
         /* nbl037421.hq.fr.corp.leroymerlin.com (10.16.187.230) */
+        String ip = null, hostname = null;
         if (line.contains("(")) {
-            host.ip = line.split(" ")[1].replace("(", "").replace(")", "");
-            host.Hostname = line.split(" ")[0];
+            ip = line.split(" ")[1].replace("(", "").replace(")", "");
+            hostname = line.split(" ")[0];
         } else {
-            host.ip = line.split(" ")[0];
+            ip = line.split(" ")[0];
         }
+        for (Host host : hosts) {
+            if (host.ip.contentEquals(ip)) {
+                if (hostname != null)
+                    host.name = hostname;
+                return host;
+            }
+
+        }
+        Log.e(TAG, "ERROR FOR " + line);
+        return null;
     }
 
     /**
@@ -398,10 +410,10 @@ class NmapHostDiscoveryParser {
         return null;
     }
 
-    private String                  getMACInTmp(String[] macsAndIp, String ip) throws UnknownHostException {
-        for (String mac : macsAndIp) {
-            if (mac.contains(ip + ':'))
-                return mac.replace(ip + ':', "").toUpperCase();
+    private String                  getMACInTmp(ArrayList<Host> hosts, String ip) throws UnknownHostException {
+        for (Host host : hosts) {
+            if (host.mac.contains(ip + ':'))
+                return host.mac.replace(ip + ':', "").toUpperCase();
         }
         throw new UnknownHostException("getMACInTmp::no subtitle[" + ip +"] in list of macts");
     }
@@ -417,15 +429,7 @@ class NmapHostDiscoveryParser {
     private void                    nmapIsTooLong() {
         Log.d(TAG, "Some node wasn't parsed, inintializing..");
         Log.d(TAG, "Analyzing (" + NBR_PARSED_NODE + "/" + LENGTH_NODE + ") devices scanned");
-       // Collections.sort(mNetwork.listDevices(), Fingerprint.getComparator());
         Iterator<Host> iter = mNetwork.listDevices().iterator();
-//        while (iter.hasNext()) {//ConcurrentModificationException
-//            Host host = iter.next();
-//            if (host.osType == Os.Unknow) {
-//                host.dumpMe(mSingleton.hostList);
-//                Log.d(TAG, "-------------");
-//            }
-//        }
         mNmapControler.onHostActualized(mNetwork.listDevices());
     }
 

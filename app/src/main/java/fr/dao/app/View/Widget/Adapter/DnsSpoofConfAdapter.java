@@ -7,8 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import java.util.List;
 
+import fr.dao.app.Core.Configuration.GlideApp;
+import fr.dao.app.Core.Configuration.GlideRequest;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Target.DNSSpoofItem;
 import fr.dao.app.R;
@@ -36,6 +40,17 @@ public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter
         DNSSpoofItem host = mDnsIntercepts.get(position);
         holder.title.setText("www." + host.domain + "  " + host.domain);
         holder.subtitle.setText(host.ip);
+        ;
+        GlideRequest builder = GlideApp.with(mActivity)
+                .load(host.domain + "/favicon.ico")
+                .placeholder(R.drawable.webserver_icon)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                ;
+//        if (override)
+//            builder.apply(new RequestOptions()
+//                    .fitCenter()
+//                    .override(100, 100));
+        builder.into(holder.logo);
         holder.icon.setOnClickListener(onDeleteDns(host));
     }
 

@@ -72,6 +72,8 @@ public class                Host extends Model {
     public String           UPnP_Infos = "Unknown";
     @Column(name = "PortDump")
     public String           PortDump = "";
+    @Column(name = "Deepest_Scan")
+    public int              Deepest_Scan = 0; //0:NONE | 1:BASIC_SCAN | 2:REGULAR | 3:VulsScan
 
 
     private ArrayList<Service> ServiceActivOnHost = new ArrayList<>();

@@ -74,7 +74,7 @@ public class                        NetworkDiscoveryControler {
         Log.d(TAG, "onArpScanOver with : "+ ipReachable.size() + " subtitle(s) reachable");
         Network ap = mFragment.updateStateOfHostAfterIcmp(basicHost);
         mActivity.setMAXIMUM_PROGRESS(basicHost.size());
-        new NmapControler(basicHost,this, ap, mActivity);
+        new NmapControler(ap.listDevices(),this, ap, mActivity);
     }
 
     public void                     onNmapScanOver(ArrayList<Host> hosts) {

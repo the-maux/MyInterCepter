@@ -15,7 +15,7 @@ public class                    RootProcess {
     private DataOutputStream    mOutputStream;
     private int                 mPid;
     private String              mLogID;
-    private boolean             mDebugLog = true;
+    private boolean             mDebugLog = false;
     private boolean             noRootAllowed = true;
 
     public                      RootProcess(String LogID) {
