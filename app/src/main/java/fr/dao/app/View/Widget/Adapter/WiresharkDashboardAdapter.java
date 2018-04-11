@@ -43,6 +43,13 @@ public class                    WiresharkDashboardAdapter extends RecyclerView.A
                 .inflate(R.layout.item_packets_type, parent, false));
     }
 
+    /**
+     * lOGO
+     * Thamoa
+     * 20% padding
+     * DDDDDD
+     * 414141
+     */
     public void                 onBindViewHolder(final PacketHolder holder, int position) {
         switch (holder.getAdapterPosition()) {
             case TCP:
