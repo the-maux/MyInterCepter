@@ -52,7 +52,7 @@ public class                    Setup {
                  "echo \"addn-hosts=" + DnsmasqConfig.PATH_HOST_FILE + "\" >> " + DnsmasqConfig.PATH_CONF_FILE + " && " +
                  "chmod 644 " + DnsmasqConfig.PATH_CONF_FILE);
         exec( /* Dnsmasq default configuration manipulate DnsRequest */
-            "echo \"192.168.0.29 www.microsof.com microsoft.com\" > " + DnsmasqConfig.PATH_HOST_FILE + " && " +
+            "echo \"192.168.0.29 www.microsoft.com microsoft.com\" > " + DnsmasqConfig.PATH_HOST_FILE + " && " +
                  "echo \"192.168.0.30 www.any.title any.title\" >> " + DnsmasqConfig.PATH_HOST_FILE + " && " +
                  "echo \"192.168.0.30 www.test.fr test.fr\" >> " + DnsmasqConfig.PATH_HOST_FILE + " && " +
                  "chmod 644 " + DnsmasqConfig.PATH_HOST_FILE);

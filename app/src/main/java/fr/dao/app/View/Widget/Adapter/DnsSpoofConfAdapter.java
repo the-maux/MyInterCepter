@@ -3,6 +3,7 @@ package fr.dao.app.View.Widget.Adapter;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,18 +41,21 @@ public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter
         DNSSpoofItem host = mDnsIntercepts.get(position);
         holder.title.setText("www." + host.domain + "  " + host.domain);
         holder.subtitle.setText(host.ip);
-        ;
-        GlideRequest builder = GlideApp.with(mActivity)
-                .load(host.domain + "/favicon.ico")
-                .placeholder(R.drawable.webserver_icon)
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                ;
-//        if (override)
-//            builder.apply(new RequestOptions()
-//                    .fitCenter()
-//                    .override(100, 100));
-        builder.into(holder.logo);
         holder.icon.setOnClickListener(onDeleteDns(host));
+        try {
+            GlideRequest builder = GlideApp.with(mActivity)
+                    .load("http://" + host.domain + "/favicon.ico")
+                    .placeholder(R.drawable.webserver_icon)
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+            builder.into(holder.logo);
+        } catch (Exception e) {
+            Log.d(TAG, "Error loading in HTTP, go to HTTPS");
+            GlideRequest builder = GlideApp.with(mActivity)
+                    .load("https://" + host.domain + "/favicon.ico")
+                    .placeholder(R.drawable.webserver_icon)
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+            builder.into(holder.logo);
+        }
     }
 
     private View.OnClickListener onDeleteDns(final DNSSpoofItem domain) {

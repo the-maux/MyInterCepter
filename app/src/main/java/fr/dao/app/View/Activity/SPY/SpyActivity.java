@@ -14,7 +14,6 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
@@ -28,7 +27,7 @@ import fr.dao.app.View.Widget.Adapter.DnsLogsAdapter;
 import fr.dao.app.View.Widget.Adapter.DnsSpoofConfAdapter;
 import fr.dao.app.View.Widget.Dialog.DialogQuestionWithInput;
 
-
+//https://danielmiessler.com/study/bettercap/
 public class                            SpyActivity extends SniffActivity {
     private String                      TAG = "DnsActivity";
     private SpyActivity mInstance = this;

@@ -163,8 +163,7 @@ public class                    WiresharkLiveFragment extends MyFragment {
             mRV_Wireshark.setLayoutManager(layoutManager);
         }
     }
-
-
+    
     public boolean              start() {
         Utils.vibrateDevice(mActivity);
         if (!Tcpdump.isRunning()) {
