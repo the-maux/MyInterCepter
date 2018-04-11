@@ -62,7 +62,6 @@
                 android:soundEffectsEnabled="true"
                 android:src="@drawable/ic_flip_to_front_svg"
                 android:tint="@color/tint_svg"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/settingsMenu"
                 app:layout_constraintTop_toTopOf="parent" />
