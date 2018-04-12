@@ -59,7 +59,7 @@ class                           ConfTcpdump {
     }
 
     private String              buildForDumpingPcap(String nameFile, List<Host> hosts) {
-        String pcapFile = mSingleton.PcapPath + nameFile + ".pcap ";
+        String pcapFile = mSingleton.Settings.PcapPath + nameFile + ".pcap ";
         Pcap pcap = new Pcap(nameFile + ".pcap ", hosts);
         pcap.sniffSession = mSingleton.getActualSniffSession();
 
@@ -81,7 +81,8 @@ class                           ConfTcpdump {
         String date =  Words.getGenericDateFormat(new Date());
         String nameFile = mSingleton.network.ssid + "_" + date;
         String pcapFile = (isDumpingInFile) ? buildForDumpingPcap(nameFile, hosts) : "";
-        String cmd = (mSingleton.FilesPath + "tcpdump " +
+
+        String cmd = (mSingleton.Settings.FilesPath + "tcpdump " +
                 pcapFile + actualParam + hostFilter)
                 .replace("//", "/").replace("  ", " ");
         Log.d(TAG, cmd);
@@ -89,7 +90,7 @@ class                           ConfTcpdump {
     }
 
     public String               buildCmd(File mPcapFile) {
-        Log.d(TAG, "buildCmd::" + mSingleton.FilesPath + "tcpdump " + "-r " + mPcapFile.getPath());
-        return mSingleton.FilesPath + "tcpdump " + "-r " + mPcapFile.getPath();
+        Log.d(TAG, "buildCmd::" + mSingleton.Settings.FilesPath + "tcpdump " + "-r " + mPcapFile.getPath());
+        return mSingleton.Settings.FilesPath + "tcpdump " + "-r " + mPcapFile.getPath();
     }
 }

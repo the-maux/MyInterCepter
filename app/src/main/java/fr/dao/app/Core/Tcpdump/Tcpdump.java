@@ -61,7 +61,7 @@ public class                        Tcpdump {
         String actualParam = "";
         actualCmd = mTcpdumpConf.buildCmd(actualParam, isDumpingInFile, "No Filter", hosts);
         return actualCmd.replace("nmap/nmap", "nmap")
-                .replace(mSingleton.FilesPath, "");
+                .replace(mSingleton.Settings.FilesPath, "");
     }
 
     public DashboardSniff           start(final WiresharkDispatcher trameDispatcher) {
@@ -203,11 +203,11 @@ public class                        Tcpdump {
             IPTables.stopIpTable();
             if (isDumpingInFile && !isPcapReading) {
                 new RootProcess("chmod Pcap files")
-                        .exec("chmod 666 " + mSingleton.PcapPath + "/*")
-                        .exec("chown sdcard_r:sdcard_r " + mSingleton.PcapPath + "/*")
+                        .exec("chmod 666 " + mSingleton.Settings.PcapPath + "/*")
+                        .exec("chown sdcard_r:sdcard_r " + mSingleton.Settings.PcapPath + "/*")
                         .closeProcess();
                 //TODO: faire un ok qui t'amene vers le dossier
-                mActivity.showSnackbar("Pcap saved here : " + mSingleton.PcapPath, -1);
+                mActivity.showSnackbar("Pcap saved here : " + mSingleton.Settings.PcapPath, -1);
             }
             if (isPcapReading) {
                 mFragment.onPcapAnalysed(mBufferOfTrame);

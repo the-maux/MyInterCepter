@@ -17,7 +17,7 @@ public class                        MapNetwork {
     private String                  routerIp;
     private NetworkDiscoveryControler scannerControler;
     private static MapNetwork       instance = null;
-    private String                  PATH_TO_PING_BINARY = Singleton.getInstance().FilesPath + "busybox ";
+    private String                  PATH_TO_PING_BINARY = Singleton.getInstance().Settings.FilesPath + "busybox ";
 
     private                         MapNetwork(NetworkDiscoveryControler scannerControler, String routerIp) {
         this.scannerControler = scannerControler;
@@ -71,7 +71,7 @@ public class                        MapNetwork {
     public boolean                  ping(String host) {
         try {
 //            RootProcess pingProces = new RootProcess("ICMP SCAN")
-            Process  mIpAddrProcess = Runtime.getRuntime().exec(Singleton.getInstance().BinaryPath + "/busybox ping -c 1 " + host);
+            Process  mIpAddrProcess = Runtime.getRuntime().exec(Singleton.getInstance().Settings.BinaryPath + "/busybox ping -c 1 " + host);
             if( mIpAddrProcess.waitFor() == 0){
                 return true;
             } else {

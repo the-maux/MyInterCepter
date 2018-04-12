@@ -17,22 +17,17 @@ import fr.dao.app.Model.Target.Network;
 import fr.dao.app.Model.Target.SniffSession;
 
 public class                            Singleton {
-    PreferenceControler                 userPreference;
-    public boolean                      DebugMode = true, UltraDebugMode = false;
-    public String                       PcapPath;
-    public String                       BinaryPath = null;
-    public String                       FilesPath = null;
     public String                       DumpsPath = null;
 
+    public SettingsControler            Settings = null;
     public ArrayList<Host>              hostList = null;
     public List<ArpSpoof>               ArpSpoofProcessStack = new ArrayList<>();
     public NetworkInformation           network = null;
     public Network                      actualNetwork = null;
     private DnsmasqControl              dnsSpoofed = null;
     private SniffSession                actualSniffSession = null;
-    private boolean                     sslstripMode = false, LockScreen = false;
-    private boolean                     webSpoofedstarted = false;
-    public boolean                      isNmapRunning = false, isAllNmapDumped = true;
+    public boolean                      DebugMode = true, UltraDebugMode = false;
+    private boolean                     webSpoofedstarted = false, isNmapRunning = false;
 
     private static Singleton            mInstance = null;
     String                              VERSION = "0xDEADBEEF";
@@ -41,7 +36,9 @@ public class                            Singleton {
             mInstance = new Singleton();
         return mInstance;
     }
-    private                             Singleton() {}
+    private                             Singleton() {
+
+    }
 
     public SniffSession                 getActualSniffSession() {
         if (actualSniffSession == null) {
@@ -57,20 +54,21 @@ public class                            Singleton {
     }
 
     public boolean                      isSslstripMode() {
-        return sslstripMode;
+        return Settings.getUserPreferences().sslstripMode;
     }
     public void                         setSslstripMode(boolean sslstripMode) {
-        this.sslstripMode = sslstripMode;
+        Settings.getUserPreferences().sslstripMode = sslstripMode;
         IPTables.sslConf();
+        Settings.getUserPreferences().save();
     }
     public boolean                      isDnsControlstarted() {
         return dnsSpoofed != null && dnsSpoofed.isRunning();
     }
     public boolean                      isLockScreen() {
-        return LockScreen;
+        return Settings.getUserPreferences().Lockscreen;
     }
     public void                         setLockScreen(boolean lockScreen) {
-        LockScreen = lockScreen;
+        Settings.getUserPreferences().Lockscreen = lockScreen;
         //TODO: LockScreen
         Log.i("setockScreenActived", "Not implemented");
     }
@@ -106,6 +104,6 @@ public class                            Singleton {
     public boolean                      isSniffServiceActif(Activity activity) {
         Tcpdump tcpdump = Tcpdump.getTcpdump(activity, false);
         return tcpdump != null && Tcpdump.isRunning() ||
-                !(!sslstripMode && !isDnsControlstarted() && !webSpoofedstarted);
+                !(!Settings.getUserPreferences().sslstripMode && !isDnsControlstarted() && !webSpoofedstarted);
     }
 }

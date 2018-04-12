@@ -145,12 +145,12 @@ public class                    RootProcess {
 
     public static void          kill(int pid) {
         new RootProcess("Kill:" + pid)
-                .exec(Singleton.getInstance().BinaryPath + "busybox kill " + pid)
+                .exec(Singleton.getInstance().Settings.BinaryPath + "busybox kill " + pid)
                 .closeProcess();
     }
     public static void          kill(String binary) {
         new RootProcess("KILLALL")
-                .exec(Singleton.getInstance().BinaryPath + "busybox killall " + binary)
+                .exec(Singleton.getInstance().Settings.BinaryPath + "busybox killall " + binary)
                 .closeProcess();
     }
 

@@ -291,7 +291,7 @@ public class                        FragmentHistoric extends MyFragment {
                 ViewAnimate.setVisibilityToVisibleQuick(mRV);
                 List<File> pcaps;
                 if (session.SniffSessions() == null || session.SniffSessions().isEmpty()) {
-                    pcaps = Pcap.getListFiles(new File(mSingleton.PcapPath));
+                    pcaps = Pcap.getListFiles(new File(mSingleton.Settings.PcapPath));
                     mActivity.showSnackbar("No session recorded, showing all pcaps");
                     setTitleToolbar("/sdcard/Pcap",  pcaps.size() + " records");
                 } else {

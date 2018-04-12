@@ -93,7 +93,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         findViewById(R.id.OsImg).setOnClickListener(initTabs());
         mTimer = findViewById(R.id.timer);
         mProgressBar = findViewById(R.id.progressBar);
-        mToolbarBackground = (TransitionDrawable)mToolbar.getBackground();
+        mToolbarBackground = (TransitionDrawable)findViewById(R.id.appBarLayout).getBackground();
         appBarLayout = findViewById(R.id.appBarLayout);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {

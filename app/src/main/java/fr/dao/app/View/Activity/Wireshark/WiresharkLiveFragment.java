@@ -209,7 +209,7 @@ public class                    WiresharkLiveFragment extends MyFragment {
         mAdapterDashboardWireshark.setDashboard(dashboardSniff);
         dashboardSniff.setAdapter(mAdapterDashboardWireshark);
         bottom_subtitle_sniffer.setText(mListHostSelected.size() + " clients");
-        mMonitorAgv.setText(argv.replace(mSingleton.PcapPath, ""));
+        mMonitorAgv.setText(argv.replace(mSingleton.Settings.PcapPath, ""));
         mActivity.updateNotifications();
         return true;
     }

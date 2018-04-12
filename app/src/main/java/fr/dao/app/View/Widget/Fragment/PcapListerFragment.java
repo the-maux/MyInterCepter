@@ -36,7 +36,7 @@ import fr.dao.app.View.Widget.Adapter.PcapFileAdapter;
     }
 
     private void            init() {
-        for (File file : Pcap.getListFiles(new File(mSingleton.PcapPath))) {
+        for (File file : Pcap.getListFiles(new File(mSingleton.Settings.PcapPath))) {
             if (file.getPath().endsWith(".pcap"))
                 files.add(file);
         }

@@ -27,7 +27,8 @@ public class                        ArpSpoof {
             @Override
             public void run() {
                 mProcess = new RootProcess("ARPSPoof::" + mTarget.ip);
-                mProcess.exec(Singleton.getInstance().BinaryPath + "arpspoof -i wlan0 -t " + mTarget.ip + " " + Singleton.getInstance().network.gateway);
+
+                mProcess.exec(Singleton.getInstance().Settings.BinaryPath + "arpspoof -i wlan0 -t " + mTarget.ip + " " + Singleton.getInstance().network.gateway);
                 Singleton.getInstance().ArpSpoofProcessStack.add(mInstance);
                 if (Singleton.getInstance().DebugMode) {
                     BufferedReader reader = mProcess.getReader();

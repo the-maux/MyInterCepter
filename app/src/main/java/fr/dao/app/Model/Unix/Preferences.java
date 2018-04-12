@@ -4,6 +4,8 @@ import android.os.Environment;
 
 import com.google.gson.annotations.SerializedName;
 
+import fr.dao.app.Core.Configuration.SettingsControler;
+
 public class                Preferences {
     @SerializedName("AutoScanOnStartup")
     public boolean          autoScanOnStartup = true;
@@ -25,6 +27,8 @@ public class                Preferences {
     public boolean          sslstripMode = false;
     @SerializedName("AutoSaveSession")
     public boolean          autoSaveSession = true;
+    @SerializedName("AutoSaveNmapSession")
+    public boolean          autoSaveNmapSession = true;
     @SerializedName("AutoSaveSniffSession")
     public boolean          autoSaveSniffSession = true;
     @SerializedName("AutoSaveDnsLogs")
@@ -35,5 +39,9 @@ public class                Preferences {
     public String          PATH_TO_FILES = Environment.getExternalStorageDirectory().getPath();
     @SerializedName("PATH_TO_PCAP")
     public String          PATH_TO_PCAP = PATH_TO_FILES + "/Pcap";
+
+    public void             save() {
+        SettingsControler.dump();
+    }
 
 }

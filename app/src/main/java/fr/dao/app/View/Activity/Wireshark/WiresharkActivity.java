@@ -86,7 +86,7 @@ public class                    WiresharkActivity extends SniffActivity {
             Bundle bundle = new Bundle();
             bundle.putString("Pcap", PcapFilePath);
             mFragment.setArguments(bundle);
-            setToolbarTitle(PcapFilePath.replace(mSingleton.PcapPath, "")
+            setToolbarTitle(PcapFilePath.replace(mSingleton.Settings.PcapPath, "")
                     .replace("_", " ").replace(".pcap", ""),"Loading");
         }
         if (!readerFragment)

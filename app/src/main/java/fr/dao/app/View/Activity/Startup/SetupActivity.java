@@ -64,7 +64,7 @@ public class                    SetupActivity extends MyActivity {
     }
 
     private void                initialisation() {
-        if ((new File(Singleton.getInstance().FilesPath + "version").exists()))
+        if ((new File(Singleton.getInstance().Settings.FilesPath + "version").exists()))
             finish();
         new Thread(new Runnable() {
             public void run() {

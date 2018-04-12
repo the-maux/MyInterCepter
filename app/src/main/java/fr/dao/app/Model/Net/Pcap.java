@@ -57,13 +57,13 @@ public class                Pcap extends Model {
     }
 
     public String           getFullNamePath() {
-        return Singleton.getInstance().PcapPath + nameFile;
+        return Singleton.getInstance().Settings.PcapPath + nameFile;
     }
     public String           getDate() {
         return new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE).format(date);
     }
     public File             getFile() {
-        return new File(Singleton.getInstance().PcapPath + nameFile);
+        return new File(Singleton.getInstance().Settings.PcapPath + nameFile);
     }
 
     public String           toString() {

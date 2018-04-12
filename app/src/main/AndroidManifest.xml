@@ -28,12 +28,14 @@
         </activity>
         <activity
             android:name=".View.Activity.Startup.SetupActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".View.Activity.DnsSpoofing.DnsActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".View.Activity.HostDiscovery.HostDiscoveryActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".View.Activity.Settings.SettingsActivity"

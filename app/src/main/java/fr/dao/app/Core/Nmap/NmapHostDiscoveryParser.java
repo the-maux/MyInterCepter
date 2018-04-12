@@ -51,7 +51,7 @@ class NmapHostDiscoveryParser {
         this.mNmapControler = nmapControler;
         listRequestApi = Volley.newRequestQueue(context);
         //Log.d(TAG, "dump list macs[" + listMacs + "]");
-        if (mSingleton.isAllNmapDumped)
+        if (mSingleton.Settings.getUserPreferences().autoSaveNmapSession)
             dumpToFile(NmapDump);
         String[] HostNmapDump = NmapDump.split("Nmap scan report for ");
         LENGTH_NODE = HostNmapDump.length-1;
@@ -72,7 +72,7 @@ class NmapHostDiscoveryParser {
     }
 
     private void                    dumpToFile(String nmapDump) {
-        final File file = new File(mSingleton.DumpsPath, mSingleton.network.ssid + Words.getGenericDateFormat(new Date()));
+        final File file = new File(mSingleton.Settings.DumpsPath, mSingleton.network.ssid + Words.getGenericDateFormat(new Date()));
         try {
             file.createNewFile();
             file.setReadable(true, false);

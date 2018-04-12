@@ -15,41 +15,49 @@ import java.io.IOException;
 
 import fr.dao.app.Model.Unix.Preferences;
 
-public class                PreferenceControler {
-    private String          TAG = "PreferenceControler";
+public class                SettingsControler {
+    private String          TAG = "SettingsControler";
+    private static String   TAG_S = "SettingsControler";
     private File            PATH_TO_PREFERENCES_FILE;
     private Preferences     userPreferences = null;
+    public String           PcapPath;
+    public String           BinaryPath = null;
+    public String           FilesPath = null;
+    public String           DumpsPath = null;
 
-    public                  PreferenceControler(String FilesPath) {
+    public SettingsControler(String FilesPath) {
         if (FilesPath == null) {
             Log.e(TAG, "ERROR NO FILE_PATH ON LOADING USER PREFERENCE");
         } else {
-            PATH_TO_PREFERENCES_FILE = new File(FilesPath, "userPreference.json");
+            this.FilesPath = FilesPath;
+            this.BinaryPath = FilesPath;
+            PATH_TO_PREFERENCES_FILE = new File(FilesPath, "Settings.json");
             if (PATH_TO_PREFERENCES_FILE.exists())
                 load();
             else
-                Log.d(TAG, "no userPreference.json found");
+                Log.d(TAG, "no Settings.json found");
         }
     }
 
-    public void             dump() {
+    public static void      dump() {
+        Preferences userPreferences = Singleton.getInstance().Settings.getUserPreferences();
         if (userPreferences == null) {
-            Log.e(TAG, "No user Preference file found");
-            Log.e(TAG, "Generating default one");
+            Log.e(TAG_S, "No user Preference file found");
+            Log.e(TAG_S, "Generating default one");
             userPreferences = new Preferences();
         }
         FileOutputStream stream = null;
         try {
-            stream = new FileOutputStream(PATH_TO_PREFERENCES_FILE);
+            stream = new FileOutputStream(Singleton.getInstance().Settings.FilesPath);
             stream.write(new JSONObject((new Gson()).toJson(userPreferences)).toString().getBytes());
         } catch (FileNotFoundException e) {
-            Log.e(TAG, "user preference file not found");
+            Log.e(TAG_S, "user preference file not found");
             e.printStackTrace();
         } catch (IOException e) {
-            Log.e(TAG, "File write failed: " + e.toString());
+            Log.e(TAG_S, "File write failed: " + e.toString());
             e.printStackTrace();
         } catch (JSONException e) {
-            Log.e(TAG, "JSON Error failed: " + e.toString());
+            Log.e(TAG_S, "JSON Error failed: " + e.toString());
             e.printStackTrace();
         } finally {
             if (stream != null)
@@ -69,14 +77,14 @@ public class                PreferenceControler {
             in = new FileInputStream(PATH_TO_PREFERENCES_FILE);
             if (in.read(bytes) > 0)
                 userPreferences = new Gson().fromJson(new String(bytes), Preferences.class);
-            Log.d(TAG, "userPreference loaded");
+            Log.d(TAG, "Settings loaded");
         } catch (FileNotFoundException e1) {
             e1.printStackTrace();
-            Log.e(TAG, "userPreference No file, so create one");
+            Log.e(TAG, "Settings No file, so create one");
             dump();
         } catch (IOException e2) {
             e2.printStackTrace();
-            Log.e(TAG, "userPreference loading error");
+            Log.e(TAG, "Settings loading error");
         } finally {
             try {
                 if (in != null)

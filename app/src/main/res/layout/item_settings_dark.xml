@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:alpha="0.90"
+    android:padding="16dp"
+    app:cardBackgroundColor="@color/generic_background"
+    app:cardCornerRadius="0dp">
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1px"
+        android:background="@color/generic_background"
+        android:elevation="0dp"
+        android:minHeight="50dp"
+        android:paddingBottom="4dp"
+        android:paddingRight="6dp"
+        android:paddingTop="4dp">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="12dp"
+            android:enabled="true"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:paddingLeft="8dp"
+            android:text="Verifier les applis via USB"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="14sp"
+            app:layout_constraintRight_toLeftOf="@+id/switch_sw"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:enabled="true"
+            android:paddingBottom="8dp"
+            android:paddingLeft="8dp"
+            android:paddingTop="4dp"
+            android:text="Forcer orient droite à gauche pour toutes langues alors lache rien ty es presque ma guelle il faut juste encore pousser un petit peu"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="12sp"
+            android:typeface="normal"
+            android:visibility="visible"
+            app:layout_constraintLeft_toLeftOf="@+id/title"
+            app:layout_constraintRight_toLeftOf="@+id/switch_sw"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
+
+        <Switch
+            android:id="@+id/switch_sw"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>

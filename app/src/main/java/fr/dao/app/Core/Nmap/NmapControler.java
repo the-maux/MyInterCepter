@@ -55,7 +55,7 @@ public class                        NmapControler {
     private String                  TAG = "NmapControler";
     private NmapControler           mInstance = this;
     private Singleton               mSingleton = Singleton.getInstance();
-    private String                  PATH_NMAP = mSingleton.FilesPath + "nmap/nmap ";
+    private String                  PATH_NMAP = mSingleton.Settings.FilesPath + "nmap/nmap ";
     private boolean                 mIsLiveDump, isRunning;
     private NetworkDiscoveryControler mNnetworkDiscoveryControler;
     private Map<String, String>     mNmapParams;
@@ -112,7 +112,7 @@ public class                        NmapControler {
                 try {
                     String tmp;
                     StringBuilder dumpOutputBuilder = new StringBuilder();
-                    BufferedReader reader = new RootProcess("Nmap", mSingleton.FilesPath)
+                    BufferedReader reader = new RootProcess("Nmap", mSingleton.Settings.FilesPath)
                             .exec(cmd).getReader();
                     while ((tmp = reader.readLine()) != null && !tmp.startsWith("Nmap done")) {
                         dumpOutputBuilder.append(tmp).append('\n');
@@ -215,7 +215,7 @@ public class                        NmapControler {
         Log.i(TAG, cmd);
         nmapOutputFragment.printCmdInTerminal(cmd
                 .replace("nmap/nmap", "nmap")
-                .replace(mSingleton.FilesPath, ""));
+                .replace(mSingleton.Settings.FilesPath, ""));
         return cmd;
     }
 
@@ -229,9 +229,8 @@ public class                        NmapControler {
                 public void run() {
                     try {
                         String tmp;
-                        mSingleton.isNmapRunning = true;
                         StringBuilder dumpOutputBuilder = new StringBuilder();
-                        BufferedReader reader = new RootProcess("Nmap", mSingleton.FilesPath)
+                        BufferedReader reader = new RootProcess("Nmap", mSingleton.Settings.FilesPath)
                                 .exec(build(nmapOutputFragment)).getReader();
                         while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {
                             if (!tmp.isEmpty()) {
@@ -243,7 +242,6 @@ public class                        NmapControler {
                         dumpOutputBuilder.append(tmp);
                         Log.d(TAG, "Nmap final dump:" + dumpOutputBuilder.toString());
                         nmapOutputFragment.flushOutput(tmp + '\n', progressBar);
-                        mSingleton.isNmapRunning = false;
                     } catch (IOException e) {
                         e.printStackTrace();
                         nmapOutputFragment.flushOutput(null, progressBar);

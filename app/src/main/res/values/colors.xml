@@ -31,7 +31,7 @@
     <color name="wiresharkPrimary">#dd263238</color>
     <color name="dnsSpoofPrimary">#dd004D40</color>
     <color name="webserverSpoofPrimary">#dd3E2723</color>
-    <color name="settingsPrimary">#dd01579B</color>
+    <color name="settingsPrimary">#dd455a64</color>
 
     <!-- Wireshark color  -->
     <color name="arp">#d6e7ff</color>

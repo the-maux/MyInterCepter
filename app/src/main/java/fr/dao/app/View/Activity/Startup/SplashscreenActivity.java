@@ -31,7 +31,7 @@ public class                    SplashscreenActivity extends AppCompatActivity {
         Intent intent;
         Log.d("Splashscreen", "getRootPermission");
         if (rootCheck()) {
-            if ((new File(Singleton.getInstance().FilesPath + "version").exists()))
+            if ((new File(Singleton.getInstance().Settings.FilesPath + "version").exists()))
                 intent = new Intent(this, HostDiscoveryActivity.class);
             else
                 intent = new Intent(this, SetupActivity.class);

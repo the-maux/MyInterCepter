@@ -45,7 +45,7 @@ public class                    SettingsFragment extends MyFragment {
 
     public void                 addItemMenu(String title, String subtitle, final Thread onClick,
                                             String switchEnabled) {
-        View settingsItemView = inflater.inflate(R.layout.item_settings, container, false);
+        View settingsItemView = inflater.inflate(R.layout.item_settings_dark, container, false);
         TextView title_TV = settingsItemView.findViewById(R.id.title);
         TextView subtitle_TV = settingsItemView.findViewById(R.id.subtitle);
         ConstraintLayout rootView = settingsItemView.findViewById(R.id.rootView);
