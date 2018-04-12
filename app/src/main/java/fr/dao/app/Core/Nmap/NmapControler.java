@@ -22,6 +22,7 @@ import fr.dao.app.Model.Target.Network;
 import fr.dao.app.View.Activity.Scan.NmapOutputFragment;
 
 /*
+https://hackertarget.com/7-nmap-nse-scripts-recon/
     Utilisation: nmap [Type(s) de scan] [Options] {spécifications des cibles}
 
            -A Active la détection du système d'exploitation et des versions
@@ -65,7 +66,15 @@ public class                        NmapControler {
 
 
     /*
+    http://macvendors.co/api
     **   HostDiscoveryActivity
+    * --Script =
+     *              nbstat => U:137
+     *              dns-service-discovery => U:5353
+     *              upnp-info => U:1900
+     *              Windows check => T:135 https://nmap.org/nsedoc/scripts/msrpc-enum.html msrpc
+     *                            => T:445 microsoft-ds
+    *
     */
     public                          NmapControler(ArrayList<Host> hosts, NetworkDiscoveryControler networkDiscoveryControler,
                                                   Network ap, Context context) {/* Parsing mode */

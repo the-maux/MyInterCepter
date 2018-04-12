@@ -88,7 +88,6 @@ public class                            SpyActivity extends SniffActivity {
             mFab.setImageResource(R.drawable.ic_media_play);
         }
         mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View view) {
                 Utils.vibrateDevice(mInstance);
                 updateNotifications();
