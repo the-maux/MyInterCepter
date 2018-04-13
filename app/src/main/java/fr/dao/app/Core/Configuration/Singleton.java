@@ -17,27 +17,24 @@ import fr.dao.app.Model.Target.Network;
 import fr.dao.app.Model.Target.SniffSession;
 
 public class                            Singleton {
-    public String                       DumpsPath = null;
-
-    public SettingsControler            Settings = null;
-    public ArrayList<Host>              hostList = null;
-    public List<ArpSpoof>               ArpSpoofProcessStack = new ArrayList<>();
-    public NetworkInformation           network = null;
-    public Network                      actualNetwork = null;
+    public  SettingsControler           Settings = null;
+    public  NetworkInformation          network = null;
+    public  Network                     actualNetwork = null;
+    public  ArrayList<Host>             hostList = null;
+    public  List<ArpSpoof>              ArpSpoofProcessStack = new ArrayList<>();
     private DnsmasqControl              dnsSpoofed = null;
     private SniffSession                actualSniffSession = null;
-    public boolean                      DebugMode = true, UltraDebugMode = false;
     private boolean                     webSpoofedstarted = false, isNmapRunning = false;
 
     private static Singleton            mInstance = null;
     String                              VERSION = "0xDEADBEEF";
+
+    private                             Singleton() {}
+
     public static synchronized Singleton getInstance() {
         if(mInstance == null)
             mInstance = new Singleton();
         return mInstance;
-    }
-    private                             Singleton() {
-
     }
 
     public SniffSession                 getActualSniffSession() {

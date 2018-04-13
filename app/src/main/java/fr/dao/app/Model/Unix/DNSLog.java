@@ -73,7 +73,7 @@ public class                            DNSLog extends Model {
         this.recyclerView = dnsRVLogs;
     }
     public void                         addLog(DNSLog dnsLog) {
-        if (Singleton.getInstance().DebugMode)
+        if (Singleton.getInstance().Settings.DebugMode)
             Log.d(TAG, "addLog:" + dnsLog.data + "] to [" + this.domain + "]");
         logs.add(dnsLog);
         this.currentType = dnsLog.currentType;

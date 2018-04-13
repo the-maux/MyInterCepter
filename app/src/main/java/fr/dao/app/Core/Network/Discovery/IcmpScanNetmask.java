@@ -31,7 +31,7 @@ public class                        IcmpScanNetmask {
     private volatile int            mNbrHostScanned = 0;
     private volatile boolean        alreadySend = false;
     private ArrayList<String>       mListIpReachable = new ArrayList<>();
-    private boolean                 debuglog = Singleton.getInstance().DebugMode;
+    private boolean                 debuglog = Singleton.getInstance().Settings.DebugMode;
     private NetworkDiscoveryControler mScanner;
     private Date                    startScanning;
 
@@ -61,7 +61,7 @@ public class                        IcmpScanNetmask {
 
     private void                    IcmpScanOver() {
         alreadySend = true;
-        if (Singleton.getInstance().UltraDebugMode) {
+        if (Singleton.getInstance().Settings.UltraDebugMode) {
             for (String ipReachable : mListIpReachable) {
                 Log.d(TAG, ipReachable + " reachable");
             }

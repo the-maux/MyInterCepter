@@ -18,7 +18,7 @@ public class                    MyActivity extends AppCompatActivity {
     }
 
     public void                 overridePendingTransition(int enterAnim, int exitAnim) {
-        if (Singleton.getInstance().UltraDebugMode)
+        if (Singleton.getInstance().Settings.UltraDebugMode)
             Log.d(TAG, "overridePendingTransition::(EnterAnim:" + enterAnim + ") & exitAnim(" + exitAnim +")");
         super.overridePendingTransition(enterAnim, exitAnim);
     }

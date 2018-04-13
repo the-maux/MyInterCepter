@@ -24,6 +24,7 @@ public class                SettingsControler {
     public String           BinaryPath = null;
     public String           FilesPath = null;
     public String           DumpsPath = null;
+    public boolean          DebugMode = true, UltraDebugMode = false;
 
     public SettingsControler(String FilesPath) {
         if (FilesPath == null) {

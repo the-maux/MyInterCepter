@@ -179,7 +179,7 @@ public class                    WiresharkPacketsAdapter extends RecyclerView.Ada
             public void run() {
                 mActualize = true;
                 listOfTrame.clear();
-                if (Singleton.getInstance().UltraDebugMode)
+                if (Singleton.getInstance().Settings.UltraDebugMode)
                     dump();
                 for (Trame trame : originalListOfTrames) {
                     putTrameFilteredInLiveList(trame, false);

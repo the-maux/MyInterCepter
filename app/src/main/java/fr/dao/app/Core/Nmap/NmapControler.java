@@ -107,17 +107,17 @@ public class                        NmapControler {
 
     private void                    hostDiscoveryFromNmap(final String cmd, final ArrayList<Host> hosts, final Network ap, final Context context) {
         new Thread(new Runnable() {
-            @Override
             public void run() {
                 try {
-                    String tmp;
+                    String tmp = "";
                     StringBuilder dumpOutputBuilder = new StringBuilder();
-                    BufferedReader reader = new RootProcess("Nmap", mSingleton.Settings.FilesPath)
+/*                    BufferedReader reader = new RootProcess("Nmap", mSingleton.Settings.FilesPath)
                             .exec(cmd).getReader();
                     while ((tmp = reader.readLine()) != null && !tmp.startsWith("Nmap done")) {
                         dumpOutputBuilder.append(tmp).append('\n');
                     }
-                    if (tmp == null || !tmp.startsWith("Nmap done")) {
+                    */
+                    if (tmp.isEmpty() || !tmp.startsWith("Nmap done")) {
                         Log.d(TAG, "Error in nmap execution, Nmap didn't end");
                         dumpOutputBuilder.append(tmp);
                         Log.e(TAG, dumpOutputBuilder.toString());
@@ -129,7 +129,7 @@ public class                        NmapControler {
                     Log.d(TAG, "\t\t LastLine[" + tmp + "]");
                     startParsing = Calendar.getInstance().getTime();
                     new NmapHostDiscoveryParser(mInstance, hosts, FullDUMP, ap, context);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -148,8 +148,8 @@ public class                        NmapControler {
                 "--script nbstat.nse,dns-service-discovery " +
                 " " +
                 "-p T:21,T:22,T:23,T:25,T:80,T:110,T:135,T:139,T:3128,T:443,T:445,T:2869,U:53,U:3031,U:5353  ");
-        mMenuCommand.add("");
-        mNmapParams.put(mMenuCommand.get(3), "");
+        mMenuCommand.add("Quick scan");
+        mNmapParams.put(mMenuCommand.get(3), " -T4 -A -v");
         mMenuCommand.add("Os fingerprint");
         mNmapParams.put(mMenuCommand.get(4), " -O -v ");
         mMenuCommand.add("Intrusive scan");
