@@ -7,38 +7,65 @@ import com.google.gson.annotations.SerializedName;
 import fr.dao.app.Core.Configuration.SettingsControler;
 
 public class                Preferences {
-    @SerializedName("AutoScanOnStartup")
-    public boolean          autoScanOnStartup = true;
-    @SerializedName("DumpInPcap")
-    public boolean          dumpInPcap = true;
-    @SerializedName("SendFeedBackToServer")
-    public boolean          feedBackToServer = true;
+    /*
+     ** Global settings
+     */
     @SerializedName("DebugMode")
     public boolean          debugMode = true;
     @SerializedName("UltraDebugMode")
     public boolean          ultraDebugMode = true;
-    @SerializedName("SearchServiceOnHostDiscovery")
-    public boolean          searchServiceOnHostDiscovery = false;
+    @SerializedName("SendFeedBackToServer")
+    public boolean          feedBackToServer = true;
     @SerializedName("MaxSizeOfDbSpaceInMB")
     public int              maxSizeOfDbSpace = 200;
+
+    @SerializedName("PATH_TO_FILES")
+    public String           PATH_TO_FILES = Environment.getExternalStorageDirectory().getPath();
+    @SerializedName("PATH_TO_PCAP")
+    public String           PATH_TO_PCAP = PATH_TO_FILES + "/Pcap";
+    @SerializedName("SearchForUpdateOnStartup")
+    public boolean          searchForUpdateOnStartup = true;
     @SerializedName("Lockscreen")
     public boolean          Lockscreen = true;
+
+    /*
+     ** MITM Settings
+     */
+    @SerializedName("DumpInPcap")
+    public boolean          dumpInPcap = true;
     @SerializedName("SslstripMode")
     public boolean          sslstripMode = false;
-    @SerializedName("AutoSaveSession")
-    public boolean          autoSaveSession = true;
-    @SerializedName("AutoSaveNmapSession")
-    public boolean          autoSaveNmapSession = true;
     @SerializedName("AutoSaveSniffSession")
     public boolean          autoSaveSniffSession = true;
     @SerializedName("AutoSaveDnsLogs")
     public boolean          autoSaveDnsLogs = false;
-    @SerializedName("SearchForUpdateOnStartup")
-    public boolean          searchForUpdateOnStartup = true;
-    @SerializedName("PATH_TO_FILES")
-    public String          PATH_TO_FILES = Environment.getExternalStorageDirectory().getPath();
-    @SerializedName("PATH_TO_PCAP")
-    public String          PATH_TO_PCAP = PATH_TO_FILES + "/Pcap";
+
+    /*
+     ** Scan/Nmap Settings
+     */
+    @SerializedName("AutoSaveSession")
+    public boolean          autoSaveSession = true;
+    @SerializedName("AutoScanOnStartup")
+    public boolean          autoScanOnStartup = true;
+    @SerializedName("SearchServiceOnHostDiscovery")
+    public boolean          searchServiceOnHostDiscovery = false;
+    @SerializedName("AutoSaveNmapSession")
+    public boolean          autoSaveNmapSession = true;
+    @SerializedName("NmapMode")
+    public int              NmapMode = 1;
+    @SerializedName("MaxThread")
+    public int              MaxThread = 100;
+    @SerializedName("CleverScan")
+    public boolean          CleverScan = true;
+    @SerializedName("VendorOnline")
+    public boolean           VendorOnline = false;
+
+    /*
+     ** Dora Settings
+     */
+    @SerializedName("timeBeetweenRequest")
+    public float            timeBeetweenRequest = 0.2f;
+
 
     public void             save() {
         SettingsControler.dump();
