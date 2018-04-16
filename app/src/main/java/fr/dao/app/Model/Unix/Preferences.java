@@ -67,8 +67,4 @@ public class                Preferences {
     public float            timeBeetweenRequest = 0.2f;
 
 
-    public void             save() {
-        SettingsControler.dump();
-    }
-
 }

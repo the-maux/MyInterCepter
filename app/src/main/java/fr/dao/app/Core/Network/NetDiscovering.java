@@ -21,9 +21,9 @@ public class                            NetDiscovering {
 
     public static ArrayList<String>     readARPTable(ArrayList<String> ipReachable) {
         ArrayList<String> listIpPlusMac = new ArrayList<>();
-        try {
+     //   try {
             boolean already;
-            ArrayList<String> ipsFromArpFile = readIpsTableFromArp(listIpPlusMac);
+            ArrayList<String> ipsFromArpFile = NetDiscovering.readIpsTableFromRoot(listIpPlusMac);
             for (String reachable : ipReachable) {
                 already = false;
                 if (reachable != null) {
@@ -44,33 +44,72 @@ public class                            NetDiscovering {
             }
             String dumpMyDevice = Singleton.getInstance().network.myIp + ":" + Singleton.getInstance().network.mac;
             listIpPlusMac.add(dumpMyDevice);
-
+/*
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         return listIpPlusMac;
     }
 
+    public static ArrayList<String>   readIpsTableFromRoot(final ArrayList<String> listIpPlusMac) {
+     /*   new Thread(new Runnable() {
+            @Override
+            public void run() {*/
+        ArrayList<String> IpExtracted = new ArrayList<>();
+        String tmp, MAC_RE = "^%s\\s+0x1\\s+0x2\\s+([:0-9a-fA-F]+)\\s+\\*\\s+\\w+$";
+        StringBuilder stringBuilder = new StringBuilder();
+        BufferedReader reader = new RootProcess("Nmap", "/data/data/fr.dao.app/")
+                .exec("cat /proc/net/arp").getReader();
+        try {
+
+            while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {
+                String ip = tmp.substring(0, tmp.indexOf(" "));
+                Object[] objArr = new Object[1];
+                objArr[0] = ip.replace(".", "\\.");
+                Matcher matcher = Pattern.compile(String.format(MAC_RE, objArr)).matcher(tmp);
+                if (matcher.matches() && !ip.contains(Singleton.getInstance().network.myIp) && !tmp.isEmpty()) {
+                    IpExtracted.add(ip);
+                    stringBuilder.append(ip);
+                    listIpPlusMac.add(ip + ":" + matcher.group(1));
+                }
+            }
+            Log.d(TAG, IpExtracted.size() + " host discovered in /proc/net/arp");
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG, "READ arp root error:");
+
+        }
+
+        /*   }).start();*/
+        // return new ArrayList<>();
+        return IpExtracted;
+    }
+
+    /**
+     * Not working on > And 7.1.1
+     * @param listIpPlusMac
+     * @return
+     * @throws IOException
+     */
     private static ArrayList<String>    readIpsTableFromArp(ArrayList<String> listIpPlusMac) throws IOException {
-        ArrayList<String> listOfIpsAlreadyIn = new ArrayList<>();
+        ArrayList<String> listOfIP = new ArrayList<>();
         BufferedReader bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"));
-        String MAC_RE = "^%s\\s+0x1\\s+0x2\\s+([:0-9a-fA-F]+)\\s+\\*\\s+\\w+$";
-        String read;
-        while ((read = bufferedReader.readLine()) != null) {
-            String ip = read.substring(0, read.indexOf(" "));
+        String line, MAC_RE = "^%s\\s+0x1\\s+0x2\\s+([:0-9a-fA-F]+)\\s+\\*\\s+\\w+$";
+        while ((line = bufferedReader.readLine()) != null) {
+            String ip = line.substring(0, line.indexOf(" "));
             Object[] objArr = new Object[1];
             objArr[0] = ip.replace(".", "\\.");
-            Matcher matcher = Pattern.compile(String.format(MAC_RE, objArr)).matcher(read);
+            Matcher matcher = Pattern.compile(String.format(MAC_RE, objArr)).matcher(line);
             if (matcher.matches() && !ip.contains(Singleton.getInstance().network.myIp)) {
-                listOfIpsAlreadyIn.add(ip);
+                listOfIP.add(ip);
                 if (Singleton.getInstance().Settings.UltraDebugMode)
                     Log.d(TAG, "ARP_TABLE: " + ip + ":" + matcher.group(1));
                 listIpPlusMac.add(ip + ":" + matcher.group(1));
             }
         }
         bufferedReader.close();
-        Log.d(TAG, listOfIpsAlreadyIn.size() + " host discovered in /proc/net/arp");
-        return listOfIpsAlreadyIn;
+        Log.d(TAG, listOfIP.size() + " host discovered in /proc/net/arp");
+        return listOfIP;
     }
 
     public static boolean               initNetworkInfo(Activity activity) {

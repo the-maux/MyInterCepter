@@ -68,10 +68,12 @@ public class                        NetworkDiscoveryControler {
     synchronized void               onArpScanOver(ArrayList<String> ipReachable) {
         ArrayList<String> ipsreachables = new ArrayList<>();
         ipsreachables.addAll(ipReachable);
-        Log.d(TAG, "onIcmpScanOver with : "+ ipReachable.size() + " subtitle(s) reachable");
+        Log.d(TAG, "onIcmpScanOver with : "+ ipReachable.size() + " device(s) reachable");
         mActivity.setToolbarTitle(null, ipsreachables.size() + " hosts detected");
+
+
         ArrayList<String> basicHost = NetDiscovering.readARPTable(ipsreachables);
-        Log.d(TAG, "onArpScanOver with : "+ ipReachable.size() + " subtitle(s) reachable");
+        Log.d(TAG, "onArpScanOver with : "+ ipReachable.size() + " device(s) reachable");
         Network ap = mFragment.updateStateOfHostAfterIcmp(basicHost);
         mActivity.setMAXIMUM_PROGRESS(basicHost.size());
         new NmapControler(ap.listDevices(),this, ap, mActivity);

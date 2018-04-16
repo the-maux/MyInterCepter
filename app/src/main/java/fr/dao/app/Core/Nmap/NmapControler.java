@@ -111,12 +111,12 @@ public class                        NmapControler {
                 try {
                     String tmp = "";
                     StringBuilder dumpOutputBuilder = new StringBuilder();
-/*                    BufferedReader reader = new RootProcess("Nmap", mSingleton.Settings.FilesPath)
+                    BufferedReader reader = new RootProcess("Nmap", mSingleton.Settings.FilesPath)
                             .exec(cmd).getReader();
                     while ((tmp = reader.readLine()) != null && !tmp.startsWith("Nmap done")) {
                         dumpOutputBuilder.append(tmp).append('\n');
                     }
-                    */
+
                     if (tmp.isEmpty() || !tmp.startsWith("Nmap done")) {
                         Log.d(TAG, "Error in nmap execution, Nmap didn't end");
                         dumpOutputBuilder.append(tmp);

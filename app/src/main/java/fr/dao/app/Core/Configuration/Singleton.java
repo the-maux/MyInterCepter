@@ -56,7 +56,6 @@ public class                            Singleton {
     public void                         setSslstripMode(boolean sslstripMode) {
         Settings.getUserPreferences().sslstripMode = sslstripMode;
         IPTables.sslConf();
-        Settings.getUserPreferences().save();
     }
     public boolean                      isDnsControlstarted() {
         return dnsSpoofed != null && dnsSpoofed.isRunning();

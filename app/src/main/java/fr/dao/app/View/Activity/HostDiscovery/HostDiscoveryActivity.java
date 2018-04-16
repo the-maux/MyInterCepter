@@ -165,7 +165,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 if (mFragment.getClass().getName().contains("FragmentHostDiscoveryScan") &&
                     ((FragmentHostDiscoveryScan) mFragment).mHostLoaded) {
                     mSingleton.hostList = ((FragmentHostDiscoveryScan) mFragment).getTargetSelectedFromHostList();
-                    if (mSingleton.UltraDebugMode) {
+                    if (mSingleton.Settings.UltraDebugMode) {
                         Log.d(TAG, "mSingleton.hostList" + mSingleton.hostList);
                         Log.d(TAG, "mSingleton.hostsListSize:" +
                                 ((mSingleton.hostList != null) ? mSingleton.hostList.size() : "0"));
@@ -175,7 +175,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 }
                 else if (!mFragment.start()) {
 
-                } else if (mSingleton.UltraDebugMode) {
+                } else if (mSingleton.Settings.UltraDebugMode) {
                     Log.i(TAG, "fragment start false");
                 }
             }
