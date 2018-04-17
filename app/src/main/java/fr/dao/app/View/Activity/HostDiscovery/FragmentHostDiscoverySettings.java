@@ -1,11 +1,16 @@
 package fr.dao.app.View.Activity.HostDiscovery;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.View.Activity.Settings.SettingsFragment;
+import fr.dao.app.View.Widget.Dialog.QuestionMultipleAnswerDialog;
 
 public class FragmentHostDiscoverySettings extends SettingsFragment {
     private HostDiscoveryActivity   mActivity;
@@ -31,20 +36,37 @@ public class FragmentHostDiscoverySettings extends SettingsFragment {
          * [X] Rescan every host even when know
          * [X] See host even if scan is not OK (it means: present in ARP table but no response from Nmap
          */
-        addItemMenu("Aggresive discovery",
-                "Type of scan who will be launch on the netwotk, Silence, Normal, Agressive, Insane",
+        initDiscoveryMode();
+        addItemMenu("Scan every time",
+                "Start a new scan of the Network without loading previous one from database",
                 new Thread(new Runnable() {
-                    @Override
                     public void run() {
                         showSnackbar("not implemented");
                     }
                 }),
-                null);
+                "true");
 
-        addItemMenu("Scan every time",
-                "Start a new scan of the Network without loading previous one from database",
+        addItemMenu("Clever scan",
+                "Doesn't scan every devices, just the ones we don't know",
                 new Thread(new Runnable() {
-                    @Override
+                    public void run() {
+                        showSnackbar("not implemented");
+                    }
+                }),
+                "true");
+
+        addItemMenu("Show my device",
+                "Un/Hide your device in the list of hosts discovered",
+                new Thread(new Runnable() {
+                    public void run() {
+                        showSnackbar("not implemented");
+                    }
+                }),
+                "true");
+
+        addItemMenu("Show Offline devices",
+                "Un/show the list of devices previously recorded on the network, but offline anymore",
+                new Thread(new Runnable() {
                     public void run() {
                         showSnackbar("not implemented");
                     }
@@ -54,20 +76,49 @@ public class FragmentHostDiscoverySettings extends SettingsFragment {
         addItemMenu("Debug mode",
                 "Means a lot of thing and can slow the application",
                 new Thread(new Runnable() {
-                    @Override
                     public void run() {
+                        showSnackbar("not implemented");
                     }
                 }),
-                null);
+                "false");
 
         addItemMenu("Save every scan",
                 "",
                 new Thread(new Runnable() {
-                    @Override
                     public void run() {
+                        showSnackbar("not implemented");
                     }
                 }),
                 "true");
+    }
+
+    private void                    initDiscoveryMode() {
+        final CharSequence[] items = new CharSequence[]{"Discrete", "Basic", "Advanced", "Brutal"};
+        //TODO: actualize title ?
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                final DialogInterface.OnClickListener click = new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.dismiss();
+                        int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                        showSnackbar("Type of scan: " + items[selectedPosition]);
+                        Log.d("SettingsDiscovery", "Type of scan: " + items[selectedPosition]);
+                        Singleton.getInstance().Settings.getUserPreferences().NmapMode = selectedPosition;
+                        Singleton.getInstance().Settings.dump(Singleton.getInstance().Settings.getUserPreferences());
+                    }
+                };
+                mActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        new QuestionMultipleAnswerDialog(mActivity, items,
+                                click, "Type of network discovery", mSingleton.Settings.getUserPreferences().NmapMode);
+                    }
+                });
+            }
+        });
+        addItemMenu(items[mSingleton.Settings.getUserPreferences().NmapMode] + " discovery",
+                    "Type of scan who will be launch on the netwotk, Silence, Normal, Agressive, Insane",
+                    t,
+                    null);
     }
 
     private void                    showSnackbar(String txt) {

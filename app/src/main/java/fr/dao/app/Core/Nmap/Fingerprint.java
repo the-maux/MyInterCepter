@@ -39,10 +39,6 @@ public class                            Fingerprint {
             host.osType = Os.Android;
            return;
         }
-/*        if (host.dumpInfo == null) {
-            host.osType = Os.Unknow;
-            return;
-        }*/
         if (host.dumpInfo == null)
             host.dumpInfo = host.vendor.toLowerCase() + " ";
          else
@@ -116,20 +112,22 @@ public class                            Fingerprint {
         String buffer;
         StringBuilder s = new StringBuilder("");
         try {
-            while (reader != null && (buffer = reader.readLine()) != null &&
-                    !buffer.contains("Nmap done")) {
+            while (reader != null && (buffer = reader.readLine()) != null) {
                 s.append(buffer);
             }
             tmp = s.toString();
             if (tmp.contains(" ")) {
+                Log.d(TAG, "HOST[" + mac + "] -> VENDOR[" + tmp.substring(tmp.indexOf(" ")+1, tmp.length()) + "]");
                 return tmp.substring(tmp.indexOf(" ")+1, tmp.length());
             } else {
+                Log.i(TAG, "HOST[" + mac + "] -> VENDOR[" + "Unknown vendor" + "]");
                 return "Unknown vendor";
             }
         } catch (IOException e) {
             Log.e(TAG+"::MAC", "get Mac root error:");
             e.printStackTrace();
         }
-        return "Unknow";
+        Log.e(TAG, "HOST[" + mac + "] -> VENDOR[" + "Unknown vendor error" + "]");
+        return "Unknown";
     }
 }

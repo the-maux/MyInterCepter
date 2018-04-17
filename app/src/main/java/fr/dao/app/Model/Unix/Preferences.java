@@ -56,7 +56,7 @@ public class                Preferences {
      * 4 - Nmap All Script -T1
      */
     @SerializedName("NmapMode")
-    public int              NmapMode = 1;
+    public int              NmapMode = 0;
     @SerializedName("MaxThread")
     public int              MaxThread = 100;
     @SerializedName("CleverScan")

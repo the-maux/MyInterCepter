@@ -218,7 +218,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 Host host = new Host();
                 host.ip = ip;
                 host.mac = mac;
-                if (mSingleton.Settings.getUserPreferences().NmapMode == 1) {
+                if (mSingleton.Settings.getUserPreferences().NmapMode == 0) {/*No nmap so, Local vendor*/
                     host.vendor = Fingerprint.getVendorFrom(host.mac);//TODO: Thread this
                     Fingerprint.initHost(host);
                 }

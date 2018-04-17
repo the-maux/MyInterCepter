@@ -191,9 +191,9 @@ class NmapHostDiscoveryParser {
             }
         }
         if (host.Deepest_Scan >= 1) {
-            Log.d(TAG, "Host[" + host.ip + "] was already Nmap scanned");
+            Log.d(TAG, "Host[" + host.ip + "] was already Nmap scanned at this level[" + host.Deepest_Scan + "]");
         } else {
-            host.Deepest_Scan = 1;
+            host.Deepest_Scan = mSingleton.Settings.getUserPreferences().NmapMode;
             host.save();
         }
     }

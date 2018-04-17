@@ -76,7 +76,7 @@ public class                        NetworkDiscoveryControler {
         Log.d(TAG, "onArpScanOver with : "+ ipReachable.size() + " device(s) reachable");
         Network ap = mFragment.updateStateOfHostAfterIcmp(basicHost);
         mActivity.setMAXIMUM_PROGRESS(basicHost.size());
-        if (mSingleton.Settings.getUserPreferences().NmapMode > 1) {
+        if (mSingleton.Settings.getUserPreferences().NmapMode > 0) {
             Log.d(TAG, "Nmap_Mode[" + mSingleton.Settings.getUserPreferences().NmapMode + "] so starting Nmap");
             new NmapControler(ap.listDevices(), this, ap, mActivity);
         } else {
