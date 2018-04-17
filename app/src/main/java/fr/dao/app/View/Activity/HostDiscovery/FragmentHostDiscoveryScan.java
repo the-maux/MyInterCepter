@@ -29,6 +29,7 @@ import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Database.DBNetwork;
 import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
 import fr.dao.app.Core.Network.NetDiscovering;
+import fr.dao.app.Core.Nmap.Fingerprint;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.Model.Unix.Os;
@@ -217,6 +218,10 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 Host host = new Host();
                 host.ip = ip;
                 host.mac = mac;
+                if (mSingleton.Settings.getUserPreferences().NmapMode == 1) {
+                    host.vendor = Fingerprint.getVendorFrom(host.mac);//TODO: Thread this
+                    Fingerprint.initHost(host);
+                }
                 DBHost.saveOrGetInDatabase(host);
                 host.state = Host.State.ONLINE;
                 host.save();

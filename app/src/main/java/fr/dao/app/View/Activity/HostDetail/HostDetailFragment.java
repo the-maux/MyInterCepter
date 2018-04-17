@@ -106,7 +106,7 @@ public class                    HostDetailFragment extends MyFragment {
                 Log.d(TAG, "NO DUMP IN PORTS");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "ERROR PORTS FOR HOST[" + mFocusedHost.ip + "]");
         }
     }
 

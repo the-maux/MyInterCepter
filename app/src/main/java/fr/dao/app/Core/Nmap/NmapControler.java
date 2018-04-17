@@ -88,10 +88,10 @@ public class                        NmapControler {
         mActualItemMenu = "Basic Host discovery";
         StringBuilder hostCmd = new StringBuilder("");
         for (Host host : hosts) {
-            if (host.Deepest_Scan == 0)
+            if (host.Deepest_Scan == 0)//To not scan again automaticaly already scanned host
                 hostCmd.append(" ").append(host.ip);
         }
-        String cmd = PATH_NMAP + NMAP_ARG_SCAN + hostCmd.toString();
+        String cmd = PATH_NMAP + NMAP_ARG_SCAN + mSingleton.network.myIp;//hostCmd.toString();
         Log.d(TAG, "CMD:["+ cmd + "]");
         setTitleToolbar(null, "Scanning " + hostCmd.toString().split(" ").length + " devices");
         hostDiscoveryFromNmap(cmd, hosts, ap, context);
@@ -109,7 +109,7 @@ public class                        NmapControler {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    String tmp = "";
+                    String tmp;
                     StringBuilder dumpOutputBuilder = new StringBuilder();
                     BufferedReader reader = new RootProcess("Nmap", mSingleton.Settings.FilesPath)
                             .exec(cmd).getReader();

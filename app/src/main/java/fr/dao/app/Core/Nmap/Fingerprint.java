@@ -2,8 +2,10 @@ package fr.dao.app.Core.Nmap;
 
 import android.util.Log;
 
-import java.net.InetAddress;
+import java.io.BufferedReader;
+import java.io.IOException;
 
+import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Unix.Os;
@@ -35,11 +37,14 @@ public class                            Fingerprint {
             host.osType = Os.Android;
            return;
         }
-        if (host.dumpInfo == null) {
+/*        if (host.dumpInfo == null) {
             host.osType = Os.Unknow;
             return;
-        }
-        host.dumpInfo = host.dumpInfo.toLowerCase();
+        }*/
+        if (host.dumpInfo == null)
+            host.dumpInfo = host.vendor.toLowerCase() + " ";
+         else
+            host.dumpInfo = host.dumpInfo.toLowerCase();
         if (host.vendor.contains("Sony")) {
             /**
              * TODO: faire un Thread qui check les port, si c'est open, c'est une ps4
@@ -102,6 +107,26 @@ public class                            Fingerprint {
                 host.ip.length() == Singleton.getInstance().network.gateway.length();
     }
 
-
-
+    public static String                getVendorFrom(String mac) {
+        String tmp = mac.contains(":") ? mac.replaceAll(":", "").substring(0, 6) : mac ;
+        BufferedReader reader = new RootProcess("Nmap", Singleton.getInstance().Settings.FilesPath + "nmap")
+                .exec("grep \"" + tmp.substring(0, 6) + "\" nmap-mac-prefixes").getReader();
+        String buffer = "";
+        StringBuilder s = new StringBuilder("");
+        try {
+            while ((buffer = reader.readLine()) != null && !buffer.contains("Nmap done")) {
+                s.append(buffer);
+            }
+            tmp = s.toString();
+            if (tmp.contains(" ")) {
+                return tmp.substring(tmp.indexOf(" ")+1, tmp.length());
+            } else {
+                return "Unknown vendor";
+            }
+        } catch (IOException e) {
+            Log.e(TAG+"::MAC", "get Mac root error:");
+            e.printStackTrace();
+        }
+        return "Unknow";
+    }
 }

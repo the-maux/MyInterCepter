@@ -76,11 +76,17 @@ public class                        NetworkDiscoveryControler {
         Log.d(TAG, "onArpScanOver with : "+ ipReachable.size() + " device(s) reachable");
         Network ap = mFragment.updateStateOfHostAfterIcmp(basicHost);
         mActivity.setMAXIMUM_PROGRESS(basicHost.size());
-        new NmapControler(ap.listDevices(),this, ap, mActivity);
+        if (mSingleton.Settings.getUserPreferences().NmapMode > 1) {
+            Log.d(TAG, "Nmap_Mode[" + mSingleton.Settings.getUserPreferences().NmapMode + "] so starting Nmap");
+            new NmapControler(ap.listDevices(), this, ap, mActivity);
+        } else {
+            Log.d(TAG, "Nmap_Mode[" + mSingleton.Settings.getUserPreferences().NmapMode + "] so bypass Nmap");
+            onNmapScanOver(ap.listDevices());
+        }
     }
 
     public void                     onNmapScanOver(ArrayList<Host> hosts) {
-        Log.d(TAG, "Full scanning in " + Utils.TimeDifference(startScanning));
+        Log.d(TAG, "Scan took " + Utils.TimeDifference(startScanning));
         String time = Utils.TimeDifference(startScanning);
         int online = 0, offline = 0;
         for (Host host : hosts) {

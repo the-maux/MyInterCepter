@@ -4,8 +4,6 @@ import android.os.Environment;
 
 import com.google.gson.annotations.SerializedName;
 
-import fr.dao.app.Core.Configuration.SettingsControler;
-
 public class                Preferences {
     /*
      ** Global settings
@@ -51,6 +49,12 @@ public class                Preferences {
     public boolean          searchServiceOnHostDiscovery = false;
     @SerializedName("AutoSaveNmapSession")
     public boolean          autoSaveNmapSession = true;
+    /**
+     * 1 - Basic No nmap
+     * 2 - Nmap 5 Port
+     * 3 - Nmap Script + -T4
+     * 4 - Nmap All Script -T1
+     */
     @SerializedName("NmapMode")
     public int              NmapMode = 1;
     @SerializedName("MaxThread")
