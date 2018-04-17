@@ -60,8 +60,8 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         if (host.state == Host.State.FILTERED) {
             pushThisShyGuyToFront(holder, host);
         }
-        String os = host.os.contains("Unknow") ? "No os information" : host.os;
-        holder.os.setText(os);
+        //String os = host.os.contains("Unknow") ? "No os information" : host.os;
+        holder.os.setText(host.os);
         holder.vendor.setText(host.vendor);
         if (mIsHistoric)
             holder.statusIcon.setVisibility(View.GONE);

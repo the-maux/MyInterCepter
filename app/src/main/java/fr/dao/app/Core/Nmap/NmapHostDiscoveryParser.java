@@ -169,12 +169,6 @@ class NmapHostDiscoveryParser {
         host.mac = host.mac.toUpperCase();
         host.dumpInfo = dump.toString();
         Fingerprint.initHost(host);
-        if (Fingerprint.isItMyGateway(host)) {
-            host.osType = Os.Gateway;
-            if (host.osDetail.contains("Unknown"))
-                host.osDetail = "Gateway";
-            mNetwork.Gateway = host;
-        }
         if (host.Notes == null)
             host.Notes = "";
         host.Notes = host.Notes.concat("OxBABOBAB").concat(nmapStdout);
@@ -190,7 +184,7 @@ class NmapHostDiscoveryParser {
                 Log.e(TAG, "HOST NO DNS FOUND");
             }
         }
-        if (host.Deepest_Scan >= 1) {
+        if (host.Deepest_Scan > mSingleton.Settings.getUserPreferences().NmapMode) {
             Log.d(TAG, "Host[" + host.ip + "] was already Nmap scanned at this level[" + host.Deepest_Scan + "]");
         } else {
             host.Deepest_Scan = mSingleton.Settings.getUserPreferences().NmapMode;

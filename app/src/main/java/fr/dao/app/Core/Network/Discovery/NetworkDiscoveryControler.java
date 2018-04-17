@@ -70,18 +70,16 @@ public class                        NetworkDiscoveryControler {
         ipsreachables.addAll(ipReachable);
         Log.d(TAG, "onIcmpScanOver with : "+ ipReachable.size() + " device(s) reachable");
         mActivity.setToolbarTitle(null, ipsreachables.size() + " hosts detected");
-
-
         ArrayList<String> basicHost = NetDiscovering.readARPTable(ipsreachables);
         Log.d(TAG, "onArpScanOver with : "+ ipReachable.size() + " device(s) reachable");
-        Network ap = mFragment.updateStateOfHostAfterIcmp(basicHost);
+        Singleton.getInstance().actualNetwork = mFragment.updateStateOfHostAfterIcmp(basicHost);
         mActivity.setMAXIMUM_PROGRESS(basicHost.size());
         if (mSingleton.Settings.getUserPreferences().NmapMode > 0) {
             Log.d(TAG, "Nmap_Mode[" + mSingleton.Settings.getUserPreferences().NmapMode + "] so starting Nmap");
-            new NmapControler(ap.listDevices(), this, ap, mActivity);
+            new NmapControler(Singleton.getInstance().actualNetwork.listDevices(), this, Singleton.getInstance().actualNetwork, mActivity);
         } else {
             Log.d(TAG, "Nmap_Mode[" + mSingleton.Settings.getUserPreferences().NmapMode + "] so bypass Nmap");
-            onNmapScanOver(ap.listDevices());
+            onNmapScanOver(Singleton.getInstance().actualNetwork.listDevices());
         }
     }
 

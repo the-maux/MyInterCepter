@@ -26,11 +26,19 @@ public class                            Fingerprint {
             host.osType = Os.Android;
             host.name = "My Device";//Need reafect in case of nmap_mode == 1
         } else if (Fingerprint.isItWindows(host)) {
+            Log.d(TAG, "HOST[" + host.ip  + "] is windows");
             host.osType = Os.Windows;
             host.os = "Windows";
             host.osDetail = "Windows";
         } else if (host.osType == Os.Unknow) {
             host.osType = Os.fromString(host.osDetail);
+        }
+        if (Fingerprint.isItMyGateway(host)) {
+            host.osType = Os.Gateway;
+            if (host.osDetail.contains("Unknown"))
+                host.osDetail = "Gateway";
+            if (Singleton.getInstance().actualNetwork != null)
+                Singleton.getInstance().actualNetwork.Gateway = host;
         }
     }
 
@@ -74,6 +82,8 @@ public class                            Fingerprint {
             host.osType = Os.Linux_Unix;
         } else if (host.dumpInfo.contains("windows") || host.dumpInfo.contains("microsoft")) {
             host.osType = Os.Windows;
+            host.os = "Windows";
+            host.osDetail = "Windows";
         } else {
             host.osType = Os.Unknow;
         }

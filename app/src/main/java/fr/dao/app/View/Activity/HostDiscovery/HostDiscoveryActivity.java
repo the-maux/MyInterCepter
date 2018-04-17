@@ -389,13 +389,13 @@ public class                        HostDiscoveryActivity extends MyActivity {
             ViewAnimate.FabAnimateReveal(mInstance, mFab);
     }
 
-    protected void onPause() {
+    protected void                  onPause() {
         ViewAnimate.FabAnimateHide(mInstance, mFab);
         super.onPause();
     }
 
     public void                     onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() >= 1) {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             Log.d(TAG, "onBackPressed::" + mFragment.getClass().getName());
             if (mFragment.getClass().getName().contains(FragmentHostDiscoveryScan.class.getName())) {
                 finish();
