@@ -10,7 +10,7 @@ import android.view.View;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 
-public class FooterBarBehavior extends CoordinatorLayout.Behavior<com.aurelhubert.ahbottomnavigation.AHBottomNavigation> {
+public class                FooterBarBehavior extends CoordinatorLayout.Behavior<com.aurelhubert.ahbottomnavigation.AHBottomNavigation> {
 
     public FooterBarBehavior() {
         //Used when attached to a view class as the default behavior

@@ -148,7 +148,7 @@
 
         <include
             android:id="@+id/navigation"
-            layout="@layout/item_nav_bottom"
+            layout="@layout/bottom_navigation_sniff"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:transitionName="navigation"
