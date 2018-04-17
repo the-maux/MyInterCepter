@@ -75,13 +75,11 @@ public class                    SetupActivity extends MyActivity {
                     monitor("Network initialization");
                     NetDiscovering.initNetworkInfo(mInstance);
                     runOnUiThread(new Runnable() {
-                        @Override
                         public void run() {
                             Pair<View, String> p1;
                             p1 = Pair.create(findViewById(R.id.monitor), "title");
                             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1);
                             startActivity(new Intent(mInstance, HostDiscoveryActivity.class), options.toBundle());
-                            finish();
                         }
                     });
                 } catch (IOException e) {

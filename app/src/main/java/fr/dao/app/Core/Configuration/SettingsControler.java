@@ -20,6 +20,7 @@ public class                SettingsControler {
     private File            PATH_TO_PREFERENCES_FILE;
     private Preferences     userPreferences = null;
     public String           PcapPath;
+    public String           NAME_FILE_PREFERENCE = "DaoPreferences.json";
     public String           BinaryPath = null;
     public String           FilesPath = null;
     public String           DumpsPath = null;
@@ -31,7 +32,7 @@ public class                SettingsControler {
         } else {
             this.FilesPath = FilesPath;
             this.BinaryPath = FilesPath;
-            PATH_TO_PREFERENCES_FILE = new File(FilesPath, "Settings.json");
+            PATH_TO_PREFERENCES_FILE = new File(FilesPath, NAME_FILE_PREFERENCE);
             if (PATH_TO_PREFERENCES_FILE.exists())
                 load();
             else {
@@ -77,7 +78,7 @@ public class                SettingsControler {
             userPreferences = new Preferences();
         FileOutputStream stream = null;
         try {
-            stream = new FileOutputStream(FilesPath + "settings");
+            stream = new FileOutputStream(FilesPath + NAME_FILE_PREFERENCE);
             stream.write(new JSONObject((new Gson()).toJson(userPreferences)).toString().getBytes());
         } catch (FileNotFoundException e) {
             Log.e(TAG, "user preference file not found");
