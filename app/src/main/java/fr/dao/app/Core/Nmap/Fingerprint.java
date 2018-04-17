@@ -19,10 +19,12 @@ public class                            Fingerprint {
     public static void                  initHost(Host host) {
         host.build();
         guessosType(host);
-        if (host.name.contains("My Device")) {/* host.isItMyDevice is not saved on BDD for optimiz*/
+        if (host.name.contains("My Device") ||
+                host.ip.contentEquals(Singleton.getInstance().network.myIp)) {/* host.isItMyDevice is not saved on BDD for optimiz*/
             host.isItMyDevice = true;
             host.state = Host.State.ONLINE;
             host.osType = Os.Android;
+            host.name = "My Device";//Need reafect in case of nmap_mode == 1
         } else if (Fingerprint.isItWindows(host)) {
             host.osType = Os.Windows;
             host.os = "Windows";
@@ -109,12 +111,13 @@ public class                            Fingerprint {
 
     public static String                getVendorFrom(String mac) {
         String tmp = mac.contains(":") ? mac.replaceAll(":", "").substring(0, 6) : mac ;
-        BufferedReader reader = new RootProcess("Nmap", Singleton.getInstance().Settings.FilesPath + "nmap")
-                .exec("grep \"" + tmp.substring(0, 6) + "\" nmap-mac-prefixes").getReader();
-        String buffer = "";
+        BufferedReader reader = new RootProcess("Nmap")
+                .exec("grep \"" + tmp.substring(0, 6) + "\" " + Singleton.getInstance().Settings.FilesPath + "nmap/nmap-mac-prefixes").getReader();
+        String buffer;
         StringBuilder s = new StringBuilder("");
         try {
-            while ((buffer = reader.readLine()) != null && !buffer.contains("Nmap done")) {
+            while (reader != null && (buffer = reader.readLine()) != null &&
+                    !buffer.contains("Nmap done")) {
                 s.append(buffer);
             }
             tmp = s.toString();
