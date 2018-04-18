@@ -13,7 +13,7 @@ import java.util.Arrays;
 
 import fr.dao.app.Core.Dnsmasq.DnsmasqConfig;
 import fr.dao.app.R;
-import fr.dao.app.View.Activity.Startup.SetupActivity;
+import fr.dao.app.View.Startup.SetupActivity;
 
 public class                    Setup {
     private String              TAG = "Setup";

@@ -15,6 +15,7 @@
     <color name="divider">#BDBDBD</color>
     <color name="white_secondary">#EEEEEE</color>
     <color name="generic_background">#ee212121</color>
+    <color name="generic_background_dark">#ee111111</color>
     <color name="stop_color">@color/material_red_500</color>
     <color name="start_color">@color/material_green_500</color>
     <color name="fab_color">#455a64</color>

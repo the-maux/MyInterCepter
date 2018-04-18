@@ -19,7 +19,7 @@ import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
-import fr.dao.app.View.Activity.Scan.NmapOutputFragment;
+import fr.dao.app.View.Scan.NmapOutputFragment;
 
 /*
 https://hackertarget.com/7-nmap-nse-scripts-recon/

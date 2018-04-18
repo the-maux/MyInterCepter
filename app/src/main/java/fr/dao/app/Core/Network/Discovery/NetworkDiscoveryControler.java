@@ -13,9 +13,8 @@ import fr.dao.app.Core.Network.IPv4Utils;
 import fr.dao.app.Core.Network.NetDiscovering;
 import fr.dao.app.Core.Nmap.NmapControler;
 import fr.dao.app.Model.Target.Host;
-import fr.dao.app.Model.Target.Network;
-import fr.dao.app.View.Activity.HostDiscovery.FragmentHostDiscoveryScan;
-import fr.dao.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
+import fr.dao.app.View.HostDiscovery.FragmentHostDiscoveryScan;
+import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
 
 public class                        NetworkDiscoveryControler {
     private String                  TAG = "NetworkDiscoveryControler";
@@ -28,9 +27,7 @@ public class                        NetworkDiscoveryControler {
     private static                  NetworkDiscoveryControler            mInstance = null;
 
     public static boolean           over() {
-        if (mInstance == null)
-            return false;
-        return true;
+        return mInstance != null && !mInstance.inLoading;
     }
 
     public static synchronized      NetworkDiscoveryControler getInstance(final FragmentHostDiscoveryScan fragmentHostDiscoveryScan) {

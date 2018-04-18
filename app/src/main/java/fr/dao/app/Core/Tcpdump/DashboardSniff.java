@@ -6,7 +6,7 @@ import android.widget.TextView;
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.R;
-import fr.dao.app.View.Widget.Adapter.WiresharkDashboardAdapter;
+import fr.dao.app.View.ZViewController.Adapter.WiresharkDashboardAdapter;
 
 /**
  * TODO:

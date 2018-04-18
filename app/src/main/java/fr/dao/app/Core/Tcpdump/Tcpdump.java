@@ -18,9 +18,9 @@ import fr.dao.app.Core.Network.IPTables;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
-import fr.dao.app.View.Activity.Wireshark.WiresharkActivity;
-import fr.dao.app.View.Activity.Wireshark.WiresharkDispatcher;
-import fr.dao.app.View.Activity.Wireshark.WiresharkReaderFragment;
+import fr.dao.app.View.Wireshark.WiresharkActivity;
+import fr.dao.app.View.Wireshark.WiresharkDispatcher;
+import fr.dao.app.View.Wireshark.WiresharkReaderFragment;
 
 public class                        Tcpdump {
     private String                  TAG = "Tcpdump";

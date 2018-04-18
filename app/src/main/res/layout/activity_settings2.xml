@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splashscreen">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/generic_background_dark"
+        android:fitsSystemWindows="true"
+        app:elevation="2dp">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:elevation="4dp">
+
+
+            <ImageView
+                android:id="@+id/OsImg"
+                android:layout_width="40dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:elevation="4dp"
+                android:padding="4dp"
+                android:tint="@color/tint_svg"
+                android:transitionName="logo_activity"
+                app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                app:layout_constraintEnd_toStartOf="@+id/toolbar2"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_build_svg" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar2"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                app:layout_constraintEnd_toStartOf="@+id/searchViewRelative"
+                app:layout_constraintStart_toEndOf="@+id/OsImg"
+                app:layout_constraintTop_toTopOf="parent"
+                app:subtitle="Subtitle"
+                app:title="Title">
+
+            </android.support.v7.widget.Toolbar>
+
+            <RelativeLayout
+                android:id="@+id/searchViewRelative"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
+                android:baselineAlignBottom="false"
+                app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                app:layout_constraintEnd_toStartOf="@+id/settingsIcon"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/toolbar2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_max="150dp">
+
+                <android.support.v7.widget.SearchView
+                    android:id="@+id/searchView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:background="@android:color/transparent"
+                    android:gravity="right" />
+            </RelativeLayout>
+
+
+            <ImageView
+                android:id="@+id/iconSettings2"
+                android:layout_width="40dp"
+                android:layout_height="0dp"
+                android:baselineAlignBottom="false"
+                android:padding="4dp"
+                android:soundEffectsEnabled="true"
+                android:tint="@color/tint_svg"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                app:layout_constraintEnd_toStartOf="@+id/settingsIcon"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/searchViewRelative"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/settingsIcon"
+                android:layout_width="40dp"
+                android:layout_height="0dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:soundEffectsEnabled="true"
+                android:tint="@color/tint_svg"
+                app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/iconSettings2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_min="45dp"
+                app:srcCompat="@drawable/ic_more_svg" />
+
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="65dp" />
+
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
+
+        <FrameLayout
+            android:id="@+id/frame_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/Message"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_weight="9"></FrameLayout>
+
+        <TextView
+            android:id="@+id/timer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="8dp"
+            android:elevation="4dp"
+            android:gravity="left|center_vertical"
+            android:lines="1"
+            android:paddingBottom="2dp"
+            android:paddingLeft="8dp"
+            android:paddingTop="4dp"
+            android:text="42s"
+            android:textColor="@color/accent_material_dark"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/Message"
+            app:layout_constraintRight_toRightOf="@+id/Message"
+            app:layout_constraintTop_toTopOf="@+id/Message" />
+
+        <TextView
+            android:id="@+id/Message"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/primary_text"
+            android:elevation="2dp"
+            android:gravity="right|center_vertical"
+            android:lines="2"
+            android:padding="8dp"
+            android:textColor="@color/accent_material_dark"
+            android:textSize="12sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/frame_container"
+            app:layout_constraintVertical_weight="1" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9" />
+
+        <com.aurelhubert.ahbottomnavigation.AHBottomNavigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/navigationSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:soundEffectsEnabled="true"
+            app:layout_behavior=".behavior.FooterBarBehavior"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHeight_min="40dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintVertical_chainStyle="spread" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.design.widget.CoordinatorLayout>

@@ -4,7 +4,7 @@ import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
 import android.util.Log;
 
-import fr.dao.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
+import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
 
 public class                            DiscoveryListenr implements NsdManager.DiscoveryListener {
     private String                      TAG = "DiscoveryListenr";

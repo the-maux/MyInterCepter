@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Target.SniffSession;
 import fr.dao.app.R;
-import fr.dao.app.View.Widget.Adapter.Holder.ConsoleLogHolder;
+import fr.dao.app.View.ZViewController.Adapter.Holder.ConsoleLogHolder;
 
 @Table(name = "DnsLog", id = "_id")
 public class                            DNSLog extends Model {
