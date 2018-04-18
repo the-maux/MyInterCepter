@@ -65,7 +65,7 @@ public abstract class               SniffActivity extends MyActivity  {
             bottomItems[0] = new AHBottomNavigationItem(R.string.TRACKER,
                     R.drawable.spy, R.color.spyPrimary);
             bottomItems[1] = new AHBottomNavigationItem(R.string.SNIFFER,
-                    R.drawable.ic_sniff_barbutton, R.color.wiresharkPrimary);
+                    R.drawable.ic_sniff_barbutton, R.color.snifferPrimary);
             bottomItems[2] = new AHBottomNavigationItem(R.string.DNS_SPOOFER,
                     R.drawable.ic_dns_btnbar, R.color.dnsSpoofPrimary);
             bottomItems[3] = new AHBottomNavigationItem(R.string.WEB_SPOOFER,

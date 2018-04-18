@@ -10,7 +10,7 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/wiresharkPrimary"
+        android:background="@color/snifferPrimary"
         android:transitionName="appBarTransition"
         android:visibility="visible"
         app:elevation="6dp">
@@ -138,7 +138,7 @@
             android:layout_marginRight="16dp"
             android:soundEffectsEnabled="true"
             android:src="@drawable/ic_media_play"
-            app:backgroundTint="@color/wiresharkPrimary"
+            app:backgroundTint="@color/snifferPrimary"
             app:fabSize="normal" />
 
         <include

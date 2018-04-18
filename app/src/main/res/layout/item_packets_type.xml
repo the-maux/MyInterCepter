@@ -6,7 +6,7 @@
     android:layout_height="100dp"
     android:layout_margin="8dp"
     android:padding="8dp"
-    app:cardBackgroundColor="@color/wiresharkPrimary"
+    app:cardBackgroundColor="@color/snifferPrimary"
     app:cardCornerRadius="8dp"
     app:cardElevation="2dp">
 

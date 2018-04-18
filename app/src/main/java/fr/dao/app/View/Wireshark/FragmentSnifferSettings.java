@@ -10,7 +10,7 @@ import fr.dao.app.View.Settings.SettingsFragment;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Dialog.QuestionMultipleAnswerDialog;
 
-public class FragmentWiresharkSettings extends SettingsFragment {
+public class FragmentSnifferSettings extends SettingsFragment {
     private String                  Title = "Settings Wireshark";
     private MyActivity              mActivity;
 

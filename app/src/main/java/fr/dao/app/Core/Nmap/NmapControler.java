@@ -110,21 +110,28 @@ public class                        NmapControler {
             public void run() {
                 try {
                     String tmp;
-                    StringBuilder dumpOutputBuilder = new StringBuilder();
+                    StringBuilder outputBuilder = new StringBuilder();
                     BufferedReader reader = new RootProcess("Nmap", mSingleton.Settings.FilesPath)
                             .exec(cmd).getReader();
                     while ((tmp = reader.readLine()) != null && !tmp.startsWith("Nmap done")) {
-                        dumpOutputBuilder.append(tmp).append('\n');
+                        outputBuilder.append(tmp).append('\n');
                     }
-                    if (tmp.isEmpty() || !tmp.startsWith("Nmap done")) {
+                    /*
+                     * Hello dear, If you're here
+                     * Trying to understand why the condition is
+                     * outputBuilder.toString().isEmpty()
+                     * I love you, thank you, for existing
+                     * You're not alone, we are connected
+                     */
+                    if (outputBuilder.toString().isEmpty() || tmp.isEmpty() || !tmp.startsWith("Nmap done")) {
                         Log.d(TAG, "Error in nmap execution, Nmap didn't end");
-                        dumpOutputBuilder.append(tmp);
-                        Log.e(TAG, dumpOutputBuilder.toString());
+                        outputBuilder.append(tmp);
+                        Log.e(TAG, outputBuilder.toString());
                         setTitleToolbar("Network scan", "Nmap Error");
                         return;
                     }
-                    dumpOutputBuilder.append(tmp);
-                    String FullDUMP = dumpOutputBuilder.toString().substring(1);
+                    outputBuilder.append(tmp);
+                    String FullDUMP = outputBuilder.toString().substring(1);
                     Log.d(TAG, "\t\t LastLine[" + tmp + "]");
                     startParsing = Calendar.getInstance().getTime();
                     new NmapHostDiscoveryParser(mInstance, hosts, FullDUMP, ap, context);

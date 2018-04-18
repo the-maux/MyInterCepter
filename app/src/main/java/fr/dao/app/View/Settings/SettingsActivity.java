@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -14,8 +15,12 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 
 import fr.dao.app.R;
+import fr.dao.app.View.DnsSpoofing.FragmentDnsSettings;
 import fr.dao.app.View.HostDiscovery.FragmentHistoric;
 import fr.dao.app.View.HostDiscovery.FragmentHostDiscoverySettings;
+import fr.dao.app.View.WebServer.FragmentWebserverSettings;
+import fr.dao.app.View.WebTracker.FragmentTrackerSettings;
+import fr.dao.app.View.Wireshark.FragmentSnifferSettings;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
@@ -39,7 +44,7 @@ public class                    SettingsActivity extends MyActivity {
     private CoordinatorLayout   mCoordinatorLayout;
     private Toolbar             mToolbar;
     protected AHBottomNavigation    mBottomBar;
-    private int                     mType;
+    private int                     mType = 0;
     private AppBarLayout            appBarLayout;
     public static final String  GLOBAL_SETTINGS = "GLOBAL";
     public static final String  HOSTDISCOVERY_SETTINGS = "HOSTDISCOVERY";
@@ -70,7 +75,7 @@ public class                    SettingsActivity extends MyActivity {
 
     private void                init() {
         initBottomBar(0, true);
-        initFragment("");
+        initFragment(null);
     }
 
     protected void              initBottomBar(int position, boolean useCallback) {
@@ -82,11 +87,11 @@ public class                    SettingsActivity extends MyActivity {
             Log.d(TAG, "initNavigationBottomBarSettings(" + position + ":" + useCallback + ")");
             AHBottomNavigationItem[] bottomItems = new AHBottomNavigationItem[5];
             bottomItems[0] = new AHBottomNavigationItem(R.string.SCANNER,
-                    R.drawable.ic_fingerprint_svg, R.color.spyPrimary);
+                    R.drawable.ic_fingerprint_svg, R.color.generic_background_dark);
             bottomItems[1] = new AHBottomNavigationItem(R.string.TRACKER,
                     R.drawable.spy, R.color.spyPrimary);
             bottomItems[2] = new AHBottomNavigationItem(R.string.SNIFFER,
-                    R.drawable.ic_sniff_barbutton, R.color.wiresharkPrimary);
+                    R.drawable.ic_sniff_barbutton, R.color.snifferPrimary);
             bottomItems[3] = new AHBottomNavigationItem(R.string.DNS_SPOOFER,
                     R.drawable.ic_dns_btnbar, R.color.dnsSpoofPrimary);
             bottomItems[4] = new AHBottomNavigationItem(R.string.WEB_SPOOFER,
@@ -108,33 +113,43 @@ public class                    SettingsActivity extends MyActivity {
     private AHBottomNavigation.OnTabSelectedListener onBottomBarSelectedItem() {
         return new AHBottomNavigation.OnTabSelectedListener() {
             public boolean onTabSelected(final int position, boolean wasSelected) {
-                if (position != mType) {//prevent reselection
+                if (position != mType) {
+                    mType = position;
+                    //prevent reselection
                     mBottomBar.post(new Runnable() {
                         @Override
                         public void run() {
                             mInstance.runOnUiThread(new Runnable() {
-                                @Override
                                 public void run() {
-                                    //Log.d(TAG, "onNavigationItemSelected::" + position);
-                                    //initFragment
+                                    MyFragment fragment = null;
+                                    Log.d(TAG, "position:" + position);
                                     switch (position) {
                                         case 0:
-                                            //initFragment
+                                            fragment = new FragmentHostDiscoverySettings();
+                                            appBarLayout.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.generic_background_dark));
                                             break;
                                         case 1:
-                                            //initFragment
+                                            fragment = new FragmentTrackerSettings();
+                                            appBarLayout.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.spyPrimary));
                                             break;
                                         case 2:
-                                            //initFragment
+                                            fragment = new FragmentSnifferSettings();
+                                            appBarLayout.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.snifferPrimary));
                                             break;
                                         case 3:
-                                            //initFragment
+                                            fragment = new FragmentDnsSettings();
+                                            appBarLayout.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.dnsSpoofPrimary));
+                                            break;
+                                        case 4:
+                                            fragment = new FragmentWebserverSettings();
+                                            appBarLayout.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.webserverSpoofPrimary));
                                             break;
                                         default:
-                                            //initFragment
+                                            fragment = new SettingsFragment();
+                                            appBarLayout.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.dnsSpoofPrimary));
                                             break;
                                     }
-                                    //initFragment
+                                    initFragment(fragment);
                                 }
                             });
                         }
@@ -146,9 +161,11 @@ public class                    SettingsActivity extends MyActivity {
         };
     }
 
-    private void                initFragment(String typeFramgent) {
+    private void                initFragment(MyFragment fragment) {
         try {
-            mFragment = getFragmentFromType(typeFramgent);
+            if (fragment == null)
+                fragment = new FragmentHostDiscoverySettings();
+            mFragment = fragment;
             Bundle args = new Bundle();
             args.putString("mode", FragmentHistoric.HOST_HISTORIC);
             mFragment.setArguments(args);
@@ -161,28 +178,6 @@ public class                    SettingsActivity extends MyActivity {
             showSnackbar("Error in fragment");
             super.onBackPressed();
         }
-    }
-
-    private MyFragment          getFragmentFromType(String typeFragment) {
-        return new FragmentHostDiscoverySettings();
-  /*      switch (typeFragment) {//TODO: Create the architecture of settings
-            case WIRESHARK_SETTINGS:
-                return new WiresharkSettingsFragmt();
-            case GLOBAL_SETTINGS:
-                return new GlobalSettingsFragmt();
-            case DNSMASQ_SETTINGS:
-                return new WiresharkSettingsFragmt();
-            case DATABASE_SETTINGS:
-                return new WiresharkSettingsFragmt();
-            case WEBSERVER_SETTINGS:
-                return new WiresharkSettingsFragmt();
-            case DORA_SETTINGS:
-                return new WiresharkSettingsFragmt();
-            case HOSTDISCOVERY_SETTINGS:
-                return new FragmentHostDiscoverySettings();
-            default:
-                return new WiresharkSettingsFragmt();
-        }*/
     }
 
     public void                 showSnackbar(String txt) {
