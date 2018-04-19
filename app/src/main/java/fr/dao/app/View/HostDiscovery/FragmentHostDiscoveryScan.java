@@ -290,7 +290,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 .addItem(1, "Select all", R.mipmap.ic_select_all)
                 .addItem(2, "Mode offline", R.mipmap.ic_leave)
                 .addItem(3, "Settings", R.mipmap.ic_leave)
-                .addItem(4, "Settings Master", R.mipmap.ic_leave)
                 .setItemClickListener(new BottomSheetItemClickListener() {
                     @Override
                     public void onBottomSheetItemClick(MenuItem menuItem) {
@@ -308,10 +307,6 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                             case "Settings":
                                 mActivity.initFragmentSettings();
                                 break;
-                            case "Settings Master":
-                                startActivity(new Intent(mActivity, SettingsActivity.class));
-                                break;
-
                         }
                     }
                 })
