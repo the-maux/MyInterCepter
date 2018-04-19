@@ -25,7 +25,6 @@ public class                            Singleton {
     private DnsmasqControl              dnsSpoofed = null;
     private SniffSession                actualSniffSession = null;
     private boolean                     webSpoofedstarted = false, isNmapRunning = false;
-
     private static Singleton            mInstance = null;
     String                              VERSION = "0xDEADBEEF";
 

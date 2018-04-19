@@ -30,6 +30,10 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
+            android:name=".View.Startup.HomeActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
+        <activity
             android:name=".View.DnsSpoofing.DnsActivity"
             android:launchMode="singleTask" />
         <activity

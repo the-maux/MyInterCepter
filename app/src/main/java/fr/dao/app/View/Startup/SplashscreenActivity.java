@@ -8,26 +8,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import java.io.File;
+import java.io.IOException;
 
+import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Setup;
-import fr.dao.app.Core.Configuration.Singleton;
-import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
 
 public class                    SplashscreenActivity extends AppCompatActivity {
+    private SplashscreenActivity mInstance = this;
     private int                 MAXIMUM_TRY_PERMISSION = 42, try_permission = 0;
 
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Setup.buildPath(this);
         getRootPermission();
     }
 
-    private void             getRootPermission() {
+    private void                getRootPermission() {
         Intent intent;
         Log.d("Splashscreen", "getRootPermission");
         if (rootCheck()) {
-            if ((new File(Singleton.getInstance().Settings.FilesPath + "version").exists()))
-                intent = new Intent(this, HostDiscoveryActivity.class);
+            if ((new File(mInstance.getFilesDir().getPath() + '/' + "DaoPreferences.json").exists()))
+                intent = new Intent(this, HomeActivity.class);
             else
                 intent = new Intent(this, SetupActivity.class);
             Log.d("Splashscreen", "getRootPermission:: OK");
@@ -46,15 +47,13 @@ public class                    SplashscreenActivity extends AppCompatActivity {
         }
     }
     private boolean             rootCheck() {
-        return true;
-//        try {
-//
-//            String RootOk = new RootProcess("RootCheck").exec("id").getReader().readLine();
-//            return (RootOk != null && RootOk.contains("uid=0(root)"));
-//        } catch (IOException e) {
-//            Log.d("Splashscreen", "RootOK[IOException]");
-//            e.printStackTrace();
-//            return false;
-//        }
+        try {
+            String RootOk = new RootProcess("RootCheck").exec("id").getReader().readLine();
+            return (RootOk != null && RootOk.contains("uid=0(root)"));
+        } catch (IOException e) {
+            Log.d("Splashscreen", "RootOK[IOException]");
+            e.printStackTrace();
+            return false;
+        }
     }
 }
