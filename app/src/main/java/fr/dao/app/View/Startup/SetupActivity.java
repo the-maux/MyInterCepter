@@ -20,7 +20,6 @@ import fr.dao.app.Core.Configuration.Setup;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Network.NetDiscovering;
 import fr.dao.app.R;
-import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 
@@ -64,8 +63,10 @@ public class                    SetupActivity extends MyActivity {
     }
 
     private void                initialisation() {
-        if ((new File(Singleton.getInstance().Settings.FilesPath + "version").exists()))
+        if ((new File(Singleton.getInstance().Settings.FilesPath + "version").exists())) {
+            Log.d(TAG, "Version file exist, leaving app, why ?");
             finish();
+        }
         new Thread(new Runnable() {
             public void run() {
                 try {
@@ -79,7 +80,7 @@ public class                    SetupActivity extends MyActivity {
                             Pair<View, String> p1;
                             p1 = Pair.create(findViewById(R.id.monitor), "title");
                             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1);
-                            startActivity(new Intent(mInstance, HostDiscoveryActivity.class), options.toBundle());
+                            startActivity(new Intent(mInstance, HomeActivity.class), options.toBundle());
                         }
                     });
                 } catch (IOException e) {

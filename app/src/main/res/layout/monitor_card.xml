@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="140dp"
+    android:layout_height="50dp"
+    android:layout_margin="8dp"
+    app:cardBackgroundColor="#CC414141"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="4dp">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/titleCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="Updated"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.3"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/statusIconCardView"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/statusIconCardView"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_alignRight="@+id/icon"
+            android:layout_alignTop="@+id/icon"
+            android:layout_margin="4dp"
+            android:elevation="2dp"
+            android:src="@color/stop_color"
+            android:transitionName="statusSniffing"
+            app:civ_border_color="#212121"
+            app:civ_border_width="3px"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progressBar_monitor"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_margin="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/statusIconCardView"
+            app:layout_constraintRight_toRightOf="@+id/statusIconCardView"
+            app:layout_constraintTop_toBottomOf="@+id/statusIconCardView"
+            app:layout_constraintVertical_bias="1.0" />
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>
