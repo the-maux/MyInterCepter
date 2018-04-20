@@ -3,6 +3,7 @@ package fr.dao.app.View.Startup;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -18,6 +20,7 @@ import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Core.Configuration.RootProcess;
+import fr.dao.app.Core.Configuration.Setup;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.R;
@@ -34,6 +37,7 @@ public class                    HomeActivity extends MyActivity {
     private int                 MAXIMUM_TRY_PERMISSION = 42, try_permission = 0;
     private View                monitorRoot, monitorPermission, monitorUpdated;
     private TextView            TV_Root, TV_Permission, TV_Updated;
+    private ProgressBar         PB_Root, PB_Permission, PB_Updated;
     private CircleImageView     statusRoot, statusPermission, statusUpdated;
     private static final int    PERMISSIONS_MULTIPLE_REQUEST = 123;
 
@@ -46,6 +50,13 @@ public class                    HomeActivity extends MyActivity {
 
     protected void              onResume() {
         super.onResume();
+    }
+
+    protected void              onPostResume() {
+        super.onPostResume();
+        Setup.buildPath(this);
+        getRootPermission();
+        getAndroidPermission();
     }
 
     private void                initXml() {
@@ -66,9 +77,9 @@ public class                    HomeActivity extends MyActivity {
         TV_Root.setText("Root");
         TV_Permission.setText("Permission");
         TV_Updated.setText("New release");
-        //        radioButton = findViewById(R.id.radioButton);
-//        radioButton2 = findViewById(R.id.radioButton2);
-//        radioButton3 = findViewById(R.id.radioButton3);
+        PB_Root = monitorRoot.findViewById(R.id.progressBar_monitor);
+        PB_Permission = monitorPermission.findViewById(R.id.progressBar_monitor);
+        PB_Updated = monitorUpdated.findViewById(R.id.progressBar_monitor);
     }
 
     private void                init() {
@@ -80,11 +91,8 @@ public class                    HomeActivity extends MyActivity {
     }
 
     private void                initBottomMonitor() {
-        int res = (Tcpdump.isRunning()) ? R.color.online_color : R.color.offline_color;
         statusRoot.setImageResource(R.color.material_deep_orange_400);
         statusPermission.setImageResource(R.color.material_deep_orange_400);
-        getRootPermission();
-        getAndroidPermission();
     }
 
     private void                getAndroidPermission() {
@@ -92,11 +100,14 @@ public class                    HomeActivity extends MyActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE
         };
+        PB_Permission.setVisibility(View.VISIBLE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, PERMISSION_STORAGE, PERMISSIONS_MULTIPLE_REQUEST);
         } else {
-            statusPermission.setImageResource(R.color.online_color);
+
+            statusPermission.setImageDrawable(new ColorDrawable(getResources().getColor(R.color.online_color)));
+            PB_Permission.setVisibility(View.GONE);
         }
     }
 
@@ -149,17 +160,18 @@ public class                    HomeActivity extends MyActivity {
     }
 
     private void                getRootPermission() {
-        Intent intent;
-        Log.d("Splashscreen", "getRootPermission");
+        PB_Root.setVisibility(View.VISIBLE);
+        Log.d(TAG, "getRootPermission");
         if (rootCheck()) {
-            statusRoot.setImageResource(R.color.online_color);
+            statusRoot.setImageDrawable(new ColorDrawable(getResources().getColor(R.color.online_color)));
+            PB_Root.setVisibility(View.GONE);
             return;
         } else {
-            Log.d("Splashscreen", "getRootPermission::Error::Retry");
+            Log.d(TAG, "getRootPermission::Error::Retry");
             new Handler().postDelayed(new Runnable() {
                 public void run() {
                     if (try_permission++ > MAXIMUM_TRY_PERMISSION)
-                        finish();
+                        finish();//TODO: make a snackbar, don't the leave the app, you idiot
                     getRootPermission();
                 }
             }, 5000);

@@ -20,7 +20,7 @@ public class                SettingsControler {
     private File            PATH_TO_PREFERENCES_FILE;
     private Preferences     userPreferences = null;
     public String           PcapPath;
-    public String           NAME_FILE_PREFERENCE = "DaoPreferences.json";
+    public static String    NAME_FILE_PREFERENCE = "DaoPreferences.json";
     public String           BinaryPath = null;
     public String           FilesPath = null;
     public String           DumpsPath = null;

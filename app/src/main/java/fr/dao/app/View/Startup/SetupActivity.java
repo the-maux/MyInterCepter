@@ -63,10 +63,6 @@ public class                    SetupActivity extends MyActivity {
     }
 
     private void                initialisation() {
-        if ((new File(Singleton.getInstance().Settings.FilesPath + "version").exists())) {
-            Log.d(TAG, "Version file exist, leaving app, why ?");
-            finish();
-        }
         new Thread(new Runnable() {
             public void run() {
                 try {

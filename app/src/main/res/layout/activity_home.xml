@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.05" />
+        app:layout_constraintGuide_percent="0.0" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline_left"
@@ -32,7 +32,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.45" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline_middle_verti"
@@ -46,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.95" />
+        app:layout_constraintGuide_percent="0.90" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline8"
@@ -315,8 +315,9 @@
         android:id="@+id/monitorRoot"
         layout="@layout/monitor_card"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/monitorPermission"
         app:layout_constraintStart_toStartOf="@+id/blue_card"
@@ -327,9 +328,9 @@
         android:id="@+id/monitorPermission"
         layout="@layout/monitor_card"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:layout_marginLeft="8dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/monitorUpdated"
         app:layout_constraintStart_toEndOf="@+id/monitorRoot"
@@ -340,8 +341,9 @@
         android:id="@+id/monitorUpdated"
         layout="@layout/monitor_card"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/red_card"
         app:layout_constraintStart_toEndOf="@+id/monitorPermission"

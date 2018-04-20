@@ -130,11 +130,11 @@
         android:layout_marginTop="216dp"
         android:tint="@color/tint_svg"
         android:transitionName="fabTransition"
+        app:layout_behavior="fr.dao.app.View.ZViewController.Coordinator.HostDetail.FAMCollapseBehavior"
         android:visibility="gone"
         app:elevation="2dp"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="end"
-        app:layout_behavior="fr.dao.app.View.Behavior.Coordinator.HostDetail.FAMCollapseBehavior"
         app:menu_icon="@mipmap/ic_action"
         app:menu_openDirection="down"
         fab:menu_animationDelayPerItem="50"
@@ -161,6 +161,6 @@
         android:transitionName="hostPicture"
         app:civ_border_color="#eedddddd"
         app:civ_border_width="1px"
-        app:layout_behavior="fr.dao.app.View.Behavior.Coordinator.HostDetail.ImageCollapseBehavior" />
+        app:layout_behavior="fr.dao.app.View.ZViewController.Coordinator.HostDetail.ImageCollapseBehavior" />
 
 </android.support.design.widget.CoordinatorLayout>
