@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -56,11 +55,12 @@
             app:layout_constraintRight_toLeftOf="@+id/switch_sw"
             app:layout_constraintTop_toBottomOf="@+id/title" />
 
-        <Switch
+        <android.support.v7.widget.SwitchCompat
             android:id="@+id/switch_sw"
             android:layout_width="50dp"
             android:layout_height="40dp"
             android:layout_marginRight="8dp"
+            android:checked="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -40,14 +40,14 @@ import fr.dao.app.Model.Target.SniffSession;
 import fr.dao.app.R;
 import fr.dao.app.View.HostDetail.HostDetailActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
-import fr.dao.app.View.ZViewController.Fragment.MyFragment;
-import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
-import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Adapter.HostDiscoveryAdapter;
 import fr.dao.app.View.ZViewController.Adapter.NetworksAdapter;
 import fr.dao.app.View.ZViewController.Adapter.PcapFileAdapter;
 import fr.dao.app.View.ZViewController.Adapter.SniffSessionAdapter;
+import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
+import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Dialog.RV_dialog;
+import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 public class                        FragmentHistoric extends MyFragment {
     private String                  TAG = "FragmentHistoric";
@@ -198,7 +198,7 @@ public class                        FragmentHistoric extends MyFragment {
         if (focusedNetwork == null) {
             onBackPressed();
         }
-        date.setText("Last scan realised the " + focusedNetwork.getDateString());
+        date.setText("Last scan : " + focusedNetwork.getDateString());
         name.setText(focusedNetwork.Ssid);
         nbrScanned.setText("Scanned " + focusedNetwork.nbrScanned + " times");
         initViewSessionFocus_Gateway(focusedNetwork);

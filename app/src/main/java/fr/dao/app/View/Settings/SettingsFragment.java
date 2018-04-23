@@ -1,15 +1,16 @@
 package fr.dao.app.View.Settings;
 
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import fr.dao.app.R;
@@ -43,13 +44,15 @@ public class                    SettingsFragment extends MyFragment {
         mActivity.setToolbarTitle(txt, "");
     }
 
-    public void                 addItemMenu(String title, String subtitle, final Thread onClick,
+    public void                 addItemMenu(String title, String subtitle, final Runnable onClick,
                                             String switchEnabled) {
         View settingsItemView = inflater.inflate(R.layout.item_settings_dark, container, false);
         TextView title_TV = settingsItemView.findViewById(R.id.title);
         TextView subtitle_TV = settingsItemView.findViewById(R.id.subtitle);
         ConstraintLayout rootView = settingsItemView.findViewById(R.id.rootView);
-        Switch switch_sw = settingsItemView.findViewById(R.id.switch_sw);
+        SwitchCompat switch_sw = settingsItemView.findViewById(R.id.switch_sw);
+        initSwitchBehavior(switch_sw);
+
         title_TV.setText(title);
         if (subtitle == null) {
             subtitle_TV.setVisibility(View.GONE);
@@ -61,25 +64,40 @@ public class                    SettingsFragment extends MyFragment {
         }
         switch_sw.setChecked(Boolean.valueOf(switchEnabled));
         switch_sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                onClick.start();
+                new Thread(onClick).start();
             }
         });
         rootView.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View view) {
-                onClick.start();
+                new Thread(onClick).start();
             }
         });
         settingsItemView.findViewById(R.id.card_view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClick.start();
+                new Thread(onClick).start();
             }
         });
         addViewSettingsToListSettings();
         mCentral_layout.addView(settingsItemView);
+    }
+
+    private void                initSwitchBehavior(SwitchCompat switch_sw) {
+        int[][] states = new int[][] {
+                new int[]{-android.R.attr.state_enabled},
+                new int[]{android.R.attr.state_checked},
+                new int[]{}
+        };
+
+        int[] colors = new int[] {
+                R.color.settingsPrimary,
+                R.color.material_grey_500,
+                R.color.snifferPrimary
+        };
+
+        ColorStateList myList = new ColorStateList(states, colors);
+        switch_sw.setThumbTintList(myList);
     }
 
     private void                addViewSettingsToListSettings() {

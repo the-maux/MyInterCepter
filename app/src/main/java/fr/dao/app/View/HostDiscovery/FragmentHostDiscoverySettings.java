@@ -40,56 +40,56 @@ public class                        FragmentHostDiscoverySettings extends Settin
         initDiscoveryMode();
         addItemMenu("Scan every time",
                 "Start a new scan of the Network without loading previous one from database",
-                new Thread(new Runnable() {
+                new Runnable() {
                     public void run() {
                         showSnackbar("not implemented");
                     }
-                }),
+                },
                 "true");
 
         addItemMenu("Clever scan",
                 "Doesn't scan every devices, just the ones we don't know",
-                new Thread(new Runnable() {
+                new Runnable() {
                     public void run() {
                         showSnackbar("not implemented");
                     }
-                }),
+                },
                 "true");
 
         addItemMenu("Show my device",
                 "Un/Hide your device in the list of hosts discovered",
-                new Thread(new Runnable() {
+                new Runnable() {
                     public void run() {
                         showSnackbar("not implemented");
                     }
-                }),
+                },
                 "true");
 
         addItemMenu("Show Offline devices",
                 "Un/show the list of devices previously recorded on the network, but offline anymore",
-                new Thread(new Runnable() {
+                new Runnable() {
                     public void run() {
                         showSnackbar("not implemented");
                     }
-                }),
+                },
                 "true");
 
         addItemMenu("Debug mode",
                 "Means a lot of thing and can slow the application",
-                new Thread(new Runnable() {
+                new Runnable() {
                     public void run() {
                         showSnackbar("not implemented");
                     }
-                }),
+                },
                 "false");
 
         addItemMenu("Save every scan",
                 "",
-                new Thread(new Runnable() {
+                new Runnable() {
                     public void run() {
                         showSnackbar("not implemented");
                     }
-                }),
+                },
                 "true");
     }
 
