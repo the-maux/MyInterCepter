@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -28,8 +29,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/header_layout"
             android:scrollbars="vertical"
-            app:layoutManager="android.support.v7.widget.GridLayoutManager"/>
-        <!-- tools:listitem="@layout/item_menu"-->
+            tools:listitem="@layout/monitor_card" />
 
         <ImageView
             android:id="@+id/scylla"
@@ -38,7 +38,6 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:visibility="gone"
-            app:srcCompat="@drawable/scylla_transparent"
-            />
+            app:srcCompat="@drawable/scylla_transparent" />
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

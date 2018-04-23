@@ -1,27 +1,31 @@
 package fr.dao.app.View.Startup;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
-import android.view.View;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import fr.dao.app.R;
-import fr.dao.app.View.Settings.SettingsActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
+import fr.dao.app.View.ZViewController.Adapter.MenuDefenseAdapter;
 
-public class DefenseHomeActivity extends MyActivity {
+public class                    DefenseHomeActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
     private DefenseHomeActivity mInstance = this;
-    private ConstraintLayout    mCoordinatorLayout;
+    private CoordinatorLayout   mCoordinatorLayout;
     private CardView            blue_card, dashboard_card, settings_card, red_card;
-
+    private RecyclerView        RV_menu;
+    private MenuDefenseAdapter  mAdapter;
 
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_defense);
         initXml();
+        init();
     }
 
     protected void              onResume() {
@@ -29,41 +33,18 @@ public class DefenseHomeActivity extends MyActivity {
     }
 
     private void                initXml() {
-        mCoordinatorLayout = findViewById(R.id.rootView);
-        blue_card = findViewById(R.id.blue_card);
-        red_card = findViewById(R.id.red_card);
-        dashboard_card = findViewById(R.id.dashboard_card);
-        settings_card = findViewById(R.id.settings_card);
+        mCoordinatorLayout = findViewById(R.id.Coordonitor);
+        RV_menu = findViewById(R.id.RV_menu);
     }
 
     private void                init() {
-        red_card.setOnClickListener(onAttackclicked());
-        blue_card.setOnClickListener(onDefenseClicked());
-        settings_card.setOnClickListener(onSettingsClick());
+        mAdapter = new MenuDefenseAdapter(this);
+        RV_menu.setAdapter(mAdapter);
+        RV_menu.setLayoutManager(new GridLayoutManager(this, 2));
     }
 
-    private View.OnClickListener onSettingsClick() {
-        return new View.OnClickListener() {
-            public void onClick(View view) {
-                startActivity(new Intent(mInstance, SettingsActivity.class));
-            }
-        };
+    public void                 showSnackbar(String txt) {
+        super.showSnackbar(txt);
+        Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
-
-    private View.OnClickListener onDefenseClicked() {
-        return new View.OnClickListener() {
-            public void onClick(View view) {
-
-            }
-        };
-    }
-
-    private View.OnClickListener onAttackclicked() {
-        return new View.OnClickListener() {
-            public void onClick(View view) {
-
-            }
-        };
-    }
-
 }

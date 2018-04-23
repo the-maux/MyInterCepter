@@ -7,7 +7,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -22,7 +24,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Setup;
 import fr.dao.app.Core.Configuration.Utils;
-import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.R;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
 import fr.dao.app.View.Settings.SettingsActivity;
@@ -31,7 +32,7 @@ import fr.dao.app.View.ZViewController.Activity.MyActivity;
 public class                    HomeActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
     private HomeActivity        mInstance = this;
-    private ConstraintLayout    mCoordinatorLayout;
+    private CoordinatorLayout   mCoordinatorLayout;
     private CardView            blue_card, dashboard_card, settings_card, red_card;
     private RadioButton         radioButton, radioButton2, radioButton3;
     private int                 MAXIMUM_TRY_PERMISSION = 42, try_permission = 0;
@@ -60,7 +61,7 @@ public class                    HomeActivity extends MyActivity {
     }
 
     private void                initXml() {
-        mCoordinatorLayout = findViewById(R.id.rootView);
+        mCoordinatorLayout = findViewById(R.id.Coordonitor);
         blue_card = findViewById(R.id.blue_card);
         red_card = findViewById(R.id.red_card);
         dashboard_card = findViewById(R.id.dashboard_card);
@@ -141,12 +142,7 @@ public class                    HomeActivity extends MyActivity {
     private View.OnClickListener onDefenseClicked() {
         return new View.OnClickListener() {
             public void onClick(View view) {
-                Utils.vibrateDevice(mInstance);
-                Utils.vibrateDevice(mInstance);
-                Utils.vibrateDevice(mInstance);
-                Utils.vibrateDevice(mInstance);
-                Utils.vibrateDevice(mInstance);
-                //                startActivity(new Intent(mInstance, DefenseHomeActivity.class));
+                startActivity(new Intent(mInstance, DefenseHomeActivity.class));
             }
         };
     }
@@ -187,5 +183,13 @@ public class                    HomeActivity extends MyActivity {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public void                 onBackPressed() {
+        finish();
+    }
+
+    public void                     showSnackbar(String txt) {
+        Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
 }
