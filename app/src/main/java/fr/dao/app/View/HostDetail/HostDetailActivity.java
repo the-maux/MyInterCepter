@@ -34,9 +34,9 @@ import fr.dao.app.Core.Database.DBManager;
 import fr.dao.app.Model.Net.Pcap;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
-import fr.dao.app.View.HostDiscovery.FragmentHistoric;
+import fr.dao.app.View.HostDiscovery.HostDiscoveryHistoricFrgmnt;
 import fr.dao.app.View.Scan.NmapActivity;
-import fr.dao.app.View.Wireshark.WiresharkActivity;
+import fr.dao.app.View.Sniff.SniffActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
@@ -188,7 +188,7 @@ public class                    HostDetailActivity extends MyActivity {
         sniffingFAB.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 mMenuFAB.close(true);
-                Intent intent = new Intent(mInstance, WiresharkActivity.class);
+                Intent intent = new Intent(mInstance, SniffActivity.class);
                 Log.d(TAG, "Sending mac[" + getIntent().getExtras().getString("macAddress") + "]");
                 intent.putExtra("macAddress", getIntent().getExtras().getString("macAddress"));
                 startActivity(intent);
@@ -287,9 +287,9 @@ public class                    HostDetailActivity extends MyActivity {
     }
 
     private void                displayHistoric(String macOfHostFocused) {
-        MyFragment fragment = new FragmentHistoric();
+        MyFragment fragment = new HostDiscoveryHistoricFrgmnt();
         Bundle args = new Bundle();
-        args.putString("mode", FragmentHistoric.HOST_HISTORIC);
+        args.putString("mode", HostDiscoveryHistoricFrgmnt.HOST_HISTORIC);
         args.putString("macAddress", macOfHostFocused);
         fragment.setArguments(args);
         initFragment(fragment);

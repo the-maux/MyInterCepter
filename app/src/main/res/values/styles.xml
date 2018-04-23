@@ -32,4 +32,19 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="BrandedSwitch.control" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">#e6e600</item>
+        <item name="colorSwitchThumbNormal">#cc0000</item>
+    </style>
+
+    <style name="BrandedCheckBox" parent="AppTheme">
+        <item name="colorAccent">#aaf000</item>
+        <item name="colorControlNormal">#ff0000</item>
+    </style>
+
+    <style name="BrandedSwitch" parent="AppTheme">
+        <item name="colorAccent">#39ac39</item>
+    </style>
 </resources>

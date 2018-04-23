@@ -15,12 +15,12 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 
 import fr.dao.app.R;
-import fr.dao.app.View.DnsSpoofing.FragmentDnsSettings;
-import fr.dao.app.View.HostDiscovery.FragmentHistoric;
-import fr.dao.app.View.HostDiscovery.FragmentHostDiscoverySettings;
-import fr.dao.app.View.WebServer.FragmentWebserverSettings;
-import fr.dao.app.View.WebTracker.FragmentTrackerSettings;
-import fr.dao.app.View.Wireshark.FragmentSnifferSettings;
+import fr.dao.app.View.DnsSpoofing.DnsSettingsFrgmnt;
+import fr.dao.app.View.HostDiscovery.HostDiscoveryHistoricFrgmnt;
+import fr.dao.app.View.HostDiscovery.HostDiscoverySettingsFrgmnt;
+import fr.dao.app.View.WebServer.WebserverSettingsFrgmnt;
+import fr.dao.app.View.SpyMITM.SpyMitmSettingsFrgmnt;
+import fr.dao.app.View.Sniff.SniffSettingsFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
@@ -87,7 +87,7 @@ public class                    SettingsActivity extends MyActivity {
             Log.d(TAG, "initNavigationBottomBarSettings(" + position + ":" + useCallback + ")");
             AHBottomNavigationItem[] bottomItems = new AHBottomNavigationItem[5];
             bottomItems[0] = new AHBottomNavigationItem(R.string.SCANNER,
-                    R.drawable.ic_fingerprint_svg, R.color.generic_background_dark);
+                    R.drawable.ic_fingerprint_svg, R.color.settingsPrimary);
             bottomItems[1] = new AHBottomNavigationItem(R.string.TRACKER,
                     R.drawable.spy, R.color.spyPrimary);
             bottomItems[2] = new AHBottomNavigationItem(R.string.SNIFFER,
@@ -125,27 +125,27 @@ public class                    SettingsActivity extends MyActivity {
                                     Log.d(TAG, "position:" + position);
                                     switch (position) {
                                         case 0:
-                                            fragment = new FragmentHostDiscoverySettings();
-                                            appBarLayout.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.generic_background_dark));
+                                            fragment = new HostDiscoverySettingsFrgmnt();
+                                            appBarLayout.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.settingsPrimary));
                                             break;
                                         case 1:
-                                            fragment = new FragmentTrackerSettings();
+                                            fragment = new SpyMitmSettingsFrgmnt();
                                             appBarLayout.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.spyPrimary));
                                             break;
                                         case 2:
-                                            fragment = new FragmentSnifferSettings();
+                                            fragment = new SniffSettingsFrgmnt();
                                             appBarLayout.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.snifferPrimary));
                                             break;
                                         case 3:
-                                            fragment = new FragmentDnsSettings();
+                                            fragment = new DnsSettingsFrgmnt();
                                             appBarLayout.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.dnsSpoofPrimary));
                                             break;
                                         case 4:
-                                            fragment = new FragmentWebserverSettings();
+                                            fragment = new WebserverSettingsFrgmnt();
                                             appBarLayout.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.webserverSpoofPrimary));
                                             break;
                                         default:
-                                            fragment = new SettingsFragment();
+                                            fragment = new SettingsFrgmnt();
                                             appBarLayout.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.dnsSpoofPrimary));
                                             break;
                                     }
@@ -164,10 +164,10 @@ public class                    SettingsActivity extends MyActivity {
     private void                initFragment(MyFragment fragment) {
         try {
             if (fragment == null)
-                fragment = new FragmentHostDiscoverySettings();
+                fragment = new HostDiscoverySettingsFrgmnt();
             mFragment = fragment;
             Bundle args = new Bundle();
-            args.putString("mode", FragmentHistoric.HOST_HISTORIC);
+            args.putString("mode", HostDiscoveryHistoricFrgmnt.HOST_HISTORIC);
             mFragment.setArguments(args);
             getSupportFragmentManager()
                     .beginTransaction()

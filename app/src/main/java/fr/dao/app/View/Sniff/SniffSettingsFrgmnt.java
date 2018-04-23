@@ -1,17 +1,19 @@
-package fr.dao.app.View.DnsSpoofing;
+package fr.dao.app.View.Sniff;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import fr.dao.app.View.Settings.SettingsFragment;
+import fr.dao.app.R;
+import fr.dao.app.View.Settings.SettingsFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Dialog.QuestionMultipleAnswerDialog;
 
-public class                        FragmentDnsSettings extends SettingsFragment {
-    private String                  Title = "Settings Dns";
+public class SniffSettingsFrgmnt extends SettingsFrgmnt {
+    private String                  Title = "Settings Wireshark";
     private MyActivity              mActivity;
 
     public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,7 +40,8 @@ public class                        FragmentDnsSettings extends SettingsFragment
                         showSnackbar("not implemented");
                     }
                 }),
-                "true");
+                "true",
+                ContextCompat.getColor(mActivity, R.color.snifferSwitch),ContextCompat.getColor(mActivity, R.color.snifferSwitchBack));
         }
 
     private void                    initAskModeSetting() {
@@ -63,7 +66,7 @@ public class                        FragmentDnsSettings extends SettingsFragment
         addItemMenu(items[mSingleton.Settings.getUserPreferences().NmapMode] + " discovery",
                     "Choose your mode",
                     t,
-                    null);
+                    null, 0, 0);
     }
 
     private void                    showSnackbar(String txt) {

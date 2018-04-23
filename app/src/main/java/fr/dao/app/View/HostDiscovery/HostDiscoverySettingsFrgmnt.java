@@ -2,6 +2,7 @@ package fr.dao.app.View.HostDiscovery;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,11 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import fr.dao.app.Core.Configuration.Singleton;
-import fr.dao.app.View.Settings.SettingsFragment;
+import fr.dao.app.R;
+import fr.dao.app.View.Settings.SettingsFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Dialog.QuestionMultipleAnswerDialog;
 
-public class                        FragmentHostDiscoverySettings extends SettingsFragment {
+public class HostDiscoverySettingsFrgmnt extends SettingsFrgmnt {
     private MyActivity              mActivity;
 
     public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,7 +47,8 @@ public class                        FragmentHostDiscoverySettings extends Settin
                         showSnackbar("not implemented");
                     }
                 },
-                "true");
+                "true",
+                ContextCompat.getColor(mActivity, R.color.settingsSwitch),ContextCompat.getColor(mActivity, R.color.settingsSwitchBack));
 
         addItemMenu("Clever scan",
                 "Doesn't scan every devices, just the ones we don't know",
@@ -54,7 +57,8 @@ public class                        FragmentHostDiscoverySettings extends Settin
                         showSnackbar("not implemented");
                     }
                 },
-                "true");
+                "true",
+                ContextCompat.getColor(mActivity, R.color.settingsSwitch),ContextCompat.getColor(mActivity, R.color.settingsSwitchBack));
 
         addItemMenu("Show my device",
                 "Un/Hide your device in the list of hosts discovered",
@@ -63,7 +67,8 @@ public class                        FragmentHostDiscoverySettings extends Settin
                         showSnackbar("not implemented");
                     }
                 },
-                "true");
+                "true",
+                ContextCompat.getColor(mActivity, R.color.settingsSwitch),ContextCompat.getColor(mActivity, R.color.settingsSwitchBack));
 
         addItemMenu("Show Offline devices",
                 "Un/show the list of devices previously recorded on the network, but offline anymore",
@@ -72,7 +77,8 @@ public class                        FragmentHostDiscoverySettings extends Settin
                         showSnackbar("not implemented");
                     }
                 },
-                "true");
+                "true",
+                ContextCompat.getColor(mActivity, R.color.settingsSwitch),ContextCompat.getColor(mActivity, R.color.settingsSwitchBack));
 
         addItemMenu("Debug mode",
                 "Means a lot of thing and can slow the application",
@@ -81,7 +87,8 @@ public class                        FragmentHostDiscoverySettings extends Settin
                         showSnackbar("not implemented");
                     }
                 },
-                "false");
+                "false",
+                ContextCompat.getColor(mActivity, R.color.settingsSwitch),ContextCompat.getColor(mActivity, R.color.settingsSwitchBack));
 
         addItemMenu("Save every scan",
                 "",
@@ -90,7 +97,8 @@ public class                        FragmentHostDiscoverySettings extends Settin
                         showSnackbar("not implemented");
                     }
                 },
-                "true");
+                "true",
+                ContextCompat.getColor(mActivity, R.color.settingsSwitch),ContextCompat.getColor(mActivity, R.color.settingsSwitchBack));
     }
 
     private void                    initDiscoveryMode() {
@@ -119,7 +127,8 @@ public class                        FragmentHostDiscoverySettings extends Settin
         addItemMenu(items[mSingleton.Settings.getUserPreferences().NmapMode] + " discovery",
                     "Type of scan who will be launch on the netwotk, Silence, Normal, Agressive, Insane",
                     t,
-                    null);
+                    null,
+                ContextCompat.getColor(mActivity, R.color.settingsSwitch),ContextCompat.getColor(mActivity, R.color.settingsSwitchBack));
     }
 
     private void                    showSnackbar(String txt) {

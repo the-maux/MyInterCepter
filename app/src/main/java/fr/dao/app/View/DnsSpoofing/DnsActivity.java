@@ -26,7 +26,7 @@ import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Dnsmasq.DnsmasqConfig;
 import fr.dao.app.Core.Dnsmasq.DnsmasqControl;
 import fr.dao.app.R;
-import fr.dao.app.View.ZViewController.Activity.SniffActivity;
+import fr.dao.app.View.ZViewController.Activity.MITMActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Adapter.DnsLogsAdapter;
@@ -34,7 +34,7 @@ import fr.dao.app.View.ZViewController.Adapter.DnsSpoofConfAdapter;
 import fr.dao.app.View.ZViewController.Dialog.DialogQuestionWithInput;
 
 
-public class                            DnsActivity extends SniffActivity {
+public class                            DnsActivity extends MITMActivity {
     private String                      TAG = "DnsActivity";
     private DnsActivity                 mInstance = this;
     private CoordinatorLayout           mCoordinatorLayout;

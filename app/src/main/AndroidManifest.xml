@@ -42,8 +42,7 @@
             android:launchMode="singleTask" />
         <activity
             android:name=".View.HostDiscovery.HostDiscoveryActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".View.Settings.SettingsActivity"
             android:launchMode="singleTask" />
@@ -51,10 +50,10 @@
             android:name=".View.Scan.NmapActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".View.WebTracker.TrackerActivity"
+            android:name=".View.SpyMITM.SpyMitmActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".View.Wireshark.WiresharkActivity"
+            android:name=".View.Sniff.SniffActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".View.Dora.DoraActivity"

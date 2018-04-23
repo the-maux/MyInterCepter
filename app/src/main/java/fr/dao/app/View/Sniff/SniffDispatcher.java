@@ -1,4 +1,4 @@
-package fr.dao.app.View.Wireshark;
+package fr.dao.app.View.Sniff;
 
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
@@ -10,10 +10,10 @@ import fr.dao.app.Core.Tcpdump.DashboardSniff;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.View.ZViewController.Adapter.WiresharkPacketsAdapter;
 
-public class                        WiresharkDispatcher  {
-    private String                  TAG = "WiresharkDispatcher";
+public class SniffDispatcher {
+    private String                  TAG = "SniffDispatcher";
     private java.util.Queue         queue = new java.util.LinkedList();
-    private WiresharkActivity       mActivity;
+    private SniffActivity mActivity;
     private RecyclerView            mRV_Wireshark;
     private boolean                 mIsRunning = false, mAutoscroll = true, isDashboardMode;
     private int                     REFRESH_TIME = 800;
@@ -21,8 +21,8 @@ public class                        WiresharkDispatcher  {
     private DashboardSniff          mDashboard;
     private RecyclerView.Adapter    mAdapterWireshark;
 
-    public                          WiresharkDispatcher(RecyclerView.Adapter adapter, boolean isDashboardMode,
-                                                        RecyclerView recyclerView, WiresharkActivity activity) {
+    public SniffDispatcher(RecyclerView.Adapter adapter, boolean isDashboardMode,
+                           RecyclerView recyclerView, SniffActivity activity) {
         mAdapterWireshark = adapter;
         mIsRunning = true;
         mActivity = activity;

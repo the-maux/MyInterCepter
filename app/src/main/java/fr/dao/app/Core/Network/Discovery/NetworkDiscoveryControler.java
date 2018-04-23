@@ -13,12 +13,12 @@ import fr.dao.app.Core.Network.IPv4Utils;
 import fr.dao.app.Core.Network.NetDiscovering;
 import fr.dao.app.Core.Nmap.NmapControler;
 import fr.dao.app.Model.Target.Host;
-import fr.dao.app.View.HostDiscovery.FragmentHostDiscoveryScan;
+import fr.dao.app.View.HostDiscovery.HostDiscoveryScanFrgmnt;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
 
 public class                        NetworkDiscoveryControler {
     private String                  TAG = "NetworkDiscoveryControler";
-    private FragmentHostDiscoveryScan mFragment;
+    private HostDiscoveryScanFrgmnt mFragment;
     private Singleton               mSingleton = Singleton.getInstance();
     private HostDiscoveryActivity   mActivity;
     public boolean                  inLoading = false;
@@ -30,7 +30,7 @@ public class                        NetworkDiscoveryControler {
         return mInstance != null && !mInstance.inLoading;
     }
 
-    public static synchronized      NetworkDiscoveryControler getInstance(final FragmentHostDiscoveryScan fragmentHostDiscoveryScan) {
+    public static synchronized      NetworkDiscoveryControler getInstance(final HostDiscoveryScanFrgmnt fragmentHostDiscoveryScan) {
         if(mInstance == null)
             mInstance = new NetworkDiscoveryControler();
         mInstance.mActivity = (HostDiscoveryActivity) fragmentHostDiscoveryScan.getActivity();
@@ -75,6 +75,7 @@ public class                        NetworkDiscoveryControler {
             Log.d(TAG, "Nmap_Mode[" + mSingleton.Settings.getUserPreferences().NmapMode + "] so starting Nmap");
             new NmapControler(Singleton.getInstance().actualNetwork.listDevices(), this, Singleton.getInstance().actualNetwork, mActivity);
         } else {
+
             Log.d(TAG, "Nmap_Mode[" + mSingleton.Settings.getUserPreferences().NmapMode + "] so bypass Nmap");
             onNmapScanOver(Singleton.getInstance().actualNetwork.listDevices());
         }
@@ -82,15 +83,7 @@ public class                        NetworkDiscoveryControler {
 
     public void                     onNmapScanOver(ArrayList<Host> hosts) {
         Log.d(TAG, "Scan took " + Utils.TimeDifference(startScanning));
-        String time = Utils.TimeDifference(startScanning);
-        int online = 0, offline = 0;
-        for (Host host : hosts) {
-            if (host.state == Host.State.ONLINE)
-                online++;
-            else if (host.state == Host.State.OFFLINE || host.state == Host.State.FILTERED)
-                offline++;
-        }
-        mFragment.onHostActualized(hosts, online, offline);
+        mFragment.onHostActualized(hosts);
     }
 
     public void                     setToolbarTitle(String title, String subtitle) {

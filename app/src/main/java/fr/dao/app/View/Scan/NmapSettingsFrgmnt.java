@@ -2,15 +2,17 @@ package fr.dao.app.View.Scan;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import fr.dao.app.View.Settings.SettingsFragment;
+import fr.dao.app.R;
+import fr.dao.app.View.Settings.SettingsFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Dialog.QuestionMultipleAnswerDialog;
 
-public class FragmentNmapSettings extends SettingsFragment {
+public class NmapSettingsFrgmnt extends SettingsFrgmnt {
     private String                  Title = "Settings Nmap";
     private MyActivity              mActivity;
 
@@ -33,12 +35,13 @@ public class FragmentNmapSettings extends SettingsFragment {
         initAskModeSetting();
         addItemMenu(Title,
                 "No info",
-                new Thread(new Runnable() {
+                new Runnable() {
                     public void run() {
                         showSnackbar("not implemented");
                     }
-                }),
-                "true");
+                },
+                "true",
+                ContextCompat.getColor(mActivity, R.color.nmapSwitch),ContextCompat.getColor(mActivity, R.color.nmapSwitch));
         }
 
     private void                    initAskModeSetting() {
@@ -63,7 +66,7 @@ public class FragmentNmapSettings extends SettingsFragment {
         addItemMenu(items[mSingleton.Settings.getUserPreferences().NmapMode] + " discovery",
                     "Choose your mode",
                     t,
-                    null);
+                    null, 0, 0);
     }
 
     private void                    showSnackbar(String txt) {

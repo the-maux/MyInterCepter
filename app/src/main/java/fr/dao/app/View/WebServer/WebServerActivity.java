@@ -20,12 +20,12 @@ import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.WebServer.GenericServer;
 import fr.dao.app.R;
-import fr.dao.app.View.ZViewController.Activity.SniffActivity;
+import fr.dao.app.View.ZViewController.Activity.MITMActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.MyWebViewClient;
 
-public class                    WebServerActivity extends SniffActivity {
+public class                    WebServerActivity extends MITMActivity {
     private String              TAG = "WebServerActivity";
     private int                 PORT = 8081;
     private Singleton           mSingleton = Singleton.getInstance();

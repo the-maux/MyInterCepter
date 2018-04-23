@@ -32,17 +32,17 @@ import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Nmap.NmapControler;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
-import fr.dao.app.View.ZViewController.Activity.SniffActivity;
+import fr.dao.app.View.ZViewController.Activity.MITMActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Dialog.DialogQuestionWithInput;
 
-public class                    NmapActivity extends SniffActivity {
+public class                    NmapActivity extends MITMActivity {
     private String              TAG = "NmapActivity";
     private NmapActivity        mInstance = this;
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
-    private NmapOutputFragment  nmapOutputFragment;
+    private NmapTTYFrgmnt nmapOutputFragment;
     private AppBarLayout        appBarLayout;
     private TextView            monitorHostTargeted, monitorNmapParam;
     private TextView            MonitorInoptionTheTarget;
@@ -134,7 +134,7 @@ public class                    NmapActivity extends SniffActivity {
 
     private void                initFragment() {
         try {
-            nmapOutputFragment = new NmapOutputFragment();
+            nmapOutputFragment = new NmapTTYFrgmnt();
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.frame_container, nmapOutputFragment)

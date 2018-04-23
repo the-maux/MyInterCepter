@@ -2,9 +2,13 @@ package fr.dao.app.View.Settings;
 
 
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +21,8 @@ import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
-public class                    SettingsFragment extends MyFragment {
-    private String              TAG = "SettingsFragment";
+public class SettingsFrgmnt extends MyFragment {
+    private String              TAG = "SettingsFrgmnt";
     protected CoordinatorLayout mCoordinatorLayout;
     protected MyActivity        mActivity;
     protected LinearLayout      mCentral_layout;
@@ -45,13 +49,16 @@ public class                    SettingsFragment extends MyFragment {
     }
 
     public void                 addItemMenu(String title, String subtitle, final Runnable onClick,
-                                            String switchEnabled) {
+                                            String switchEnabled, int colorThumb, int colorBack) {
         View settingsItemView = inflater.inflate(R.layout.item_settings_dark, container, false);
         TextView title_TV = settingsItemView.findViewById(R.id.title);
         TextView subtitle_TV = settingsItemView.findViewById(R.id.subtitle);
         ConstraintLayout rootView = settingsItemView.findViewById(R.id.rootView);
         SwitchCompat switch_sw = settingsItemView.findViewById(R.id.switch_sw);
-        initSwitchBehavior(switch_sw);
+        if (switchEnabled == null) {
+            switch_sw.setVisibility(View.GONE);
+        } else
+            initSwitchBehavior(switch_sw, switchEnabled, onClick,  colorThumb, colorBack);
 
         title_TV.setText(title);
         if (subtitle == null) {
@@ -59,15 +66,7 @@ public class                    SettingsFragment extends MyFragment {
         } else {
             subtitle_TV.setText(subtitle);
         }
-        if (switchEnabled == null) {
-            switch_sw.setVisibility(View.GONE);
-        }
-        switch_sw.setChecked(Boolean.valueOf(switchEnabled));
-        switch_sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                new Thread(onClick).start();
-            }
-        });
+
         rootView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 new Thread(onClick).start();
@@ -83,21 +82,31 @@ public class                    SettingsFragment extends MyFragment {
         mCentral_layout.addView(settingsItemView);
     }
 
-    private void                initSwitchBehavior(SwitchCompat switch_sw) {
+    private void                initSwitchBehavior(SwitchCompat switch_sw, String switchEnabled,
+                                                   final Runnable onClick, int colorThumb, int colorBack) {
         int[][] states = new int[][] {
-                new int[]{-android.R.attr.state_enabled},
-                new int[]{android.R.attr.state_checked},
-                new int[]{}
+                new int[] {-android.R.attr.state_checked},
+                new int[] {android.R.attr.state_checked},
         };
 
-        int[] colors = new int[] {
-                R.color.settingsPrimary,
-                R.color.material_grey_500,
-                R.color.snifferPrimary
+        int[] thumbColors = new int[] {
+                Color.GRAY,
+                colorThumb,
         };
 
-        ColorStateList myList = new ColorStateList(states, colors);
-        switch_sw.setThumbTintList(myList);
+        int[] trackColors = new int[] {
+                ContextCompat.getColor(mActivity, R.color.switchOFF),
+                colorBack,
+        };
+
+        DrawableCompat.setTintList(DrawableCompat.wrap(switch_sw.getThumbDrawable()), new ColorStateList(states, thumbColors));
+        DrawableCompat.setTintList(DrawableCompat.wrap(switch_sw.getTrackDrawable()), new ColorStateList(states, trackColors));
+        switch_sw.setChecked(Boolean.valueOf(switchEnabled));
+        switch_sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                new Thread(onClick).start();
+            }
+        });
     }
 
     private void                addViewSettingsToListSettings() {

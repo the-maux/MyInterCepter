@@ -1,4 +1,4 @@
-package fr.dao.app.View.Wireshark;
+package fr.dao.app.View.Sniff;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -26,15 +26,15 @@ import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.R;
-import fr.dao.app.View.ZViewController.Activity.SniffActivity;
+import fr.dao.app.View.ZViewController.Activity.MITMActivity;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Fragment.PcapListerFragment;
 
-public class                    WiresharkActivity extends SniffActivity {
-    private String              TAG = this.getClass().getName();
-    private WiresharkActivity   mInstance = this;
+public class                    SniffActivity extends MITMActivity {
+    private String              TAG = "SniffActivity";
+    private SniffActivity       mInstance = this;
     private CoordinatorLayout   mCoordinatorLayout;
     private AppBarLayout        mAppBar;
     private Toolbar             mToolbar;
@@ -54,7 +54,7 @@ public class                    WiresharkActivity extends SniffActivity {
     private void                init(Intent intent) {
         String PcapFilePath = intent  == null ? null : intent.getStringExtra("Pcap");
         if (PcapFilePath == null) {
-            mFragment = new WiresharkLiveFragment();
+            mFragment = new SniffLiveFrgmnt();
             hideBottomBar();
             if (intent != null && intent.getStringExtra("macAddress") != null) {// FROM HOSTDETAILACTIVITY
                 int position = DBHost.getPositionFromMacaddress(mSingleton.hostList, intent.getStringExtra("macAddress"));
@@ -82,7 +82,7 @@ public class                    WiresharkActivity extends SniffActivity {
             ViewAnimate.FabAnimateHide(mInstance, mFab);
             findViewById(R.id.navigation).setVisibility(View.GONE);
             readerFragment = true;
-            mFragment = new WiresharkReaderFragment();
+            mFragment = new SniffReaderFrgmnt();
             Bundle bundle = new Bundle();
             bundle.putString("Pcap", PcapFilePath);
             mFragment.setArguments(bundle);
@@ -125,11 +125,11 @@ public class                    WiresharkActivity extends SniffActivity {
         SwitchViewBackBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (!readerFragment) {
-                    boolean isDashboard = ((WiresharkLiveFragment)mFragment).onSwitchView();
+                    boolean isDashboard = ((SniffLiveFrgmnt)mFragment).onSwitchView();
                     int res = isDashboard ? R.drawable.ic_flip_to_front_svg: R.drawable.ic_flip_to_back_black_svg;
                     MyGlideLoader.loadDrawableInImageView(mInstance, res, SwitchViewBackBtn, false);
                     Log.d(TAG, "swithed has " + ((isDashboard) ? "dashboard" : "Live packets" ));
-                    ((WiresharkLiveFragment)mFragment).switchOutputType(isDashboard);
+                    ((SniffLiveFrgmnt)mFragment).switchOutputType(isDashboard);
                 } else {
                     Log.d(TAG, "not in readerFragment");
                 }

@@ -49,9 +49,9 @@ import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Dialog.RV_dialog;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
-public class                        FragmentHistoric extends MyFragment {
-    private String                  TAG = "FragmentHistoric";
-    private FragmentHistoric        mInstance = this;
+public class HostDiscoveryHistoricFrgmnt extends MyFragment {
+    private String                  TAG = "HostDiscoveryHistoricFrgmnt";
+    private HostDiscoveryHistoricFrgmnt mInstance = this;
     private Host                    mFocusedHost = null;
     private List<Network>           networksScanned;
     private Network                 focusedNetwork = null;

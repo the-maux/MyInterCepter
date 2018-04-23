@@ -20,7 +20,7 @@ public class                            Singleton {
     public  SettingsControler           Settings = null;
     public  NetworkInformation          network = null;
     public  Network                     actualNetwork = null;
-    public  ArrayList<Host>             hostList = null;
+    public  ArrayList<Host>             hostList = null, savedHostList = null;
     public  List<ArpSpoof>              ArpSpoofProcessStack = new ArrayList<>();
     private DnsmasqControl              dnsSpoofed = null;
     private SniffSession                actualSniffSession = null;

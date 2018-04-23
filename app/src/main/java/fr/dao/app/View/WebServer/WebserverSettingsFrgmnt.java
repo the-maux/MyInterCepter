@@ -1,17 +1,19 @@
-package fr.dao.app.View.WebTracker;
+package fr.dao.app.View.WebServer;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import fr.dao.app.View.Settings.SettingsFragment;
+import fr.dao.app.R;
+import fr.dao.app.View.Settings.SettingsFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Dialog.QuestionMultipleAnswerDialog;
 
-public class FragmentTrackerSettings extends SettingsFragment {
-    private String                  Title = "Settings Tracker";
+public class WebserverSettingsFrgmnt extends SettingsFrgmnt {
+    private String                  Title = "Settings Web";
     private MyActivity              mActivity;
 
     public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,12 +35,13 @@ public class FragmentTrackerSettings extends SettingsFragment {
         initAskModeSetting();
         addItemMenu(Title,
                 "No info",
-                new Thread(new Runnable() {
+                new Runnable() {
                     public void run() {
                         showSnackbar("not implemented");
                     }
-                }),
-                "true");
+                },
+                "true",
+                ContextCompat.getColor(mActivity, R.color.webserverSpoofSwitch),ContextCompat.getColor(mActivity, R.color.webserverSpoofSwitchBack));
         }
 
     private void                    initAskModeSetting() {
@@ -63,7 +66,7 @@ public class FragmentTrackerSettings extends SettingsFragment {
         addItemMenu(items[mSingleton.Settings.getUserPreferences().NmapMode] + " discovery",
                     "Choose your mode",
                     t,
-                    null);
+                    null, 0, 0);
     }
 
     private void                    showSnackbar(String txt) {

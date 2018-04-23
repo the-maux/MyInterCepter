@@ -30,7 +30,8 @@ import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
 import fr.dao.app.Core.Network.NetDiscovering;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.R;
-import fr.dao.app.View.WebTracker.TrackerActivity;
+import fr.dao.app.View.SpyMITM.SpyMitmActivity;
+import fr.dao.app.View.Startup.HomeActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
@@ -100,6 +101,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
+        mFab.setImageResource(R.drawable.ic_media_play);
     }
 
     private void                    init()  {
@@ -110,7 +112,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         } else {
             initFabs();
             initMonitor();
-            mFragment = new FragmentHostDiscoveryScan();
+            mFragment = new HostDiscoveryScanFrgmnt();
             NetDiscoveryFragment = mFragment;
             initFragment(NetDiscoveryFragment);
             initSearchView();
@@ -163,22 +165,22 @@ public class                        HostDiscoveryActivity extends MyActivity {
             public void onClick(View v) {
                 mFab.startAnimation(AnimationUtils.loadAnimation(mInstance, R.anim.shake));
                 Utils.vibrateDevice(mInstance);
-                if (mFragment.getClass().getName().contains("FragmentHostDiscoveryScan") &&
-                    ((FragmentHostDiscoveryScan) mFragment).mHostLoaded) {
-                    mSingleton.hostList = ((FragmentHostDiscoveryScan) mFragment).getTargetSelectedFromHostList();
+                if (mFragment.getClass().getName().contains("HostDiscoveryScanFrgmnt") &&
+                    ((HostDiscoveryScanFrgmnt) mFragment).mHostLoaded) {
+                    mSingleton.savedHostList = mSingleton.hostList;
+                    mSingleton.hostList = ((HostDiscoveryScanFrgmnt) mFragment).getTargetSelectedFromHostList();
                     if (mSingleton.Settings.UltraDebugMode) {
                         Log.d(TAG, "mSingleton.hostList" + mSingleton.hostList);
                         Log.d(TAG, "mSingleton.hostsListSize:" +
                                 ((mSingleton.hostList != null) ? mSingleton.hostList.size() : "0"));
                     }
                     mSingleton.actualNetwork = actualNetwork;
-                    startActivity(new Intent(mInstance, TrackerActivity.class));
+                    startActivity(new Intent(mInstance, SpyMitmActivity.class));
                 }
                 else if (!mFragment.start()) {
-
-                } else if (mSingleton.Settings.UltraDebugMode) {
                     Log.i(TAG, "fragment start false");
-                }
+                } else
+                    Log.i(TAG, "FabClicked");
             }
         });
     }
@@ -219,7 +221,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     }
 
     public void                     initFragmentSettings() {
-        mFragment = new FragmentHostDiscoverySettings();
+        mFragment = new HostDiscoverySettingsFrgmnt();
         initFragment(mFragment);
 //        mFab.setVisibility(View.GONE);
         ViewAnimate.FabAnimateHide(mInstance, mFab);
@@ -250,10 +252,10 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 MyFragment fragment;
                 ViewAnimate.setVisibilityToVisibleQuick(mHistory);
                 if (HistoricFragment == null)
-                    HistoricFragment = new FragmentHistoric();
+                    HistoricFragment = new HostDiscoveryHistoricFrgmnt();
                 fragment = HistoricFragment;
                 Bundle args = new Bundle();
-                args.putString("mode", FragmentHistoric.DB_HISTORIC);
+                args.putString("mode", HostDiscoveryHistoricFrgmnt.DB_HISTORIC);
                 fragment.setArguments(args);
                 ViewAnimate.setVisibilityToInvisibleQuick(mHistory);
                 ViewAnimate.setVisibilityToInvisibleQuick(mSearchView);
@@ -314,7 +316,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     public void                     progressAnimation() {
         mProgressBar.setVisibility(View.VISIBLE);
-        mFab.setImageResource(R.drawable.ic_loop_search);
         mProgressBar.setProgress(0);
         mProgressBar.setMax(MAXIMUM_PROGRESS);
         new Thread(new Runnable() {
@@ -338,7 +339,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 }
                 mInstance.runOnUiThread(new Runnable() {
                     public void run() {
-                        mFab.setImageResource(R.drawable.ic_media_play);
                         //ViewAnimate.setVisibilityToVisibleQuick(mFab);
                         //mFab.show();
                         mProgressBar.setVisibility(View.GONE);
@@ -386,6 +386,11 @@ public class                        HostDiscoveryActivity extends MyActivity {
 //        ViewAnimate.setVisibilityTo:VisibleQuick(mFab);
         if (NetworkDiscoveryControler.over())
             ViewAnimate.FabAnimateReveal(mInstance, mFab);
+//        mFragment = new HostDiscoveryScanFrgmnt();
+        if (mFragment != null)
+            Log.d(TAG, "visible:" + mFragment.isVisible());
+        initFragment(mFragment);
+//        initFragment(NetDiscoveryFragment);
     }
 
     protected void                  onPause() {
@@ -396,9 +401,9 @@ public class                        HostDiscoveryActivity extends MyActivity {
     public void                     onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             Log.d(TAG, "onBackPressed::" + mFragment.getClass().getName());
-            if (mFragment.getClass().getName().contains(FragmentHostDiscoveryScan.class.getName())) {
-                finish();
-            } else if (mFragment.getClass().getName().contains(FragmentHistoric.class.getName())) {
+            if (mFragment.getClass().getName().contains(HostDiscoveryScanFrgmnt.class.getName())) {
+                startActivity(new Intent(mInstance, HomeActivity.class));
+            } else if (mFragment.getClass().getName().contains(HostDiscoveryHistoricFrgmnt.class.getName())) {
                 if (mFragment.onBackPressed()) {
                     Log.d(TAG, "Fragment historic is over, switching to Netdiscover");
                     ViewAnimate.setVisibilityToVisibleQuick(mHistory, 300);
@@ -409,7 +414,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                     initFragment(NetDiscoveryFragment);
                     initSearchView();
                 }
-            } else if (mFragment.getClass().getName().contains(FragmentHostDiscoverySettings.class.getName())){
+            } else if (mFragment.getClass().getName().contains(HostDiscoverySettingsFrgmnt.class.getName())){
                 mToolbarBackground.reverseTransition(450);
                 ViewAnimate.setVisibilityToVisibleQuick(mHistory, 300);
                 ViewAnimate.setVisibilityToVisibleQuick(mSearchView, 400);
@@ -419,8 +424,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 getSupportFragmentManager().popBackStackImmediate();
             }
         } else {
-            Log.e(TAG, "onBackPressed::NOTHING ON STACK");
-            finish();
+            startActivity(new Intent(mInstance, HomeActivity.class));
         }
     }
 }

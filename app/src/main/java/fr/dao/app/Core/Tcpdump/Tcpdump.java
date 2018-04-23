@@ -18,25 +18,25 @@ import fr.dao.app.Core.Network.IPTables;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
-import fr.dao.app.View.Wireshark.WiresharkActivity;
-import fr.dao.app.View.Wireshark.WiresharkDispatcher;
-import fr.dao.app.View.Wireshark.WiresharkReaderFragment;
+import fr.dao.app.View.Sniff.SniffActivity;
+import fr.dao.app.View.Sniff.SniffDispatcher;
+import fr.dao.app.View.Sniff.SniffReaderFrgmnt;
 
 public class                        Tcpdump {
     private String                  TAG = "Tcpdump";
     private static Tcpdump          mInstance = null;
     private RootProcess             mTcpDumpProcess;
     private Singleton               mSingleton = Singleton.getInstance();
-    private WiresharkActivity       mActivity;
+    private SniffActivity mActivity;
     private ConfTcpdump             mTcpdumpConf = new ConfTcpdump();
     private boolean                 isRunning = false;
     public  boolean                 isDumpingInFile = true, isPcapReading;
     private String                  actualCmd = "";
-    private WiresharkDispatcher     mDispatcher = null;
-    private WiresharkReaderFragment mFragment = null;
+    private SniffDispatcher mDispatcher = null;
+    private SniffReaderFrgmnt mFragment = null;
     private ArrayList<Trame>        mBufferOfTrame = new ArrayList<>();
 
-    private                         Tcpdump(WiresharkActivity activity) {
+    private                         Tcpdump(SniffActivity activity) {
         this.mActivity = activity;
         LinkedHashMap<String, String> mCmds = mTcpdumpConf.initCmds();
     }
@@ -44,7 +44,7 @@ public class                        Tcpdump {
     public static synchronized Tcpdump getTcpdump(Activity activity, boolean isWiresharkActivity) {
         if (isWiresharkActivity) {
             if (mInstance == null) {
-                mInstance = new Tcpdump((WiresharkActivity) activity);
+                mInstance = new Tcpdump((SniffActivity) activity);
             }
         }
         return mInstance;
@@ -64,7 +64,7 @@ public class                        Tcpdump {
                 .replace(mSingleton.Settings.FilesPath, "");
     }
 
-    public DashboardSniff           start(final WiresharkDispatcher trameDispatcher) {
+    public DashboardSniff           start(final SniffDispatcher trameDispatcher) {
         isPcapReading = false;
         mDispatcher = trameDispatcher;
         isRunning = true;
@@ -97,7 +97,7 @@ public class                        Tcpdump {
         return dashboardSniff;
     }
 
-    public void                     readPcap(File pcapFile, WiresharkReaderFragment fragment) {
+    public void                     readPcap(File pcapFile, SniffReaderFrgmnt fragment) {
         isPcapReading = true;
         isRunning = true;
         mFragment = fragment;

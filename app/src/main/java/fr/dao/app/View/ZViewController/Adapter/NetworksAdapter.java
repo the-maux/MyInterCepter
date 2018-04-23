@@ -9,16 +9,16 @@ import java.util.List;
 
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.R;
-import fr.dao.app.View.HostDiscovery.FragmentHistoric;
+import fr.dao.app.View.HostDiscovery.HostDiscoveryHistoricFrgmnt;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Adapter.Holder.SessionHolder;
 
 public class                    NetworksAdapter extends RecyclerView.Adapter<SessionHolder> {
     private String              TAG = "NetworksAdapter";
-    private FragmentHistoric mFragment;
+    private HostDiscoveryHistoricFrgmnt mFragment;
     private List<Network>       mSessions;
 
-    public                      NetworksAdapter(FragmentHistoric fragment, List<Network> sessions) {
+    public                      NetworksAdapter(HostDiscoveryHistoricFrgmnt fragment, List<Network> sessions) {
         this.mFragment = fragment;
         this.mSessions = sessions;
     }

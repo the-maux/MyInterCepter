@@ -19,7 +19,7 @@ import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
-import fr.dao.app.View.Scan.NmapOutputFragment;
+import fr.dao.app.View.Scan.NmapTTYFrgmnt;
 
 /*
 https://hackertarget.com/7-nmap-nse-scripts-recon/
@@ -216,7 +216,7 @@ public class                        NmapControler {
         return cmd.replace("  ", " ").replace("\n", "");
     }
 
-    private String                  build(NmapOutputFragment nmapOutputFragment) {
+    private String                  build(NmapTTYFrgmnt nmapOutputFragment) {
         String cmd = buildCommand();
         Log.i(TAG, cmd);
         nmapOutputFragment.printCmdInTerminal(cmd
@@ -225,7 +225,7 @@ public class                        NmapControler {
         return cmd;
     }
 
-    public void                     start(final NmapOutputFragment nmapOutputFragment,
+    public void                     start(final NmapTTYFrgmnt nmapOutputFragment,
                                             final ProgressBar progressBar) {
         if (mHost == null) {
             Log.e(TAG, "No client selected when launched");

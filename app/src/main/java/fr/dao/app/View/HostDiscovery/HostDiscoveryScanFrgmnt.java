@@ -41,11 +41,11 @@ import fr.dao.app.View.ZViewController.Adapter.HostDiscoveryAdapter;
 import fr.dao.app.View.ZViewController.Adapter.OSFilterAdapter;
 import fr.dao.app.View.ZViewController.Dialog.RV_dialog;
 
-public class                        FragmentHostDiscoveryScan extends MyFragment {
-    private String                  TAG = "FragmentHostDiscoveryScan";
+public class HostDiscoveryScanFrgmnt extends MyFragment {
+    private String                  TAG = "HostDiscoveryScanFrgmnt";
     private HostDiscoveryActivity   mActivity;
     private ArrayList<Host>         mHosts = new ArrayList<>();
-    private HostDiscoveryAdapter    mHostAdapter;
+    private HostDiscoveryAdapter    mHostAdapter = null;
     private RecyclerView            mHost_RV;
     private TextView                mEmptyList;
     private SwipeRefreshLayout      mSwipeRefreshLayout;
@@ -53,6 +53,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
     boolean                         mHostLoaded = false;
 
     public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         Log.d(TAG, "onCreateView:mSingleton.hostList " + ((mSingleton.hostList == null) ? "null" : mSingleton.hostList.size()));
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hostdiscovery_scan, container, false);
         initXml(rootView);
@@ -63,12 +64,14 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
 
     public void                     init() {
         mScannerControler = NetworkDiscoveryControler.getInstance(this);
-        initSwipeRefresh();
         mActivity.initSettingsButton();
         initHostsRecyclerView();
-        if (mSingleton.hostList != null && !mSingleton.hostList.isEmpty())
+        initSwipeRefresh();
+        if (mSingleton.hostList != null && !mSingleton.hostList.isEmpty()) {
             mHostLoaded = true;
-        if (!mHostLoaded) {
+            mActivity.actualNetwork = mSingleton.actualNetwork;
+            onHostActualized(mSingleton.hostList);
+        } else if (!mHostLoaded) {
             start();
         }
     }
@@ -84,7 +87,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
             mActivity.setToolbarTitle(mSingleton.network.ssid,
                     mHosts.size() + " device" + ((mHosts.size() > 1) ? "s" : ""));
         }
-
+        if (mHosts == null || mHosts.isEmpty())
         mHostAdapter.updateHostList(mHosts);
         mHost_RV.setAdapter(mHostAdapter);
         mActivity.initToolbarButton();
@@ -114,10 +117,13 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         });
     }
     private void                    initHostsRecyclerView() {
-        mHostAdapter = new HostDiscoveryAdapter(getActivity(), mHost_RV, false, mActivity.mFab);
+        if (mHostAdapter == null)
+            mHostAdapter = new HostDiscoveryAdapter(getActivity(), mHost_RV, false, mActivity.mFab);
         mHost_RV.setAdapter(mHostAdapter);
         mHost_RV.setHasFixedSize(true);
         mHost_RV.setLayoutManager(new LinearLayoutManager(mActivity));
+        if (mHosts != null && !mHosts.isEmpty())
+            mHostAdapter.updateHostList(mHosts);
     }
 
     public void                     initSearchView(SearchView searchView, final Toolbar toolbar) {
@@ -206,32 +212,33 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         for (Host host : actualNetwork.listDevices()) {
             host.state = Host.State.OFFLINE;
         }
-        for (String ipAndMacReachable : ipReachables) {
-            rax = rax + 1;
-            String ip = ipAndMacReachable.split(":")[0];
-            String mac = ipAndMacReachable.replace(ipAndMacReachable.split(":")[0]+":", "").toUpperCase();
-            boolean isHostInList = false;
-            for (Host host : actualNetwork.listDevices()) {
-                if (host.mac.contains(mac)) {
+        if (ipReachables != null)
+            for (String ipAndMacReachable : ipReachables) {
+                rax = rax + 1;
+                String ip = ipAndMacReachable.split(":")[0];
+                String mac = ipAndMacReachable.replace(ipAndMacReachable.split(":")[0]+":", "").toUpperCase();
+                boolean isHostInList = false;
+                for (Host host : actualNetwork.listDevices()) {
+                    if (host.mac.contains(mac)) {
+                        host.state = Host.State.ONLINE;
+                        isHostInList = true;
+                        break;
+                    }
+                }
+                if (!isHostInList) {
+                    Host host = new Host();
+                    host.ip = ip;
+                    host.mac = mac;
+                    if (mSingleton.Settings.getUserPreferences().NmapMode == 0) {/*No nmap so, Local vendor*/
+                        host.vendor = Fingerprint.getVendorFrom(host.mac);//TODO: Thread this
+                        Fingerprint.initHost(host);
+                    }
+                    DBHost.saveOrGetInDatabase(host);
                     host.state = Host.State.ONLINE;
-                    isHostInList = true;
-                    break;
+                    host.save();
+                    actualNetwork.listDevices().add(host);
                 }
             }
-            if (!isHostInList) {
-                Host host = new Host();
-                host.ip = ip;
-                host.mac = mac;
-                if (mSingleton.Settings.getUserPreferences().NmapMode == 0) {/*No nmap so, Local vendor*/
-                    host.vendor = Fingerprint.getVendorFrom(host.mac);//TODO: Thread this
-                    Fingerprint.initHost(host);
-                }
-                DBHost.saveOrGetInDatabase(host);
-                host.state = Host.State.ONLINE;
-                host.save();
-                actualNetwork.listDevices().add(host);
-            }
-        }
         Log.d(TAG, "(" + (actualNetwork.listDevices().size() - rax) + " offline/ " + actualNetwork.listDevices().size() + "inCache) ");
         mSingleton.actualNetwork = actualNetwork;
         mActivity.actualNetwork = actualNetwork;
@@ -240,9 +247,14 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
         return actualNetwork;
     }
 
-    public void                     onHostActualized(final ArrayList<Host> hosts, final int online, final int offline) {
+    public void                     onHostActualized(final ArrayList<Host> hosts) {
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
+                int online = 0;
+                for (Host host : hosts) {
+                    if (host.state == Host.State.ONLINE)
+                        online++;
+                }
                 mHosts = hosts;
                 mHostLoaded = true;
                 mScannerControler.inLoading = false;
@@ -255,7 +267,7 @@ public class                        FragmentHostDiscoveryScan extends MyFragment
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
                 mSwipeRefreshLayout.setRefreshing(false);
                 mActivity.onScanOver();
-                DBNetwork.updateHostOfSessions(mActivity.actualNetwork, hosts, mHostAdapter.getOsList());
+                DBNetwork.updateHostOfSessions(mSingleton.actualNetwork, hosts, mHostAdapter.getOsList());
             }
         });
     }

@@ -35,7 +35,7 @@ public class                    HomeActivity extends MyActivity {
     private CoordinatorLayout   mCoordinatorLayout;
     private CardView            blue_card, dashboard_card, settings_card, red_card;
     private RadioButton         radioButton, radioButton2, radioButton3;
-    private int                 MAXIMUM_TRY_PERMISSION = 42, try_permission = 0;
+    private int                 MAXIMUM_TRY_PERMISSION = 5, try_permission = 0;
     private View                monitorRoot, monitorPermission, monitorUpdated;
     private TextView            TV_Root, TV_Permission, TV_Updated;
     private ProgressBar         PB_Root, PB_Permission, PB_Updated;
@@ -47,10 +47,6 @@ public class                    HomeActivity extends MyActivity {
         setContentView(R.layout.activity_home);
         initXml();
         init();
-    }
-
-    protected void              onResume() {
-        super.onResume();
     }
 
     protected void              onPostResume() {
@@ -166,9 +162,11 @@ public class                    HomeActivity extends MyActivity {
             Log.d(TAG, "getRootPermission::Error::Retry");
             new Handler().postDelayed(new Runnable() {
                 public void run() {
-                    if (try_permission++ > MAXIMUM_TRY_PERMISSION)
-                        finish();//TODO: make a snackbar, don't the leave the app, you idiot
-                    getRootPermission();
+                    if (try_permission++ > MAXIMUM_TRY_PERMISSION) {
+                        showSnackbar("Root: permission denied");
+                        statusRoot.setImageResource(R.color.offline_color);
+                    } else
+                        getRootPermission();
                 }
             }, 5000);
         }

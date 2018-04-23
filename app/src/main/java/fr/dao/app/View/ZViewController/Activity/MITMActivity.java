@@ -20,15 +20,15 @@ import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.R;
 import fr.dao.app.View.DnsSpoofing.DnsActivity;
-import fr.dao.app.View.WebTracker.TrackerActivity;
+import fr.dao.app.View.Sniff.SniffActivity;
+import fr.dao.app.View.SpyMITM.SpyMitmActivity;
 import fr.dao.app.View.WebServer.WebServerActivity;
-import fr.dao.app.View.Wireshark.WiresharkActivity;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 
 
-public abstract class               SniffActivity extends MyActivity  {
-    protected String                TAG = "SniffActivity";
-    protected SniffActivity         mInstance = this;
+public abstract class MITMActivity extends MyActivity  {
+    protected String                TAG = "MITMActivity";
+    protected MITMActivity mInstance = this;
     protected Bundle                bundle = null;
     protected AHBottomNavigation    mBottomBar;
     protected FloatingActionButton  mFab;
@@ -126,10 +126,10 @@ public abstract class               SniffActivity extends MyActivity  {
                                     final ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1/*, p2*/);
                                     switch (position) {
                                         case 0:
-                                            intent = new Intent(mInstance, TrackerActivity.class);
+                                            intent = new Intent(mInstance, SpyMitmActivity.class);
                                             break;
                                         case 1:
-                                            intent = new Intent(mInstance, WiresharkActivity.class);
+                                            intent = new Intent(mInstance, SniffActivity.class);
                                             break;
                                         case 2:
                                             intent = new Intent(mInstance, DnsActivity.class);

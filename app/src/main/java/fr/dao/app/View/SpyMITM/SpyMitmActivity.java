@@ -1,4 +1,4 @@
-package fr.dao.app.View.WebTracker;
+package fr.dao.app.View.SpyMITM;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -20,7 +20,7 @@ import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Configuration.Words;
 import fr.dao.app.Core.Dnsmasq.DnsmasqControl;
 import fr.dao.app.R;
-import fr.dao.app.View.ZViewController.Activity.SniffActivity;
+import fr.dao.app.View.ZViewController.Activity.MITMActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Adapter.DnsLogsAdapter;
@@ -28,9 +28,9 @@ import fr.dao.app.View.ZViewController.Adapter.DnsSpoofConfAdapter;
 import fr.dao.app.View.ZViewController.Dialog.DialogQuestionWithInput;
 
 //https://danielmiessler.com/study/bettercap/
-public class TrackerActivity extends SniffActivity {
-    private String                      TAG = "DnsActivity";
-    private TrackerActivity mInstance = this;
+public class                            SpyMitmActivity extends MITMActivity {
+    private String                      TAG = "SpyMitmActivity";
+    private SpyMitmActivity mInstance = this;
     private CoordinatorLayout           mCoordinatorLayout;
     private AppBarLayout                appBarLayout;
     private Toolbar                     mToolbar;
@@ -177,7 +177,8 @@ public class TrackerActivity extends SniffActivity {
 
     public void                         onBackPressed() {
         super.onBackPressed();
-        //Check if sniffing was loading
+        mSingleton.hostList = mSingleton.savedHostList;
+        //TODO:Check if sniffing was loading
     }
 
     public void                         onError(String error) {

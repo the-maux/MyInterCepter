@@ -29,42 +29,42 @@ public class MenuDefenseAdapter extends RecyclerView.Adapter<MenuItemHolder> {
                 holder.titleCard.setText("Network bodyguard");
                 holder.logo_card.setImageResource(R.drawable.scan);
                 holder.progressBar_monitor.setVisibility(View.GONE);
-                holder.statusIconCardView.setImageResource(R.color.online_color);
+                holder.statusIconCardView.setImageResource(R.color.filtered_color);
                 holder.logo_card.setVisibility(View.VISIBLE);
                 break;
             case 1:
                 holder.titleCard.setText("Terminal");
                 holder.logo_card.setImageResource(R.drawable.linuxicon);
                 holder.progressBar_monitor.setVisibility(View.GONE);
-                holder.statusIconCardView.setImageResource(R.color.online_color);
+                holder.statusIconCardView.setImageResource(R.color.filtered_color);
                 holder.logo_card.setVisibility(View.VISIBLE);
                 break;
             case 2:
                 holder.titleCard.setText("Self Proxy");
                 holder.logo_card.setImageResource(R.drawable.cage);
                 holder.progressBar_monitor.setVisibility(View.GONE);
-                holder.statusIconCardView.setImageResource(R.color.online_color);
+                holder.statusIconCardView.setImageResource(R.color.filtered_color);
                 holder.logo_card.setVisibility(View.VISIBLE);
                 break;
             case 3:
                 holder.titleCard.setText("ARP Controller");
                 holder.progressBar_monitor.setVisibility(View.GONE);
                 holder.logo_card.setImageResource(R.drawable.poiz);
-                holder.statusIconCardView.setImageResource(R.color.online_color);
+                holder.statusIconCardView.setImageResource(R.color.filtered_color);
                 holder.logo_card.setVisibility(View.VISIBLE);
                 break;
             case 4:
                 holder.titleCard.setText("Crypt Check");
                 holder.progressBar_monitor.setVisibility(View.GONE);
                 holder.logo_card.setImageResource(R.mipmap.ic_lock);
-                holder.statusIconCardView.setImageResource(R.color.online_color);
+                holder.statusIconCardView.setImageResource(R.color.filtered_color);
                 holder.logo_card.setVisibility(View.VISIBLE);
                 break;
             case 5:
                 holder.titleCard.setText("Email checker");
                 holder.progressBar_monitor.setVisibility(View.GONE);
                 holder.logo_card.setImageResource(R.drawable.secure_computer1);
-                holder.statusIconCardView.setImageResource(R.color.online_color);
+                holder.statusIconCardView.setImageResource(R.color.filtered_color);
                 holder.logo_card.setVisibility(View.VISIBLE);
                 break;
         }

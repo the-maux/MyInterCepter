@@ -12,7 +12,7 @@ import java.io.File;
 import java.util.List;
 
 import fr.dao.app.R;
-import fr.dao.app.View.Wireshark.WiresharkActivity;
+import fr.dao.app.View.Sniff.SniffActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Adapter.Holder.PcapHolder;
 import fr.dao.app.View.ZViewController.Fragment.PcapListerFragment;
@@ -54,7 +54,7 @@ public class                    PcapFileAdapter extends RecyclerView.Adapter<Pca
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mActivity, WiresharkActivity.class);
+                Intent intent = new Intent(mActivity, SniffActivity.class);
                 Log.d(TAG, "newIntent Pcap:"+pcap.getPath());
                 intent.putExtra("Pcap", pcap.getPath());
                 if (pcapListerFragment != null)

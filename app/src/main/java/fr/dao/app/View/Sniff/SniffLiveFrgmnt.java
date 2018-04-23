@@ -1,4 +1,4 @@
-package fr.dao.app.View.Wireshark;
+package fr.dao.app.View.Sniff;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,13 +36,13 @@ import fr.dao.app.View.ZViewController.Dialog.RV_dialog;
 /**
  * TODO: tu dois trouver un moye, de flush l'ensemble des trames du dispatcher dans le RV live
  */
-public class                    WiresharkLiveFragment extends MyFragment {
-    private String              TAG = "WiresharkLiveFragment";
+public class SniffLiveFrgmnt extends MyFragment {
+    private String              TAG = "SniffLiveFrgmnt";
     private CoordinatorLayout   mCoordinatorLayout;
     private ConstraintLayout    rootViewForDashboard;
     private RelativeLayout      rootViewForLiveFlux;
-    private WiresharkDispatcher mTrameDispatcher;
-    private WiresharkActivity   mActivity;
+    private SniffDispatcher mTrameDispatcher;
+    private SniffActivity mActivity;
     private RecyclerView        mRV_Wireshark, dashboard_RV;
     private WiresharkPacketsAdapter mAdapterDetailWireshark;
     private WiresharkDashboardAdapter mAdapterDashboardWireshark;
@@ -56,7 +56,7 @@ public class                    WiresharkLiveFragment extends MyFragment {
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_wireshark, container, false);
-        mActivity = (WiresharkActivity) getActivity();
+        mActivity = (SniffActivity) getActivity();
         initXml(rootView);
         mTcpdump = Tcpdump.getTcpdump(mActivity, true);
         init();
@@ -198,7 +198,7 @@ public class                    WiresharkLiveFragment extends MyFragment {
             }
         }
         if (mTrameDispatcher == null) {
-            mTrameDispatcher = new WiresharkDispatcher(mAdapterDetailWireshark, isDashboardMode, mRV_Wireshark, mActivity);
+            mTrameDispatcher = new SniffDispatcher(mAdapterDetailWireshark, isDashboardMode, mRV_Wireshark, mActivity);
         } else if (wasLaunched && !Tcpdump.isRunning()) {/* Clear shit its a restart*/
             mAdapterDetailWireshark.reset();
             mAdapterDashboardWireshark.reset();

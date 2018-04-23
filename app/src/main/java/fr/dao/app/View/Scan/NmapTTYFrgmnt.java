@@ -19,8 +19,8 @@ import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
-public class                    NmapOutputFragment extends MyFragment  {
-    private String              TAG = "NmapOutputFragment";
+public class NmapTTYFrgmnt extends MyFragment  {
+    private String              TAG = "NmapTTYFrgmnt";
     private Host                mFocusedHost;
     private CoordinatorLayout   mCoordinatorLayout;
     private TextView            Output;

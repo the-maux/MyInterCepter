@@ -1,4 +1,4 @@
-package fr.dao.app.View.Wireshark;
+package fr.dao.app.View.Sniff;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -22,11 +22,11 @@ import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 import fr.dao.app.View.ZViewController.Adapter.WiresharkPacketsAdapter;
 
 
-public class                    WiresharkReaderFragment extends MyFragment {
-    private String              TAG = "WiresharkLiveFragment";
+public class SniffReaderFrgmnt extends MyFragment {
+    private String              TAG = "SniffLiveFrgmnt";
     private CoordinatorLayout   mCoordinatorLayout;
     private Context             mCtx;
-    private WiresharkActivity   mActivity;
+    private SniffActivity mActivity;
     private RecyclerView        mRV_Wireshark;
     private WiresharkPacketsAdapter mAdapterWireshark;
     private Tcpdump             mTcpdump;
@@ -37,7 +37,7 @@ public class                    WiresharkReaderFragment extends MyFragment {
         View rootView = inflater.inflate(R.layout.fragment_wireshark, container, false);
         mCtx = getActivity();
         initXml(rootView);
-        mActivity = (WiresharkActivity) getActivity();
+        mActivity = (SniffActivity) getActivity();
         mTcpdump = Tcpdump.getTcpdump(mActivity, true);
         init();
         return rootView;
