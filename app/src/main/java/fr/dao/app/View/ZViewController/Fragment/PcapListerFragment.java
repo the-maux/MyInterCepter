@@ -19,23 +19,24 @@ import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Adapter.PcapFileAdapter;
 
     public class                PcapListerFragment  extends DialogFragment {
-    private Singleton       mSingleton = Singleton.getInstance();
-    private List<File>      files = new ArrayList<>();
-    private RecyclerView    mRV_files;
-    private PcapFileAdapter mAdapter;
+    private Singleton           mSingleton = Singleton.getInstance();
+    private List<File>          files = new ArrayList<>();
+    private RecyclerView        mRV_files;
+    private PcapFileAdapter     mAdapter;
 
-    public View             onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View                 onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.dialog_recyclerview, container, false);
         initXml(rootView);
+
         init();
         return rootView;
     }
 
-    private void            initXml(View rootView) {
+    private void                initXml(View rootView) {
         mRV_files = rootView.findViewById(R.id.RL_items);
     }
 
-    private void            init() {
+    private void                init() {
         for (File file : Pcap.getListFiles(new File(mSingleton.Settings.PcapPath))) {
             if (file.getPath().endsWith(".pcap"))
                 files.add(file);
@@ -44,8 +45,6 @@ import fr.dao.app.View.ZViewController.Adapter.PcapFileAdapter;
         mRV_files.setAdapter(mAdapter);
         mRV_files.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
-
-
 
     public static PcapListerFragment newInstance() {
         return new PcapListerFragment();

@@ -248,16 +248,6 @@ public class                    SniffActivity extends MITMActivity {
                     PcapListerFragment.newInstance().show(getSupportFragmentManager(), "");
 
                 }
-                /*SniffSessionAdapter adapter = new SniffSessionAdapter(mInstance, DBSniffSession.getAllSniffSession());
-                new RV_dialog(mInstance)
-                        .setAdapter(adapter, true)
-                        .setTitle("Sniffing sessions recorded")
-                        .onPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        }).show();*/
             }
         };
     }
