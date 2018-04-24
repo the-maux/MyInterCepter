@@ -47,8 +47,7 @@
             android:name=".View.HostDiscovery.HostDiscoveryActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".View.Settings.SettingsActivity"
-            android:launchMode="singleTask" />
+            android:name=".View.Settings.SettingsActivity" />
         <activity
             android:name=".View.Scan.NmapActivity"
             android:launchMode="singleTask" />
@@ -65,7 +64,7 @@
             android:name=".View.WebServer.WebServerActivity"
             android:launchMode="singleTask" />
         <activity android:name=".View.HostDetail.HostDetailActivity"
-           />
+            android:launchMode="standard"/>
         <meta-data android:name="AA_MODELS"
             android:value="
             fr.dao.app.Model.Target.Network,

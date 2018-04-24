@@ -78,7 +78,7 @@ public class                MyGlideLoader {
                 });
     }
 
-    public static void                  setOsIcon(Host host, ImageView osImageView) {
+    public static void      setOsIcon(Host host, ImageView osImageView) {
         if (host != null && host.osType != null) {
             if (host.state == Host.State.FILTERED && host.vendor.contains("Unknown")) {
                 osImageView.setImageResource(R.mipmap.ic_unknow);
@@ -90,7 +90,7 @@ public class                MyGlideLoader {
         osImageView.setImageResource(R.drawable.monitor);
     }
 
-    public static void                  setOsIcon(Os os, ImageView osImageView) {
+    public static void      setOsIcon(Os os, ImageView osImageView) {
         int ImageRessource;
         switch (os) {
             case Windows:

@@ -26,6 +26,7 @@ import com.github.clans.fab.FloatingActionMenu;
 import java.security.InvalidParameterException;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Core.Configuration.GlideApp;
 import fr.dao.app.Core.Configuration.GlideRequest;
 import fr.dao.app.Core.Configuration.Singleton;
@@ -50,7 +51,8 @@ public class                    HostDetailActivity extends MyActivity {
     private CoordinatorLayout   mCoordinator;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private FloatingActionMenu  mMenuFAB;
-    private ImageView           osHostImage, history, settingsMenuDetail;
+    private CircleImageView     osHostImage;
+    private ImageView           history, settingsMenuDetail;
     private TabLayout           mTabs;
     private MyFragment          mCurrentFragment;
     private List<Pcap>          mPcapsList;

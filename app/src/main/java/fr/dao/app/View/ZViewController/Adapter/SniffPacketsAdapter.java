@@ -17,8 +17,8 @@ import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Adapter.Holder.WiresharkHolder;
 
-public class                    WiresharkPacketsAdapter extends RecyclerView.Adapter<WiresharkHolder> {
-    private String              TAG = "WiresharkPacketsAdapter";
+public class SniffPacketsAdapter extends RecyclerView.Adapter<WiresharkHolder> {
+    private String              TAG = "SniffPacketsAdapter";
 /*    private CopyOnWriteArrayList<Trame> originalListOfTrames;
     private CopyOnWriteArrayList<Trame> listOfTrame;*/
     private ArrayList<Trame>    originalListOfTrames;
@@ -29,7 +29,7 @@ public class                    WiresharkPacketsAdapter extends RecyclerView.Ada
     private boolean             arp = true, http = true, https = true,
                                 tcp = true, dns = true, udp = true, ip = true;
 
-    public WiresharkPacketsAdapter(Activity activity, RecyclerView recyclerView) {
+    public SniffPacketsAdapter(Activity activity, RecyclerView recyclerView) {
         this.listOfTrame = new ArrayList<>();
         this.originalListOfTrames = new ArrayList<>();
         this.mActivity = activity;

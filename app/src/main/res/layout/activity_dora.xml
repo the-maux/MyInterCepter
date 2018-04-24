@@ -4,17 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    android:animationCache="true">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:transitionName="appBarTransition"
-
         android:layout_height="wrap_content"
+
         android:background="@color/primary_text"
+        android:transitionName="appBarTransition"
         app:elevation="6dp">
 
 
@@ -27,9 +25,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/primary_text"
-                android:elevation="1dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:gravity="right">
 
                 <android.support.v7.widget.Toolbar
@@ -126,7 +121,6 @@
         android:id="@+id/RV_dora"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:addStatesFromChildren="false"
         android:paddingBottom="8dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"

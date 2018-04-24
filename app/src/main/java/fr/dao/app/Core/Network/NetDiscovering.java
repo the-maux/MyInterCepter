@@ -15,9 +15,37 @@ import java.util.regex.Pattern;
 
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Model.Target.Host;
 
 public class                            NetDiscovering {
     private static String               TAG = "NetDiscovering";
+
+    public static boolean               initNetworkInfo(Activity activity) {
+        WifiManager wifiManager = (WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        if (wifiManager == null)
+            return false;
+
+        String data = wifiManager.getDhcpInfo().toString();
+        if (!data.contains("ipaddr") || !data.contains("gateway") || !data.contains("netmask") ) {
+            return false;
+        }
+
+        String[] res = data.split(" ");
+        int netmask = 0;
+        for (int i = 0; i < res.length; i++) {
+            if (res[i].contains("netmask")) {
+                netmask = i + 1;
+            }
+        }
+        if (res[netmask].contains("0.0.0.0")) res[netmask] = "255.255.255.0";
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        Singleton.getInstance().network = new NetworkInformation(wifiManager, getMac(wifiInfo));
+        Singleton.getInstance().network.init();
+        if ((activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)) != null)
+            wifiInfo = ((WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
+        Singleton.getInstance().network.ssid = wifiInfo.getSSID().replace("\"", "");
+        return true;
+    }
 
     public static ArrayList<String>     readARPTable(ArrayList<String> ipReachable) {
         ArrayList<String> listIpPlusMac = new ArrayList<>();
@@ -51,7 +79,7 @@ public class                            NetDiscovering {
         return listIpPlusMac;
     }
 
-    public static ArrayList<String>   readIpsTableFromRoot(final ArrayList<String> listIpPlusMac) {
+    public static ArrayList<String>     readIpsTableFromRoot(final ArrayList<String> listIpPlusMac) {
      /*   new Thread(new Runnable() {
             @Override
             public void run() {*/
@@ -112,34 +140,8 @@ public class                            NetDiscovering {
         return listOfIP;
     }
 
-    public static boolean               initNetworkInfo(Activity activity) {
-        WifiManager wifiManager = (WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        if (wifiManager == null)
-            return false;
 
-        String data = wifiManager.getDhcpInfo().toString();
-        if (!data.contains("ipaddr") || !data.contains("gateway") || !data.contains("netmask") ) {
-            return false;
-        }
-
-        String[] res = data.split(" ");
-        int netmask = 0;
-        for (int i = 0; i < res.length; i++) {
-            if (res[i].contains("netmask")) {
-                netmask = i + 1;
-            }
-        }
-        if (res[netmask].contains("0.0.0.0")) res[netmask] = "255.255.255.0";
-        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        Singleton.getInstance().network = new NetworkInformation(wifiManager, getMac(wifiInfo));
-        Singleton.getInstance().network.init();
-        if ((activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)) != null)
-            wifiInfo = ((WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
-        Singleton.getInstance().network.ssid = wifiInfo.getSSID().replace("\"", "");
-        return true;
-    }
-
-    public static String                    getMac(WifiInfo wifiInfo) {
+    public static String                getMac(WifiInfo wifiInfo) {
 
         BufferedReader reader = new RootProcess("GetMacADDR")
                 .exec("cat /sys/class/net/wlan0/address").getReader();
@@ -156,4 +158,5 @@ public class                            NetDiscovering {
             return wifiInfo.getMacAddress().toUpperCase();//Using getMacAddress() is not recommended, gna gna gna
         }
     }
+
 }

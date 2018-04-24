@@ -6,7 +6,7 @@ import android.widget.TextView;
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.R;
-import fr.dao.app.View.ZViewController.Adapter.WiresharkDashboardAdapter;
+import fr.dao.app.View.ZViewController.Adapter.SniffDashboardAdapter;
 
 /**
  * TODO:
@@ -28,7 +28,7 @@ import fr.dao.app.View.ZViewController.Adapter.WiresharkDashboardAdapter;
 public class                DashboardSniff {
     private String          TAG = "DashboardSniff";
     private boolean         mIsRunning = false;
-    private WiresharkDashboardAdapter mAdapterDashboardWireshark;
+    private SniffDashboardAdapter mAdapterDashboardWireshark;
     private int             nbrPackets = 0;
     private TextView        monitorPackets, nbrTargets, timer;
     private CircleImageView status;
@@ -84,7 +84,7 @@ public class                DashboardSniff {
         mAdapterDashboardWireshark.stopTimer();
     }
 
-    public void             setAdapter(WiresharkDashboardAdapter adapterDashboardWireshark) {
+    public void             setAdapter(SniffDashboardAdapter adapterDashboardWireshark) {
         this.mAdapterDashboardWireshark = adapterDashboardWireshark;
         this.mAdapterDashboardWireshark.startTimer();
     }

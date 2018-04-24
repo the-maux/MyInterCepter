@@ -15,16 +15,18 @@ import fr.dao.app.Core.Nmap.NmapControler;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryScanFrgmnt;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
+import fr.dao.app.View.ZViewController.Activity.MyActivity;
 
 public class                        NetworkDiscoveryControler {
     private String                  TAG = "NetworkDiscoveryControler";
     private HostDiscoveryScanFrgmnt mFragment;
     private Singleton               mSingleton = Singleton.getInstance();
-    private HostDiscoveryActivity   mActivity;
+    private MyActivity              mActivity;
     public boolean                  inLoading = false;
     private Date                    startScanning;
-
+    public boolean                  isFromHostDiscoveryActivity = false;
     private static                  NetworkDiscoveryControler            mInstance = null;
+    private boolean                 isJustCheckingWhoIsAlive = true;
 
     public static boolean           over() {
         return mInstance != null && !mInstance.inLoading;
@@ -33,13 +35,27 @@ public class                        NetworkDiscoveryControler {
     public static synchronized      NetworkDiscoveryControler getInstance(final HostDiscoveryScanFrgmnt fragmentHostDiscoveryScan) {
         if(mInstance == null)
             mInstance = new NetworkDiscoveryControler();
-        mInstance.mActivity = (HostDiscoveryActivity) fragmentHostDiscoveryScan.getActivity();
+        mInstance.mActivity = (MyActivity) fragmentHostDiscoveryScan.getActivity();
         mInstance.mFragment = fragmentHostDiscoveryScan;
+        mInstance.isFromHostDiscoveryActivity = true;
+        return mInstance;
+    }
+    public static synchronized      NetworkDiscoveryControler getInstance(final MyActivity activity) {
+        if(mInstance == null)
+            mInstance = new NetworkDiscoveryControler();
+        mInstance.mActivity = activity;
+        mInstance.mFragment = null;
+        mInstance.isFromHostDiscoveryActivity = false;
         return mInstance;
     }
 
-    public boolean                   run(List<Host> listOfHosts) {
+    public boolean                   run(boolean isJustCheckingWhoIsAlive) {
+        if (!NetDiscovering.initNetworkInfo(mActivity) || !mSingleton.network.updateInfo().isConnectedToNetwork()) {
+            mActivity.showSnackbar("You need to be connected");
+            return false;
+        }
         if (!inLoading) {
+            this.isJustCheckingWhoIsAlive = isJustCheckingWhoIsAlive;
             inLoading = true;
             startScanning = Calendar.getInstance().getTime();
             mSingleton.resetActualSniffSession();
@@ -70,12 +86,11 @@ public class                        NetworkDiscoveryControler {
         ArrayList<String> basicHost = NetDiscovering.readARPTable(ipsreachables);
         Log.d(TAG, "onArpScanOver with : "+ ipReachable.size() + " device(s) reachable");
         Singleton.getInstance().actualNetwork = mFragment.updateStateOfHostAfterIcmp(basicHost);
-        mActivity.setMAXIMUM_PROGRESS(basicHost.size());
-        if (mSingleton.Settings.getUserPreferences().NmapMode > 0) {
+        mActivity.MAXIMUM_PROGRESS = basicHost.size();
+        if (mSingleton.Settings.getUserPreferences().NmapMode > 0 && !isFromHostDiscoveryActivity) {
             Log.d(TAG, "Nmap_Mode[" + mSingleton.Settings.getUserPreferences().NmapMode + "] so starting Nmap");
             new NmapControler(Singleton.getInstance().actualNetwork.listDevices(), this, Singleton.getInstance().actualNetwork, mActivity);
         } else {
-
             Log.d(TAG, "Nmap_Mode[" + mSingleton.Settings.getUserPreferences().NmapMode + "] so bypass Nmap");
             onNmapScanOver(Singleton.getInstance().actualNetwork.listDevices());
         }
@@ -83,7 +98,10 @@ public class                        NetworkDiscoveryControler {
 
     public void                     onNmapScanOver(ArrayList<Host> hosts) {
         Log.d(TAG, "Scan took " + Utils.TimeDifference(startScanning));
-        mFragment.onHostActualized(hosts);
+        if (isFromHostDiscoveryActivity)
+            mFragment.onHostActualized(hosts);
+        else
+            mActivity.onHostActualized(hosts);
     }
 
     public void                     setToolbarTitle(String title, String subtitle) {

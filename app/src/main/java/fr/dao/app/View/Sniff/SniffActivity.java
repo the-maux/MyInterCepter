@@ -243,10 +243,9 @@ public class                    SniffActivity extends MITMActivity {
         return new View.OnClickListener() {
             public void onClick(View v) {
                 if (Tcpdump.isRunning()) {
-                    showSnackbar("You cant read while sniffing", -1);
+                    showSnackbar("You cant load pcap while sniffing", -1);
                 } else {
                     PcapListerFragment.newInstance().show(getSupportFragmentManager(), "");
-
                 }
             }
         };

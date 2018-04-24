@@ -4,8 +4,13 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
+
+import java.util.ArrayList;
 
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Model.Target.Host;
 
 
 public class                    MyActivity extends AppCompatActivity {
@@ -17,12 +22,6 @@ public class                    MyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState, persistentState);
     }
 
-    public void                 overridePendingTransition(int enterAnim, int exitAnim) {
-        if (Singleton.getInstance().Settings.UltraDebugMode)
-            Log.d(TAG, "overridePendingTransition::(EnterAnim:" + enterAnim + ") & exitAnim(" + exitAnim +")");
-        super.overridePendingTransition(enterAnim, exitAnim);
-    }
-
     public void                 setToolbarTitle(final String title, final String subtitle) {}
 
     public void                 setToolbarBackgroundColor(final int color) {}
@@ -32,5 +31,35 @@ public class                    MyActivity extends AppCompatActivity {
     public void                 showSnackbar(String txt) {
 
     }
+
+    public void                 onHostActualized(ArrayList<Host> hosts) {
+
+    }
+
+    protected ProgressBar       mProgressBar;/* Generic ProgressBar mecanics, but can be everywhere*/
+    protected int               mProgress = 0;
+    public int                  MAXIMUM_PROGRESS = 100;
+    public void                 setProgressState(final int progress){
+        if (mProgressBar != null) {
+            mInstance.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    if (progress != -1) {
+                        if (progress >= MAXIMUM_PROGRESS)
+                            mProgressBar.setVisibility(View.GONE);
+                        mProgress = progress;
+                    }
+                }
+            });
+        }
+    }
+
+
+//    public void                 overridePendingTransition(int enterAnim, int exitAnim) {
+//        if (Singleton.getInstance().Settings.UltraDebugMode)
+//            Log.d(TAG, "overridePendingTransition::(EnterAnim:" + enterAnim + ") & exitAnim(" + exitAnim +")");
+//        super.overridePendingTransition(enterAnim, exitAnim);
+//    }
 
 }

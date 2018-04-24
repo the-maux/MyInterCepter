@@ -20,8 +20,8 @@ import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Adapter.Holder.PacketHolder;
 
-public class                    WiresharkDashboardAdapter extends RecyclerView.Adapter<PacketHolder> {
-    private String              TAG = "WiresharkDashboardAdapter";
+public class SniffDashboardAdapter extends RecyclerView.Adapter<PacketHolder> {
+    private String              TAG = "SniffDashboardAdapter";
     private MyActivity          mActivity;
     private DashboardSniff      wiresharkDashboard = new DashboardSniff();
     private TextView            packetsNumber, nbrTargets, timerMonitor;
@@ -29,8 +29,8 @@ public class                    WiresharkDashboardAdapter extends RecyclerView.A
     private Timer               timer = new Timer();
     public final int            TCP = 0, UDP = 1, DNS = 2, HTTP = 3, HTTPS = 4, SPY = 5;
 
-    public WiresharkDashboardAdapter(MyActivity activity, TextView packetsNumber, TextView nbrTargets,
-                                     TextView timerMonitor, CircleImageView status) {
+    public SniffDashboardAdapter(MyActivity activity, TextView packetsNumber, TextView nbrTargets,
+                                 TextView timerMonitor, CircleImageView status) {
         this.mActivity = activity;
         this.packetsNumber = packetsNumber;
         this.nbrTargets = nbrTargets;

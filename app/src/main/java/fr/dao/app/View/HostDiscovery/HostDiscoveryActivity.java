@@ -52,15 +52,12 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private CoordinatorLayout       mCoordinatorLayout;
     private AppBarLayout            appBarLayout;
     private TextView                mBottomMonitor, mTimer;
-    private int                     mProgress = 0;
     private ImageView               mSettingsMenu, mHistory;
     private SearchView              mSearchView;
     private Toolbar                 mToolbar;
     private TransitionDrawable      mToolbarBackground;
-    private ProgressBar             mProgressBar;
     private MyFragment              HistoricFragment = null, NetDiscoveryFragment = null;
     private MyFragment              mFragment = null;
-    public int                      MAXIMUM_PROGRESS = 100;
     public Network                  actualNetwork;
     public Date                     date;
     private Timer                   timer = new Timer();
@@ -301,20 +298,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-            }
-        });
-    }
-
-    public void                     setProgressState(final int progress){
-        mInstance.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mProgressBar.setVisibility(View.VISIBLE);
-                if (progress != -1) {
-                    if (progress >= MAXIMUM_PROGRESS)
-                        mProgressBar.setVisibility(View.GONE);
-                    mProgress = progress;
-                }
             }
         });
     }

@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.R;
+import fr.dao.app.View.ZViewController.Adapter.SniffPacketsAdapter;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
-import fr.dao.app.View.ZViewController.Adapter.WiresharkPacketsAdapter;
 
 
 public class SniffReaderFrgmnt extends MyFragment {
@@ -28,7 +28,7 @@ public class SniffReaderFrgmnt extends MyFragment {
     private Context             mCtx;
     private SniffActivity mActivity;
     private RecyclerView        mRV_Wireshark;
-    private WiresharkPacketsAdapter mAdapterWireshark;
+    private SniffPacketsAdapter mAdapterWireshark;
     private Tcpdump             mTcpdump;
     private File                mPcapFile;
     ProgressDialog              dialog;
@@ -63,7 +63,7 @@ public class SniffReaderFrgmnt extends MyFragment {
     }
 
     private void                initRV() {
-        mAdapterWireshark = new WiresharkPacketsAdapter(mActivity, mRV_Wireshark);
+        mAdapterWireshark = new SniffPacketsAdapter(mActivity, mRV_Wireshark);
         mRV_Wireshark.setAdapter(mAdapterWireshark);
         mRV_Wireshark.setItemAnimator(null);
         mRV_Wireshark.setLayoutManager(new LinearLayoutManager(mActivity));

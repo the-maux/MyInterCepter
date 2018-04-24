@@ -222,15 +222,11 @@ public class                        HostDiscoveryHistoricFrgmnt extends MyFragme
             cardGateway.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ActivityOptionsCompat options;
+                    ActivityOptionsCompat options = null;
                     Intent intent = new Intent(mActivity, HostDetailActivity.class);
-                    Pair<View, String> p1 = Pair.create((View)gateway_logo, "hostPicture");
-                    Pair<View, String> p2 = Pair.create((View)titleGateway, "hostTitle");
-                    options = ActivityOptionsCompat
-                            .makeSceneTransitionAnimation(mActivity, p1, p2);
                     intent.putExtra("mode", "Recorded");
                     intent.putExtra("macAddress", session.Gateway.mac);
-                    mActivity.startActivity(intent, options.toBundle());
+                    mActivity.startActivity(intent);
                 }
             });
         } else {

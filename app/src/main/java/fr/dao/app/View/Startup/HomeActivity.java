@@ -23,6 +23,7 @@ import java.io.IOException;
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Setup;
+import fr.dao.app.Core.Network.NetDiscovering;
 import fr.dao.app.R;
 import fr.dao.app.View.DashBoard.DashboardActivity;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
@@ -84,6 +85,7 @@ public class                    HomeActivity extends MyActivity {
         blue_card.setOnClickListener(onDefenseClicked());
         settings_card.setOnClickListener(onSettingsClick());
         dashboard_card.setOnClickListener(onDashboardClick());
+        NetDiscovering.initNetworkInfo(mInstance);
         initBottomMonitor();
     }
 
@@ -182,7 +184,7 @@ public class                    HomeActivity extends MyActivity {
         finish();
     }
 
-    public void                     showSnackbar(String txt) {
+    public void                 showSnackbar(String txt) {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
 }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import fr.dao.app.Core.Tcpdump.DashboardSniff;
 import fr.dao.app.Model.Net.Trame;
-import fr.dao.app.View.ZViewController.Adapter.WiresharkPacketsAdapter;
+import fr.dao.app.View.ZViewController.Adapter.SniffPacketsAdapter;
 
 public class SniffDispatcher {
     private String                  TAG = "SniffDispatcher";
@@ -33,7 +33,7 @@ public class SniffDispatcher {
 
     public int                      flush() {
         //Log.d(TAG, "flushing");
-        return ((WiresharkPacketsAdapter) mAdapterWireshark).flush(TrameBuffer);
+        return ((SniffPacketsAdapter) mAdapterWireshark).flush(TrameBuffer);
     }
 
     private void                    adapterRefreshDeamon() {
@@ -61,7 +61,7 @@ public class SniffDispatcher {
                         if (poppedTrame != null) {
                             poppedTrame.offsett = TrameBuffer.indexOf(poppedTrame);
                         }
-                        ((WiresharkPacketsAdapter) mAdapterWireshark).addTrameOnAdapter(poppedTrame);
+                        ((SniffPacketsAdapter) mAdapterWireshark).addTrameOnAdapter(poppedTrame);
                         mDashboard.addTrame(poppedTrame);
                     }
                     if (!isDashboardMode) {

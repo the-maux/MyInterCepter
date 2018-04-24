@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabItem;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,9 +14,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Dora;
+import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
+import fr.dao.app.Core.Network.NetDiscovering;
+import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Unix.DoraProcess;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
@@ -75,12 +82,12 @@ public class                    DoraActivity extends MyActivity {
 
     private void                getDoraWrapper() {
         mDoraWrapper = Dora.getDora(this);
-        mFab.setImageResource((!mDoraWrapper.isRunning()) ? R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
+        mFab.setImageResource((!Dora.isRunning()) ? R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
         more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 for (DoraProcess doraProcess : mDoraWrapper.getmListOfHostDored()) {
-                    if (mDoraWrapper.isRunning()) {
+                    if (Dora.isRunning()) {
                         doraProcess.reset();
                     }
                 }
@@ -96,13 +103,18 @@ public class                    DoraActivity extends MyActivity {
     }
 
     private void                launchDiagnose() {
-        boolean isStarting = mDoraWrapper.onAction();
-        mRv_Adapter.setIsRunning(isStarting);
-        mFab.setImageResource((!isStarting) ? R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
+        //TODO: checkez qu'on a internet !!
+        if (mSingleton.hostList == null || mSingleton.hostList.isEmpty()) {
+            NetworkDiscoveryControler.getInstance(this).run(true);
+        } else {
+            boolean isStarting = mDoraWrapper.onAction();//TODO: make a loading visible
+            mRv_Adapter.setIsRunning(isStarting);
+            mFab.setImageResource((!isStarting) ? R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
+        }
     }
 
     public void                 adapterRefreshDeamon() {
-        if (mDoraWrapper.isRunning()) {
+        if (Dora.isRunning()) {
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
 
@@ -111,7 +123,7 @@ public class                    DoraActivity extends MyActivity {
                     mInstance.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (mDoraWrapper.isRunning()) {
+                            if (Dora.isRunning()) {
                                 mRv_Adapter.notifyDataSetChanged();
                             }
                         }
@@ -120,5 +132,14 @@ public class                    DoraActivity extends MyActivity {
                 }
             }, REFRESH_TIME);
         }
+    }
+
+    public void                 onHostActualized(ArrayList<Host> hosts) {
+        launchDiagnose();
+    }
+
+    public void                 showSnackbar(String txt) {
+        super.showSnackbar(txt);
+        Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
 }

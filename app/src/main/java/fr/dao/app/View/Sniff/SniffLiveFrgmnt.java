@@ -26,11 +26,11 @@ import fr.dao.app.Core.Tcpdump.DashboardSniff;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
+import fr.dao.app.View.ZViewController.Adapter.SniffDashboardAdapter;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Adapter.HostSelectionAdapter;
-import fr.dao.app.View.ZViewController.Adapter.WiresharkDashboardAdapter;
-import fr.dao.app.View.ZViewController.Adapter.WiresharkPacketsAdapter;
+import fr.dao.app.View.ZViewController.Adapter.SniffPacketsAdapter;
 import fr.dao.app.View.ZViewController.Dialog.RV_dialog;
 
 /**
@@ -44,8 +44,8 @@ public class SniffLiveFrgmnt extends MyFragment {
     private SniffDispatcher mTrameDispatcher;
     private SniffActivity mActivity;
     private RecyclerView        mRV_Wireshark, dashboard_RV;
-    private WiresharkPacketsAdapter mAdapterDetailWireshark;
-    private WiresharkDashboardAdapter mAdapterDashboardWireshark;
+    private SniffPacketsAdapter mAdapterDetailWireshark;
+    private SniffDashboardAdapter mAdapterDashboardWireshark;
     private List<Host>          mListHostSelected = new ArrayList<>();
     private TextView            mMonitorAgv;
     private Tcpdump             mTcpdump;
@@ -112,7 +112,7 @@ public class SniffLiveFrgmnt extends MyFragment {
             bottom_title_sniffer.setText("Not started");
             bottom_subtitle_sniffer.setText("");
             MyGlideLoader.loadDrawableInImageView(mActivity, R.drawable.wireshark, headerWifi, false);
-            mAdapterDashboardWireshark = new WiresharkDashboardAdapter(mActivity, subtitle_sniffer,
+            mAdapterDashboardWireshark = new SniffDashboardAdapter(mActivity, subtitle_sniffer,
                     bottom_title_sniffer, bottom_subtitle_sniffer, statusIconSniffing);
             dashboard_RV.setAdapter(mAdapterDashboardWireshark);
             LinearLayoutManager layoutManager = new GridLayoutManager(mActivity, 3);
@@ -155,7 +155,7 @@ public class SniffLiveFrgmnt extends MyFragment {
     }
     private void                initRV() {
         if (mAdapterDetailWireshark == null) {
-            mAdapterDetailWireshark = new WiresharkPacketsAdapter(mActivity, mRV_Wireshark);
+            mAdapterDetailWireshark = new SniffPacketsAdapter(mActivity, mRV_Wireshark);
             mRV_Wireshark.setAdapter(mAdapterDetailWireshark);
             WrapContentLinearLayoutManager layoutManager = new WrapContentLinearLayoutManager(mActivity);
             layoutManager.setAutoMeasureEnabled(false);

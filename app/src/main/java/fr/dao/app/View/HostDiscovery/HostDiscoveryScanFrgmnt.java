@@ -157,8 +157,7 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
     public boolean                  start() {
         mActivity.setToolbarTitle("Scanner", "Discovering Network");
         if (!isWaiting()) {
-            if ((NetDiscovering.initNetworkInfo(mActivity)) &&
-                    mSingleton.network.updateInfo().isConnectedToNetwork()) {
+            if (mScannerControler.run(false)) {
                 //TODO: if its a refreshing don't unload list of host
                 init_prologueScan();
                 mActivity.initMonitor();
@@ -166,10 +165,9 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
                 mActivity.progressAnimation();
                 Log.d(TAG, "start -> true");
                 mHostLoaded = false;
-                return mScannerControler.run(mHosts);
+                return true;
             } else {
                 Log.d(TAG, "start -> false no connection");
-                mActivity.showSnackbar("You need to be connected");
                 mEmptyList.setVisibility(View.VISIBLE);
                 mEmptyList.setText("No connection detected");
             }
