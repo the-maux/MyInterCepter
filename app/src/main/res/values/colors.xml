@@ -27,7 +27,7 @@
 
     <!-- Activitys color  -->
     <color name="NmapPrimary">#dd006064</color>
-    <color name="DashboardPrimary">@color/material_purple_700</color>
+    <color name="DashboardPrimary">#dd7B1FA2</color>
     <color name="spyPrimary">#dd4f5b62</color>
     <color name="snifferPrimary">#dd263238</color>
     <color name="dnsSpoofPrimary">#dd004D40</color>

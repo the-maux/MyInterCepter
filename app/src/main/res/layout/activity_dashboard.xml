@@ -118,6 +118,34 @@
 
 
         </android.support.constraint.ConstraintLayout>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/topToolbar"
+            android:background="@android:color/transparent"
+            app:tabMode="scrollable">
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/generalTab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="General" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/offensifTab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Offensif" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/defensifTab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Defensif" />
+
+        </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>
 
     <android.support.constraint.ConstraintLayout
@@ -139,114 +167,13 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_weight="5">
+            app:layout_constraintVertical_weight="4">
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/HeaderCardDashboardLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/HeaderDefenseCardDashboard"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    app:cardBackgroundColor="@color/material_blue_900"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/HeaderAttackCardDashboard"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintHorizontal_weight="1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <android.support.constraint.ConstraintLayout
-                        android:id="@+id/HeaderDefenseCardDashboardLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="8dp">
-
-                        <TextView
-                            android:id="@+id/title1Defense"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:text="2 Menaces detecte"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/title2Defense" />
-
-                        <TextView
-                            android:id="@+id/title2Defense"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:text="4 analyse SSL"
-                            app:layout_constraintBottom_toTopOf="@+id/title1Defense"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.65" />
-                    </android.support.constraint.ConstraintLayout>
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/HeaderAttackCardDashboard"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    app:cardBackgroundColor="@color/material_red_900"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintHorizontal_weight="1"
-                    app:layout_constraintStart_toEndOf="@+id/HeaderDefenseCardDashboard"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <android.support.constraint.ConstraintLayout
-                        android:id="@+id/HeaderAttackCardDashboardLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="8dp">
-
-                        <TextView
-                            android:id="@+id/title1Attackk"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="5 network pentested"
-                            app:layout_constraintBottom_toTopOf="@+id/title1Attack2"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/title1Attack2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="27 devices audited"
-                            app:layout_constraintBottom_toTopOf="@+id/title3Attack"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/title1Attackk" />
-
-
-                        <TextView
-                            android:id="@+id/title3Attack"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="17 devices sniffé"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/title1Attack2" />
-                    </android.support.constraint.ConstraintLayout>
-                </android.support.v7.widget.CardView>
             </android.support.constraint.ConstraintLayout>
         </android.support.v7.widget.CardView>
 
@@ -260,7 +187,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/HeaderCardDashboard"
-            app:layout_constraintVertical_weight="4"></FrameLayout>
+            app:layout_constraintVertical_weight="7"></FrameLayout>
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline3"
