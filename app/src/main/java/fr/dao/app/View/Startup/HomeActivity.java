@@ -23,8 +23,8 @@ import java.io.IOException;
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Setup;
-import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.R;
+import fr.dao.app.View.DashBoard.DashboardActivity;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
 import fr.dao.app.View.Settings.SettingsActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
@@ -117,12 +117,7 @@ public class                    HomeActivity extends MyActivity {
     private View.OnClickListener onDashboardClick() {
         return new View.OnClickListener() {
             public void onClick(View view) {
-                Utils.vibrateDevice(mInstance);
-                Utils.vibrateDevice(mInstance);
-                Utils.vibrateDevice(mInstance);
-                Utils.vibrateDevice(mInstance);
-                Utils.vibrateDevice(mInstance);
-                //                startActivity(new Intent(mInstance, DefenseHomeActivity.class));
+               startActivity(new Intent(mInstance, DashboardActivity.class));
             }
         };
     }

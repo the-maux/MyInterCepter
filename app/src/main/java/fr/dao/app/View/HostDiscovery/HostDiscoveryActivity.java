@@ -33,9 +33,9 @@ import fr.dao.app.R;
 import fr.dao.app.View.SpyMITM.SpyMitmActivity;
 import fr.dao.app.View.Startup.HomeActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
-import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
+import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 /**
  * TODO:    + Add manual target
@@ -87,7 +87,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
         mHistory = findViewById(R.id.history);
-        mHistory.setOnClickListener(onHistory());
+        mHistory.setOnClickListener(onOsFilter());
         mSearchView = findViewById(R.id.searchView);
         mToolbar = findViewById(R.id.toolbar2);
         mSettingsMenu = findViewById(R.id.settingsMenu);
@@ -246,9 +246,13 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mFragment.initSearchView(mSearchView, mToolbar);
     }
 
-    private View.OnClickListener    onHistory() {
+    private View.OnClickListener    onOsFilter() {
         return new View.OnClickListener() {
             public void onClick(View view) {
+                if (mFragment.getClass().getName().contains(HostDiscoveryScanFrgmnt.class.getName())) {
+                    ((HostDiscoveryScanFrgmnt)mFragment).osFilterDialog();
+                }
+                /*
                 MyFragment fragment;
                 ViewAnimate.setVisibilityToVisibleQuick(mHistory);
                 if (HistoricFragment == null)
@@ -263,7 +267,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 //ViewAnimate.setVisibilityToGoneQuick(mFab);
                 mFab.hide();
                 initFragment(fragment);
-                initSearchView();
+                initSearchView();*/
+
             }
         };
     }

@@ -38,6 +38,9 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
+            android:name=".View.DashBoard.DashboardActivity"
+            android:launchMode="singleTask" />
+        <activity
             android:name=".View.DnsSpoofing.DnsActivity"
             android:launchMode="singleTask" />
         <activity

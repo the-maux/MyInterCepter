@@ -18,12 +18,12 @@ import fr.dao.app.R;
 import fr.dao.app.View.DnsSpoofing.DnsSettingsFrgmnt;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryHistoricFrgmnt;
 import fr.dao.app.View.HostDiscovery.HostDiscoverySettingsFrgmnt;
-import fr.dao.app.View.WebServer.WebserverSettingsFrgmnt;
-import fr.dao.app.View.SpyMITM.SpyMitmSettingsFrgmnt;
 import fr.dao.app.View.Sniff.SniffSettingsFrgmnt;
+import fr.dao.app.View.SpyMITM.SpyMitmSettingsFrgmnt;
+import fr.dao.app.View.WebServer.WebserverSettingsFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
-import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
+import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 /**
  * TODO: SSLStrip
@@ -38,30 +38,23 @@ import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
  *                      faire le saveMyPreviousRecord on startUp
  *
  */
-public class                    SettingsActivity extends MyActivity {
-    private String              TAG = "SettingsActivity";
-    private MyFragment          mFragment;
-    private CoordinatorLayout   mCoordinatorLayout;
-    private Toolbar             mToolbar;
+public class                        SettingsActivity extends MyActivity {
+    private String                  TAG = "SettingsActivity";
+    private MyFragment              mFragment;
+    private CoordinatorLayout       mCoordinatorLayout;
+    private Toolbar                 mToolbar;
     protected AHBottomNavigation    mBottomBar;
     private int                     mType = 0;
     private AppBarLayout            appBarLayout;
-    public static final String  GLOBAL_SETTINGS = "GLOBAL";
-    public static final String  HOSTDISCOVERY_SETTINGS = "HOSTDISCOVERY";
-    public static final String  WIRESHARK_SETTINGS = "WIRESHARK";
-    public static final String  DNSMASQ_SETTINGS = "DNSMASQ";
-    public static final String  DORA_SETTINGS = "DORA";
-    public static final String  WEBSERVER_SETTINGS = "WEBSERVER";
-    public static final String  DATABASE_SETTINGS = "DATABASE";
     
-    public void                 onCreate(Bundle savedInstanceState) {
+    public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings2);
         initXml();
         init();
     }
 
-    private void                initXml() {
+    private void                    initXml() {
         mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
         MyGlideLoader.coordoBackgroundXMM(this, (CoordinatorLayout) findViewById(R.id.coordinatorLayout));
         mToolbar = findViewById(R.id.toolbar2);
@@ -73,12 +66,12 @@ public class                    SettingsActivity extends MyActivity {
         });
     }
 
-    private void                init() {
+    private void                    init() {
         initBottomBar(0, true);
         initFragment(null);
     }
 
-    protected void              initBottomBar(int position, boolean useCallback) {
+    protected void                  initBottomBar(int position, boolean useCallback) {
 // Create items
         mBottomBar = findViewById(R.id.navigationSettings);
         if (useCallback) {
@@ -161,7 +154,7 @@ public class                    SettingsActivity extends MyActivity {
         };
     }
 
-    private void                initFragment(MyFragment fragment) {
+    private void                    initFragment(MyFragment fragment) {
         try {
             if (fragment == null)
                 fragment = new HostDiscoverySettingsFrgmnt();
@@ -180,11 +173,11 @@ public class                    SettingsActivity extends MyActivity {
         }
     }
 
-    public void                 showSnackbar(String txt) {
+    public void                     showSnackbar(String txt) {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
 
-    public void                 setToolbarTitle(final String title, final String subtitle) {
+    public void                     setToolbarTitle(final String title, final String subtitle) {
         mInstance.runOnUiThread(new Runnable() {
             @Override
             public void run() {

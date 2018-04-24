@@ -35,11 +35,10 @@ import fr.dao.app.Model.Target.Network;
 import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
 import fr.dao.app.View.Scan.NmapActivity;
-import fr.dao.app.View.Settings.SettingsActivity;
-import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 import fr.dao.app.View.ZViewController.Adapter.HostDiscoveryAdapter;
 import fr.dao.app.View.ZViewController.Adapter.OSFilterAdapter;
 import fr.dao.app.View.ZViewController.Dialog.RV_dialog;
+import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 public class HostDiscoveryScanFrgmnt extends MyFragment {
     private String                  TAG = "HostDiscoveryScanFrgmnt";
@@ -285,7 +284,7 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
                                 mActivity.showSnackbar(mHostAdapter.filterByOs(adapter.getSelected()) + " devices found");
                             }
                         }
-                        })
+                    })
                     .show();
         } else {
             mActivity.showSnackbar("You can't filter while scanning");
@@ -298,18 +297,14 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
                 .setBackgroundColor(ContextCompat.getColor(activity, R.color.material_light_white))
                 .setAppBarLayout(mAppbar)
                 .addTitleItem("Settings")
-                .addItem(0, "Os filter", R.mipmap.ic_os_filter)
-                .addItem(1, "Select all", R.mipmap.ic_select_all)
-                .addItem(2, "Mode offline", R.mipmap.ic_leave)
-                .addItem(3, "Settings", R.mipmap.ic_leave)
+                .addItem(0, "Select all", R.mipmap.ic_select_all)
+                .addItem(1, "Mode offline", R.mipmap.ic_leave)
+                .addItem(2, "Settings", R.mipmap.ic_leave)
                 .setItemClickListener(new BottomSheetItemClickListener() {
                     @Override
                     public void onBottomSheetItemClick(MenuItem menuItem) {
                         Log.d(TAG, "STRING:"+menuItem.getTitle().toString());
                         switch (menuItem.getTitle().toString()) {
-                            case "Os filter":
-                                osFilterDialog();
-                                break;
                             case "Select all":
                                 mHostAdapter.selectAll();
                                 break;

@@ -49,7 +49,7 @@ import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Dialog.RV_dialog;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
-public class HostDiscoveryHistoricFrgmnt extends MyFragment {
+public class                        HostDiscoveryHistoricFrgmnt extends MyFragment {
     private String                  TAG = "HostDiscoveryHistoricFrgmnt";
     private HostDiscoveryHistoricFrgmnt mInstance = this;
     private Host                    mFocusedHost = null;
@@ -161,7 +161,7 @@ public class HostDiscoveryHistoricFrgmnt extends MyFragment {
             if (RV_AdapterAp == null) {
                 RV_AdapterAp = new NetworksAdapter(this, networksScanned);
             }
-            setTitleToolbar("Historic", networksScanned.size() + " network scanned");
+            setTitleToolbar(null, networksScanned.size() + " network scanned");
             mRV.setAdapter(RV_AdapterAp);
             mActualMode = HistoricDetailMode.NETWORK_LISTING;
             mEmptyList.setVisibility(View.GONE);
