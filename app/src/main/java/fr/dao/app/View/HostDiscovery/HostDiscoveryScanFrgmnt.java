@@ -203,45 +203,11 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
         return selectedHost;
     }
 
-    public Network                  updateStateOfHostAfterIcmp(ArrayList<String> ipReachables) {
-        Network actualNetwork = DBNetwork.getAPFromSSID(mSingleton.network.ssid);
-        int rax = 0;
-        for (Host host : actualNetwork.listDevices()) {
-            host.state = Host.State.OFFLINE;
-        }
-        if (ipReachables != null)
-            for (String ipAndMacReachable : ipReachables) {
-                rax = rax + 1;
-                String ip = ipAndMacReachable.split(":")[0];
-                String mac = ipAndMacReachable.replace(ipAndMacReachable.split(":")[0]+":", "").toUpperCase();
-                boolean isHostInList = false;
-                for (Host host : actualNetwork.listDevices()) {
-                    if (host.mac.contains(mac)) {
-                        host.state = Host.State.ONLINE;
-                        isHostInList = true;
-                        break;
-                    }
-                }
-                if (!isHostInList) {
-                    Host host = new Host();
-                    host.ip = ip;
-                    host.mac = mac;
-                    if (mSingleton.Settings.getUserPreferences().NmapMode == 0) {/*No nmap so, Local vendor*/
-                        host.vendor = Fingerprint.getVendorFrom(host.mac);//TODO: Thread this
-                        Fingerprint.initHost(host);
-                    }
-                    DBHost.saveOrGetInDatabase(host);
-                    host.state = Host.State.ONLINE;
-                    host.save();
-                    actualNetwork.listDevices().add(host);
-                }
-            }
-        Log.d(TAG, "(" + (actualNetwork.listDevices().size() - rax) + " offline/ " + actualNetwork.listDevices().size() + "inCache) ");
+    public void                     updateStateOfHostAfterIcmp(Network actualNetwork) {
         mSingleton.actualNetwork = actualNetwork;
         mActivity.actualNetwork = actualNetwork;
         mHosts = actualNetwork.listDevices();
         mHostAdapter.updateHostList(actualNetwork.listDevices());
-        return actualNetwork;
     }
 
     public void                     onHostActualized(final ArrayList<Host> hosts) {
@@ -254,7 +220,6 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
                 }
                 mHosts = hosts;
                 mHostLoaded = true;
-                mScannerControler.inLoading = false;
                 mActivity.setProgressState(mActivity.MAXIMUM_PROGRESS*2);
                 mSingleton.hostList = mHosts;
                 mActivity.setToolbarTitle(mSingleton.network.ssid,

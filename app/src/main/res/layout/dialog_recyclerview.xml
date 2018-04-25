@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:maxHeight="300dp"
-    >
+    android:maxHeight="300dp">
+
+    <include
+        android:id="@+id/headerRV"
+        layout="@layout/item_port"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/RL_items"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="false"
-        android:layout_centerHorizontal="true"
-        android:layout_centerInParent="false"
-        android:layout_centerVertical="false"
-        android:layout_margin="4dp"
-        android:elevation="4dp"
+        android:layout_below="@+id/headerRV"
 
+        android:layout_margin="4dp"
         android:padding="8dp"
-        android:visibility="visible"
         tools:listitem="@layout/item_host_checkbox" />
 </RelativeLayout>

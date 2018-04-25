@@ -18,7 +18,7 @@ import fr.dao.app.Core.Configuration.Singleton;
 
 public class                            NetDiscovering {
     private static String               TAG = "NetDiscovering";
-
+    private static String               MAC = null;
     public static boolean               initNetworkInfo(Activity activity) {
         WifiManager wifiManager = (WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if (wifiManager == null)
@@ -140,21 +140,25 @@ public class                            NetDiscovering {
 
 
     public static String                getMac(WifiInfo wifiInfo) {
-
-        BufferedReader reader = new RootProcess("GetMacADDR")
-                .exec("cat /sys/class/net/wlan0/address").getReader();
-        try {
-            String tmp;
-            StringBuilder stringBuilder = new StringBuilder();
-            while ((tmp = reader.readLine()) != null) {
-                stringBuilder.append(tmp);
+        if (MAC == null) {
+            BufferedReader reader = new RootProcess("GetMacADDR")
+                    .exec("cat /sys/class/net/wlan0/address").getReader();
+            try {
+                String tmp;
+                StringBuilder stringBuilder = new StringBuilder();
+                while ((tmp = reader.readLine()) != null) {
+                    stringBuilder.append(tmp);
+                }
+                MAC = stringBuilder.toString().toUpperCase();
+                Log.i(TAG, "ADDR MAC DETECTED[" + stringBuilder.toString().toUpperCase() + "]");
+                return stringBuilder.toString().toUpperCase();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return wifiInfo.getMacAddress().toUpperCase();
+                //Using getMacAddress() is not recommended, gna gna gna
             }
-            Log.i(TAG, "ADDR MAC DETECTED[" + stringBuilder.toString().toUpperCase() + "]");
-            return stringBuilder.toString().toUpperCase();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return wifiInfo.getMacAddress().toUpperCase();//Using getMacAddress() is not recommended, gna gna gna
+        } else {
+            return MAC;
         }
     }
-
 }

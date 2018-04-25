@@ -259,7 +259,7 @@ public class                        NmapControler {
 
     public void                     onHostActualized(ArrayList<Host> hosts) {
         Log.d(TAG, "All node was parsed in :" + Utils.TimeDifference(startParsing));
-        mNnetworkDiscoveryControler.onNmapScanOver(hosts);
+        mNnetworkDiscoveryControler.onScanFinished(hosts);
     }
 
     public void                     setmActualItemMenu(String itemMenu) {

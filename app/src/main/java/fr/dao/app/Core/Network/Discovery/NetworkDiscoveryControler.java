@@ -8,10 +8,13 @@ import java.util.Date;
 
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
+import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Network.IPv4Utils;
 import fr.dao.app.Core.Network.NetDiscovering;
+import fr.dao.app.Core.Nmap.Fingerprint;
 import fr.dao.app.Core.Nmap.NmapControler;
 import fr.dao.app.Model.Target.Host;
+import fr.dao.app.Model.Target.Network;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryScanFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 
@@ -55,21 +58,22 @@ public class                        NetworkDiscoveryControler {
             return false;
         if (mInstance.mSingleton.hostList == null || mInstance.mSingleton.hostList.isEmpty())
             return false;
-        if (!mInstance.inLoading)
-            return false;
         return true;
     }
 
     public boolean                   run(boolean isJustCheckingWhoIsAlive) {
+        Log.i(TAG, "run::WifiInit");
         if (!NetDiscovering.initNetworkInfo(mActivity) || !mSingleton.network.updateInfo().isConnectedToNetwork()) {
             mActivity.showSnackbar("No wifi connection detected");
             Log.i(TAG, "No wifi connection detected");
             return false;
         }
+        Log.i(TAG, "run::init");
         if (!inLoading) {
             this.isJustCheckingWhoIsAlive = isJustCheckingWhoIsAlive;
             inLoading = true;
             startScanning = Calendar.getInstance().getTime();
+            Log.i(TAG, "run::mSingleton.resetActualSniffSession");
             mSingleton.resetActualSniffSession();
             startArpScan();
             return true;
@@ -88,37 +92,84 @@ public class                        NetworkDiscoveryControler {
                 new IcmpScanNetmask(new IPv4Utils(mSingleton.network), mInstance);
             }
         }).start();
+        Log.i(TAG, "startArpScan::IcmpScanNetmask::started");
     }
 
     synchronized void               onArpScanOver(ArrayList<String> ipReachable) {
+        Log.i(TAG, "onArpScanOver:: "+ ipReachable.size() + " device(s) reachable");
         ArrayList<String> ipsreachables = new ArrayList<>();
         ipsreachables.addAll(ipReachable);
-        Log.d(TAG, "onIcmpScanOver with : "+ ipReachable.size() + " device(s) reachable");
         mActivity.setToolbarTitle(null, ipsreachables.size() + " hosts detected");
         ArrayList<String> basicHost = NetDiscovering.readARPTable(ipsreachables);
-        Log.d(TAG, "onArpScanOver with : "+ ipReachable.size() + " device(s) reachable");
+        Log.i(TAG, "onArpScanOver::readARPTable::"+ ipReachable.size() + " device(s) from ARP");
+        Singleton.getInstance().actualNetwork = updateHostStatus(basicHost);
         if (isFromHostDiscoveryActivity) {
-            Singleton.getInstance().actualNetwork = mFragment.updateStateOfHostAfterIcmp(basicHost);
+            Log.i(TAG, "onArpScanOver::mFragment.updateStateOfHostAfterIcmp");
+            mFragment.updateStateOfHostAfterIcmp(Singleton.getInstance().actualNetwork);
         }
         mActivity.MAXIMUM_PROGRESS = basicHost.size();
         if (mSingleton.Settings.getUserPreferences().NmapMode > 0 && !isFromHostDiscoveryActivity) {
-            Log.d(TAG, "Nmap_Mode[" + mSingleton.Settings.getUserPreferences().NmapMode + "] so starting Nmap");
+            Log.i(TAG, "onArpScanOver::Nmap::TypeScan::"+mSingleton.Settings.getUserPreferences().NmapMode+"::StartingNmap");
             new NmapControler(Singleton.getInstance().actualNetwork.listDevices(), this, Singleton.getInstance().actualNetwork, mActivity);
-        } else {
-            Log.d(TAG, "Nmap_Mode[" + mSingleton.Settings.getUserPreferences().NmapMode + "] so bypass Nmap");
-            onNmapScanOver(Singleton.getInstance().actualNetwork.listDevices());
+            return;
         }
+        if (isJustCheckingWhoIsAlive) {
+            Log.i(TAG, "onArpScanOver::Nmap::JustCheckingHostAlive::BypassNmap");
+        } else {
+            Log.i(TAG, "onArpScanOver::Nmap::TypeScan::"+mSingleton.Settings.getUserPreferences().NmapMode+"::BypassNmap");
+        }
+        onScanFinished(Singleton.getInstance().actualNetwork.listDevices());
     }
 
-    public void                     onNmapScanOver(ArrayList<Host> hosts) {
+    private Network                    updateHostStatus(ArrayList<String> ipReachables) {
+        Network actualNetwork = mSingleton.actualNetwork;
+        int rax = 0;
+        for (Host host : actualNetwork.listDevices()) {
+            host.state = Host.State.OFFLINE;
+        }
+        if (ipReachables != null)
+            for (String ipAndMacReachable : ipReachables) {
+                rax = rax + 1;
+                String ip = ipAndMacReachable.split(":")[0];
+                String mac = ipAndMacReachable.replace(ipAndMacReachable.split(":")[0]+":", "").toUpperCase();
+                boolean isHostInList = false;
+                for (Host host : actualNetwork.listDevices()) {
+                    if (host.mac.contains(mac)) {
+                        host.state = Host.State.ONLINE;
+                        isHostInList = true;
+                        break;
+                    }
+                }
+                if (!isHostInList) {
+                    Host host = new Host();
+                    host.ip = ip;
+                    host.mac = mac;
+                    if (mSingleton.Settings.getUserPreferences().NmapMode == 0) {/*No nmap so, Local vendor*/
+                        host.vendor = Fingerprint.getVendorFrom(host.mac);//TODO: Thread this
+                        Fingerprint.initHost(host);
+                    }
+                    DBHost.saveOrGetInDatabase(host);
+                    host.state = Host.State.ONLINE;
+                    host.save();
+                    actualNetwork.listDevices().add(host);
+                }
+            }
+        Log.i(TAG, "(" + (actualNetwork.listDevices().size() - rax) + " offline/ " + actualNetwork.listDevices().size() + "inCache) ");
+        mSingleton.actualNetwork = actualNetwork;
+        return actualNetwork;
+    }
+
+    public void                     onScanFinished(ArrayList<Host> hosts) {
+        Log.i(TAG, "onScanFinished::"+
+                (isFromHostDiscoveryActivity?"mFragment":"mActivity")+".onHostActualized::"+
+                hosts.size() + " hosts found on " + Utils.TimeDifference(startScanning));
+        isLoadedOnce = true;
+        inLoading = false;
         if (isFromHostDiscoveryActivity) {
-            Log.d(TAG, "Scan took " + Utils.TimeDifference(startScanning) + ", stdout::fragment");
             mFragment.onHostActualized(hosts);
         } else {
-            Log.d(TAG, "Scan took " + Utils.TimeDifference(startScanning) + ", stdout::Activity");
             mActivity.onHostActualized(hosts);
         }
-        isLoadedOnce = true;
     }
 
     public void                     setToolbarTitle(String title, String subtitle) {

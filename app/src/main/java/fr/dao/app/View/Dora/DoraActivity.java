@@ -88,13 +88,12 @@ public class                    DoraActivity extends MyActivity {
         mDoraWrapper = Dora.getDora(this);
         if (!NetworkDiscoveryControler.isHostListLoaded()) {
             new QuestionDialog(mInstance)
-
-                    .setTitle("Vous devez scannez le reseau pour trouver des cibles")
-                    .setText("Voulez vous scannez le reseau pour découvrir des hosts ?")
+                    .setTitle("No target available")
+                    .setText("Fast scanning network to find host ?")
                     .onPositiveButton("Search device", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             NetworkDiscoveryControler.getInstance(mInstance).run(true);
-                            mInstance.dialog = ProgressDialog.show(mInstance, "Discovering Network", "Loading. Please wait...", true);
+                            mInstance.dialog = ProgressDialog.show(mInstance, "Discovering Network", "Scanning. Please wait...", true);
                         }
                     })
                     .onNegativeButton("Dont", new DialogInterface.OnClickListener() {
@@ -107,7 +106,6 @@ public class                    DoraActivity extends MyActivity {
             ViewAnimate.FabAnimateReveal(mInstance, mFab);
         mFab.setImageResource((!Dora.isRunning()) ? R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
         more.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
                 for (DoraProcess doraProcess : mDoraWrapper.getmListOfHostDored()) {
                     if (Dora.isRunning()) {
@@ -146,11 +144,8 @@ public class                    DoraActivity extends MyActivity {
         if (Dora.isRunning()) {
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
-
-                @Override
                 public void run() {
                     mInstance.runOnUiThread(new Runnable() {
-                        @Override
                         public void run() {
                             if (Dora.isRunning()) {
                                 mRv_Adapter.notifyDataSetChanged();

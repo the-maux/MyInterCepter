@@ -30,9 +30,9 @@ public class                                DBNetwork {
             network = new Select()
                     .from(Network.class)
                     .where("ssid = \"" + SSID + "\"").executeSingle();
-            Log.d(TAG, "getAPFromSSID::" + new Select()
-                    .from(Network.class)
-                    .where("ssid = \"" + SSID + "\"").toSql());
+//            Log.d(TAG, "getAPFromSSID::" + new Select()
+//                    .from(Network.class)
+//                    .where("ssid = \"" + SSID + "\"").toSql());
             if (network != null) {
                 if (Singleton.getInstance().Settings.DebugMode)
                     Log.d(TAG, "AccessPoint::" + SSID + " already knew with " + network.nbrScanned + " previous scan");

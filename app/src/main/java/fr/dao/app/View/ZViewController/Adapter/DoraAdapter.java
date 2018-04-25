@@ -40,7 +40,7 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
     public void                 onBindViewHolder(DoraHolder holder, int position) {
         final DoraProcess host = mHosts.get(position);
         holder.diagnose.setText(new String(new char[host.getVisu()]).replace("\0", "#"));
-        holder.IP.setText(host.mhost.name.isEmpty() ? host.mhost.ip : host.mhost.name);
+        holder.IP.setText(host.mhost.name.contains("Unknown") ? host.mhost.ip : host.mhost.name);
         holder.uptime.setText("Uptime:    " + host.getmUptime());
         holder.stat.setText("sent: " + host.sent + " / rcv: " + host.rcv);
         int pourc = host.getPourcentage();
@@ -105,7 +105,7 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
 
     public void                 updateDoraListHost(List<DoraProcess> doraProcesses) {
         if (!mIsRunning) {
-            Log.e(TAG, "Dora update list, cause it's running");
+            Log.i(TAG, "Dora update list, cause it's not running");
             this.mHosts = doraProcesses;
             this.mListHostRunning = new ArrayList<>(Arrays.asList(new Boolean[doraProcesses.size()]));
             Collections.fill(mListHostRunning, Boolean.FALSE);

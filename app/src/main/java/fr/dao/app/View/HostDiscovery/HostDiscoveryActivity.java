@@ -165,6 +165,10 @@ public class                        HostDiscoveryActivity extends MyActivity {
                     ((HostDiscoveryScanFrgmnt) mFragment).mHostLoaded) {
                     mSingleton.savedHostList = mSingleton.hostList;
                     mSingleton.hostList = ((HostDiscoveryScanFrgmnt) mFragment).getTargetSelectedFromHostList();
+                    if (mSingleton.hostList == null) {
+                        mSingleton.hostList = mSingleton.savedHostList;
+                        return;
+                    }
                     if (mSingleton.Settings.UltraDebugMode) {
                         Log.d(TAG, "mSingleton.hostList" + mSingleton.hostList);
                         Log.d(TAG, "mSingleton.hostsListSize:" +

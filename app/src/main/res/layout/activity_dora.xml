@@ -24,6 +24,7 @@
                 android:id="@+id/topToolbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
                 android:background="@color/primary_text"
                 android:gravity="right">
 
@@ -34,7 +35,6 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_toLeftOf="@+id/searchView"
-                    android:addStatesFromChildren="true"
                     android:minWidth="100dp"
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:subtitle="Easy Q.O.S"
@@ -52,7 +52,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_toLeftOf="@+id/action_add_host" />
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/action_add_host"
                     android:layout_width="@dimen/btn_toolbar_size"
                     android:layout_height="@dimen/btn_toolbar_size"
@@ -60,18 +60,17 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginTop="12dp"
                     android:layout_toLeftOf="@+id/history"
-                    android:background="@android:color/transparent"
-                    android:visibility="gone"
-                    app:srcCompat="@drawable/ic_add_circle" />
+                    android:src="@drawable/ic_add_circle"
+                    android:visibility="gone" />
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/history"
                     android:layout_width="@dimen/btn_toolbar_size"
                     android:layout_height="@dimen/btn_toolbar_size"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="8dp"
-                    android:background="@android:color/transparent"
+                    android:padding="12dp"
                     android:soundEffectsEnabled="true"
                     android:src="@drawable/ic_more_vert" />
 
@@ -83,13 +82,13 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/topToolbar"
                 android:background="@color/primary_text"
+                android:visibility="gone"
                 app:tabMode="scrollable">
 
                 <android.support.design.widget.TabItem
                     android:id="@+id/radar"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:icon="@drawable/radar1600" />
+                    android:layout_height="wrap_content" />
 
                 <android.support.design.widget.TabItem
                     android:id="@+id/signalQuality"
@@ -109,10 +108,10 @@
         android:layout_height="56dp"
         android:layout_marginRight="16dp"
         android:elevation="3dp"
-        android:scaleType="fitCenter"
+
         android:soundEffectsEnabled="true"
         android:src="@drawable/ic_media_play"
-        android:visibility="gone"
+        android:visibility="visible"
         app:backgroundTint="@color/fab_color"
         app:fabSize="normal"
         app:layout_anchor="@id/appBarLayout"

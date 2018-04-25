@@ -186,6 +186,10 @@ public class SniffLiveFrgmnt extends MyFragment {
     }
 
     private boolean             startTcpdump() {
+        if (mSingleton.hostList == null || mSingleton.hostList.isEmpty()) {
+            mActivity.showSnackbar("No target available");
+            return false;
+        }
         if (mListHostSelected.isEmpty()) {
             if (mSingleton.hostList.size() == 1) {//Automatic selection when 1 target only
                 mListHostSelected.clear();

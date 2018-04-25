@@ -27,7 +27,7 @@ public class                            Singleton {
     public  List<ArpSpoof>              ArpSpoofProcessStack = new ArrayList<>();
     private DnsmasqControl              dnsSpoofed = null;
     private SniffSession                actualSniffSession = null;
-    private boolean                     webSpoofedstarted = false, isNmapRunning = false;
+    private boolean                     webSpoofedstarted = false;
     private static Singleton            mInstance = null;
     String                              VERSION = "0xDEADBEEF";
 
@@ -108,12 +108,14 @@ public class                            Singleton {
     }
 
     public void                         init(Activity activity) {
-        Log.d("Singleton", "Singleton"+"::initialisation");
-        Settings = new SettingsControler(activity.getFilesDir().getPath() + '/');
-        Settings.PcapPath = Environment.getExternalStorageDirectory().getPath() + "/Dao/Pcap/";
-        Settings.DumpsPath = Environment.getExternalStorageDirectory().getPath() + "/Dao/Nmap/";
-        Settings.BinaryPath = Settings.FilesPath;
-        if (NetDiscovering.initNetworkInfo(activity))
-            actualNetwork = DBNetwork.getAPFromSSID(network.ssid);
+        if (Settings == null) {
+            Log.d("Singleton", "Singleton"+"::initialisation");
+            Settings = new SettingsControler(activity.getFilesDir().getPath() + '/');
+            Settings.PcapPath = Environment.getExternalStorageDirectory().getPath() + "/Dao/Pcap/";
+            Settings.DumpsPath = Environment.getExternalStorageDirectory().getPath() + "/Dao/Nmap/";
+            Settings.BinaryPath = Settings.FilesPath;
+            if (NetDiscovering.initNetworkInfo(activity))
+                actualNetwork = DBNetwork.getAPFromSSID(network.ssid);
+        }
     }
 }

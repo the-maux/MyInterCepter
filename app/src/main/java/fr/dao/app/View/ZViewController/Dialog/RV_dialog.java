@@ -7,11 +7,13 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import fr.dao.app.R;
 
 public class                    RV_dialog {
     private RecyclerView        mRV_host;
+    private RelativeLayout      rootView;
     protected AlertDialog.Builder dialog;
 
     public                      RV_dialog(Activity activity) {
@@ -20,6 +22,7 @@ public class                    RV_dialog {
         View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_recyclerview, null);
         dialog.setView(dialogView);
         dialog.setIcon(R.drawable.ico);
+        rootView = dialogView.findViewById(R.id.rootView);
         mRV_host = dialogView.findViewById(R.id.RL_items);
         mRV_host.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(activity);
