@@ -275,6 +275,7 @@
             android:alpha="0.8"
             android:elevation="4dp"
             android:focusableInTouchMode="false"
+            android:padding="8dp"
             android:tint="@android:color/primary_text_dark"
             app:layout_constraintBottom_toBottomOf="@+id/guideline_middle_verti"
             app:layout_constraintBottom_toTopOf="@+id/title_settings"
@@ -282,7 +283,7 @@
             app:layout_constraintLeft_toLeftOf="@+id/settings_card"
             app:layout_constraintRight_toRightOf="@+id/settings_card"
             app:layout_constraintTop_toTopOf="@+id/settings_card"
-            app:srcCompat="@mipmap/ic_settings_wireshark" />
+            app:srcCompat="@drawable/ic_build_svg" />
 
         <!--<RadioButton-->
         <!--android:id="@+id/radioButton"-->
