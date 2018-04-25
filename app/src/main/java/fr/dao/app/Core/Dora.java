@@ -1,6 +1,5 @@
 package fr.dao.app.Core;
 
-import android.app.Activity;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -8,7 +7,6 @@ import java.util.List;
 
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
-import fr.dao.app.Core.Network.NetDiscovering;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Unix.DoraProcess;
 import fr.dao.app.View.Dora.DoraActivity;
@@ -48,26 +46,33 @@ public class Dora {
     public boolean                  onAction() {
         if (mListOfHostDored.isEmpty())
             for (Host host : mSingleton.hostList) {
+            if (host.state == Host.State.ONLINE)
                 mListOfHostDored.add(new DoraProcess(host));
             }
         if (!isRunning) {
             isRunning = true;
+            Log.d(TAG, "dora started " + mListOfHostDored.size() + " process");
             for (DoraProcess doraProcess : mListOfHostDored) {
                 doraProcess.exec();
             }
             activity.adapterRefreshDeamon();
-            Log.d(TAG, "diagnose dora started");
+
         } else {
             isRunning = false;
             for (DoraProcess doraProcess : mListOfHostDored) {
                 RootProcess.kill(doraProcess.mProcess.getmPid());
             }
-            Log.d(TAG, "diagnose dora stopped");
+            Log.d(TAG, "dora stopped " + mListOfHostDored.size() + " process");
         }
         return isRunning;
     }
 
     public List<DoraProcess>        getmListOfHostDored() {
+        if (mListOfHostDored.isEmpty() && mSingleton.hostList != null && !mSingleton.hostList.isEmpty())
+            for (Host host : mSingleton.hostList) {
+                if (host.state == Host.State.ONLINE)
+                    mListOfHostDored.add(new DoraProcess(host));
+            }
         return mListOfHostDored;
     }
 }

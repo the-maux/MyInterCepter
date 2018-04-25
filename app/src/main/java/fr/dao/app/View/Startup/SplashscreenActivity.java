@@ -6,14 +6,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import java.io.File;
-import java.util.Set;
 
 import fr.dao.app.Core.Configuration.SettingsControler;
-import fr.dao.app.Core.Configuration.Setup;
 
 public class                    SplashscreenActivity extends AppCompatActivity {
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         startActivity(
                 new Intent(this,
                 new File(/* Ok Ok maybe not the best way to discover the code of the app xD */

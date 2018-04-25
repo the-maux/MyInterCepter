@@ -15,7 +15,6 @@ import java.util.regex.Pattern;
 
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
-import fr.dao.app.Model.Target.Host;
 
 public class                            NetDiscovering {
     private static String               TAG = "NetDiscovering";
@@ -39,8 +38,7 @@ public class                            NetDiscovering {
         }
         if (res[netmask].contains("0.0.0.0")) res[netmask] = "255.255.255.0";
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        Singleton.getInstance().network = new NetworkInformation(wifiManager, getMac(wifiInfo));
-        Singleton.getInstance().network.init();
+        Singleton.getInstance().network = new NetworkInformation(wifiManager, getMac(wifiInfo)).init();
         if ((activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)) != null)
             wifiInfo = ((WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
         Singleton.getInstance().network.ssid = wifiInfo.getSSID().replace("\"", "");

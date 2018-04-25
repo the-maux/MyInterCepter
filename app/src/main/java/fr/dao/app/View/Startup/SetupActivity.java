@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import java.io.File;
 import java.io.IOException;
 
 import fr.dao.app.Core.Configuration.Setup;
@@ -66,7 +65,7 @@ public class                    SetupActivity extends MyActivity {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    Setup.buildPath(mInstance);
+                    Singleton.getInstance().init(mInstance);
                     Log.d(TAG, "Installation");
                     new Setup(mInstance).install();
                     monitor("Network initialization");

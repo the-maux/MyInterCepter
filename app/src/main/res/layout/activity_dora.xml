@@ -112,6 +112,7 @@
         android:scaleType="fitCenter"
         android:soundEffectsEnabled="true"
         android:src="@drawable/ic_media_play"
+        android:visibility="gone"
         app:backgroundTint="@color/fab_color"
         app:fabSize="normal"
         app:layout_anchor="@id/appBarLayout"

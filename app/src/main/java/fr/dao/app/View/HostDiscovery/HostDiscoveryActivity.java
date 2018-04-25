@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -171,7 +170,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
                         Log.d(TAG, "mSingleton.hostsListSize:" +
                                 ((mSingleton.hostList != null) ? mSingleton.hostList.size() : "0"));
                     }
-                    mSingleton.actualNetwork = actualNetwork;
                     startActivity(new Intent(mInstance, SpyMitmActivity.class));
                 }
                 else if (!mFragment.start()) {

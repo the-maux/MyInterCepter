@@ -91,11 +91,7 @@ public class                    Setup {
     }
 
     public static void          buildPath(Activity activity) {
-        Singleton singleton = Singleton.getInstance();
-        singleton.Settings = new SettingsControler(activity.getFilesDir().getPath() + '/');
-        singleton.Settings.PcapPath = Environment.getExternalStorageDirectory().getPath() + "/Dao/Pcap/";
-        singleton.Settings.DumpsPath = Environment.getExternalStorageDirectory().getPath() + "/Dao/Nmap/";
-        singleton.Settings.BinaryPath = singleton.Settings.FilesPath;
+
     }
 
     private void                buildFile(String nameFile, int ressource) throws IOException, InterruptedException {

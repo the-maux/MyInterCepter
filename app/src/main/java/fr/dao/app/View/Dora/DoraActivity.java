@@ -1,5 +1,7 @@
 package fr.dao.app.View.Dora;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -12,6 +14,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -21,13 +24,14 @@ import java.util.ArrayList;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Dora;
 import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
-import fr.dao.app.Core.Network.NetDiscovering;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Unix.DoraProcess;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
-import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Adapter.DoraAdapter;
+import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
+import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
+import fr.dao.app.View.ZViewController.Dialog.QuestionDialog;
 
 public class                    DoraActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
@@ -43,6 +47,7 @@ public class                    DoraActivity extends MyActivity {
     private DoraAdapter         mRv_Adapter;
     private FloatingActionButton mFab;
     private int                 REFRESH_TIME = 1000;// == 1seconde
+    ProgressDialog              dialog;
 
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +72,6 @@ public class                    DoraActivity extends MyActivity {
         mRV_dora = findViewById(R.id.RV_dora);
         mFab = findViewById(R.id.fab);
         mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
                 launchDiagnose();
             }
@@ -82,6 +86,25 @@ public class                    DoraActivity extends MyActivity {
 
     private void                getDoraWrapper() {
         mDoraWrapper = Dora.getDora(this);
+        if (!NetworkDiscoveryControler.isHostListLoaded()) {
+            new QuestionDialog(mInstance)
+
+                    .setTitle("Vous devez scannez le reseau pour trouver des cibles")
+                    .setText("Voulez vous scannez le reseau pour découvrir des hosts ?")
+                    .onPositiveButton("Search device", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            NetworkDiscoveryControler.getInstance(mInstance).run(true);
+                            mInstance.dialog = ProgressDialog.show(mInstance, "Discovering Network", "Loading. Please wait...", true);
+                        }
+                    })
+                    .onNegativeButton("Dont", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            showSnackbar("Dora is not fonctinal without target");
+                        }
+                    })
+                    .show();
+        } else
+            ViewAnimate.FabAnimateReveal(mInstance, mFab);
         mFab.setImageResource((!Dora.isRunning()) ? R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
         more.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,9 +127,15 @@ public class                    DoraActivity extends MyActivity {
 
     private void                launchDiagnose() {
         //TODO: checkez qu'on a internet !!
+        //TODO: make a loading visible
         if (mSingleton.hostList == null || mSingleton.hostList.isEmpty()) {
-            NetworkDiscoveryControler.getInstance(this).run(true);
+            Log.d(TAG, "onHostActualized::mSingleton.hostList is null or empty");
+            if (!NetworkDiscoveryControler.getInstance(this).inLoading)
+                NetworkDiscoveryControler.getInstance(this).run(true);
+            else
+                Log.d(TAG, "onHostActualized::mSingleton.hostList is null or empty but scan is already running");
         } else {
+            Log.d(TAG, "onHostActualized::starting RV initialisation");
             boolean isStarting = mDoraWrapper.onAction();//TODO: make a loading visible
             mRv_Adapter.setIsRunning(isStarting);
             mFab.setImageResource((!isStarting) ? R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
@@ -135,7 +164,11 @@ public class                    DoraActivity extends MyActivity {
     }
 
     public void                 onHostActualized(ArrayList<Host> hosts) {
-        launchDiagnose();
+        super.onHostActualized(hosts);
+        Log.d(TAG, "onHostActualized::"+hosts.size());
+        mRv_Adapter.updateDoraListHost(mDoraWrapper.getmListOfHostDored());
+        if (dialog != null && dialog.isShowing())
+            dialog.dismiss();
     }
 
     public void                 showSnackbar(String txt) {

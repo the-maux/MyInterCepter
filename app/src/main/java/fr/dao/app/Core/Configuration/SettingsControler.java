@@ -27,6 +27,7 @@ public class                SettingsControler {
     public boolean          DebugMode = true, UltraDebugMode = false;
 
     public SettingsControler(String FilesPath) {
+        Log.d(TAG, TAG+"::initialisation");
         if (FilesPath == null) {
             Log.e(TAG, "ERROR NO FILE_PATH ON LOADING USER PREFERENCE");
         } else {

@@ -5,7 +5,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
@@ -14,7 +13,6 @@ import fr.dao.app.Core.Network.NetDiscovering;
 import fr.dao.app.Core.Nmap.NmapControler;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryScanFrgmnt;
-import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 
 public class                        NetworkDiscoveryControler {
@@ -27,6 +25,7 @@ public class                        NetworkDiscoveryControler {
     public boolean                  isFromHostDiscoveryActivity = false;
     private static                  NetworkDiscoveryControler            mInstance = null;
     private boolean                 isJustCheckingWhoIsAlive = true;
+    private boolean                 isLoadedOnce = false;
 
     public static boolean           over() {
         return mInstance != null && !mInstance.inLoading;
@@ -49,9 +48,22 @@ public class                        NetworkDiscoveryControler {
         return mInstance;
     }
 
+    public static synchronized  boolean isHostListLoaded() {
+        if (mInstance == null)
+            return false;
+        if (!mInstance.isLoadedOnce)
+            return false;
+        if (mInstance.mSingleton.hostList == null || mInstance.mSingleton.hostList.isEmpty())
+            return false;
+        if (!mInstance.inLoading)
+            return false;
+        return true;
+    }
+
     public boolean                   run(boolean isJustCheckingWhoIsAlive) {
         if (!NetDiscovering.initNetworkInfo(mActivity) || !mSingleton.network.updateInfo().isConnectedToNetwork()) {
-            mActivity.showSnackbar("You need to be connected");
+            mActivity.showSnackbar("No wifi connection detected");
+            Log.i(TAG, "No wifi connection detected");
             return false;
         }
         if (!inLoading) {
@@ -62,7 +74,7 @@ public class                        NetworkDiscoveryControler {
             startArpScan();
             return true;
         } else {
-            Log.e(TAG, "Trying to launch multiple scan at same time");
+            Log.i(TAG, "Trying to launch multiple scan at same time");
         }
         return false;
     }
@@ -85,7 +97,9 @@ public class                        NetworkDiscoveryControler {
         mActivity.setToolbarTitle(null, ipsreachables.size() + " hosts detected");
         ArrayList<String> basicHost = NetDiscovering.readARPTable(ipsreachables);
         Log.d(TAG, "onArpScanOver with : "+ ipReachable.size() + " device(s) reachable");
-        Singleton.getInstance().actualNetwork = mFragment.updateStateOfHostAfterIcmp(basicHost);
+        if (isFromHostDiscoveryActivity) {
+            Singleton.getInstance().actualNetwork = mFragment.updateStateOfHostAfterIcmp(basicHost);
+        }
         mActivity.MAXIMUM_PROGRESS = basicHost.size();
         if (mSingleton.Settings.getUserPreferences().NmapMode > 0 && !isFromHostDiscoveryActivity) {
             Log.d(TAG, "Nmap_Mode[" + mSingleton.Settings.getUserPreferences().NmapMode + "] so starting Nmap");
@@ -97,11 +111,14 @@ public class                        NetworkDiscoveryControler {
     }
 
     public void                     onNmapScanOver(ArrayList<Host> hosts) {
-        Log.d(TAG, "Scan took " + Utils.TimeDifference(startScanning));
-        if (isFromHostDiscoveryActivity)
+        if (isFromHostDiscoveryActivity) {
+            Log.d(TAG, "Scan took " + Utils.TimeDifference(startScanning) + ", stdout::fragment");
             mFragment.onHostActualized(hosts);
-        else
+        } else {
+            Log.d(TAG, "Scan took " + Utils.TimeDifference(startScanning) + ", stdout::Activity");
             mActivity.onHostActualized(hosts);
+        }
+        isLoadedOnce = true;
     }
 
     public void                     setToolbarTitle(String title, String subtitle) {

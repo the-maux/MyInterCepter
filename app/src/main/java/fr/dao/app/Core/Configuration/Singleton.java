@@ -1,15 +1,18 @@
 package fr.dao.app.Core.Configuration;
 
 import android.app.Activity;
+import android.os.Environment;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.dao.app.Core.Database.DBNetwork;
 import fr.dao.app.Core.Database.DBSniffSession;
 import fr.dao.app.Core.Dnsmasq.DnsmasqControl;
 import fr.dao.app.Core.Network.ArpSpoof;
 import fr.dao.app.Core.Network.IPTables;
+import fr.dao.app.Core.Network.NetDiscovering;
 import fr.dao.app.Core.Network.NetworkInformation;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.Model.Target.Host;
@@ -28,11 +31,13 @@ public class                            Singleton {
     private static Singleton            mInstance = null;
     String                              VERSION = "0xDEADBEEF";
 
-    private                             Singleton() {}
+    private                             Singleton() {
+    }
 
     public static synchronized Singleton getInstance() {
-        if(mInstance == null)
+        if(mInstance == null) {
             mInstance = new Singleton();
+        }
         return mInstance;
     }
 
@@ -100,5 +105,15 @@ public class                            Singleton {
         Tcpdump tcpdump = Tcpdump.getTcpdump(activity, false);
         return tcpdump != null && Tcpdump.isRunning() ||
                 !(!Settings.getUserPreferences().sslstripMode && !isDnsControlstarted() && !webSpoofedstarted);
+    }
+
+    public void                         init(Activity activity) {
+        Log.d("Singleton", "Singleton"+"::initialisation");
+        Settings = new SettingsControler(activity.getFilesDir().getPath() + '/');
+        Settings.PcapPath = Environment.getExternalStorageDirectory().getPath() + "/Dao/Pcap/";
+        Settings.DumpsPath = Environment.getExternalStorageDirectory().getPath() + "/Dao/Nmap/";
+        Settings.BinaryPath = Settings.FilesPath;
+        if (NetDiscovering.initNetworkInfo(activity))
+            actualNetwork = DBNetwork.getAPFromSSID(network.ssid);
     }
 }

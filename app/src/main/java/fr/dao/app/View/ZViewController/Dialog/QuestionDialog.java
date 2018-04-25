@@ -17,6 +17,7 @@ public class                        QuestionDialog {
         dialog.setCancelable(true);
         View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_questionsimple, null);
         dialog.setView(dialogView);
+        dialog.setIcon(R.drawable.ico);
         dialog.setNegativeButton("Non", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -32,8 +33,19 @@ public class                        QuestionDialog {
         return this;
     }
 
+    public QuestionDialog           setIcon(int ressource)  {
+        dialog.setIcon(R.drawable.ico);
+        return this;
+    }
+
     public QuestionDialog           onPositiveButton(String msg, DialogInterface.OnClickListener listener) {
         dialog.setPositiveButton(msg, listener);
+        return this;
+    }
+
+
+    public QuestionDialog           onNegativeButton(String msg, DialogInterface.OnClickListener listener) {
+        dialog.setNegativeButton(msg, listener);
         return this;
     }
 

@@ -3,6 +3,7 @@ package fr.dao.app.View.ZViewController.Adapter;
 import android.app.Activity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -21,11 +22,11 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
     private Activity            mActivity;
     private List<DoraProcess>   mHosts;
     private List<Boolean>       mListHostRunning;
-    private boolean             mIsRunning;
+    private boolean             mIsRunning = false;
 
     public                      DoraAdapter(Activity mActivity, List<DoraProcess> hostsSelected) {
-        this.mHosts = hostsSelected;
         this.mActivity = mActivity;
+        this.mHosts = hostsSelected;
         this.mListHostRunning = new ArrayList<>(Arrays.asList(new Boolean[hostsSelected.size()]));
         Collections.fill(mListHostRunning, Boolean.FALSE);
     }
@@ -102,4 +103,19 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
         return mHosts.size();
     }
 
+    public void                 updateDoraListHost(List<DoraProcess> doraProcesses) {
+        if (!mIsRunning) {
+            Log.e(TAG, "Dora update list, cause it's running");
+            this.mHosts = doraProcesses;
+            this.mListHostRunning = new ArrayList<>(Arrays.asList(new Boolean[doraProcesses.size()]));
+            Collections.fill(mListHostRunning, Boolean.FALSE);
+            mActivity.runOnUiThread(new Runnable() {
+                public void run() {
+                    notifyDataSetChanged();
+                }
+            });
+        } else {
+            Log.e(TAG, "Dora can't' update list, cause it's running");
+        }
+    }
 }

@@ -33,7 +33,8 @@ public class                    MyActivity extends AppCompatActivity {
     }
 
     public void                 onHostActualized(ArrayList<Host> hosts) {
-
+        Log.d(TAG, "MyActivity::onHostActualize -> Saved ton Singleton");
+        Singleton.getInstance().hostList = hosts;
     }
 
     protected ProgressBar       mProgressBar;/* Generic ProgressBar mecanics, but can be everywhere*/
