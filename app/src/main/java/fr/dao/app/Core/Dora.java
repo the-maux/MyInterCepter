@@ -11,7 +11,7 @@ import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Unix.DoraProcess;
 import fr.dao.app.View.Dora.DoraActivity;
 
-public class Dora {
+public class                        Dora {
     private String                  TAG = "Dora";
     private static Dora             mInstance = null;
     private DoraActivity            activity;
@@ -38,13 +38,13 @@ public class Dora {
         if (mInstance != null) {
             mListOfHostDored.clear();
             for (Host host : mSingleton.hostList) {
-                if (!host.name.contains("My Device") && !host.ip.contains(mSingleton.network.gateway))
+                if (!host.name.contains("My Device") && !host.ip.contentEquals(mSingleton.network.gateway))
                     mListOfHostDored.add(new DoraProcess(host));
             }
         }
     }
 
-    public boolean                  onAction() {
+    public int                      onAction() {
         mSingleton.actualNetwork.defensifAction = mSingleton.actualNetwork.defensifAction + 1;
         mSingleton.actualNetwork.save();
         if (mListOfHostDored.isEmpty())
@@ -57,22 +57,22 @@ public class Dora {
             }
             activity.adapterRefreshDeamon();
 
-        } else {
-            isRunning = false;
-            for (DoraProcess doraProcess : mListOfHostDored) {
-                RootProcess.kill(doraProcess.mProcess.getmPid());
-            }
-            Log.d(TAG, "dora stopped " + mListOfHostDored.size() + " process");
         }
-        return isRunning;
+        return mListOfHostDored.size();
+    }
+
+    public int                     onStop() {
+        isRunning = false;
+        for (DoraProcess doraProcess : mListOfHostDored) {
+            RootProcess.kill(doraProcess.mProcess.getmPid());
+        }
+        Log.d(TAG, "dora stopped " + mListOfHostDored.size() + " process");
+        return mListOfHostDored.size();
     }
 
     public List<DoraProcess>        getmListOfHostDored() {
         if (mListOfHostDored.isEmpty() && mSingleton.hostList != null && !mSingleton.hostList.isEmpty())
-            for (Host host : mSingleton.hostList) {
-                if (host.state == Host.State.ONLINE)
-                    mListOfHostDored.add(new DoraProcess(host));
-            }
+            reset();
         return mListOfHostDored;
     }
 }

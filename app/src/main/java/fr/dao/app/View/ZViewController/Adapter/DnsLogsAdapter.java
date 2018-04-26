@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import java.util.List;
 
+import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Model.Unix.DNSLog;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
@@ -38,8 +39,8 @@ public class                    DnsLogsAdapter extends RecyclerView.Adapter<DnsL
         holder.nameHost.setText(dnslog.domain);
         setCurrentTypeLogo(dnslog.currentType, holder.DNSTypeImg);
         holder.viewFullLogsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View view) {
+                Utils.vibrateDevice(activity, 100);
                 if (holder.RV_layout.getVisibility() == View.GONE) {
                     holder.DnsRVLogs.setAdapter(setDetailLogsAdapter(dnslog, holder.DnsRVLogs));
                     holder.DnsRVLogs.setHasFixedSize(true);

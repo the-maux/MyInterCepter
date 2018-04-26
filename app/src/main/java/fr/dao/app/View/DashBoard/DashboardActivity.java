@@ -16,6 +16,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.External.jgraph.graph.JcoolGraph;
 import fr.dao.app.External.jgraph.models.Jchart;
 import fr.dao.app.R;

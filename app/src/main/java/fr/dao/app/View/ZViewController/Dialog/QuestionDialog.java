@@ -6,22 +6,22 @@ import android.content.DialogInterface;
 import android.view.View;
 import android.widget.TextView;
 
+import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.R;
 
 public class                        QuestionDialog {
     private TextView                mQuestion;
     protected AlertDialog.Builder   dialog;
 
-    public                          QuestionDialog(Activity activity) {
+    public                          QuestionDialog(final Activity activity) {
         dialog = new AlertDialog.Builder(activity);
         dialog.setCancelable(true);
         View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_questionsimple, null);
         dialog.setView(dialogView);
         dialog.setIcon(R.drawable.ico);
         dialog.setNegativeButton("Non", new DialogInterface.OnClickListener() {
-            @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                Utils.vibrateDevice(activity, 100);
             }
         });
         dialog.setIcon(R.drawable.ico);

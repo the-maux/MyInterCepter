@@ -108,7 +108,7 @@ public class                        NetworkDiscoveryControler {
             mFragment.updateStateOfHostAfterIcmp(Singleton.getInstance().actualNetwork);
         }
         mActivity.MAXIMUM_PROGRESS = basicHost.size();
-        if (mSingleton.Settings.getUserPreferences().NmapMode > 0 && !isFromHostDiscoveryActivity) {
+        if (mSingleton.Settings.getUserPreferences().NmapMode > 0 && isFromHostDiscoveryActivity) {
             Log.i(TAG, "onArpScanOver::Nmap::TypeScan::"+mSingleton.Settings.getUserPreferences().NmapMode+"::StartingNmap");
             new NmapControler(Singleton.getInstance().actualNetwork.listDevices(), this, Singleton.getInstance().actualNetwork, mActivity);
             return;

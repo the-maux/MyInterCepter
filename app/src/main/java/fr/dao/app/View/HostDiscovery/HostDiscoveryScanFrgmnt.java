@@ -25,6 +25,7 @@ import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickList
 
 import java.util.ArrayList;
 
+import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Database.DBNetwork;
 import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
@@ -128,8 +129,8 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
     public void                     initSearchView(SearchView searchView, final Toolbar toolbar) {
         searchView.setGravity(Gravity.END);
         searchView.setOnSearchClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
+                Utils.vibrateDevice(mActivity, 100);
                 toolbar.setVisibility(View.GONE);
             }
         });
@@ -244,6 +245,7 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
                     .onPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             if (osList.size() > 0) {
+                                Utils.vibrateDevice(mActivity, 100);
                                 mActivity.showSnackbar(mHostAdapter.filterByOs(adapter.getSelected()) + " devices found");
                             }
                         }

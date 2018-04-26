@@ -127,6 +127,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.vibrateDevice(mActivity, 100);
                 onHostChecked(holder, mHosts.get(position), position);
             }
         };

@@ -223,8 +223,8 @@ public class SniffLiveFrgmnt extends MyFragment {
                 .setAdapter(new HostSelectionAdapter(mActivity, mSingleton.hostList, mListHostSelected), false)
                 .setTitle("Choix des cibles")
                 .onPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        Utils.vibrateDevice(mActivity, 100);
                         if (mListHostSelected.isEmpty())
                             mActivity.showSnackbar("No target selected", -1);
                         else {

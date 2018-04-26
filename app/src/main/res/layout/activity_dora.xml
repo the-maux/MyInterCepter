@@ -102,18 +102,28 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <ProgressBar
+        android:id="@+id/progressBarDora"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="74dp"
+        android:layout_height="74dp"
+        android:layout_marginRight="7dp"
+        android:elevation="5dp"
+        android:visibility="gone"
+        app:layout_anchor="@id/appBarLayout"
+        app:layout_anchorGravity="bottom|right|end" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginRight="16dp"
         android:elevation="3dp"
-
         android:soundEffectsEnabled="true"
         android:src="@drawable/ic_media_play"
         android:visibility="visible"
         app:backgroundTint="@color/primary_dark"
-        app:elevation="4dp"
+        app:elevation="6dp"
         app:fabSize="normal"
         app:layout_anchor="@id/appBarLayout"
         app:layout_anchorGravity="bottom|right|end" />

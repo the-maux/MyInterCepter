@@ -75,6 +75,7 @@ public class SniffDashboardAdapter extends RecyclerView.Adapter<PacketHolder> {
         }
         holder.card_view.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Utils.vibrateDevice(mActivity, 100);
                 mActivity.showSnackbar("CARD " + holder.getAdapterPosition() + "CLICKED");
             }
         });

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.R;
 import fr.dao.app.View.Dora.DoraActivity;
 import fr.dao.app.View.Startup.DefenseHomeActivity;
@@ -35,6 +36,7 @@ public class MenuDefenseAdapter extends RecyclerView.Adapter<MenuItemHolder> {
                 holder.logo_card.setVisibility(View.VISIBLE);
                 holder.card_view.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
+                        Utils.vibrateDevice(mActivity, 100);
                         mActivity.showSnackbar(holder.titleCard.getText().toString());
                     }
                 });     break;
@@ -46,6 +48,7 @@ public class MenuDefenseAdapter extends RecyclerView.Adapter<MenuItemHolder> {
                 holder.logo_card.setVisibility(View.VISIBLE);
                 holder.card_view.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
+                        Utils.vibrateDevice(mActivity, 100);
                         mActivity.showSnackbar(holder.titleCard.getText().toString());
                     }
                 });                break;
@@ -57,6 +60,7 @@ public class MenuDefenseAdapter extends RecyclerView.Adapter<MenuItemHolder> {
                 holder.logo_card.setVisibility(View.VISIBLE);
                 holder.card_view.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
+                        Utils.vibrateDevice(mActivity, 100);
                         mActivity.showSnackbar(holder.titleCard.getText().toString());
                     }
                 });
@@ -69,6 +73,7 @@ public class MenuDefenseAdapter extends RecyclerView.Adapter<MenuItemHolder> {
                 holder.logo_card.setVisibility(View.VISIBLE);
                 holder.card_view.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
+                        Utils.vibrateDevice(mActivity, 100);
                         mActivity.showSnackbar(holder.titleCard.getText().toString());
                     }
                 });
@@ -81,6 +86,7 @@ public class MenuDefenseAdapter extends RecyclerView.Adapter<MenuItemHolder> {
                 holder.logo_card.setVisibility(View.VISIBLE);
                 holder.card_view.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
+                        Utils.vibrateDevice(mActivity, 100);
                         mActivity.showSnackbar(holder.titleCard.getText().toString());
                     }
                 });
@@ -93,6 +99,7 @@ public class MenuDefenseAdapter extends RecyclerView.Adapter<MenuItemHolder> {
                 holder.logo_card.setVisibility(View.VISIBLE);
                 holder.card_view.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
+                        Utils.vibrateDevice(mActivity, 100);
                         mActivity.startActivity(new Intent(mActivity, DoraActivity.class));
                     }
                 });

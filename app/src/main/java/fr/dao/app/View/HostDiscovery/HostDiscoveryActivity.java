@@ -148,6 +148,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private View.OnClickListener    initTabs(){
         return new View.OnClickListener() {
             public void onClick(View view) {
+                Utils.vibrateDevice(mInstance, 100);
                 MyFragment fragment = NetDiscoveryFragment;
                 //mFab.setVisibility(View.GONE);
                 initFragment(fragment);
@@ -234,6 +235,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mSettingsMenu.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 try {
+                    Utils.vibrateDevice(mInstance, 100);
                     NetDiscoveryFragment.onSettingsClick((AppBarLayout) findViewById(R.id.appBarLayout), mInstance).show();
                 } catch (Exception error) {
                     showSnackbar("BottomSheet is shitty");

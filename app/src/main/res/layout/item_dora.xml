@@ -9,7 +9,7 @@
     android:soundEffectsEnabled="true"
     app:cardBackgroundColor="@color/doraPrimary"
     app:cardCornerRadius="10dp"
-    app:cardElevation="12dp"
+    app:cardElevation="2dp"
     app:cardPreventCornerOverlap="true">
 
     <android.support.constraint.ConstraintLayout
@@ -55,7 +55,7 @@
             android:layout_marginLeft="12dp"
             android:fontFamily="serif"
             android:gravity="center"
-            android:text="76%"
+            android:text="100%"
             android:textColor="@color/material_light_white"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -80,7 +80,7 @@
             android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/stat"
             app:layout_constraintEnd_toEndOf="@+id/diagnose"
-            app:layout_constraintHorizontal_weight="8"
+            app:layout_constraintHorizontal_weight="7"
             app:layout_constraintStart_toEndOf="@+id/diagnosPourcentage"
             app:layout_constraintTop_toBottomOf="@+id/IP" />
 

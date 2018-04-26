@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
@@ -46,18 +47,20 @@ public class                    HostDetailAdapter extends RecyclerView.Adapter<H
         holder.subtitle.setText(line[1]);
         holder.relative_layout.setOnLongClickListener(new View.OnLongClickListener() {
             public boolean onLongClick(View view) {
-                onItemClick(line);
+                onItemClick(line, false);
                 return true;
             }
         });
         holder.relative_layout.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                onItemClick(line);
+                onItemClick(line, true);
             }
         });
     }
 
-    private void                onItemClick(String[] line) {
+    private void                onItemClick(String[] line, boolean vib) {
+        if (vib)
+            Utils.vibrateDevice(myActivity, 100);
         if (line[0].contains("Ports")) {
             PortAdapter adapter = new PortAdapter(myActivity, mFocusedHost.Ports().portArrayList());
             new RV_dialog(myActivity)

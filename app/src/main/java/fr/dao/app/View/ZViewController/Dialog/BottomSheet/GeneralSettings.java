@@ -13,6 +13,7 @@ import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
 
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.R;
 
@@ -61,6 +62,7 @@ public class                    GeneralSettings {
         return new BottomSheetItemClickListener() {
             @Override
             public void onBottomSheetItemClick(MenuItem menuItem) {
+                Utils.vibrateDevice(mActivity, 100);
                 Log.d(TAG, "Menu Wireshark [" + menuItem.getTitle().toString() + "]");
                 switch (menuItem.getTitle().toString()) {
                     case PCAP_DUMP:
@@ -95,8 +97,8 @@ public class                    GeneralSettings {
 
     private View.OnClickListener onPortMitm(final boolean flag) {
         return new View.OnClickListener() {
-            @Override
             public void onClick(View view) {
+                Utils.vibrateDevice(mActivity, 100);
                 if (flag) { /** TODO: PortRedirect */
 
                 } else {    /** TODO: PortFiltering */

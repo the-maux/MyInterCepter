@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
@@ -38,8 +39,8 @@ public class                    NmapHostCheckerAdapter extends RecyclerView.Adap
 
     private View.OnClickListener onClickCard(final Host host) {
         return new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
+                Utils.vibrateDevice(mActivity, 100);
                 //((NmapActivity)mActivity).newTarget(title);
             }
         };

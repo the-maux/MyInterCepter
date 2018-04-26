@@ -23,6 +23,7 @@ import java.io.IOException;
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.R;
 import fr.dao.app.View.DashBoard.DashboardActivity;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
@@ -117,6 +118,7 @@ public class                    HomeActivity extends MyActivity {
     private View.OnClickListener onDashboardClick() {
         return new View.OnClickListener() {
             public void onClick(View view) {
+                Utils.vibrateDevice(mInstance, 100);
                startActivity(new Intent(mInstance, DashboardActivity.class));
             }
         };
@@ -125,6 +127,7 @@ public class                    HomeActivity extends MyActivity {
     private View.OnClickListener onSettingsClick() {
         return new View.OnClickListener() {
             public void onClick(View view) {
+                Utils.vibrateDevice(mInstance, 100);
                 startActivity(new Intent(mInstance, SettingsActivity.class));
             }
         };
@@ -133,6 +136,7 @@ public class                    HomeActivity extends MyActivity {
     private View.OnClickListener onDefenseClicked() {
         return new View.OnClickListener() {
             public void onClick(View view) {
+                Utils.vibrateDevice(mInstance, 100);
                 startActivity(new Intent(mInstance, DefenseHomeActivity.class));
             }
         };
@@ -141,6 +145,7 @@ public class                    HomeActivity extends MyActivity {
     private View.OnClickListener onAttackclicked() {
         return new View.OnClickListener() {
             public void onClick(View view) {
+                Utils.vibrateDevice(mInstance, 100);
                 startActivity(new Intent(mInstance, HostDiscoveryActivity.class));
             }
         };
@@ -162,6 +167,7 @@ public class                    HomeActivity extends MyActivity {
                         statusRoot.setImageResource(R.color.offline_color);
                     } else
                         getRootPermission();
+                    Utils.vibrateDevice(mInstance, 100);
                 }
             }, 5000);
         }

@@ -17,11 +17,14 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Dora;
 import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
 import fr.dao.app.Model.Target.Host;
@@ -44,6 +47,7 @@ public class                    DoraActivity extends MyActivity {
     private TabItem             radar, signalQuality;
     private ImageView           add, more;
     private RecyclerView        mRV_dora;
+    private ProgressBar         progressBar;
     private DoraAdapter         mRv_Adapter;
     private FloatingActionButton mFab;
     private int                 REFRESH_TIME = 1000;// == 1seconde
@@ -71,9 +75,10 @@ public class                    DoraActivity extends MyActivity {
         more = findViewById(R.id.action_add_host);
         mRV_dora = findViewById(R.id.RV_dora);
         mFab = findViewById(R.id.fab);
+        progressBar = findViewById(R.id.progressBarDora);
         mFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                launchDiagnose();
+                onFabClick();
             }
         });
         appBarLayout = findViewById(R.id.appBarLayout);
@@ -82,6 +87,18 @@ public class                    DoraActivity extends MyActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
+    }
+
+    private void onFabClick() {
+        Utils.vibrateDevice(mInstance);
+        if (Dora.isRunning()) {
+            progressBar.setVisibility(View.VISIBLE);
+            mRv_Adapter.setIsRunning(false);
+            showSnackbar(mDoraWrapper.onStop() + " diagnostic stopped");
+            mFab.setImageResource(R.drawable.ic_media_play);
+        } else {
+            launchDiagnose();
+        }
     }
 
     private void                getDoraWrapper() {
@@ -93,7 +110,7 @@ public class                    DoraActivity extends MyActivity {
 //                    .onPositiveButton("Search device", new DialogInterface.OnClickListener() {
 //                        public void onClick(DialogInterface dialog, int which) {
                             NetworkDiscoveryControler.getInstance(mInstance).run(true);
-                            mInstance.dialog = ProgressDialog.show(mInstance, "Discovering Network", "Scanning. Please wait...", true);
+            mInstance.dialog = ProgressDialog.show(mInstance, "Discovering Network", "Scanning. Please wait...", true);
 //                        }
 //                    })
 //                    .onNegativeButton("Dont", new DialogInterface.OnClickListener() {
@@ -134,9 +151,19 @@ public class                    DoraActivity extends MyActivity {
                 Log.d(TAG, "onHostActualized::mSingleton.hostList is null or empty but scan is already running");
         } else {
             Log.d(TAG, "onHostActualized::starting RV initialisation");
-            boolean isStarting = mDoraWrapper.onAction();//TODO: make a loading visible
-            mRv_Adapter.setIsRunning(isStarting);
-            mFab.setImageResource((!isStarting) ? R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
+            mInstance.dialog = ProgressDialog.show(mInstance,
+                    "D.O.R.A", "Inializing" + mDoraWrapper.onAction() + " diagnostics" +". Please wait...", true);
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    if (mInstance.dialog != null) {
+                        mInstance.dialog.dismiss();
+                        mInstance.dialog = null;
+                    }
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+            }, 5000);
+            mRv_Adapter.setIsRunning(true);
+            mFab.setImageResource(R.drawable.ic_stop);
         }
     }
 
@@ -162,8 +189,11 @@ public class                    DoraActivity extends MyActivity {
         super.onHostActualized(hosts);
         Log.d(TAG, "onHostActualized::"+hosts.size());
         mRv_Adapter.updateDoraListHost(mDoraWrapper.getmListOfHostDored());
-        if (dialog != null && dialog.isShowing())
+        if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
+            dialog = null;
+        }
+
     }
 
     public void                 showSnackbar(String txt) {

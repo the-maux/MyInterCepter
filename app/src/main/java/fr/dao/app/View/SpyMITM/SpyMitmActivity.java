@@ -127,6 +127,7 @@ public class                            SpyMitmActivity extends MITMActivity {
 
         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface d, int which) {
+                Utils.vibrateDevice(mInstance, 100);
             }
         })
         .show();
@@ -192,6 +193,7 @@ public class                            SpyMitmActivity extends MITMActivity {
                         .setMessage("Would you like to restart the process ?")
                         .setPositiveButton(Words.yes(mInstance), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                Utils.vibrateDevice(mInstance, 100);
                                 mDnsSpoof.start();
                             }
                         })

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import java.io.File;
 import java.util.List;
 
+import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.R;
 import fr.dao.app.View.Sniff.SniffActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
@@ -52,8 +53,8 @@ public class                    PcapFileAdapter extends RecyclerView.Adapter<Pca
 
     private View.OnClickListener onFocusPcapFile(final File pcap) {
         return new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
+                Utils.vibrateDevice(mActivity, 100);
                 Intent intent = new Intent(mActivity, SniffActivity.class);
                 Log.d(TAG, "newIntent Pcap:"+pcap.getPath());
                 intent.putExtra("Pcap", pcap.getPath());

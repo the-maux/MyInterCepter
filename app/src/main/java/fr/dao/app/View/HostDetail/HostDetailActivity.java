@@ -30,6 +30,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Core.Configuration.GlideApp;
 import fr.dao.app.Core.Configuration.GlideRequest;
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Database.DBManager;
 import fr.dao.app.Model.Net.Pcap;
@@ -151,6 +152,7 @@ public class                    HostDetailActivity extends MyActivity {
         nmapFAB.setColorPressed(getResources().getColor(R.color.generic_background));
         nmapFAB.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                Utils.vibrateDevice(mInstance, 100);
                 mMenuFAB.close(true);
                 Intent intent = new Intent(mInstance, NmapActivity.class);
                 intent.putExtra("macAddress", getIntent().getExtras().getString("macAddress"));
@@ -165,6 +167,7 @@ public class                    HostDetailActivity extends MyActivity {
         cutInternet.setColorPressed(getResources().getColor(R.color.generic_background));
         cutInternet.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                Utils.vibrateDevice(mInstance, 100);
                 Snackbar.make(findViewById(R.id.Coordonitor), "Not implemented yet", Snackbar.LENGTH_LONG).show();
                 mMenuFAB.close(true);
             }
@@ -177,6 +180,7 @@ public class                    HostDetailActivity extends MyActivity {
         vulnerabilityScanner.setPadding(4, 4, 4, 4);
         vulnerabilityScanner.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                Utils.vibrateDevice(mInstance, 100);
                 Snackbar.make(findViewById(R.id.Coordonitor), "Not implemented yet", Snackbar.LENGTH_LONG).show();
                 mMenuFAB.close(true);
             }
@@ -189,6 +193,7 @@ public class                    HostDetailActivity extends MyActivity {
         sniffingFAB.setColorPressed(getResources().getColor(R.color.generic_background));
         sniffingFAB.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                Utils.vibrateDevice(mInstance, 100);
                 mMenuFAB.close(true);
                 Intent intent = new Intent(mInstance, SniffActivity.class);
                 Log.d(TAG, "Sending mac[" + getIntent().getExtras().getString("macAddress") + "]");
@@ -256,6 +261,7 @@ public class                    HostDetailActivity extends MyActivity {
             mTabs.addTab(mTabs.newTab().setText("Pcap"), ++rax);
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             public void onTabSelected(TabLayout.Tab tab) {
+                Utils.vibrateDevice(mInstance, 100);
                 Log.d(TAG, "tab.getFirstInputQuestion().toString():" + tab.getText().toString());
                 switch (tab.getText().toString().toLowerCase()) {
                     case "historic":

@@ -15,6 +15,7 @@ import java.util.List;
 import fr.dao.app.Core.Configuration.GlideApp;
 import fr.dao.app.Core.Configuration.GlideRequest;
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Model.Target.DNSSpoofItem;
 import fr.dao.app.R;
 import fr.dao.app.View.DnsSpoofing.DnsActivity;
@@ -61,6 +62,7 @@ public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter
     private View.OnClickListener onDeleteDns(final DNSSpoofItem domain) {
         return new View.OnClickListener() {
             public void onClick(View view) {
+                Utils.vibrateDevice(mActivity, 100);
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -69,6 +71,7 @@ public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter
                         .setMessage("Would you like to remove this spoofed title ?")
                         .setPositiveButton(mActivity.getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                Utils.vibrateDevice(mActivity, 100);
                                 mSingleton.getDnsControler().removeDomain(domain);
                                 mActivity.onDnsmasqConfChanged(domain + " deleted from configuration");
                                 mActivity.setToolbarTitle(null, mDnsIntercepts.size() + " title spoofable");

@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Model.Net.Pcap;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.SniffSession;
@@ -61,8 +62,8 @@ public class                    SniffSessionAdapter extends RecyclerView.Adapter
 
     private View.OnClickListener    onShareSession(final SniffSession sniffSession) {
         return new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
+                Utils.vibrateDevice(mActivity, 100);
                 final Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("application/vnd.tcpdump.pcap");
                 final File photoFile = sniffSession.listPcapRecorded().get(0).getFile();
@@ -78,11 +79,13 @@ public class                    SniffSessionAdapter extends RecyclerView.Adapter
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.vibrateDevice(mActivity, 100);
                 new QuestionDialog(mActivity)
                         .setTitle("Non implementé")
                         .setText("")
                         .onPositiveButton("Je vais le faire", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                Utils.vibrateDevice(mActivity, 100);
 
                             }
                         })
