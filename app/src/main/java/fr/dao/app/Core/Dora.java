@@ -38,7 +38,8 @@ public class Dora {
         if (mInstance != null) {
             mListOfHostDored.clear();
             for (Host host : mSingleton.hostList) {
-                mListOfHostDored.add(new DoraProcess(host));
+                if (!host.name.contains("My Device") && !host.ip.contains(mSingleton.network.gateway))
+                    mListOfHostDored.add(new DoraProcess(host));
             }
         }
     }
@@ -47,10 +48,7 @@ public class Dora {
         mSingleton.actualNetwork.defensifAction = mSingleton.actualNetwork.defensifAction + 1;
         mSingleton.actualNetwork.save();
         if (mListOfHostDored.isEmpty())
-            for (Host host : mSingleton.hostList) {
-            if (host.state == Host.State.ONLINE)
-                mListOfHostDored.add(new DoraProcess(host));
-            }
+           reset();
         if (!isRunning) {
             isRunning = true;
             Log.d(TAG, "dora started " + mListOfHostDored.size() + " process");

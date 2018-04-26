@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:background="@color/primary_text"
+        android:background="@color/doraPrimary"
+        android:paddingTop="4dp"
         android:transitionName="appBarTransition"
         app:elevation="6dp">
 
@@ -25,7 +26,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:background="@color/primary_text"
                 android:gravity="right">
 
                 <android.support.v7.widget.Toolbar
@@ -112,7 +112,8 @@
         android:soundEffectsEnabled="true"
         android:src="@drawable/ic_media_play"
         android:visibility="visible"
-        app:backgroundTint="@color/fab_color"
+        app:backgroundTint="@color/primary_dark"
+        app:elevation="4dp"
         app:fabSize="normal"
         app:layout_anchor="@id/appBarLayout"
         app:layout_anchorGravity="bottom|right|end" />
@@ -121,6 +122,7 @@
         android:id="@+id/RV_dora"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
         android:paddingBottom="8dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"

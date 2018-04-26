@@ -24,7 +24,7 @@
     <color name="tint_svg">#ddcccccc</color>
     <color name="redteam_color">#B71C1C</color><!-- material_red_900 -->
     <color name="blueteam_color">#0D47A1</color><!-- material_blue_900 -->
-
+    1a237e
 
     <color name="offline_color">@color/material_red_500</color>
 
@@ -32,11 +32,12 @@
     <color name="NmapPrimary">#dd006064</color>
     <color name="DashboardPrimary">#dd7B1FA2</color>
     <color name="spyPrimary">#dd4f5b62</color>
-    <color name="doraPrimary">#dd263238</color>
+    <color name="doraPrimary">#dd005b9f</color>
     <color name="snifferPrimary">#dd263238</color>
     <color name="dnsSpoofPrimary">#dd004D40</color>
     <color name="webserverSpoofPrimary">#dd3E2723</color>
     <color name="settingsPrimary">#dd455a64</color>
+
     
     <!-- switch color  -->
     <color name="nmapSwitchBack">@color/material_cyan_700</color>

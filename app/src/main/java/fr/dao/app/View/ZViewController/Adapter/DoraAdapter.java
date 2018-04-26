@@ -15,6 +15,7 @@ import java.util.List;
 import fr.dao.app.Model.Unix.DoraProcess;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Adapter.Holder.DoraHolder;
+import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 
 
 public class                    DoraAdapter extends RecyclerView.Adapter<DoraHolder> {
@@ -41,8 +42,9 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
         final DoraProcess host = mHosts.get(position);
         holder.diagnose.setText(new String(new char[host.getVisu()]).replace("\0", "#"));
         holder.IP.setText(host.mhost.name.contains("Unknown") ? host.mhost.ip : host.mhost.name);
-        holder.uptime.setText("Uptime:    " + host.getmUptime());
-        holder.stat.setText("sent: " + host.sent + " / rcv: " + host.rcv);
+        holder.uptime.setText(host.getmUptime());
+        String t = "\u2191 " + host.sent + "  /  " + "\u2193 " + host.rcv;
+        holder.stat.setText(t);
         int pourc = host.getPourcentage();
         if (pourc == 0) {
             holder.diagnosPourcentage.setTextColor(ContextCompat.getColor(mActivity, R.color.material_light_white));
@@ -58,6 +60,7 @@ public class                    DoraAdapter extends RecyclerView.Adapter<DoraHol
 //        holder.fab.setOnClickListener(onClickFab(position, holder));
         //TODO: replace with status bar in card view
         //holder.stopFab.setOnClickListener(onClickStop(position, holder));
+        MyGlideLoader.setOsIcon(host.mhost, holder.hostIcon);
     }
 
     public void                 setIsRunning(boolean mIsRunning) {

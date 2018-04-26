@@ -1,157 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView"
     android:layout_width="168dp"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     android:soundEffectsEnabled="true"
-    app:cardBackgroundColor="@color/cardview_dark_background"
+    app:cardBackgroundColor="@color/doraPrimary"
     app:cardCornerRadius="10dp"
     app:cardElevation="12dp"
     app:cardPreventCornerOverlap="true">
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="1dp"
         android:background="@android:color/transparent">
 
-        <RelativeLayout
-            android:id="@+id/menuView"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:elevation="4dp">
 
-            <TextView
-                android:id="@+id/IP"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_toLeftOf="@+id/menuButton"
-                android:fontFamily="serif-monospace"
-                android:gravity="center"
-                android:text="127.42.42.1"
-                android:textColor="@color/material_light_white"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:typeface="monospace" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/hostIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="6dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/ipHostname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/IP"
-                android:layout_toLeftOf="@+id/menuButton"
-                android:fontFamily="serif-monospace"
-                android:gravity="center"
-                android:textColor="@color/material_light_white"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:typeface="monospace" />
+        <TextView
+            android:id="@+id/IP"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="serif-monospace"
+            android:gravity="center"
+            android:text="127.42.42.1"
+            android:textColor="@color/material_light_white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:typeface="monospace"
+            app:layout_constraintBottom_toTopOf="@+id/uptime"
+            app:layout_constraintLeft_toRightOf="@+id/hostIcon"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageButton
-                android:id="@+id/menuButton"
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="8dp"
-                android:background="@android:color/transparent"
-                app:srcCompat="@drawable/ic_more_vert_white_18dp" />
 
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/diagnosPourcentage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:fontFamily="serif"
+            android:gravity="center"
+            android:text="76%"
+            android:textColor="@color/material_light_white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/stat"
+            app:layout_constraintEnd_toStartOf="@+id/uptime"
+            app:layout_constraintHorizontal_weight="3"
+            app:layout_constraintStart_toStartOf="@+id/diagnose"
+            app:layout_constraintTop_toTopOf="@+id/uptime"
+            app:layout_constraintVertical_bias="0.39" />
 
-        <RelativeLayout
-            android:id="@+id/topView"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:layout_below="@+id/menuView">
+        <TextView
+            android:id="@+id/uptime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:gravity="right"
+            android:text="00:00:00"
+            android:textColor="@color/material_light_white"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/stat"
+            app:layout_constraintEnd_toEndOf="@+id/diagnose"
+            app:layout_constraintHorizontal_weight="8"
+            app:layout_constraintStart_toEndOf="@+id/diagnosPourcentage"
+            app:layout_constraintTop_toBottomOf="@+id/IP" />
 
-            <TextView
-                android:id="@+id/diagnosPourcentage"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="4dp"
-                android:fontFamily="serif"
-                android:gravity="center_vertical"
-                android:text="76%"
-                android:textColor="@color/material_light_white"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+        <TextView
+            android:id="@+id/stat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginRight="16dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif"
+            android:gravity="bottom|right"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="↑ 0 / ↓ 0"
+            android:textColor="@color/material_light_white"
+            android:textSize="12sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/diagnose"
+            app:layout_constraintEnd_toEndOf="@+id/diagnose"
+            app:layout_constraintStart_toEndOf="@+id/diagnosPourcentage"
+            app:layout_constraintTop_toBottomOf="@+id/uptime" />
 
-            <TextView
-                android:id="@+id/uptime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="4dp"
-                android:layout_toRightOf="@+id/diagnosPourcentage"
-                android:gravity="right"
-                android:text="Uptime: 01h42m"
-                android:textColor="@color/material_light_white"
-                android:textSize="12sp"
-                android:textStyle="italic" />
 
-            <TextView
-                android:id="@+id/stat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@id/uptime"
-                android:layout_marginBottom="4dp"
-                android:layout_marginRight="8dp"
-                android:layout_toRightOf="@+id/diagnosPourcentage"
-                android:ellipsize="end"
-                android:fontFamily="sans-serif"
-                android:gravity="bottom|right"
-                android:lines="1"
-                android:maxLines="1"
-                android:text="sent: 454 / rcv: 434"
-                android:textColor="@color/material_light_white"
-                android:textSize="12sp"
-                android:textStyle="italic" />
+        <TextView
+            android:id="@+id/diagnose"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/dialog_frame"
+            android:ellipsize="start"
+            android:fontFamily="serif"
+            android:lines="8"
+            android:maxLines="7"
+            android:textColor="@color/green"
+            android:textSize="8sp"
+            android:typeface="monospace"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stat" />
 
-        </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/middleView"
-            android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:layout_below="@+id/topView">
-
-            <TextView
-                android:id="@+id/diagnose"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:drawable/dialog_frame"
-                android:elegantTextHeight="true"
-                android:elevation="2dp"
-                android:ellipsize="start"
-                android:fontFamily="serif"
-                android:lines="8"
-                android:maxLines="7"
-                android:text="........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................"
-                android:textColor="@color/accent_material_dark"
-                android:textSize="8sp"
-                android:typeface="monospace" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/bottomView"
-            android:layout_width="match_parent"
-            android:layout_height="31dp"
-            android:layout_alignWithParentIfMissing="false"
-            android:layout_below="@+id/middleView"
-            android:elevation="2dp"
-            android:visibility="gone">
-
-        </RelativeLayout>
-    </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>

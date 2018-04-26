@@ -87,21 +87,21 @@ public class                    DoraActivity extends MyActivity {
     private void                getDoraWrapper() {
         mDoraWrapper = Dora.getDora(this);
         if (!NetworkDiscoveryControler.isHostListLoaded()) {
-            new QuestionDialog(mInstance)
-                    .setTitle("No target available")
-                    .setText("Fast scanning network to find host ?")
-                    .onPositiveButton("Search device", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
+//            new QuestionDialog(mInstance) //TODO: Question or not question ?
+//                    .setTitle("No target available")
+//                    .setText("Fast scanning network to find host ?")
+//                    .onPositiveButton("Search device", new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int which) {
                             NetworkDiscoveryControler.getInstance(mInstance).run(true);
                             mInstance.dialog = ProgressDialog.show(mInstance, "Discovering Network", "Scanning. Please wait...", true);
-                        }
-                    })
-                    .onNegativeButton("Dont", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            showSnackbar("Dora is not fonctinal without target");
-                        }
-                    })
-                    .show();
+//                        }
+//                    })
+//                    .onNegativeButton("Dont", new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            showSnackbar("Dora is not fonctinal without target");
+//                        }
+//                    })
+//                    .show();
         } else
             ViewAnimate.FabAnimateReveal(mInstance, mFab);
         mFab.setImageResource((!Dora.isRunning()) ? R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
