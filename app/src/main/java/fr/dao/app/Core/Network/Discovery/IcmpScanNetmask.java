@@ -18,14 +18,20 @@ import java.util.concurrent.TimeUnit;
 
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Network.IPv4Utils;
-
+/*
+ * TODO: Challenge make this ok :
+ *         - Free wifi:
+ *                      + Ip : 10.50.41.195
+ *                      + Gateway : 10.55.255.254
+ *                      mNumberOfHosts:524286 ipAvailable:524285
+ */
 public class                        IcmpScanNetmask {
     private String                  TAG = "IcmpScanNetmask";
     private Integer                 mNumberOfHosts;
     private volatile int            mNbrHostScanned = 0;
     private volatile boolean        alreadySend = false;
     private ArrayList<String>       mListIpReachable = new ArrayList<>();
-    private boolean                 debuglog = Singleton.getInstance().DebugMode;
+    private boolean                 debuglog = Singleton.getInstance().Settings.DebugMode;
     private NetworkDiscoveryControler mScanner;
     private Date                    startScanning;
 
@@ -45,6 +51,7 @@ public class                        IcmpScanNetmask {
             }
             service.shutdown();
             service.awaitTermination(10000, TimeUnit.MILLISECONDS);
+
         } catch (InterruptedException e) {
             e.printStackTrace();
             Log.e(TAG, "Icmp scan was interupted");
@@ -54,7 +61,7 @@ public class                        IcmpScanNetmask {
 
     private void                    IcmpScanOver() {
         alreadySend = true;
-        if (Singleton.getInstance().UltraDebugMode) {
+        if (Singleton.getInstance().Settings.UltraDebugMode) {
             for (String ipReachable : mListIpReachable) {
                 Log.d(TAG, ipReachable + " reachable");
             }

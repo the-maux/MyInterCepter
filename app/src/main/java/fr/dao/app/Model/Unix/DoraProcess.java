@@ -21,6 +21,7 @@ public class            DoraProcess {
     public int          mPid;
     public volatile int rcv = 0x00, sent = 0x00, error = 0x00;
     private int         MARGE_ERREUR = 21;//pour ne pas fausser les stats avec le debut du binaire
+    private boolean     over = false;
 
     public              DoraProcess(Host host) {
         this.mProcess = new RootProcess("Dora:" + host.ip);
@@ -41,7 +42,6 @@ public class            DoraProcess {
                     Log.d(TAG, "Dora:" + mhost.ip + " PID:" + mPid);
                     // find mPid pour finir
                     int tmpLine;
-                    boolean over = false;
                     while (!over) {
                         InputStreamReader reader = mProcess.getInputStreamReader();
                         if (reader.ready()) {
@@ -109,15 +109,15 @@ public class            DoraProcess {
             return "0:00:00";
     }
 
-    public void         kill() {
-
-    }
-
     public int          getVisu() {
         if (sent == 0 || rcv == 0)
             return 0;
         if (sent - rcv < 0)
             return 0;
         return sent - rcv;
+    }
+
+    public void         stop() {
+        over = true;
     }
 }

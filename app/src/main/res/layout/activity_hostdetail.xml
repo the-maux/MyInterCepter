@@ -6,10 +6,8 @@
     android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:fitsSystemWindows="true"
-    tools:context="fr.dao.app.View.Activity.HostDetail.HostDetailActivity">
-
+    tools:context=".View.HostDetail.HostDetailActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -25,13 +23,12 @@
             android:layout_height="@dimen/app_bar_height"
             android:elevation="2dp"
             android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
+            android:transitionName="hostTitle"
+            app:contentScrim="@color/generic_background"
             app:expandedTitleGravity="center_vertical"
             app:expandedTitleMarginBottom="18dp"
             app:expandedTitleMarginStart="90dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:statusBarScrim="@drawable/backgroundtransition"
-            android:transitionName="hostTitle"
             app:toolbarId="@+id/toolbar">
 
             <ImageView
@@ -44,7 +41,7 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="56dp"
                 android:elevation="2dp"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|snap"
@@ -67,7 +64,7 @@
                 android:elevation="4dp"
                 android:padding="6dp"
                 android:soundEffectsEnabled="true"
-                android:tint="@color/primary_white"
+                android:tint="@color/tint_svg"
                 android:visibility="gone"
                 app:layout_collapseMode="pin"
                 app:srcCompat="@drawable/ic_edit_svg" />
@@ -85,7 +82,7 @@
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:soundEffectsEnabled="true"
-                android:tint="@color/primary_white"
+                android:tint="@color/tint_svg"
                 android:visibility="gone"
                 app:layout_collapseMode="pin"
                 app:srcCompat="@drawable/ic_more_svg" />
@@ -119,8 +116,7 @@
             android:layout_height="match_parent"
 
             android:layout_below="@+id/tabs"
-            android:background="@color/generic_background"
-            />
+            android:background="@color/generic_background" />
 
     </android.support.v4.widget.NestedScrollView>
 
@@ -132,13 +128,13 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="8dp"
         android:layout_marginTop="216dp"
-        android:tint="@color/primary_white"
+        android:tint="@color/tint_svg"
         android:transitionName="fabTransition"
+        app:layout_behavior="fr.dao.app.View.ZViewController.Coordinator.HostDetail.FAMCollapseBehavior"
         android:visibility="gone"
-        app:elevation="10dp"
+        app:elevation="2dp"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="end"
-        app:layout_behavior="fr.dao.app.View.Behavior.Coordinator.HostDetail.FAMCollapseBehavior"
         app:menu_icon="@mipmap/ic_action"
         app:menu_openDirection="down"
         fab:menu_animationDelayPerItem="50"
@@ -156,15 +152,15 @@
 
     </com.github.clans.fab.FloatingActionMenu>
 
-
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/OsImg"
         android:layout_width="60dp"
         android:layout_height="@dimen/app_bar_height"
         android:layout_marginLeft="16dp"
         android:elevation="6dp"
         android:transitionName="hostPicture"
-        app:layout_behavior="fr.dao.app.View.Behavior.Coordinator.HostDetail.ImageCollapseBehavior" />
-
+        app:civ_border_color="#eedddddd"
+        app:civ_border_width="1px"
+        app:layout_behavior="fr.dao.app.View.ZViewController.Coordinator.HostDetail.ImageCollapseBehavior" />
 
 </android.support.design.widget.CoordinatorLayout>

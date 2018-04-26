@@ -12,7 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import fr.dao.app.View.Behavior.Activity.MyActivity;
+import fr.dao.app.View.ZViewController.Activity.MyActivity;
 
 
 public class                Utils {
@@ -25,7 +25,14 @@ public class                Utils {
     public static void      vibrateDevice(Context context) {
         Vibrator vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         if (vibe != null) {
-            vibe.vibrate(80);
+            vibe.vibrate(30);
+        }
+    }
+
+    public static void      vibrateDevice(Context context, int time) {
+        Vibrator vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibe != null) {
+            vibe.vibrate(30);
         }
     }
 
@@ -42,7 +49,7 @@ public class                Utils {
         }
     }
 
-    public static String     TimeDifference(Date start) {
+    public static String    TimeDifference(Date start) {
         Date now = Calendar.getInstance().getTime();
         long restDatesinMillis = now.getTime() - start.getTime();
         Date restdate = new Date(restDatesinMillis);

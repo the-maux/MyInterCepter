@@ -15,6 +15,6 @@ public enum Protocol {
     UDP,
     FTP,
     NBNS,
-    UNKNOW,
+    UNKNOWN,
     IP
 }

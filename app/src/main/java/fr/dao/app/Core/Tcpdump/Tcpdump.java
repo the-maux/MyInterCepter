@@ -18,33 +18,33 @@ import fr.dao.app.Core.Network.IPTables;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
-import fr.dao.app.View.Activity.Wireshark.WiresharkActivity;
-import fr.dao.app.View.Activity.Wireshark.WiresharkReaderFragment;
-import fr.dao.app.View.Behavior.WiresharkDispatcher;
+import fr.dao.app.View.Sniff.SniffActivity;
+import fr.dao.app.View.Sniff.SniffDispatcher;
+import fr.dao.app.View.Sniff.SniffReaderFrgmnt;
 
 public class                        Tcpdump {
     private String                  TAG = "Tcpdump";
     private static Tcpdump          mInstance = null;
+    private RootProcess             mTcpDumpProcess;
     private Singleton               mSingleton = Singleton.getInstance();
-    private LinkedHashMap<String, String> mCmds;
-    private RootProcess mTcpDumpProcess;
-    private WiresharkActivity       mActivity;
+    private SniffActivity mActivity;
     private ConfTcpdump             mTcpdumpConf = new ConfTcpdump();
-    public  boolean                 isRunning = false, isDumpingInFile = true, isPcapReading;
-    private String                  actualParam = "", actualCmd = "";
-    private WiresharkDispatcher     mDispatcher = null;
-    private WiresharkReaderFragment mFragment = null;
+    private boolean                 isRunning = false;
+    public  boolean                 isDumpingInFile = true, isPcapReading;
+    private String                  actualCmd = "";
+    private SniffDispatcher mDispatcher = null;
+    private SniffReaderFrgmnt mFragment = null;
     private ArrayList<Trame>        mBufferOfTrame = new ArrayList<>();
 
-    private                         Tcpdump(WiresharkActivity activity) {
+    private                         Tcpdump(SniffActivity activity) {
         this.mActivity = activity;
-        mCmds = mTcpdumpConf.initCmds();
+        LinkedHashMap<String, String> mCmds = mTcpdumpConf.initCmds();
     }
 
     public static synchronized Tcpdump getTcpdump(Activity activity, boolean isWiresharkActivity) {
         if (isWiresharkActivity) {
             if (mInstance == null) {
-                mInstance = new Tcpdump((WiresharkActivity) activity);
+                mInstance = new Tcpdump((SniffActivity) activity);
             }
         }
         return mInstance;
@@ -54,20 +54,24 @@ public class                        Tcpdump {
         return mInstance != null && mInstance.isRunning;
     }
 
-    public String                  initCmd(List<Host> hosts) {
-        actualCmd = mTcpdumpConf.buildCmd(actualParam, isDumpingInFile, "No Filter", hosts);
+    public String                   initCmd(List<Host> hosts) {
+        int a = IPTables.InterceptWithoutSSL();
+        Log.d(TAG, "IPtable returned: " + a);
         ArpSpoof.launchArpSpoof(hosts);
-        IPTables.InterceptWithoutSSL();
+        String actualParam = "";
+        actualCmd = mTcpdumpConf.buildCmd(actualParam, isDumpingInFile, "No Filter", hosts);
         return actualCmd.replace("nmap/nmap", "nmap")
-                .replace(mSingleton.FilesPath, "");
+                .replace(mSingleton.Settings.FilesPath, "");
     }
 
-    public DashboardSniff          start(final WiresharkDispatcher trameDispatcher) {
+    public DashboardSniff           start(final SniffDispatcher trameDispatcher) {
         isPcapReading = false;
         mDispatcher = trameDispatcher;
         isRunning = true;
         final DashboardSniff dashboardSniff = new DashboardSniff();
         mDispatcher.setDashboard(dashboardSniff);
+        mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
+        mSingleton.actualNetwork.save();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -95,7 +99,7 @@ public class                        Tcpdump {
         return dashboardSniff;
     }
 
-    public void                     readPcap(File pcapFile, WiresharkReaderFragment fragment) {
+    public void                     readPcap(File pcapFile, SniffReaderFrgmnt fragment) {
         isPcapReading = true;
         isRunning = true;
         mFragment = fragment;
@@ -201,11 +205,11 @@ public class                        Tcpdump {
             IPTables.stopIpTable();
             if (isDumpingInFile && !isPcapReading) {
                 new RootProcess("chmod Pcap files")
-                        .exec("chmod 666 " + mSingleton.PcapPath + "/*")
-                        .exec("chown sdcard_r:sdcard_r " + mSingleton.PcapPath + "/*")
+                        .exec("chmod 666 " + mSingleton.Settings.PcapPath + "/*")
+                        .exec("chown sdcard_r:sdcard_r " + mSingleton.Settings.PcapPath + "/*")
                         .closeProcess();
                 //TODO: faire un ok qui t'amene vers le dossier
-                mActivity.showSnackbar("Pcap saved here : " + mSingleton.PcapPath, -1);
+                mActivity.showSnackbar("Pcap saved here : " + mSingleton.Settings.PcapPath, -1);
             }
             if (isPcapReading) {
                 mFragment.onPcapAnalysed(mBufferOfTrame);
@@ -214,4 +218,15 @@ public class                        Tcpdump {
         }
     }
 
+    public void                     flushToAdapter() {
+        Log.d(TAG, "flushToAdapter");
+        if (mDispatcher != null)
+            mDispatcher.flush();
+    }
+
+    public void                     switchOutputType(boolean isDashboard) {
+        if (mDispatcher != null) {
+            mDispatcher.switchOutputType(isDashboard);
+        }
+    }
 }

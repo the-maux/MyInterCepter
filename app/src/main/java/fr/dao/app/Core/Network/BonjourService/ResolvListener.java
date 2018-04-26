@@ -42,7 +42,7 @@ public class                ResolvListener implements NsdManager.ResolveListener
         if (addr != null) {
             Host client = getclientNatifByIp(addr.getHostAddress());
             if (client != null) {
-                if (Singleton.getInstance().DebugMode) {
+                if (Singleton.getInstance().Settings.DebugMode) {
                     Log.i(TAG, "addr HostAddress: " + addr.getHostAddress());
                     Log.i(TAG, "addr CanonicalHostName: " + addr.getCanonicalHostName());
                     Log.i(TAG, "addr Address: " + addr.getAddress());

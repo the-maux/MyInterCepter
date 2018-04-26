@@ -28,7 +28,7 @@ public class                                DBHost {
                 .from(Host.class)
                 .where("mac = \"" + MAC + "\"");
         Host tmp = from.executeSingle();
-        if (Singleton.getInstance().UltraDebugMode) {
+        if (Singleton.getInstance().Settings.UltraDebugMode) {
             if (tmp != null) {
                 Log.d(TAG, "SQL STRING [" + from.toSql() + "]: FOUND");
             } else {

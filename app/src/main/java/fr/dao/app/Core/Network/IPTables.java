@@ -70,8 +70,8 @@ public class                    IPTables {
         Log.d(TAG, "Redirecting traffic from port " + from + " to port " + to);
         new RootProcess("IPTable::portRedirect")
                 .noDebugOutput()
-                .exec("iptables " + "-t nat -F")// clear nat
-                .exec("iptables " + "-F")// clear
+                .exec("iptables " + "-t nat -F")// reset nat
+                .exec("iptables " + "-F")// reset
                 .exec("iptables " + "-t nat -I POSTROUTING -s 0/0 -j MASQUERADE")// post route
                 .exec("iptables " + "-P FORWARD ACCEPT")// accept all
                 .exec("iptables " + "-t nat -A PREROUTING -j DNAT -p tcp --dport " + from + " --to " + Singleton.getInstance().network.myIp + ":" + to);// add rule;
@@ -81,39 +81,10 @@ public class                    IPTables {
         Log.d(TAG, "Undoing port redirection");
         new RootProcess("IPTable::undoPortRedirect")
                 .noDebugOutput()
-                .exec("iptables " + "-t nat -F") // clear nat
-                .exec("iptables " + "-F")// clear
+                .exec("iptables " + "-t nat -F") // reset nat
+                .exec("iptables " + "-F")// reset
                 .exec("iptables " + "-t nat -D POSTROUTING -s 0/0 -j MASQUERADE")  // remove post route
                 .exec("iptables " + "-t nat -D PREROUTING -j DNAT -p tcp --dport " + from + " --to " + Singleton.getInstance().network.myIp + ":" + to);// remove rule
-    }
-
-    public static void          InterceptWithoutSSL() {
-        RootProcess process = new RootProcess("IpTable::InitWithoutSSL");
-        process.exec("iptables -F;")
-                .noDebugOutput()
-                .exec("iptables -X;")
-                .exec("iptables -t nat -F;")
-                .exec("iptables -t nat -X;")
-                .exec("iptables -t mangle -F;")
-                .exec("iptables -t mangle -X;")
-                .exec("iptables -P INPUT ACCEPT;")
-                .exec("iptables -P FORWARD ACCEPT;")
-                .exec("iptables -P OUTPUT ACCEPT")
-                .exec("echo '1' > /proc/sys/net/ipv4/ip_forward");
-        process.closeProcess();
-    }
-
-    public static void         redirectDnsForSpoofing() {
-        Log.d("DNSREDIRECT", "iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053");
-        new RootProcess("IpTable::DNSREDIRECT")
-                .exec("iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053")
-                .closeProcess();
-    }
-    public static void         stopRedirectDnsForSpoofing() {
-        Log.d("DNSREDIRECT", "iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053");
-        new RootProcess("IpTable::DNSREDIRECT")
-                .exec("iptables -t nat -D PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053")
-                .closeProcess();
     }
 
     private static  void        InterceptWithSSlStrip() {
@@ -123,9 +94,44 @@ public class                    IPTables {
                 .exec("iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8081");
     }
 
+    /**
+     * Classic :
+     * iptables -F; iptables -X; iptables -t nat -F; iptables -t nat -X; iptables -t mangle -F; iptables -t mangle -X;
+     * iptables -P INPUT ACCEPT; iptables -P FORWARD ACCEPT; iptables -P OUTPUT ACCEPT ; echo '1' > /proc/sys/net/ipv4/ip_forward
+     * @return
+     */
+    public static int          InterceptWithoutSSL() {
+        Log.d(TAG, "IPTable configuration for MITM");
+        RootProcess process = new RootProcess("IpTable::InitWithoutSSL");
+        process.exec("iptables -F; " +
+                "iptables -X; " +
+                "iptables -t nat -F; " +
+                "iptables -t nat -X; " +
+                "iptables -t mangle -F; " +
+                "iptables -t mangle -X; " +
+                "iptables -P INPUT ACCEPT; " +
+                "iptables -P FORWARD ACCEPT; " +
+                "iptables -P OUTPUT ACCEPT ; " +
+                "echo '1' > /proc/sys/net/ipv4/ip_forward");
+        return process.closeProcess();
+    }
+
+    public static void          redirectDnsForSpoofing() {
+        Log.d("DNSREDIRECT", "iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053");
+        new RootProcess("IpTable::DNSREDIRECT")
+                .exec("iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053")
+                .closeProcess();
+    }
+    public static void          stopRedirectDnsForSpoofing() {
+        Log.d("DNSREDIRECT", "iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053");
+        new RootProcess("IpTable::DNSREDIRECT")
+                .exec("iptables -t nat -D PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port 8053")
+                .closeProcess();
+    }
+
     public static void          stopIpTable() {
+        Log.d(TAG, "Stopping IPTable configuration for MITM");
         new RootProcess("IpTable stop")
-                    .noDebugOutput()
                     .exec("iptables -F;")
                     .exec("iptables -X;")
                     .exec("iptables -t nat -F;")
@@ -134,7 +140,7 @@ public class                    IPTables {
                     .exec("iptables -t mangle -X;")
                     .exec("iptables -P INPUT ACCEPT;")
                     .exec("iptables -P FORWARD ACCEPT;")
-                    .exec("iptables -P OUTPUT ACCEPT")
+                    .exec("iptables -P OUTPUT ACCEPT;")
                     .closeProcess();
     }
 

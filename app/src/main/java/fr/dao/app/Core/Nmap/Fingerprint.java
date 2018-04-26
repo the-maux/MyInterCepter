@@ -1,13 +1,14 @@
 package fr.dao.app.Core.Nmap;
 
-import android.content.Context;
-import android.widget.ImageView;
+import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+
+import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Unix.Os;
-import fr.dao.app.R;
-import fr.dao.app.View.Behavior.MyGlideLoader;
 
 /**
  * Supprimer les duplicata External & Host
@@ -17,27 +18,39 @@ public class                            Fingerprint {
 
     public static void                  initHost(Host host) {
         host.build();
-        isItMyDevice(host);
         guessosType(host);
-        if (Fingerprint.isItWindows(host)) {
+        if (host.name.contains("My Device") ||
+                host.ip.contentEquals(Singleton.getInstance().network.myIp)) {/* host.isItMyDevice is not saved on BDD for optimiz*/
+            host.isItMyDevice = true;
+            host.state = Host.State.ONLINE;
+            host.osType = Os.Android;
+            host.name = "My Device";//Need reafect in case of nmap_mode == 1
+        } else if (Fingerprint.isItWindows(host)) {
+            Log.d(TAG, "HOST[" + host.ip  + "] is windows");
             host.osType = Os.Windows;
             host.os = "Windows";
             host.osDetail = "Windows";
-        }
-        if (host.osType == Os.Unknow) {
+        } else if (host.osType == Os.Unknow) {
             host.osType = Os.fromString(host.osDetail);
+        }
+        if (Fingerprint.isItMyGateway(host)) {
+            host.osType = Os.Gateway;
+            if (host.osDetail.contains("Unknown"))
+                host.osDetail = "Gateway";
+            if (Singleton.getInstance().actualNetwork != null)
+                Singleton.getInstance().actualNetwork.Gateway = host;
         }
     }
 
     private static void                 guessosType(Host host) {
         if (host.isItMyDevice) {
+            host.osType = Os.Android;
            return;
         }
-        if (host.dumpInfo == null) {
-            host.osType = Os.Unknow;
-            return;
-        }
-        host.dumpInfo = host.dumpInfo.toLowerCase();
+        if (host.dumpInfo == null)
+            host.dumpInfo = host.vendor.toLowerCase() + " ";
+         else
+            host.dumpInfo = host.dumpInfo.toLowerCase();
         if (host.vendor.contains("Sony")) {
             /**
              * TODO: faire un Thread qui check les port, si c'est open, c'est une ps4
@@ -69,8 +82,11 @@ public class                            Fingerprint {
             host.osType = Os.Linux_Unix;
         } else if (host.dumpInfo.contains("windows") || host.dumpInfo.contains("microsoft")) {
             host.osType = Os.Windows;
-        } else
+            host.os = "Windows";
+            host.osDetail = "Windows";
+        } else {
             host.osType = Os.Unknow;
+        }
     }
 
     private static void                 fingerprintApple(Host host, String infoDevice) {
@@ -94,99 +110,34 @@ public class                            Fingerprint {
                 host.Ports().isPortOpen(445);
     }
 
-    public static boolean               isItMyDevice(Host host) {
-        if (host.ip.contains(Singleton.getInstance().network.myIp)) {
-            host.isItMyDevice = true;
-            host.state = Host.State.ONLINE;
-            host.os = "Unix/(AOSP)";
-            host.osType = Os.Android;
-        }
-        return host.isItMyDevice;
-    }
-
     public static boolean               isItMyGateway(Host host) {
         return host.ip.contains(Singleton.getInstance().network.gateway) &&
                 host.ip.length() == Singleton.getInstance().network.gateway.length();
     }
 
-    public static void                  setOsIcon(Context context, Host host, ImageView osImageView) {
-        if (host != null && host.osType != null) {
-            if (host.state == Host.State.FILTERED && host.vendor.contains("Unknown")) {
-                MyGlideLoader.loadDrawableInCircularImageView(context, R.drawable.secure_computer1, osImageView);
-                return ;
+    public static String                getVendorFrom(String mac) {
+        String tmp = mac.contains(":") ? mac.replaceAll(":", "").substring(0, 6) : mac ;
+        BufferedReader reader = new RootProcess("Nmap")
+                .exec("grep \"" + tmp.substring(0, 6) + "\" " + Singleton.getInstance().Settings.FilesPath + "nmap/nmap-mac-prefixes").getReader();
+        String buffer;
+        StringBuilder s = new StringBuilder("");
+        try {
+            while (reader != null && (buffer = reader.readLine()) != null) {
+                s.append(buffer);
             }
-            setOsIcon(context, host.osType, osImageView);
-            return;
+            tmp = s.toString();
+            if (tmp.contains(" ")) {
+                Log.d(TAG, "HOST[" + mac + "] -> VENDOR[" + tmp.substring(tmp.indexOf(" ")+1, tmp.length()) + "]");
+                return tmp.substring(tmp.indexOf(" ")+1, tmp.length());
+            } else {
+                Log.i(TAG, "HOST[" + mac + "] -> VENDOR[" + "Unknown vendor" + "]");
+                return "Unknown vendor";
+            }
+        } catch (IOException e) {
+            Log.e(TAG+"::MAC", "get Mac root error:");
+            e.printStackTrace();
         }
-        MyGlideLoader.loadDrawableInCircularImageView(context, R.drawable.monitor, osImageView);
+        Log.e(TAG, "HOST[" + mac + "] -> VENDOR[" + "Unknown vendor error" + "]");
+        return "Unknown";
     }
-
-    public static void                  setOsIcon(Context context, Os os,  ImageView osImageView) {
-        int ImageRessource;
-        switch (os) {
-            case Windows:
-                ImageRessource = R.drawable.windows;
-                break;
-            case Cisco:
-                ImageRessource = R.drawable.cisco;
-                break;
-            case Raspberry:
-                ImageRessource = R.drawable.rasp;
-                break;
-            case QUANTA:
-                ImageRessource = R.drawable.quanta;
-                break;
-            case Bluebird:
-                ImageRessource = R.drawable.bluebird;
-                break;
-            case Apple://Need MacBOOK, MacAIR, Iphone, AppleTV
-                ImageRessource = R.drawable.ios;
-                break;
-            case Ios:
-                ImageRessource = R.drawable.ios;
-                break;
-            case Unix:
-                ImageRessource = R.drawable.linuxicon;
-                break;
-            case Linux_Unix:
-                ImageRessource = R.drawable.linuxicon;
-                break;
-            case OpenBSD:
-                ImageRessource = R.drawable.linuxicon;
-                break;
-            case Android:
-                ImageRessource = R.drawable.android_winner;
-                break;
-            case Mobile:
-                ImageRessource = R.mipmap.ic_logo_android_trans_round;
-                break;
-            case Samsung:
-                ImageRessource = R.mipmap.ic_logo_android_trans_round;
-                break;
-            case Ps4:
-                ImageRessource = R.drawable.ps4;
-                break;
-            case Gateway:
-                ImageRessource = R.drawable.router1;
-                break;
-            case Unknow:
-                ImageRessource = R.mipmap.ic_unknow;
-                MyGlideLoader.loadDrawableInImageView(context, ImageRessource, osImageView, false);
-                return;
-            default:
-                ImageRessource = R.drawable.router3;
-                break;
-        }
-        //MyGlideLoader.loadDrawableInCircularImageView(context, ImageRessource, osImageView);
-        osImageView.setImageResource(ImageRessource);
-        /*GlideApp.with(context)
-                .load(ImageRessource)
-                //.apply(RequestOptions.circleCropTransform())
-                //.diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                //.transition(DrawableTransitionOptions.withCrossFade())
-                //.dontAnimate()
-
-                .into(osImageView);*/
-    }
-
 }

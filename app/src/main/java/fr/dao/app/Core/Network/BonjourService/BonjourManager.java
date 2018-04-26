@@ -13,7 +13,7 @@ import java.util.List;
 import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
 import fr.dao.app.Model.Net.Service;
 import fr.dao.app.Model.Target.Host;
-import fr.dao.app.View.Activity.HostDiscovery.HostDiscoveryActivity;
+import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
 
 public class                        BonjourManager {
     private String                  TAG = "BonjourManager";

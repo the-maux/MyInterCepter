@@ -1,5 +1,6 @@
 package fr.dao.app.Core.Configuration;
 
+import android.os.Build;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -16,27 +17,38 @@ public class                    RootProcess {
     private int                 mPid;
     private String              mLogID;
     private boolean             mDebugLog = false;
+    private boolean             noRootAllowed = true;
 
     public                      RootProcess(String LogID) {
         this.mLogID = LogID;
         try {
-            mProcess = Runtime.getRuntime().exec("su");
+            mProcess = Runtime.getRuntime().exec("su", null);
             mOutputStream = new DataOutputStream(mProcess.getOutputStream());
         } catch (IOException e) {
+            Log.d(TAG, "e:[" + e.getMessage()+ "]");
             e.printStackTrace();
+            if (e.getMessage().contains("Permission denied")) {
+                Log.e(TAG, "permission denied");
+                noRootAllowed = true;
+            }
         }
     }
     public                      RootProcess(String LogID, String workingDirectory) {
         this.mLogID = LogID;
-        try {
-            if (workingDirectory == null)
-                mProcess = Runtime.getRuntime().exec("su", null);
-            else
-                mProcess = Runtime.getRuntime().exec("su", null, new File(workingDirectory));
-            mOutputStream = new DataOutputStream(mProcess.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String[] env = {"PATH=/su/bin:/sbin:/system/sbin:/system/bin:/su/xbin:/system/xbin:/system/xbin/su"};
+        Log.d(TAG, "");
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        } else {*/
+            try {
+                if (workingDirectory == null) {
+                    mProcess = Runtime.getRuntime().exec("su", env);
+                } else
+                    mProcess = Runtime.getRuntime().exec("su", env, new File(workingDirectory));
+                mOutputStream = new DataOutputStream(mProcess.getOutputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+      //  }
     }
     public                      RootProcess(String LogID, boolean noRoot) {
         /* Ye noRoot is never used, why bother ? */
@@ -54,14 +66,15 @@ public class                    RootProcess {
             cmd = cmd.replace("//", "/");
             if (mDebugLog)
                 Log.d(TAG, mLogID + "::" + cmd);
-            mOutputStream.writeBytes(cmd + " 2>&1 ; exit \n");
-            mOutputStream.flush();
-            Field f = mProcess.getClass().getDeclaredField("pid");
-            f.setAccessible(true);
-            mPid = f.getInt(mProcess);
-            if (mDebugLog)
-                Log.d(TAG, mLogID + "[PID:" + mPid + "]::" + cmd);
-            f.setAccessible(false);
+            if (mOutputStream != null) {
+                mOutputStream.writeBytes(cmd + " 2>&1 ; exit \n");
+                mOutputStream.flush();
+                Field f = mProcess.getClass().getDeclaredField("pid");
+                f.setAccessible(true);
+                mPid = f.getInt(mProcess);
+                if (mDebugLog)
+                    Log.d(TAG, mLogID + "[PID:" + mPid + "]::" + cmd);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -82,7 +95,7 @@ public class                    RootProcess {
     }
 
     private int                 waitFor() {
-        /* Pro-Tip: You want to close process ? Purge all fd first */
+        /* Pro-Tip: You want to close process fd ? Purge it */
         try {
             BufferedReader reader = new BufferedReader(getReader());
             if (reader.ready()) {
@@ -108,15 +121,15 @@ public class                    RootProcess {
     }
 
     public BufferedReader       getReader() {
-        return new BufferedReader(new InputStreamReader(mProcess.getInputStream()));
+        return mProcess == null ? null : new BufferedReader(new InputStreamReader(mProcess.getInputStream()));
     }
 
     public InputStreamReader    getInputStreamReader() {
-        return new InputStreamReader(mProcess.getInputStream());
+        return mProcess == null ? null : new InputStreamReader(mProcess.getInputStream());
     }
 
     private InputStreamReader   getErrorStreamReader() {
-        return new InputStreamReader(mProcess.getErrorStream());
+        return mProcess == null ? null : new InputStreamReader(mProcess.getErrorStream());
     }
 
     public int                  getmPid() {
@@ -125,14 +138,11 @@ public class                    RootProcess {
 
     public int                  closeProcess() {
         closeDontWait();
-        return waitFor();
+        return mProcess == null ? -1 : waitFor();
     }
 
     RootProcess                 closeDontWait() {
         try {
-            //Log.d(TAG, this.mLogID + "::Close");
-            //mOutputStream.writeBytes("exit\n");
-            //mOutputStream.flush();
             mOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -142,12 +152,16 @@ public class                    RootProcess {
 
     public static void          kill(int pid) {
         new RootProcess("Kill:" + pid)
-                .exec(Singleton.getInstance().BinaryPath + "busybox kill " + pid)
+                .exec(Singleton.getInstance().Settings.BinaryPath + "busybox kill " + pid)
                 .closeProcess();
     }
     public static void          kill(String binary) {
         new RootProcess("KILLALL")
-                .exec(Singleton.getInstance().BinaryPath + "busybox killall " + binary)
+                .exec(Singleton.getInstance().Settings.BinaryPath + "busybox killall " + binary)
                 .closeProcess();
+    }
+
+    public boolean              isNoRootAllowed() {
+        return noRootAllowed;
     }
 }

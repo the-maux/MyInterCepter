@@ -1,15 +1,18 @@
 package fr.dao.app.Core.Configuration;
 
 import android.app.Activity;
+import android.os.Environment;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.dao.app.Core.Database.DBNetwork;
 import fr.dao.app.Core.Database.DBSniffSession;
 import fr.dao.app.Core.Dnsmasq.DnsmasqControl;
 import fr.dao.app.Core.Network.ArpSpoof;
 import fr.dao.app.Core.Network.IPTables;
+import fr.dao.app.Core.Network.NetDiscovering;
 import fr.dao.app.Core.Network.NetworkInformation;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.Model.Target.Host;
@@ -17,30 +20,26 @@ import fr.dao.app.Model.Target.Network;
 import fr.dao.app.Model.Target.SniffSession;
 
 public class                            Singleton {
-    PreferenceControler                 userPreference;
-    public boolean                      DebugMode = true, UltraDebugMode = false;
-    public String                       PcapPath;
-    public String                       BinaryPath = null;
-    public String                       FilesPath = null;
-
-    public ArrayList<Host>              hostList = null;
-    public List<ArpSpoof>               ArpSpoofProcessStack = new ArrayList<>();
-    public NetworkInformation           network = null;
-    public Network                      actualNetwork = null;
+    public  SettingsControler           Settings = null;
+    public  NetworkInformation          network = null;
+    public  Network                     actualNetwork = null;
+    public  ArrayList<Host>             hostList = null, savedHostList = null;
+    public  List<ArpSpoof>              ArpSpoofProcessStack = new ArrayList<>();
     private DnsmasqControl              dnsSpoofed = null;
     private SniffSession                actualSniffSession = null;
-    private boolean                     sslstripMode = false, LockScreen = false;
     private boolean                     webSpoofedstarted = false;
-    public boolean                      isNmapRunning = false;
-
     private static Singleton            mInstance = null;
     String                              VERSION = "0xDEADBEEF";
+
+    private                             Singleton() {
+    }
+
     public static synchronized Singleton getInstance() {
-        if(mInstance == null)
+        if(mInstance == null) {
             mInstance = new Singleton();
+        }
         return mInstance;
     }
-    private                             Singleton() {}
 
     public SniffSession                 getActualSniffSession() {
         if (actualSniffSession == null) {
@@ -56,20 +55,20 @@ public class                            Singleton {
     }
 
     public boolean                      isSslstripMode() {
-        return sslstripMode;
+        return Settings.getUserPreferences().sslstripMode;
     }
     public void                         setSslstripMode(boolean sslstripMode) {
-        this.sslstripMode = sslstripMode;
+        Settings.getUserPreferences().sslstripMode = sslstripMode;
         IPTables.sslConf();
     }
     public boolean                      isDnsControlstarted() {
         return dnsSpoofed != null && dnsSpoofed.isRunning();
     }
     public boolean                      isLockScreen() {
-        return LockScreen;
+        return Settings.getUserPreferences().Lockscreen;
     }
     public void                         setLockScreen(boolean lockScreen) {
-        LockScreen = lockScreen;
+        Settings.getUserPreferences().Lockscreen = lockScreen;
         //TODO: LockScreen
         Log.i("setockScreenActived", "Not implemented");
     }
@@ -87,7 +86,7 @@ public class                            Singleton {
 
     public void                         closeEverySniffService(Activity activity) {
         Tcpdump tcpdump = Tcpdump.getTcpdump(activity, false);
-        if (tcpdump.isRunning) {
+        if (Tcpdump.isRunning()) {
             Log.e("Singleton", "Stopping tcpdump not implemented");
         }
         if (!ArpSpoofProcessStack.isEmpty()) {
@@ -104,7 +103,19 @@ public class                            Singleton {
 
     public boolean                      isSniffServiceActif(Activity activity) {
         Tcpdump tcpdump = Tcpdump.getTcpdump(activity, false);
-        return tcpdump != null && tcpdump.isRunning ||
-                !(!sslstripMode && !isDnsControlstarted() && !webSpoofedstarted);
+        return tcpdump != null && Tcpdump.isRunning() ||
+                !(!Settings.getUserPreferences().sslstripMode && !isDnsControlstarted() && !webSpoofedstarted);
+    }
+
+    public void                         init(Activity activity) {
+        if (Settings == null) {
+            Log.d("Singleton", "Singleton"+"::initialisation");
+            Settings = new SettingsControler(activity.getFilesDir().getPath() + '/');
+            Settings.PcapPath = Environment.getExternalStorageDirectory().getPath() + "/Dao/Pcap/";
+            Settings.DumpsPath = Environment.getExternalStorageDirectory().getPath() + "/Dao/Nmap/";
+            Settings.BinaryPath = Settings.FilesPath;
+            if (NetDiscovering.initNetworkInfo(activity))
+                actualNetwork = DBNetwork.getAPFromSSID(network.ssid);
+        }
     }
 }

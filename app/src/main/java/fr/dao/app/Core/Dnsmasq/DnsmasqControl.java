@@ -12,8 +12,8 @@ import fr.dao.app.Core.Network.IPTables;
 import fr.dao.app.Model.Target.DNSSpoofItem;
 import fr.dao.app.Model.Target.SniffSession;
 import fr.dao.app.Model.Unix.DNSLog;
-import fr.dao.app.View.Activity.DnsSpoofing.DnsActivity;
-import fr.dao.app.View.Widget.Adapter.DnsLogsAdapter;
+import fr.dao.app.View.DnsSpoofing.DnsActivity;
+import fr.dao.app.View.ZViewController.Adapter.DnsLogsAdapter;
 
 public class                    DnsmasqControl {
     private String              TAG = "DnsmasqControl";
@@ -115,7 +115,7 @@ public class                    DnsmasqControl {
             mRV_Adapter.getRecyclerview().post(new Runnable() {
                 @Override
                 public void run() {
-                    //mDnsLogs.clear();
+                    //mDnsLogs.reset();
                     if (mRV_Adapter != null)
                         mRV_Adapter.notifyDataSetChanged();
                 }

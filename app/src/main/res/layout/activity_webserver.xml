@@ -9,7 +9,7 @@
 
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/NmapPrimary"
@@ -21,18 +21,20 @@
             android:layout_height="wrap_content"
             android:background="@color/webserverSpoofPrimary"
             android:elevation="4dp"
-            android:paddingBottom="24dp">
+            android:paddingBottom="8dp">
 
 
             <ImageView
                 android:id="@+id/OsImg"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/icon_toolbar_size"
+                android:layout_height="@dimen/icon_toolbar_size"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
-                android:elevation="4dp"
-                android:src="@drawable/logo155_grey"
+                android:padding="8dp"
+                android:src="@drawable/ic_vpn_lock_svg"
+                android:tint="@color/tint_svg"
                 android:transitionName="NmapIconTransition"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHeight_min="50dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -41,69 +43,70 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@+id/tabs"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/OsImg"
                 app:layout_constraintRight_toLeftOf="@+id/config"
                 app:layout_constraintTop_toTopOf="parent"
                 app:subtitle="Spoof any website !"
-                app:title="Webserver spoofing">
+                app:subtitleTextColor="@color/tint_svg"
+                app:title="Webserver spoofing"
+                app:titleTextColor="@android:color/primary_text_dark">
 
             </android.support.v7.widget.Toolbar>
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/config"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                android:baselineAlignBottom="false"
 
                 android:padding="6dp"
                 android:soundEffectsEnabled="true"
-                android:tint="@color/primary_white"
+                android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/tabs"
                 app:layout_constraintRight_toLeftOf="@+id/settingsMenu"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.50"
                 app:layout_constraintWidth_min="45dp"
                 app:srcCompat="@drawable/ic_settings_svg" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/settingsMenu"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:background="@android:color/transparent"
                 android:padding="4dp"
                 android:soundEffectsEnabled="true"
-                android:tint="@color/primary_white"
+                android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/tabs"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_min="45dp"
+                app:layout_constraintVertical_bias="0.5"
                 app:srcCompat="@drawable/ic_more_svg" />
 
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@color/NmapPrimary"
-                android:visibility="gone"
-                app:layout_constraintHeight_min="56dp"
-                app:layout_constraintLeft_toLeftOf="@+id/OsImg"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/OsImg"
-                app:tabMode="scrollable">
-
-                <android.support.design.widget.TabItem
-                    android:id="@+id/tabItem"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tab1" />
-            </android.support.design.widget.TabLayout>
-
-
         </android.support.constraint.ConstraintLayout>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/NmapPrimary"
+            android:visibility="gone"
+            app:layout_constraintHeight_min="56dp"
+            app:layout_constraintLeft_toLeftOf="@+id/OsImg"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/OsImg"
+            app:tabMode="scrollable">
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tab1" />
+        </android.support.design.widget.TabLayout>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -115,7 +118,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="5dp"
         android:visibility="gone"
-        app:layout_anchor="@id/appbar"
+        app:layout_anchor="@id/appBarLayout"
         app:layout_anchorGravity="bottom|right|end" />
 
 
@@ -149,15 +152,15 @@
             android:scaleType="fitCenter"
             android:soundEffectsEnabled="true"
             android:src="@drawable/ic_media_play"
-            android:tint="@color/primary_white"
-            app:backgroundTint="@color/fab_color"
+            android:tint="@color/tint_svg"
+            app:backgroundTint="@color/webserverSpoofPrimary"
             app:fabSize="normal"
             app:layout_constraintBottom_toTopOf="@+id/navigation"
             app:layout_constraintRight_toRightOf="parent" />
 
         <include
             android:id="@+id/navigation"
-            layout="@layout/item_nav_bottom"
+            layout="@layout/bottom_navigation_sniff"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:transitionName="navigation"

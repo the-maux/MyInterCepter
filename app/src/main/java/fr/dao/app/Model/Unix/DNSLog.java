@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Target.SniffSession;
 import fr.dao.app.R;
-import fr.dao.app.View.Widget.Adapter.Holder.ConsoleLogHolder;
+import fr.dao.app.View.ZViewController.Adapter.Holder.ConsoleLogHolder;
 
 @Table(name = "DnsLog", id = "_id")
 public class                            DNSLog extends Model {
@@ -73,7 +73,7 @@ public class                            DNSLog extends Model {
         this.recyclerView = dnsRVLogs;
     }
     public void                         addLog(DNSLog dnsLog) {
-        if (Singleton.getInstance().DebugMode)
+        if (Singleton.getInstance().Settings.DebugMode)
             Log.d(TAG, "addLog:" + dnsLog.data + "] to [" + this.domain + "]");
         logs.add(dnsLog);
         this.currentType = dnsLog.currentType;

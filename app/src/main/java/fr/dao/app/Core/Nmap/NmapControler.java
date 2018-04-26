@@ -19,9 +19,10 @@ import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
-import fr.dao.app.View.Activity.Scan.NmapOutputFragment;
+import fr.dao.app.View.Scan.NmapTTYFrgmnt;
 
 /*
+https://hackertarget.com/7-nmap-nse-scripts-recon/
     Utilisation: nmap [Type(s) de scan] [Options] {spécifications des cibles}
 
            -A Active la détection du système d'exploitation et des versions
@@ -54,7 +55,7 @@ public class                        NmapControler {
     private String                  TAG = "NmapControler";
     private NmapControler           mInstance = this;
     private Singleton               mSingleton = Singleton.getInstance();
-    private String                  PATH_NMAP = mSingleton.FilesPath + "nmap/nmap ";
+    private String                  PATH_NMAP = mSingleton.Settings.FilesPath + "nmap/nmap ";
     private boolean                 mIsLiveDump, isRunning;
     private NetworkDiscoveryControler mNnetworkDiscoveryControler;
     private Map<String, String>     mNmapParams;
@@ -65,29 +66,37 @@ public class                        NmapControler {
 
 
     /*
+    http://macvendors.co/api
     **   HostDiscoveryActivity
+    * --Script =
+     *              nbstat => U:137
+     *              dns-service-discovery => U:5353
+     *              upnp-info => U:1900
+     *              Windows check => T:135 https://nmap.org/nsedoc/scripts/msrpc-enum.html msrpc
+     *                            => T:445 microsoft-ds
+    *
     */
-    public                          NmapControler(List<String> ips, NetworkDiscoveryControler networkDiscoveryControler,
+    public                          NmapControler(ArrayList<Host> hosts, NetworkDiscoveryControler networkDiscoveryControler,
                                                   Network ap, Context context) {/* Parsing mode */
         String NMAP_ARG_SCAN = " -PN -sS -T3 -sU " +
                 "--script nbstat.nse,dns-service-discovery,upnp-info " +
                 "--min-parallelism 100 " +
-                "-p T:21,T:22,T:23,T:25,T:80,T:110,T:135,T:139,T:3128,T:443,T:445,T:2869,U:53,U:1900,U:3031,U:5353  ";
+                "-p T:21,T:22,T:23,T:25,T:80,T:110,T:111,T:135,T:139,T:3128,T:443,T:445,T:2049,T:2869," +
+                "U:53,U:1900,U:3031,U:5353  ";
         mIsLiveDump = false;
         mNnetworkDiscoveryControler = networkDiscoveryControler;
         mActualItemMenu = "Basic Host discovery";
         StringBuilder hostCmd = new StringBuilder("");
-        StringBuilder hostsMAC = new StringBuilder("");
-        for (String ip : ips) {
-            String[] tmp = ip.split(":");
-            hostCmd.append(" ").append(tmp[0]);
-            hostsMAC.append(" ").append(ip);
+        for (Host host : hosts) {
+            if (mSingleton.Settings.getUserPreferences().NmapMode > host.Deepest_Scan)//To not scan again automaticaly already scanned host
+                hostCmd.append(" ").append(host.ip);
         }
         String cmd = PATH_NMAP + NMAP_ARG_SCAN + hostCmd.toString();
-        if (mSingleton.UltraDebugMode)
-            Log.d(TAG, "CMD:["+ cmd + "]");
-        setTitleToolbar(null, "Scanning " + ips.size() + " devices");
-        hostDiscoveryFromNmap(cmd, hostsMAC.toString(), ap, context);
+        Log.d(TAG, "CMD:["+ cmd + "]");
+        setTitleToolbar(null, "Scanning " + hostCmd.toString().split(" ").length + " devices");
+        hostDiscoveryFromNmap(cmd, hosts, ap, context);
+        mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
+        mSingleton.actualNetwork.save();
     }
 
     /*
@@ -98,31 +107,39 @@ public class                        NmapControler {
         mIsLiveDump = true;
     }
 
-    private void                    hostDiscoveryFromNmap(final String cmd, final String listMacs, final Network ap, final Context context) {
+    private void                    hostDiscoveryFromNmap(final String cmd, final ArrayList<Host> hosts, final Network ap, final Context context) {
+        mSingleton.actualNetwork.defensifAction = mSingleton.actualNetwork.defensifAction + 1;
+        mSingleton.actualNetwork.save();
         new Thread(new Runnable() {
-            @Override
             public void run() {
                 try {
                     String tmp;
-                    StringBuilder dumpOutputBuilder = new StringBuilder();
-                    BufferedReader reader = new RootProcess("Nmap", mSingleton.FilesPath)
+                    StringBuilder outputBuilder = new StringBuilder();
+                    BufferedReader reader = new RootProcess("Nmap", mSingleton.Settings.FilesPath)
                             .exec(cmd).getReader();
                     while ((tmp = reader.readLine()) != null && !tmp.startsWith("Nmap done")) {
-                        dumpOutputBuilder.append(tmp).append('\n');
+                        outputBuilder.append(tmp).append('\n');
                     }
-                    if (tmp == null || !tmp.startsWith("Nmap done")) {
+                    /*
+                     * Hello dear, If you're here
+                     * Trying to understand why the condition is
+                     * outputBuilder.toString().isEmpty()
+                     * I love you, thank you, for existing
+                     * You're not alone, we are connected
+                     */
+                    if (outputBuilder.toString().isEmpty() || tmp.isEmpty() || !tmp.startsWith("Nmap done")) {
                         Log.d(TAG, "Error in nmap execution, Nmap didn't end");
-                        dumpOutputBuilder.append(tmp);
-                        Log.e(TAG, dumpOutputBuilder.toString());
+                        outputBuilder.append(tmp);
+                        Log.e(TAG, outputBuilder.toString());
                         setTitleToolbar("Network scan", "Nmap Error");
                         return;
                     }
-                    dumpOutputBuilder.append(tmp);
-                    String FullDUMP = dumpOutputBuilder.toString().substring(1);
+                    outputBuilder.append(tmp);
+                    String FullDUMP = outputBuilder.toString().substring(1);
                     Log.d(TAG, "\t\t LastLine[" + tmp + "]");
                     startParsing = Calendar.getInstance().getTime();
-                    new NmapHostDiscoveryParser(mInstance, listMacs, FullDUMP, ap, context);
-                } catch (IOException e) {
+                    new NmapHostDiscoveryParser(mInstance, hosts, FullDUMP, ap, context);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -141,8 +158,8 @@ public class                        NmapControler {
                 "--script nbstat.nse,dns-service-discovery " +
                 " " +
                 "-p T:21,T:22,T:23,T:25,T:80,T:110,T:135,T:139,T:3128,T:443,T:445,T:2869,U:53,U:3031,U:5353  ");
-        mMenuCommand.add("");
-        mNmapParams.put(mMenuCommand.get(3), "");
+        mMenuCommand.add("Quick scan");
+        mNmapParams.put(mMenuCommand.get(3), " -T4 -A -v");
         mMenuCommand.add("Os fingerprint");
         mNmapParams.put(mMenuCommand.get(4), " -O -v ");
         mMenuCommand.add("Intrusive scan");
@@ -203,16 +220,16 @@ public class                        NmapControler {
         return cmd.replace("  ", " ").replace("\n", "");
     }
 
-    private String                  build(NmapOutputFragment nmapOutputFragment) {
+    private String                  build(NmapTTYFrgmnt nmapOutputFragment) {
         String cmd = buildCommand();
         Log.i(TAG, cmd);
         nmapOutputFragment.printCmdInTerminal(cmd
                 .replace("nmap/nmap", "nmap")
-                .replace(mSingleton.FilesPath, ""));
+                .replace(mSingleton.Settings.FilesPath, ""));
         return cmd;
     }
 
-    public void                     start(final NmapOutputFragment nmapOutputFragment,
+    public void                     start(final NmapTTYFrgmnt nmapOutputFragment,
                                             final ProgressBar progressBar) {
         if (mHost == null) {
             Log.e(TAG, "No client selected when launched");
@@ -222,9 +239,8 @@ public class                        NmapControler {
                 public void run() {
                     try {
                         String tmp;
-                        mSingleton.isNmapRunning = true;
                         StringBuilder dumpOutputBuilder = new StringBuilder();
-                        BufferedReader reader = new RootProcess("Nmap", mSingleton.FilesPath)
+                        BufferedReader reader = new RootProcess("Nmap", mSingleton.Settings.FilesPath)
                                 .exec(build(nmapOutputFragment)).getReader();
                         while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {
                             if (!tmp.isEmpty()) {
@@ -236,7 +252,6 @@ public class                        NmapControler {
                         dumpOutputBuilder.append(tmp);
                         Log.d(TAG, "Nmap final dump:" + dumpOutputBuilder.toString());
                         nmapOutputFragment.flushOutput(tmp + '\n', progressBar);
-                        mSingleton.isNmapRunning = false;
                     } catch (IOException e) {
                         e.printStackTrace();
                         nmapOutputFragment.flushOutput(null, progressBar);
@@ -248,7 +263,7 @@ public class                        NmapControler {
 
     public void                     onHostActualized(ArrayList<Host> hosts) {
         Log.d(TAG, "All node was parsed in :" + Utils.TimeDifference(startParsing));
-        mNnetworkDiscoveryControler.onNmapScanOver(hosts);
+        mNnetworkDiscoveryControler.onScanFinished(hosts);
     }
 
     public void                     setmActualItemMenu(String itemMenu) {

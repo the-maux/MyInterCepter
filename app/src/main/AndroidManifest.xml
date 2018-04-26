@@ -17,44 +17,54 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".View.Activity.Startup.SplashscreenActivity"
+            android:name=".View.Startup.SplashscreenActivity"
             android:label="@string/app_name"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".View.Activity.Startup.SetupActivity"
+            android:name=".View.Startup.SetupActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
-            android:name=".View.Activity.DnsSpoofing.DnsActivity"
+            android:name=".View.Startup.HomeActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
-            android:name=".View.Activity.HostDiscovery.HostDiscoveryActivity"
+            android:name=".View.Startup.DefenseHomeActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
-            android:name=".View.Activity.Settings.SettingsActivity"
+            android:name=".View.DashBoard.DashboardActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".View.Activity.Scan.NmapActivity"
+            android:name=".View.DnsSpoofing.DnsActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".View.Activity.TargetMenu.TargetMenuActivity"
+            android:name=".View.HostDiscovery.HostDiscoveryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".View.Settings.SettingsActivity" />
+        <activity
+            android:name=".View.Scan.NmapActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".View.Activity.Wireshark.WiresharkActivity"
+            android:name=".View.SpyMITM.SpyMitmActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".View.Activity.Dora.DoraActivity"
+            android:name=".View.Sniff.SniffActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".View.Activity.WebServer.WebServerActivity"
+            android:name=".View.Dora.DoraActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".View.Activity.HostDetail.HostDetailActivity"
-           />
+        <activity
+            android:name=".View.WebServer.WebServerActivity"
+            android:launchMode="singleTask" />
+        <activity android:name=".View.HostDetail.HostDetailActivity"
+            android:launchMode="standard"/>
         <meta-data android:name="AA_MODELS"
             android:value="
             fr.dao.app.Model.Target.Network,
@@ -69,7 +79,7 @@
             android:value="DaoDatabase" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="11" />
+            android:value="12" />
     </application>
 
 </manifest>

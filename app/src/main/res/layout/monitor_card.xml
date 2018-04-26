@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="140dp"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:layout_margin="8dp"
+    app:cardBackgroundColor="#CC414141"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="4dp">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:minHeight="50dp">
+
+
+        <ImageView
+            android:id="@+id/logoCard"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/titleCard"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/titleCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:ellipsize="end"
+            android:padding="4dp"
+            android:singleLine="true"
+            android:text="Updated"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.75" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/statusIconCardView"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_alignRight="@+id/icon"
+            android:layout_alignTop="@+id/icon"
+            android:layout_margin="4dp"
+            android:elevation="2dp"
+            android:src="@color/stop_color"
+            android:transitionName="statusSniffing"
+            app:civ_border_color="@color/material_blue_grey_700"
+            app:civ_border_width="2px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.95"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.050000012" />
+
+        <ProgressBar
+            android:id="@+id/progressBar_monitor"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_margin="1dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.953"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.052" />
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

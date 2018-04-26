@@ -13,21 +13,48 @@
     <color name="secondary_text">#757575</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
+    <color name="white_secondary">#EEEEEE</color>
     <color name="generic_background">#ee212121</color>
+    <color name="generic_background_dark">#ee111111</color>
     <color name="stop_color">@color/material_red_500</color>
     <color name="start_color">@color/material_green_500</color>
     <color name="fab_color">#455a64</color>
     <color name="online_color">@color/material_green_500</color>
     <color name="filtered_color">@color/material_orange_500</color>
+    <color name="tint_svg">#ddcccccc</color>
+    <color name="redteam_color">#B71C1C</color><!-- material_red_900 -->
+    <color name="blueteam_color">#0D47A1</color><!-- material_blue_900 -->
+    1a237e
 
     <color name="offline_color">@color/material_red_500</color>
 
     <!-- Activitys color  -->
-    <color name="wiresharkPrimary">#263238</color>
-    <color name="dnsSpoofPrimary">#102027</color>
-    <color name="NmapPrimary">#3c3f41</color>
-    <color name="webserverSpoofPrimary">#424242</color>
-    <color name="settingsPrimary">#4f5b62</color>
+    <color name="NmapPrimary">#dd006064</color>
+    <color name="DashboardPrimary">#dd7B1FA2</color>
+    <color name="spyPrimary">#dd4f5b62</color>
+    <color name="doraPrimary">#dd005b9f</color>
+    <color name="snifferPrimary">#dd263238</color>
+    <color name="dnsSpoofPrimary">#dd004D40</color>
+    <color name="webserverSpoofPrimary">#dd3E2723</color>
+    <color name="settingsPrimary">#dd455a64</color>
+
+    
+    <!-- switch color  -->
+    <color name="nmapSwitchBack">@color/material_cyan_700</color>
+    <color name="spySwitchBack">#758289</color>
+    <color name="snifferSwitchBack">@color/material_blue_grey_700</color>
+    <color name="dnsSpoofSwitchBack">@color/material_teal_700</color>
+    <color name="webserverSpoofSwitchBack">@color/material_brown_700</color>
+    <color name="settingsSwitchBack">@color/material_blue_grey_200</color>
+    
+    <color name="nmapSwitch">#006064</color>
+    <color name="spySwitch">#4f5b62</color>
+    <color name="snifferSwitch">#263238</color>
+    <color name="dnsSpoofSwitch">#004D40</color>
+    <color name="webserverSpoofSwitch">#3E2723</color>
+    <color name="settingsSwitch">#455a64</color>
+    <color name="switchOn">#ddcccccc</color>
+    <color name="switchOFF">#dd757575</color>
 
     <!-- Wireshark color  -->
     <color name="arp">#d6e7ff</color>

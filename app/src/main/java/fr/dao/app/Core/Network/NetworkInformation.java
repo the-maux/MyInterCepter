@@ -25,7 +25,7 @@ public class                    NetworkInformation {
         return !(myIp.contains("0.0.0.0") || gateway.contains("0.0.0.0"));
     }
 
-    public void                init() {
+    public NetworkInformation   init() {
         DhcpInfo dhcpInfo = mWifiManager.getDhcpInfo();
         myIp = intADDRtoStringHostname(dhcpInfo.ipAddress);
         gateway = intADDRtoStringHostname(dhcpInfo.gateway);
@@ -35,6 +35,7 @@ public class                    NetworkInformation {
         String dns1 = intADDRtoStringHostname(dhcpInfo.dns1);
         String dns2 = intADDRtoStringHostname(dhcpInfo.dns2);
         String dhcp = intADDRtoStringHostname(dhcpInfo.serverAddress);
+        return this;
     }
 
     public NetworkInformation   updateInfo() {

@@ -30,11 +30,11 @@ public class                                DBNetwork {
             network = new Select()
                     .from(Network.class)
                     .where("ssid = \"" + SSID + "\"").executeSingle();
-            Log.d(TAG, "getAPFromSSID::" + new Select()
-                    .from(Network.class)
-                    .where("ssid = \"" + SSID + "\"").toSql());
+//            Log.d(TAG, "getAPFromSSID::" + new Select()
+//                    .from(Network.class)
+//                    .where("ssid = \"" + SSID + "\"").toSql());
             if (network != null) {
-                if (Singleton.getInstance().DebugMode)
+                if (Singleton.getInstance().Settings.DebugMode)
                     Log.d(TAG, "AccessPoint::" + SSID + " already knew with " + network.nbrScanned + " previous scan");
                 network.nbrScanned = network.nbrScanned + 1;
                 network.save();
@@ -43,7 +43,7 @@ public class                                DBNetwork {
         } catch (NullPointerException e) {
             e.getStackTrace();
         }
-        if (Singleton.getInstance().DebugMode)
+        if (Singleton.getInstance().Settings.DebugMode)
             Log.d(TAG, "AccessPoint::" + SSID + " is new ");
         network = new Network();
         network.Ssid = SSID;
@@ -81,7 +81,7 @@ public class                                DBNetwork {
     static void                             updateNetworkInfoInBDD(Network accessPoint, String Gateway,
                                                                    List<Host> devicesConnected, String TypeScan, ArrayList<Os> osList) {
         ActiveAndroid.beginTransaction();
-        if (Singleton.getInstance().DebugMode)
+        if (Singleton.getInstance().Settings.DebugMode)
             Log.d(TAG, "Updating Network::" + accessPoint.Ssid + " discovered " + devicesConnected.size() + " host");
         accessPoint.lastScanDate = Calendar.getInstance().getTime();
         accessPoint.listDevicesSerialized = DBHost.SerializeListDevices(devicesConnected);
