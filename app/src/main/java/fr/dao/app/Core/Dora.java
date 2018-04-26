@@ -63,8 +63,9 @@ public class                        Dora {
 
     public int                     onStop() {
         isRunning = false;
+        RootProcess.kill("ping");
         for (DoraProcess doraProcess : mListOfHostDored) {
-            RootProcess.kill(doraProcess.mProcess.getmPid());
+            doraProcess.stop();
         }
         Log.d(TAG, "dora stopped " + mListOfHostDored.size() + " process");
         return mListOfHostDored.size();
