@@ -23,12 +23,17 @@ public class                Network extends Model {
     public String           Ssid;
     @Column(name = "lastScanDate")
     public java.util.Date   lastScanDate;
-    @Column(name = "nbrScanned")
-    public int              nbrScanned;
     @Column(name = "Gateway")
     public Host             Gateway;
     @Column(name = "OsNumber")
     public int              nbrOs;
+    @Column(name = "nbrScanned")
+    public int              nbrScanned;
+    @Column(name = "offensifAction")
+    public int              offensifAction;
+    @Column(name = "defensifAction")
+    public int              defensifAction;
+
     @Column(name = "Devices")
     public String           listDevicesSerialized;
     private ArrayList<Host> listDevices = null;

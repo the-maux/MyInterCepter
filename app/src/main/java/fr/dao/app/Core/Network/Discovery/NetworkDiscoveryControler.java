@@ -75,7 +75,7 @@ public class                        NetworkDiscoveryControler {
             startScanning = Calendar.getInstance().getTime();
             Log.i(TAG, "run::mSingleton.resetActualSniffSession");
             mSingleton.resetActualSniffSession();
-            startArpScan();
+            startScan();
             return true;
         } else {
             Log.i(TAG, "Trying to launch multiple scan at same time");
@@ -83,7 +83,7 @@ public class                        NetworkDiscoveryControler {
         return false;
     }
 
-    private void                    startArpScan() {
+    private void                    startScan() {
         startScanning = Calendar.getInstance().getTime();
         mActivity.setToolbarTitle(null, "Icmp scanning");
         mActivity.setProgressState(0);
@@ -92,7 +92,7 @@ public class                        NetworkDiscoveryControler {
                 new IcmpScanNetmask(new IPv4Utils(mSingleton.network), mInstance);
             }
         }).start();
-        Log.i(TAG, "startArpScan::IcmpScanNetmask::started");
+        Log.i(TAG, "startScan::IcmpScanNetmask::started");
     }
 
     synchronized void               onArpScanOver(ArrayList<String> ipReachable) {
@@ -154,6 +154,8 @@ public class                        NetworkDiscoveryControler {
                     actualNetwork.listDevices().add(host);
                 }
             }
+        actualNetwork.offensifAction = actualNetwork.offensifAction + 1;
+        actualNetwork.save();
         Log.i(TAG, "(" + (actualNetwork.listDevices().size() - rax) + " offline/ " + actualNetwork.listDevices().size() + "inCache) ");
         mSingleton.actualNetwork = actualNetwork;
         return actualNetwork;

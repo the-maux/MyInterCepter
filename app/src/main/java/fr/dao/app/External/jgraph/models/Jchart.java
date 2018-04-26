@@ -368,11 +368,7 @@ public class Jchart implements Cloneable {
         return mUpper;
     }
 
-    /**
-     * lower不变
-     *
-     * @param upper
-     */
+
     public Jchart setUpper(float upper){
         if(upper<mLower) {
             upper = mLower;

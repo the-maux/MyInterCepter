@@ -70,6 +70,8 @@ public class                        Tcpdump {
         isRunning = true;
         final DashboardSniff dashboardSniff = new DashboardSniff();
         mDispatcher.setDashboard(dashboardSniff);
+        mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
+        mSingleton.actualNetwork.save();
         new Thread(new Runnable() {
             @Override
             public void run() {

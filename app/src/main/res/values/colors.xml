@@ -22,6 +22,9 @@
     <color name="online_color">@color/material_green_500</color>
     <color name="filtered_color">@color/material_orange_500</color>
     <color name="tint_svg">#ddcccccc</color>
+    <color name="redteam_color">#B71C1C</color><!-- material_red_900 -->
+    <color name="blueteam_color">#0D47A1</color><!-- material_blue_900 -->
+
 
     <color name="offline_color">@color/material_red_500</color>
 

@@ -37,7 +37,7 @@ import fr.dao.app.R;
  * @since [https://github.com/mychoices]
  * <p><a href="https://github.com/mychoices">github</a>
  */
-public class JcoolGraph extends BaseGraph {
+    public class JcoolGraph extends BaseGraph {
     private static final String TAG = JcoolGraph.class.getSimpleName();
     private Paint mBarPaint;
     private int mBarStanded = 0;

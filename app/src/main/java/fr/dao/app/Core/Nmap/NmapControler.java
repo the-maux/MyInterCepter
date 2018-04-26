@@ -95,6 +95,8 @@ public class                        NmapControler {
         Log.d(TAG, "CMD:["+ cmd + "]");
         setTitleToolbar(null, "Scanning " + hostCmd.toString().split(" ").length + " devices");
         hostDiscoveryFromNmap(cmd, hosts, ap, context);
+        mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
+        mSingleton.actualNetwork.save();
     }
 
     /*
@@ -106,6 +108,8 @@ public class                        NmapControler {
     }
 
     private void                    hostDiscoveryFromNmap(final String cmd, final ArrayList<Host> hosts, final Network ap, final Context context) {
+        mSingleton.actualNetwork.defensifAction = mSingleton.actualNetwork.defensifAction + 1;
+        mSingleton.actualNetwork.save();
         new Thread(new Runnable() {
             public void run() {
                 try {

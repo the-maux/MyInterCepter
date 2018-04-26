@@ -35,13 +35,13 @@ import fr.dao.app.Core.Database.DBManager;
 import fr.dao.app.Model.Net.Pcap;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
-import fr.dao.app.View.HostDiscovery.HostDiscoveryHistoricFrgmnt;
+import fr.dao.app.View.DashBoard.NetDiscoveryHistoricFrgmnt;
 import fr.dao.app.View.Scan.NmapActivity;
 import fr.dao.app.View.Sniff.SniffActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
-import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
+import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 public class                    HostDetailActivity extends MyActivity {
     private String              TAG = "HostDetailActivity";
@@ -289,9 +289,9 @@ public class                    HostDetailActivity extends MyActivity {
     }
 
     private void                displayHistoric(String macOfHostFocused) {
-        MyFragment fragment = new HostDiscoveryHistoricFrgmnt();
+        MyFragment fragment = new NetDiscoveryHistoricFrgmnt();
         Bundle args = new Bundle();
-        args.putString("mode", HostDiscoveryHistoricFrgmnt.HOST_HISTORIC);
+        args.putString("mode", NetDiscoveryHistoricFrgmnt.HOST_HISTORIC);
         args.putString("macAddress", macOfHostFocused);
         fragment.setArguments(args);
         initFragment(fragment);

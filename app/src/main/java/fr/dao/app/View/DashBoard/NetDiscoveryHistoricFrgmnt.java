@@ -1,4 +1,4 @@
-package fr.dao.app.View.HostDiscovery;
+package fr.dao.app.View.DashBoard;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -8,7 +8,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,9 +48,9 @@ import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Dialog.RV_dialog;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
-public class                        HostDiscoveryHistoricFrgmnt extends MyFragment {
-    private String                  TAG = "HostDiscoveryHistoricFrgmnt";
-    private HostDiscoveryHistoricFrgmnt mInstance = this;
+public class NetDiscoveryHistoricFrgmnt extends MyFragment {
+    private String                  TAG = "NetDiscoveryHistoricFrgmnt";
+    private NetDiscoveryHistoricFrgmnt mInstance = this;
     private Host                    mFocusedHost = null;
     private List<Network>           networksScanned;
     private Network                 focusedNetwork = null;
@@ -338,7 +337,6 @@ public class                        HostDiscoveryHistoricFrgmnt extends MyFragme
                 .setAdapter(adapter, true)
                 .setTitle("Sniffing sessions recorded")
                 .onPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                     }

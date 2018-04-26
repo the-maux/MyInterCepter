@@ -823,7 +823,6 @@ public abstract class BaseGraph extends View implements GestureDetector.OnGestur
             }
 
             if(mWidth>0) {
-                //已经显示在界面上了 重新设置数据
                 refreshChartSetData();
             }
 

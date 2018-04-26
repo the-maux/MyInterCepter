@@ -17,7 +17,7 @@ public class Dora {
     private DoraActivity            activity;
     private List<DoraProcess>       mListOfHostDored = new ArrayList<>();
     private Singleton               mSingleton = Singleton.getInstance();
-    private boolean isRunning = false;
+    private boolean                 isRunning = false;
 
     private Dora(DoraActivity activity) {
         this.activity = activity;
@@ -44,6 +44,8 @@ public class Dora {
     }
 
     public boolean                  onAction() {
+        mSingleton.actualNetwork.defensifAction = mSingleton.actualNetwork.defensifAction + 1;
+        mSingleton.actualNetwork.save();
         if (mListOfHostDored.isEmpty())
             for (Host host : mSingleton.hostList) {
             if (host.state == Host.State.ONLINE)

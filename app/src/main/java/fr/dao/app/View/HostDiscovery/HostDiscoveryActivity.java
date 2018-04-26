@@ -29,6 +29,7 @@ import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
 import fr.dao.app.Core.Network.NetDiscovering;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.R;
+import fr.dao.app.View.DashBoard.NetDiscoveryHistoricFrgmnt;
 import fr.dao.app.View.SpyMITM.SpyMitmActivity;
 import fr.dao.app.View.Startup.HomeActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
@@ -255,10 +256,10 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 MyFragment fragment;
                 ViewAnimate.setVisibilityToVisibleQuick(mHistory);
                 if (HistoricFragment == null)
-                    HistoricFragment = new HostDiscoveryHistoricFrgmnt();
+                    HistoricFragment = new NetDiscoveryHistoricFrgmnt();
                 fragment = HistoricFragment;
                 Bundle args = new Bundle();
-                args.putString("mode", HostDiscoveryHistoricFrgmnt.DB_HISTORIC);
+                args.putString("mode", NetDiscoveryHistoricFrgmnt.DB_HISTORIC);
                 fragment.setArguments(args);
                 ViewAnimate.setVisibilityToInvisibleQuick(mHistory);
                 ViewAnimate.setVisibilityToInvisibleQuick(mSearchView);
@@ -393,7 +394,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
             Log.d(TAG, "onBackPressed::" + mFragment.getClass().getName());
             if (mFragment.getClass().getName().contains(HostDiscoveryScanFrgmnt.class.getName())) {
                 startActivity(new Intent(mInstance, HomeActivity.class));
-            } else if (mFragment.getClass().getName().contains(HostDiscoveryHistoricFrgmnt.class.getName())) {
+            } else if (mFragment.getClass().getName().contains(NetDiscoveryHistoricFrgmnt.class.getName())) {
                 if (mFragment.onBackPressed()) {
                     Log.d(TAG, "Fragment historic is over, switching to Netdiscover");
                     ViewAnimate.setVisibilityToVisibleQuick(mHistory, 300);

@@ -94,6 +94,9 @@ public class                    WebServerActivity extends MITMActivity {
                 try {
                     mWebServer = new GenericServer(PORT);
                     mWebServer.start();
+                    mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
+                    mSingleton.actualNetwork.save();
+
                     return true;
                 } catch (Exception io) {
                     io.getStackTrace();
