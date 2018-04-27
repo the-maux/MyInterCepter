@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +28,7 @@ import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.R;
 import fr.dao.app.View.DashBoard.DashboardActivity;
+import fr.dao.app.View.HostDetail.HostDetailActivity;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
 import fr.dao.app.View.Settings.SettingsActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
@@ -119,7 +122,9 @@ public class                    HomeActivity extends MyActivity {
         return new View.OnClickListener() {
             public void onClick(View view) {
                 Utils.vibrateDevice(mInstance, 100);
-               startActivity(new Intent(mInstance, DashboardActivity.class));
+                Intent intent = new Intent(mInstance, DashboardActivity.class);
+                Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_dashboard), "logo_activity");
+                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1).toBundle());
             }
         };
     }
@@ -128,7 +133,9 @@ public class                    HomeActivity extends MyActivity {
         return new View.OnClickListener() {
             public void onClick(View view) {
                 Utils.vibrateDevice(mInstance, 100);
-                startActivity(new Intent(mInstance, SettingsActivity.class));
+                Intent intent = new Intent(mInstance, SettingsActivity.class);
+                Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_settings), "logo_activity");
+                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1).toBundle());
             }
         };
     }
@@ -137,7 +144,9 @@ public class                    HomeActivity extends MyActivity {
         return new View.OnClickListener() {
             public void onClick(View view) {
                 Utils.vibrateDevice(mInstance, 100);
-                startActivity(new Intent(mInstance, DefenseHomeActivity.class));
+                Intent intent = new Intent(mInstance, DefenseHomeActivity.class);
+                Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_defense), "logo_defense2");
+                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1).toBundle());
             }
         };
     }
@@ -146,7 +155,9 @@ public class                    HomeActivity extends MyActivity {
         return new View.OnClickListener() {
             public void onClick(View view) {
                 Utils.vibrateDevice(mInstance, 100);
-                startActivity(new Intent(mInstance, HostDiscoveryActivity.class));
+                Intent intent = new Intent(mInstance, HostDiscoveryActivity.class);
+                Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_defense), "logo_activity");
+                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1).toBundle());
             }
         };
     }

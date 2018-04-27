@@ -29,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/header_layout"
+            android:elevation="2dp"
             android:scrollbars="vertical"
             tools:listitem="@layout/monitor_card" />
 
@@ -40,5 +41,22 @@
             android:layout_alignParentEnd="true"
             android:visibility="gone"
             app:srcCompat="@drawable/scylla_transparent" />
+
+        <ImageView
+            android:id="@+id/logo_defense2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="8dp"
+            android:alpha="0.8"
+            android:focusableInTouchMode="false"
+            android:tint="@android:color/primary_text_dark"
+            android:transitionName="logo_defense2"
+            app:layout_constraintBottom_toTopOf="@+id/title_defense"
+            app:layout_constraintDimensionRatio="4:4"
+            app:layout_constraintLeft_toLeftOf="@+id/blue_card"
+            app:layout_constraintRight_toRightOf="@+id/blue_card"
+            app:layout_constraintTop_toTopOf="@+id/blue_card"
+            app:srcCompat="@drawable/unknow" />
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
