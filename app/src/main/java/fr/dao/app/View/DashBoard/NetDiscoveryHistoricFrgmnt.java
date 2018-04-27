@@ -150,7 +150,6 @@ public class NetDiscoveryHistoricFrgmnt extends MyFragment {
         networksScanned = DBNetwork.getAllAccessPoint();
         mDetailSessionLayout.setVisibility(View.GONE);
         if (networksScanned.isEmpty()) {
-            setTitleToolbar("Historic", "No historic");
             mActualMode = HistoricDetailMode.NO_RECORDS;
             ViewAnimate.setVisibilityToVisibleQuick(mEmptyList);
             ViewAnimate.setVisibilityToGoneQuick(mRV);
@@ -327,7 +326,7 @@ public class NetDiscoveryHistoricFrgmnt extends MyFragment {
     }
 
     private void                    pushToolbar() {
-        mActivity.setToolbarTitle(mTitle, mSubtitle);
+   //     mActivity.setToolbarTitle(mTitle, mSubtitle);
         mActivity.initSettingsButton();
     }
 

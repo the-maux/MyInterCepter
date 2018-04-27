@@ -9,14 +9,21 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.CombinedChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,14 +39,16 @@ public class                        DashboardActivity extends MyActivity {
     private Toolbar                 mToolbar;
     private MyFragment              HistoricFragment = null;
     private AppBarLayout            appBarLayout;
-    private CombinedChart           jcoolGraph;
-    private int                     chartNum = 14;
+    private LineChart               jcoolGraph;
+    private TextView                titleChartDashboard;
+
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         initXml();
         init();
+        setToolbarTitle("General Statistique", "64 action performed");
     }
 
     private void                    initXml() {
@@ -49,9 +58,11 @@ public class                        DashboardActivity extends MyActivity {
         appBarLayout = findViewById(R.id.appBarLayout);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                ViewCompat.setElevation(findViewById(R.id.relativeLayout), 6);
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
+        titleChartDashboard = findViewById(R.id.titleChartDashboard);
     }
 
     private void                    init() {
@@ -71,98 +82,107 @@ public class                        DashboardActivity extends MyActivity {
     //https://github.com/PhilJay/MPAndroidChart/issues/756
     private void                    initChart() {
         jcoolGraph = findViewById(R.id.chart);
-//https://github.com/PhilJay/MPAndroidChart/wiki/Setting-Colors
-//        List<Entry> defenseEntry = new ArrayList<Entry>();
-        //FOR TEST X: nbrAttack Y: nbrDef
-        //Simulate 9 Session
-   /*     int rax = 0;
-        for (;rax< 10;rax++) { //For nbr session in networkFocused
-            switch (rax) {
-                case 1:
-                    defenseEntry.add(new Entry(0f, 2));
-                    break;
-                case 2:
-                    defenseEntry.add(new Entry(1f, 4));
-                    break;
-                case 3:
-                    defenseEntry.add(new Entry(2f, 1));
-                    break;
-                case 4:
-                    defenseEntry.add(new Entry(3f, 7));
-                    break;
-                case 5:
-                    defenseEntry.add(new Entry(4f, 12));
-                    break;
-                case 6:
-                    defenseEntry.add(new Entry(5f, 6));
-                    break;
-                case 7:
-                    defenseEntry.add(new Entry(6f, 5));
-                    break;
-            }
-        }
+        List<Entry> attackEntry = getAttackEntry();
+        List<Entry> defenseEntry = getDefenseEntry();
 
+        LineDataSet setComp1 = new LineDataSet(defenseEntry, "Defense");
+        setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
+        setComp1.setColor(ContextCompat.getColor(mInstance, R.color.blueteam_color));
+        setComp1.setCircleColor(ContextCompat.getColor(mInstance, R.color.blueteam_color));
+        setComp1.setCircleColorHole(ContextCompat.getColor(mInstance, R.color.blueteam_color));
+        setComp1.setValueTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
+        LineDataSet setComp2 = new LineDataSet(attackEntry, "Attack");
+        setComp1.setLineWidth(1.2f);
+        setComp2.setAxisDependency(YAxis.AxisDependency.LEFT);
+        setComp2.setColor(ContextCompat.getColor(mInstance, R.color.redteam_color));
+        setComp2.setCircleColor(ContextCompat.getColor(mInstance, R.color.redteam_color));
+        setComp2.setValueTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
+        setComp2.setCircleColorHole(ContextCompat.getColor(mInstance, R.color.redteam_color));
+        setComp2.setLineWidth(1.2f);
+        List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+        dataSets.add(setComp1);
+        dataSets.add(setComp2);
+        LineData data = new LineData(dataSets);
+        Description description = new Description();
+        description.setText("6 analyze");
+        description.setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
+        Legend legend = jcoolGraph.getLegend();
+        legend.setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
+        jcoolGraph.getXAxis().setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
+        jcoolGraph.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        jcoolGraph.getAxisLeft().setDrawLabels(false);
+        jcoolGraph.getAxisRight().setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
+        jcoolGraph.animateY(2000, Easing.EasingOption.Linear);
+        jcoolGraph.setDescription(description);
+        jcoolGraph.setData(data);
+        jcoolGraph.invalidate(); // refresh
+        titleChartDashboard.setText("1 Network pentested");
+    }
 
-*/
+    private List<Entry>                    getAttackEntry() {
         List<Entry> attackEntry = new ArrayList<Entry>();
         //FOR TEST X: nbrAttack Y: nbrDef
         //Simulate 9 Session
         int raxattack = 0;
         for (;raxattack< 10;raxattack++) { //For nbr session in networkFocused
             switch (raxattack) {
-                case 1:
-                    attackEntry.add(new Entry(0f, 5));
+               case 1:
+                    attackEntry.add(new Entry(0f, 5f));
                     break;
                 case 2:
-                    attackEntry.add(new Entry(1f, 2));
+                    attackEntry.add(new Entry(1f, 2f));
                     break;
                 case 3:
-                    attackEntry.add(new Entry(2f, 6));
+                    attackEntry.add(new Entry(2f, 6f));
                     break;
                 case 4:
-                    attackEntry.add(new Entry(3f, 4));
+                    attackEntry.add(new Entry(3f, 4f));
                     break;
                 case 5:
-                    attackEntry.add(new Entry(4f, 8));
+                    attackEntry.add(new Entry(4f, 8f));
                     break;
                 case 6:
-                    attackEntry.add(new Entry(5f, 2));
+                    attackEntry.add(new Entry(5f, 4f));
                     break;
                 case 7:
-                    attackEntry.add(new Entry(6f, 7));
+                    attackEntry.add(new Entry(6f, 7f));
                     break;
             }
         }
-        LineDataSet dataSetattack = new LineDataSet(attackEntry, "Attack"); // add entries to dataset
-    //    dataSetattack.setColor(ContextCompat.getColor(mInstance, R.color.redteam_color));
-        dataSetattack.setColor(Color.rgb(240, 238, 70));
-        dataSetattack.setLineWidth(2.5f);
-        dataSetattack.setCircleColor(Color.rgb(240, 238, 70));
-        dataSetattack.setCircleSize(5f);
-        dataSetattack.setFillColor(Color.rgb(240, 238, 70));
-        dataSetattack.setDrawCubic(true);
-        dataSetattack.setDrawValues(true);
-        dataSetattack.setValueTextSize(10f);
-        dataSetattack.setAxisDependency(YAxis.AxisDependency.LEFT);
+        return attackEntry;
+    }
 
-/*        LineDataSet dataSetDefenze = new LineDataSet(defenseEntry, "Defense"); // add entries to dataset
-        dataSetDefenze.setColor(ContextCompat.getColor(mInstance, R.color.blueteam_color));
-        dataSetDefenze.setValueTextColor(ContextCompat.getColor(mInstance, R.color.material_light_white)); // styling, ...
-*/
-//        ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-        CombinedData data = new CombinedData();
-
-        LineData attackLine = new LineData();
-        attackLine.addDataSet(dataSetattack);
-      //  LineData defenseLine = new LineData();
-      //  defenseLine.addDataSet(dataSetDefenze);
-
-        data.addDataSet(dataSetattack);
-     //   data.addDataSet(dataSetDefenze);
-        jcoolGraph.setDescription("Attack&Defense");
-        jcoolGraph.setData(data);
-        jcoolGraph.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.divider));
-        jcoolGraph.invalidate(); // refresh
+    private List<Entry>                    getDefenseEntry() {
+        List<Entry> defenseEntry = new ArrayList<Entry>();
+        //FOR TEST X: nbrAttack Y: nbrDef
+        //Simulate 9 Session
+        int raxattack = 0;
+        for (;raxattack< 10;raxattack++) { //For nbr session in networkFocused
+            switch (raxattack) {
+                case 1:
+                    defenseEntry.add(new Entry(0f, 2f));
+                    break;
+                case 2:
+                    defenseEntry.add(new Entry(1f, 7f));
+                    break;
+                case 3:
+                    defenseEntry.add(new Entry(2f, 4f));
+                    break;
+                case 4:
+                    defenseEntry.add(new Entry(3f, 17f));
+                    break;
+                case 5:
+                    defenseEntry.add(new Entry(4f, 12f));
+                    break;
+                case 6:
+                    defenseEntry.add(new Entry(5f, 2f));
+                    break;
+                case 7:
+                    defenseEntry.add(new Entry(6f, 5f));
+                    break;
+            }
+        }
+        return defenseEntry;
     }
 
     private void                    initFragment(MyFragment fragment) {
