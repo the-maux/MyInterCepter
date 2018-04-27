@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -176,22 +175,15 @@
                 android:layout_height="match_parent">
 
                 <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:foreground="?attr/selectableItemBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:padding="8dp">
 
-                    <fr.dao.app.External.jgraph.graph.JcoolGraph xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/sug_recode_line"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:clickable="true"
-                        android:paddingRight="5dp"
-                        app:graphstyle="line"
-                        app:showymsg="true" />
-                    <!--app:linestyle="broken"-->
-                    <!--app:linewidth="3dp"-->
+                    <com.github.mikephil.charting.charts.CombinedChart
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/chart"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
                 </FrameLayout>
 
             </android.support.constraint.ConstraintLayout>

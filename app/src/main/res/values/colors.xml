@@ -12,7 +12,7 @@
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
     <color name="icons">#FFFFFF</color>
-    <color name="divider">#BDBDBD</color>
+    <color name="divider">#ddBDBDBD</color>
     <color name="white_secondary">#EEEEEE</color>
     <color name="generic_background">#ee212121</color>
     <color name="generic_background_dark">#ee111111</color>

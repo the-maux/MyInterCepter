@@ -1,5 +1,6 @@
 package fr.dao.app.View.DashBoard;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -8,17 +9,18 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import java.security.SecureRandom;
+import com.github.mikephil.charting.charts.CombinedChart;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.CombinedData;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.dao.app.Core.Configuration.Utils;
-import fr.dao.app.External.jgraph.graph.JcoolGraph;
-import fr.dao.app.External.jgraph.models.Jchart;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
@@ -30,7 +32,7 @@ public class                        DashboardActivity extends MyActivity {
     private Toolbar                 mToolbar;
     private MyFragment              HistoricFragment = null;
     private AppBarLayout            appBarLayout;
-    private JcoolGraph jcoolGraph;
+    private CombinedChart           jcoolGraph;
     private int                     chartNum = 14;
 
     public void                     onCreate(Bundle savedInstanceState) {
@@ -65,69 +67,103 @@ public class                        DashboardActivity extends MyActivity {
         initChart();
     }
 
+
+    //https://github.com/PhilJay/MPAndroidChart/issues/756
     private void                    initChart() {
-        jcoolGraph = findViewById(R.id.sug_recode_line);
-
-        List<Jchart> pointOfGraphAttack = new ArrayList<>();
-        List<Jchart> pointOfGraphDefense = new ArrayList<>();
-        for(int i = 0; i < chartNum; i++) {
-            Jchart tmp = new Jchart(new SecureRandom().nextInt(50)+chartNum, ContextCompat.getColor(mInstance, R.color.redteam_color));
-            pointOfGraphAttack.add(tmp);
-            //TODO: ADD Name on point
-            //lines.add(new Jchart(10,new SecureRandom().nextInt(50) + 15,"test", Color.parseColor("#b8e986")));
-        }
-        for(int i = 0; i < chartNum; i++) {
-            Jchart tmp = new Jchart(new SecureRandom().nextInt(50)+chartNum, ContextCompat.getColor(mInstance, R.color.blueteam_color));
-            pointOfGraphDefense.add(tmp);
-            //TODO: ADD Name on point
-            //lines.add(new Jchart(10,new SecureRandom().nextInt(50) + 15,"test", Color.parseColor("#b8e986")));
-        }
-//        for(Jchart line : lines) {
-//            line.setStandedHeight(100);
-//        }
-        //        lines.get(new SecureRandom().nextInt(chartNum-1)).setUpper(0);
-        pointOfGraphAttack.get(1).setUpper(0);
-        pointOfGraphAttack.get(new SecureRandom().nextInt(chartNum - 1)).setLower(10);
-        pointOfGraphAttack.get(chartNum-2).setUpper(0);
-        pointOfGraphDefense.get(1).setUpper(0);
-        pointOfGraphDefense.get(new SecureRandom().nextInt(chartNum - 1)).setLower(10);
-        pointOfGraphDefense.get(chartNum-2).setUpper(0);
-        //        jcoolGraph.setScrollAble(true);
-//        jcoolGraph.setLineMode();
-
-        //pointOfGraphDefense.add(tmp);
-        jcoolGraph.setLinePointRadio((int) jcoolGraph.getLineWidth());
-//        jcoolGraph.setLineMode(JcoolGraph.LineMode.LINE_DASH_0);
-//        jcoolGraph.setLineStyle(JcoolGraph.LineStyle.LINE_BROKEN);
-        jcoolGraph.setYaxisValues("Yvalue0", "Yvalue1", "Yvalue2");
-        //        jcoolGraph.setSelectedMode(BaseGraph.SelectedMode.SELECETD_MSG_SHOW_TOP);
-        jcoolGraph.setNormalColor(ContextCompat.getColor(mInstance, R.color.redteam_color));//Color of the line
-
-        jcoolGraph.feedData(pointOfGraphAttack);
-        jcoolGraph.feedData(pointOfGraphDefense);
-        ( (FrameLayout) jcoolGraph.getParent() ).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                jcoolGraph.postInvalidate();
+        jcoolGraph = findViewById(R.id.chart);
+//https://github.com/PhilJay/MPAndroidChart/wiki/Setting-Colors
+//        List<Entry> defenseEntry = new ArrayList<Entry>();
+        //FOR TEST X: nbrAttack Y: nbrDef
+        //Simulate 9 Session
+   /*     int rax = 0;
+        for (;rax< 10;rax++) { //For nbr session in networkFocused
+            switch (rax) {
+                case 1:
+                    defenseEntry.add(new Entry(0f, 2));
+                    break;
+                case 2:
+                    defenseEntry.add(new Entry(1f, 4));
+                    break;
+                case 3:
+                    defenseEntry.add(new Entry(2f, 1));
+                    break;
+                case 4:
+                    defenseEntry.add(new Entry(3f, 7));
+                    break;
+                case 5:
+                    defenseEntry.add(new Entry(4f, 12));
+                    break;
+                case 6:
+                    defenseEntry.add(new Entry(5f, 6));
+                    break;
+                case 7:
+                    defenseEntry.add(new Entry(6f, 5));
+                    break;
             }
-        });
-        loopThisTwoGraph(pointOfGraphAttack, pointOfGraphDefense, true);
-    }
+        }
 
-    private void                    loopThisTwoGraph(final List<Jchart> pointOfGraphAttack, final List<Jchart> pointOfGraphDefense, final boolean isDefense) {
-        jcoolGraph.postDelayed(new Runnable() {
-                    public void run() {
-                        mInstance.runOnUiThread(new Runnable() {
-                            public void run() {
-                                jcoolGraph.setNormalColor(ContextCompat.getColor(mInstance, (isDefense) ? R.color.blueteam_color : R.color.redteam_color));//Color of the line
-                                jcoolGraph.aniChangeData(isDefense ? pointOfGraphDefense : pointOfGraphAttack);
-                            }
-                        });
-                        loopThisTwoGraph(pointOfGraphAttack, pointOfGraphDefense, !isDefense);
-                    }
-                }, 2500);
-    }
 
+*/
+        List<Entry> attackEntry = new ArrayList<Entry>();
+        //FOR TEST X: nbrAttack Y: nbrDef
+        //Simulate 9 Session
+        int raxattack = 0;
+        for (;raxattack< 10;raxattack++) { //For nbr session in networkFocused
+            switch (raxattack) {
+                case 1:
+                    attackEntry.add(new Entry(0f, 5));
+                    break;
+                case 2:
+                    attackEntry.add(new Entry(1f, 2));
+                    break;
+                case 3:
+                    attackEntry.add(new Entry(2f, 6));
+                    break;
+                case 4:
+                    attackEntry.add(new Entry(3f, 4));
+                    break;
+                case 5:
+                    attackEntry.add(new Entry(4f, 8));
+                    break;
+                case 6:
+                    attackEntry.add(new Entry(5f, 2));
+                    break;
+                case 7:
+                    attackEntry.add(new Entry(6f, 7));
+                    break;
+            }
+        }
+        LineDataSet dataSetattack = new LineDataSet(attackEntry, "Attack"); // add entries to dataset
+    //    dataSetattack.setColor(ContextCompat.getColor(mInstance, R.color.redteam_color));
+        dataSetattack.setColor(Color.rgb(240, 238, 70));
+        dataSetattack.setLineWidth(2.5f);
+        dataSetattack.setCircleColor(Color.rgb(240, 238, 70));
+        dataSetattack.setCircleSize(5f);
+        dataSetattack.setFillColor(Color.rgb(240, 238, 70));
+        dataSetattack.setDrawCubic(true);
+        dataSetattack.setDrawValues(true);
+        dataSetattack.setValueTextSize(10f);
+        dataSetattack.setAxisDependency(YAxis.AxisDependency.LEFT);
+
+/*        LineDataSet dataSetDefenze = new LineDataSet(defenseEntry, "Defense"); // add entries to dataset
+        dataSetDefenze.setColor(ContextCompat.getColor(mInstance, R.color.blueteam_color));
+        dataSetDefenze.setValueTextColor(ContextCompat.getColor(mInstance, R.color.material_light_white)); // styling, ...
+*/
+//        ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+        CombinedData data = new CombinedData();
+
+        LineData attackLine = new LineData();
+        attackLine.addDataSet(dataSetattack);
+      //  LineData defenseLine = new LineData();
+      //  defenseLine.addDataSet(dataSetDefenze);
+
+        data.addDataSet(dataSetattack);
+     //   data.addDataSet(dataSetDefenze);
+        jcoolGraph.setDescription("Attack&Defense");
+        jcoolGraph.setData(data);
+        jcoolGraph.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.divider));
+        jcoolGraph.invalidate(); // refresh
+    }
 
     private void                    initFragment(MyFragment fragment) {
         try {
@@ -148,7 +184,6 @@ public class                        DashboardActivity extends MyActivity {
 
     public void                     setToolbarTitle(final String title, final String subtitle) {
         mInstance.runOnUiThread(new Runnable() {
-            @Override
             public void run() {
                 if (title != null)
                     mToolbar.setTitle(title);
