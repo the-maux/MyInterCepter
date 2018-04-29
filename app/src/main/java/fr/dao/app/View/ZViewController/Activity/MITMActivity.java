@@ -26,9 +26,9 @@ import fr.dao.app.View.WebServer.WebServerActivity;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 
 
-public abstract class MITMActivity extends MyActivity  {
+public abstract class               MITMActivity extends MyActivity  {
     protected String                TAG = "MITMActivity";
-    protected MITMActivity mInstance = this;
+    protected MITMActivity          mInstance = this;
     protected Bundle                bundle = null;
     protected AHBottomNavigation    mBottomBar;
     protected FloatingActionButton  mFab;
@@ -103,6 +103,7 @@ public abstract class MITMActivity extends MyActivity  {
             else
                 mBottomBar.setNotification(redNotif, 1);
             mBottomBar.setNotification(mSingleton.isDnsControlstarted() ? greenNotif : redNotif, 2);
+            mBottomBar.setNotification(redNotif, 0);
             mBottomBar.setNotification(mSingleton.iswebSpoofed() ? greenNotif : redNotif, 3);
         }
     }
