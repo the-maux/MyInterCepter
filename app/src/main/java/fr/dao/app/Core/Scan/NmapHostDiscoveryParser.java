@@ -50,17 +50,14 @@ class                               NmapHostDiscoveryParser {
     NmapHostDiscoveryParser(NmapControler nmapControler, String NmapDump, Network ap, Context context) {
         this.mNmapControler = nmapControler;
         listRequestApi = Volley.newRequestQueue(context);
-        //Log.d(TAG, "dump list macs[" + listMacs + "]");
         if (mSingleton.Settings.getUserPreferences().autoSaveNmapSession)
             dumpToFile(NmapDump);
         String[] HostNmapDump = NmapDump.split("Nmap scan report for ");
         LENGTH_NODE = HostNmapDump.length-1;
         ExecutorService service = Executors.newCachedThreadPool();
         mNetwork = ap;
-        //Log.i(TAG, "{{{{{{{{{{{{{" + HostNmapDump[0] + "}}}}}}}}}}}}}}}}}");
         for (int i = 1; i < HostNmapDump.length; i++) {/*First node is the nmap preambule*/
             service.execute(dispatcher(HostNmapDump[i], ap));
-          //  Log.i(TAG, "{{{{{{{{{{{{{" + HostNmapDump[i] + "}}}}}}}}}}}}}}}}}");
         }
         service.shutdown();
         try {
@@ -94,15 +91,10 @@ class                               NmapHostDiscoveryParser {
             public void run() {
                 try {
                     Host hostInList = getIpHOSTNAME(node.split("\n")[0], ap.listDevices());
-                    //host.mac = getMACInTmp(hosts, host.ip);
-                    //Host hostInList = ap.getHostFromMac(host.mac);
                     if (!hostInList.ip.contains(Singleton.getInstance().network.myIp))/* Its my device*/
                         buildHostFromNmapDump(node, hostInList);
                     else
                         initIfItsMyDevice(hostInList);
-                } catch (UnknownHostException e) {
-                    Log.e(TAG, "UnknowHost");
-                    e.printStackTrace();
                 } catch (Exception e) {
                     Log.e(TAG, "Error detected in dispatcher");
                 } finally {
@@ -112,7 +104,7 @@ class                               NmapHostDiscoveryParser {
         };
     }
 
-    private void                    buildHostFromNmapDump(String nmapStdout, Host host) throws UnknownHostException {
+    private void                    buildHostFromNmapDump(String nmapStdout, Host host) {
         String[] nmapStdoutHost = nmapStdout.split("\n");
         StringBuilder dump = new StringBuilder("");
         for (int i = 0; i < nmapStdoutHost.length; i++) {
@@ -370,15 +362,15 @@ class                               NmapHostDiscoveryParser {
      |     osxvers=17
      |_    Address=10.16.186.167 fe80:0:0:0:8c1:dc67:c4cc:4b15
      */
-    private int                     getPortList(String[] line, int i, Host host) throws Exception {
+    public static int                     getPortList(String[] line, int i, Host host) throws Exception {
         ArrayList<String> ports = new ArrayList<>();
         for (; i < line.length; i++) {
             if (!(line[i].contains("open") || line[i].contains("close") || line[i].contains("filtered"))) {
-                if (line[i].startsWith("| ") && line[i].endsWith(": ")) {
-                    while (i < line.length && !line[i].startsWith("|_")) {
+                if (line[i].startsWith("| ") && line[i].endsWith(": ")) {//Entering script detail
+                    while (i < line.length && !line[i].startsWith("|_")) {//eating script detail on port
                         ports.add(line[i++].replaceAll("  ", " "));
                     }
-                } else {
+                } else {//ADD the LINE of port, ex: '443/tcp      https        FILTERED'
                     host.Ports(ports);
                     return i-1;
                 }

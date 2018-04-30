@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabItem;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -25,6 +26,7 @@ import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Adapter.DoraAdapter;
+import fr.dao.app.View.ZViewController.Adapter.VunlsProtoAdapter;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 
 public class                    VulnsScanActivity extends MyActivity {
@@ -36,10 +38,10 @@ public class                    VulnsScanActivity extends MyActivity {
     private SearchView          searchView;
     private TabItem             radar, signalQuality;
     private ImageView           add, more;
-    private RecyclerView        mRV_dora;
+    private RecyclerView        mRV_Vulns;
     private ProgressBar         progressBar;
-    private DoraAdapter         mRv_Adapter;
     private FloatingActionButton mFab;
+    private VunlsProtoAdapter   mRv_Adapter;
     private Host                mFocusedHost;
     ProgressDialog              dialog;
 
@@ -47,18 +49,30 @@ public class                    VulnsScanActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vulnscanner);
         initXml();
-        initRV();
         analyseTarget();
         // Toolbar Btn => HailMary
     }
 
-
     private void                analyseTarget() {
         // Create ItemTab for every Open Port
         bundle = getIntent().getExtras();
-        mFocusedHost = DBHost.getDevicesFromMAC(bundle.getString("macAddress"));
-        dialog = ProgressDialog.show(mInstance, "Analyzing " + mFocusedHost.getName(), "Scanning. Please wait...", true);
+        if (bundle == null || bundle.getString("macAddress") == null) {
+            showSnackbar("No target selected");
+        } else {
+            mFocusedHost = DBHost.getDevicesFromMAC(bundle.getString("macAddress"));
+   //         dialog = ProgressDialog.show(mInstance, "Analyzing " + mFocusedHost.getName(), "Scanning. Please wait...", true);
+        }
+    }
 
+    /**
+     * Host has been updated
+     */
+    public void                 updateUIForHost(Host host) {
+        //Create all the tab for every Open Port + 1 General
+        mRv_Adapter = new VunlsProtoAdapter(mInstance, host);
+        mFocusedHost = host;
+        mRV_Vulns.setAdapter(mRv_Adapter);
+        mRV_Vulns.setLayoutManager(new LinearLayoutManager(mInstance));
     }
 
     private void                initXml() {
@@ -70,7 +84,7 @@ public class                    VulnsScanActivity extends MyActivity {
         add = findViewById(R.id.add);
         more = findViewById(R.id.action_add_host);
         more.setOnClickListener(onMoreClicked());
-        mRV_dora = findViewById(R.id.RV_dora);
+        mRV_Vulns = findViewById(R.id.RV_dora);
         mFab = findViewById(R.id.fab);
         progressBar = findViewById(R.id.progressBarDora);
         mFab.setOnClickListener(new View.OnClickListener() {
@@ -101,13 +115,6 @@ public class                    VulnsScanActivity extends MyActivity {
         Utils.vibrateDevice(mInstance);
         //TODO: start a scan or Check its not running
         launchScan();
-    }
-
-    private void                initRV() {
-       // mRv_Adapter = new DoraAdapter(mInstance, mDoraWrapper.getmListOfHostDored());
-        mRV_dora.setAdapter(mRv_Adapter);
-        mRV_dora.setHasFixedSize(true);
-        mRV_dora.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
     }
 
     private void                launchScan() {

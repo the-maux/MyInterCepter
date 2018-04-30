@@ -29,37 +29,76 @@ public class                        NmapControler {
     private NmapParam               mParams = NmapParam.getInstance();
     private NetworkDiscoveryControler mNnetworkDiscoveryControler;
     private Date                    startParsing;
-    private boolean                 mIsLiveDump, isRunning;
+    private boolean                 mIsLiveDump;
     private List<Host>              mHost = null;
+    private RootProcess             process = new RootProcess("Nmap", mSingleton.Settings.FilesPath);
     private String                  mActualScan = "Ping scan", mActualScript = "Heartbleed check";//Default
 
+
+    public                          NmapControler(Host host, int port, String script) {/*Script Vulnerability*/
+        mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
+        mSingleton.actualNetwork.save();
+
+    }
+
+    public                          NmapControler(final VulnScanner scanner, final Host host) {  /*Analyze before Scan vulns*/
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    String tmp;
+                    String cmd = PATH_NMAP + mParams.getHostQuickDiscoverArgs() + host.ip;
+                    StringBuilder outputBuilder = new StringBuilder();
+                    BufferedReader reader = process.exec(cmd).getReader();
+                    while ((tmp = reader.readLine()) != null && !tmp.startsWith("Nmap done")) {
+                        outputBuilder.append(tmp).append('\n');
+                    }
+                    if (outputBuilder.toString().isEmpty() || tmp.isEmpty() || !tmp.startsWith("Nmap done")) {
+                        Log.d(TAG, "Error in nmap execution, Nmap didn't end");
+                        outputBuilder.append(tmp);
+                        Log.e(TAG, outputBuilder.toString());
+                        setTitleToolbar("Network scan", "Nmap Error");
+                        return;
+                    }
+                    outputBuilder.append(tmp);
+                    String FullDUMP = outputBuilder.toString().substring(1);
+
+                    Log.d(TAG, "\t\t LastLine[" + tmp + "]");
+                    //TODO: Need to update the host.Port() !!
+
+                    NmapHostDiscoveryParser.getPortList(FullDUMP.split("\n"), 0)
+
+
+                    scanner.onHostPortsActualized(FullDUMP);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
     /*
-        **   HostDiscoveryActivity
-    * --Script =
-     *              nbstat => U:137
-     *              dns-service-discovery => U:5353
-     *              upnp-info => U:1900
-     *              Windows check => T:135 https://nmap.org/nsedoc/scripts/msrpc-enum.html msrpc
-     *                            => T:445 microsoft-ds
-    *
+        **   NmapActivity
     */
+    public                          NmapControler() {/*Live mode*/
+        //boolean execureAllCommandTogether This need to be in Settings
+        mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
+        mSingleton.actualNetwork.save();
+        mIsLiveDump = true;
+    }
+
+    /*
+     **   HostDiscoveryActivity
+     */
     public                          NmapControler(Network ap, NetworkDiscoveryControler discoveryControler,
                                                   Context context) {/* Parsing mode */
+        mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
+        mSingleton.actualNetwork.save();
         mIsLiveDump = false;
         mNnetworkDiscoveryControler = discoveryControler;
         String hostCmd = NmapParam.buildHostCmdArgs(ap.listDevices());
         Log.d(TAG, "CMD:["+ PATH_NMAP + mParams.getHostQuickDiscoverArgs() + hostCmd + "]");
         setTitleToolbar(null, "Scanning " + hostCmd.split(" ").length + " devices");
         hostDiscoveryFromNmap( context, PATH_NMAP + mParams.getHostQuickDiscoverArgs() + hostCmd, ap);
-        mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
-        mSingleton.actualNetwork.save();
-    }
-
-    /*
-        **   NmapActivity
-    */
-    public                          NmapControler(boolean execureAllCommandTogether) {/*Live mode*/
-        mIsLiveDump = true;
     }
 
     private void                    hostDiscoveryFromNmap(final Context context, final String cmd, final Network ap) {
@@ -70,8 +109,7 @@ public class                        NmapControler {
                     mSingleton.actualNetwork.save();
                     String tmp;
                     StringBuilder outputBuilder = new StringBuilder();
-                    BufferedReader reader = new RootProcess("Nmap", mSingleton.Settings.FilesPath)
-                            .exec(cmd).getReader();
+                    BufferedReader reader = process.exec(cmd).getReader();
                     while ((tmp = reader.readLine()) != null && !tmp.startsWith("Nmap done")) {
                         outputBuilder.append(tmp).append('\n');
                     }
@@ -101,7 +139,7 @@ public class                        NmapControler {
         }).start();
     }
 
-    private String                  buildCommand() {
+    private String                  build(NmapOutputView nmapOutputFragment) {
         StringBuilder res = new StringBuilder("");
         if (mIsLiveDump) {
             for (Host host : mHost) {
@@ -111,11 +149,7 @@ public class                        NmapControler {
         String hostFilter = res.toString();
         String parameter = getParamOfScan(mActualScan);
         String cmd = PATH_NMAP + parameter + " " + hostFilter + " -d";
-        return cmd.replace("  ", " ").replace("\n", "");
-    }
-
-    private String                  build(NmapOutputView nmapOutputFragment) {
-        String cmd = buildCommand();
+        cmd = cmd.replace("  ", " ").replace("\n", "");
         Log.i(TAG, cmd);
         nmapOutputFragment.printCmdInTerminal(cmd
                 .replace("nmap/nmap", "nmap")
@@ -123,35 +157,35 @@ public class                        NmapControler {
         return cmd;
     }
 
-    public void                     startScan(final NmapOutputView nmapOutputFragment, final ProgressBar progressBar) {
-        if (mHost == null) {
-            Log.e(TAG, "No client selected when launched");
-        } else {
+    public boolean                  startScan(final NmapOutputView nmapOutputFragment, final ProgressBar progressBar) {
+        if (mHost != null)
             new Thread(new Runnable() {
-                @Override
                 public void run() {
                     try {
                         String tmp;
                         StringBuilder dumpOutputBuilder = new StringBuilder();
-                        BufferedReader reader = new RootProcess("Nmap", mSingleton.Settings.FilesPath)
-                                .exec(build(nmapOutputFragment)).getReader();
+                        BufferedReader reader = process.exec(build(nmapOutputFragment)).getReader();
                         while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {
                             if (!tmp.isEmpty()) {
                                 if (tmp.charAt(0) == '\n')
                                     tmp = tmp.substring(1);
                                 nmapOutputFragment.flushOutput(tmp + '\n', null);
+                                dumpOutputBuilder.append(tmp).append('\n');
                             }
                         }
-                        dumpOutputBuilder.append(tmp);
                         Log.d(TAG, "Nmap final dump:" + dumpOutputBuilder.toString());
-                        nmapOutputFragment.flushOutput(tmp + '\n', progressBar);
+                        nmapOutputFragment.flushOutput(dumpOutputBuilder.toString(), progressBar);
                     } catch (IOException e) {
                         e.printStackTrace();
                         nmapOutputFragment.flushOutput(null, progressBar);
                     }
                 }
             }).start();
+        else {
+            Log.e(TAG, "No client selected when launched");
+            return false;
         }
+        return true;
     }
 
     public void                     onHostActualized(ArrayList<Host> hosts) {

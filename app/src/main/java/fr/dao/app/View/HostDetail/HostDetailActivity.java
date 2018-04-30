@@ -150,7 +150,7 @@ public class                    HostDetailActivity extends MyActivity {
         mMenuFAB.addMenuButton(initMenuBtn("Sniffing", R.mipmap.ic_hearing, actionActivity.SNIFFER), 0);
         mMenuFAB.addMenuButton(initMenuBtn("Strip connection", R.mipmap.ic_cut_internet, actionActivity.BLOCK_INTERNET), 1);
         mMenuFAB.addMenuButton(initMenuBtn("Nmap", R.mipmap.ic_eye_nosvg, actionActivity.NMAP), 2);
-        mMenuFAB.addMenuButton(initMenuBtn("Vulnerability Scanner", R.drawable.ic_loop_search, actionActivity.VULN_SCAN), 3);
+        mMenuFAB.addMenuButton(initMenuBtn("Vulnerability Scanner", R.drawable.target, actionActivity.VULN_SCAN), 3);
     }
 
     private FloatingActionButton initMenuBtn(String title, int logo, actionActivity type) {
@@ -182,7 +182,7 @@ public class                    HostDetailActivity extends MyActivity {
                     case VULN_SCAN:
                         p1  = Pair.create((View)fabBtn, "VulnIconTransition");
                         intent = new Intent(mInstance, VulnsScanActivity.class);
-                        break;
+                        intent.putExtra("macAddress", getIntent().getExtras().getString("macAddress"));                        break;
                     case BLOCK_INTERNET:
                         intent = new Intent(mInstance, NmapActivity.class);
                         p1  = Pair.create((View)fabBtn, "NmapIconTransition");

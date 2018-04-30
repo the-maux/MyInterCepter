@@ -5,7 +5,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Core.Scan.VulnScanner;
 import fr.dao.app.Model.Target.Host;
+
+import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.CouchDB;
+import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.DNS;
+import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.FTP;
+import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.HTTP;
+import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.IMAP;
+import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.LDAP;
+import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.MongoDB;
+import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.MySQL;
+import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.NTP;
+import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.POP;
+import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.SMB;
+import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.SMTP;
+import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.SSH;
+import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.SSL;
+import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.TELNET;
 
 /*
 https://hackertarget.com/7-nmap-nse-scripts-recon/
@@ -39,21 +56,25 @@ https://hackertarget.com/7-nmap-nse-scripts-recon/
  */
 public class                            NmapParam {
     private String                      TAG = "NmapParam";
+    private static NmapParam            mInstance = null;
     private ArrayList<String>           mMenuCmd = new ArrayList<>(), mMenuCommandScript = new ArrayList<>();
     private Map<String, String>         mParamsForCmd = new HashMap<>(), mNmapParamsScript = new HashMap<>();
-    private static NmapParam            mInstance = null;
+    private Map<VulnScanner.TypeScanner, String> nmapNSE;
 
     private NmapParam() {
         initMenuClassic();
         initMenuScript();
+        initMenuScriptVulnerability();
     }
-
     public static NmapParam             getInstance() {
         if (mInstance == null)
             mInstance = new NmapParam();
         return mInstance;
     }
 
+    /**
+     * Classic Menu scan
+     */
     private void                        initMenuClassic() {
         mMenuCmd.add("Quick scan");
         mParamsForCmd.put(mMenuCmd.get(0), " -T4 -F -v ");
@@ -85,7 +106,32 @@ public class                            NmapParam {
         mMenuCmd.add("Traceroute");
         mParamsForCmd.put(mMenuCmd.get(12), " -sn --traceroute -v ");
     }
+    public ArrayList<String>            getmMenuCmd() {
+        return mMenuCmd;
+    }
+    public String                       getNameTypeScan(int offset) {
+        return mMenuCmd.get(offset);
+    }
+    public String                       getParamTypeScan(String itemMenu) {
+        return mParamsForCmd.get(itemMenu);
+    }
 
+    public static int                   getFocusedScan(String focusedElem) {
+        if (mInstance != null) {
+            final CharSequence[] cmdItems = mInstance.mMenuCmd.toArray(new CharSequence[mInstance.mMenuCmd.size()]);
+            int i = 0;
+            for (; i < cmdItems.length; i++) {//To get actual focus
+                if (cmdItems[i].toString().contains(focusedElem))
+                    break;
+            }
+            return i;
+        } else
+            return 0;
+    }
+
+    /**
+     * Script Menu
+     */
     private void                        initMenuScript() {
         mMenuCommandScript.add("Nbstat");
         mNmapParamsScript.put(mMenuCommandScript.get(0), " -PN -T4 -sS -sU -v --script nbstat.nse " +
@@ -110,31 +156,6 @@ public class                            NmapParam {
         mMenuCommandScript.add("Http headers");
         mNmapParamsScript.put(mMenuCommandScript.get(9), " -sV --script=http-headers ");
     }
-
-    public String                       getParamTypeScan(String itemMenu) {
-       return mParamsForCmd.get(itemMenu);
-    }
-
-    public String                       getNameTypeScan(int offset) {
-        return mMenuCmd.get(offset);
-    }
-
-    public ArrayList<String>            getmMenuCmd() {
-        return mMenuCmd;
-    }
-
-    public static int                   getFocusedScan(String focusedElem) {
-        if (mInstance != null) {
-            final CharSequence[] cmdItems = mInstance.mMenuCmd.toArray(new CharSequence[mInstance.mMenuCmd.size()]);
-            int i = 0;
-            for (; i < cmdItems.length; i++) {//To get actual focus
-                if (cmdItems[i].toString().contains(focusedElem))
-                    break;
-            }
-            return i;
-        } else
-            return 0;
-    }
     public static int                   getFocusedScript(String focusedElem) {
         if (mInstance != null) {
             final CharSequence[] cmdItems = mInstance.mMenuCommandScript.toArray(new CharSequence[mInstance.mMenuCommandScript.size()]);
@@ -148,6 +169,14 @@ public class                            NmapParam {
             return 0;
     }
 
+    /**
+     *     * --Script =
+     *              nbstat => U:137
+     *              dns-service-discovery => U:5353
+     *              upnp-info => U:1900
+     *              Windows check => T:135 https://nmap.org/nsedoc/scripts/msrpc-enum.html msrpc
+     *                            => T:445 microsoft-ds
+     */
     public String                       getHostQuickDiscoverArgs() {
         return " -PN -sS -T3 -sU " +
                 "--script nbstat.nse,dns-service-discovery,upnp-info " +
@@ -155,7 +184,6 @@ public class                            NmapParam {
                 "-p T:21,T:22,T:23,T:25,T:80,T:110,T:111,T:135,T:139,T:3128,T:443,T:445,T:2049,T:2869," +
                 "U:53,U:1900,U:3031,U:5353  ";
     }
-
     public static String                buildHostCmdArgs(ArrayList<Host> hosts) {
         StringBuilder hostCmd = new StringBuilder("");
         for (Host host : hosts) {
@@ -163,5 +191,30 @@ public class                            NmapParam {
                 hostCmd.append(" ").append(host.ip);//CleverScan, don't re-scan
         }
         return hostCmd.toString();
+    }
+
+    /**
+     * VulnerabilityScan
+     */
+    private void                        initMenuScriptVulnerability() {
+        nmapNSE = new HashMap<>();
+        nmapNSE.put(FTP, "ftp-anon.nse,ftp-bounce.nse,ftp-brute.nse,ftp-libopie.nse,ftp-proftpd-backdoor.nse,ftp-vsftpd-backdoor.nse,ftp-vuln-cve2010-4221.nse");
+        nmapNSE.put(SSH, "ssh2-enum-algos.nse,ssh-hostkey.nse,sshv1.nse");
+        nmapNSE.put(TELNET, "telnet-brute.nse,telnet-encryption.nse");
+        nmapNSE.put(SMTP, "smtp-brute.nse,smtp-commands.nse,smtp-enum-users.nse,smtp-open-relay.nse,smtp-strangeport.nse,smtp-vuln-cve2010-4344.nse,smtp-vuln-cve2011-1720.nse,smtp-vuln-cve2011-1764.nse");
+        nmapNSE.put(DNS, "ns-blacklist.nse,dns-brute.nse,dns-cache-snoop.nse,dns-check-zone.nse,dns-client-subnet-scan.nse,dns-fuzz.nse,dns-ip6-arpa-scan.nse,dns-nsec3-enum.nse,dns-nsec-enum.nse,dns-nsid.nse,dns-random-srcport.nse,dns-random-txid.nse,dns-recursion.nse,dns-service-discovery.nse,dns-srv-enum.nse,dns-update.nse,dns-zeustracker.nse,dns-zone-transfer.nse");
+        nmapNSE.put(HTTP, "http-adobe-coldfusion-apsa1301.nse,http-affiliate-id.nse,http-apache-negotiation.nse,http-auth-finder.nse,http-auth.nse,http-awstatstotals-exec.nse,http-axis2-dir-traversal.nse,http-backup-finder.nse,http-barracuda-dir-traversal.nse,http-brute.nse,http-cakephp-version.nse,http-chrono.nse,http-coldfusion-subzero.nse,http-comments-displayer.nse,http-config-backup.nse,http-cors.nse,http-date.nse,http-default-accounts.nse,http-domino-enum-passwords.nse,http-drupal-enum-users.nse,http-drupal-modules.nse,http-email-harvest.nse,http-enum.nse,http-exif-spider.nse,http-favicon.nse,http-fileupload-exploiter.nse,http-form-brute.nse,http-form-fuzzer.nse,http-frontpage-login.nse,http-generator.nse,http-git.nse,http-gitweb-projects-enum.nse,http-google-malware.nse,http-grep.nse,http-headers.nse,http-huawei-hg5xx-vuln.nse,http-icloud-findmyiphone.nse,http-icloud-sendmsg.nse,http-iis-webdav-vuln.nse,http-joomla-brute.nse,http-litespeed-sourcecode-download.nse,http-majordomo2-dir-traversal.nse,http-malware-host.nse,http-methods.nse,http-method-tamper.nse,http-open-proxy.nse,http-open-redirect.nse,http-passwd.nse,http-phpmyadmin-dir-traversal.nse,http-phpself-xss.nse,http-php-version.nse,http-plesk-backdoor.nse,http-proxy-brute.nse,http-put.nse,http-qnap-nas-info.nse,http-rfi-spider.nse,http-robots.txt.nse,http-robtex-reverse-ip.nse,http-robtex-shared-ns.nse,http-sitemap-generator.nse,http-slowloris-check.nse,http-slowloris.nse,http-sql-injection.nse,http-stored-xss.nse,http-title.nse,http-tplink-dir-traversal.nse,http-trace.nse,http-traceroute.nse,http-unsafe-output-escaping.nse,http-userdir-enum.nse,http-vhosts.nse,http-virustotal.nse,http-vlcstreamer-ls.nse,http-vmware-path-vuln.nse,http-vuln-cve2009-3960.nse,http-vuln-cve2010-0738.nse,http-vuln-cve2010-2861.nse,http-vuln-cve2011-3192.nse,http-vuln-cve2011-3368.nse,http-vuln-cve2012-1823.nse,http-vuln-cve2013-0156.nse,http-waf-detect.nse,http-waf-fingerprint.nse,http-wordpress-brute.nse,http-wordpress-enum.nse,http-wordpress-plugins.nse");
+        nmapNSE.put(SSL, "ssl-cert.nse,ssl-date.nse,ssl-enum-ciphers.nse,ssl-google-cert-catalog.nse,ssl-known-key.nse,sslv2.nse");
+        nmapNSE.put(SMB, "smb-brute.nse,smb-check-vulns.nse,smb-enum-domains.nse,smb-enum-groups.nse,smb-enum-processes.nse,smb-enum-sessions.nse,smb-enum-shares.nse,smb-enum-users.nse,smb-flood.nse,smb-ls.nse,smb-mbenum.nse,smb-os-discovery.nse,smb-print-text.nse,smb-psexec.nse,smb-security-mode.nse,smb-server-stats.nse,smb-system-info.nse,smbv2-enabled.nse,smb-vuln-ms10-054.nse,smb-vuln-ms10-061.nse");
+        nmapNSE.put(POP, "pop3-brute.nse,pop3-capabilities.nse");
+        nmapNSE.put(NTP, "ntp-info.nse,ntp-monlist.nse");
+        nmapNSE.put(IMAP, "imap-brute.nse,imap-capabilities.nse");
+        nmapNSE.put(MySQL, "mysql-audit.nse,mysql-brute.nse,mysql-databases.nse,mysql-dump-hashes.nse,mysql-empty-password.nse,mysql-enum.nse,mysql-info.nse,mysql-query.nse,mysql-users.nse,mysql-variables.nse,mysql-vuln-cve2012-2122.nse");
+        nmapNSE.put(MongoDB, "mongodb-brute.nse,mongodb-databases.nse,mongodb-info.nse");
+        nmapNSE.put(CouchDB, "couchdb-databases.nse,couchdb-stats.nse");
+        nmapNSE.put(LDAP, "ldap-brute.nse,ldap-novell-getpass.nse,ldap-rootdse.nse,ldap-search.nse");
+    }
+    public String                       getScriptForScanFromTypeScanner(VulnScanner.TypeScanner scanner) {
+        return nmapNSE.get(scanner);
     }
 }
