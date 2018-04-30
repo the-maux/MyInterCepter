@@ -101,4 +101,16 @@ public class                    ViewAnimate {
         });
     }
 
+    public static void          scaleUp(Context context, final View mMenuFAB) {
+        Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.fab_scale_up);
+        scaleUp.setDuration(1250);
+        scaleUp.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+                mMenuFAB.setVisibility(View.VISIBLE);
+            }
+            public void onAnimationEnd(Animation animation) {}
+            public void onAnimationRepeat(Animation animation) {}
+        });
+        mMenuFAB.startAnimation(scaleUp);
+    }
 }

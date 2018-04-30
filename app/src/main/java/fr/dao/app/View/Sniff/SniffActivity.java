@@ -27,9 +27,9 @@ import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MITMActivity;
-import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
+import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 import fr.dao.app.View.ZViewController.Fragment.PcapListerFragment;
 
 public class                    SniffActivity extends MITMActivity {
@@ -46,7 +46,7 @@ public class                    SniffActivity extends MITMActivity {
 
     protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wireshark);
+        setContentView(R.layout.activity_sniffer);
         initXml();
         init(getIntent());
     }

@@ -26,9 +26,9 @@ import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Adapter.DoraAdapter;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 
-public class HunterActivity extends MyActivity {
+public class VulnsScanActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
-    private HunterActivity mInstance = this;
+    private VulnsScanActivity mInstance = this;
 
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
@@ -45,7 +45,7 @@ public class HunterActivity extends MyActivity {
 
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dora);
+        setContentView(R.layout.activity_vulnscanner);
         initXml();
         initRV();
         //TODO: Analyze the target (check all port for VulnScan)

@@ -14,8 +14,8 @@ import java.util.List;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.R;
 import fr.dao.app.View.Sniff.SniffActivity;
-import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Adapter.Holder.PcapHolder;
+import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Fragment.PcapListerFragment;
 
 public class                    PcapFileAdapter extends RecyclerView.Adapter<PcapHolder> {
@@ -29,6 +29,13 @@ public class                    PcapFileAdapter extends RecyclerView.Adapter<Pca
         this.mPcaps = pcaps;
         this.pcapListerFragment = pcapListerFragment;
     }
+
+//    public                      PcapFileAdapter(Activity activity, List<File> pcaps, PcapListerFragment pcapListerFragment) {
+//        this.mActivity = activity;
+//        this.mPcaps = pcaps;
+//        this.pcapListerFragment = pcapListerFragment;
+//    }
+
 
     public PcapHolder           onCreateViewHolder(ViewGroup parent, int viewType) {
         return new PcapHolder(LayoutInflater.from(parent.getContext())
@@ -58,8 +65,8 @@ public class                    PcapFileAdapter extends RecyclerView.Adapter<Pca
                 Intent intent = new Intent(mActivity, SniffActivity.class);
                 Log.d(TAG, "newIntent Pcap:"+pcap.getPath());
                 intent.putExtra("Pcap", pcap.getPath());
-                if (pcapListerFragment != null)
-                    pcapListerFragment.dismiss();
+                /*if (pcapListerFragment != null)
+                    pcapListerFragment.dismiss();*/
                 mActivity.startActivity(intent);
             }
         };
