@@ -19,8 +19,8 @@ import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
-public class NmapTTYFrgmnt extends MyFragment  {
-    private String              TAG = "NmapTTYFrgmnt";
+public class                    NmapOutputView extends MyFragment  {
+    private String              TAG = "NmapOutputView";
     private Host                mFocusedHost;
     private CoordinatorLayout   mCoordinatorLayout;
     private TextView            Output;
@@ -46,7 +46,7 @@ public class NmapTTYFrgmnt extends MyFragment  {
 
     public void                 refresh(Host host) {
         mFocusedHost = host;
-        if (Output != null) {
+        if (Output != null) {//Besoin de faire évolué le get historic from host.mac to host.scan.type
             if (historicByDevice.get(host.mac) != null) {
                 Log.d(TAG, "Loading previous view for device:" + host.ip);
                 Output.setText(Html.fromHtml((String)historicByDevice.get(host.mac)), TextView.BufferType.SPANNABLE);

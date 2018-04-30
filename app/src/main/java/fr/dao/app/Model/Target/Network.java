@@ -18,7 +18,6 @@ import fr.dao.app.Model.Net.Service;
 @Table(name = "Network", id = "_id")
 public class                Network extends Model {
     public static String    NAME_COLUMN = "Network";
-
     @Column(name = "ssid")
     public String           Ssid;
     @Column(name = "lastScanDate")

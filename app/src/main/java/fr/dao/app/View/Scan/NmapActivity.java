@@ -29,7 +29,7 @@ import java.util.List;
 
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
-import fr.dao.app.Core.Nmap.NmapControler;
+import fr.dao.app.Core.Scan.NmapControler;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MITMActivity;
@@ -42,7 +42,7 @@ public class                    NmapActivity extends MITMActivity {
     private NmapActivity        mInstance = this;
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
-    private NmapTTYFrgmnt nmapOutputFragment;
+    private NmapOutputView nmapOutputFragment;
     private AppBarLayout        appBarLayout;
     private TextView            monitorHostTargeted, monitorNmapParam;
     private TextView            MonitorInoptionTheTarget;
@@ -102,10 +102,16 @@ public class                    NmapActivity extends MITMActivity {
     }
 
     private void                init() {
-        nmapControler = new NmapControler(false);
+        if (nmapControler == null)
+            nmapControler = new NmapControler(false);
         mScript.setOnClickListener(onClickScript());
         mScanType.setOnClickListener(onClickTypeScript());
         initFragment();
+        initHostBehavior();
+        initNavigationBottomBar(SCANNER, true);
+    }
+
+    private void                initHostBehavior() {
         if (mSingleton.hostList == null || mSingleton.hostList.isEmpty()) {//MODE: No targert
             Log.d(TAG, "MODE: NO TARGET");
             MonitorInoptionTheTarget.setText("No target selected");
@@ -123,18 +129,15 @@ public class                    NmapActivity extends MITMActivity {
                 mListHostSelected = mSingleton.hostList;
             }
             initTabswithTargets(mListHostSelected);
-            monitorNmapParam.setText(nmapControler.getNmapParamFromMenuItem(nmapControler.getMenuCommmands().get(0)));
+            monitorNmapParam.setText(nmapControler.getParamOfScan(nmapControler.getNameOfScan(0)));
             initUIWithTarget(mListHostSelected.get(0));
-           // ViewAnimate.setVisibilityToVisibleQuick(mFab);
-            //mFab.show();
             ViewAnimate.FabAnimateReveal(mInstance, mFab);
         }
-        initNavigationBottomBar(SCANNER, true);
     }
 
     private void                initFragment() {
         try {
-            nmapOutputFragment = new NmapTTYFrgmnt();
+            nmapOutputFragment = new NmapOutputView();
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.frame_container, nmapOutputFragment)
@@ -262,7 +265,7 @@ public class                    NmapActivity extends MITMActivity {
                                 dialog.dismiss();
                                 String typeScan = charSequenceItems[((AlertDialog)dialog).getListView().getCheckedItemPosition()].toString();
                                 Log.d(TAG, "NEW Nmap TypeScan:" + typeScan);
-                                String param = nmapControler.getNmapParamFromMenuItem(typeScan);
+                                String param = nmapControler.getParamOfScan(typeScan);
                                 Log.d(TAG, "NEW Nmap Param:" + param);
                                 monitorNmapParam.setText(param);
                                 nmapControler.setmActualItemMenu(typeScan);

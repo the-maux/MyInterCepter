@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import fr.dao.app.Core.Configuration.Singleton;
-import fr.dao.app.Core.Nmap.Fingerprint;
+import fr.dao.app.Core.Scan.Fingerprint;
 import fr.dao.app.Model.Target.Host;
 
 public class                                DBHost {

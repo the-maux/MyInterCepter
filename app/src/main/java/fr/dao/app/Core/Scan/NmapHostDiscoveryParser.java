@@ -1,4 +1,4 @@
-package fr.dao.app.Core.Nmap;
+package fr.dao.app.Core.Scan;
 
 import android.content.Context;
 import android.os.Build;
@@ -39,7 +39,7 @@ import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.Model.Unix.Os;
 
-class NmapHostDiscoveryParser {
+class                               NmapHostDiscoveryParser {
     private String                  TAG = "NmapHostDiscoveryParser";
     private Singleton               mSingleton = Singleton.getInstance();
     private Network                 mNetwork;

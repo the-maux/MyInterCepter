@@ -26,11 +26,8 @@ import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickList
 import java.util.ArrayList;
 
 import fr.dao.app.Core.Configuration.Utils;
-import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Database.DBNetwork;
 import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
-import fr.dao.app.Core.Network.NetDiscovering;
-import fr.dao.app.Core.Nmap.Fingerprint;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.Model.Unix.Os;
