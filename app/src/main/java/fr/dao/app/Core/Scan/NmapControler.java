@@ -26,12 +26,12 @@ public class                        NmapControler {
     private NmapControler           mInstance = this;
     private Singleton               mSingleton = Singleton.getInstance();
     private String                  PATH_NMAP = mSingleton.Settings.FilesPath + "nmap/nmap ";
-    private boolean                 mIsLiveDump, isRunning;
-    private NetworkDiscoveryControler mNnetworkDiscoveryControler;
-    private String                  mActualItemMenu = "Ping scan";//Default
-    private List<Host>              mHost = null;
-    private Date                    startParsing;
     private NmapParam               mParams = NmapParam.getInstance();
+    private NetworkDiscoveryControler mNnetworkDiscoveryControler;
+    private Date                    startParsing;
+    private boolean                 mIsLiveDump, isRunning;
+    private List<Host>              mHost = null;
+    private String                  mActualScan = "Ping scan", mActualScript = "Heartbleed check";//Default
 
     /*
         **   HostDiscoveryActivity
@@ -52,7 +52,7 @@ public class                        NmapControler {
                 "U:53,U:1900,U:3031,U:5353  ";
         mIsLiveDump = false;
         mNnetworkDiscoveryControler = networkDiscoveryControler;
-        mActualItemMenu = "Basic Host discovery";
+        mActualScan = "Basic Host discovery";
         StringBuilder hostCmd = new StringBuilder("");
         for (Host host : hosts) {
             if (mSingleton.Settings.getUserPreferences().NmapMode > host.Deepest_Scan)//To not scan again automaticaly already scanned host
@@ -120,7 +120,7 @@ public class                        NmapControler {
             }
         }
         String hostFilter = res.toString();
-        String parameter = getParamOfScan(mActualItemMenu);
+        String parameter = getParamOfScan(mActualScan);
         String cmd = PATH_NMAP + parameter + " " + hostFilter + " -d";
         return cmd.replace("  ", " ").replace("\n", "");
     }
@@ -134,7 +134,7 @@ public class                        NmapControler {
         return cmd;
     }
 
-    public void                     start(final NmapOutputView nmapOutputFragment, final ProgressBar progressBar) {
+    public void                     startScan(final NmapOutputView nmapOutputFragment, final ProgressBar progressBar) {
         if (mHost == null) {
             Log.e(TAG, "No client selected when launched");
         } else {
@@ -167,11 +167,10 @@ public class                        NmapControler {
 
     public void                     onHostActualized(ArrayList<Host> hosts) {
         Log.d(TAG, "All node was parsed in :" + Utils.TimeDifference(startParsing));
-        mNnetworkDiscoveryControler.onScanFinished(hosts);
-    }
-
-    public void                     setmActualItemMenu(String itemMenu) {
-        this.mActualItemMenu = itemMenu;
+        if (mNnetworkDiscoveryControler != null)
+            mNnetworkDiscoveryControler.onScanFinished(hosts);
+        else
+            Log.e(TAG, "onHostActualized but networkDiscoveryControler is null ");
     }
 
     public void                     setHosts(List<Host> hosts) {
@@ -179,22 +178,31 @@ public class                        NmapControler {
     }
 
     public void                     setTitleToolbar(String title, String subtitle) {
-        mNnetworkDiscoveryControler.setToolbarTitle(title, subtitle);
+        if (mNnetworkDiscoveryControler != null)
+            mNnetworkDiscoveryControler.setToolbarTitle(title, subtitle);
+        else
+            Log.e(TAG, "setting title toolbar but networkDiscoveryControler is null ");
     }
 
+    public void                     setmActualScan(String itemMenu) {
+        this.mActualScan = itemMenu;
+    }
     public String                   getActualCmd() {
-        return mActualItemMenu;
+        return mActualScan;
     }
-
     public ArrayList<String>        getMenuCommmands() {
         return mParams.getmMenuCmd();
     }
-
+    public ArrayList<String>        getMenuScripts() {
+        return mParams.getmMenuCmd();
+    }
     public String                   getNameOfScan(int offset) {
         return mParams.getNameTypeScan(offset);
     }
-
     public String                   getParamOfScan(String itemMenu) {
         return mParams.getParamTypeScan(itemMenu);
+    }
+    public String                   getActualScript() {
+        return mActualScript;
     }
 }

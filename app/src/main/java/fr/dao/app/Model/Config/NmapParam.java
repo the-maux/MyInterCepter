@@ -36,10 +36,8 @@ https://hackertarget.com/7-nmap-nse-scripts-recon/
  */
 public class                            NmapParam {
     private String                      TAG = "NmapParam";
-    private ArrayList<String>           mMenuCmd = new ArrayList<>();
-    private Map<String, String>         mParamsForCmd = new HashMap<>();
-    private ArrayList<String>           mMenuCommandScript = new ArrayList<>();
-    private Map<String, String>         mNmapParamsScript = new HashMap<>();
+    private ArrayList<String>           mMenuCmd = new ArrayList<>(), mMenuCommandScript = new ArrayList<>();
+    private Map<String, String>         mParamsForCmd = new HashMap<>(), mNmapParamsScript = new HashMap<>();
     private static NmapParam            mInstance = null;
 
     private NmapParam() {
@@ -120,5 +118,30 @@ public class                            NmapParam {
 
     public ArrayList<String>            getmMenuCmd() {
         return mMenuCmd;
+    }
+
+    public static int                   getFocusedScan(String focusedElem) {
+        if (mInstance != null) {
+            final CharSequence[] cmdItems = mInstance.mMenuCmd.toArray(new CharSequence[mInstance.mMenuCmd.size()]);
+            int i = 0;
+            for (; i < cmdItems.length; i++) {//To get actual focus
+                if (cmdItems[i].toString().contains(focusedElem))
+                    break;
+            }
+            return i;
+        } else
+            return 0;
+    }
+    public static int                   getFocusedScript(String focusedElem) {
+        if (mInstance != null) {
+            final CharSequence[] cmdItems = mInstance.mMenuCommandScript.toArray(new CharSequence[mInstance.mMenuCommandScript.size()]);
+            int i = 0;
+            for (; i < cmdItems.length; i++) {//To get actual focus
+                if (cmdItems[i].toString().contains(focusedElem))
+                    break;
+            }
+            return i;
+        } else
+            return 0;
     }
 }

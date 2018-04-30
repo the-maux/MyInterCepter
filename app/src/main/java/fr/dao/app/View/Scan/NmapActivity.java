@@ -30,6 +30,7 @@ import java.util.List;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Scan.NmapControler;
+import fr.dao.app.Model.Config.NmapParam;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MITMActivity;
@@ -53,7 +54,7 @@ public class                    NmapActivity extends MITMActivity {
     private ImageButton         mSettingsMenu, mScript, mScanType;
     private NmapControler       nmapControler;
     private ProgressBar         mProgressBar;
-    private boolean             isExternalTarget;
+    private boolean             isExternalTarget = false, isInScriptMode = false;
 
     protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,8 +72,8 @@ public class                    NmapActivity extends MITMActivity {
         mProgressBar = findViewById(R.id.progressBar);
         mSettingsMenu = findViewById(R.id.settingsMenu);
         MonitorInoptionTheTarget = findViewById(R.id.targetMonitor);
-        mScript = findViewById(R.id.history);
-        mScanType = findViewById(R.id.searchView);
+        mScript = findViewById(R.id.scriptBtn);
+        mScanType = findViewById(R.id.typeScanBtn);
         mNmapConfEditorLayout = findViewById(R.id.nmapConfEditorLayout);
         nmapConfLayout = findViewById(R.id.nmapConfLayout);
         mFab = findViewById(R.id.fab);
@@ -105,7 +106,7 @@ public class                    NmapActivity extends MITMActivity {
         if (nmapControler == null)
             nmapControler = new NmapControler(false);
         mScript.setOnClickListener(onClickScript());
-        mScanType.setOnClickListener(onClickTypeScript());
+        mScanType.setOnClickListener(onClickTypeOfScan());
         initFragment();
         initHostBehavior();
         initNavigationBottomBar(SCANNER, true);
@@ -201,8 +202,14 @@ public class                    NmapActivity extends MITMActivity {
 
     public void                 startNmap() {
         Utils.vibrateDevice(mInstance);
-        nmapControler.start(nmapOutputFragment, mProgressBar);
         mProgressBar.setVisibility(View.VISIBLE);
+        if (!isInScriptMode) {
+//            nmapControler.startScript(nmapOutputFragment, mProgressBar);
+            showSnackbar("Need to implemente the nmap scan");
+            nmapOutputFragment.flushOutput(null, mProgressBar);
+        } else {
+            nmapControler.startScan(nmapOutputFragment, mProgressBar);
+        }
     }
 
     private void                askForExternalTarget() {
@@ -245,35 +252,28 @@ public class                    NmapActivity extends MITMActivity {
         askForExternalTarget();
     }
 
-    private View.OnClickListener onClickTypeScript() {
+    private View.OnClickListener onClickTypeOfScan() {
         return new View.OnClickListener() {
-            @Override
             public void onClick(View view) {
-                ArrayList<String> list = nmapControler.getMenuCommmands();
-                final CharSequence[] charSequenceItems = list.toArray(new CharSequence[list.size()]);
-                int i = 0;
-                for (; i < charSequenceItems.length; i++) {
-                    if (charSequenceItems[i].toString().contains(nmapControler.getActualCmd()))
-                        break;
-                }
+                final CharSequence[] cmdItems = nmapControler.getMenuCommmands().toArray(new CharSequence[nmapControler.getMenuCommmands().size()]);
                 new AlertDialog.Builder(mInstance)
-                        .setSingleChoiceItems(charSequenceItems, i, null)
-                        .setTitle("Type of scan")
+                        .setSingleChoiceItems(cmdItems, NmapParam.getFocusedScript(nmapControler.getActualCmd()), null)
+                        .setTitle("Scan available")
                         .setIcon(R.drawable.ic_nmap_icon_tabbutton)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 dialog.dismiss();
-                                String typeScan = charSequenceItems[((AlertDialog)dialog).getListView().getCheckedItemPosition()].toString();
+                                isInScriptMode = false;
+                                String typeScan = cmdItems[((AlertDialog)dialog).getListView().getCheckedItemPosition()].toString();
                                 Log.d(TAG, "NEW Nmap TypeScan:" + typeScan);
                                 String param = nmapControler.getParamOfScan(typeScan);
                                 Log.d(TAG, "NEW Nmap Param:" + param);
                                 monitorNmapParam.setText(param);
-                                nmapControler.setmActualItemMenu(typeScan);
+                                nmapControler.setmActualScan(typeScan);
                                 if (param != null)
                                     setToolbarTitle(null, typeScan);
                             }
-                        })
-                        .show();
+                        }).show();
             }
         };
     }
@@ -281,7 +281,25 @@ public class                    NmapActivity extends MITMActivity {
     private View.OnClickListener onClickScript() {
         return new View.OnClickListener() {
             public void onClick(View view) {
-
+                final CharSequence[] scriptItems = nmapControler.getMenuScripts().toArray(new CharSequence[nmapControler.getMenuScripts().size()]);
+                new AlertDialog.Builder(mInstance)
+                        .setSingleChoiceItems(scriptItems, NmapParam.getFocusedScript(nmapControler.getActualScript()), null)
+                        .setTitle("Script available")
+                        .setIcon(R.drawable.ic_nmap_icon_tabbutton)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                isInScriptMode = true;
+                                dialog.dismiss();
+                                String typeScan = scriptItems[((AlertDialog)dialog).getListView().getCheckedItemPosition()].toString();
+                                Log.d(TAG, "NEW Nmap Script:" + typeScan);
+                                String param = nmapControler.getParamOfScan(typeScan);
+                                Log.d(TAG, "NEW Nmap Script Param:" + param);
+                                monitorNmapParam.setText(param);
+                                nmapControler.setmActualScan(typeScan);
+                                if (param != null)
+                                    setToolbarTitle(null, typeScan);
+                            }
+                        }).show();
             }
         };
     }
