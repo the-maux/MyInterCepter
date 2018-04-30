@@ -43,17 +43,15 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/OsImg"
-                app:layout_constraintRight_toLeftOf="@+id/searchView"
+                app:layout_constraintRight_toLeftOf="@+id/typeScanBtn"
                 app:layout_constraintTop_toTopOf="parent"
-                app:subtitle="v6.40"
                 app:subtitleTextColor="@color/tint_svg"
-                app:title="Nmap"
                 app:titleTextColor="@android:color/primary_text_dark">
 
             </android.support.v7.widget.Toolbar>
 
             <ImageButton
-                android:id="@+id/searchView"
+                android:id="@+id/typeScanBtn"
                 android:layout_width="@dimen/btn_toolbar_size"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
@@ -62,12 +60,12 @@
                 android:src="@drawable/ic_list_svg"
                 android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/history"
+                app:layout_constraintRight_toLeftOf="@+id/scriptBtn"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_min="45dp" />
 
             <ImageButton
-                android:id="@+id/history"
+                android:id="@+id/scriptBtn"
                 android:layout_width="@dimen/btn_toolbar_size"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"

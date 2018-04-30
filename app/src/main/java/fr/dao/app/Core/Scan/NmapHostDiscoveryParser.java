@@ -1,4 +1,4 @@
-package fr.dao.app.Core.Nmap;
+package fr.dao.app.Core.Scan;
 
 import android.content.Context;
 import android.os.Build;
@@ -39,7 +39,7 @@ import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.Model.Unix.Os;
 
-class NmapHostDiscoveryParser {
+class                               NmapHostDiscoveryParser {
     private String                  TAG = "NmapHostDiscoveryParser";
     private Singleton               mSingleton = Singleton.getInstance();
     private Network                 mNetwork;
@@ -47,7 +47,7 @@ class NmapHostDiscoveryParser {
     private int                     LENGTH_NODE, NBR_PARSED_NODE = 0;
     private RequestQueue            listRequestApi;
 
-    NmapHostDiscoveryParser(NmapControler nmapControler, ArrayList<Host> hosts, String NmapDump, Network ap, Context context) {
+    NmapHostDiscoveryParser(NmapControler nmapControler, String NmapDump, Network ap, Context context) {
         this.mNmapControler = nmapControler;
         listRequestApi = Volley.newRequestQueue(context);
         //Log.d(TAG, "dump list macs[" + listMacs + "]");
@@ -59,7 +59,7 @@ class NmapHostDiscoveryParser {
         mNetwork = ap;
         //Log.i(TAG, "{{{{{{{{{{{{{" + HostNmapDump[0] + "}}}}}}}}}}}}}}}}}");
         for (int i = 1; i < HostNmapDump.length; i++) {/*First node is the nmap preambule*/
-            service.execute(dispatcher(HostNmapDump[i], hosts, ap));
+            service.execute(dispatcher(HostNmapDump[i], ap));
           //  Log.i(TAG, "{{{{{{{{{{{{{" + HostNmapDump[i] + "}}}}}}}}}}}}}}}}}");
         }
         service.shutdown();
@@ -89,11 +89,11 @@ class NmapHostDiscoveryParser {
         }
     }
 
-    private Runnable                dispatcher(final String node, final ArrayList<Host> hosts, final Network ap) {
+    private Runnable                dispatcher(final String node, final Network ap) {
        return new Runnable() {
             public void run() {
                 try {
-                    Host hostInList = getIpHOSTNAME(node.split("\n")[0], hosts);
+                    Host hostInList = getIpHOSTNAME(node.split("\n")[0], ap.listDevices());
                     //host.mac = getMACInTmp(hosts, host.ip);
                     //Host hostInList = ap.getHostFromMac(host.mac);
                     if (!hostInList.ip.contains(Singleton.getInstance().network.myIp))/* Its my device*/

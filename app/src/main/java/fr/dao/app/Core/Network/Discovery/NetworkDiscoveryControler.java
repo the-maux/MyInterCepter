@@ -11,8 +11,8 @@ import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Network.IPv4Utils;
 import fr.dao.app.Core.Network.NetDiscovering;
-import fr.dao.app.Core.Nmap.Fingerprint;
-import fr.dao.app.Core.Nmap.NmapControler;
+import fr.dao.app.Core.Scan.Fingerprint;
+import fr.dao.app.Core.Scan.NmapControler;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryScanFrgmnt;
@@ -110,15 +110,15 @@ public class                        NetworkDiscoveryControler {
         mActivity.MAXIMUM_PROGRESS = basicHost.size();
         if (mSingleton.Settings.getUserPreferences().NmapMode > 0 && isFromHostDiscoveryActivity) {
             Log.i(TAG, "onArpScanOver::Nmap::TypeScan::"+mSingleton.Settings.getUserPreferences().NmapMode+"::StartingNmap");
-            new NmapControler(Singleton.getInstance().actualNetwork.listDevices(), this, Singleton.getInstance().actualNetwork, mActivity);
-            return;
-        }
-        if (isJustCheckingWhoIsAlive) {
-            Log.i(TAG, "onArpScanOver::Nmap::JustCheckingHostAlive::BypassNmap");
+            new NmapControler(Singleton.getInstance().actualNetwork, this, mActivity);
         } else {
-            Log.i(TAG, "onArpScanOver::Nmap::TypeScan::"+mSingleton.Settings.getUserPreferences().NmapMode+"::BypassNmap");
+            if (isJustCheckingWhoIsAlive) {
+                Log.i(TAG, "onArpScanOver::Nmap::JustCheckingHostAlive::BypassNmap");
+            } else {
+                Log.i(TAG, "onArpScanOver::Nmap::TypeScan::"+mSingleton.Settings.getUserPreferences().NmapMode+"::BypassNmap");
+            }
+            onScanFinished(Singleton.getInstance().actualNetwork.listDevices());
         }
-        onScanFinished(Singleton.getInstance().actualNetwork.listDevices());
     }
 
     private Network                    updateHostStatus(ArrayList<String> ipReachables) {

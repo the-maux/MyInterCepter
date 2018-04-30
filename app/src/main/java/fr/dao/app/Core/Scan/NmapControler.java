@@ -1,0 +1,197 @@
+package fr.dao.app.Core.Scan;
+
+import android.content.Context;
+import android.util.Log;
+import android.widget.ProgressBar;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import fr.dao.app.Core.Configuration.RootProcess;
+import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Core.Configuration.Utils;
+import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
+import fr.dao.app.Model.Config.NmapParam;
+import fr.dao.app.Model.Target.Host;
+import fr.dao.app.Model.Target.Network;
+import fr.dao.app.View.Scan.NmapOutputView;
+
+
+public class                        NmapControler {
+    private String                  TAG = "NmapControler";
+    private NmapControler           mInstance = this;
+    private Singleton               mSingleton = Singleton.getInstance();
+    private String                  PATH_NMAP = mSingleton.Settings.FilesPath + "nmap/nmap ";
+    private NmapParam               mParams = NmapParam.getInstance();
+    private NetworkDiscoveryControler mNnetworkDiscoveryControler;
+    private Date                    startParsing;
+    private boolean                 mIsLiveDump, isRunning;
+    private List<Host>              mHost = null;
+    private String                  mActualScan = "Ping scan", mActualScript = "Heartbleed check";//Default
+
+    /*
+        **   HostDiscoveryActivity
+    * --Script =
+     *              nbstat => U:137
+     *              dns-service-discovery => U:5353
+     *              upnp-info => U:1900
+     *              Windows check => T:135 https://nmap.org/nsedoc/scripts/msrpc-enum.html msrpc
+     *                            => T:445 microsoft-ds
+    *
+    */
+    public                          NmapControler(Network ap, NetworkDiscoveryControler discoveryControler,
+                                                  Context context) {/* Parsing mode */
+        mIsLiveDump = false;
+        mNnetworkDiscoveryControler = discoveryControler;
+        String hostCmd = NmapParam.buildHostCmdArgs(ap.listDevices());
+        Log.d(TAG, "CMD:["+ PATH_NMAP + mParams.getHostQuickDiscoverArgs() + hostCmd + "]");
+        setTitleToolbar(null, "Scanning " + hostCmd.split(" ").length + " devices");
+        hostDiscoveryFromNmap( context, PATH_NMAP + mParams.getHostQuickDiscoverArgs() + hostCmd, ap);
+        mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
+        mSingleton.actualNetwork.save();
+    }
+
+    /*
+        **   NmapActivity
+    */
+    public                          NmapControler(boolean execureAllCommandTogether) {/*Live mode*/
+        mIsLiveDump = true;
+    }
+
+    private void                    hostDiscoveryFromNmap(final Context context, final String cmd, final Network ap) {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    mSingleton.actualNetwork.defensifAction = mSingleton.actualNetwork.defensifAction + 1;
+                    mSingleton.actualNetwork.save();
+                    String tmp;
+                    StringBuilder outputBuilder = new StringBuilder();
+                    BufferedReader reader = new RootProcess("Nmap", mSingleton.Settings.FilesPath)
+                            .exec(cmd).getReader();
+                    while ((tmp = reader.readLine()) != null && !tmp.startsWith("Nmap done")) {
+                        outputBuilder.append(tmp).append('\n');
+                    }
+                    /*
+                     * Hello dear, If you're here,
+                     * Trying to understand why the condition is
+                     * outputBuilder.toString().isEmpty()
+                     * I love you, thank you, for existing
+                     * You're not alone, we are connected
+                     */
+                    if (outputBuilder.toString().isEmpty() || tmp.isEmpty() || !tmp.startsWith("Nmap done")) {
+                        Log.d(TAG, "Error in nmap execution, Nmap didn't end");
+                        outputBuilder.append(tmp);
+                        Log.e(TAG, outputBuilder.toString());
+                        setTitleToolbar("Network scan", "Nmap Error");
+                        return;
+                    }
+                    outputBuilder.append(tmp);
+                    String FullDUMP = outputBuilder.toString().substring(1);
+                    Log.d(TAG, "\t\t LastLine[" + tmp + "]");
+                    startParsing = Calendar.getInstance().getTime();
+                    new NmapHostDiscoveryParser(mInstance, FullDUMP, ap, context);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private String                  buildCommand() {
+        StringBuilder res = new StringBuilder("");
+        if (mIsLiveDump) {
+            for (Host host : mHost) {
+                res.append(host.ip).append(" ");
+            }
+        }
+        String hostFilter = res.toString();
+        String parameter = getParamOfScan(mActualScan);
+        String cmd = PATH_NMAP + parameter + " " + hostFilter + " -d";
+        return cmd.replace("  ", " ").replace("\n", "");
+    }
+
+    private String                  build(NmapOutputView nmapOutputFragment) {
+        String cmd = buildCommand();
+        Log.i(TAG, cmd);
+        nmapOutputFragment.printCmdInTerminal(cmd
+                .replace("nmap/nmap", "nmap")
+                .replace(mSingleton.Settings.FilesPath, ""));
+        return cmd;
+    }
+
+    public void                     startScan(final NmapOutputView nmapOutputFragment, final ProgressBar progressBar) {
+        if (mHost == null) {
+            Log.e(TAG, "No client selected when launched");
+        } else {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        String tmp;
+                        StringBuilder dumpOutputBuilder = new StringBuilder();
+                        BufferedReader reader = new RootProcess("Nmap", mSingleton.Settings.FilesPath)
+                                .exec(build(nmapOutputFragment)).getReader();
+                        while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {
+                            if (!tmp.isEmpty()) {
+                                if (tmp.charAt(0) == '\n')
+                                    tmp = tmp.substring(1);
+                                nmapOutputFragment.flushOutput(tmp + '\n', null);
+                            }
+                        }
+                        dumpOutputBuilder.append(tmp);
+                        Log.d(TAG, "Nmap final dump:" + dumpOutputBuilder.toString());
+                        nmapOutputFragment.flushOutput(tmp + '\n', progressBar);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        nmapOutputFragment.flushOutput(null, progressBar);
+                    }
+                }
+            }).start();
+        }
+    }
+
+    public void                     onHostActualized(ArrayList<Host> hosts) {
+        Log.d(TAG, "All node was parsed in :" + Utils.TimeDifference(startParsing));
+        if (mNnetworkDiscoveryControler != null)
+            mNnetworkDiscoveryControler.onScanFinished(hosts);
+        else
+            Log.e(TAG, "onHostActualized but networkDiscoveryControler is null ");
+    }
+
+    public void                     setHosts(List<Host> hosts) {
+        this.mHost = hosts;
+    }
+
+    public void                     setTitleToolbar(String title, String subtitle) {
+        if (mNnetworkDiscoveryControler != null)
+            mNnetworkDiscoveryControler.setToolbarTitle(title, subtitle);
+        else
+            Log.e(TAG, "setting title toolbar but networkDiscoveryControler is null ");
+    }
+
+    public void                     setmActualScan(String itemMenu) {
+        this.mActualScan = itemMenu;
+    }
+    public String                   getActualCmd() {
+        return mActualScan;
+    }
+    public ArrayList<String>        getMenuCommmands() {
+        return mParams.getmMenuCmd();
+    }
+    public ArrayList<String>        getMenuScripts() {
+        return mParams.getmMenuCmd();
+    }
+    public String                   getNameOfScan(int offset) {
+        return mParams.getNameTypeScan(offset);
+    }
+    public String                   getParamOfScan(String itemMenu) {
+        return mParams.getParamTypeScan(itemMenu);
+    }
+    public String                   getActualScript() {
+        return mActualScript;
+    }
+}

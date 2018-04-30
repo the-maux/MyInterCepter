@@ -10,10 +10,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import fr.dao.app.Core.Nmap.Fingerprint;
+import fr.dao.app.Core.Scan.Fingerprint;
 import fr.dao.app.Model.Net.Service;
 import fr.dao.app.Model.Unix.Os;
 
@@ -74,6 +75,10 @@ public class                Host extends Model {
     public String           PortDump = "";
     @Column(name = "Deepest_Scan")
     public int              Deepest_Scan = 0; //0:VENDOR | 1:NMAP_BASIC | 2:NMAP_SCRIPT | 3:VulsScan?
+
+    public List<VulnerabilityScan> VulnerabilityScan() {
+        return getMany(VulnerabilityScan.class, "Host");
+    }
 
 
     private ArrayList<Service> ServiceActivOnHost = new ArrayList<>();

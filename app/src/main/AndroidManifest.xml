@@ -71,6 +71,7 @@
             fr.dao.app.Model.Target.Host,
             fr.dao.app.Model.Target.ExternalHost,
             fr.dao.app.Model.Target.SniffSession,
+            fr.dao.app.Model.Target.VulnerabilityScan,
             fr.dao.app.Model.Unix.DNSLog,
             fr.dao.app.Model.Net.Pcap,
             fr.dao.app.Model.Net.Service" />

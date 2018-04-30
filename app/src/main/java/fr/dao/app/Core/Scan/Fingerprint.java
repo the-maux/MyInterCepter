@@ -1,4 +1,4 @@
-package fr.dao.app.Core.Nmap;
+package fr.dao.app.Core.Scan;
 
 import android.util.Log;
 
