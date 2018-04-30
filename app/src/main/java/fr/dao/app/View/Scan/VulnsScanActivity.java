@@ -20,16 +20,16 @@ import android.widget.Toast;
 
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
-import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
+import fr.dao.app.Core.Database.DBHost;
+import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Adapter.DoraAdapter;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 
-public class VulnsScanActivity extends MyActivity {
+public class                    VulnsScanActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
-    private VulnsScanActivity mInstance = this;
-
+    private VulnsScanActivity   mInstance = this;
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
     private AppBarLayout        appBarLayout;
@@ -40,7 +40,7 @@ public class VulnsScanActivity extends MyActivity {
     private ProgressBar         progressBar;
     private DoraAdapter         mRv_Adapter;
     private FloatingActionButton mFab;
-    private int                 REFRESH_TIME = 1000;// == 1seconde
+    private Host                mFocusedHost;
     ProgressDialog              dialog;
 
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,10 +48,17 @@ public class VulnsScanActivity extends MyActivity {
         setContentView(R.layout.activity_vulnscanner);
         initXml();
         initRV();
-        //TODO: Analyze the target (check all port for VulnScan)
-        // Create ItemTab for every Open Port
-        // FAB = Launch Scan
+        analyseTarget();
         // Toolbar Btn => HailMary
+    }
+
+
+    private void                analyseTarget() {
+        // Create ItemTab for every Open Port
+        bundle = getIntent().getExtras();
+        mFocusedHost = DBHost.getDevicesFromMAC(bundle.getString("macAddress"));
+        dialog = ProgressDialog.show(mInstance, "Analyzing " + mFocusedHost.getName(), "Scanning. Please wait...", true);
+
     }
 
     private void                initXml() {
@@ -62,6 +69,7 @@ public class VulnsScanActivity extends MyActivity {
         signalQuality = findViewById(R.id.signalQuality);
         add = findViewById(R.id.add);
         more = findViewById(R.id.action_add_host);
+        more.setOnClickListener(onMoreClicked());
         mRV_dora = findViewById(R.id.RV_dora);
         mFab = findViewById(R.id.fab);
         progressBar = findViewById(R.id.progressBarDora);
@@ -76,6 +84,17 @@ public class VulnsScanActivity extends MyActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
+    }
+
+    private View.OnClickListener onMoreClicked() {
+        return new View.OnClickListener() {
+            public void onClick(View v) {
+                if (dialog != null && dialog.isShowing()) {
+                    dialog.dismiss();
+                    dialog = null;
+                }
+            }
+        };
     }
 
     private void                onFabClick() {
@@ -94,11 +113,7 @@ public class VulnsScanActivity extends MyActivity {
     private void                launchScan() {
         //TODO: make a loading visible
         if (mSingleton.hostList == null || mSingleton.hostList.isEmpty()) {
-            Log.d(TAG, "launchScan::mSingleton.hostList is null or empty");
-            if (!NetworkDiscoveryControler.getInstance(this).inLoading)
-                NetworkDiscoveryControler.getInstance(this).run(true);
-            else
-                Log.d(TAG, "launchScan::scan is already running");
+
         } else {
             Log.d(TAG, "launchScan::starting");
             mRv_Adapter.setIsRunning(true);

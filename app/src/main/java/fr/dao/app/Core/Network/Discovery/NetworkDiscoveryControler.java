@@ -110,15 +110,15 @@ public class                        NetworkDiscoveryControler {
         mActivity.MAXIMUM_PROGRESS = basicHost.size();
         if (mSingleton.Settings.getUserPreferences().NmapMode > 0 && isFromHostDiscoveryActivity) {
             Log.i(TAG, "onArpScanOver::Nmap::TypeScan::"+mSingleton.Settings.getUserPreferences().NmapMode+"::StartingNmap");
-            new NmapControler(Singleton.getInstance().actualNetwork.listDevices(), this, Singleton.getInstance().actualNetwork, mActivity);
-            return;
-        }
-        if (isJustCheckingWhoIsAlive) {
-            Log.i(TAG, "onArpScanOver::Nmap::JustCheckingHostAlive::BypassNmap");
+            new NmapControler(Singleton.getInstance().actualNetwork, this, mActivity);
         } else {
-            Log.i(TAG, "onArpScanOver::Nmap::TypeScan::"+mSingleton.Settings.getUserPreferences().NmapMode+"::BypassNmap");
+            if (isJustCheckingWhoIsAlive) {
+                Log.i(TAG, "onArpScanOver::Nmap::JustCheckingHostAlive::BypassNmap");
+            } else {
+                Log.i(TAG, "onArpScanOver::Nmap::TypeScan::"+mSingleton.Settings.getUserPreferences().NmapMode+"::BypassNmap");
+            }
+            onScanFinished(Singleton.getInstance().actualNetwork.listDevices());
         }
-        onScanFinished(Singleton.getInstance().actualNetwork.listDevices());
     }
 
     private Network                    updateHostStatus(ArrayList<String> ipReachables) {

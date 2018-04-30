@@ -121,7 +121,7 @@ public class                    HostDetailActivity extends MyActivity {
 
     private void                init() {
         try {
-            Bundle bundle = getIntent().getExtras();
+            bundle = getIntent().getExtras();
             if (bundle == null)
                 throw new InvalidParameterException("NO BUNDLE TRANSMITED");
             String mode = bundle.getString("mode");

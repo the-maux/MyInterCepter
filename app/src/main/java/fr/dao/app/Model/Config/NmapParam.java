@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Model.Target.Host;
+
 /*
 https://hackertarget.com/7-nmap-nse-scripts-recon/
     Utilisation: nmap [Type(s) de scan] [Options] {spécifications des cibles}
@@ -143,5 +146,22 @@ public class                            NmapParam {
             return i;
         } else
             return 0;
+    }
+
+    public String                       getHostQuickDiscoverArgs() {
+        return " -PN -sS -T3 -sU " +
+                "--script nbstat.nse,dns-service-discovery,upnp-info " +
+                "--min-parallelism 100 " +
+                "-p T:21,T:22,T:23,T:25,T:80,T:110,T:111,T:135,T:139,T:3128,T:443,T:445,T:2049,T:2869," +
+                "U:53,U:1900,U:3031,U:5353  ";
+    }
+
+    public static String                buildHostCmdArgs(ArrayList<Host> hosts) {
+        StringBuilder hostCmd = new StringBuilder("");
+        for (Host host : hosts) {
+            if (Singleton.getInstance().Settings.getUserPreferences().NmapMode > host.Deepest_Scan)
+                hostCmd.append(" ").append(host.ip);//CleverScan, don't re-scan
+        }
+        return hostCmd.toString();
     }
 }

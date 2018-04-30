@@ -43,25 +43,14 @@ public class                        NmapControler {
      *                            => T:445 microsoft-ds
     *
     */
-    public                          NmapControler(ArrayList<Host> hosts, NetworkDiscoveryControler networkDiscoveryControler,
-                                                  Network ap, Context context) {/* Parsing mode */
-        String NMAP_ARG_SCAN = " -PN -sS -T3 -sU " +
-                "--script nbstat.nse,dns-service-discovery,upnp-info " +
-                "--min-parallelism 100 " +
-                "-p T:21,T:22,T:23,T:25,T:80,T:110,T:111,T:135,T:139,T:3128,T:443,T:445,T:2049,T:2869," +
-                "U:53,U:1900,U:3031,U:5353  ";
+    public                          NmapControler(Network ap, NetworkDiscoveryControler discoveryControler,
+                                                  Context context) {/* Parsing mode */
         mIsLiveDump = false;
-        mNnetworkDiscoveryControler = networkDiscoveryControler;
-        mActualScan = "Basic Host discovery";
-        StringBuilder hostCmd = new StringBuilder("");
-        for (Host host : hosts) {
-            if (mSingleton.Settings.getUserPreferences().NmapMode > host.Deepest_Scan)//To not scan again automaticaly already scanned host
-                hostCmd.append(" ").append(host.ip);
-        }
-        String cmd = PATH_NMAP + NMAP_ARG_SCAN + hostCmd.toString();
-        Log.d(TAG, "CMD:["+ cmd + "]");
-        setTitleToolbar(null, "Scanning " + hostCmd.toString().split(" ").length + " devices");
-        hostDiscoveryFromNmap(cmd, hosts, ap, context);
+        mNnetworkDiscoveryControler = discoveryControler;
+        String hostCmd = NmapParam.buildHostCmdArgs(ap.listDevices());
+        Log.d(TAG, "CMD:["+ PATH_NMAP + mParams.getHostQuickDiscoverArgs() + hostCmd + "]");
+        setTitleToolbar(null, "Scanning " + hostCmd.split(" ").length + " devices");
+        hostDiscoveryFromNmap( context, PATH_NMAP + mParams.getHostQuickDiscoverArgs() + hostCmd, ap);
         mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
         mSingleton.actualNetwork.save();
     }
@@ -73,12 +62,12 @@ public class                        NmapControler {
         mIsLiveDump = true;
     }
 
-    private void                    hostDiscoveryFromNmap(final String cmd, final ArrayList<Host> hosts, final Network ap, final Context context) {
-        mSingleton.actualNetwork.defensifAction = mSingleton.actualNetwork.defensifAction + 1;
-        mSingleton.actualNetwork.save();
+    private void                    hostDiscoveryFromNmap(final Context context, final String cmd, final Network ap) {
         new Thread(new Runnable() {
             public void run() {
                 try {
+                    mSingleton.actualNetwork.defensifAction = mSingleton.actualNetwork.defensifAction + 1;
+                    mSingleton.actualNetwork.save();
                     String tmp;
                     StringBuilder outputBuilder = new StringBuilder();
                     BufferedReader reader = new RootProcess("Nmap", mSingleton.Settings.FilesPath)
@@ -104,7 +93,7 @@ public class                        NmapControler {
                     String FullDUMP = outputBuilder.toString().substring(1);
                     Log.d(TAG, "\t\t LastLine[" + tmp + "]");
                     startParsing = Calendar.getInstance().getTime();
-                    new NmapHostDiscoveryParser(mInstance, hosts, FullDUMP, ap, context);
+                    new NmapHostDiscoveryParser(mInstance, FullDUMP, ap, context);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
