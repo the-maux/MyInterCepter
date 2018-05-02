@@ -156,7 +156,7 @@ public class                    HomeActivity extends MyActivity {
             public void onClick(View view) {
                 Utils.vibrateDevice(mInstance, 100);
                 Intent intent = new Intent(mInstance, HostDiscoveryActivity.class);
-                Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_defense), "logo_activity");
+                Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_attack), "logo_activity");
                 startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1).toBundle());
             }
         };

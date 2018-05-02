@@ -27,6 +27,7 @@ import fr.dao.app.Core.Scan.ExploitScanner;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
+import fr.dao.app.View.ZViewController.Adapter.VunlsProtoAdapter;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 
 public class                    VulnsScanActivity extends MyActivity {
@@ -41,7 +42,7 @@ public class                    VulnsScanActivity extends MyActivity {
     private RecyclerView        mRV_Vulns;
     private ProgressBar         progressBar;
     private FloatingActionButton mFab;
- //   private VunlsProtoAdapter   mRv_Adapter;
+    private VunlsProtoAdapter   mRv_Adapter;
     private Host                mFocusedHost;
     private ExploitScanner      mScanner;
     ProgressDialog              dialog;
@@ -74,16 +75,25 @@ public class                    VulnsScanActivity extends MyActivity {
     }
 
     /**
-     * Host has been updated
+     * Host has been updated, So update UI
      */
-    public void                 updateUIForHost(Host host) {
+    public void                 updateUIForHost(final Host host) {
         Log.d(TAG, "updateUIForHost");
         //TODO:Create all the tab for every Open Port + 1 General
         //TODO: Create RV to show all actif protocol
-//        mRv_Adapter = new VunlsProtoAdapter(mInstance, host);
-//        mFocusedHost = host;
-//        mRV_Vulns.setAdapter(mRv_Adapter);
-        mRV_Vulns.setLayoutManager(new LinearLayoutManager(mInstance));
+        mInstance.runOnUiThread(new Runnable() {
+            public void run() {
+                mRv_Adapter = new VunlsProtoAdapter(mInstance, host);
+                mFocusedHost = host;
+                mRV_Vulns.setAdapter(mRv_Adapter);
+                mRV_Vulns.setLayoutManager(new LinearLayoutManager(mInstance));
+                if (dialog != null && dialog.isShowing()) {
+                    dialog.dismiss();
+                    dialog = null;
+                }
+            }
+        });
+
     }
 
     private void                initXml() {

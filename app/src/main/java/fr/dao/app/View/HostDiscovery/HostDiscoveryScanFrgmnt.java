@@ -39,7 +39,7 @@ import fr.dao.app.View.ZViewController.Adapter.OSFilterAdapter;
 import fr.dao.app.View.ZViewController.Dialog.RV_dialog;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
-public class HostDiscoveryScanFrgmnt extends MyFragment {
+public class                        HostDiscoveryScanFrgmnt extends MyFragment {
     private String                  TAG = "HostDiscoveryScanFrgmnt";
     private HostDiscoveryActivity   mActivity;
     private ArrayList<Host>         mHosts = new ArrayList<>();
@@ -69,7 +69,7 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
             mHostLoaded = true;
             mActivity.actualNetwork = mSingleton.actualNetwork;
             onHostActualized(mSingleton.hostList);
-        } else if (!mHostLoaded) {
+        } else if (!mHostLoaded) {//To not reload for nothing
             start();
         }
     }
@@ -123,7 +123,6 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
         if (mHosts != null && !mHosts.isEmpty())
             mHostAdapter.updateHostList(mHosts);
     }
-
     public void                     initSearchView(SearchView searchView, final Toolbar toolbar) {
         searchView.setGravity(Gravity.END);
         searchView.setOnSearchClickListener(new View.OnClickListener() {
@@ -157,21 +156,20 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
         mActivity.setToolbarTitle("Scanner", "Discovering Network");
         if (!isWaiting()) {
             if (mScannerControler.run(false)) {
-                //TODO: if its a refreshing don't unload list of host
                 init_prologueScan();
                 mActivity.initMonitor();
                 mActivity.initTimer();
                 mActivity.progressAnimation();
-                Log.d(TAG, "start -> true");
+                Log.d(TAG, "Scanning is started");
                 mHostLoaded = false;
                 return true;
             } else {
-                Log.d(TAG, "start -> false no connection");
+                Log.d(TAG, "Scanning is not launched");
                 mEmptyList.setVisibility(View.VISIBLE);
                 mEmptyList.setText("No connection detected");
             }
         } else {
-            Log.d(TAG, "start -> false, already loading");
+            Log.d(TAG, "Scanning, already loading => Interupt the double start");
             mActivity.showSnackbar("Patientez, loading en cours");
         }
         return false;

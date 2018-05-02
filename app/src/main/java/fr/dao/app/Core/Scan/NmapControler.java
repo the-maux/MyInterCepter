@@ -44,7 +44,7 @@ public class                        NmapControler {
             public void run() {
                 try {
                     String tmp;
-                    String cmd = PATH_NMAP + mParams.getHostQuickDiscoverArgs() + host.ip;
+                    String cmd = PATH_NMAP + mParams.getFullScanForVulns() + host.ip;
                     StringBuilder outputBuilder = new StringBuilder();
                     BufferedReader reader = process.exec(cmd).getReader();
                     while ((tmp = reader.readLine()) != null && !tmp.startsWith("Nmap done")) {
@@ -59,11 +59,8 @@ public class                        NmapControler {
                     }
                     outputBuilder.append(tmp);
                     String FullDUMP = outputBuilder.toString().substring(1);
-
                     Log.d(TAG, "\t\t LastLine[" + tmp + "]");
-                    //TODO: Need to update the host.Port() !!
                     PortParser.parsePorts4Vulns(FullDUMP.split("\n"), host, scanner);
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

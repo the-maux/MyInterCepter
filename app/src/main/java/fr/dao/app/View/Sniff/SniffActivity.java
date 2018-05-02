@@ -29,6 +29,7 @@ import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MITMActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
+import fr.dao.app.View.ZViewController.Dialog.PcapListerDialogFragment;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 import fr.dao.app.View.ZViewController.Fragment.PcapListerFragment;
 
@@ -245,7 +246,7 @@ public class                    SniffActivity extends MITMActivity {
                 if (Tcpdump.isRunning()) {
                     showSnackbar("You cant load pcap while sniffing", -1);
                 } else {
-                    PcapListerFragment.newInstance().show(getSupportFragmentManager(), "");
+                    PcapListerDialogFragment.newInstance().show(getSupportFragmentManager(), "");
                 }
             }
         };

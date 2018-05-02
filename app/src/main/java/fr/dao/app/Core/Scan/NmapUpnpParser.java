@@ -143,7 +143,6 @@ public class                    NmapUpnpParser {
     private void                parseHttpUpnp(Host host, String response) {
         host.Notes = host.Notes.concat("OxBABOBAB").concat(response);
         try {
-            parseHttpUpnp(host, response);
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(true);
             XmlPullParser xpp = factory.newPullParser();

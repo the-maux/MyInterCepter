@@ -56,8 +56,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private SearchView              mSearchView;
     private Toolbar                 mToolbar;
     private TransitionDrawable      mToolbarBackground;
-    private MyFragment              HistoricFragment = null, NetDiscoveryFragment = null;
-    private MyFragment              mFragment = null;
+    private MyFragment              NetDiscoveryFragment = null, mFragment = null;
     public Network                  actualNetwork;
     public Date                     date;
     private Timer                   timer = new Timer();
@@ -143,6 +142,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         ViewAnimate.FabAnimateReveal(mInstance, mFab);
         //mFab.show();
        // ViewAnimate.setVisibilityToVisibleQuick(mFab);
+        Log.d(TAG, "onScanOver");
     }
 
     private View.OnClickListener    initTabs(){
@@ -254,23 +254,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 if (mFragment.getClass().getName().contains(HostDiscoveryScanFrgmnt.class.getName())) {
                     ((HostDiscoveryScanFrgmnt)mFragment).osFilterDialog();
                 }
-                /*
-                MyFragment fragment;
-                ViewAnimate.setVisibilityToVisibleQuick(mHistory);
-                if (HistoricFragment == null)
-                    HistoricFragment = new NetDiscoveryHistoricFrgmnt();
-                fragment = HistoricFragment;
-                Bundle args = new Bundle();
-                args.putString("mode", NetDiscoveryHistoricFrgmnt.DB_HISTORIC);
-                fragment.setArguments(args);
-                ViewAnimate.setVisibilityToInvisibleQuick(mHistory);
-                ViewAnimate.setVisibilityToInvisibleQuick(mSearchView);
-                ViewAnimate.FabAnimateHide(mInstance, mFab);
-                //ViewAnimate.setVisibilityToGoneQuick(mFab);
-                mFab.hide();
-                initFragment(fragment);
-                initSearchView();*/
-
             }
         };
     }
@@ -292,16 +275,13 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mToolbar.setAnimation(fadeOut);
         fadeOut.start();
         fadeOut.setAnimationListener(new Animation.AnimationListener() {
-            @Override
             public void onAnimationStart(Animation animation) {
             }
 
-            @Override
             public void onAnimationEnd(Animation animation) {
                 mToolbar.setBackgroundColor(color);
             }
 
-            @Override
             public void onAnimationRepeat(Animation animation) {
             }
         });

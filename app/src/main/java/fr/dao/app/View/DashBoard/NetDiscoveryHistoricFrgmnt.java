@@ -292,7 +292,7 @@ public class NetDiscoveryHistoricFrgmnt extends MyFragment {
                     pcaps = DBManager.getListPcapFormSSIDFile(session.Ssid);
                     setTitleToolbar(session.Ssid,  pcaps.size() + "records");
                 }
-                mRV.setAdapter(new PcapFileAdapter(mActivity, pcaps, null));
+                mRV.setAdapter(new PcapFileAdapter(mActivity, pcaps));
                 mRV.setHasFixedSize(true);
                 mRV.setLayoutManager(new LinearLayoutManager(getActivity()));
             }

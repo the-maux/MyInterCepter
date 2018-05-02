@@ -52,6 +52,9 @@
             android:name=".View.Scan.NmapActivity"
             android:launchMode="singleTask" />
         <activity
+            android:name=".View.Scan.VulnsScanActivity"
+            android:launchMode="singleTask" />
+        <activity
             android:name=".View.SpyMITM.SpyMitmActivity"
             android:launchMode="singleTask" />
         <activity
@@ -80,7 +83,7 @@
             android:value="DaoDatabase" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="12" />
+            android:value="1" />
     </application>
 
 </manifest>

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:background="@color/doraPrimary"
+        android:background="@color/vulnsPrimary"
         android:paddingTop="4dp"
         android:transitionName="appBarTransition"
         app:elevation="6dp">
@@ -30,11 +30,13 @@
 
                 <ImageView
                     android:id="@+id/imageView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:tint="@color/material_light_white"
                     android:transitionName="VulnIconTransition"
-                    app:srcCompat="@mipmap/ic_head_userf_round" />
+                    app:srcCompat="@drawable/target" />
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar2"
@@ -129,7 +131,7 @@
         android:soundEffectsEnabled="true"
         android:src="@drawable/ic_media_play"
         android:visibility="visible"
-        app:backgroundTint="@color/primary_dark"
+        app:backgroundTint="@color/material_deep_orange_accent_700"
         app:elevation="6dp"
         app:fabSize="normal"
         app:layout_anchor="@id/appBarLayout"
@@ -144,5 +146,5 @@
         android:paddingRight="8dp"
         android:paddingTop="8dp"
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
-        tools:listitem="@layout/item_dora" />
+        tools:listitem="@layout/item_generic_little" />
 </android.support.design.widget.CoordinatorLayout>

@@ -207,9 +207,8 @@ public class                    NmapActivity extends MITMActivity {
 //            nmapControler.startScript(nmapOutputFragment, mProgressBar);
             showSnackbar("Need to implemente the nmap scan");
             nmapOutputFragment.flushOutput(null, mProgressBar);
-        } else {
-            nmapControler.startScan(nmapOutputFragment, mProgressBar);
-        }
+        } else if (!nmapControler.startScan(nmapOutputFragment, mProgressBar))
+            showSnackbar("No target selected");
     }
 
     private void                askForExternalTarget() {
@@ -257,7 +256,7 @@ public class                    NmapActivity extends MITMActivity {
             public void onClick(View view) {
                 final CharSequence[] cmdItems = nmapControler.getMenuCommmands().toArray(new CharSequence[nmapControler.getMenuCommmands().size()]);
                 new AlertDialog.Builder(mInstance)
-                        .setSingleChoiceItems(cmdItems, NmapParam.getFocusedScript(nmapControler.getActualCmd()), null)
+                        .setSingleChoiceItems(cmdItems, NmapParam.getFocusedScan(nmapControler.getActualCmd()), null)
                         .setTitle("Scan available")
                         .setIcon(R.drawable.ic_nmap_icon_tabbutton)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {

@@ -32,6 +32,7 @@
     <color name="NmapPrimary">#dd006064</color>
     <color name="DashboardPrimary">#4a148c</color>
     <color name="spyPrimary">#dd4f5b62</color>
+    <color name="vulnsPrimary">#dde65100</color><!-- material_deep_orange_900 -->
     <color name="doraPrimary">#dd005b9f</color>
     <color name="snifferPrimary">#dd263238</color>
     <color name="dnsSpoofPrimary">#dd004D40</color>

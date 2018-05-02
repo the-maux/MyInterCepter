@@ -71,8 +71,6 @@ public class                Host extends Model {
     public String           UPnP_Services = "Unknown";
     @Column(name = "UPnP_Infos")
     public String           UPnP_Infos = "Unknown";
-    @Column(name = "PortDump")
-    public String           PortDump = "";
     @Column(name = "Deepest_Scan")
     public int              Deepest_Scan = 0; //0:VENDOR | 1:NMAP_BASIC | 2:NMAP_SCRIPT | 3:VulsScan?
 

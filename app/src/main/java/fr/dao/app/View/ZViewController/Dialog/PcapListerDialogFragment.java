@@ -1,7 +1,9 @@
-package fr.dao.app.View.ZViewController.Fragment;
+package fr.dao.app.View.ZViewController.Dialog;
 
 
+import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,8 +22,9 @@ import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Adapter.PcapFileAdapter;
+import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
-public class                    PcapListerFragment  extends MyFragment {
+public class PcapListerDialogFragment extends DialogFragment {
     private Singleton           mSingleton = Singleton.getInstance();
     private List<File>          files = new ArrayList<>();
     private RecyclerView        mRV_files;
@@ -61,7 +64,7 @@ public class                    PcapListerFragment  extends MyFragment {
             if (file != null && file.exists())
                 files.add(pcap.getFile());
         }
-        mAdapter = new PcapFileAdapter(getActivity(), files);
+        mAdapter = new PcapFileAdapter(getActivity(), files, this);
     }
 
     private void                initWithNoFocusHost() {
@@ -70,7 +73,11 @@ public class                    PcapListerFragment  extends MyFragment {
             if (file.getPath().endsWith(".pcap"))
                 files.add(file);
         }
-        mAdapter = new PcapFileAdapter(getActivity(), files);
+        mAdapter = new PcapFileAdapter(getActivity(), files, this);
+    }
+
+    public static PcapListerDialogFragment newInstance() {
+        return new PcapListerDialogFragment();
     }
 }
 
