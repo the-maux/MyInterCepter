@@ -18,7 +18,7 @@ public class            Service extends Model {
     private String      TAG = "Service";
     @Column(name ="Host")
     public Host         host;
-    @Column(name ="Ports")
+    @Column(name ="getPorts")
     public String       Port;
     @Column(name ="ServiceName")
     public String       ServiceName;

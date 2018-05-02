@@ -21,11 +21,12 @@ import fr.dao.app.Core.Configuration.Comparator.Comparators;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Model.Target.Host;
+import fr.dao.app.Model.Target.State;
 import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
 import fr.dao.app.View.HostDetail.HostDetailActivity;
-import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Adapter.Holder.HostDiscoveryHolder;
+import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 
 
 public class                    HostDiscoveryAdapter extends RecyclerView.Adapter<HostDiscoveryHolder> {
@@ -56,7 +57,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         String ipHostname = host.ip + ((host.getName().contains(host.ip)) ? "" : " [" + host.getName() + "]");
         holder.ipAndHostname.setText(ipHostname);
         holder.mac.setText(host.mac);
-        if (host.state == Host.State.FILTERED) {
+        if (host.state == State.FILTERED) {
             pushThisShyGuyToFront(holder, host);
         }
         //String os = host.os.contains("Unknow") ? "No os information" : host.os;

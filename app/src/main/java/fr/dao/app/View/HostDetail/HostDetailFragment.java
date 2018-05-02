@@ -16,8 +16,8 @@ import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
-import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 import fr.dao.app.View.ZViewController.Adapter.HostDetailAdapter;
+import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 
 public class                    HostDetailFragment extends MyFragment {
@@ -99,11 +99,11 @@ public class                    HostDetailFragment extends MyFragment {
             arrayList.add(title10);
         }
         try {
-            if (mFocusedHost.Ports(null) != null) {
-                String[] title11 = {"Ports", mFocusedHost.Ports().portArrayList().size() + " ports scanned"};
+            if (mFocusedHost.getPorts() != null) {
+                String[] title11 = {"getPorts", mFocusedHost.getPorts().portArrayList().size() + " ports scanned"};
                 arrayList.add(title11);
             } else {
-                Log.d(TAG, "NO DUMP IN PORTS");
+                Log.e(TAG, "NO DUMP IN PORTS");
             }
         } catch (Exception e) {
             Log.e(TAG, "ERROR PORTS FOR HOST[" + mFocusedHost.ip + "]");

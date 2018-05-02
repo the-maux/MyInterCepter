@@ -34,14 +34,12 @@ public class                        NmapControler {
     private RootProcess             process = new RootProcess("Nmap", mSingleton.Settings.FilesPath);
     private String                  mActualScan = "Ping scan", mActualScript = "Heartbleed check";//Default
 
-
-    public                          NmapControler(Host host, int port, String script) {/*Script Vulnerability*/
-        mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
-        mSingleton.actualNetwork.save();
-
-    }
-
-    public                          NmapControler(final VulnScanner scanner, final Host host) {  /*Analyze before Scan vulns*/
+    /**
+     * <- VulnsScanner: to update Host ports status
+     * @param scanner
+     * @param host
+     */
+    public                          NmapControler(final ExploitScanner scanner, final Host host) {
         new Thread(new Runnable() {
             public void run() {
                 try {
@@ -64,11 +62,8 @@ public class                        NmapControler {
 
                     Log.d(TAG, "\t\t LastLine[" + tmp + "]");
                     //TODO: Need to update the host.Port() !!
+                    PortParser.parsePorts4Vulns(FullDUMP.split("\n"), host, scanner);
 
-                    NmapHostDiscoveryParser.getPortList(FullDUMP.split("\n"), 0)
-
-
-                    scanner.onHostPortsActualized(FullDUMP);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -76,9 +71,44 @@ public class                        NmapControler {
         }).start();
     }
 
-    /*
-        **   NmapActivity
-    */
+    /**
+     *  <-  VulnsScanner: To launch a NSE script
+     *
+     * @param cmd
+     */
+    public                          NmapControler(final ExploitScanner scanner, final ExploitScanner.TypeScanner type, final String cmd) {
+        mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
+        mSingleton.actualNetwork.save();
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    String tmp;
+                    String realCmd = PATH_NMAP + cmd;
+                    StringBuilder outputBuilder = new StringBuilder();
+//                    BufferedReader reader = process.exec(realCmd).getReader();
+//                    while ((tmp = reader.readLine()) != null && !tmp.startsWith("Nmap done")) {
+//                        outputBuilder.append(tmp).append('\n');
+//                    }
+//                    if (outputBuilder.toString().isEmpty() || tmp.isEmpty() || !tmp.startsWith("Nmap done")) {
+//                        Log.d(TAG, "Error in nmap execution, Nmap didn't end");
+//                        outputBuilder.append(tmp);
+//                        Log.e(TAG, outputBuilder.toString());
+//                        setTitleToolbar("Network scan", "Nmap Error");
+//                        return;
+//                    }
+//                    outputBuilder.append(tmp);
+                    String FullDUMP = outputBuilder.toString().substring(1);
+                    scanner.onNseScanFinished(FullDUMP, type);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
+     *  <-  NmapActivity:To launch any nmap scan
+     */
     public                          NmapControler() {/*Live mode*/
         //boolean execureAllCommandTogether This need to be in Settings
         mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
@@ -86,11 +116,13 @@ public class                        NmapControler {
         mIsLiveDump = true;
     }
 
-    /*
-     **   HostDiscoveryActivity
+    /**
+     *  <-  HostDiscoveryActivity: To discover hosts on subnet
+     * @param ap
+     * @param discoveryControler
+     * @param context
      */
-    public                          NmapControler(Network ap, NetworkDiscoveryControler discoveryControler,
-                                                  Context context) {/* Parsing mode */
+    public                          NmapControler(Network ap, NetworkDiscoveryControler discoveryControler, Context context) {
         mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
         mSingleton.actualNetwork.save();
         mIsLiveDump = false;

@@ -4,8 +4,6 @@ package fr.dao.app.Model.Target;
 import android.util.Log;
 import android.util.SparseIntArray;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -14,21 +12,20 @@ import fr.dao.app.Model.Net.Port;
 import fr.dao.app.Model.Unix.Os;
 
 public class                    Ports {
-    private String              TAG = "Ports";
+    private String              TAG = "getPorts";
     private ArrayList<Port>     mPorts = new ArrayList<>();
     private SparseIntArray      primitivePortsLits = new SparseIntArray();
 
-    public                      Ports(ArrayList<String> lines, Host host) throws Exception {
-        if (lines != null) {
-            host.dumpPort = StringUtils.join(lines, "\n");
-        } else if (host.dumpPort == null) {
-            throw new Exception("No dump to analyze");
+    /**
+     * Parsing from Host.getPorts()
+     * @param host
+     * @throws Exception
+     */
+    public                      Ports(Host host) {
+        if (host.dumpPort == null) {
+            Log.e(TAG, "No dump to analyze");
         }
         init(host.dumpPort, host);
-    }
-    public                      Ports(String lines, Host host) {
-        if (lines != null)
-            init(lines, host);
     }
 
     public void                  init(String dump, Host host) {

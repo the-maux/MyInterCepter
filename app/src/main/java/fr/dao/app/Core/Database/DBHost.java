@@ -74,7 +74,7 @@ public class                                DBHost {
             Host device = findDeviceById(id.replace(";", ""));
             try {
                 Fingerprint.initHost(device);
-                device.build();
+                device.getPorts();
                 hosts.add(device);
             } catch (NullPointerException e) {
                 Log.e(TAG, "id[" + id + "] was not found in BDD");

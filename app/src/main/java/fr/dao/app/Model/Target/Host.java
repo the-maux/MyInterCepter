@@ -6,13 +6,13 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import fr.dao.app.Core.Scan.Fingerprint;
 import fr.dao.app.Model.Net.Service;
@@ -89,12 +89,15 @@ public class                Host extends Model {
     public State            state = State.OFFLINE;
 
     private Ports           listPorts = null;
-    public Ports            Ports() {
+    public Ports            getPorts() {
+        /*  Build Ports from String dumped in BDD */
+        if (listPorts == null && dumpPort != null && !dumpPort.isEmpty())
+            listPorts = new Ports(this);
         return listPorts;
     }
-    public Ports            Ports(ArrayList<String> dumpsPorts) throws Exception {
-        listPorts = new Ports(dumpsPorts, this);
-        return listPorts;
+    public void            buildPorts(ArrayList<String> dumpsPorts) {
+        dumpPort = StringUtils.join(dumpsPorts, "\n");
+        listPorts = new Ports(this);
     }
 
     public                  Host() {
@@ -134,10 +137,10 @@ public class                Host extends Model {
             Log.d(TAG, "NO DUMP /!\\ : " + ip);
         else
             Log.i(TAG, "DUMPINFO::" + dumpInfo);
-        if (Ports() != null)
-            Ports().dump();
+        if (getPorts() != null)
+            getPorts().dump();
         else
-            Log.d(TAG, "Ports Not found...");
+            Log.d(TAG, "getPorts Not found...");
         if (osType == Os.Unknow)
             Log.d(TAG, toString() + " isItWindowsPort() => " + Fingerprint.isItWindows(this));
         Log.i(TAG, "END DUMP ---------------------------------------" + ip);
@@ -148,6 +151,7 @@ public class                Host extends Model {
     }
 
     public void             copy(Host myDevice) {
+        /*  General */
         if (osType == Os.Unknow)
             osType = myDevice.osType;
         if (mac.contains("Unknown"))
@@ -166,89 +170,34 @@ public class                Host extends Model {
             deviceType = myDevice.deviceType;
         if (firstSeen == null)
             firstSeen = myDevice.firstSeen;
+        /*  Dump    */
         if (dumpPort == null)
             dumpPort = myDevice.dumpPort;
         if (dumpInfo == null)
             dumpInfo = myDevice.dumpInfo;
-
+        /*  Hostname*/
         if (Hostname.contains("Unknown"))
             Hostname = myDevice.Hostname;
-
+        /*  NetBios */
         if (NetBIOS_Domain.contains("Unknown"))
             NetBIOS_Domain = myDevice.NetBIOS_Domain;
         if (NetBIOS_Name.contains("Unknown"))
             NetBIOS_Name = myDevice.NetBIOS_Name;
         if (NetBIOS_Role.contains("Unknown"))
             NetBIOS_Role = myDevice.NetBIOS_Role;
-
+        /*  Bonjour */
         if (Bonjour_Name.contains("Unknown"))
             Bonjour_Name = myDevice.Bonjour_Name;
         if (Bonjour_Services.contains("Unknown"))
             Bonjour_Services = myDevice.Bonjour_Services;
-
+        /*  Upnp    */
         if (UPnP_Name.contains("Unknown"))
             UPnP_Name = myDevice.UPnP_Name;
         if (UPnP_Services.contains("Unknown"))
             UPnP_Services = myDevice.UPnP_Services;
-
         dumpInfo = myDevice.dumpInfo;
     }
 
-    public void             build() {
-        listPorts = new Ports(dumpPort, this);
-        //dumpMe();
-    }
-
-    public enum         State   {
-        OFFLINE(0), ONLINE(1), FILTERED(2), UNKNOW(3);
-
-        private int value;
-        private static Map map = new HashMap<>();
-
-        State(int value) {
-            this.value = value;
-        }
-
-        static {
-            for (Host.State pageType : Host.State.values()) {
-                map.put(pageType.value, pageType);
-            }
-        }
-        public static Host.State valueOf(int pageType) {
-            return (Host.State) Host.State.map.get(pageType);
-        }
-
-        public static Host.State valueOf(String pageType, int a) {
-            pageType = pageType.toUpperCase().replace("|", "_");
-            switch (pageType) {
-                case "FILTERED":
-                    return FILTERED;
-                case "OFFLINE":
-                    return OFFLINE;
-                case "ONLINE":
-                    return ONLINE;
-                default:
-                    return FILTERED;
-            }
-        }
-
-        public int              getValue() {
-            return value;
-        }
-
-        public String           toString() {
-            switch (valueOf(value)) {
-                case FILTERED:
-                    return "FILTERED";
-                case OFFLINE:
-                    return "OFFLINE";
-                case ONLINE:
-                    return "ONLINE";
-                default:
-                    return "UNKNOWN";
-            }
-        }
-    }
     public String           getDateString() {
         if (firstSeen == null)
             return "Not recorded";

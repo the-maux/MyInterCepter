@@ -15,6 +15,7 @@ import fr.dao.app.Core.Scan.Fingerprint;
 import fr.dao.app.Core.Scan.NmapControler;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
+import fr.dao.app.Model.Target.State;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryScanFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 
@@ -125,7 +126,7 @@ public class                        NetworkDiscoveryControler {
         Network actualNetwork = mSingleton.actualNetwork;
         int rax = 0;
         for (Host host : actualNetwork.listDevices()) {
-            host.state = Host.State.OFFLINE;
+            host.state = State.OFFLINE;
         }
         if (ipReachables != null)
             for (String ipAndMacReachable : ipReachables) {
@@ -135,7 +136,7 @@ public class                        NetworkDiscoveryControler {
                 boolean isHostInList = false;
                 for (Host host : actualNetwork.listDevices()) {
                     if (host.mac.contains(mac)) {
-                        host.state = Host.State.ONLINE;
+                        host.state = State.ONLINE;
                         isHostInList = true;
                         break;
                     }
@@ -149,7 +150,7 @@ public class                        NetworkDiscoveryControler {
                         Fingerprint.initHost(host);
                     }
                     DBHost.saveOrGetInDatabase(host);
-                    host.state = Host.State.ONLINE;
+                    host.state = State.ONLINE;
                     host.save();
                     actualNetwork.listDevices().add(host);
                 }

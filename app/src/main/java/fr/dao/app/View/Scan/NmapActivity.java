@@ -104,7 +104,7 @@ public class                    NmapActivity extends MITMActivity {
 
     private void                init() {
         if (nmapControler == null)
-            nmapControler = new NmapControler(false);
+            nmapControler = new NmapControler();
         mScript.setOnClickListener(onClickScript());
         mScanType.setOnClickListener(onClickTypeOfScan());
         initFragment();

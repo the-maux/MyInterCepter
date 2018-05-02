@@ -1,5 +1,25 @@
 package fr.dao.app.Core.Scan;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+
+import fr.dao.app.Model.Target.Host;
+
 /**
  Pre-scan script results:
  | broadcast-avahi-dos:
@@ -55,5 +75,116 @@ package fr.dao.app.Core.Scan;
 
  */
 
-public class NmapUpnpParser {
+public class                    NmapUpnpParser {
+    private String              TAG = "NmapUpnpParser";
+    private RequestQueue        listRequestApi;
+    private ArrayList<String>   items = new ArrayList<>();
+
+    public                      NmapUpnpParser(Context context) {
+        listRequestApi = Volley.newRequestQueue(context);
+    }
+
+    /**
+     * 1900/udp open          upnp
+     | upnp-info:
+     | 192.168.0.12
+     |     server: microsoft-windows/10.0 upnp/1.0 upnp-device-host/1.0
+     |_    location: http://192.168.0.12:2869/upnphost/udhisapi.dll?content=uuid:b0a22e22-1541-424f-bd84-cfda678aaa4d
+     */
+    public int                  analyseUPnPtResult(String[] nmapStdoutHost, int i, final Host host) {
+        ArrayList<String> dumpHostScript = new ArrayList<>();
+        String urlUPnP = "";
+        while (i < nmapStdoutHost.length && !nmapStdoutHost[i].startsWith("|_")) {
+            dumpHostScript.add(nmapStdoutHost[i++].toLowerCase().replace("|", "").trim());
+        }
+        dumpHostScript.add(nmapStdoutHost[i++].toLowerCase().replace("|_", "").trim());
+        Log.d(TAG, "UPnP:[" + dumpHostScript+ "]");
+        for (String line : dumpHostScript) {
+            if (line.contains("server:")) {
+                String[] splitted = line.replace("server: ","").split(" ");
+                host.os = splitted[0].replace("microsoft-", "").replace("|", "").trim();
+                host.UPnP_Device = splitted[0].replace("microsoft-", "").replace("|", "").trim();
+                host.vendor = host.UPnP_Device;
+            } else if (line.contains("location: ")) {
+                urlUPnP = line.replace("location: ", "");
+                host.UPnP_Infos = urlUPnP;
+            }
+        }
+        if (!urlUPnP.isEmpty()) {//GET HTTP XML UPnP
+            Log.i(TAG, "GET /upnp-info [" + urlUPnP + "]");
+            getHTTPUpnp(host, urlUPnP);
+            for (String item : items) {
+                Log.d(TAG, "UPnP[" + item + "]");
+            }
+        }
+        return i;
+    }
+
+    private void                getHTTPUpnp(final Host host, String urlUPnP) {
+        try {//YOU HAVE TO LET THE ALL NODE WAIT THE HTTP RESPONSE
+            StringRequest request = new StringRequest(Request.Method.GET, urlUPnP,
+                    new Response.Listener<String>() {
+                        public void onResponse(String response) {
+                            parseHttpUpnp(host, response);
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        public void onErrorResponse(VolleyError error) {
+                            Log.w(TAG, "getModules::VolleyError:"  + error.getMessage());
+                            error.getStackTrace();
+                        }
+            });
+            listRequestApi.add(request);
+        } catch (Throwable t) {
+            Log.e(TAG, "error in getting UpnP XML");
+        }
+    }
+
+    private void                parseHttpUpnp(Host host, String response) {
+        host.Notes = host.Notes.concat("OxBABOBAB").concat(response);
+        try {
+            parseHttpUpnp(host, response);
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new StringReader(response));
+            int eventType = xpp.getEventType();
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_DOCUMENT) {
+                } else if (eventType == XmlPullParser.START_TAG) {
+                    if (xpp.getName().contains("serialNumber")) {
+                        xpp.next();
+                        host.Brand_and_Model = xpp.getText();
+                        Log.d(TAG, "serialNumber " + xpp.getText());
+                    } else if (xpp.getName().contains("friendlyName")) {
+                        xpp.next();
+                        if (!xpp.getText().contains("http"))
+                            host.UPnP_Name = xpp.getText();
+                        Log.d(TAG, "friendlyName " + xpp.getText());
+                    } else if (xpp.getName().contains("deviceType")) {
+                        xpp.next();
+                        host.osDetail = xpp.getText();
+                        Log.d(TAG, "deviceType::" + xpp.getText());
+                    } else if (xpp.getName().contains("manufacturer")) {
+                        xpp.next();
+                        host.UPnP_Device = xpp.getText();
+                        Log.d(TAG, "manufacturer::" + xpp.getText());
+                    } else if (xpp.getName().contains("modelName")) {
+                        xpp.next();
+                        host.UPnP_Services = xpp.getText();
+                        Log.d(TAG, "ModelName::" + xpp.getText());
+                    }
+                } else if (eventType == XmlPullParser.END_TAG) {
+                    // Log.d(TAG, "End tag " + xpp.getName());
+                } else if (eventType == XmlPullParser.TEXT) {
+                    // Log.d(TAG, "Text " + xpp.getText()); // here you get the text from xml
+                }
+                eventType = xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

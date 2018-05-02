@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import fr.dao.app.Model.Net.Port;
 import fr.dao.app.Model.Target.Host;
+import fr.dao.app.Model.Target.State;
 
 public class                            Comparators {
 
@@ -24,9 +25,9 @@ public class                            Comparators {
                     else if (Integer.parseInt(ip1[3]) < Integer.parseInt(ip2[3]))
                         return -1;
                 } else {
-                    if (o1.state == Host.State.ONLINE || o2.state == Host.State.OFFLINE)
+                    if (o1.state == State.ONLINE || o2.state == State.OFFLINE)
                         return -1;
-                    else if (o2.state == Host.State.ONLINE || o1.state == Host.State.OFFLINE)
+                    else if (o2.state == State.ONLINE || o1.state == State.OFFLINE)
                         return 1;
                 }
                 return 0;

@@ -30,6 +30,7 @@ import fr.dao.app.Core.Database.DBNetwork;
 import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
+import fr.dao.app.Model.Target.State;
 import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
 import fr.dao.app.View.Scan.NmapActivity;
@@ -213,7 +214,7 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
             public void run() {
                 int online = 0;
                 for (Host host : hosts) {
-                    if (host.state == Host.State.ONLINE)
+                    if (host.state == State.ONLINE)
                         online++;
                 }
                 mHosts = hosts;

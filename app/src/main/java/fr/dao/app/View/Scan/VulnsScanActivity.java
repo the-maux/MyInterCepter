@@ -9,7 +9,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabItem;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -19,14 +18,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Database.DBHost;
+import fr.dao.app.Core.Scan.ExploitScanner;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
-import fr.dao.app.View.ZViewController.Adapter.DoraAdapter;
-import fr.dao.app.View.ZViewController.Adapter.VunlsProtoAdapter;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 
 public class                    VulnsScanActivity extends MyActivity {
@@ -41,9 +41,11 @@ public class                    VulnsScanActivity extends MyActivity {
     private RecyclerView        mRV_Vulns;
     private ProgressBar         progressBar;
     private FloatingActionButton mFab;
-    private VunlsProtoAdapter   mRv_Adapter;
+ //   private VunlsProtoAdapter   mRv_Adapter;
     private Host                mFocusedHost;
+    private ExploitScanner      mScanner;
     ProgressDialog              dialog;
+
 
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,18 +62,27 @@ public class                    VulnsScanActivity extends MyActivity {
             showSnackbar("No target selected");
         } else {
             mFocusedHost = DBHost.getDevicesFromMAC(bundle.getString("macAddress"));
-   //         dialog = ProgressDialog.show(mInstance, "Analyzing " + mFocusedHost.getName(), "Scanning. Please wait...", true);
+            dialog = ProgressDialog.show(mInstance, "Analyzing " + mFocusedHost.getName(), "Scanning. Please wait...", true);
+            mScanner = new ExploitScanner(mFocusedHost, mInstance).actualizeStatus();
         }
+    }
+
+    public void                 onHostActualized(ArrayList<Host> hosts) {
+        Log.d(TAG, "onHostActualized");
+        super.onHostActualized(hosts);
+        updateUIForHost(mFocusedHost);
     }
 
     /**
      * Host has been updated
      */
     public void                 updateUIForHost(Host host) {
-        //Create all the tab for every Open Port + 1 General
-        mRv_Adapter = new VunlsProtoAdapter(mInstance, host);
-        mFocusedHost = host;
-        mRV_Vulns.setAdapter(mRv_Adapter);
+        Log.d(TAG, "updateUIForHost");
+        //TODO:Create all the tab for every Open Port + 1 General
+        //TODO: Create RV to show all actif protocol
+//        mRv_Adapter = new VunlsProtoAdapter(mInstance, host);
+//        mFocusedHost = host;
+//        mRV_Vulns.setAdapter(mRv_Adapter);
         mRV_Vulns.setLayoutManager(new LinearLayoutManager(mInstance));
     }
 
@@ -119,11 +130,14 @@ public class                    VulnsScanActivity extends MyActivity {
 
     private void                launchScan() {
         //TODO: make a loading visible
-        if (mSingleton.hostList == null || mSingleton.hostList.isEmpty()) {
-
+        if (mFocusedHost == null) {
+            showSnackbar("No target selected");
+        } else if (!mScanner.isHostRefreshed()) {
+            showSnackbar("Still analysing targer");
         } else {
             Log.d(TAG, "launchScan::starting");
-            mRv_Adapter.setIsRunning(true);
+
+     //       mRv_Adapter.setIsRunning(true);
             mFab.setImageResource(R.drawable.ic_stop);
         }
     }

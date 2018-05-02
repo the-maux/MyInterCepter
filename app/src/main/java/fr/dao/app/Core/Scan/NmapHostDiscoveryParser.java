@@ -4,22 +4,10 @@ import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.StringReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -37,6 +25,7 @@ import fr.dao.app.Core.Configuration.Words;
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
+import fr.dao.app.Model.Target.State;
 import fr.dao.app.Model.Unix.Os;
 
 class                               NmapHostDiscoveryParser {
@@ -45,11 +34,11 @@ class                               NmapHostDiscoveryParser {
     private Network                 mNetwork;
     private NmapControler           mNmapControler;
     private int                     LENGTH_NODE, NBR_PARSED_NODE = 0;
-    private RequestQueue            listRequestApi;
+    private NmapUpnpParser          UpnParser;
 
     NmapHostDiscoveryParser(NmapControler nmapControler, String NmapDump, Network ap, Context context) {
         this.mNmapControler = nmapControler;
-        listRequestApi = Volley.newRequestQueue(context);
+        UpnParser = new NmapUpnpParser(context);
         if (mSingleton.Settings.getUserPreferences().autoSaveNmapSession)
             dumpToFile(NmapDump);
         String[] HostNmapDump = NmapDump.split("Nmap scan report for ");
@@ -133,18 +122,16 @@ class                               NmapHostDiscoveryParser {
                 host.vendor = line.replace("MAC Address: " + host.mac + " (", "").replace(")", "");
                 host.vendor = host.vendor.substring(0, 1).toUpperCase() + host.vendor.substring(1);
             } else if (line.contains("PORT ")) {
-                int z = 0;
                 try {
-                    z = getPortList(nmapStdoutHost, i +1, host);
+                    int z = PortParser.getPortList(nmapStdoutHost, i +1, host);
+                    for (; i < z; i++) {
+                        if (nmapStdoutHost[i].contains("upnp-info:"))
+                            UpnParser.analyseUPnPtResult(nmapStdoutHost, i + 1, host);
+                        dump.append(nmapStdoutHost[i]).append("\n");
+                    }
                 } catch (Exception e) {
                     Log.e(TAG, "Error in analyzing nmap dump");
                     e.printStackTrace();
-                }
-                for (; i < z; i++) {
-                    if (nmapStdoutHost[i].contains("upnp-info:")) {
-                        analyseUPnPtResult(nmapStdoutHost, i + 1, host);
-                    }
-                    dump.append(nmapStdoutHost[i]).append("\n");
                 }
             } else if (line.contains("Host script results:")) {
                 int z = analyseHostScriptResult(nmapStdoutHost, i + 1, host);
@@ -153,7 +140,7 @@ class                               NmapHostDiscoveryParser {
                 }
             }
         }
-        host.state = Host.State.ONLINE;
+        host.state = State.ONLINE;
         saveHost(host, dump, nmapStdout);
     }
 
@@ -248,134 +235,6 @@ class                               NmapHostDiscoveryParser {
                 host.NetBIOS_Role = splitted[1].replace("NetBIOS user: ", "").trim();
                 Log.d(TAG, "NetBIOS user:[" + host.NetBIOS_Role + "]");
                 //TODO: get le groupe ->  Flags: <group>
-            }
-        }
-        return i;
-    }
-    ArrayList<String> items = new ArrayList<>();
-    /**
-     * 1900/udp open          upnp
-     | upnp-info:
-     | 192.168.0.12
-     |     server: microsoft-windows/10.0 upnp/1.0 upnp-device-host/1.0
-     |_    location: http://192.168.0.12:2869/upnphost/udhisapi.dll?content=uuid:b0a22e22-1541-424f-bd84-cfda678aaa4d
-     */
-    private int                     analyseUPnPtResult(String[] nmapStdoutHost, int i, final Host host) {
-        ArrayList<String> dumpHostScript = new ArrayList<>();
-        String urlUPnP = "";
-        while (i < nmapStdoutHost.length && !nmapStdoutHost[i].startsWith("|_")) {
-            dumpHostScript.add(nmapStdoutHost[i++].toLowerCase().replace("|", "").trim());
-        }
-        dumpHostScript.add(nmapStdoutHost[i++].toLowerCase().replace("|_", "").trim());
-        Log.d(TAG, "UPnP:[" + dumpHostScript+ "]");
-        for (String line : dumpHostScript) {
-            if (line.contains("server:")) {
-                String[] splitted = line.replace("server: ","").split(" ");
-                host.os = splitted[0].replace("microsoft-", "").replace("|", "").trim();
-                host.UPnP_Device = splitted[0].replace("microsoft-", "").replace("|", "").trim();
-                host.vendor = host.UPnP_Device;
-            } else if (line.contains("location: ")) {
-                urlUPnP = line.replace("location: ", "");
-                host.UPnP_Infos = urlUPnP;
-            }
-        }
-        if (!urlUPnP.isEmpty()) {//GET HTTP XML UPnP
-            Log.d(TAG, "Trying to GET /upnp-info [" + urlUPnP + "]");
-            try {//YOU HAVE TO LET THE ALL NODE WAIT THE HTTP RESPONSE
-                StringRequest request = new StringRequest(Request.Method.GET, urlUPnP,
-                        new Response.Listener<String>() {
-                            public void onResponse(String response) {
-                                host.Notes = host.Notes.concat("OxBABOBAB").concat(response);
-                                try {
-                                    XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-                                    factory.setNamespaceAware(true);
-                                    XmlPullParser xpp = factory.newPullParser();
-                                    xpp.setInput(new StringReader(response));
-                                    int eventType = xpp.getEventType();
-                                    while (eventType != XmlPullParser.END_DOCUMENT) {
-                                        if (eventType == XmlPullParser.START_DOCUMENT) {
-                                        } else if (eventType == XmlPullParser.START_TAG) {
-                                            if (xpp.getName().contains("serialNumber")) {
-                                                xpp.next();
-                                                host.Brand_and_Model = xpp.getText();
-                                                Log.d(TAG, "serialNumber " + xpp.getText());
-                                            } else if (xpp.getName().contains("friendlyName")) {
-                                                xpp.next();
-                                                if (!xpp.getText().contains("http"))
-                                                    host.UPnP_Name = xpp.getText();
-                                                Log.d(TAG, "friendlyName " + xpp.getText());
-                                            } else if (xpp.getName().contains("deviceType")) {
-                                                xpp.next();
-                                                host.osDetail = xpp.getText();
-                                                Log.d(TAG, "deviceType::" + xpp.getText());
-                                            } else if (xpp.getName().contains("manufacturer")) {
-                                                xpp.next();
-                                                host.UPnP_Device = xpp.getText();
-                                                Log.d(TAG, "manufacturer::" + xpp.getText());
-                                            } else if (xpp.getName().contains("modelName")) {
-                                                xpp.next();
-                                                host.UPnP_Services = xpp.getText();
-                                                Log.d(TAG, "ModelName::" + xpp.getText());
-                                            }
-                                        } else if (eventType == XmlPullParser.END_TAG) {
-                                           // Log.d(TAG, "End tag " + xpp.getName());
-                                        } else if (eventType == XmlPullParser.TEXT) {
-                                           // Log.d(TAG, "Text " + xpp.getText()); // here you get the text from xml
-                                        }
-                                        eventType = xpp.next();
-                                    }
-                                } catch (XmlPullParserException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-                    public void onErrorResponse(VolleyError error) {
-                        Log.w(TAG, "getModules::VolleyError:"  + error.getMessage());
-                        error.getStackTrace();
-                    }
-                });
-                listRequestApi.add(request);
-            } catch (Throwable t) {
-                Log.e(TAG, "error in getting UpnP XML");
-            }
-            for (String item : items) {
-                Log.d(TAG, "UPnP[" + item + "]");
-            }
-        }
-        return i;
-    }
-
-    /**
-     * 5353/udp open   zeroconf
-     | dns-service-discovery:
-     |   49600/tcp http
-     |     Address=10.16.186.167 fe80:0:0:0:8c1:dc67:c4cc:4b15
-     |   59544/tcp companion-link
-     |     rpBA=86:4D:AB:5D:21:2C
-     |     rpVr=120.51
-     |     rpHI=233259abbbba
-     |     rpHN=9348e33de016
-     |     rpHA=bf1e06edf5f7
-     |     model=MacBookPro11,2
-     |     osxvers=17
-     |_    Address=10.16.186.167 fe80:0:0:0:8c1:dc67:c4cc:4b15
-     */
-    public static int                     getPortList(String[] line, int i, Host host) throws Exception {
-        ArrayList<String> ports = new ArrayList<>();
-        for (; i < line.length; i++) {
-            if (!(line[i].contains("open") || line[i].contains("close") || line[i].contains("filtered"))) {
-                if (line[i].startsWith("| ") && line[i].endsWith(": ")) {//Entering script detail
-                    while (i < line.length && !line[i].startsWith("|_")) {//eating script detail on port
-                        ports.add(line[i++].replaceAll("  ", " "));
-                    }
-                } else {//ADD the LINE of port, ex: '443/tcp      https        FILTERED'
-                    host.Ports(ports);
-                    return i-1;
-                }
-            } else {
-                ports.add(line[i].replaceAll("  ", " "));
             }
         }
         return i;

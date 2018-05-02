@@ -8,6 +8,7 @@ import java.io.IOException;
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Target.Host;
+import fr.dao.app.Model.Target.State;
 import fr.dao.app.Model.Unix.Os;
 
 /**
@@ -17,12 +18,12 @@ public class                            Fingerprint {
     private static String               TAG = "Fingerprint";
 
     public static void                  initHost(Host host) {
-        host.build();
+        host.getPorts();
         guessosType(host);
         if (host.name.contains("My Device") ||
                 host.ip.contentEquals(Singleton.getInstance().network.myIp)) {/* host.isItMyDevice is not saved on BDD for optimiz*/
             host.isItMyDevice = true;
-            host.state = Host.State.ONLINE;
+            host.state = State.ONLINE;
             host.osType = Os.Android;
             host.name = "My Device";//Need reafect in case of nmap_mode == 1
         } else if (Fingerprint.isItWindows(host)) {
@@ -105,9 +106,9 @@ public class                            Fingerprint {
     }
 
     public static boolean               isItWindows(Host host) {
-        return host.Ports() != null &&
-                host.Ports().isPortOpen(135) &&
-                host.Ports().isPortOpen(445);
+        return host.getPorts() != null &&
+                host.getPorts().isPortOpen(135) &&
+                host.getPorts().isPortOpen(445);
     }
 
     public static boolean               isItMyGateway(Host host) {

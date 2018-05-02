@@ -5,24 +5,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fr.dao.app.Core.Configuration.Singleton;
-import fr.dao.app.Core.Scan.VulnScanner;
+import fr.dao.app.Core.Scan.ExploitScanner;
 import fr.dao.app.Model.Target.Host;
 
-import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.CouchDB;
-import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.DNS;
-import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.FTP;
-import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.HTTP;
-import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.IMAP;
-import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.LDAP;
-import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.MongoDB;
-import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.MySQL;
-import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.NTP;
-import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.POP;
-import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.SMB;
-import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.SMTP;
-import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.SSH;
-import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.SSL;
-import static fr.dao.app.Core.Scan.VulnScanner.TypeScanner.TELNET;
+import static fr.dao.app.Core.Scan.ExploitScanner.TypeScanner.CouchDB;
+import static fr.dao.app.Core.Scan.ExploitScanner.TypeScanner.DNS;
+import static fr.dao.app.Core.Scan.ExploitScanner.TypeScanner.FTP;
+import static fr.dao.app.Core.Scan.ExploitScanner.TypeScanner.HTTP;
+import static fr.dao.app.Core.Scan.ExploitScanner.TypeScanner.IMAP;
+import static fr.dao.app.Core.Scan.ExploitScanner.TypeScanner.LDAP;
+import static fr.dao.app.Core.Scan.ExploitScanner.TypeScanner.MongoDB;
+import static fr.dao.app.Core.Scan.ExploitScanner.TypeScanner.MySQL;
+import static fr.dao.app.Core.Scan.ExploitScanner.TypeScanner.NTP;
+import static fr.dao.app.Core.Scan.ExploitScanner.TypeScanner.POP;
+import static fr.dao.app.Core.Scan.ExploitScanner.TypeScanner.SMB;
+import static fr.dao.app.Core.Scan.ExploitScanner.TypeScanner.SMTP;
+import static fr.dao.app.Core.Scan.ExploitScanner.TypeScanner.SSH;
+import static fr.dao.app.Core.Scan.ExploitScanner.TypeScanner.SSL;
+import static fr.dao.app.Core.Scan.ExploitScanner.TypeScanner.TELNET;
 
 /*
 https://hackertarget.com/7-nmap-nse-scripts-recon/
@@ -59,7 +59,7 @@ public class                            NmapParam {
     private static NmapParam            mInstance = null;
     private ArrayList<String>           mMenuCmd = new ArrayList<>(), mMenuCommandScript = new ArrayList<>();
     private Map<String, String>         mParamsForCmd = new HashMap<>(), mNmapParamsScript = new HashMap<>();
-    private Map<VulnScanner.TypeScanner, String> nmapNSE;
+    private Map<ExploitScanner.TypeScanner, String> nmapNSE;
 
     private NmapParam() {
         initMenuClassic();
@@ -181,8 +181,9 @@ public class                            NmapParam {
         return " -PN -sS -T3 -sU " +
                 "--script nbstat.nse,dns-service-discovery,upnp-info " +
                 "--min-parallelism 100 " +
-                "-p T:21,T:22,T:23,T:25,T:80,T:110,T:111,T:135,T:139,T:3128,T:443,T:445,T:2049,T:2869," +
-                "U:53,U:1900,U:3031,U:5353  ";
+                "-p " +
+                "T:21,T:22,T:23,T:25,T:80,T:110,T:111,T:135,T:139,T:3128,T:443,T:445,T:2049,T:2869," +
+                "U:53,U:1900,U:3031,U:5353 ";
     }
     public static String                buildHostCmdArgs(ArrayList<Host> hosts) {
         StringBuilder hostCmd = new StringBuilder("");
@@ -196,6 +197,12 @@ public class                            NmapParam {
     /**
      * VulnerabilityScan
      */
+    public String                       getFullScanForVulns() {//TODO: dump all ports
+        return " -PN -sS -sU " + /* Deleted but why not : -T3 */
+                "-p " +
+                "T:21,T:22,T:23,T:25,T:80,T:110,T:111,T:135,T:139,T:3128,T:443,T:445,T:2049,T:2869," +
+                "U:53,U:1900,U:3031,U:5353 ";
+    }
     private void                        initMenuScriptVulnerability() {
         nmapNSE = new HashMap<>();
         nmapNSE.put(FTP, "ftp-anon.nse,ftp-bounce.nse,ftp-brute.nse,ftp-libopie.nse,ftp-proftpd-backdoor.nse,ftp-vsftpd-backdoor.nse,ftp-vuln-cve2010-4221.nse");
@@ -214,7 +221,7 @@ public class                            NmapParam {
         nmapNSE.put(CouchDB, "couchdb-databases.nse,couchdb-stats.nse");
         nmapNSE.put(LDAP, "ldap-brute.nse,ldap-novell-getpass.nse,ldap-rootdse.nse,ldap-search.nse");
     }
-    public String                       getScriptForScanFromTypeScanner(VulnScanner.TypeScanner scanner) {
+    public String                       getScriptForScanFromTypeScanner(ExploitScanner.TypeScanner scanner) {
         return nmapNSE.get(scanner);
     }
 }

@@ -253,7 +253,6 @@ public class                    SniffActivity extends MITMActivity {
 
     public void                 setToolbarTitle(final String title, final String subtitle) {
         mInstance.runOnUiThread(new Runnable() {
-            @Override
             public void run() {
                 if (title != null)
                     mToolbar.setTitle(title);
