@@ -45,7 +45,7 @@ public class                    Ports {
     */
     private void                initPort(String line, boolean open) {
         try {
-            Port port = (open) ? new Port(line) : add(line);
+            Port port = new Port(line);
             primitivePortsLits.append(port.getPort(), port.state.getValue());
             mPorts.add(port);
         } catch (Exception e) {

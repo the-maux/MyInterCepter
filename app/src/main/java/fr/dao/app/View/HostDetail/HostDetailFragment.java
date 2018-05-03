@@ -46,10 +46,9 @@ public class                    HostDetailFragment extends MyFragment {
         Bundle args = getArguments();
         if (args == null || args.getString("macAddress") == null) {
             mActivity.showSnackbar("Error in focus device (no MAC) in bundle");
-        } else {
+        } else if (mFocusedHost == null) {//prevent reloading
             mFocusedHost = DBHost.getDevicesFromMAC(args.getString("macAddress"));
             adapter = new HostDetailAdapter((MyActivity)getActivity(), mFocusedHost);
-            mFocusedHost.dumpMe();
             mRV.setAdapter(adapter);
             LinearLayoutManager manager = new LinearLayoutManager(mActivity);
             mRV.setLayoutManager(manager);
