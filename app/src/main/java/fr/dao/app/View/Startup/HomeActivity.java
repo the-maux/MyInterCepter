@@ -26,9 +26,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
+import fr.dao.app.Core.Database.DBSessions;
 import fr.dao.app.R;
 import fr.dao.app.View.DashBoard.DashboardActivity;
-import fr.dao.app.View.HostDetail.HostDetailActivity;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
 import fr.dao.app.View.Settings.SettingsActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
@@ -89,6 +89,7 @@ public class                    HomeActivity extends MyActivity {
         settings_card.setOnClickListener(onSettingsClick());
         dashboard_card.setOnClickListener(onDashboardClick());
         initBottomMonitor();
+        Singleton.getInstance().Session = DBSessions.getSession();
     }
 
     private void                initBottomMonitor() {

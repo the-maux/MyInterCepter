@@ -41,7 +41,7 @@ public class HostDiscoverySettingsFrgmnt extends SettingsFrgmnt {
          */
         initDiscoveryMode();
         addItemMenu("Scan every time",
-                "Start a new scan of the Network without loading previous one from database",
+                "Start a new scan of the NetworkInformation without loading previous one from database",
                 new Runnable() {
                     public void run() {
                         showSnackbar("not implemented");
@@ -71,7 +71,7 @@ public class HostDiscoverySettingsFrgmnt extends SettingsFrgmnt {
                 ContextCompat.getColor(mActivity, R.color.settingsSwitch),ContextCompat.getColor(mActivity, R.color.settingsSwitchBack));
 
         addItemMenu("Show Offline devices",
-                "Un/show the list of devices previously recorded on the network, but offline anymore",
+                "Un/show the list of devices previously recorded on the NetworkInformation, but offline anymore",
                 new Runnable() {
                     public void run() {
                         showSnackbar("not implemented");
@@ -119,7 +119,7 @@ public class HostDiscoverySettingsFrgmnt extends SettingsFrgmnt {
                 mActivity.runOnUiThread(new Runnable() {
                     public void run() {
                         new QuestionMultipleAnswerDialog(mActivity, items,
-                                click, "Type of network discovery", mSingleton.Settings.getUserPreferences().NmapMode);
+                                click, "Type of NetworkInformation discovery", mSingleton.Settings.getUserPreferences().NmapMode);
                     }
                 });
             }

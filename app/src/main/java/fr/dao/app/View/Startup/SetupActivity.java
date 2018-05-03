@@ -68,7 +68,7 @@ public class                    SetupActivity extends MyActivity {
                     Singleton.getInstance().init(mInstance);
                     Log.d(TAG, "Installation");
                     new Setup(mInstance).install();
-                    monitor("Network initialization");
+                    monitor("NetworkInformation initialization");
                     NetDiscovering.initNetworkInfo(mInstance);
                     runOnUiThread(new Runnable() {
                         public void run() {

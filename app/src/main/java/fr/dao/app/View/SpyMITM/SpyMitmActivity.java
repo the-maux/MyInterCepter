@@ -21,10 +21,10 @@ import fr.dao.app.Core.Configuration.Words;
 import fr.dao.app.Core.Dnsmasq.DnsmasqControl;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MITMActivity;
-import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
-import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Adapter.DnsLogsAdapter;
 import fr.dao.app.View.ZViewController.Adapter.DnsSpoofConfAdapter;
+import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
+import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Dialog.DialogQuestionWithInput;
 
 //https://danielmiessler.com/study/bettercap/
@@ -123,7 +123,7 @@ public class                            SpyMitmActivity extends MITMActivity {
                 .setHintToTILFirstQuestion("Domain")
                 .setHintToEDFirstQuestion("Ex: google.com")
                 .setHintToTILSecoundQuestion("Ip address")
-                .setHintToEDSecoundQuestion("Ex: " + mSingleton.network.myIp);
+                .setHintToEDSecoundQuestion("Ex: " + mSingleton.NetworkInformation.myIp);
 
         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface d, int which) {

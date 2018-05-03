@@ -19,6 +19,7 @@ import android.widget.Toast;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.WebServer.GenericServer;
+import fr.dao.app.Model.Config.Action;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MITMActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
@@ -31,7 +32,7 @@ public class                    WebServerActivity extends MITMActivity {
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
     private AppBarLayout        appBarLayout;
-    private String              myUrl = "http://" + mSingleton.network.myIp + ":" + PORT;
+    private String              myUrl = "http://" + mSingleton.NetworkInformation.myIp + ":" + PORT;
     private Toolbar             mToolbar;
     private GenericServer       mWebServer;
     private ProgressBar         mProgressBar;
@@ -93,10 +94,8 @@ public class                    WebServerActivity extends MITMActivity {
         if (!mSingleton.iswebSpoofed()) {
                 try {
                     mWebServer = new GenericServer(PORT);
+                    mSingleton.Session.addAction(Action.actionType.WEBSERVER, true);
                     mWebServer.start();
-                    mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
-                    mSingleton.actualNetwork.save();
-
                     return true;
                 } catch (Exception io) {
                     io.getStackTrace();

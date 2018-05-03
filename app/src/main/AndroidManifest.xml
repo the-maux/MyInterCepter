@@ -76,6 +76,9 @@
             fr.dao.app.Model.Target.SniffSession,
             fr.dao.app.Model.Target.VulnerabilityScan,
             fr.dao.app.Model.Unix.DNSLog,
+            fr.dao.app.Model.Config.Action,
+            fr.dao.app.Model.Config.Session,
+            fr.dao.app.Model.Unix.DNSLog,
             fr.dao.app.Model.Net.Pcap,
             fr.dao.app.Model.Net.Service" />
         <meta-data

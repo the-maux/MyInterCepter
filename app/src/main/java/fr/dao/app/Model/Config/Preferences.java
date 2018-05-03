@@ -1,4 +1,4 @@
-package fr.dao.app.Model.Unix;
+package fr.dao.app.Model.Config;
 
 import android.os.Environment;
 

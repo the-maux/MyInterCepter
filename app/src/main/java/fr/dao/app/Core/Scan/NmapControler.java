@@ -15,6 +15,7 @@ import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
+import fr.dao.app.Model.Config.Action;
 import fr.dao.app.Model.Config.NmapParam;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
@@ -54,7 +55,7 @@ public class                        NmapControler {
                         Log.d(TAG, "Error in nmap execution, Nmap didn't end");
                         outputBuilder.append(tmp);
                         Log.e(TAG, outputBuilder.toString());
-                        setTitleToolbar("Network scan", "Nmap Error");
+                        setTitleToolbar("NetworkInformation scan", "Nmap Error");
                         return;
                     }
                     outputBuilder.append(tmp);
@@ -74,8 +75,7 @@ public class                        NmapControler {
      * @param cmd
      */
     public                          NmapControler(final ExploitScanner scanner, final ExploitScanner.TypeScanner type, final String cmd) {
-        mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
-        mSingleton.actualNetwork.save();
+        buildAction();
         new Thread(new Runnable() {
             public void run() {
                 try {
@@ -90,7 +90,7 @@ public class                        NmapControler {
 //                        Log.d(TAG, "Error in nmap execution, Nmap didn't end");
 //                        outputBuilder.append(tmp);
 //                        Log.e(TAG, outputBuilder.toString());
-//                        setTitleToolbar("Network scan", "Nmap Error");
+//                        setTitleToolbar("NetworkInformation scan", "Nmap Error");
 //                        return;
 //                    }
 //                    outputBuilder.append(tmp);
@@ -108,8 +108,7 @@ public class                        NmapControler {
      */
     public                          NmapControler() {/*Live mode*/
         //boolean execureAllCommandTogether This need to be in Settings
-        mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
-        mSingleton.actualNetwork.save();
+        buildAction();
         mIsLiveDump = true;
     }
 
@@ -120,8 +119,7 @@ public class                        NmapControler {
      * @param context
      */
     public                          NmapControler(Network ap, NetworkDiscoveryControler discoveryControler, Context context) {
-        mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
-        mSingleton.actualNetwork.save();
+        buildAction();
         mIsLiveDump = false;
         mNnetworkDiscoveryControler = discoveryControler;
         String hostCmd = NmapParam.buildHostCmdArgs(ap.listDevices());
@@ -134,8 +132,7 @@ public class                        NmapControler {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    mSingleton.actualNetwork.defensifAction = mSingleton.actualNetwork.defensifAction + 1;
-                    mSingleton.actualNetwork.save();
+                    buildAction();
                     String tmp;
                     StringBuilder outputBuilder = new StringBuilder();
                     BufferedReader reader = process.exec(cmd).getReader();
@@ -153,7 +150,7 @@ public class                        NmapControler {
                         Log.d(TAG, "Error in nmap execution, Nmap didn't end");
                         outputBuilder.append(tmp);
                         Log.e(TAG, outputBuilder.toString());
-                        setTitleToolbar("Network scan", "Nmap Error");
+                        setTitleToolbar("NetworkInformation scan", "Nmap Error");
                         return;
                     }
                     outputBuilder.append(tmp);
@@ -234,6 +231,10 @@ public class                        NmapControler {
             mNnetworkDiscoveryControler.setToolbarTitle(title, subtitle);
         else
             Log.e(TAG, "setting title toolbar but networkDiscoveryControler is null ");
+    }
+
+    private void                    buildAction() {
+        Singleton.getInstance().Session.addAction(Action.actionType.SCAN, true);
     }
 
     public void                     setmActualScan(String itemMenu) {

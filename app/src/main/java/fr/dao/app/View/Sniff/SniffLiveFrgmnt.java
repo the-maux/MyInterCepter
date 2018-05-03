@@ -26,12 +26,12 @@ import fr.dao.app.Core.Tcpdump.DashboardSniff;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
-import fr.dao.app.View.ZViewController.Adapter.SniffDashboardAdapter;
-import fr.dao.app.View.ZViewController.Fragment.MyFragment;
-import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Adapter.HostSelectionAdapter;
+import fr.dao.app.View.ZViewController.Adapter.SniffDashboardAdapter;
 import fr.dao.app.View.ZViewController.Adapter.SniffPacketsAdapter;
+import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Dialog.RV_dialog;
+import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 /**
  * TODO: tu dois trouver un moye, de flush l'ensemble des trames du dispatcher dans le RV live
@@ -107,7 +107,7 @@ public class SniffLiveFrgmnt extends MyFragment {
         int res = (Tcpdump.isRunning()) ? R.color.online_color : R.color.offline_color;
         statusIconSniffing.setImageResource(res);
         if (mAdapterDashboardWireshark == null) {
-            title_sniffer.setText(mSingleton.network.ssid);
+            title_sniffer.setText(mSingleton.NetworkInformation.ssid);
             subtitle_sniffer.setText("No packets recorded");
             bottom_title_sniffer.setText("Not started");
             bottom_subtitle_sniffer.setText("");

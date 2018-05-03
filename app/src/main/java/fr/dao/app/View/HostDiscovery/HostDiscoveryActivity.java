@@ -102,8 +102,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     private void                    init()  {
         NetDiscovering.initNetworkInfo(this);
-        if (mSingleton.network == null || mSingleton.network.myIp == null) {
-            showSnackbar("You need to be connected to a Network");
+        if (mSingleton.NetworkInformation == null || mSingleton.NetworkInformation.myIp == null) {
+            showSnackbar("You need to be connected to a NetworkInformation");
             finish();
         } else {
             initFabs();
@@ -204,15 +204,15 @@ public class                        HostDiscoveryActivity extends MyActivity {
     public void                     initMonitor() {
         String monitor = "";
         if (!monitor.contains("WiFi")) {
-            monitor += " Ip Address : " + mSingleton.network.myIp;
-            monitor += "\n" + mSingleton.network.ssid + " : " + mSingleton.network.gateway;
+            monitor += " Ip Address : " + mSingleton.NetworkInformation.myIp;
+            monitor += "\n" + mSingleton.NetworkInformation.ssid + " : " + mSingleton.NetworkInformation.gateway;
         } else {
             monitor += "Not Connected";
         }
-        if (Singleton.getInstance().network.isConnectedToNetwork())
+        if (Singleton.getInstance().NetworkInformation.isConnectedToNetwork())
             mBottomMonitor.setText(monitor);
         else
-            mBottomMonitor.setText(mSingleton.network.ssid + ": No connection");
+            mBottomMonitor.setText(mSingleton.NetworkInformation.ssid + ": No connection");
         //ViewAnimate.setVisibilityToVisibleQuick(mBottomMonitor);
         ViewAnimate.FabAnimateReveal(this, mBottomMonitor, new Runnable() {
             public void run() {

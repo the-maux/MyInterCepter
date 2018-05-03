@@ -15,9 +15,9 @@ import java.util.Locale;
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Model.Net.Service;
 
-@Table(name = "Network", id = "_id")
+@Table(name = "NetworkInformation", id = "_id")
 public class                Network extends Model {
-    public static String    NAME_COLUMN = "Network";
+    public static String    NAME_COLUMN = "NetworkInformation";
     @Column(name = "ssid")
     public String           Ssid;
     @Column(name = "lastScanDate")
@@ -28,10 +28,6 @@ public class                Network extends Model {
     public int              nbrOs;
     @Column(name = "nbrScanned")
     public int              nbrScanned;
-    @Column(name = "offensifAction")
-    public int              offensifAction;
-    @Column(name = "defensifAction")
-    public int              defensifAction;
 
     @Column(name = "Devices")
     public String           listDevicesSerialized;
@@ -43,18 +39,18 @@ public class                Network extends Model {
                 return listDevices;
             }
             listDevices = DBHost.getListFromSerialized(listDevicesSerialized);
-            Log.d(NAME_COLUMN, "liste Network deserialized " + listDevices.size() + " devices");
+            Log.d(NAME_COLUMN, "liste NetworkInformation deserialized " + listDevices.size() + " devices");
 
         }
         return listDevices;
     }
 
     public List<Service>    Services() {
-        return getMany(Service.class, "Network");
+        return getMany(Service.class, "NetworkInformation");
     }
 
     public List<SniffSession> SniffSessions() {
-        return getMany(SniffSession.class, "Network");
+        return getMany(SniffSession.class, "NetworkInformation");
     }
 
     public String           toString() {
@@ -78,7 +74,7 @@ public class                Network extends Model {
         throw new UnknownHostException("Not host found in BDD with this mac[" + mac + "]");
     }
 
-    public              Network() {
+    public                  Network() {
         super();
     }
 }

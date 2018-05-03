@@ -99,7 +99,7 @@ public class                    SniffSessionAdapter extends RecyclerView.Adapter
             @Override
             public void onClick(View v) {
                 new QuestionDialog(mActivity)
-                        .setTitle("Supprimer le network ?")
+                        .setTitle("Supprimer le NetworkInformation ?")
                         .setText("Cette action est irreversible, etes vous sur d\'etre certains de vouloir supprimer cette record.")
                         .onPositiveButton("Oui", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {

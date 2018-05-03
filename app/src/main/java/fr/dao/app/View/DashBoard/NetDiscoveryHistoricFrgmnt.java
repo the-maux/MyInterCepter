@@ -118,7 +118,7 @@ public class NetDiscoveryHistoricFrgmnt extends MyFragment {
         mDetailSessionLayout.setVisibility(View.GONE);
 
         
-        /* Detail Network */
+        /* Detail NetworkInformation */
         name = rootView.findViewById(R.id.title);
         date = rootView.findViewById(R.id.dateSession);
         nbrScanned = rootView.findViewById(R.id.nbrScanned);
@@ -159,7 +159,7 @@ public class NetDiscoveryHistoricFrgmnt extends MyFragment {
             if (RV_AdapterAp == null) {
                 RV_AdapterAp = new NetworksAdapter(this, networksScanned);
             }
-            setTitleToolbar(null, networksScanned.size() + " network scanned");
+            setTitleToolbar(null, networksScanned.size() + " NetworkInformation scanned");
             mRV.setAdapter(RV_AdapterAp);
             mActualMode = HistoricDetailMode.NETWORK_LISTING;
             mEmptyList.setVisibility(View.GONE);
@@ -209,7 +209,7 @@ public class NetDiscoveryHistoricFrgmnt extends MyFragment {
         ViewAnimate.setVisibilityToVisibleQuick(cardService, 400);
         setTitleToolbar(null, focusedNetwork.getDateString());
         String nbrService = ((focusedNetwork.Services() == null) ? "0" :
-                focusedNetwork.Services().size()) + " Services discovered on Network";
+                focusedNetwork.Services().size()) + " Services discovered on NetworkInformation";
         titleService.setText(nbrService);
     }
 
@@ -350,7 +350,7 @@ public class NetDiscoveryHistoricFrgmnt extends MyFragment {
                 .setAppBarLayout(mAppbar)
                 .addTitleItem("Historic settings")
                 .addItem(0, "Purge all history", R.mipmap.ic_os_filter)
-                .addItem(1, "MITM Network", R.mipmap.ic_os_filter)
+                .addItem(1, "MITM NetworkInformation", R.mipmap.ic_os_filter)
                 .setItemClickListener(new BottomSheetItemClickListener() {
                     @Override
                     public void onBottomSheetItemClick(MenuItem menuItem) {
@@ -359,7 +359,7 @@ public class NetDiscoveryHistoricFrgmnt extends MyFragment {
                             case "Purge all history":
                                //osFilterDialog();
                                 break;
-                            case "MITM Network":
+                            case "MITM NetworkInformation":
                                 showSniffSessionList();
                                 break;
                             case "Mode offline":
@@ -415,11 +415,11 @@ public class NetDiscoveryHistoricFrgmnt extends MyFragment {
                     initHistoricFromDB(mFocusedHost);
                 return false;
             case DEVICE_OF_NETWORK:
-                Log.i(TAG, "returning to network detail");
+                Log.i(TAG, "returning to NetworkInformation detail");
                 onNetworkFocused(null);
                 return false;
             case WIRESHARK_LISTING:
-                Log.i(TAG, "listing wireshark so, returning to network detail");
+                Log.i(TAG, "listing wireshark so, returning to NetworkInformation detail");
                 onNetworkFocused(null);
                 return false;
             default:

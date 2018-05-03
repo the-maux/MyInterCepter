@@ -67,7 +67,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         initSwipeRefresh();
         if (mSingleton.hostList != null && !mSingleton.hostList.isEmpty()) {
             mHostLoaded = true;
-            mActivity.actualNetwork = mSingleton.actualNetwork;
+            mActivity.actualNetwork = mSingleton.CurrentNetwork;
             onHostActualized(mSingleton.hostList);
         } else if (!mHostLoaded) {//To not reload for nothing
             start();
@@ -79,10 +79,10 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         Log.d(TAG, "onResume::scan discovery host :" + mHostAdapter.getItemCount());
         Log.d(TAG, "onResume::scan discovery hostList :" + mHosts.size());
         if (mHosts.size() == 0) {
-            mActivity.setToolbarTitle(mSingleton.network.ssid,
+            mActivity.setToolbarTitle(mSingleton.NetworkInformation.ssid,
                     "Searching devices");
         } else {
-            mActivity.setToolbarTitle(mSingleton.network.ssid,
+            mActivity.setToolbarTitle(mSingleton.NetworkInformation.ssid,
                     mHosts.size() + " device" + ((mHosts.size() > 1) ? "s" : ""));
         }
         if (mHosts == null || mHosts.isEmpty())
@@ -153,7 +153,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
     }
 
     public boolean                  start() {
-        mActivity.setToolbarTitle("Scanner", "Discovering Network");
+        mActivity.setToolbarTitle("Scanner", "Discovering NetworkInformation");
         if (!isWaiting()) {
             if (mScannerControler.run(false)) {
                 init_prologueScan();
@@ -178,7 +178,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
     private void                    init_prologueScan() {
         /**
          * TODO:
-         * + Get Last list of host from this SSID where Gateway.mac.equals(mSingleton.Network.gateway.mac)
+         * + Get Last list of host from this SSID where Gateway.mac.equals(mSingleton.NetworkInformation.gateway.mac)
          *      -> If not same Mac Alert we détected a roaming. Have to restart the process
          * - IF ITS THE FIST SCAN print the list of host in degraded mode
          * - IF You already have a lit:
@@ -201,7 +201,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
     }
 
     public void                     updateStateOfHostAfterIcmp(Network actualNetwork) {
-        mSingleton.actualNetwork = actualNetwork;
+        mSingleton.CurrentNetwork = actualNetwork;
         mActivity.actualNetwork = actualNetwork;
         mHosts = actualNetwork.listDevices();
         mHostAdapter.updateHostList(actualNetwork.listDevices());
@@ -219,14 +219,14 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
                 mHostLoaded = true;
                 mActivity.setProgressState(mActivity.MAXIMUM_PROGRESS*2);
                 mSingleton.hostList = mHosts;
-                mActivity.setToolbarTitle(mSingleton.network.ssid,
+                mActivity.setToolbarTitle(mSingleton.NetworkInformation.ssid,
                         "(" + online + "/" + hosts.size()+ ") device" + ((hosts.size() > 1) ? "s" : ""));
                 Log.d(TAG, "onHostActualized: " + ((mSingleton.hostList == null) ? "null" : mSingleton.hostList.size()));
                 mHostAdapter.updateHostList(mHosts);
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
                 mSwipeRefreshLayout.setRefreshing(false);
                 mActivity.onScanOver();
-                DBNetwork.updateHostOfSessions(mSingleton.actualNetwork, hosts, mHostAdapter.getOsList());
+                DBNetwork.updateHostOfSessions(mSingleton.CurrentNetwork, hosts, mHostAdapter.getOsList());
             }
         });
     }

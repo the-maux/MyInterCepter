@@ -74,7 +74,7 @@ public class                    IPTables {
                 .exec("iptables " + "-F")// reset
                 .exec("iptables " + "-t nat -I POSTROUTING -s 0/0 -j MASQUERADE")// post route
                 .exec("iptables " + "-P FORWARD ACCEPT")// accept all
-                .exec("iptables " + "-t nat -A PREROUTING -j DNAT -p tcp --dport " + from + " --to " + Singleton.getInstance().network.myIp + ":" + to);// add rule;
+                .exec("iptables " + "-t nat -A PREROUTING -j DNAT -p tcp --dport " + from + " --to " + Singleton.getInstance().NetworkInformation.myIp + ":" + to);// add rule;
     }
 
     public void                 undoPortRedirect(int from, int to) {
@@ -84,7 +84,7 @@ public class                    IPTables {
                 .exec("iptables " + "-t nat -F") // reset nat
                 .exec("iptables " + "-F")// reset
                 .exec("iptables " + "-t nat -D POSTROUTING -s 0/0 -j MASQUERADE")  // remove post route
-                .exec("iptables " + "-t nat -D PREROUTING -j DNAT -p tcp --dport " + from + " --to " + Singleton.getInstance().network.myIp + ":" + to);// remove rule
+                .exec("iptables " + "-t nat -D PREROUTING -j DNAT -p tcp --dport " + from + " --to " + Singleton.getInstance().NetworkInformation.myIp + ":" + to);// remove rule
     }
 
     private static  void        InterceptWithSSlStrip() {

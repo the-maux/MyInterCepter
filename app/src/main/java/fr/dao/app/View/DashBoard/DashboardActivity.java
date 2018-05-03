@@ -1,6 +1,5 @@
 package fr.dao.app.View.DashBoard;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -13,13 +12,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -28,6 +25,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.dao.app.Core.Database.DBNetwork;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
@@ -85,27 +83,13 @@ public class                        DashboardActivity extends MyActivity {
         List<Entry> attackEntry = getAttackEntry();
         List<Entry> defenseEntry = getDefenseEntry();
 
-        LineDataSet setComp1 = new LineDataSet(defenseEntry, "Defense");
-        setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
-        setComp1.setColor(ContextCompat.getColor(mInstance, R.color.blueteam_color));
-        setComp1.setCircleColor(ContextCompat.getColor(mInstance, R.color.blueteam_color));
-        setComp1.setCircleColorHole(ContextCompat.getColor(mInstance, R.color.blueteam_color));
-        setComp1.setValueTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
-        LineDataSet setComp2 = new LineDataSet(attackEntry, "Attack");
-        setComp1.setLineWidth(1.2f);
-        setComp2.setAxisDependency(YAxis.AxisDependency.LEFT);
-        setComp2.setColor(ContextCompat.getColor(mInstance, R.color.redteam_color));
-        setComp2.setCircleColor(ContextCompat.getColor(mInstance, R.color.redteam_color));
-        setComp2.setValueTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
-        setComp2.setCircleColorHole(ContextCompat.getColor(mInstance, R.color.redteam_color));
-        setComp2.setLineWidth(1.2f);
+        LineDataSet setComp1 = initLineDataSet(defenseEntry, "Defense", R.color.blueteam_color);
+        LineDataSet setComp2 = initLineDataSet(attackEntry, "Attack", R.color.redteam_color);
+
         List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
         dataSets.add(setComp1);
         dataSets.add(setComp2);
         LineData data = new LineData(dataSets);
-        Description description = new Description();
-        description.setText("6 analyze");
-        description.setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
         Legend legend = jcoolGraph.getLegend();
         legend.setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
         jcoolGraph.getXAxis().setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
@@ -113,10 +97,25 @@ public class                        DashboardActivity extends MyActivity {
         jcoolGraph.getAxisLeft().setDrawLabels(false);
         jcoolGraph.getAxisRight().setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
         jcoolGraph.animateY(2000, Easing.EasingOption.Linear);
-        jcoolGraph.setDescription(description);
         jcoolGraph.setData(data);
+        String titleChart = DBNetwork.getAllAccessPoint() == null ? "0" : DBNetwork.getAllAccessPoint().size() + "NetworkInformation pentested";
+        Description description = new Description();
+        description.setText("6 sessions");
+        description.setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
+        jcoolGraph.setDescription(description);
+        titleChartDashboard.setText(titleChart);
         jcoolGraph.invalidate(); // refresh
-        titleChartDashboard.setText("1 Network pentested");
+    }
+
+    private LineDataSet                     initLineDataSet(List<Entry> defenseEntry, String title, int color) {
+        LineDataSet setComp1 = new LineDataSet(defenseEntry, title);
+        setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
+        setComp1.setColor(ContextCompat.getColor(mInstance, color));
+        setComp1.setCircleColor(ContextCompat.getColor(mInstance, color));
+        setComp1.setCircleColorHole(ContextCompat.getColor(mInstance, color));
+        setComp1.setValueTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
+        setComp1.setLineWidth(1.2f);
+        return setComp1;
     }
 
     private List<Entry>                    getAttackEntry() {

@@ -5,7 +5,6 @@ import android.os.Environment;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import fr.dao.app.Core.Database.DBNetwork;
 import fr.dao.app.Core.Database.DBSniffSession;
@@ -15,20 +14,21 @@ import fr.dao.app.Core.Network.IPTables;
 import fr.dao.app.Core.Network.NetDiscovering;
 import fr.dao.app.Core.Network.NetworkInformation;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
+import fr.dao.app.Model.Config.Session;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.Model.Target.SniffSession;
 
 public class                            Singleton {
-    public  SettingsControler           Settings = null;
-    public  NetworkInformation          network = null;
-    public  Network                     actualNetwork = null;
-    public  ArrayList<Host>             hostList = null, savedHostList = null;
-    public  List<ArpSpoof>              ArpSpoofProcessStack = new ArrayList<>();
-    private DnsmasqControl              dnsSpoofed = null;
-    private SniffSession                actualSniffSession = null;
-    private boolean                     webSpoofedstarted = false;
     private static Singleton            mInstance = null;
+    public  SettingsControler           Settings = null;
+    public  Session                     Session;
+    public  NetworkInformation          NetworkInformation = null;
+    public  Network                     CurrentNetwork = null;
+    public  ArrayList<Host>             hostList = null, savedHostList = null;
+    private SniffSession                CurrentSniffSession = null;
+    private DnsmasqControl              dnsSpoofed = null;
+    private boolean                     webSpoofedstarted = false;
     String                              VERSION = "0xDEADBEEF";
 
     private                             Singleton() {
@@ -41,11 +41,11 @@ public class                            Singleton {
         return mInstance;
     }
 
-    public SniffSession                 getActualSniffSession() {
-        if (actualSniffSession == null) {
-            actualSniffSession = DBSniffSession.buildSniffSession();
+    public SniffSession getCurrentSniffSession() {
+        if (CurrentSniffSession == null) {
+            CurrentSniffSession = DBSniffSession.buildSniffSession();
         }
-       return actualSniffSession;
+       return CurrentSniffSession;
     }
     public DnsmasqControl               getDnsControler() {
         if (dnsSpoofed == null) {
@@ -81,7 +81,7 @@ public class                            Singleton {
     }
 
     public void                         resetActualSniffSession() {
-        actualSniffSession = null;
+        CurrentSniffSession = null;
     }
 
     public void                         closeEverySniffService(Activity activity) {
@@ -89,7 +89,7 @@ public class                            Singleton {
         if (Tcpdump.isRunning()) {
             Log.e("Singleton", "Stopping tcpdump not implemented");
         }
-        if (!ArpSpoofProcessStack.isEmpty()) {
+        if (!ArpSpoof.ArpSpoofProcessStack.isEmpty()) {
             Log.e("Singleton", "Stopping ArpSpoof not implemented");
         }
         if (dnsSpoofed != null) {
@@ -115,7 +115,7 @@ public class                            Singleton {
             Settings.DumpsPath = Environment.getExternalStorageDirectory().getPath() + "/Dao/Nmap/";
             Settings.BinaryPath = Settings.FilesPath;
             if (NetDiscovering.initNetworkInfo(activity))
-                actualNetwork = DBNetwork.getAPFromSSID(network.ssid);
+                CurrentNetwork = DBNetwork.getAPFromSSID(NetworkInformation.ssid);
         }
     }
 }

@@ -27,10 +27,10 @@ import fr.dao.app.Core.Dnsmasq.DnsmasqConfig;
 import fr.dao.app.Core.Dnsmasq.DnsmasqControl;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MITMActivity;
-import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
-import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Adapter.DnsLogsAdapter;
 import fr.dao.app.View.ZViewController.Adapter.DnsSpoofConfAdapter;
+import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
+import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Dialog.DialogQuestionWithInput;
 
 
@@ -224,7 +224,7 @@ public class                            DnsActivity extends MITMActivity {
                 .setHintToTILFirstQuestion("Domain")
                 .setHintToEDFirstQuestion("Ex: google.com")
                 .setHintToTILSecoundQuestion("Ip address")
-                .setHintToEDSecoundQuestion("Ex: " + mSingleton.network.myIp);
+                .setHintToEDSecoundQuestion("Ex: " + mSingleton.NetworkInformation.myIp);
         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface d, int which) {

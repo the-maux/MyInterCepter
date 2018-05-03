@@ -15,6 +15,7 @@ import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Network.ArpSpoof;
 import fr.dao.app.Core.Network.IPTables;
+import fr.dao.app.Model.Config.Action;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
@@ -70,8 +71,7 @@ public class                        Tcpdump {
         isRunning = true;
         final DashboardSniff dashboardSniff = new DashboardSniff();
         mDispatcher.setDashboard(dashboardSniff);
-        mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
-        mSingleton.actualNetwork.save();
+        Singleton.getInstance().Session.addAction(Action.actionType.SNIFF, true);
         new Thread(new Runnable() {
             @Override
             public void run() {

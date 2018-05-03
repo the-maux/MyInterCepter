@@ -64,7 +64,7 @@ public class                        NetworkDiscoveryControler {
 
     public boolean                   run(boolean isJustCheckingWhoIsAlive) {
         Log.i(TAG, "run::WifiInit");
-        if (!NetDiscovering.initNetworkInfo(mActivity) || !mSingleton.network.updateInfo().isConnectedToNetwork()) {
+        if (!NetDiscovering.initNetworkInfo(mActivity) || !mSingleton.NetworkInformation.updateInfo().isConnectedToNetwork()) {
             mActivity.showSnackbar("No wifi connection detected");
             Log.i(TAG, "No wifi connection detected");
             return false;
@@ -90,7 +90,7 @@ public class                        NetworkDiscoveryControler {
         mActivity.setProgressState(0);
         new Thread(new Runnable() {
             public void run() {
-                new IcmpScanNetmask(new IPv4Utils(mSingleton.network), mInstance);
+                new IcmpScanNetmask(new IPv4Utils(mSingleton.NetworkInformation), mInstance);
             }
         }).start();
         Log.i(TAG, "startScan::IcmpScanNetmask::started");
@@ -103,27 +103,27 @@ public class                        NetworkDiscoveryControler {
         mActivity.setToolbarTitle(null, ipsreachables.size() + " hosts detected");
         ArrayList<String> basicHost = NetDiscovering.readARPTable(ipsreachables);
         Log.i(TAG, "onArpScanOver::readARPTable::"+ ipReachable.size() + " device(s) from ARP");
-        Singleton.getInstance().actualNetwork = updateHostStatus(basicHost);
+        Singleton.getInstance().CurrentNetwork = updateHostStatus(basicHost);
         if (isFromHostDiscoveryActivity) {
             Log.i(TAG, "onArpScanOver::mFragment.updateStateOfHostAfterIcmp");
-            mFragment.updateStateOfHostAfterIcmp(Singleton.getInstance().actualNetwork);
+            mFragment.updateStateOfHostAfterIcmp(Singleton.getInstance().CurrentNetwork);
         }
         mActivity.MAXIMUM_PROGRESS = basicHost.size();
         if (mSingleton.Settings.getUserPreferences().NmapMode > 0 && isFromHostDiscoveryActivity) {
             Log.i(TAG, "onArpScanOver::Nmap::TypeScan::"+mSingleton.Settings.getUserPreferences().NmapMode+"::StartingNmap");
-            new NmapControler(Singleton.getInstance().actualNetwork, this, mActivity);
+            new NmapControler(Singleton.getInstance().CurrentNetwork, this, mActivity);
         } else {
             if (isJustCheckingWhoIsAlive) {
                 Log.i(TAG, "onArpScanOver::Nmap::JustCheckingHostAlive::BypassNmap");
             } else {
                 Log.i(TAG, "onArpScanOver::Nmap::TypeScan::"+mSingleton.Settings.getUserPreferences().NmapMode+"::BypassNmap");
             }
-            onScanFinished(Singleton.getInstance().actualNetwork.listDevices());
+            onScanFinished(Singleton.getInstance().CurrentNetwork.listDevices());
         }
     }
 
     private Network                    updateHostStatus(ArrayList<String> ipReachables) {
-        Network actualNetwork = mSingleton.actualNetwork;
+        Network actualNetwork = mSingleton.CurrentNetwork;
         int rax = 0;
         for (Host host : actualNetwork.listDevices()) {
             host.state = State.OFFLINE;
@@ -155,10 +155,8 @@ public class                        NetworkDiscoveryControler {
                     actualNetwork.listDevices().add(host);
                 }
             }
-        actualNetwork.offensifAction = actualNetwork.offensifAction + 1;
-        actualNetwork.save();
         Log.i(TAG, "(" + (actualNetwork.listDevices().size() - rax) + " offline/ " + actualNetwork.listDevices().size() + "inCache) ");
-        mSingleton.actualNetwork = actualNetwork;
+        mSingleton.CurrentNetwork = actualNetwork;
         return actualNetwork;
     }
 

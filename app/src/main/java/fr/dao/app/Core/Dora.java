@@ -7,6 +7,7 @@ import java.util.List;
 
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Model.Config.Action;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Unix.DoraProcess;
 import fr.dao.app.View.Dora.DoraActivity;
@@ -38,15 +39,14 @@ public class                        Dora {
         if (mInstance != null) {
             mListOfHostDored.clear();
             for (Host host : mSingleton.hostList) {
-                if (!host.name.contains("My Device") && !host.ip.contentEquals(mSingleton.network.gateway))
+                if (!host.name.contains("My Device") && !host.ip.contentEquals(mSingleton.NetworkInformation.gateway))
                     mListOfHostDored.add(new DoraProcess(host));
             }
         }
     }
 
     public int                      onAction() {
-        mSingleton.actualNetwork.defensifAction = mSingleton.actualNetwork.defensifAction + 1;
-        mSingleton.actualNetwork.save();
+        mSingleton.Session.addAction(Action.actionType.DORA, false);
         if (mListOfHostDored.isEmpty())
            reset();
         if (!isRunning) {

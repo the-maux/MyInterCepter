@@ -21,7 +21,7 @@ public class                            Fingerprint {
         host.getPorts();
         guessosType(host);
         if (host.name.contains("My Device") ||
-                host.ip.contentEquals(Singleton.getInstance().network.myIp)) {/* host.isItMyDevice is not saved on BDD for optimiz*/
+                host.ip.contentEquals(Singleton.getInstance().NetworkInformation.myIp)) {/* host.isItMyDevice is not saved on BDD for optimiz*/
             host.isItMyDevice = true;
             host.state = State.ONLINE;
             host.osType = Os.Android;
@@ -38,8 +38,8 @@ public class                            Fingerprint {
             host.osType = Os.Gateway;
             if (host.osDetail.contains("Unknown"))
                 host.osDetail = "Gateway";
-            if (Singleton.getInstance().actualNetwork != null)
-                Singleton.getInstance().actualNetwork.Gateway = host;
+            if (Singleton.getInstance().CurrentNetwork != null)
+                Singleton.getInstance().CurrentNetwork.Gateway = host;
         }
     }
 
@@ -112,8 +112,8 @@ public class                            Fingerprint {
     }
 
     public static boolean               isItMyGateway(Host host) {
-        return host.ip.contains(Singleton.getInstance().network.gateway) &&
-                host.ip.length() == Singleton.getInstance().network.gateway.length();
+        return host.ip.contains(Singleton.getInstance().NetworkInformation.gateway) &&
+                host.ip.length() == Singleton.getInstance().NetworkInformation.gateway.length();
     }
 
     public static String                getVendorFrom(String mac) {

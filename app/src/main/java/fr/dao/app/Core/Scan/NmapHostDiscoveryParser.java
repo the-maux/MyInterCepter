@@ -58,7 +58,7 @@ class                               NmapHostDiscoveryParser {
     }
 
     private void                    dumpToFile(String nmapDump) {
-        final File file = new File(mSingleton.Settings.DumpsPath, mSingleton.network.ssid + Words.getGenericDateFormat(new Date()));
+        final File file = new File(mSingleton.Settings.DumpsPath, mSingleton.NetworkInformation.ssid + Words.getGenericDateFormat(new Date()));
         try {
             file.createNewFile();
             file.setReadable(true, false);
@@ -80,7 +80,7 @@ class                               NmapHostDiscoveryParser {
             public void run() {
                 try {
                     Host hostInList = getIpHOSTNAME(node.split("\n")[0], ap.listDevices());
-                    if (!hostInList.ip.contains(Singleton.getInstance().network.myIp))/* Its my device*/
+                    if (!hostInList.ip.contains(Singleton.getInstance().NetworkInformation.myIp))/* Its my device*/
                         buildHostFromNmapDump(node, hostInList);
                     else
                         initIfItsMyDevice(hostInList);
@@ -108,9 +108,9 @@ class                               NmapHostDiscoveryParser {
             } else if (line.contains("Too many fingerprints match this host to give specific OS details")) {
                 dump.append(line).append("\n");
                 host.TooManyFingerprintMatchForOs = true;
-            } else if (line.contains("Network Distance: ")) {
+            } else if (line.contains("NetworkInformation Distance: ")) {
                 dump.append(line).append("\n");
-                host.NetworkDistance = line.replace("Network Distance: ", "");
+                host.NetworkDistance = line.replace("NetworkInformation Distance: ", "");
             } else if (line.contains("NetBIOS name:")) {
                 dump.append(line).append("\n");
                 host.name = line.split(",")[0].replace("NetBIOS name: ", "")
@@ -173,8 +173,8 @@ class                               NmapHostDiscoveryParser {
 
     private void                    initIfItsMyDevice(Host host) {
         Log.i(TAG, "THIS IS MY DEVICE DETECTED");
-        host.mac = mSingleton.network.mac;
-        host.ip = mSingleton.network.myIp;
+        host.mac = mSingleton.NetworkInformation.mac;
+        host.ip = mSingleton.NetworkInformation.myIp;
         host = DBHost.saveOrGetInDatabase(host);
         host.name = "My Device";
         host.os = "Android API " + Build.VERSION.SDK_INT;

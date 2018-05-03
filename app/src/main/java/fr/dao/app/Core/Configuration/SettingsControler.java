@@ -13,7 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import fr.dao.app.Model.Unix.Preferences;
+import fr.dao.app.Model.Config.Preferences;
 
 public class                SettingsControler {
     private String          TAG = "SettingsControler";

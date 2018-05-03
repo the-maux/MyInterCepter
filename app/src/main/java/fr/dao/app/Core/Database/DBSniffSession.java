@@ -21,7 +21,7 @@ public class                        DBSniffSession {
 
     public static SniffSession      buildSniffSession() {
         Log.d(TAG, "buildSniffSession");
-        Network session = Singleton.getInstance().actualNetwork;
+        Network session = Singleton.getInstance().CurrentNetwork;
         SniffSession sniffSession = new SniffSession();
         sniffSession.listDevicesSerialized = DBHost.SerializeListDevices(Singleton.getInstance().hostList);
         sniffSession.date = Calendar.getInstance().getTime();

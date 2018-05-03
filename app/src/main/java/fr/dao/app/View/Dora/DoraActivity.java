@@ -1,7 +1,6 @@
 package fr.dao.app.View.Dora;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -22,7 +21,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Dora;
@@ -34,7 +32,6 @@ import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Adapter.DoraAdapter;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
-import fr.dao.app.View.ZViewController.Dialog.QuestionDialog;
 
 public class                    DoraActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
@@ -106,11 +103,11 @@ public class                    DoraActivity extends MyActivity {
         if (!NetworkDiscoveryControler.isHostListLoaded()) {
 //            new QuestionDialog(mInstance) //TODO: Question or not question ?
 //                    .setTitle("No target available")
-//                    .setText("Fast scanning network to find host ?")
+//                    .setText("Fast scanning NetworkInformation to find host ?")
 //                    .onPositiveButton("Search device", new DialogInterface.OnClickListener() {
 //                        public void onClick(DialogInterface dialog, int which) {
                             NetworkDiscoveryControler.getInstance(mInstance).run(true);
-            mInstance.dialog = ProgressDialog.show(mInstance, "Discovering Network", "Scanning. Please wait...", true);
+            mInstance.dialog = ProgressDialog.show(mInstance, "Discovering NetworkInformation", "Scanning. Please wait...", true);
 //                        }
 //                    })
 //                    .onNegativeButton("Dont", new DialogInterface.OnClickListener() {

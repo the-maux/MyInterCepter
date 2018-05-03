@@ -27,8 +27,8 @@ public class                    DnsmasqControl {
 
     public DnsmasqControl() {
         mDnsConf = new DnsmasqConfig();
-        if (Singleton.getInstance().getActualSniffSession() != null) {
-            sniffSession = Singleton.getInstance().getActualSniffSession();
+        if (Singleton.getInstance().getCurrentSniffSession() != null) {
+            sniffSession = Singleton.getInstance().getCurrentSniffSession();
             mDnsLogs = sniffSession.logDnsSpoofed();
         }
 

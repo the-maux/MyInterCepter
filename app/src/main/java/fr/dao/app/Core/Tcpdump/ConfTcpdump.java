@@ -3,11 +3,9 @@ package fr.dao.app.Core.Tcpdump;
 import android.util.Log;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Words;
@@ -61,14 +59,14 @@ class                           ConfTcpdump {
     private String              buildForDumpingPcap(String nameFile, List<Host> hosts) {
         String pcapFile = mSingleton.Settings.PcapPath + nameFile + ".pcap ";
         Pcap pcap = new Pcap(nameFile + ".pcap ", hosts);
-        pcap.sniffSession = mSingleton.getActualSniffSession();
+        pcap.sniffSession = mSingleton.getCurrentSniffSession();
 
         pcap.save();
-        if (mSingleton.getActualSniffSession() != null) {
-            mSingleton.getActualSniffSession().listPcapRecorded().add(pcap);
-            Log.d(TAG, "Pcap added to Sniff Network");
+        if (mSingleton.getCurrentSniffSession() != null) {
+            mSingleton.getCurrentSniffSession().listPcapRecorded().add(pcap);
+            Log.d(TAG, "Pcap added to Sniff NetworkInformation");
         } else {
-            Log.d(TAG, "Pcap not added to Sniff Network");
+            Log.d(TAG, "Pcap not added to Sniff NetworkInformation");
         }
         pcapFile =  " -w " + pcapFile;
         Log.d(TAG, pcap.toString());
@@ -79,7 +77,7 @@ class                           ConfTcpdump {
                                             String typeScan, List<Host> hosts) {
         String hostFilter = buildHostFilterCommand(hosts, typeScan);
         String date =  Words.getGenericDateFormat(new Date());
-        String nameFile = mSingleton.network.ssid + "_" + date;
+        String nameFile = mSingleton.NetworkInformation.ssid + "_" + date;
         String pcapFile = (isDumpingInFile) ? buildForDumpingPcap(nameFile, hosts) : "";
 
         String cmd = (mSingleton.Settings.FilesPath + "tcpdump " +
