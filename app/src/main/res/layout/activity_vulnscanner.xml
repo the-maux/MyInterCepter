@@ -131,7 +131,7 @@
         android:soundEffectsEnabled="true"
         android:src="@drawable/ic_media_play"
         android:visibility="visible"
-        app:backgroundTint="@color/material_deep_orange_accent_700"
+        app:backgroundTint="@color/vulnsPrimaryDark"
         app:elevation="6dp"
         app:fabSize="normal"
         app:layout_anchor="@id/appBarLayout"

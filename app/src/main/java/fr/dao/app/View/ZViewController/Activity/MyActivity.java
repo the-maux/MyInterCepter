@@ -14,7 +14,7 @@ import fr.dao.app.Model.Target.Host;
 
 
 public class                    MyActivity extends AppCompatActivity {
-    protected String            TAG = this.getClass().getName();
+    protected String            TAG = "MyActivity";
     protected MyActivity        mInstance = this;
     protected Bundle            bundle = null;
 
@@ -33,8 +33,12 @@ public class                    MyActivity extends AppCompatActivity {
     }
 
     public void                 onHostActualized(ArrayList<Host> hosts) {
-        Log.d(TAG, "MyActivity::onHostActualize -> Saved ton Singleton");
-        Singleton.getInstance().hostList = hosts;
+        if (hosts != null && hosts.size() > 1) {
+            Singleton.getInstance().hostList = hosts;
+            Log.d(TAG, "onHostActualize -> Saved to Singleton");
+        } else {
+            Log.e(TAG, "onHostActualize -> Not Saved to Singleton cause is null or empty");
+        }
     }
 
     protected ProgressBar       mProgressBar;/* Generic ProgressBar mecanics, but can be everywhere*/

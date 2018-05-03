@@ -24,7 +24,8 @@
     <color name="tint_svg">#ddcccccc</color>
     <color name="redteam_color">#B71C1C</color><!-- material_red_900 -->
     <color name="blueteam_color">#0D47A1</color><!-- material_blue_900 -->
-    1a237e
+    <color name="msf_light">#dd0E77B9</color>
+    <color name="msf_dark">#dd276890</color>
 
     <color name="offline_color">@color/material_red_500</color>
 
@@ -32,7 +33,8 @@
     <color name="NmapPrimary">#dd006064</color>
     <color name="DashboardPrimary">#4a148c</color>
     <color name="spyPrimary">#dd4f5b62</color>
-    <color name="vulnsPrimary">#dde65100</color><!-- material_deep_orange_900 -->
+    <color name="vulnsPrimary">@color/msf_dark</color><!-- material_deep_orange_900 -->
+    <color name="vulnsPrimaryDark">@color/msf_light</color><!-- material_deep_orange_900 -->
     <color name="doraPrimary">#dd005b9f</color>
     <color name="snifferPrimary">#dd263238</color>
     <color name="dnsSpoofPrimary">#dd004D40</color>
