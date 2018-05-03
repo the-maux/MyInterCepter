@@ -102,8 +102,7 @@ public class                            Singleton {
     }
 
     public boolean                      isSniffServiceActif(Activity activity) {
-        Tcpdump tcpdump = Tcpdump.getTcpdump(activity, false);
-        return tcpdump != null && Tcpdump.isRunning() ||
+        return Tcpdump.getTcpdump(activity, false) != null && Tcpdump.isRunning() ||
                 !(!Settings.getUserPreferences().sslstripMode && !isDnsControlstarted() && !webSpoofedstarted);
     }
 
