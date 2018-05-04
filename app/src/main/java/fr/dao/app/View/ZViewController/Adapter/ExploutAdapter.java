@@ -1,7 +1,5 @@
 package fr.dao.app.View.ZViewController.Adapter;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,10 +13,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Core.Configuration.GlideApp;
 import fr.dao.app.Core.Configuration.GlideRequest;
 import fr.dao.app.Core.Configuration.Singleton;
-import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Model.Net.Port;
 import fr.dao.app.Model.Net.PortState;
-import fr.dao.app.Model.Target.DNSSpoofItem;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Ports;
 import fr.dao.app.R;
@@ -82,7 +78,7 @@ public class ExploutAdapter extends RecyclerView.Adapter<GenericLittleCardAvatar
                 res = R.drawable.ic_play_arrow_black_24dp;
                 break;
             default:
-                res = R.mipmap.ic_target;
+                res = R.mipmap.ic_action;
                 break;
         }
         if (port.state == PortState.FILTERED || port.state == PortState.CLOSED_FILTERED)

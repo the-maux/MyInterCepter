@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -20,12 +21,14 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.dao.app.Core.Database.DBNetwork;
+import fr.dao.app.Model.Config.Session;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
@@ -77,14 +80,14 @@ public class                        DashboardActivity extends MyActivity {
     }
 
 
-    //https://github.com/PhilJay/MPAndroidChart/issues/756
+    /**
+     * XAxis(<->) = NBR_SESSIONS
+     * YAxis(↕) = NBR ACTIONS
+     */
     private void                    initChart() {
         jcoolGraph = findViewById(R.id.chart);
-        List<Entry> attackEntry = getAttackEntry();
-        List<Entry> defenseEntry = getDefenseEntry();
-
-        LineDataSet setComp1 = initLineDataSet(defenseEntry, "Defense", R.color.blueteam_color);
-        LineDataSet setComp2 = initLineDataSet(attackEntry, "Attack", R.color.redteam_color);
+        LineDataSet setComp1 = initLineDataSet(getDefenseEntry(), "Defense", R.color.blueteam_color);
+        LineDataSet setComp2 = initLineDataSet(getAttackEntry(), "Attack", R.color.redteam_color);
 
         List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
         dataSets.add(setComp1);
@@ -92,13 +95,15 @@ public class                        DashboardActivity extends MyActivity {
         LineData data = new LineData(dataSets);
         Legend legend = jcoolGraph.getLegend();
         legend.setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
+        jcoolGraph.getXAxis().setValueFormatter(getSessionValueFormater());
         jcoolGraph.getXAxis().setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
         jcoolGraph.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         jcoolGraph.getAxisLeft().setDrawLabels(false);
         jcoolGraph.getAxisRight().setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
         jcoolGraph.animateY(2000, Easing.EasingOption.Linear);
+
         jcoolGraph.setData(data);
-        String titleChart = DBNetwork.getAllAccessPoint() == null ? "0" : DBNetwork.getAllAccessPoint().size() + "NetworkInformation pentested";
+        String titleChart = (DBNetwork.getAllAccessPoint() == null ? "0" : DBNetwork.getAllAccessPoint().size()) + " network audit";
         Description description = new Description();
         description.setText("6 sessions");
         description.setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
@@ -119,6 +124,8 @@ public class                        DashboardActivity extends MyActivity {
     }
 
     private List<Entry>                    getAttackEntry() {
+        //TODO: Creer une liste de Session sorted by date
+        //TODO: From Sessions build List<Entry> (X:offsetSession;Y:NbrOffensifAction
         List<Entry> attackEntry = new ArrayList<Entry>();
         //FOR TEST X: nbrAttack Y: nbrDef
         //Simulate 9 Session
@@ -151,7 +158,7 @@ public class                        DashboardActivity extends MyActivity {
         return attackEntry;
     }
 
-    private List<Entry>                    getDefenseEntry() {
+    private List<Entry>             getDefenseEntry() {
         List<Entry> defenseEntry = new ArrayList<Entry>();
         //FOR TEST X: nbrAttack Y: nbrDef
         //Simulate 9 Session
@@ -212,4 +219,23 @@ public class                        DashboardActivity extends MyActivity {
         });
     }
 
+    public IAxisValueFormatter      getSessionValueFormater() {
+        return new MyCustomXAxisValueFormatter();
+    }
+
+    public Session                  getSessionFromValue(float value) {
+        return null;
+    }
+
+    /**
+     * Print The date of the session in XAxis value
+     */
+    public class MyCustomXAxisValueFormatter implements IAxisValueFormatter {
+
+        public String getFormattedValue(float value, AxisBase axis) {
+
+            return getSessionFromValue(value).getDateString();
+
+        }
+    }
 }

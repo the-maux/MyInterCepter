@@ -150,7 +150,7 @@ public class                    HostDetailActivity extends MyActivity {
         mMenuFAB.addMenuButton(initMenuBtn("Sniffing", R.mipmap.ic_hearing, actionActivity.SNIFFER), 0);
         mMenuFAB.addMenuButton(initMenuBtn("Strip connection", R.mipmap.ic_cut_internet, actionActivity.BLOCK_INTERNET), 1);
         mMenuFAB.addMenuButton(initMenuBtn("Nmap", R.mipmap.ic_eye_nosvg, actionActivity.NMAP), 2);
-        mMenuFAB.addMenuButton(initMenuBtn("Vulnerability Scanner", R.mipmap.ic_target, actionActivity.VULN_SCAN), 3);
+        mMenuFAB.addMenuButton(initMenuBtn("Vulnerability Scanner", R.drawable.target_pad_30_white, actionActivity.VULN_SCAN), 3);
     }
 
     private FloatingActionButton initMenuBtn(String title, int logo, actionActivity type) {

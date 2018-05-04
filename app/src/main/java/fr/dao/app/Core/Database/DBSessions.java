@@ -4,8 +4,10 @@ import android.util.Log;
 
 import com.activeandroid.query.Select;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import fr.dao.app.Model.Config.Session;
 
@@ -36,13 +38,16 @@ public class                                DBSessions {
                         cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)) {
                     Log.d(TAG, "::returning session -> " + session.getDateString());
                     return session;
+                } else {
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd_MMMM_HH#mm-ss", Locale.FRANCE);
+                    Log.d(TAG, "Session not matching s1[" + sdf.format(cal1.getTime())+ "] s2[" + sdf.format(cal2.getTime()) + "]");
                 }
             }
         return createSession();
     }
 
     private static Session                  createSession() {
-        Log.d(TAG, "::createSession");
+        Log.d(TAG, "::creatingSession");
         Session session = new Session();
         session.date = Calendar.getInstance().getTime();
         return session;
