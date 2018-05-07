@@ -26,13 +26,13 @@
                 android:id="@+id/OsImg"
                 android:layout_width="40dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="12dp"
+                android:layout_marginLeft="8dp"
                 android:elevation="4dp"
                 android:tint="@android:color/primary_text_dark"
                 android:transitionName="logo_activity"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toStartOf="@+id/toolbar2"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_developer_board_svg" />
@@ -47,6 +47,7 @@
                 android:visibility="visible"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toStartOf="@+id/searchViewRelative"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/OsImg"
                 app:layout_constraintTop_toTopOf="parent"
                 app:title="Dashboard">
@@ -60,7 +61,8 @@
                 android:background="@android:color/transparent"
                 android:baselineAlignBottom="false"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
-                app:layout_constraintEnd_toStartOf="@+id/settingsIcon"
+                app:layout_constraintEnd_toStartOf="@+id/iconSettings2"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/toolbar2"
                 app:layout_constraintTop_toTopOf="parent"
@@ -80,16 +82,19 @@
                 android:id="@+id/iconSettings2"
                 android:layout_width="40dp"
                 android:layout_height="0dp"
+                android:layout_marginLeft="8dp"
                 android:baselineAlignBottom="false"
-                android:padding="4dp"
+                android:padding="6dp"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/tint_svg"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toStartOf="@+id/settingsIcon"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/searchViewRelative"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_settings_input_svg" />
 
             <ImageView
                 android:id="@+id/settingsIcon"
@@ -101,7 +106,7 @@
                 android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/iconSettings2"
                 app:layout_constraintTop_toTopOf="parent"
@@ -131,19 +136,19 @@
                 android:id="@+id/generalTab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="General" />
+                android:text="GENERAL" />
 
             <android.support.design.widget.TabItem
                 android:id="@+id/offensifTab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Offensif" />
+                android:text="OFFENSIF" />
 
             <android.support.design.widget.TabItem
                 android:id="@+id/defensifTab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Defensif" />
+                android:text="DEFENSIF" />
 
         </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>

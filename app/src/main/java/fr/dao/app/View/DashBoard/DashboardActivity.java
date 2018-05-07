@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
@@ -45,12 +46,14 @@ public class                        DashboardActivity extends MyActivity {
     private LineChart               jcoolGraph;
     private TextView                titleChartDashboard;
     private SessionManager          sessionManager;
+    private TabLayout               mTabs;
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         initXml();
-        init();
+        sessionManager = new SessionManager();
+        initHistoricFragment();
         setToolbarTitle("General Statistique", "64 action performed");
     }
 
@@ -65,11 +68,46 @@ public class                        DashboardActivity extends MyActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
+        mTabs = findViewById(R.id.tabs);
         titleChartDashboard = findViewById(R.id.titleChartDashboard);
     }
 
-    private void                    init() {
-        sessionManager = new SessionManager();
+
+
+    private void                    initTabs() {
+        mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getText().toString()) {
+                    case "GENERAL":
+                        initGeneral();
+                        break;
+                    case "OFFENSIF":
+                        initOffensif();
+                        break;
+                    case "DEFENSIF":
+                        initDefensif();
+                        break;
+                }
+            }
+            public void onTabUnselected(TabLayout.Tab tab) {}
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
+    }
+
+    private void initDefensif() {
+
+    }
+
+    private void initOffensif() {
+
+    }
+
+    private void initGeneral() {
+        initChart();
+    }
+
+    private void                    initHistoricFragment() {
+        //TODO: changer ca en fragment dialog
         setToolbarTitle("Dashboard", null);
         MyFragment fragment;
         if (HistoricFragment == null)
@@ -79,9 +117,8 @@ public class                        DashboardActivity extends MyActivity {
         args.putString("mode", NetDiscoveryHistoricFrgmnt.DB_HISTORIC);
         fragment.setArguments(args);
         initFragment(fragment);
-        initChart();
+        initGeneral();
     }
-
 
     /**
      * XAxis(<->) = NBR_SESSIONS
@@ -122,7 +159,7 @@ public class                        DashboardActivity extends MyActivity {
         jcoolGraph.invalidate(); // refresh
     }
 
-    private LineDataSet                     initLineDataSet(List<Entry> defenseEntry, String title, int color) {
+    private LineDataSet             initLineDataSet(List<Entry> defenseEntry, String title, int color) {
         LineDataSet setComp1 = new LineDataSet(defenseEntry, title);
         setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
         setComp1.setColor(ContextCompat.getColor(mInstance, color));
@@ -175,8 +212,7 @@ public class                        DashboardActivity extends MyActivity {
     public class MyCustomXAxisValueFormatter implements IAxisValueFormatter {
 
         public String getFormattedValue(float value, AxisBase axis) {
-
-            return getSessionFromValue(value).getDateString();
+            return getSessionFromValue(value) == null ? "00/00" : getSessionFromValue(value).getDateString();
 
         }
     }

@@ -43,6 +43,8 @@ public class                                DBSessions {
                     Log.d(TAG, "Session not matching s1[" + sdf.format(cal1.getTime())+ "] s2[" + sdf.format(cal2.getTime()) + "]");
                 }
             }
+        else
+            Log.d(TAG, "no sessions in BDD");
         return createSession();
     }
 
@@ -50,6 +52,7 @@ public class                                DBSessions {
         Log.d(TAG, "::creatingSession");
         Session session = new Session();
         session.date = Calendar.getInstance().getTime();
+        session.save();
         return session;
     }
 }
