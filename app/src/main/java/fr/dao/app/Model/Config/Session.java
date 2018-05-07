@@ -27,15 +27,12 @@ public class                Session extends Model {
         return new SimpleDateFormat("dd/MMMM", Locale.FRANCE).format(date);
     }
 
-    public void             addAction(Action.actionType type, boolean isOffensif) {
+    public void             addAction(Action.ActionType type, boolean isOffensif) {
         Action action = new Action();
-        action.date = Calendar.getInstance().getTime();
-        if (isOffensif)
-            action.offensifAction = action.offensifAction + 1;
-        else
-            action.defensifAction = action.defensifAction + 1;
         if (Singleton.getInstance().CurrentNetwork != null)
             action.network = Singleton.getInstance().CurrentNetwork;
+        action.date = Calendar.getInstance().getTime();
+        action.teamActionType = (isOffensif) ? Action.TeamAction.READTEAM : Action.TeamAction.BLUETEAM;
         action.session = this;
         action.type = type;
         action.save();
@@ -45,5 +42,14 @@ public class                Session extends Model {
 
     public                  Session() {
         super();
+    }
+
+    public int              getNbrActionType(Action.TeamAction type) {
+        int rax = 0;
+        for (Action action : Actions()) {
+            if (action.teamActionType == type)
+                rax += 1;
+        }
+        return rax;
     }
 }

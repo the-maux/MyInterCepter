@@ -234,7 +234,7 @@ public class                        NmapControler {
     }
 
     private void                    buildAction() {
-        Singleton.getInstance().Session.addAction(Action.actionType.SCAN, true);
+        Singleton.getInstance().Session.addAction(Action.ActionType.SCAN, true);
     }
 
     public void                     setmActualScan(String itemMenu) {

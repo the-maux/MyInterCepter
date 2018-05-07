@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.dao.app.Core.Database.DBNetwork;
+import fr.dao.app.Core.Network.SessionManager;
+import fr.dao.app.Model.Config.Action;
 import fr.dao.app.Model.Config.Session;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
@@ -42,7 +44,7 @@ public class                        DashboardActivity extends MyActivity {
     private AppBarLayout            appBarLayout;
     private LineChart               jcoolGraph;
     private TextView                titleChartDashboard;
-
+    private SessionManager          sessionManager;
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +69,7 @@ public class                        DashboardActivity extends MyActivity {
     }
 
     private void                    init() {
+        sessionManager = new SessionManager();
         setToolbarTitle("Dashboard", null);
         MyFragment fragment;
         if (HistoricFragment == null)
@@ -86,10 +89,17 @@ public class                        DashboardActivity extends MyActivity {
      */
     private void                    initChart() {
         jcoolGraph = findViewById(R.id.chart);
-        LineDataSet setComp1 = initLineDataSet(getDefenseEntry(), "Defense", R.color.blueteam_color);
-        LineDataSet setComp2 = initLineDataSet(getAttackEntry(), "Attack", R.color.redteam_color);
-
-        List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+        LineDataSet setComp1, setComp2;
+        if (42 == 41) {/* Tester les vrai valeurs*/
+            setComp1 = initLineDataSet(sessionManager.getEntryFromLoadedSessionsByType(Action.TeamAction.BLUETEAM),
+                    "Defense", R.color.blueteam_color);
+            setComp2 = initLineDataSet(sessionManager.getEntryFromLoadedSessionsByType(Action.TeamAction.READTEAM),
+                    "Attack", R.color.redteam_color);
+        } else {
+            setComp1 = initLineDataSet(sessionManager.getFakeDefenseEntry(), "Defense", R.color.blueteam_color);
+            setComp2 = initLineDataSet(sessionManager.getFakeAttackEntry(), "Attack", R.color.redteam_color);
+        }
+        List<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(setComp1);
         dataSets.add(setComp2);
         LineData data = new LineData(dataSets);
@@ -121,74 +131,6 @@ public class                        DashboardActivity extends MyActivity {
         setComp1.setValueTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
         setComp1.setLineWidth(1.2f);
         return setComp1;
-    }
-
-    private List<Entry>                    getAttackEntry() {
-        //TODO: Creer une liste de Session sorted by date
-        //TODO: From Sessions build List<Entry> (X:offsetSession;Y:NbrOffensifAction
-        List<Entry> attackEntry = new ArrayList<Entry>();
-        //FOR TEST X: nbrAttack Y: nbrDef
-        //Simulate 9 Session
-        int raxattack = 0;
-        for (;raxattack< 10;raxattack++) { //For nbr session in networkFocused
-            switch (raxattack) {
-               case 1:
-                    attackEntry.add(new Entry(0f, 5f));
-                    break;
-                case 2:
-                    attackEntry.add(new Entry(1f, 2f));
-                    break;
-                case 3:
-                    attackEntry.add(new Entry(2f, 6f));
-                    break;
-                case 4:
-                    attackEntry.add(new Entry(3f, 4f));
-                    break;
-                case 5:
-                    attackEntry.add(new Entry(4f, 8f));
-                    break;
-                case 6:
-                    attackEntry.add(new Entry(5f, 4f));
-                    break;
-                case 7:
-                    attackEntry.add(new Entry(6f, 7f));
-                    break;
-            }
-        }
-        return attackEntry;
-    }
-
-    private List<Entry>             getDefenseEntry() {
-        List<Entry> defenseEntry = new ArrayList<Entry>();
-        //FOR TEST X: nbrAttack Y: nbrDef
-        //Simulate 9 Session
-        int raxattack = 0;
-        for (;raxattack< 10;raxattack++) { //For nbr session in networkFocused
-            switch (raxattack) {
-                case 1:
-                    defenseEntry.add(new Entry(0f, 2f));
-                    break;
-                case 2:
-                    defenseEntry.add(new Entry(1f, 7f));
-                    break;
-                case 3:
-                    defenseEntry.add(new Entry(2f, 4f));
-                    break;
-                case 4:
-                    defenseEntry.add(new Entry(3f, 17f));
-                    break;
-                case 5:
-                    defenseEntry.add(new Entry(4f, 12f));
-                    break;
-                case 6:
-                    defenseEntry.add(new Entry(5f, 2f));
-                    break;
-                case 7:
-                    defenseEntry.add(new Entry(6f, 5f));
-                    break;
-            }
-        }
-        return defenseEntry;
     }
 
     private void                    initFragment(MyFragment fragment) {

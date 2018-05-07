@@ -46,7 +46,7 @@ public class                        Dora {
     }
 
     public int                      onAction() {
-        mSingleton.Session.addAction(Action.actionType.DORA, false);
+        mSingleton.Session.addAction(Action.ActionType.DORA, false);
         if (mListOfHostDored.isEmpty())
            reset();
         if (!isRunning) {

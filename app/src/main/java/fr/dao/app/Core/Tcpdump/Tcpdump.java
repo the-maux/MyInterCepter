@@ -71,7 +71,7 @@ public class                        Tcpdump {
         isRunning = true;
         final DashboardSniff dashboardSniff = new DashboardSniff();
         mDispatcher.setDashboard(dashboardSniff);
-        Singleton.getInstance().Session.addAction(Action.actionType.SNIFF, true);
+        Singleton.getInstance().Session.addAction(Action.ActionType.SNIFF, true);
         new Thread(new Runnable() {
             @Override
             public void run() {

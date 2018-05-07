@@ -17,17 +17,19 @@ public class                Action extends Model {
 
     @Column(name = "Network")
     public Network          network;
-    @Column(name = "Type")
-    public actionType       type;
     @Column(name = "Date")
     public Date             date;
+    @Column(name = "TypeAction")
+    public ActionType       type;
+    @Column(name = "teamActionType")
+    public TeamAction       teamActionType;
 
-    @Column(name = "offensifAction")
-    public int              offensifAction;
-    @Column(name = "defensifAction")
-    public int              defensifAction;
+    public enum TeamAction {
+        BLUETEAM, READTEAM
+    }
 
-    public enum             actionType {
+
+    public enum ActionType {
         SPY, SNIFF, DNSSPPOOF, WEBSERVER, SCAN, VULNSCAN, DORA, CRYPTCHECK,
     }
 

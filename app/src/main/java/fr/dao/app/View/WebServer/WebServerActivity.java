@@ -94,7 +94,7 @@ public class                    WebServerActivity extends MITMActivity {
         if (!mSingleton.iswebSpoofed()) {
                 try {
                     mWebServer = new GenericServer(PORT);
-                    mSingleton.Session.addAction(Action.actionType.WEBSERVER, true);
+                    mSingleton.Session.addAction(Action.ActionType.WEBSERVER, true);
                     mWebServer.start();
                     return true;
                 } catch (Exception io) {
