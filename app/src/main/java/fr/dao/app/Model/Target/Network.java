@@ -46,11 +46,11 @@ public class                Network extends Model {
     }
 
     public List<Service>    Services() {
-        return getMany(Service.class, "NetworkInformation");
+        return getMany(Service.class, "Network");
     }
 
     public List<SniffSession> SniffSessions() {
-        return getMany(SniffSession.class, "NetworkInformation");
+        return getMany(SniffSession.class, "Network");
     }
 
     public String           toString() {

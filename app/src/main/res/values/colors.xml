@@ -32,6 +32,7 @@
     <!-- Activitys color  -->
     <color name="NmapPrimary">#dd006064</color>
     <color name="DashboardPrimary">#4a148c</color>
+    <color name="DashboardPrimaryDark">#1a237e</color>
     <color name="spyPrimary">#dd4f5b62</color>
     <color name="vulnsPrimary">@color/msf_dark</color><!-- material_deep_orange_900 -->
     <color name="vulnsPrimaryDark">@color/msf_light</color><!-- material_deep_orange_900 -->

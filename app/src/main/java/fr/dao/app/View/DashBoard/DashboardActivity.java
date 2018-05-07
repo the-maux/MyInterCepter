@@ -45,6 +45,7 @@ public class                        DashboardActivity extends MyActivity {
     private AppBarLayout            appBarLayout;
     private LineChart               jcoolGraph;
     private TextView                titleChartDashboard;
+    private int                     nbrActionPerformed = 0;
     private SessionManager          sessionManager;
     private TabLayout               mTabs;
 
@@ -52,8 +53,12 @@ public class                        DashboardActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         initXml();
+        setToolbarTitle("General Statistique", "");
+        nbrActionPerformed = 0;
         sessionManager = new SessionManager();
         initHistoricFragment();
+        initGeneral();
+        initTabs();
         setToolbarTitle("General Statistique", "64 action performed");
     }
 
@@ -71,7 +76,6 @@ public class                        DashboardActivity extends MyActivity {
         mTabs = findViewById(R.id.tabs);
         titleChartDashboard = findViewById(R.id.titleChartDashboard);
     }
-
 
 
     private void                    initTabs() {
@@ -117,7 +121,6 @@ public class                        DashboardActivity extends MyActivity {
         args.putString("mode", NetDiscoveryHistoricFrgmnt.DB_HISTORIC);
         fragment.setArguments(args);
         initFragment(fragment);
-        initGeneral();
     }
 
     /**
@@ -157,6 +160,7 @@ public class                        DashboardActivity extends MyActivity {
         jcoolGraph.setDescription(description);
         titleChartDashboard.setText(titleChart);
         jcoolGraph.invalidate(); // refresh
+        setToolbarTitle("General Statistique", nbrActionPerformed + " actions performed");
     }
 
     private LineDataSet             initLineDataSet(List<Entry> defenseEntry, String title, int color) {
@@ -203,6 +207,7 @@ public class                        DashboardActivity extends MyActivity {
     }
 
     public Session                  getSessionFromValue(float value) {
+
         return null;
     }
 

@@ -25,14 +25,14 @@ public class                Utils {
     public static void      vibrateDevice(Context context) {
         Vibrator vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         if (vibe != null) {
-            vibe.vibrate(35);
+            vibe.vibrate(39);
         }
     }
 
     public static void      vibrateDevice(Context context, int time) {
         Vibrator vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         if (vibe != null) {
-            vibe.vibrate(35);
+            vibe.vibrate(39);
         }
     }
 

@@ -155,12 +155,25 @@ public class                    HomeActivity extends MyActivity {
     private View.OnClickListener onAttackclicked() {
         return new View.OnClickListener() {
             public void onClick(View view) {
-                Utils.vibrateDevice(mInstance, 100);
-                Intent intent = new Intent(mInstance, HostDiscoveryActivity.class);
-                Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_attack), "logo_activity");
-                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1).toBundle());
+                Utils.vibrateDevice(mInstance);
+                runOnThreadDelay(new Runnable() {
+                    public void run() {
+                        try {
+                            Thread.sleep(40);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        Intent intent = new Intent(mInstance, HostDiscoveryActivity.class);
+                        Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_attack), "logo_activity");
+                        startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1).toBundle());
+                    }
+                });
             }
         };
+    }
+
+    private void                runOnThreadDelay(Runnable runnable) {
+        mInstance.runOnUiThread(runnable);
     }
 
     private void                getRootPermission() {
