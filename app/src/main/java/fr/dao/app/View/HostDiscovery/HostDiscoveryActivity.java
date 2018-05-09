@@ -228,6 +228,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         ViewAnimate.FabAnimateHide(mInstance, mFab);
         //mFab.hide();
         mBottomMonitor.setVisibility(View.GONE);
+        mToolbarBackground.setCrossFadeEnabled(true);
         mToolbarBackground.startTransition(500);
     }
 

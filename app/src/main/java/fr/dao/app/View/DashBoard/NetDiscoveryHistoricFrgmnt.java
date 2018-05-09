@@ -48,7 +48,7 @@ import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Dialog.RV_dialog;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
-public class NetDiscoveryHistoricFrgmnt extends MyFragment {
+public class                        NetDiscoveryHistoricFrgmnt extends MyFragment {
     private String                  TAG = "NetDiscoveryHistoricFrgmnt";
     private NetDiscoveryHistoricFrgmnt mInstance = this;
     private Host                    mFocusedHost = null;
@@ -98,7 +98,6 @@ public class NetDiscoveryHistoricFrgmnt extends MyFragment {
             mRV.setHasFixedSize(true);
             LinearLayoutManager manager = new LinearLayoutManager(mActivity);
             mRV.setLayoutManager(manager);
-
         } else {
             Log.d(TAG, "Historic Mode is not set (referer from User or Discovery)");
             onBackPressed();

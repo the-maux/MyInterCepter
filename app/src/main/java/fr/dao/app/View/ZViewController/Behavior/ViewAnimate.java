@@ -11,7 +11,7 @@ import android.view.animation.AnimationUtils;
 import fr.dao.app.R;
 
 public class                    ViewAnimate {
-    private static int          SHORT_DURATION = 250, LONG_DURATION = 800;
+    private static int          SHORT_DURATION = 250, LONG_DURATION = 150;
 
     public static void          setVisibilityToGoneQuick(final View view) {
         setVisibilty(view, SHORT_DURATION, View.GONE);

@@ -17,6 +17,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.R;
 import fr.dao.app.View.DnsSpoofing.DnsActivity;
@@ -81,6 +82,11 @@ public abstract class               MITMActivity extends MyActivity  {
             mBottomBar.setTranslucentNavigationEnabled(true);
             mBottomBar.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
             mBottomBar.setColored(true);
+            mBottomBar.setOnNavigationPositionListener(new AHBottomNavigation.OnNavigationPositionListener() {
+                public void onPositionChange(int y) {
+
+                }
+            });
             mBottomBar.setOnTabSelectedListener(onSelectedListener());
         }
     }
@@ -111,45 +117,45 @@ public abstract class               MITMActivity extends MyActivity  {
     private AHBottomNavigation.OnTabSelectedListener onSelectedListener() {
         return new AHBottomNavigation.OnTabSelectedListener() {
             public boolean onTabSelected(final int position, boolean wasSelected) {
+                Intent intent = null;
                 if (position != mType) {
-                    mBottomBar.post(new Runnable() {
-                        @Override
+                    switch (position) {
+                        case 0:
+                            intent = new Intent(mInstance, SpyMitmActivity.class);
+                            break;
+                        case 1:
+                            intent = new Intent(mInstance, SniffActivity.class);
+                            break;
+                        case 2:
+                            intent = new Intent(mInstance, DnsActivity.class);
+                            break;
+                        case 3:
+                            intent = new Intent(mInstance, WebServerActivity.class);
+                            break;
+                        default:
+                            Log.d(TAG, "No activity found");
+                            break;
+                    }
+                    ViewAnimate.FabAnimateHide(mInstance, (FloatingActionButton) findViewById(R.id.fab));
+                    Utils.vibrateDevice(mInstance);
+                    final Intent finalIntent = intent;
+                    new Thread(new Runnable() {
                         public void run() {
+                            try {
+                                Thread.sleep(170);
+                            } catch (InterruptedException e) {
+                            }
                             mInstance.runOnUiThread(new Runnable() {
-                                @Override
                                 public void run() {
-                                   //Log.d(TAG, "onNavigationItemSelected::" + position);
-                                    Intent intent = null;
-                                    if (mFab != null)
-                                        ViewAnimate.FabAnimateHide(mInstance, mFab);
-                                    Pair<View, String> p1 = Pair.create((View) mBottomBar, "navigation");
-                                    //Pair<View, String> p2 = Pair.create(findViewById(R.id.appbar), "appBarTransition");
-                                    final ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1/*, p2*/);
-                                    switch (position) {
-                                        case 0:
-                                            intent = new Intent(mInstance, SpyMitmActivity.class);
-                                            break;
-                                        case 1:
-                                            intent = new Intent(mInstance, SniffActivity.class);
-                                            break;
-                                        case 2:
-                                            intent = new Intent(mInstance, DnsActivity.class);
-                                            break;
-                                        case 3:
-                                            intent = new Intent(mInstance, WebServerActivity.class);
-                                            break;
-                                        default:
-                                            Log.d(TAG, "No activity found");
-                                            break;
+                                    if (finalIntent != null) {
+                                        finalIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(finalIntent/*, options.toBundle()*/);
                                     }
-                                    if (intent != null) {
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(intent/*, options.toBundle()*/);
-                                    }
+                                    startActivity(finalIntent/*, options.toBundle()*/);
                                 }
                             });
                         }
-                    });
+                    }).start();
                     return true;
                 }
                 return false;
