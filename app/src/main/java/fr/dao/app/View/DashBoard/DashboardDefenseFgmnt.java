@@ -10,21 +10,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import fr.dao.app.Core.Network.SessionManager;
-import fr.dao.app.Model.Config.Session;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
@@ -78,41 +71,10 @@ public class                    DashboardDefenseFgmnt extends MyFragment {
         ds1.setSliceSpace(2f);
         ds1.setValueTextColor(Color.WHITE);
         ds1.setValueTextSize(12f);
-
         PieData d = new PieData(ds1);
         jcoolGraph.animateX(2000);
         jcoolGraph.setData(d);
+        jcoolGraph.setHoleColor(ContextCompat.getColor(mActivity, R.color.trans));
         mActivity.setToolbarTitle("General Statistique", nbrActionPerformed + " actions performed");
-    }
-
-    private LineDataSet             initLineDataSet(List<Entry> defenseEntry, String title, int color) {
-        LineDataSet setComp1 = new LineDataSet(defenseEntry, title);
-        setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
-        setComp1.setColor(ContextCompat.getColor(mActivity, color));
-        setComp1.setCircleColor(ContextCompat.getColor(mActivity, color));
-        setComp1.setCircleColorHole(ContextCompat.getColor(mActivity, color));
-        setComp1.setValueTextColor(ContextCompat.getColor(mActivity, R.color.white_secondary));
-        setComp1.setLineWidth(1.2f);
-        return setComp1;
-    }
-
-    public IAxisValueFormatter getSessionValueFormater() {
-        return new DashboardDefenseFgmnt.MyCustomXAxisValueFormatter();
-    }
-
-    public Session getSessionFromValue(float value) {
-        //TODO get Session from value in graph
-        return null;
-    }
-
-    /**
-     * Print The date of the session in XAxis value
-     */
-    public class MyCustomXAxisValueFormatter implements IAxisValueFormatter {
-
-        public String getFormattedValue(float value, AxisBase axis) {
-            return getSessionFromValue(value) == null ? "00/00" : getSessionFromValue(value).getDateString();
-
-        }
     }
 }

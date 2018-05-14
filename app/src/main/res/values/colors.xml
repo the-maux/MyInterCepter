@@ -26,7 +26,7 @@
     <color name="blueteam_color">#0D47A1</color><!-- material_blue_900 -->
     <color name="msf_light">#dd0E77B9</color>
     <color name="msf_dark">#dd276890</color>
-
+    <color name="trans">#00FFFFFF</color>
     <color name="offline_color">@color/material_red_500</color>
 
     <!-- Activitys color  -->
