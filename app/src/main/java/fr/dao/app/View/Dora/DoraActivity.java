@@ -86,7 +86,7 @@ public class                    DoraActivity extends MyActivity {
         });
     }
 
-    private void onFabClick() {
+    private void                onFabClick() {
         Utils.vibrateDevice(mInstance);
         if (Dora.isRunning()) {
             progressBar.setVisibility(View.VISIBLE);

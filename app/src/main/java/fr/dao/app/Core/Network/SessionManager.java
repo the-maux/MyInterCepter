@@ -22,16 +22,22 @@ public class                SessionManager {
     }
 
     private ArrayList<Session>  getSessionBetweenDate(Date start, Date end) {
-        loadedSessions = new ArrayList<>();
         if (start == null || end == null) {
-            Collections.sort(loadedSessions, Comparators.getSessionComparator());
-            return loadedSessions;
+            return update();
         }
-        for (Session session : this.sessionsFromBDD) {
+        loadedSessions = new ArrayList<>();
+        for (Session session : DBSessions.getAllSession()) {
             if (session.date.before(end) && session.date.after(start))
                 loadedSessions.add(session);
         }
         Collections.sort(loadedSessions, Comparators.getSessionComparator());
+        return loadedSessions;
+    }
+
+    public ArrayList<Session> update() {
+        sessionsFromBDD = DBSessions.getAllSession();
+        Collections.sort(sessionsFromBDD, Comparators.getSessionComparator());
+        loadedSessions = new ArrayList<>(sessionsFromBDD);
         return loadedSessions;
     }
 
@@ -43,10 +49,14 @@ public class                SessionManager {
         List<Entry> attackEntry = new ArrayList<>();
         if (loadedSessions == null)
             getSessionBetweenDate(null, null);
-        for (int raxattack = 0; raxattack < loadedSessions.size(); raxattack++) { //For nbr session in networkFocused
-            attackEntry.add(new Entry(raxattack, loadedSessions.get(raxattack).getNbrActionType(type)));
+        for (int offsetSession = 0; offsetSession < loadedSessions.size(); offsetSession++) { //For nbr session in networkFocused
+            attackEntry.add(new Entry(offsetSession, loadedSessions.get(offsetSession).getNbrActionType(type)));
         }
         return attackEntry;
+    }
+
+    public List<Session>      getSessionsFromDate(Date start, Date end) {
+        return (start == null && end == null) ? update() : getSessionBetweenDate(start, end);
     }
 
     public List<Entry>      getFakeAttackEntry() {

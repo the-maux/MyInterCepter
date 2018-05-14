@@ -22,14 +22,14 @@ import fr.dao.app.View.Scan.VulnsScanActivity;
 import fr.dao.app.View.ZViewController.Adapter.Holder.GenericLittleCardAvatarHolder;
 
 
-public class ExploutAdapter extends RecyclerView.Adapter<GenericLittleCardAvatarHolder> {
-    private String              TAG = "DnsSpoofConfAdapter";
-    private Singleton           mSingleton = Singleton.getInstance();
-    private VulnsScanActivity   mActivity;
-    private Host                mHost;
-    private Ports               mPorts;
+public class                        ExploutAdapter extends RecyclerView.Adapter<GenericLittleCardAvatarHolder> {
+    private String                  TAG = "DnsSpoofConfAdapter";
+    private Singleton               mSingleton = Singleton.getInstance();
+    private VulnsScanActivity       mActivity;
+    private Host                    mHost;
+    private Ports                   mPorts;
 
-    public ExploutAdapter(VulnsScanActivity activity, Host host) {
+    public                          ExploutAdapter(VulnsScanActivity activity, Host host) {
         this.mActivity = activity;
         this.mHost = host;
         this.mPorts = mHost.getPorts();
@@ -40,7 +40,7 @@ public class ExploutAdapter extends RecyclerView.Adapter<GenericLittleCardAvatar
                 .inflate(R.layout.item_generic_little, parent, false));
     }
 
-    public void                 onBindViewHolder(GenericLittleCardAvatarHolder holder, int position) {
+    public void                     onBindViewHolder(GenericLittleCardAvatarHolder holder, int position) {
         Port port = mPorts.getPortForAdapter(position);
         holder.card_view.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.vulnsPrimary));
         holder.title.setText(port.service);
@@ -55,7 +55,7 @@ public class ExploutAdapter extends RecyclerView.Adapter<GenericLittleCardAvatar
         holder.card_view.setOnClickListener(onCardClicked(position));
     }
 
-    private void                setIcon(ImageView icon, int position) {
+    private void                    setIcon(ImageView icon, int position) {
         int res;
         switch (position) {
             case 0:
@@ -71,7 +71,7 @@ public class ExploutAdapter extends RecyclerView.Adapter<GenericLittleCardAvatar
         builder.into(icon);
     }
 
-    private void                setLogo(CircleImageView logo, int position, Port port) {
+    private void                    setLogo(CircleImageView logo, int position, Port port) {
         int res;
         switch (position) {
             case 0:
@@ -93,7 +93,7 @@ public class ExploutAdapter extends RecyclerView.Adapter<GenericLittleCardAvatar
         builder.into(logo);
     }
 
-    private View.OnClickListener onCardClicked(final int position) {
+    private View.OnClickListener    onCardClicked(final int position) {
         return new View.OnClickListener() {
             public void onClick(View view) {
                 switch (position) {
@@ -108,7 +108,7 @@ public class ExploutAdapter extends RecyclerView.Adapter<GenericLittleCardAvatar
         };
     }
 
-    public int                  getItemCount() {
+    public int                      getItemCount() {
         return mPorts.portArrayList().size();// VulnScanner.TypeScanner.values().length;
     }
 

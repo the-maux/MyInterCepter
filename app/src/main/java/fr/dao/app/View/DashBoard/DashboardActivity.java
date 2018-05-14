@@ -9,31 +9,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import fr.dao.app.Core.Database.DBNetwork;
-import fr.dao.app.Core.Network.SessionManager;
-import fr.dao.app.Model.Config.Action;
-import fr.dao.app.Model.Config.Session;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
@@ -77,12 +55,15 @@ public class                        DashboardActivity extends MyActivity {
                 switch (tab.getText().toString()) {
                     case "GENERAL":
                         initGeneral();
+                        appBarLayout.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.DashboardPrimary));
                         break;
                     case "OFFENSIF":
                         initOffensif();
+                        appBarLayout.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.redteam_color));
                         break;
                     case "DEFENSIF":
                         initDefensif();
+                        appBarLayout.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.blueteam_color));
                         break;
                 }
             }

@@ -1,14 +1,14 @@
 package fr.dao.app.View.DashBoard;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.animation.Easing;
@@ -27,14 +27,13 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Database.DBNetwork;
 import fr.dao.app.Core.Network.SessionManager;
 import fr.dao.app.Model.Config.Action;
 import fr.dao.app.Model.Config.Session;
-import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
-import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
+import fr.dao.app.View.ZViewController.Activity.MyActivity;
+import fr.dao.app.View.ZViewController.Adapter.SessionAdapter;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 
@@ -45,14 +44,13 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
     private LineChart           jcoolGraph;
     private TextView            titleChartDashboard;
     private SessionManager      sessionManager;
-    private int                     nbrActionPerformed = 0;
+    private int                 nbrActionPerformed = 0;
+    private RecyclerView        mRv_dash_general;
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_dash_general, container, false);
         initXml(rootView);
         mActivity = (DashboardActivity) getActivity();
-        init();
-
         return rootView;
     }
     
@@ -60,12 +58,22 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
         mRootView = rootView.findViewById(R.id.rootView);
         titleChartDashboard = rootView.findViewById(R.id.titleChartDashboard);
         jcoolGraph = rootView.findViewById(R.id.chart);
+        mRv_dash_general = rootView.findViewById(R.id.rv_dash_general);
     }
 
     public void                 init() {
         nbrActionPerformed = 0;
         sessionManager = new SessionManager();
         initChart();
+        initRV();
+    }
+
+    private void                initRV() {
+        SessionAdapter adapter = new SessionAdapter((MyActivity) getActivity(), sessionManager.getSessionsFromDate(null, null));
+        mRv_dash_general.setAdapter(adapter);
+        mRv_dash_general.setHasFixedSize(true);
+        mRv_dash_general.setLayoutManager(new LinearLayoutManager(mActivity));
+        Log.d(TAG, "Loaded " + sessionManager.getSessionsFromDate(null, null).size() + " sessions");
     }
 
     public void                 onResume() {
@@ -102,7 +110,6 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
         jcoolGraph.getAxisLeft().setDrawLabels(false);
         jcoolGraph.getAxisRight().setTextColor(ContextCompat.getColor(mActivity, R.color.white_secondary));
         jcoolGraph.animateY(2000, Easing.EasingOption.Linear);
-
         jcoolGraph.setData(data);
         String titleChart = (DBNetwork.getAllAccessPoint() == null ? "0" : DBNetwork.getAllAccessPoint().size()) + " network audit";
         Description description = new Description();
@@ -130,7 +137,7 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
     }
 
     public Session getSessionFromValue(float value) {
-
+        //TODO get Session from value in graph
         return null;
     }
 
