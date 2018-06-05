@@ -103,12 +103,16 @@ public class                    HostDetailActivity extends MyActivity {
             collapsBackground = findViewById(R.id.collapsBackground);
             collapsBackground.postDelayed(new Runnable() {
                 public void run() {
-                    GlideRequest r = GlideApp.with(mInstance)
-                            .load(R.drawable.bg1)
-                            .centerCrop()
-                            .transition(DrawableTransitionOptions.withCrossFade())
-                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
-                    r.into(collapsBackground);
+                    try {
+                        GlideRequest r = GlideApp.with(mInstance)
+                                .load(R.drawable.bg1)
+                                .centerCrop()
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+                        r.into(collapsBackground);
+                    } catch (IllegalArgumentException e) {
+                        Log.e(TAG, "PostDelayed while Activity is destroyed");
+                    }
                 }
             }, 800);
 

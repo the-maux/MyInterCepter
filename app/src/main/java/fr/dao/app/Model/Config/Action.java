@@ -37,7 +37,7 @@ public class                Action extends Model {
         return new SimpleDateFormat("dd/MMMM-k:mm:ss", Locale.FRANCE).format(date);
     }
 
-    Action() {
+    public                  Action() {
         super();
     }
 }

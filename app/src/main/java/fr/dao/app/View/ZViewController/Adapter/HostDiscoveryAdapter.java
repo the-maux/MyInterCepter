@@ -116,6 +116,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
     private void                onHostChecked(final HostDiscoveryHolder holder, Host host, final int position) {
         Utils.vibrateDevice(mActivity);
         host.selected = !host.selected;
+        Log.d(TAG, "onHostChecked:"+ host.selected);
         holder.selected.setSelected(host.selected);
         mHost_RV.post(new Runnable() {
             @Override

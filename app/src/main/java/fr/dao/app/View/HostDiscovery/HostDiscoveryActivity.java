@@ -161,6 +161,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private void                    initFabs() {
         mFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Log.i(TAG, "FabClicked::"+mFragment.getClass().getName());
                 mFab.startAnimation(AnimationUtils.loadAnimation(mInstance, R.anim.shake));
                 Utils.vibrateDevice(mInstance);
                 if (mFragment.getClass().getName().contains("HostDiscoveryScanFrgmnt") &&
@@ -168,6 +169,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                     mSingleton.savedHostList = mSingleton.hostList;
                     mSingleton.hostList = ((HostDiscoveryScanFrgmnt) mFragment).getTargetSelectedFromHostList();
                     if (mSingleton.hostList == null) {
+                        Log.e(TAG, "HostList is null");
                         mSingleton.hostList = mSingleton.savedHostList;
                         return;
                     }
@@ -181,7 +183,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 else if (!mFragment.start()) {
                     Log.i(TAG, "fragment start false");
                 } else
-                    Log.i(TAG, "FabClicked");
+                    Log.i(TAG, "FabClicked but no action");
             }
         });
     }
@@ -396,6 +398,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 //mFab.show();
                // ViewAnimate.setVisibilityToVisibleQuick(mFab, 500);
                 getSupportFragmentManager().popBackStackImmediate();
+                mFragment = NetDiscoveryFragment;
             }
         } else {
             startActivity(new Intent(mInstance, HomeActivity.class));
