@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
 
 
     <android.support.design.widget.AppBarLayout
@@ -31,7 +32,7 @@
                 android:layout_width="@dimen/icon_toolbar_size"
                 android:layout_height="0dp"
                 android:elevation="4dp"
-                android:padding="8dp"
+                android:padding="4dp"
                 android:tint="@color/tint_svg"
                 android:transitionName="wiresharkIcon"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -46,7 +47,6 @@
                 android:id="@+id/toolbar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/history"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -54,6 +54,7 @@
                 app:layout_constraintStart_toEndOf="@+id/OsImg"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_scrollFlags="scroll|enterAlways"
+                app:subtitle="222222222222"
                 app:subtitleTextColor="@color/tint_svg"
                 app:title="mon Text nest pas ici"
                 app:titleTextColor="@android:color/primary_text_dark">

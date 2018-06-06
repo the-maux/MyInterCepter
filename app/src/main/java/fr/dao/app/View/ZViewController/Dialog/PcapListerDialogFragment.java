@@ -24,7 +24,7 @@ import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Adapter.PcapFileAdapter;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
-public class PcapListerDialogFragment extends DialogFragment {
+public class                    PcapListerDialogFragment extends DialogFragment {
     private Singleton           mSingleton = Singleton.getInstance();
     private List<File>          files = new ArrayList<>();
     private RecyclerView        mRV_files;
@@ -53,6 +53,11 @@ public class PcapListerDialogFragment extends DialogFragment {
         }
         mRV_files.setAdapter(mAdapter);
         mRV_files.setLayoutManager(new LinearLayoutManager(getActivity()));
+        if (files.isEmpty())
+            getDialog().setTitle("No Pcaps found in historic");
+        else
+            getDialog().setTitle("Liste de Pcaps recorded");
+
     }
 
     private void                initWithFocusHost() {

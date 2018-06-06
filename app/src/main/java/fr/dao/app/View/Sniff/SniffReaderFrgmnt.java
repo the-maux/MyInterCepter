@@ -3,6 +3,7 @@ package fr.dao.app.View.Sniff;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,7 +28,9 @@ public class                    SniffReaderFrgmnt extends MyFragment {
     private String              TAG = "SniffReaderFrgmnt";
     private CoordinatorLayout   mCoordinatorLayout;
     private Context             mCtx;
-    private SniffActivity mActivity;
+    private ConstraintLayout    rootViewForDashboard;
+    private RelativeLayout      rootViewForLiveFlux;
+    private SniffActivity       mActivity;
     private RecyclerView        mRV_Wireshark;
     private SniffPacketsAdapter mAdapterWireshark;
     private Tcpdump             mTcpdump;
@@ -46,10 +50,15 @@ public class                    SniffReaderFrgmnt extends MyFragment {
     private void                initXml(View rootView) {
         mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
         mRV_Wireshark = rootView.findViewById(R.id.RV_Wireshark);
+        rootViewForLiveFlux = rootView.findViewById(R.id.rootViewForLiveFlux);
+        rootViewForDashboard = rootView.findViewById(R.id.rootViewForDashboard);
     }
 
     public void                 init() {
+        //TODO: Hide le btn Dashboard dans toolbar when in Reading mode
         if (getArguments() != null && getArguments().getString("Pcap") != null) {
+            rootViewForDashboard.setVisibility(View.GONE);
+            rootViewForLiveFlux.setVisibility(View.VISIBLE);
             mPcapFile = new File(getArguments().getString("Pcap"));
             Log.d(TAG, "reading:" + mPcapFile.getPath());
             initRV();
@@ -60,6 +69,7 @@ public class                    SniffReaderFrgmnt extends MyFragment {
             Log.e(TAG, "no Pcap returned");
             mActivity.showSnackbar("No Pcap to read",  ContextCompat.getColor(mActivity, R.color.stop_color));
         }
+
     }
 
     private void                initRV() {
@@ -69,11 +79,12 @@ public class                    SniffReaderFrgmnt extends MyFragment {
         mRV_Wireshark.setLayoutManager(new LinearLayoutManager(mActivity));
     }
 
-    public void                 onPcapAnalysed(final ArrayList<Trame> mBufferOfTrame) {
+    public void                 onPcapAnalysed(final ArrayList<Trame> bufferOfTrame) {
+        Log.d(TAG, " onPcapAnalysed:" + bufferOfTrame.size());
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
-                mAdapterWireshark.loadListOfTrame(mBufferOfTrame, dialog);
-                mActivity.setToolbarTitle(null, mBufferOfTrame.size() + " packets");
+                mAdapterWireshark.loadListOfTrame(bufferOfTrame, dialog);
+                mActivity.setToolbarTitle(null, bufferOfTrame.size() + " packets");
             }
         });
     }

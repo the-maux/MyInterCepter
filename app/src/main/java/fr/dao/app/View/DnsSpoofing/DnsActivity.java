@@ -40,7 +40,7 @@ public class                            DnsActivity extends MITMActivity {
     private CoordinatorLayout           mCoordinatorLayout;
     private AppBarLayout                appBarLayout;
     private Toolbar                     mToolbar;
-    private SearchView                  mSearchView;
+  //  private SearchView                  mSearchView;
     private ImageButton                 mAction_add_host, mSettingsBtn;
     private TabLayout                   mTabs;
     private RecyclerView                mDnsSpoof_RV;
@@ -64,7 +64,7 @@ public class                            DnsActivity extends MITMActivity {
         initMenu();
         initTabs();
         initRVConfiguration();
-        initSearchView();
+      //  initSearchView();
         initNavigationBottomBar(DNS, true);
         mDnsSpoof.setActivity(this);
     }
@@ -72,7 +72,7 @@ public class                            DnsActivity extends MITMActivity {
     private void                        initXml() {
         mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
         mToolbar = findViewById(R.id.toolbar2);
-        mSearchView = findViewById(R.id.searchView);
+        //mSearchView = findViewById(R.id.searchView);
         mAction_add_host = findViewById(R.id.action_add_host);
         mSettingsBtn = findViewById(R.id.history);
         mFab = findViewById(R.id.fab);
@@ -280,7 +280,7 @@ public class                            DnsActivity extends MITMActivity {
         mDnsSpoof_RV.setLayoutManager(new LinearLayoutManager(mInstance));
     }
 
-    private void                        initSearchView() {
+    /*private void                        initSearchView() {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             public boolean onQueryTextSubmit(String query) {
                 if (title.getText().toString().contains(NAME_CONF_MENU)) {//CONF VIEW
@@ -306,7 +306,7 @@ public class                            DnsActivity extends MITMActivity {
                 return false;
             }
         });
-    }
+    }*/
 
     public void                         onDnsmasqConfChanged(String msg) {
         Snackbar mySnackbar = Snackbar.make(mCoordinatorLayout, msg, Snackbar.LENGTH_LONG);

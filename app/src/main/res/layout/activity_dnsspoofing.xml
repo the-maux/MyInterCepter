@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -15,76 +15,97 @@
         android:transitionName="appBarTransition"
         app:elevation="4dp">
 
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout
             android:id="@+id/topToolbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:elevation="6dp"
+            android:paddingLeft="8dp">
+
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="8dp"
+                android:layout_width="@dimen/icon_toolbar_size"
+                android:layout_height="0dp"
+                android:elevation="4dp"
                 android:padding="8dp"
                 android:tint="@color/tint_svg"
+                android:transitionName="wiresharkIcon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/toolbar2"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_max="40dp"
                 app:srcCompat="@drawable/ic_dns_btnbar" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar2"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@+id/searchView"
-                android:layout_toRightOf="@+id/imageView3"
-                android:addStatesFromChildren="true"
-                android:minWidth="100dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/searchView"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_weight="5"
+                app:layout_constraintStart_toEndOf="@+id/imageView3"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_min="@dimen/icon_toolbar_size"
                 app:layout_scrollFlags="scroll|enterAlways"
+                app:subtitle="Spoofing D.N.S"
                 app:subtitleTextColor="@color/tint_svg"
                 app:title="Dnsmasq"
                 app:titleTextColor="@android:color/primary_text_dark">
 
             </android.support.v7.widget.Toolbar>
 
-            <android.support.v7.widget.SearchView
+
+            <ImageView
                 android:id="@+id/searchView"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/btn_toolbar_size"
-                android:layout_alignParentTop="true"
-                android:layout_centerVertical="false"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="12dp"
-                android:layout_toLeftOf="@+id/action_add_host" />
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="8dp"
+                android:soundEffectsEnabled="true"
+                android:src="@drawable/ic_search_svg"
+                android:tint="@color/tint_svg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/action_add_host"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/toolbar2"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
                 android:id="@+id/action_add_host"
-                android:layout_width="@dimen/btn_toolbar_size"
-                android:layout_height="@dimen/btn_toolbar_size"
-                android:layout_alignParentTop="true"
-                android:layout_centerVertical="false"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="12dp"
-                android:layout_toLeftOf="@+id/history"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:background="@android:color/transparent"
                 android:soundEffectsEnabled="true"
+                android:src="@drawable/ic_add_svg"
                 android:tint="@color/tint_svg"
-                app:srcCompat="@drawable/ic_add_svg" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/history"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/searchView"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
                 android:id="@+id/history"
-                android:layout_width="@dimen/btn_toolbar_size"
-                android:layout_height="@dimen/btn_toolbar_size"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_centerVertical="false"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="12dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginRight="8dp"
                 android:background="@android:color/transparent"
                 android:soundEffectsEnabled="true"
-                android:src="@drawable/ic_more_svg"
-                android:tint="@color/tint_svg" />
+                android:tint="@color/tint_svg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/action_add_host"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_more_svg" />
 
-        </RelativeLayout>
+        </android.support.constraint.ConstraintLayout>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"

@@ -55,6 +55,7 @@ public class                    PcapFileAdapter extends RecyclerView.Adapter<Pca
         holder.title.setOnClickListener(onFocusPcapFile(pcap));
         holder.subtitle.setOnClickListener(onFocusPcapFile(pcap));
         holder.icon.setOnClickListener(onFocusPcapFile(pcap));
+        holder.forward.setVisibility(View.GONE);
         MyGlideLoader.loadDrawableInImageView(mActivity, R.drawable.pcapfile, holder.icon, false);
     }
 

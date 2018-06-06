@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -46,7 +47,6 @@
                 android:transitionName="logo_activity"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toStartOf="@+id/toolbar2"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -74,7 +74,7 @@
                 android:background="@android:color/transparent"
                 android:baselineAlignBottom="false"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
-                app:layout_constraintEnd_toStartOf="@+id/history"
+                app:layout_constraintEnd_toStartOf="@+id/OsFilter"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/toolbar2"
                 app:layout_constraintTop_toTopOf="parent"
@@ -91,11 +91,11 @@
 
 
             <ImageView
-                android:id="@+id/history"
+                android:id="@+id/OsFilter"
                 android:layout_width="40dp"
                 android:layout_height="0dp"
                 android:baselineAlignBottom="false"
-                android:padding="4dp"
+                android:padding="6dp"
                 android:soundEffectsEnabled="true"
                 android:src="@drawable/ic_important_devices_svg"
                 android:tint="@color/tint_svg"
@@ -116,7 +116,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/history"
+                app:layout_constraintStart_toEndOf="@+id/OsFilter"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_max="40dp"
                 app:srcCompat="@drawable/ic_more_svg" />

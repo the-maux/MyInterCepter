@@ -52,7 +52,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private CoordinatorLayout       mCoordinatorLayout;
     private AppBarLayout            appBarLayout;
     private TextView                mBottomMonitor, mTimer;
-    private ImageView               mSettingsMenu, mHistory;
+    private ImageView               mSettingsMenu, mOsFilter;
     private SearchView              mSearchView;
     private Toolbar                 mToolbar;
     private TransitionDrawable      mToolbarBackground;
@@ -82,8 +82,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
         ViewCompat.setElevation(mBottomMonitor, 2);
         mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
-        mHistory = findViewById(R.id.history);
-        mHistory.setOnClickListener(onOsFilter());
+        mOsFilter = findViewById(R.id.OsFilter);
+        mOsFilter.setOnClickListener(onOsFilter());
         mSearchView = findViewById(R.id.searchView);
         mToolbar = findViewById(R.id.toolbar2);
         mSettingsMenu = findViewById(R.id.settingsMenu);
@@ -362,6 +362,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
 //        ViewAnimate.setVisibilityTo:VisibleQuick(mFab);
         if (NetworkDiscoveryControler.over())
             ViewAnimate.FabAnimateReveal(mInstance, mFab);
+        else
+            Log.i(TAG, "not showing FAB cause no !mInstance.inLoading of NetworkDiscoveryControler");
 //        mFragment = new HostDiscoveryScanFrgmnt();
         if (mFragment != null)
             Log.d(TAG, "visible:" + mFragment.isVisible());
@@ -382,7 +384,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
             } else if (mFragment.getClass().getName().contains(NetDiscoveryHistoricFrgmnt.class.getName())) {
                 if (mFragment.onBackPressed()) {
                     Log.d(TAG, "Fragment historic is over, switching to Netdiscover");
-                    ViewAnimate.setVisibilityToVisibleQuick(mHistory, 300);
+                    ViewAnimate.setVisibilityToVisibleQuick(mOsFilter, 300);
                     ViewAnimate.setVisibilityToVisibleQuick(mSearchView, 400);
                     //ViewAnimate.setVisibilityToVisibleQuick(mFab, 500);
                     ViewAnimate.FabAnimateReveal(mInstance, mFab);
@@ -392,7 +394,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 }
             } else if (mFragment.getClass().getName().contains(HostDiscoverySettingsFrgmnt.class.getName())){
                 mToolbarBackground.reverseTransition(450);
-                ViewAnimate.setVisibilityToVisibleQuick(mHistory, 300);
+                ViewAnimate.setVisibilityToVisibleQuick(mOsFilter, 300);
                 ViewAnimate.setVisibilityToVisibleQuick(mSearchView, 400);
                 ViewAnimate.FabAnimateReveal(mInstance, mFab);
                 //mFab.show();

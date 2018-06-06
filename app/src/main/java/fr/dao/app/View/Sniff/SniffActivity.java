@@ -31,7 +31,6 @@ import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Dialog.PcapListerDialogFragment;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
-import fr.dao.app.View.ZViewController.Fragment.PcapListerFragment;
 
 public class                    SniffActivity extends MITMActivity {
     private String              TAG = "SniffActivity";
@@ -79,6 +78,7 @@ public class                    SniffActivity extends MITMActivity {
             initNavigationBottomBar(SNIFFER, true);
             ViewAnimate.FabAnimateReveal(mInstance, mFab);
         } else {
+            Log.d(TAG, "Pcap Reading mode activated");
             hideBottomBar();
             ViewAnimate.FabAnimateHide(mInstance, mFab);
             findViewById(R.id.navigation).setVisibility(View.GONE);
@@ -87,8 +87,11 @@ public class                    SniffActivity extends MITMActivity {
             Bundle bundle = new Bundle();
             bundle.putString("Pcap", PcapFilePath);
             mFragment.setArguments(bundle);
-            setToolbarTitle(PcapFilePath.replace(mSingleton.Settings.PcapPath, "")
-                    .replace("_", " ").replace(".pcap", ""),"Loading");
+            String Title = PcapFilePath.replace(mSingleton.Settings.PcapPath, "")
+                    .replace("_", " ").replace(".pcap", "");
+            String subtitle = Title.substring(PcapFilePath.replace(mSingleton.Settings.PcapPath, "").indexOf("_")+1, Title.length());//TODO: better cut than _, maybe ___ :p ?
+            Title = PcapFilePath.replace(mSingleton.Settings.PcapPath, "").substring(0, PcapFilePath.replace(mSingleton.Settings.PcapPath, "").indexOf("_"));
+            setToolbarTitle(Title,subtitle);
         }
         if (!readerFragment)
             ViewAnimate.setVisibilityToVisibleQuick(SwitchViewBackBtn);
@@ -112,7 +115,7 @@ public class                    SniffActivity extends MITMActivity {
         mFab.setOnClickListener(onclickFab());
         MyGlideLoader.loadDrawableInImageView(this, R.drawable.ic_sniff_barbutton, (ImageView) findViewById(R.id.OsImg), true);
         SwitchViewBackBtn = findViewById(R.id.SwitchViewBackBtn);
-        findViewById(R.id.history).setOnClickListener(onClickHistory());
+        findViewById(R.id.history).setOnClickListener(onClickPcaps());
         onSwitchViewClicked();
         mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -240,7 +243,7 @@ public class                    SniffActivity extends MITMActivity {
         });
     }
 
-    private View.OnClickListener onClickHistory() {
+    private View.OnClickListener onClickPcaps() {
         return new View.OnClickListener() {
             public void onClick(View v) {
                 if (Tcpdump.isRunning()) {

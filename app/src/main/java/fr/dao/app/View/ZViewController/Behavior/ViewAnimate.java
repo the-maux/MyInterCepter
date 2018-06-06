@@ -79,6 +79,7 @@ public class                    ViewAnimate {
     public static void          FabAnimateReveal(Context context, final FloatingActionButton fab) {
         Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.fab_scale_up);
         scaleUp.setDuration(LONG_DURATION);
+        fab.startAnimation(scaleUp);
         scaleUp.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
                 fab.setVisibility(View.VISIBLE);
@@ -91,7 +92,6 @@ public class                    ViewAnimate {
     public static void          FabAnimateHide(Context context, final FloatingActionButton fab) {
         Animation scaleDown = AnimationUtils.loadAnimation(context, R.anim.fab_scale_down);
         scaleDown.setDuration(LONG_DURATION);
-        fab.startAnimation(scaleDown);
         scaleDown.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {}
             public void onAnimationEnd(Animation animation) {
@@ -99,6 +99,7 @@ public class                    ViewAnimate {
             }
             public void onAnimationRepeat(Animation animation) {}
         });
+        fab.startAnimation(scaleDown);
     }
 
     public static void          scaleUp(Context context, final View mMenuFAB) {

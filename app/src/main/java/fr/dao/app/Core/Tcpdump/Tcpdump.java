@@ -31,7 +31,7 @@ public class                        Tcpdump {
     private SniffActivity mActivity;
     private ConfTcpdump             mTcpdumpConf = new ConfTcpdump();
     private boolean                 isRunning = false;
-    public  boolean                 isDumpingInFile = true, isPcapReading;
+    public  boolean                 isDumpingInFile = true, isPcapReading = false;
     private String                  actualCmd = "";
     private SniffDispatcher mDispatcher = null;
     private SniffReaderFrgmnt mFragment = null;
@@ -197,6 +197,7 @@ public class                        Tcpdump {
     }
 
     public void                     onTcpDumpStop() {
+        Log.d(TAG, "onTcpDumpStop");
         if (isRunning) {
             ArpSpoof.stopArpSpoof();
             mActivity.onTcpdumpstopped();
@@ -204,6 +205,7 @@ public class                        Tcpdump {
             isRunning = false;
             IPTables.stopIpTable();
             if (isDumpingInFile && !isPcapReading) {
+                Log.d(TAG, "allow right on pcap's dump directory");
                 new RootProcess("chmod Pcap files")
                         .exec("chmod 666 " + mSingleton.Settings.PcapPath + "/*")
                         .exec("chown sdcard_r:sdcard_r " + mSingleton.Settings.PcapPath + "/*")
@@ -212,6 +214,7 @@ public class                        Tcpdump {
                 mActivity.showSnackbar("Pcap saved here : " + mSingleton.Settings.PcapPath, -1);
             }
             if (isPcapReading) {
+                Log.d(TAG, "mFragment.onPcapAnalysed(mBufferOfTrame), fragment => " + mFragment.getClass().getName());
                 mFragment.onPcapAnalysed(mBufferOfTrame);
             } else
                 mDispatcher.stop();

@@ -14,6 +14,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
@@ -35,7 +36,8 @@ public class                            SpyMitmActivity extends MITMActivity {
     private AppBarLayout                appBarLayout;
     private Toolbar                     mToolbar;
     private SearchView                  mSearchView;
-    private ImageButton                 mAction_add_host, mSettingsBtn;
+    private ImageButton                 mSettingsBtn;
+    private ImageView                   mAction_add_host;
     private TabLayout                   mTabs;
     private RecyclerView                mDnsSpoof_RV;
     private Singleton                   mSingleton = Singleton.getInstance();
@@ -49,20 +51,21 @@ public class                            SpyMitmActivity extends MITMActivity {
         setContentView(R.layout.activity_spysniff);
         initXml();
         init();
+        setToolbarTitle("Proxy", "Not started");
     }
 
     private void                        init() {
         initFab();
         initTabs();
         initRVConfiguration();
-        initSearchView();
+        //initSearchView();
         initNavigationBottomBar(SCANNER, true);
     }
 
     private void                        initXml() {
         mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
         mToolbar = findViewById(R.id.toolbar2);
-        mSearchView = findViewById(R.id.searchView);
+       // mSearchView = findViewById(R.id.searchView);
         mAction_add_host = findViewById(R.id.action_add_host);
         mSettingsBtn = findViewById(R.id.history);
         mFab = findViewById(R.id.fab);
@@ -72,7 +75,7 @@ public class                            SpyMitmActivity extends MITMActivity {
         appBarLayout = findViewById(R.id.appBarLayout);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                ViewCompat.setElevation(findViewById(R.id.topToolbar), 4);
+                ViewCompat.setElevation(findViewById(R.id.toptoolbar2), 4);
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
@@ -144,25 +147,25 @@ public class                            SpyMitmActivity extends MITMActivity {
         mDnsSpoof.setRV_Adapter(mDnsConsoleAdapter);
     }
 
-    private void                        initSearchView() {
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            public boolean onQueryTextSubmit(String query) {
-
-                return false;
-            }
-
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-
-                return false;
-            }
-        });
-    }
+//    private void                        initSearchView() {
+//        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            public boolean onQueryTextSubmit(String query) {
+//
+//                return false;
+//            }
+//
+//            public boolean onQueryTextChange(String newText) {
+//                return false;
+//            }
+//        });
+//        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+//            @Override
+//            public boolean onClose() {
+//
+//                return false;
+//            }
+//        });
+//    }
 
     public void                         setToolbarTitle(final String title, final String subtitle) {
         runOnUiThread(new Runnable() {
