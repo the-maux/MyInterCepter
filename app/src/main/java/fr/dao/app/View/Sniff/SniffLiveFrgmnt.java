@@ -36,13 +36,13 @@ import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 /**
  * TODO: tu dois trouver un moye, de flush l'ensemble des trames du dispatcher dans le RV live
  */
-public class SniffLiveFrgmnt extends MyFragment {
+public class                    SniffLiveFrgmnt extends MyFragment {
     private String              TAG = "SniffLiveFrgmnt";
     private CoordinatorLayout   mCoordinatorLayout;
     private ConstraintLayout    rootViewForDashboard;
     private RelativeLayout      rootViewForLiveFlux;
-    private SniffDispatcher mTrameDispatcher;
-    private SniffActivity mActivity;
+    private SniffDispatcher     mTrameDispatcher;
+    private SniffActivity       mActivity;
     private RecyclerView        mRV_Wireshark, dashboard_RV;
     private SniffPacketsAdapter mAdapterDetailWireshark;
     private SniffDashboardAdapter mAdapterDashboardWireshark;
@@ -72,8 +72,8 @@ public class SniffLiveFrgmnt extends MyFragment {
         statusIconSniffing = rootView.findViewById(R.id.statusIconSniffing);
         title_sniffer = rootView.findViewById(R.id.title_sniffer);
         subtitle_sniffer = rootView.findViewById(R.id.subtitle_sniffer);
-        bottom_title_sniffer = rootView.findViewById(R.id.bottom_title_sniffer);
-        bottom_subtitle_sniffer = rootView.findViewById(R.id.bottom_subtitle_sniffer);
+        bottom_title_sniffer = rootView.findViewById(R.id.bottom_subtitle_sniffer);
+        bottom_subtitle_sniffer = rootView.findViewById(R.id.bottom_title_sniffer);
         headerWifi = rootView.findViewById(R.id.headerWifi);
         dashboard_RV = rootView.findViewById(R.id.dashboard_RV);
   //      mMonitorCmd =  rootView.findViewById(R.id.cmd);
@@ -107,7 +107,7 @@ public class SniffLiveFrgmnt extends MyFragment {
         int res = (Tcpdump.isRunning()) ? R.color.online_color : R.color.offline_color;
         statusIconSniffing.setImageResource(res);
         if (mAdapterDashboardWireshark == null) {
-            title_sniffer.setText(mSingleton.NetworkInformation.ssid);
+            putTitle(title_sniffer);
             subtitle_sniffer.setText("No packets recorded");
             bottom_title_sniffer.setText("Not started");
             bottom_subtitle_sniffer.setText("");
@@ -118,6 +118,22 @@ public class SniffLiveFrgmnt extends MyFragment {
             LinearLayoutManager layoutManager = new GridLayoutManager(mActivity, 3);
             dashboard_RV.setLayoutManager(layoutManager);
         }
+    }
+
+    private void                putTitle(TextView title_sniffer) {
+        title_sniffer.setText(mSingleton.NetworkInformation.ssid);
+        if (mListHostSelected.size() == 0) {
+            if (mSingleton.hostList.isEmpty())
+                title_sniffer.setText("No target selected");
+            else if (mSingleton.hostList.size() == 1)
+                title_sniffer.setText(mSingleton.hostList.get(0).getName());
+            else
+                title_sniffer.setText(mSingleton.hostList.size() + " targets");
+        } else if (mListHostSelected.size() == 1)
+            title_sniffer.setText(mListHostSelected.get(0).getName());
+        else
+            title_sniffer.setText(mListHostSelected.size() + " targets");
+
     }
 
     public boolean              onSwitchView() {

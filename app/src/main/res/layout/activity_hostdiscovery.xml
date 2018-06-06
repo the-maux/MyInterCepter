@@ -17,7 +17,7 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:background="@android:color/transparent"
             android:elevation="4dp">
 
@@ -41,24 +41,25 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 android:elevation="4dp"
+                android:padding="4dp"
                 android:tint="@color/tint_svg"
                 android:transitionName="logo_activity"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toStartOf="@+id/toolbar2"
                 app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_fingerprint_svg" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar2"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:visibility="visible"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toStartOf="@+id/searchViewRelative"
+                app:layout_constraintHorizontal_weight="5"
                 app:layout_constraintStart_toEndOf="@+id/OsImg"
                 app:layout_constraintTop_toTopOf="parent"
                 app:subtitle="Subtitle"
@@ -94,7 +95,7 @@
                 android:layout_width="40dp"
                 android:layout_height="0dp"
                 android:baselineAlignBottom="false"
-                android:padding="6dp"
+                android:padding="4dp"
                 android:soundEffectsEnabled="true"
                 android:src="@drawable/ic_important_devices_svg"
                 android:tint="@color/tint_svg"
@@ -106,19 +107,18 @@
 
             <ImageView
                 android:id="@+id/settingsMenu"
-                android:layout_width="40dp"
-                android:layout_height="0dp"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:padding="4dp"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/history"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_min="45dp"
+                app:layout_constraintWidth_max="40dp"
                 app:srcCompat="@drawable/ic_more_svg" />
 
 
@@ -127,7 +127,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="65dp" />
+                app:layout_constraintGuide_begin="56dp" />
 
 
         </android.support.constraint.ConstraintLayout>

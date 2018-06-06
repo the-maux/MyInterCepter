@@ -22,8 +22,8 @@ import fr.dao.app.View.ZViewController.Adapter.SniffPacketsAdapter;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 
-public class SniffReaderFrgmnt extends MyFragment {
-    private String              TAG = "SniffLiveFrgmnt";
+public class                    SniffReaderFrgmnt extends MyFragment {
+    private String              TAG = "SniffReaderFrgmnt";
     private CoordinatorLayout   mCoordinatorLayout;
     private Context             mCtx;
     private SniffActivity mActivity;
