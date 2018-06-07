@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -146,7 +145,7 @@
         android:src="@drawable/ic_search_svg"
         android:tint="@color/tint_svg"
         android:transitionName="fab"
-        android:visibility="gone"
+        android:visibility="visible"
         app:backgroundTint="@color/fab_color"
         app:fabSize="normal"
         app:layout_anchor="@id/appBarLayout"

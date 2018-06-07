@@ -39,7 +39,6 @@ import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 /**
  * TODO:    + Add manual target
- *          + filterOs scrollView (bottom or top ?)
  *          + filter Text as SearchView
  *          + Button add -> No target mode / Settings /
  *          + detect target onFly ?
@@ -356,19 +355,20 @@ public class                        HostDiscoveryActivity extends MyActivity {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
 
-    protected void                  onResume() {
-        super.onResume();
-        //mFab.show();
-//        ViewAnimate.setVisibilityTo:VisibleQuick(mFab);
-        if (NetworkDiscoveryControler.over())
-            ViewAnimate.FabAnimateReveal(mInstance, mFab);
-        else
+    protected void                  onPostResume() {
+        super.onPostResume();
+        if (NetworkDiscoveryControler.over()) {
+            //ViewAnimate.FabAnimateReveal(mInstance, mFab);
+            ViewAnimate.setVisibilityToVisibleQuick(mFab);
+            mFab.show();
+            Log.d(TAG, "Scan is over so reveal FAB& opaque:"+mFab.isOpaque());
+            Log.d(TAG, "dirty:"+mFab.isDirty());
+            mFab.clearColorFilter();
+            mFab.clearAnimation();
+        } else
             Log.i(TAG, "not showing FAB cause no !mInstance.inLoading of NetworkDiscoveryControler");
 //        mFragment = new HostDiscoveryScanFrgmnt();
-        if (mFragment != null)
-            Log.d(TAG, "visible:" + mFragment.isVisible());
         initFragment(mFragment);
-//        initFragment(NetDiscoveryFragment);
     }
 
     protected void                  onPause() {
