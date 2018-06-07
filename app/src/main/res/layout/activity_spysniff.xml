@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -20,9 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:elevation="6dp"
-            android:paddingBottom="8dp"
             android:paddingLeft="8dp"
-            android:paddingTop="8dp"
             android:visibility="visible">
 
 
@@ -31,6 +28,7 @@
                 android:layout_width="@dimen/icon_toolbar_size"
                 android:layout_height="0dp"
                 android:elevation="4dp"
+                android:padding="2dp"
                 android:soundEffectsEnabled="true"
                 android:transitionName="wiresharkIcon"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -45,14 +43,16 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar2"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/searchView"
                 app:layout_constraintHorizontal_weight="5"
                 app:layout_constraintStart_toEndOf="@+id/imageView2"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_scrollFlags="scroll|enterAlways"
+                app:subtitle="Not started"
                 app:subtitleTextColor="@color/tint_svg"
+                app:title="Proxy"
                 app:titleTextColor="@android:color/primary_text_dark">
 
             </android.support.v7.widget.Toolbar>

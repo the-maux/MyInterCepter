@@ -98,4 +98,8 @@ public class                    SniffReaderFrgmnt extends MyFragment {
             }
         });
     }
+
+    public void                 initUIActivtyAsReading() {
+        mActivity.ReadingMode();
+    }
 }

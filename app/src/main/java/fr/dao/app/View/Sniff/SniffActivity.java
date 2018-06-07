@@ -289,4 +289,7 @@ public class                    SniffActivity extends MITMActivity {
     public void                 onBackPressed() {
         super.onBackPressed();
     }
+
+    public void                 ReadingMode() {
+    }
 }

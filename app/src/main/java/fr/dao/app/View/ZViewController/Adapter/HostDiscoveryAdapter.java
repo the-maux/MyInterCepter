@@ -140,8 +140,13 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
             public boolean onLongClick(View v) {
                 mActivity.runOnUiThread(new Runnable() {
                     public void run() {
-                        //host.dumpMe();
                         Utils.vibrateDevice(mActivity);
+                    }
+                });
+                mActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        //host.dumpMe();
+
                         ActivityOptionsCompat options;
                         Intent intent = new Intent(mActivity, HostDetailActivity.class);
                         Pair<View, String> p1 = Pair.create((View)holder.osIcon, "hostPicture");
