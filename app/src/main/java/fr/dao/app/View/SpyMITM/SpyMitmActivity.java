@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Configuration.Words;
@@ -41,7 +42,7 @@ public class                            SpyMitmActivity extends MITMActivity {
     private TabLayout                   mTabs;
     private RecyclerView                mDnsSpoof_RV;
     private Singleton                   mSingleton = Singleton.getInstance();
-    private DnsmasqControl              mDnsSpoof = mSingleton.getDnsControler();
+    private DnsmasqControl              mDnsSpoof = MitManager.getInstance().getDnsControler();
     private DnsSpoofConfAdapter         mDnsSpoofAdapter;
     private DnsLogsAdapter              mDnsConsoleAdapter;
     private String                      NAME_CONF_MENU = "Domains intercepted:", NAME_LOGS_MENU = "Dnsmasq logs:";
@@ -85,7 +86,7 @@ public class                            SpyMitmActivity extends MITMActivity {
 //        ViewAnimate.setVisibilityToVisibleQuick(mFab);
         ViewAnimate.FabAnimateReveal(mInstance, mFab);
 //        mFab.show();
-        if (mSingleton.isDnsControlstarted()) {
+        if (MitManager.getInstance().isDnsControlstarted()) {
             mFab.setImageResource(R.mipmap.ic_stop);
         } else {
             mFab.setImageResource(R.drawable.ic_media_play);

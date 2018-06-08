@@ -16,6 +16,7 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.WebServer.GenericServer;
@@ -78,12 +79,12 @@ public class                    WebServerActivity extends MITMActivity {
             public void onClick(View v) {
                 Utils.vibrateDevice(mInstance);
                 ViewAnimate.setVisibilityToVisibleQuick(mProgressBar);
-                if (!mSingleton.iswebSpoofed() && startAndroidWebServer()) {
-                    mSingleton.setwebSpoofed(true);
+                if (!MitManager.getInstance().iswebSpoofed() && startAndroidWebServer()) {
+                    MitManager.getInstance().initWebserver();
                     showWebView();
                     mFab.setBackgroundTintList(ContextCompat.getColorStateList(WebServerActivity.this, R.color.start_color));
                 } else if (stopAndroidWebServer()) {
-                    mSingleton.setwebSpoofed(false);
+                    MitManager.getInstance().stopWebserver(false);
                     unShowWebView();
                 }
             }
@@ -91,7 +92,7 @@ public class                    WebServerActivity extends MITMActivity {
     }
 
     private boolean             startAndroidWebServer() {
-        if (!mSingleton.iswebSpoofed()) {
+        if (!MitManager.getInstance().iswebSpoofed()) {
                 try {
                     mWebServer = new GenericServer(PORT);
                     mSingleton.Session.addAction(Action.ActionType.WEBSERVER, true);
@@ -107,9 +108,9 @@ public class                    WebServerActivity extends MITMActivity {
         return false;
     }
     private boolean             stopAndroidWebServer() {
-        if (mSingleton.iswebSpoofed() && mWebServer != null) {
+        if (MitManager.getInstance().iswebSpoofed() && mWebServer != null) {
             mWebServer.stop();
-            mSingleton.setwebSpoofed(false);
+            MitManager.getInstance().stopWebserver(false);
             return true;
         }
         return false;
@@ -139,7 +140,7 @@ public class                    WebServerActivity extends MITMActivity {
         Log.d(TAG, "onDestroy");
         super.onDestroy();
         stopAndroidWebServer();
-        mSingleton.setwebSpoofed(false);
+        MitManager.getInstance().stopWebserver(false);
    }
 
 }

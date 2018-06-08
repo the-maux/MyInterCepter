@@ -10,7 +10,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +20,7 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 
+import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Dnsmasq.DnsmasqConfig;
@@ -47,7 +47,7 @@ public class                            DnsActivity extends MITMActivity {
     private RelativeLayout              mClipper;
     private TextView                    mAction_deleteall, mAction_import, mAction_export, textEmpty, title;
     private Singleton                   mSingleton = Singleton.getInstance();
-    private DnsmasqControl              mDnsSpoof = mSingleton.getDnsControler();
+    private DnsmasqControl              mDnsSpoof = MitManager.getInstance().getDnsControler();
     private DnsSpoofConfAdapter         mDnsSpoofAdapter;
     private DnsLogsAdapter              mDnsConsoleAdapter;
     private String                      NAME_CONF_MENU = "Domains intercepted:", NAME_LOGS_MENU = "Dnsmasq logs:";
@@ -98,7 +98,7 @@ public class                            DnsActivity extends MITMActivity {
 //        ViewAnimate.setVisibilityToVisibleQuick(mFab);
         ViewAnimate.FabAnimateReveal(mInstance, mFab);
 //        mFab.show();
-        if (mSingleton.isDnsControlstarted()) {
+        if (MitManager.getInstance().isDnsControlstarted()) {
             mFab.setImageResource(R.mipmap.ic_stop);
         } else {
             mFab.setImageResource(R.drawable.ic_media_play);
@@ -107,7 +107,7 @@ public class                            DnsActivity extends MITMActivity {
             @Override
             public void onClick(View view) {
                 Utils.vibrateDevice(mInstance);
-                if (!mSingleton.isDnsControlstarted()) {
+                if (!MitManager.getInstance().isDnsControlstarted()) {
                     mDnsSpoof.start();
                     mFab.setImageResource(R.drawable.ic_stop);
                 } else {

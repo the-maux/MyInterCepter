@@ -14,6 +14,7 @@ import java.util.List;
 
 import fr.dao.app.Core.Configuration.GlideApp;
 import fr.dao.app.Core.Configuration.GlideRequest;
+import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Model.Target.DNSSpoofItem;
@@ -72,7 +73,7 @@ public class                    DnsSpoofConfAdapter extends RecyclerView.Adapter
                         .setPositiveButton(mActivity.getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 Utils.vibrateDevice(mActivity, 100);
-                                mSingleton.getDnsControler().removeDomain(domain);
+                                MitManager.getInstance().getDnsControler().removeDomain(domain);
                                 mActivity.onDnsmasqConfChanged(domain + " deleted from configuration");
                                 mActivity.setToolbarTitle(null, mDnsIntercepts.size() + " title spoofable");
                                 notifyDataSetChanged();

@@ -27,6 +27,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Scan.NmapControler;
@@ -304,13 +305,13 @@ public class                    NmapActivity extends MITMActivity {
     }
 
     public void                 onBackPressed() {
-        if (mSingleton.isSniffServiceActif(this)) {
+        if (MitManager.getInstance().isSniffServiceActif(this)) {
              new AlertDialog.Builder(this)
                         .setTitle("Warning: Sniffing service is active")
                         .setMessage("You press ok we will terminate every process for you")
                         .setPositiveButton(getResources().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                mSingleton.closeEverySniffService(mInstance);
+                                MitManager.getInstance().stopEverything();
                                 onBackPressed();
                             }
                         })

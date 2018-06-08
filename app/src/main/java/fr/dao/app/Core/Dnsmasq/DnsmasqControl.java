@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
 
+import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Network.IPTables;
@@ -31,7 +32,6 @@ public class                    DnsmasqControl {
             sniffSession = Singleton.getInstance().getCurrentSniffSession();
             mDnsLogs = sniffSession.logDnsSpoofed();
         }
-
     }
 
     private void                initRVLink() {
@@ -68,7 +68,7 @@ public class                    DnsmasqControl {
     public DnsmasqControl       start() {
         isRunning = true;
         initRVLink();
-        IPTables.redirectDnsForSpoofing();
+        MitManager.getInstance().initDNSSpoofing();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -109,11 +109,10 @@ public class                    DnsmasqControl {
     }
     public void                 stop() {
         isRunning = false;
-        IPTables.stopRedirectDnsForSpoofing();
+        IPTables.stopDnsPacketRedirect();
         RootProcess.kill("dnsmasq");
         if (mRV_Adapter.getRecyclerview() != null)
             mRV_Adapter.getRecyclerview().post(new Runnable() {
-                @Override
                 public void run() {
                     //mDnsLogs.reset();
                     if (mRV_Adapter != null)

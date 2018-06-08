@@ -5,9 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +14,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 
+import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
@@ -108,9 +107,9 @@ public abstract class               MITMActivity extends MyActivity  {
                 mBottomBar.setNotification(Tcpdump.isRunning() ? greenNotif : redNotif, 1);
             else
                 mBottomBar.setNotification(redNotif, 1);
-            mBottomBar.setNotification(mSingleton.isDnsControlstarted() ? greenNotif : redNotif, 2);
+            mBottomBar.setNotification(MitManager.getInstance().isDnsControlstarted() ? greenNotif : redNotif, 2);
             mBottomBar.setNotification(redNotif, 0);
-            mBottomBar.setNotification(mSingleton.iswebSpoofed() ? greenNotif : redNotif, 3);
+            mBottomBar.setNotification(MitManager.getInstance().iswebSpoofed() ? greenNotif : redNotif, 3);
         }
     }
 

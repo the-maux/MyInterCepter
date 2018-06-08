@@ -194,7 +194,7 @@ public class                    SniffLiveFrgmnt extends MyFragment {
             }
         } else {
             mMonitorAgv.setVisibility(View.GONE);
-            mTcpdump.onTcpDumpStop();
+            mTcpdump.stop();
             mActivity.setToolbarTitle(null, "Sniffing finished");
             mActivity.updateNotifications();
         }
