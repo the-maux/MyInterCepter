@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
@@ -177,6 +178,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                         Log.d(TAG, "mSingleton.hostsListSize:" +
                                 ((mSingleton.hostList != null) ? mSingleton.hostList.size() : "0"));
                     }
+                    MitManager.getInstance().loadHost(mSingleton.hostList);
                     startActivity(new Intent(mInstance, SpyMitmActivity.class));
                 }
                 else if (!mFragment.start()) {

@@ -30,7 +30,7 @@ public class                Action extends Model {
 
 
     public enum ActionType {
-        SPY, SNIFF, DNSSPPOOF, WEBSERVER, SCAN, VULNSCAN, DORA, CRYPTCHECK,
+        PROXY, SNIFF, DNSSPPOOF, WEBSERVER, SCAN, VULNSCAN, DORA, CRYPTCHECK,
     }
 
     public String           getStringDate() {

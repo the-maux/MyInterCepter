@@ -17,14 +17,14 @@ import android.widget.RelativeLayout;
 import java.io.File;
 import java.util.ArrayList;
 
-import fr.dao.app.Core.Tcpdump.Tcpdump;
+import fr.dao.app.Core.Tcpdump.Proxy;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Adapter.SniffPacketsAdapter;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 
-public class                    SniffReaderFrgmnt extends MyFragment {
+public class ProxyReaderFrgmnt extends MyFragment {
     private String              TAG = "SniffReaderFrgmnt";
     private CoordinatorLayout   mCoordinatorLayout;
     private Context             mCtx;
@@ -33,7 +33,7 @@ public class                    SniffReaderFrgmnt extends MyFragment {
     private SniffActivity       mActivity;
     private RecyclerView        mRV_Wireshark;
     private SniffPacketsAdapter mAdapterWireshark;
-    private Tcpdump             mTcpdump;
+    private Proxy mTcpdump;
     private File                mPcapFile;
     ProgressDialog              dialog;
 
@@ -42,7 +42,7 @@ public class                    SniffReaderFrgmnt extends MyFragment {
         mCtx = getActivity();
         initXml(rootView);
         mActivity = (SniffActivity) getActivity();
-        mTcpdump = Tcpdump.getTcpdump(mActivity, true);
+        mTcpdump = Proxy.getProxy(mActivity, true);
         init();
         return rootView;
     }
@@ -64,7 +64,7 @@ public class                    SniffReaderFrgmnt extends MyFragment {
             initRV();
             dialog = ProgressDialog.show(mActivity, mPcapFile.getName(), "Loading. Please wait...", true);
             dialog.show();
-            mTcpdump.readPcap(mPcapFile, this);
+
         } else {
             Log.e(TAG, "no Pcap returned");
             mActivity.showSnackbar("No Pcap to read",  ContextCompat.getColor(mActivity, R.color.stop_color));
@@ -79,7 +79,7 @@ public class                    SniffReaderFrgmnt extends MyFragment {
         mRV_Wireshark.setLayoutManager(new LinearLayoutManager(mActivity));
     }
 
-    public void                 onPcapAnalysed(final ArrayList<Trame> bufferOfTrame) {
+    public void onSniffingOver(final ArrayList<Trame> bufferOfTrame) {
         Log.d(TAG, " onSniffingOver:" + bufferOfTrame.size());
         mActivity.runOnUiThread(new Runnable() {
             public void run() {

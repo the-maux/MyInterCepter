@@ -1,6 +1,5 @@
 package fr.dao.app.View.SpyMITM;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -15,11 +14,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
-import fr.dao.app.Core.Configuration.Words;
 import fr.dao.app.Core.Dnsmasq.DnsmasqControl;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MITMActivity;
@@ -99,6 +99,11 @@ public class                            SpyMitmActivity extends MITMActivity {
         });
     }
 
+    public void                         onProxystopped() {
+        setToolbarTitle("Proxy", "Stopped");
+    }
+
+
     private void                        initTabs() {
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             public void onTabSelected(TabLayout.Tab tab) {
@@ -168,6 +173,16 @@ public class                            SpyMitmActivity extends MITMActivity {
 //        });
 //    }
 
+    public void                         showSnackbar(String txt, int color) {
+        if (color == -1) {
+            Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
+        }
+        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, txt, Snackbar.LENGTH_LONG);
+        ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text))
+                .setTextColor(color);
+        snackbar.show();
+    }
+
     public void                         setToolbarTitle(final String title, final String subtitle) {
         runOnUiThread(new Runnable() {
             @Override
@@ -186,24 +201,9 @@ public class                            SpyMitmActivity extends MITMActivity {
         //TODO:Check if sniffing was loading
     }
 
-    public void                         onError(String error) {
-        Snackbar.make(mCoordinatorLayout, error, Snackbar.LENGTH_SHORT).show();
-        mInstance.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                updateNotifications();
-                new AlertDialog.Builder(mInstance)
-                        .setTitle("Sniffing error detected")
-                        .setMessage("Would you like to restart the process ?")
-                        .setPositiveButton(Words.yes(mInstance), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Utils.vibrateDevice(mInstance, 100);
-                                mDnsSpoof.start();
-                            }
-                        })
-                        .setNegativeButton(Words.no(mInstance), null)
-                        .show();
-            }
-        });
+
+    public void                         onError() {
+
     }
+
 }

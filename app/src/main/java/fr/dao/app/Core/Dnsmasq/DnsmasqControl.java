@@ -25,6 +25,7 @@ public class                    DnsmasqControl {
     private DnsActivity         mActivity;
     private SniffSession        sniffSession;
     private boolean             isRunning = false;
+    private Thread              mThreadProcess = null;
 
     public DnsmasqControl() {
         mDnsConf = new DnsmasqConfig();
@@ -46,56 +47,36 @@ public class                    DnsmasqControl {
             });
     }
 
-    private boolean             isItALog(String read) {
-        return !read.isEmpty() && !read.contains("compile time options:") &&
-                !read.contains("using nameserver 8.8.8.8#53") &&
-                !read.contains("using nameserver") &&
-                !read.contains("read /etc/dnsmasq.hosts") &&
-                !read.contains("read /etc/hosts") &&
-                !read.contains("reading ") &&
-                !read.contains("started, version");
-    }
-    private boolean             isADomainConnu(DNSLog dnsLog) {
-        for (DNSLog domainLog : mDnsLogs) {
-            if (domainLog.isSameDomain(dnsLog)) {
-                domainLog.addLog(dnsLog);
-                return false;
-            }
-        }
-        return true;
-    }
-
     public DnsmasqControl       start() {
         isRunning = true;
         initRVLink();
-        MitManager.getInstance().initDNSSpoofing();
-        new Thread(new Runnable() {
-            @Override
+        if (!MitManager.getInstance().isDnsControlstarted()) {
+            mThreadProcess = runThread();
+            mThreadProcess.start();
+        } else
+            Log.e(TAG, "DnsControl doesn't restart, already launched");
+        return this;
+    }
+
+    private Thread              runThread() {
+        return new Thread(new Runnable() {
             public void run() {
                 mDnsLogs.clear();
                 mProcess = new RootProcess("Dnsmasq::");
                 mProcess.exec("dnsmasq --no-daemon --log-queries");
                 BufferedReader reader = mProcess.getReader();
                 try {
-                    String read;
-                    while ((read = reader.readLine()) != null) {
-                        Log.d(TAG, "DNS_STDOUT::(" +read + ')');
-                        read = read.replace("dnsmasq: ", "");
-                        if (read.contains("failed to create listening socket")){
+                    String buffer;
+                    while ((buffer = reader.readLine()) != null) {
+                        buffer = buffer.replace("dnsmasq: ", "");
+                        if (buffer.contains("failed to create listening socket")){
                             stop();
-                            mActivity.onError(read);
+                            mActivity.onError(buffer);
                             break;
                         }
-                        if (isItALog(read)) {
-                            DNSLog DomainlogTmp = new DNSLog();
-                            DomainlogTmp.init(read);
-                            boolean isAnewDomain;
-                            if ((isAnewDomain = isADomainConnu(DomainlogTmp))) {
-                                DomainlogTmp.sniffSession = sniffSession;
-                                DomainlogTmp.save();
-                                mDnsLogs.add(0, DomainlogTmp);
-                            }
-                            notifyAdapter(DomainlogTmp, isAnewDomain);
+                        if (strip(buffer)) {
+                            buildDNSLog(buffer);
+                            Log.i(TAG, "DNSMASQ[" + buffer + ']');
                         }
                     }
                 } catch (IOException e) {
@@ -104,11 +85,14 @@ public class                    DnsmasqControl {
                 }
                 Log.d(TAG, "dnsmasq terminated");
             }
-        }).start();
-        return this;
+        });
     }
+
     public void                 stop() {
         isRunning = false;
+        mThreadProcess.interrupt();
+        mProcess.closeDontWait();
+        mThreadProcess = null;
         IPTables.stopDnsPacketRedirect();
         RootProcess.kill("dnsmasq");
         if (mRV_Adapter.getRecyclerview() != null)
@@ -142,6 +126,26 @@ public class                    DnsmasqControl {
             mActivity.setToolbarTitle(null, mDnsLogs.size() + " dns request catched");
     }
 
+    private void                buildDNSLog(String buffer) {
+        DNSLog DomainlogTmp = new DNSLog();
+        DomainlogTmp.init(buffer);
+        boolean isAnewDomain;
+        if ((isAnewDomain = isADomainConnu(DomainlogTmp))) {
+            DomainlogTmp.sniffSession = sniffSession;
+            DomainlogTmp.save();
+            mDnsLogs.add(0, DomainlogTmp);
+        }
+        notifyAdapter(DomainlogTmp, isAnewDomain);
+    }
+    private boolean             isADomainConnu(DNSLog dnsLog) {
+        for (DNSLog domainLog : mDnsLogs) {
+            if (domainLog.isSameDomain(dnsLog)) {
+                domainLog.addLog(dnsLog);
+                return false;
+            }
+        }
+        return true;
+    }
     /**
      * DnsmasqConfig
      */
@@ -153,6 +157,15 @@ public class                    DnsmasqControl {
     }
     public void                 clear() {
         mDnsConf.clear();
+    }
+    private boolean             strip(String read) {
+        return !read.isEmpty() && !read.contains("compile time options:") &&
+                !read.contains("using nameserver 8.8.8.8#53") &&
+                !read.contains("using nameserver") &&
+                !read.contains("read /etc/dnsmasq.hosts") &&
+                !read.contains("read /etc/hosts") &&
+                !read.contains("reading ") &&
+                !read.contains("started, version");
     }
     public DnsmasqConfig        getDnsConf() {
         return mDnsConf;

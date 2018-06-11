@@ -1,6 +1,5 @@
 package fr.dao.app.Core.Configuration;
 
-import android.os.Build;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -141,7 +140,7 @@ public class                    RootProcess {
         return mProcess == null ? -1 : waitFor();
     }
 
-    RootProcess                 closeDontWait() {
+    public RootProcess         closeDontWait() {
         try {
             mOutputStream.close();
         } catch (IOException e) {

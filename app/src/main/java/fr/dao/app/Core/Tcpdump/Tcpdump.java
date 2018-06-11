@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Network.ArpSpoof;
@@ -43,10 +44,8 @@ public class                        Tcpdump {
     }
 
     public static synchronized Tcpdump getTcpdump(Activity activity, boolean isWiresharkActivity) {
-        if (isWiresharkActivity) {
-            if (mInstance == null) {
-                mInstance = new Tcpdump((SniffActivity) activity);
-            }
+        if (isWiresharkActivity && mInstance == null) {
+            mInstance = new Tcpdump((SniffActivity) activity);
         }
         return mInstance;
     }
@@ -64,7 +63,7 @@ public class                        Tcpdump {
         Log.d(TAG, "IPtable returned: " + a);
         ArpSpoof.launchArpSpoof(hosts);
         String actualParam = "";
-        actualCmd = mTcpdumpConf.buildCmd(actualParam, isDumpingInFile, "No Filter", hosts);
+        actualCmd = mTcpdumpConf.buildWiresharkCmd(actualParam, isDumpingInFile, "No Filter", hosts);
         return actualCmd.replace("nmap/nmap", "nmap")
                 .replace(mSingleton.Settings.FilesPath, "");
     }
@@ -108,7 +107,7 @@ public class                        Tcpdump {
         isRunning = true;
         mFragment = fragment;
         Log.d(TAG, "reading Pcap:" + pcapFile.getPath());
-        actualCmd = mTcpdumpConf.buildCmd(pcapFile);
+        actualCmd = mTcpdumpConf.buildWiresharkCmd(pcapFile);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -203,11 +202,10 @@ public class                        Tcpdump {
     public void                     stop() {
         Log.d(TAG, "stop");
         if (isRunning) {
-            ArpSpoof.stopArpSpoof();
+            MitManager.getInstance().stopTcpdump(true);
+            mTcpDumpProcess.closeDontWait();
             mActivity.onTcpdumpstopped();
-            RootProcess.kill("tcpdump");
             isRunning = false;
-            IPTables.stopIpTable();
             if (isDumpingInFile && !isPcapReading) {
                 Log.d(TAG, "allow right on pcap's dump directory");
                 new RootProcess("chmod Pcap files")
@@ -218,7 +216,7 @@ public class                        Tcpdump {
                 mActivity.showSnackbar("Pcap saved here : " + mSingleton.Settings.PcapPath, -1);
             }
             if (isPcapReading) {
-                Log.d(TAG, "mFragment.onPcapAnalysed(mBufferOfTrame), fragment => " + mFragment.getClass().getName());
+                Log.d(TAG, "mFragment.onSniffingOver(mBufferOfTrame), fragment => " + mFragment.getClass().getName());
                 mFragment.onPcapAnalysed(mBufferOfTrame);
             } else
                 mDispatcher.stop();

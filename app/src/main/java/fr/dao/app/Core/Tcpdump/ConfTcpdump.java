@@ -73,8 +73,8 @@ class                           ConfTcpdump {
         return pcapFile;
     }
 
-    String                      buildCmd(String actualParam, boolean isDumpingInFile,
-                                            String typeScan, List<Host> hosts) {
+    String buildWiresharkCmd(String actualParam, boolean isDumpingInFile,
+                             String typeScan, List<Host> hosts) {
         String hostFilter = buildHostFilterCommand(hosts, typeScan);
         String date =  Words.getGenericDateFormat(new Date());
         String nameFile = mSingleton.NetworkInformation.ssid + "_" + date;
@@ -87,8 +87,22 @@ class                           ConfTcpdump {
         return cmd ;
     }
 
-    public String               buildCmd(File mPcapFile) {
-        Log.d(TAG, "buildCmd::" + mSingleton.Settings.FilesPath + "tcpdump " + "-r " + mPcapFile.getPath());
+    String buildProxyCmd(String actualParam, boolean isDumpingInFile,
+                             String typeScan, List<Host> hosts) {
+        String hostFilter = buildHostFilterCommand(hosts, typeScan);
+        String date =  Words.getGenericDateFormat(new Date());
+        String nameFile = mSingleton.NetworkInformation.ssid + "_" + date;
+        String pcapFile = (isDumpingInFile) ? buildForDumpingPcap(nameFile, hosts) : "";
+
+        String cmd = (mSingleton.Settings.FilesPath + "tcpdump " +
+                pcapFile + actualParam + hostFilter)
+                .replace("//", "/").replace("  ", " ");
+        Log.d(TAG, cmd);
+        return cmd ;
+    }
+
+    public String buildWiresharkCmd(File mPcapFile) {
+        Log.d(TAG, "buildWiresharkCmd::" + mSingleton.Settings.FilesPath + "tcpdump " + "-r " + mPcapFile.getPath());
         return mSingleton.Settings.FilesPath + "tcpdump " + "-r " + mPcapFile.getPath();
     }
 }

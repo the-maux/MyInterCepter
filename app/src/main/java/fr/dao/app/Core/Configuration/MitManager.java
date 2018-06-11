@@ -9,6 +9,7 @@ import java.util.List;
 import fr.dao.app.Core.Dnsmasq.DnsmasqControl;
 import fr.dao.app.Core.Network.ArpSpoof;
 import fr.dao.app.Core.Network.IPTables;
+import fr.dao.app.Core.Tcpdump.Proxy;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.Model.Target.Host;
 
@@ -26,6 +27,9 @@ public class                        MitManager {
     private boolean                 trafficRedirected = false;
     private boolean                 isAttackRunning = false;
 
+    public boolean                  isProxyRunning() {
+        return Proxy.isRunning();
+    }
     public boolean                  isTcpdumpRunning() {
         return Tcpdump.isRunning();
     }
@@ -43,7 +47,9 @@ public class                        MitManager {
         return dnsSpoofed != null && dnsSpoofed.isRunning();
     }
 
-
+    /**
+     *
+     */
     private void                    initMitmConnection() {
         Log.d(TAG, "initMitmConnection");
         IPTables.startForwardingStream();
@@ -52,21 +58,16 @@ public class                        MitManager {
     }
     public boolean                  initTcpDump() {
         Log.d(TAG, "initTcpDump");
-        //TODO: IF IPTables startForwardingStream TODO2: SSLSTRIP
-        if (!trafficRedirected)
-            initMitmConnection();
-        IPTables.startForwardingStream();
-        ArpSpoof.launchArpSpoof(targets);
-        isAttackRunning = true;
+        initMitmConnection();
         return true;
     }
     public DnsmasqControl           initDNSSpoofing() {
         Log.d(TAG, "initDNSSpoofing");
-        if (!trafficRedirected)//TODO: Start the MITM connection
+        if (!trafficRedirected)
             initMitmConnection();
         IPTables.startDnsPacketRedirect();
         isAttackRunning = true;
-        return dnsSpoofed;
+        return new DnsmasqControl();
     }
     public boolean                  initWebserver() {
         Log.d(TAG, "initWebserver");
@@ -79,17 +80,20 @@ public class                        MitManager {
         trafficRedirected = isRedirected;
     }
 
-    private void                    stopMitmConnection() {
-        Log.d(TAG, "stopMitmConnection");
-        IPTables.stopIpTable();
-        ArpSpoof.stopArpSpoof();
-        trafficRedirected = false;
-    }
     public void                     stopTcpdump(boolean isShutdown) {
         Log.d(TAG, "stopTcpdump");
-        Tcpdump.getTcpdump().stop();
+        if (!stopMITMBehavior()) {
+            //TODO: We need to close the Tcpdump current process, even if there is still MITM behavior
+        }
         if (!isShutdown)
             updateRunningStatus();
+    }
+    public void                     stopProxy() {
+        Log.d(TAG, "stopTcpdump");
+        if (!stopMITMBehavior()) {
+            //TODO: We need to close the Tcpdump current process, even if there is still MITM behavior
+        }
+        updateRunningStatus();
     }
     public boolean                  stopDnsSpoofing(boolean isShutdown) {
         Log.d(TAG, "stopDnsSpoofing");
@@ -104,6 +108,15 @@ public class                        MitManager {
         if (!isShutdown)
             updateRunningStatus();
     }
+    public boolean                  stopMITMBehavior() {
+        if (!isProxyRunning() && isTcpdumpRunning() && isDnsControlstarted()) {
+            stopEverything();
+            return true;
+        } else {
+            Log.d(TAG, "Still some Mitm modules alive");
+            return false;
+        }
+    }
     public void                     stopEverything() {
         Log.d(TAG, "stopEverything");
         if (dnsSpoofed != null && dnsSpoofed.isRunning())
@@ -114,6 +127,7 @@ public class                        MitManager {
             stopTcpdump(true);
         }
         trafficRedirected = false;
+        RootProcess.kill("tcpdump");
         ArpSpoof.stopArpSpoof();
         IPTables.stopIpTable();
         isAttackRunning = false;
@@ -127,19 +141,11 @@ public class                        MitManager {
     }
     private void                    updateRunningStatus() {
         Log.d(TAG, "updateRunningStatus");
-        if (Tcpdump.isRunning() ||
-            (dnsSpoofed != null && dnsSpoofed.isRunning()) ||
-                (webSpoofedstarted)) {
-            Log.d(TAG, "Every modules closed");
-            isAttackRunning = false;
-            stopMitmConnection();
-        } else {
-            Log.d(TAG, "Still some Mitm modules alive");
-        }
+        stopMITMBehavior();
     }
     public DnsmasqControl           getDnsControler() {
         if (dnsSpoofed == null) {
-            dnsSpoofed = new DnsmasqControl();
+            dnsSpoofed = initDNSSpoofing();
         }
         return dnsSpoofed;
     }

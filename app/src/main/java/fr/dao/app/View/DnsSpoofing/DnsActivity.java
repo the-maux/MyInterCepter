@@ -47,7 +47,7 @@ public class                            DnsActivity extends MITMActivity {
     private RelativeLayout              mClipper;
     private TextView                    mAction_deleteall, mAction_import, mAction_export, textEmpty, title;
     private Singleton                   mSingleton = Singleton.getInstance();
-    private DnsmasqControl              mDnsSpoof = MitManager.getInstance().getDnsControler();
+    private DnsmasqControl mDnsControler = MitManager.getInstance().getDnsControler();
     private DnsSpoofConfAdapter         mDnsSpoofAdapter;
     private DnsLogsAdapter              mDnsConsoleAdapter;
     private String                      NAME_CONF_MENU = "Domains intercepted:", NAME_LOGS_MENU = "Dnsmasq logs:";
@@ -66,7 +66,7 @@ public class                            DnsActivity extends MITMActivity {
         initRVConfiguration();
       //  initSearchView();
         initNavigationBottomBar(DNS, true);
-        mDnsSpoof.setActivity(this);
+        mDnsControler.setActivity(this);
     }
 
     private void                        initXml() {
@@ -108,10 +108,10 @@ public class                            DnsActivity extends MITMActivity {
             public void onClick(View view) {
                 Utils.vibrateDevice(mInstance);
                 if (!MitManager.getInstance().isDnsControlstarted()) {
-                    mDnsSpoof.start();
+                    mDnsControler.start();
                     mFab.setImageResource(R.drawable.ic_stop);
                 } else {
-                    mDnsSpoof.stop();
+                    mDnsControler.stop();
                     mFab.setImageResource(R.drawable.ic_media_play);
                 }
                 updateNotifications();
@@ -156,7 +156,7 @@ public class                            DnsActivity extends MITMActivity {
         mAction_import.setOnClickListener(onClickTopMenu());
         mAction_export.setOnClickListener(onClickTopMenu());
         mClipper.setOnClickListener(onClickTopMenu());
-        setToolbarTitle(null, mDnsSpoof.getDnsConf().listDomainSpoofable.size() + " title spoofable");
+        setToolbarTitle(null, mDnsControler.getDnsConf().listDomainSpoofable.size() + " title spoofable");
     }
 
     private View.OnClickListener        onClickTopMenu() {
@@ -180,14 +180,14 @@ public class                            DnsActivity extends MITMActivity {
                                 if (nameOfFile.contains(".") || nameOfFile.length() < 4) {
                                     Snackbar.make(mCoordinatorLayout, "Syntax incorrect", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    mDnsSpoof.saveDnsConf(nameOfFile);
+                                    mDnsControler.saveDnsConf(nameOfFile);
                                 }
                             }
                         })
                                 .show();
                         break;
                     case R.id.action_deleteall:
-                        mDnsSpoof.clear();
+                        mDnsControler.clear();
                         mDnsSpoofAdapter.notifyDataSetChanged();
                         break;
                     case R.id.action_import:
@@ -204,7 +204,7 @@ public class                            DnsActivity extends MITMActivity {
                                 if (nameOfFile.contains(".") || nameOfFile.length() < 4) {
                                     Snackbar.make(mCoordinatorLayout, "Syntax incorrect", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    mDnsSpoof.saveDnsConf(nameOfFile);
+                                    mDnsControler.saveDnsConf(nameOfFile);
                                 }
                             }
                         }).show();
@@ -242,13 +242,13 @@ public class                            DnsActivity extends MITMActivity {
                     mySnackbar = Snackbar.make(mCoordinatorLayout, "Ip incorrect", Snackbar.LENGTH_LONG);
                     mySnackbar.setAction("RETRY", retryListene);
                 } else {
-                    mDnsSpoof.getDnsConf().addHost(ip, host);
+                    mDnsControler.getDnsConf().addHost(ip, host);
                     mDnsSpoofAdapter.notifyItemInserted(0);
                     mySnackbar = Snackbar.make(mCoordinatorLayout,  host + " -> " + ip, Snackbar.LENGTH_LONG);
                     mySnackbar.setAction("SAVE", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mDnsSpoof.getDnsConf().saveConf();
+                            mDnsControler.getDnsConf().saveConf();
                         }
                     });
                 }
@@ -259,19 +259,19 @@ public class                            DnsActivity extends MITMActivity {
     }
 
     private void                        initRVConfiguration() {
-        mDnsSpoofAdapter = new DnsSpoofConfAdapter(this, mDnsSpoof.getDnsConf().listDomainSpoofable);
+        mDnsSpoofAdapter = new DnsSpoofConfAdapter(this, mDnsControler.getDnsConf().listDomainSpoofable);
         ViewAnimate.setVisibilityToVisibleQuick(mDnsSpoof_RV);
         mDnsSpoof_RV.setAdapter(mDnsSpoofAdapter);
         mDnsSpoof_RV.setHasFixedSize(true);
         mDnsSpoof_RV.setLayoutManager(new LinearLayoutManager(mInstance));
-        if (mDnsSpoof.getDnsConf().listDomainSpoofable.isEmpty()) {
+        if (mDnsControler.getDnsConf().listDomainSpoofable.isEmpty()) {
             Snackbar.make(mCoordinatorLayout, "No dnsmasq configuration could be loaded", Snackbar.LENGTH_LONG);
             Log.e(TAG, "No dnsmasq configuration saved");
         } else {
             textEmpty.setVisibility(View.GONE);
         }
-        mDnsConsoleAdapter = new DnsLogsAdapter(this, mDnsSpoof.mDnsLogs);
-        mDnsSpoof.setRV_Adapter(mDnsConsoleAdapter);
+        mDnsConsoleAdapter = new DnsLogsAdapter(this, mDnsControler.mDnsLogs);
+        mDnsControler.setRV_Adapter(mDnsConsoleAdapter);
     }
 
     private void                        initViewConsoleLogs() {
@@ -313,7 +313,7 @@ public class                            DnsActivity extends MITMActivity {
         mySnackbar.setAction("SAVE CONFIG", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDnsSpoof.getDnsConf().saveConf();
+                mDnsControler.getDnsConf().saveConf();
             }
         });
         mySnackbar.show();
@@ -349,7 +349,8 @@ public class                            DnsActivity extends MITMActivity {
                         .setMessage("Would you like to restart the dns process ?")
                         .setPositiveButton(getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                mDnsSpoof.start();
+                                mDnsControler.stop();
+                                mDnsControler.start();
                             }
                         })
                         .setNegativeButton(getResources().getString(android.R.string.no), null)
