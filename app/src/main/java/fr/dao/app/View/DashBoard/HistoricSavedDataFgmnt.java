@@ -217,7 +217,6 @@ public class HistoricSavedDataFgmnt extends MyFragment {
             titleGateway.setText(session.Gateway.getName());
             subtitleGateway.setText(session.Gateway.mac);
             cardGateway.setOnClickListener(new View.OnClickListener() {
-                @Override
                 public void onClick(View v) {
                     ActivityOptionsCompat options = null;
                     Intent intent = new Intent(mActivity, HostDetailActivity.class);

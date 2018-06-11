@@ -1,5 +1,6 @@
 package fr.dao.app.View.ZViewController.Adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,18 +10,28 @@ import java.util.List;
 
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.R;
+import fr.dao.app.View.DashBoard.DashboardActivity;
 import fr.dao.app.View.DashBoard.HistoricSavedDataFgmnt;
 import fr.dao.app.View.ZViewController.Adapter.Holder.SessionHolder;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 
 public class                    NetworksAdapter extends RecyclerView.Adapter<SessionHolder> {
     private String              TAG = "NetworksAdapter";
-    private HistoricSavedDataFgmnt mFragment;
-    private List<Network>       mSessions;
+    private HistoricSavedDataFgmnt mFragment = null;
+    private DashboardActivity   mActivity = null;
+    private Context             context;
+    private List<Network>       mSessions = null;
 
     public                      NetworksAdapter(HistoricSavedDataFgmnt fragment, List<Network> sessions) {
         this.mFragment = fragment;
         this.mSessions = sessions;
+        this.context = fragment.getContext();
+    }
+
+    public                      NetworksAdapter(DashboardActivity activity, List<Network> sessions) {
+        this.mActivity = activity;
+        this.mSessions = sessions;
+        this.context = activity;
     }
 
     public SessionHolder        onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -36,7 +47,7 @@ public class                    NetworksAdapter extends RecyclerView.Adapter<Ses
         String subtitle = size + " device" + (size >= 2 ? "s" : "") + " decouvert";
         holder.subtitle.setText(subtitle);
         View.OnClickListener onClick = onClick(accessPoint);
-        MyGlideLoader.loadDrawableInCircularImageView(mFragment.getContext(), R.drawable.radar, holder.icon);
+        MyGlideLoader.loadDrawableInCircularImageView(context, R.drawable.radar, holder.icon);
         holder.forward.setOnClickListener(onClick);
        /* if (accessPoint.SniffSessions() != null && !accessPoint.SniffSessions().isEmpty()) {
             MyGlideLoader.loadDrawableInImageView(mFragment.getContext(), R.mipmap.ic_forward_round,
@@ -51,7 +62,11 @@ public class                    NetworksAdapter extends RecyclerView.Adapter<Ses
     private View.OnClickListener onClick(final Network accessPoint) {
         return new View.OnClickListener() {
             public void onClick(View v) {
-                mFragment.onNetworkFocused(accessPoint);
+                if (mFragment != null) {
+                    mFragment.onNetworkFocused(accessPoint);
+                } else {
+                    mActivity.onNetworkFocused(accessPoint);
+                }
             }
         };
     }

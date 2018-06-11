@@ -1,5 +1,6 @@
 package fr.dao.app.View.DashBoard;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -13,13 +14,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import fr.dao.app.Core.Configuration.Utils;
+import fr.dao.app.Core.Database.DBNetwork;
+import fr.dao.app.Model.Target.Network;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
+import fr.dao.app.View.ZViewController.Adapter.NetworksAdapter;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
+import fr.dao.app.View.ZViewController.Dialog.RV_dialog;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 public class                        DashboardActivity extends MyActivity {
     private String                  TAG = "DashboardActivity";
+    private DashboardActivity       mInstance = this;
     private CoordinatorLayout       mCoordinatorLayout;
     private Toolbar                 mToolbar;
     private AppBarLayout            appBarLayout;
@@ -40,8 +47,17 @@ public class                        DashboardActivity extends MyActivity {
     private void                    initNetworkFilterBtn() {
         iconSettings2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                new RV_dialog(mInstance)
+                        .setAdapter(new NetworksAdapter(mInstance, DBNetwork.getAllAccessPoint()), false)
+                        .setTitle("Recorded network")
+                        .onPositiveButton("No filter", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Utils.vibrateDevice(mInstance, 100);
+                            }
+                        })
+                        .show();
             }
+
         });
     }
 
@@ -129,5 +145,10 @@ public class                        DashboardActivity extends MyActivity {
             mTabs.getTabAt(0).select();
         else
             super.onBackPressed();
+    }
+
+    public void                     onNetworkFocused(Network accessPoint) {
+        //TODO: add filter ACCESS POINT
+        showSnackbar("Now filtered on : " + accessPoint.Ssid);
     }
 }
