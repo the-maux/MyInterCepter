@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ public class                        DashboardActivity extends MyActivity {
     private AppBarLayout            appBarLayout;
     private TabLayout               mTabs;
     private ImageView               OsImg;
+    private ImageView               iconSettings2;
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +33,16 @@ public class                        DashboardActivity extends MyActivity {
         initXml();
         setToolbarTitle("General Statistique", "");
         initTabs();
+        initNetworkFilterBtn();
         initGeneral();
+    }
+
+    private void                    initNetworkFilterBtn() {
+        iconSettings2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     private void                    initXml() {
@@ -45,6 +56,7 @@ public class                        DashboardActivity extends MyActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
+        iconSettings2 = findViewById(R.id.iconSettings2);
         OsImg = findViewById(R.id.OsImg);
         mTabs = findViewById(R.id.tabs);
     }

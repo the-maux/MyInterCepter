@@ -15,7 +15,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 
 import fr.dao.app.R;
-import fr.dao.app.View.DashBoard.NetDiscoveryHistoricFrgmnt;
+import fr.dao.app.View.DashBoard.HistoricSavedDataFgmnt;
 import fr.dao.app.View.DnsSpoofing.DnsSettingsFrgmnt;
 import fr.dao.app.View.HostDiscovery.HostDiscoverySettingsFrgmnt;
 import fr.dao.app.View.Sniff.SniffSettingsFrgmnt;
@@ -160,7 +160,7 @@ public class                        SettingsActivity extends MyActivity {
                 fragment = new HostDiscoverySettingsFrgmnt();
             mFragment = fragment;
             Bundle args = new Bundle();
-            args.putString("mode", NetDiscoveryHistoricFrgmnt.HOST_HISTORIC);
+            args.putString("mode", HistoricSavedDataFgmnt.HOST_HISTORIC);
             mFragment.setArguments(args);
             getSupportFragmentManager()
                     .beginTransaction()

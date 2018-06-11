@@ -38,7 +38,7 @@ import fr.dao.app.Core.Database.DBManager;
 import fr.dao.app.Model.Net.Pcap;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
-import fr.dao.app.View.DashBoard.NetDiscoveryHistoricFrgmnt;
+import fr.dao.app.View.DashBoard.HistoricSavedDataFgmnt;
 import fr.dao.app.View.Scan.NmapActivity;
 import fr.dao.app.View.Scan.VulnsScanActivity;
 import fr.dao.app.View.Sniff.SniffActivity;
@@ -291,9 +291,9 @@ public class                    HostDetailActivity extends MyActivity {
     }
 
     private void                displayHistoric(String macOfHostFocused) {
-        MyFragment fragment = new NetDiscoveryHistoricFrgmnt();
+        MyFragment fragment = new HistoricSavedDataFgmnt();
         Bundle args = new Bundle();
-        args.putString("mode", NetDiscoveryHistoricFrgmnt.HOST_HISTORIC);
+        args.putString("mode", HistoricSavedDataFgmnt.HOST_HISTORIC);
         args.putString("macAddress", macOfHostFocused);
         fragment.setArguments(args);
         initFragment(fragment);

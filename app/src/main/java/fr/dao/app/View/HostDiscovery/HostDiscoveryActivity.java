@@ -30,7 +30,7 @@ import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
 import fr.dao.app.Core.Network.NetDiscovering;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.R;
-import fr.dao.app.View.DashBoard.NetDiscoveryHistoricFrgmnt;
+import fr.dao.app.View.DashBoard.HistoricSavedDataFgmnt;
 import fr.dao.app.View.SpyMITM.SpyMitmActivity;
 import fr.dao.app.View.Startup.HomeActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
@@ -383,7 +383,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
             Log.d(TAG, "onBackPressed::" + mFragment.getClass().getName());
             if (mFragment.getClass().getName().contains(HostDiscoveryScanFrgmnt.class.getName())) {
                 startActivity(new Intent(mInstance, HomeActivity.class));
-            } else if (mFragment.getClass().getName().contains(NetDiscoveryHistoricFrgmnt.class.getName())) {
+            } else if (mFragment.getClass().getName().contains(HistoricSavedDataFgmnt.class.getName())) {
                 if (mFragment.onBackPressed()) {
                     Log.d(TAG, "Fragment historic is over, switching to Netdiscover");
                     ViewAnimate.setVisibilityToVisibleQuick(mOsFilter, 300);
