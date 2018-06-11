@@ -18,16 +18,17 @@ import fr.dao.app.Model.Config.Action;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
+import fr.dao.app.View.Proxy.ProxyActivity;
 import fr.dao.app.View.Sniff.ProxyReaderFrgmnt;
 import fr.dao.app.View.Sniff.SniffDispatcher;
-import fr.dao.app.View.SpyMITM.SpyMitmActivity;
+
 
 public class                        Proxy {
     private String                  TAG = "Proxy";
     private static Proxy            mInstance = null;
     private RootProcess             mTcpDumpProcess;
     private Singleton               mSingleton = Singleton.getInstance();
-    private SpyMitmActivity         mActivity;
+    private ProxyActivity           mActivity;
     private ConfTcpdump             mProxyConf = new ConfTcpdump();
     private boolean                 isRunning = false;
     public  boolean                 isDumpingInFile = true, isPcapReading = false;
@@ -36,14 +37,14 @@ public class                        Proxy {
     private ProxyReaderFrgmnt mFragment = null;
     private ArrayList<Trame>        mBufferOfTrame = new ArrayList<>();
 
-    private                         Proxy(SpyMitmActivity activity) {
+    private                         Proxy(ProxyActivity activity) {
         this.mActivity = activity;
         LinkedHashMap<String, String> mCmds = mProxyConf.initCmds();
     }
 
     public static synchronized Proxy getProxy(Activity activity, boolean isProxyActivity) {
         if (isProxyActivity && mInstance == null) {
-            mInstance = new Proxy((SpyMitmActivity) activity);
+            mInstance = new Proxy((ProxyActivity) activity);
         }
         return mInstance;
     }

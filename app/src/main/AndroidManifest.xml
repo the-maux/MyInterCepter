@@ -55,7 +55,7 @@
             android:name=".View.Scan.VulnsScanActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".View.SpyMITM.SpyMitmActivity"
+            android:name=".View.Proxy.ProxyActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".View.Sniff.SniffActivity"

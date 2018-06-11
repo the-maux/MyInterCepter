@@ -103,7 +103,7 @@ public class                    WebServerActivity extends MITMActivity {
                     showSnackbar("Error in server booting");
                 }
         } else {
-            showSnackbar("Server already launched");
+            showSnackbar("HTTPProxy already launched");
         }
         return false;
     }

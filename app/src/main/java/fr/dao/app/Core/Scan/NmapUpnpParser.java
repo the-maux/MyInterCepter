@@ -33,8 +33,8 @@ import fr.dao.app.Model.Target.Host;
  |   IP Offered: 192.168.0.26
  |   Subnet Mask: 255.255.255.0
  |   Router: 192.168.0.1
- |   Server Identifier: 192.168.0.1
- |_  Domain Name Server: 89.2.0.1, 8.8.8.8
+ |   HTTPProxy Identifier: 192.168.0.1
+ |_  Domain Name HTTPProxy: 89.2.0.1, 8.8.8.8
  | broadcast-dns-service-discovery:
  |   192.168.0.25
  |     9/tcp workstation
@@ -62,10 +62,10 @@ import fr.dao.app.Model.Target.Host;
  |_  ERROR: Failed to get source MAC address
  | broadcast-upnp-info:
  |   192.168.0.2
- |       Server: Linux/2.x.x, UPnP/1.0, pvConnect UPnP SDK/1.0, TwonkyMedia UPnP SDK/1.1
+ |       HTTPProxy: Linux/2.x.x, UPnP/1.0, pvConnect UPnP SDK/1.0, TwonkyMedia UPnP SDK/1.1
  |       Location: http://192.168.0.2:9000/TMSDeviceDescription.xml
  |   192.168.0.1
- |       Server: UPnP/1.0 UPnP/1.0 UPnP-Device-Host/1.0
+ |       HTTPProxy: UPnP/1.0 UPnP/1.0 UPnP-Device-Host/1.0
  |_      Location: http://192.168.0.1:80/RootDevice.xml
  | broadcast-wpad-discover:
  |_  ERROR: Could not find WPAD using DNS/DHCP

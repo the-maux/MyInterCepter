@@ -1,4 +1,4 @@
-package fr.dao.app.View.SpyMITM;
+package fr.dao.app.View.Proxy;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import fr.dao.app.View.Settings.SettingsFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Dialog.QuestionMultipleAnswerDialog;
 
-public class SpyMitmSettingsFrgmnt extends SettingsFrgmnt {
+public class ProxySettingsFrgmnt extends SettingsFrgmnt {
     private String                  Title = "Settings Tracker";
     private MyActivity              mActivity;
 

@@ -31,7 +31,7 @@ import fr.dao.app.Core.Network.NetDiscovering;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.R;
 import fr.dao.app.View.DashBoard.HistoricSavedDataFgmnt;
-import fr.dao.app.View.SpyMITM.SpyMitmActivity;
+import fr.dao.app.View.Proxy.ProxyActivity;
 import fr.dao.app.View.Startup.HomeActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
@@ -179,7 +179,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                                 ((mSingleton.hostList != null) ? mSingleton.hostList.size() : "0"));
                     }
                     MitManager.getInstance().loadHost(mSingleton.hostList);
-                    startActivity(new Intent(mInstance, SpyMitmActivity.class));
+                    startActivity(new Intent(mInstance, ProxyActivity.class));
                 }
                 else if (!mFragment.start()) {
                     Log.i(TAG, "fragment start false");

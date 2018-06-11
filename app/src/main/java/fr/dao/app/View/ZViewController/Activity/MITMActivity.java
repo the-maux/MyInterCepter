@@ -21,7 +21,7 @@ import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.R;
 import fr.dao.app.View.DnsSpoofing.DnsActivity;
 import fr.dao.app.View.Sniff.SniffActivity;
-import fr.dao.app.View.SpyMITM.SpyMitmActivity;
+import fr.dao.app.View.Proxy.ProxyActivity;
 import fr.dao.app.View.WebServer.WebServerActivity;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 
@@ -120,7 +120,7 @@ public abstract class               MITMActivity extends MyActivity  {
                 if (position != mType) {
                     switch (position) {
                         case 0:
-                            intent = new Intent(mInstance, SpyMitmActivity.class);
+                            intent = new Intent(mInstance, ProxyActivity.class);
                             break;
                         case 1:
                             intent = new Intent(mInstance, SniffActivity.class);

@@ -1,4 +1,4 @@
-package fr.dao.app.View.SpyMITM;
+package fr.dao.app.View.Proxy;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -21,18 +21,18 @@ import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Dnsmasq.DnsmasqControl;
+import fr.dao.app.Core.Network.Proxy.HTTPProxy;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MITMActivity;
 import fr.dao.app.View.ZViewController.Adapter.DnsLogsAdapter;
-import fr.dao.app.View.ZViewController.Adapter.DnsSpoofConfAdapter;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Dialog.DialogQuestionWithInput;
 
 //https://danielmiessler.com/study/bettercap/
-public class                            SpyMitmActivity extends MITMActivity {
-    private String                      TAG = "SpyMitmActivity";
-    private SpyMitmActivity mInstance = this;
+public class                            ProxyActivity extends MITMActivity {
+    private String                      TAG = "ProxyActivity";
+    private ProxyActivity               mInstance = this;
     private CoordinatorLayout           mCoordinatorLayout;
     private AppBarLayout                appBarLayout;
     private Toolbar                     mToolbar;
@@ -40,12 +40,9 @@ public class                            SpyMitmActivity extends MITMActivity {
     private ImageButton                 mSettingsBtn;
     private ImageView                   mAction_add_host;
     private TabLayout                   mTabs;
-    private RecyclerView                mDnsSpoof_RV;
+    private RecyclerView                mProxyRV;
+    private HTTPProxy                   proxyActivity;
     private Singleton                   mSingleton = Singleton.getInstance();
-    private DnsmasqControl              mDnsSpoof = MitManager.getInstance().getDnsControler();
-    private DnsSpoofConfAdapter         mDnsSpoofAdapter;
-    private DnsLogsAdapter              mDnsConsoleAdapter;
-    private String                      NAME_CONF_MENU = "Domains intercepted:", NAME_LOGS_MENU = "Dnsmasq logs:";
 
     public void                         onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +58,7 @@ public class                            SpyMitmActivity extends MITMActivity {
         initRVConfiguration();
         //initSearchView();
         initNavigationBottomBar(SCANNER, true);
+        proxyActivity = new HTTPProxy(this);
     }
 
     private void                        initXml() {
@@ -70,7 +68,7 @@ public class                            SpyMitmActivity extends MITMActivity {
         mAction_add_host = findViewById(R.id.action_add_host);
         mSettingsBtn = findViewById(R.id.history);
         mFab = findViewById(R.id.fab);
-        mDnsSpoof_RV = findViewById(R.id.dnsSpoof_RV);
+        mProxyRV = findViewById(R.id.dnsSpoof_RV);
         mTabs = findViewById(R.id.tabs);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
         appBarLayout = findViewById(R.id.appBarLayout);
@@ -88,15 +86,29 @@ public class                            SpyMitmActivity extends MITMActivity {
 //        mFab.show();
         if (MitManager.getInstance().isDnsControlstarted()) {
             mFab.setImageResource(R.mipmap.ic_stop);
-        } else {
-            mFab.setImageResource(R.drawable.ic_media_play);
-        }
-        mFab.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Utils.vibrateDevice(mInstance);
-                updateNotifications();
+            if (!mSingleton.isProxyStarted()) {
+                mFab.setImageResource(R.drawable.ic_media_play);
+            } else {
+                mFab.setImageResource(R.mipmap.ic_stop);
             }
-        });
+            mFab.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    Utils.vibrateDevice(mInstance);
+                    if (mSingleton.isProxyStarted()) {
+                        mFab.setImageResource(R.drawable.ic_media_play);
+                        if (!proxyActivity.stop())
+                            showSnackbar("Error in stoping proxy");
+                        mSingleton.setProxyStarted(false);
+                    } else {
+                        mFab.setImageResource(R.mipmap.ic_stop);
+                        if (!proxyActivity.start())
+                            showSnackbar("Error in starting proxy");
+                        mSingleton.setProxyStarted(true);
+                    }
+                    updateNotifications();
+                }
+            });
+        }
     }
 
     public void                         onProxystopped() {
@@ -144,13 +156,13 @@ public class                            SpyMitmActivity extends MITMActivity {
 
     private void                        initRVConfiguration() {
         //mDnsSpoofAdapter = new DnsSpoofConfAdapter(this, mDnsSpoof.getDnsConf().listDomainSpoofable);
-        ViewAnimate.setVisibilityToVisibleQuick(mDnsSpoof_RV);
-        mDnsSpoof_RV.setAdapter(mDnsSpoofAdapter);
-        mDnsSpoof_RV.setHasFixedSize(true);
-        mDnsSpoof_RV.setLayoutManager(new LinearLayoutManager(mInstance));
-
-        mDnsConsoleAdapter = new DnsLogsAdapter(this, mDnsSpoof.mDnsLogs);
-        mDnsSpoof.setRV_Adapter(mDnsConsoleAdapter);
+        ViewAnimate.setVisibilityToVisibleQuick(mProxyRV);
+//        mProxyRV.setAdapter();
+        mProxyRV.setHasFixedSize(true);
+        mProxyRV.setLayoutManager(new LinearLayoutManager(mInstance));
+        mProxyRV.setVisibility(View.INVISIBLE);
+//        mDnsConsoleAdapter = new DnsLogsAdapter(this, mDnsSpoof.mDnsLogs);
+//        mDnsSpoof.setRV_Adapter(mDnsConsoleAdapter);
     }
 
 //    private void                        initSearchView() {
@@ -173,6 +185,17 @@ public class                            SpyMitmActivity extends MITMActivity {
 //        });
 //    }
 
+    public void                         setToolbarTitle(final String title, final String subtitle){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (title != null)
+                        mToolbar.setTitle(title);
+                    if (subtitle != null)
+                        mToolbar.setSubtitle(subtitle);
+                }
+            });
+        }
     public void                         showSnackbar(String txt, int color) {
         if (color == -1) {
             Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
@@ -181,18 +204,6 @@ public class                            SpyMitmActivity extends MITMActivity {
         ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text))
                 .setTextColor(color);
         snackbar.show();
-    }
-
-    public void                         setToolbarTitle(final String title, final String subtitle) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (title != null)
-                    mToolbar.setTitle(title);
-                if (subtitle != null)
-                    mToolbar.setSubtitle(subtitle);
-            }
-        });
     }
 
     public void                         onBackPressed() {
