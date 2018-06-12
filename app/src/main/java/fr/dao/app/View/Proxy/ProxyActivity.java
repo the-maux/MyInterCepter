@@ -1,19 +1,13 @@
 package fr.dao.app.View.Proxy;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,13 +18,12 @@ import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Network.Proxy.HTTPProxy;
-import fr.dao.app.Core.Tcpdump.Proxy;
 import fr.dao.app.R;
+import fr.dao.app.View.Sniff.ProxyReaderFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MITMActivity;
-import fr.dao.app.View.ZViewController.Adapter.SniffPacketsAdapter;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
-import fr.dao.app.View.ZViewController.Dialog.DialogQuestionWithInput;
+import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 //https://danielmiessler.com/study/bettercap/
 public class                            ProxyActivity extends MITMActivity {
@@ -43,11 +36,9 @@ public class                            ProxyActivity extends MITMActivity {
     private ImageButton                 mSettingsBtn;
     private ImageView                   mAction_add_host;
     private TabLayout                   mTabs;
-    private RecyclerView                mProxyRV;
-    private SniffPacketsAdapter         mAdapterDetailWireshark;
     private HTTPProxy                   proxyActivity;
     private Singleton                   mSingleton = Singleton.getInstance();
-    private Proxy                       proxy;
+    private MyFragment                  mFragment;
 
     public void                         onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +51,8 @@ public class                            ProxyActivity extends MITMActivity {
     private void                        init() {
         initFab();
         initTabs();
-        initRVConfiguration();
-        //initSearchView();
-        initNavigationBottomBar(SCANNER, true);
+        initFragment(new ProxyReaderFrgmnt());
+        initNavigationBottomBar(PROXY, true);
         proxyActivity = new HTTPProxy(this);
     }
 
@@ -73,7 +63,6 @@ public class                            ProxyActivity extends MITMActivity {
         mAction_add_host = findViewById(R.id.action_add_host);
         mSettingsBtn = findViewById(R.id.history);
         mFab = findViewById(R.id.fab);
-        mProxyRV = findViewById(R.id.dnsSpoof_RV);
         mTabs = findViewById(R.id.tabs);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
         appBarLayout = findViewById(R.id.appBarLayout);
@@ -89,31 +78,24 @@ public class                            ProxyActivity extends MITMActivity {
 //        ViewAnimate.setVisibilityToVisibleQuick(mFab);
         ViewAnimate.FabAnimateReveal(mInstance, mFab);
 //        mFab.show();
-        if (MitManager.getInstance().isDnsmasqRunning()) {
+        mFab.setImageResource(R.mipmap.ic_stop);
+        if (!mSingleton.isProxyStarted()) {
+            mFab.setImageResource(R.drawable.ic_media_play);
+        } else {
             mFab.setImageResource(R.mipmap.ic_stop);
-            if (!mSingleton.isProxyStarted()) {
-                mFab.setImageResource(R.drawable.ic_media_play);
-            } else {
-                mFab.setImageResource(R.mipmap.ic_stop);
-            }
-            mFab.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    Utils.vibrateDevice(mInstance);
-                    if (mSingleton.isProxyStarted()) {
-                        mFab.setImageResource(R.drawable.ic_media_play);
-                        MitManager.getInstance().stopProxy();
-                        if (!proxyActivity.stop())
-                            showSnackbar("Error in stoping proxy");
-                    } else {
-                        mFab.setImageResource(R.mipmap.ic_stop);
-                        MitManager.getInstance().initProxy(mProxyRV, mAdapterDetailWireshark);
-                        if (!proxyActivity.start())
-                            showSnackbar("Error in starting proxy");
-                    }
-                    updateNotifications();
-                }
-            });
         }
+        mFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Utils.vibrateDevice(mInstance);
+                mFragment.start();
+                if (mSingleton.isProxyStarted()) {
+                    mFab.setImageResource(R.drawable.ic_media_play);
+                } else {
+                    mFab.setImageResource(R.mipmap.ic_stop);
+                }
+                updateNotifications();
+            }
+        });
     }
 
     public void                         onProxystopped() {
@@ -126,7 +108,7 @@ public class                            ProxyActivity extends MITMActivity {
                 switch (tab.getText().toString()) {
                     case "GLOBAL":
                         //title.setText("GLOBAL");
-                        initRVConfiguration();
+                        initFragment(new ProxyReaderFrgmnt());
                         break;
                     case "CREDENTIALS":
                         //title.setText("CREDENTIALS");
@@ -141,36 +123,19 @@ public class                            ProxyActivity extends MITMActivity {
         });
     }
 
-    private void                        onAddHostDialog() {
-        final DialogQuestionWithInput dialog = new DialogQuestionWithInput(mInstance)
-                .setIcon(R.drawable.dns)
-                .setTitle("Ajouter un title")
-                .setHintToTILFirstQuestion("Domain")
-                .setHintToEDFirstQuestion("Ex: google.com")
-                .setHintToTILSecoundQuestion("Ip address")
-                .setHintToEDSecoundQuestion("Ex: " + mSingleton.NetworkInformation.myIp);
-
-        dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface d, int which) {
-                Utils.vibrateDevice(mInstance, 100);
-            }
-        })
-        .show();
-    }
-
-    private void                        initRVConfiguration() {
-        //mDnsSpoofAdapter = new DnsSpoofConfAdapter(this, mDnsSpoof.getDnsConf().listDomainSpoofable);
-        ViewAnimate.setVisibilityToVisibleQuick(mProxyRV);
-//        mProxyRV.setAdapter();
-        mAdapterDetailWireshark = new SniffPacketsAdapter(mInstance, mProxyRV);
-        mProxyRV.setAdapter(mAdapterDetailWireshark);
-        WrapContentLinearLayoutManager layoutManager = new WrapContentLinearLayoutManager(mInstance);
-        layoutManager.setAutoMeasureEnabled(false);
-        mProxyRV.setHasFixedSize(true);
-        mProxyRV.setLayoutManager(new LinearLayoutManager(mInstance));
-        mProxyRV.setVisibility(View.INVISIBLE);
-//        mDnsConsoleAdapter = new DnsLogsAdapter(this, mDnsSpoof.mDnsLogs);
-//        mDnsSpoof.setRV_Adapter(mDnsConsoleAdapter);
+    private void                        initFragment(MyFragment fragment) {
+        try {
+            mFragment = fragment;
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frame_container, mFragment)
+                    .addToBackStack(fragment.getClass().getName())
+                    .commit();
+        } catch (IllegalStateException e) {
+            showSnackbar("Error in fragment: " + e.getCause().getMessage());
+            e.getStackTrace();
+            super.onBackPressed();
+        }
     }
 
     public void                         setToolbarTitle(final String title, final String subtitle){
@@ -199,53 +164,5 @@ public class                            ProxyActivity extends MITMActivity {
         mSingleton.hostList = mSingleton.savedHostList;
         //TODO:Check if sniffing was loading
         MitManager.getInstance().stopEverything();
-    }
-
-    public void                         onError() {
-
-    }
-
-
-//    private void                        initSearchView() {
-//        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            public boolean onQueryTextSubmit(String query) {
-//
-//                return false;
-//            }
-//
-//            public boolean onQueryTextChange(String newText) {
-//                return false;
-//            }
-//        });
-//        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
-//            @Override
-//            public boolean onClose() {
-//
-//                return false;
-//            }
-//        });
-//    }
-
-    public class WrapContentLinearLayoutManager extends LinearLayoutManager {
-        public WrapContentLinearLayoutManager(Context context) {
-            super(context);
-        }
-
-        public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
-            try {
-                super.onLayoutChildren(recycler, state);
-            } catch (IndexOutOfBoundsException e) {
-                mProxyRV.post(new Runnable() {
-                    public void run() {
-                        mAdapterDetailWireshark.notifyDataSetChanged();
-                    }
-                });
-                Log.d("ProxyActivity", e.getMessage());
-                Log.e("ProxyActivity", "O.M.G::IndexOutOfBoundsException in RecyclerView happens");
-            } catch (Resources.NotFoundException e) {
-                e.printStackTrace();
-                mInstance.onBackPressed();
-            }
-        }
     }
 }

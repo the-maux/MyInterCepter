@@ -20,6 +20,7 @@ import fr.dao.app.R;
 import fr.dao.app.View.Proxy.ProxyActivity;
 import fr.dao.app.View.Sniff.ProxyReaderFrgmnt;
 import fr.dao.app.View.Sniff.SniffDispatcher;
+import fr.dao.app.View.ZViewController.Activity.MyActivity;
 
 
 public class                        Proxy {
@@ -27,23 +28,23 @@ public class                        Proxy {
     private static Proxy            mInstance = null;
     private RootProcess             mTcpDumpProcess;
     private Singleton               mSingleton = Singleton.getInstance();
-    private ProxyActivity           mActivity;
+    private MyActivity              mActivity;
     private ConfTcpdump             mProxyConf = new ConfTcpdump();
     private boolean                 isRunning = false;
     public  boolean                 isDumpingInFile = true, isPcapReading = false;
     private String                  actualCmd = "";
     private SniffDispatcher         mDispatcher = null;
-    private ProxyReaderFrgmnt mFragment = null;
+    private ProxyReaderFrgmnt       mFragment = null;
     private ArrayList<Trame>        mBufferOfTrame = new ArrayList<>();
 
-    private                         Proxy(ProxyActivity activity) {
-        this.mActivity = activity;
+    private                         Proxy(ProxyReaderFrgmnt activity) {
+        this.mActivity = (MyActivity) activity.getActivity();
         LinkedHashMap<String, String> mCmds = mProxyConf.initCmds();
     }
 
-    public static synchronized Proxy getProxy(Activity activity, boolean isProxyActivity) {
+    public static synchronized Proxy getProxy(ProxyReaderFrgmnt fragment, boolean isProxyActivity) {
         if (isProxyActivity && mInstance == null) {
-            mInstance = new Proxy((ProxyActivity) activity);
+            mInstance = new Proxy(fragment);
         }
         return mInstance;
     }
@@ -53,22 +54,24 @@ public class                        Proxy {
     }
 
     public static synchronized boolean  isRunning() {
-        return mInstance != null && mInstance.isRunning;
+        if (mInstance == null)
+            return false;
+        return mInstance.isRunning;
     }
 
     public String                   initCmd(List<Host> hosts) {
         //sites.google.com/site/jimmyxu101/testing/use-tcpdump-to-monitor-http-traffic
-        String actualParam = "-A -s 0 'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'";
+        String actualParam = "-A -s 0 'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0) and ";
         actualCmd = mProxyConf.buildProxyCmd(actualParam, isDumpingInFile, "No Filter", hosts);
         return actualCmd.replace("nmap/nmap", "nmap")
                 .replace(mSingleton.Settings.FilesPath, "");
     }
 
     public DashboardSniff           start(final SniffDispatcher trameDispatcher) {
+        Log.i(TAG, "Proxy execution started");
         isPcapReading = false;
         mDispatcher = trameDispatcher;
         isRunning = true;
-        Log.i(TAG, "Proxy execution started");
         final DashboardSniff dashboardSniff = new DashboardSniff();
         mDispatcher.setDashboard(dashboardSniff);
         Singleton.getInstance().Session.addAction(Action.ActionType.PROXY, true);
@@ -83,7 +86,7 @@ public class                        Proxy {
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.e(TAG, "Process Error: " + e.getMessage());
-                    mActivity.showSnackbar(e.getMessage(), ContextCompat.getColor(mActivity, R.color.stop_color));
+                    mActivity.showSnackbar(e.getMessage()/*, ContextCompat.getColor(mActivity, R.color.stop_color)*/);
                     mActivity.setToolbarTitle("Execution stopped", e.getMessage());
                     stop();
                 } finally {
@@ -129,7 +132,7 @@ public class                        Proxy {
             mBufferOfTrame.add(trame);
         } else if (!trame.skipped) {
             Log.d(TAG, "trame created not initialized and not skipped, STOP TCPDUMP");
-            mActivity.onError(/*trame*/);
+            mFragment.onError(/*trame*/);
             stop();
         }//else skipped
     }
@@ -137,10 +140,9 @@ public class                        Proxy {
     public void                     stop() {
         Log.d(TAG, "stop");
         if (isRunning) {
-            MitManager.getInstance().stopProxy();
             isRunning = false;
             if (mActivity != null)
-                mActivity.onProxystopped();
+                mFragment.onProxystopped();
             if (mFragment != null)
                 mFragment.onSniffingOver(mBufferOfTrame);
         }

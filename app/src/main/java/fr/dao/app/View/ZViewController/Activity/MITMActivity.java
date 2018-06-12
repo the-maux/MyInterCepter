@@ -32,7 +32,7 @@ public abstract class               MITMActivity extends MyActivity  {
     protected Bundle                bundle = null;
     protected AHBottomNavigation    mBottomBar;
     protected FloatingActionButton  mFab;
-    protected static final int      SCANNER=0, SNIFFER=1, DNS=2, WEB=3;
+    protected static final int PROXY =0, SNIFFER=1, DNS=2, WEB=3;
     private int                     mType;
     private Singleton               mSingleton = Singleton.getInstance();
     private boolean                 hideBottomBar = false;

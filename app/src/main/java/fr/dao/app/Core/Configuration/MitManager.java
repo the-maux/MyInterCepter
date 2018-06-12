@@ -46,7 +46,7 @@ public class                        MitManager {
         return Tcpdump.getTcpdump(activity, false) != null && Tcpdump.isRunning() ||
                 !(!MitManager.getInstance().isDnsmasqRunning() && !webSpoofedstarted);
     }
-    public boolean isDnsmasqRunning() {
+    public boolean                  isDnsmasqRunning() {
         return dnsSpoofed != null && dnsSpoofed.isRunning();
     }
 
@@ -55,7 +55,7 @@ public class                        MitManager {
      */
     private void                    initMitmConnection() {
         if (!trafficRedirected) {
-            Log.d(TAG, "Traffic already redicreted init");
+            Log.d(TAG, "Traffic redirection init");
             int a = IPTables.startForwardingStream();
             ArpSpoof.launchArpSpoof(targets);
             trafficRedirected = true;
@@ -65,26 +65,29 @@ public class                        MitManager {
     public DashboardSniff           initTcpDump(SniffDispatcher mTrameDispatcher) {
         initMitmConnection();
         Log.d(TAG, "initTcpDump");
-        String cmd = Tcpdump.getTcpdump().initCmd(targets);
+        Tcpdump.getTcpdump().initCmd(targets);
         return Tcpdump.getTcpdump().start(mTrameDispatcher);
     }
     public boolean                  initProxy(RecyclerView recyclerView, RecyclerView.Adapter adapter) {
-        if (isProxyRunning()) {
+        if (!isProxyRunning()) {
             initMitmConnection();
             Log.d(TAG, "initProxy");
-            Proxy.getProxy().initCmd(targets);
-            if (mTrameDispatcher == null) {
-                mTrameDispatcher = new SniffDispatcher(recyclerView, adapter, false);
-            } else {/* Clear shit its a restart*/
-                mTrameDispatcher.reset();
-            }
-            Proxy.getProxy().start(mTrameDispatcher);
-            initDNSSpoofing();
-            Singleton.getInstance().setProxyStarted(true);
+            if (Proxy.getProxy() != null) {
+                Proxy.getProxy().initCmd(targets);
+                if (mTrameDispatcher == null) {
+                    mTrameDispatcher = new SniffDispatcher(recyclerView, adapter, false);
+                } else {/* Clear shit its a restart*/
+                    mTrameDispatcher.reset();
+                }
+                Proxy.getProxy().start(mTrameDispatcher);
+                initDNSSpoofing();
+                Singleton.getInstance().setProxyStarted(true);
+                return true;
+            } else
+                Log.e(TAG, "Proxy is null, can't do shit");
         } else
             Log.e(TAG, "Trying to start proxy but already launched");
-
-        return true;
+        return false;
     }
     public DnsmasqControl           initDNSSpoofing() {
         if (isDnsmasqRunning()) {
