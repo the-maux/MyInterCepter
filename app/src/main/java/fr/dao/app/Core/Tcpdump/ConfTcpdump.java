@@ -91,7 +91,7 @@ class                           ConfTcpdump {
                              String typeScan, List<Host> hosts) {
         String hostFilter = buildHostFilterCommand(hosts, typeScan);
         String date =  Words.getGenericDateFormat(new Date());
-        String nameFile = mSingleton.NetworkInformation.ssid + "_" + date;
+        String nameFile = "Proxy" + "_" + date;
         String pcapFile = (isDumpingInFile) ? buildForDumpingPcap(nameFile, hosts) : "";
 
         String cmd = (mSingleton.Settings.FilesPath + "tcpdump " +

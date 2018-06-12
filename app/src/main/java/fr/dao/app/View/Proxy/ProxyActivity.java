@@ -1,6 +1,8 @@
 package fr.dao.app.View.Proxy;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -11,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -20,11 +23,11 @@ import android.widget.Toast;
 import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
-import fr.dao.app.Core.Dnsmasq.DnsmasqControl;
 import fr.dao.app.Core.Network.Proxy.HTTPProxy;
+import fr.dao.app.Core.Tcpdump.Proxy;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MITMActivity;
-import fr.dao.app.View.ZViewController.Adapter.DnsLogsAdapter;
+import fr.dao.app.View.ZViewController.Adapter.SniffPacketsAdapter;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Dialog.DialogQuestionWithInput;
@@ -41,8 +44,10 @@ public class                            ProxyActivity extends MITMActivity {
     private ImageView                   mAction_add_host;
     private TabLayout                   mTabs;
     private RecyclerView                mProxyRV;
+    private SniffPacketsAdapter         mAdapterDetailWireshark;
     private HTTPProxy                   proxyActivity;
     private Singleton                   mSingleton = Singleton.getInstance();
+    private Proxy                       proxy;
 
     public void                         onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,14 +101,14 @@ public class                            ProxyActivity extends MITMActivity {
                     Utils.vibrateDevice(mInstance);
                     if (mSingleton.isProxyStarted()) {
                         mFab.setImageResource(R.drawable.ic_media_play);
+                        MitManager.getInstance().stopProxy();
                         if (!proxyActivity.stop())
                             showSnackbar("Error in stoping proxy");
-                        mSingleton.setProxyStarted(false);
                     } else {
                         mFab.setImageResource(R.mipmap.ic_stop);
+                        MitManager.getInstance().initProxy(mProxyRV, mAdapterDetailWireshark);
                         if (!proxyActivity.start())
                             showSnackbar("Error in starting proxy");
-                        mSingleton.setProxyStarted(true);
                     }
                     updateNotifications();
                 }
@@ -114,7 +119,6 @@ public class                            ProxyActivity extends MITMActivity {
     public void                         onProxystopped() {
         setToolbarTitle("Proxy", "Stopped");
     }
-
 
     private void                        initTabs() {
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -158,32 +162,16 @@ public class                            ProxyActivity extends MITMActivity {
         //mDnsSpoofAdapter = new DnsSpoofConfAdapter(this, mDnsSpoof.getDnsConf().listDomainSpoofable);
         ViewAnimate.setVisibilityToVisibleQuick(mProxyRV);
 //        mProxyRV.setAdapter();
+        mAdapterDetailWireshark = new SniffPacketsAdapter(mInstance, mProxyRV);
+        mProxyRV.setAdapter(mAdapterDetailWireshark);
+        WrapContentLinearLayoutManager layoutManager = new WrapContentLinearLayoutManager(mInstance);
+        layoutManager.setAutoMeasureEnabled(false);
         mProxyRV.setHasFixedSize(true);
         mProxyRV.setLayoutManager(new LinearLayoutManager(mInstance));
         mProxyRV.setVisibility(View.INVISIBLE);
 //        mDnsConsoleAdapter = new DnsLogsAdapter(this, mDnsSpoof.mDnsLogs);
 //        mDnsSpoof.setRV_Adapter(mDnsConsoleAdapter);
     }
-
-//    private void                        initSearchView() {
-//        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            public boolean onQueryTextSubmit(String query) {
-//
-//                return false;
-//            }
-//
-//            public boolean onQueryTextChange(String newText) {
-//                return false;
-//            }
-//        });
-//        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
-//            @Override
-//            public boolean onClose() {
-//
-//                return false;
-//            }
-//        });
-//    }
 
     public void                         setToolbarTitle(final String title, final String subtitle){
             runOnUiThread(new Runnable() {
@@ -212,9 +200,52 @@ public class                            ProxyActivity extends MITMActivity {
         //TODO:Check if sniffing was loading
     }
 
-
     public void                         onError() {
 
     }
 
+
+//    private void                        initSearchView() {
+//        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            public boolean onQueryTextSubmit(String query) {
+//
+//                return false;
+//            }
+//
+//            public boolean onQueryTextChange(String newText) {
+//                return false;
+//            }
+//        });
+//        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+//            @Override
+//            public boolean onClose() {
+//
+//                return false;
+//            }
+//        });
+//    }
+
+    public class WrapContentLinearLayoutManager extends LinearLayoutManager {
+        public WrapContentLinearLayoutManager(Context context) {
+            super(context);
+        }
+
+        public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
+            try {
+                super.onLayoutChildren(recycler, state);
+            } catch (IndexOutOfBoundsException e) {
+                mProxyRV.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapterDetailWireshark.notifyDataSetChanged();
+                    }
+                });
+                Log.d("ProxyActivity", e.getMessage());
+                Log.e("ProxyActivity", "O.M.G::IndexOutOfBoundsException in RecyclerView happens");
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+                mInstance.onBackPressed();
+            }
+        }
+    }
 }

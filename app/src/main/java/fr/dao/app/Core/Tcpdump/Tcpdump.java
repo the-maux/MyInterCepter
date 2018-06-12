@@ -14,7 +14,6 @@ import java.util.List;
 import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
-import fr.dao.app.Core.Network.ArpSpoof;
 import fr.dao.app.Core.Network.IPTables;
 import fr.dao.app.Model.Config.Action;
 import fr.dao.app.Model.Net.Trame;
@@ -61,7 +60,6 @@ public class                        Tcpdump {
     public String                   initCmd(List<Host> hosts) {
         int a = IPTables.startForwardingStream();
         Log.d(TAG, "IPtable returned: " + a);
-        ArpSpoof.launchArpSpoof(hosts);
         String actualParam = "";
         actualCmd = mTcpdumpConf.buildWiresharkCmd(actualParam, isDumpingInFile, "No Filter", hosts);
         return actualCmd.replace("nmap/nmap", "nmap")
@@ -100,37 +98,6 @@ public class                        Tcpdump {
             }
         }).start();
         return dashboardSniff;
-    }
-
-    public void                     readPcap(File pcapFile, SniffReaderFrgmnt fragment) {
-        isPcapReading = true;
-        isRunning = true;
-        mFragment = fragment;
-        Log.d(TAG, "reading Pcap:" + pcapFile.getPath());
-        actualCmd = mTcpdumpConf.buildWiresharkCmd(pcapFile);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mTcpDumpProcess = new RootProcess("Wireshark")
-                            .exec(actualCmd);
-                    mInstance.run(mTcpDumpProcess.getReader(), null);
-                    Log.i(TAG, "Tcpdump execution over");
-                    stop();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "Process Error: " + e.getMessage());
-                    mActivity.showSnackbar(e.getMessage(), ContextCompat.getColor(mActivity, R.color.stop_color));
-                    mActivity.setToolbarTitle("Execution stopped", e.getMessage());
-                    stop();
-                    Log.d(TAG, "Restarting ?");
-                } finally {
-                    if (mTcpDumpProcess != null)
-                        mTcpDumpProcess.closeProcess();
-                }
-                Log.i(TAG, "End of Tcpdump thread");
-            }
-        }).start();
     }
 
     private void                    run(final BufferedReader reader, final DashboardSniff dashboardSniff) throws IOException {
@@ -221,6 +188,37 @@ public class                        Tcpdump {
             } else
                 mDispatcher.stop();
         }
+    }
+
+    public void                     readPcap(File pcapFile, SniffReaderFrgmnt fragment) {
+        isPcapReading = true;
+        isRunning = true;
+        mFragment = fragment;
+        Log.d(TAG, "reading Pcap:" + pcapFile.getPath());
+        actualCmd = mTcpdumpConf.buildWiresharkCmd(pcapFile);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mTcpDumpProcess = new RootProcess("Wireshark")
+                            .exec(actualCmd);
+                    mInstance.run(mTcpDumpProcess.getReader(), null);
+                    Log.i(TAG, "Tcpdump execution over");
+                    stop();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Process Error: " + e.getMessage());
+                    mActivity.showSnackbar(e.getMessage(), ContextCompat.getColor(mActivity, R.color.stop_color));
+                    mActivity.setToolbarTitle("Execution stopped", e.getMessage());
+                    stop();
+                    Log.d(TAG, "Restarting ?");
+                } finally {
+                    if (mTcpDumpProcess != null)
+                        mTcpDumpProcess.closeProcess();
+                }
+                Log.i(TAG, "End of Tcpdump thread");
+            }
+        }).start();
     }
 
     public void                     flushToAdapter() {

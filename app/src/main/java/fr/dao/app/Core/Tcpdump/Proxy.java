@@ -60,8 +60,8 @@ public class                        Proxy {
     public String                   initCmd(List<Host> hosts) {
         int a = IPTables.startForwardingStream();
         Log.d(TAG, "IPtable returned: " + a);
-        MitManager.getInstance().initTcpDump();
-        String actualParam = "";
+        //sites.google.com/site/jimmyxu101/testing/use-tcpdump-to-monitor-http-traffic
+        String actualParam = "-A -s 0 'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'";
         actualCmd = mProxyConf.buildProxyCmd(actualParam, isDumpingInFile, "No Filter", hosts);
         return actualCmd.replace("nmap/nmap", "nmap")
                 .replace(mSingleton.Settings.FilesPath, "");
@@ -80,7 +80,7 @@ public class                        Proxy {
                 try {
                     Log.i(TAG, actualCmd);
                     mTcpDumpProcess = new RootProcess("Proxy").exec(actualCmd);
-                    Proxy.this.run(mTcpDumpProcess.getReader(), dashboardSniff);
+                    mInstance.run(mTcpDumpProcess.getReader(), dashboardSniff);
                     Log.i(TAG, "Proxy execution over");
                     stop();
                 } catch (IOException e) {
@@ -141,9 +141,11 @@ public class                        Proxy {
         Log.d(TAG, "stop");
         if (isRunning) {
             MitManager.getInstance().stopProxy();
-            mActivity.onProxystopped();
             isRunning = false;
-            mFragment.onSniffingOver(mBufferOfTrame);
+            if (mActivity != null)
+                mActivity.onProxystopped();
+            if (mFragment != null)
+                mFragment.onSniffingOver(mBufferOfTrame);
         }
     }
 

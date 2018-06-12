@@ -147,22 +147,20 @@ public class                    SniffLiveFrgmnt extends MyFragment {
     }
 
     public class WrapContentLinearLayoutManager extends LinearLayoutManager {
-        public WrapContentLinearLayoutManager(Context context) {
+        public          WrapContentLinearLayoutManager(Context context) {
             super(context);
         }
-
-        public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
+        public void     onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
             try {
                 super.onLayoutChildren(recycler, state);
             } catch (IndexOutOfBoundsException e) {
                 mRV_Wireshark.post(new Runnable() {
-                    @Override
                     public void run() {
                         mAdapterDetailWireshark.notifyDataSetChanged();
                     }
                 });
-                Log.d("ERROR", e.getMessage());
-                Log.e("ERROR", "O.M.G::IndexOutOfBoundsException in RecyclerView happens");
+                Log.d("SniffLiveFrgmnt", e.getMessage());
+                Log.e("SniffLiveFrgmnt", "O.M.G::IndexOutOfBoundsException in RecyclerView happens");
             } catch (Resources.NotFoundException e) {
                 e.printStackTrace();
                 mActivity.onBackPressed();
@@ -218,7 +216,7 @@ public class                    SniffLiveFrgmnt extends MyFragment {
             }
         }
         if (mTrameDispatcher == null) {
-            mTrameDispatcher = new SniffDispatcher(mAdapterDetailWireshark, isDashboardMode, mRV_Wireshark, mActivity);
+            mTrameDispatcher = new SniffDispatcher(mRV_Wireshark, mAdapterDetailWireshark, isDashboardMode);
         } else if (wasLaunched && !Tcpdump.isRunning()) {/* Clear shit its a restart*/
             mAdapterDetailWireshark.reset();
             mAdapterDashboardWireshark.reset();

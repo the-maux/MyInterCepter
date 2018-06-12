@@ -1,6 +1,7 @@
 package fr.dao.app.Core.Configuration;
 
 import android.app.Activity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import fr.dao.app.Core.Network.IPTables;
 import fr.dao.app.Core.Tcpdump.Proxy;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.Model.Target.Host;
+import fr.dao.app.View.Sniff.SniffDispatcher;
 
 //TODO: tu dois faire le lien en prenant le relai de ce qui étais dans Singleton
 public class                        MitManager {
@@ -51,14 +53,31 @@ public class                        MitManager {
      *
      */
     private void                    initMitmConnection() {
-        Log.d(TAG, "initMitmConnection");
-        IPTables.startForwardingStream();
-        ArpSpoof.launchArpSpoof(targets);
-        trafficRedirected = true;
+        if (!trafficRedirected) {
+            Log.d(TAG, "Traffic already redicreted init");
+            int a = IPTables.startForwardingStream();
+            ArpSpoof.launchArpSpoof(targets);
+            trafficRedirected = true;
+        } else
+            Log.i(TAG, "Traffic already redicreted");
     }
     public boolean                  initTcpDump() {
         Log.d(TAG, "initTcpDump");
         initMitmConnection();
+        return true;
+    }
+    SniffDispatcher mTrameDispatcher;
+    public boolean                  initProxy(RecyclerView recyclerView, RecyclerView.Adapter adapter) {
+        Log.d(TAG, "initProxy");
+        initMitmConnection();
+        Proxy.getProxy().initCmd(targets);
+        if (mTrameDispatcher == null) {
+            mTrameDispatcher = new SniffDispatcher(recyclerView, adapter, false);
+        } else {/* Clear shit its a restart*/
+            mTrameDispatcher.reset();
+        }
+        Proxy.getProxy().start(mTrameDispatcher);
+        Singleton.getInstance().setProxyStarted(true);
         return true;
     }
     public DnsmasqControl           initDNSSpoofing() {
@@ -93,6 +112,8 @@ public class                        MitManager {
         if (!stopMITMBehavior()) {
             //TODO: We need to close the Tcpdump current process, even if there is still MITM behavior
         }
+        Proxy.getProxy().stop();
+        Singleton.getInstance().setProxyStarted(false);
         updateRunningStatus();
     }
     public boolean                  stopDnsSpoofing(boolean isShutdown) {
