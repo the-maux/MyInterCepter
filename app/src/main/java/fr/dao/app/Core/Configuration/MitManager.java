@@ -10,12 +10,12 @@ import java.util.List;
 import fr.dao.app.Core.Dnsmasq.DnsmasqControl;
 import fr.dao.app.Core.Network.ArpSpoof;
 import fr.dao.app.Core.Network.IPTables;
+import fr.dao.app.Core.Tcpdump.DashboardSniff;
 import fr.dao.app.Core.Tcpdump.Proxy;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.View.Sniff.SniffDispatcher;
 
-//TODO: tu dois faire le lien en prenant le relai de ce qui étais dans Singleton
 public class                        MitManager {
     private String                  TAG = "MitmManager";
     private static final MitManager ourInstance = new MitManager();
@@ -28,6 +28,7 @@ public class                        MitManager {
     private boolean                 webSpoofedstarted = false;
     private boolean                 trafficRedirected = false;
     private boolean                 isAttackRunning = false;
+    SniffDispatcher                 mTrameDispatcher;
 
     public boolean                  isProxyRunning() {
         return Proxy.isRunning();
@@ -43,9 +44,9 @@ public class                        MitManager {
     }
     public boolean                  isSniffServiceActif(Activity activity) {
         return Tcpdump.getTcpdump(activity, false) != null && Tcpdump.isRunning() ||
-                !(!MitManager.getInstance().isDnsControlstarted() && !webSpoofedstarted);
+                !(!MitManager.getInstance().isDnsmasqRunning() && !webSpoofedstarted);
     }
-    public boolean                  isDnsControlstarted() {
+    public boolean isDnsmasqRunning() {
         return dnsSpoofed != null && dnsSpoofed.isRunning();
     }
 
@@ -61,32 +62,40 @@ public class                        MitManager {
         } else
             Log.i(TAG, "Traffic already redicreted");
     }
-    public boolean                  initTcpDump() {
+    public DashboardSniff           initTcpDump(SniffDispatcher mTrameDispatcher) {
+        initMitmConnection();
         Log.d(TAG, "initTcpDump");
-        initMitmConnection();
-        return true;
+        String cmd = Tcpdump.getTcpdump().initCmd(targets);
+        return Tcpdump.getTcpdump().start(mTrameDispatcher);
     }
-    SniffDispatcher mTrameDispatcher;
     public boolean                  initProxy(RecyclerView recyclerView, RecyclerView.Adapter adapter) {
-        Log.d(TAG, "initProxy");
-        initMitmConnection();
-        Proxy.getProxy().initCmd(targets);
-        if (mTrameDispatcher == null) {
-            mTrameDispatcher = new SniffDispatcher(recyclerView, adapter, false);
-        } else {/* Clear shit its a restart*/
-            mTrameDispatcher.reset();
-        }
-        Proxy.getProxy().start(mTrameDispatcher);
-        Singleton.getInstance().setProxyStarted(true);
+        if (isProxyRunning()) {
+            initMitmConnection();
+            Log.d(TAG, "initProxy");
+            Proxy.getProxy().initCmd(targets);
+            if (mTrameDispatcher == null) {
+                mTrameDispatcher = new SniffDispatcher(recyclerView, adapter, false);
+            } else {/* Clear shit its a restart*/
+                mTrameDispatcher.reset();
+            }
+            Proxy.getProxy().start(mTrameDispatcher);
+            initDNSSpoofing();
+            Singleton.getInstance().setProxyStarted(true);
+        } else
+            Log.e(TAG, "Trying to start proxy but already launched");
+
         return true;
     }
     public DnsmasqControl           initDNSSpoofing() {
-        Log.d(TAG, "initDNSSpoofing");
-        if (!trafficRedirected)
-            initMitmConnection();
-        IPTables.startDnsPacketRedirect();
-        isAttackRunning = true;
-        return new DnsmasqControl();
+        if (isDnsmasqRunning()) {
+            if (!trafficRedirected)
+                initMitmConnection();
+            Log.d(TAG, "initDNSSpoofing");
+            IPTables.startDnsPacketRedirect();
+            isAttackRunning = true;
+            dnsSpoofed = new DnsmasqControl();
+        }
+        return dnsSpoofed;
     }
     public boolean                  initWebserver() {
         Log.d(TAG, "initWebserver");
@@ -100,19 +109,22 @@ public class                        MitManager {
     }
 
     public void                     stopTcpdump(boolean isShutdown) {
-        Log.d(TAG, "stopTcpdump");
-        if (!stopMITMBehavior()) {
-            //TODO: We need to close the Tcpdump current process, even if there is still MITM behavior
+        if (isTcpdumpRunning()) {
+            if (!stopMITMBehavior()) {
+                Tcpdump.getTcpdump().stop();
+                //TODO: We need to close the Tcpdump current process, even if there is still MITM behavior
+            }
+            Log.d(TAG, "stopTcpdump");
+            if (!isShutdown)
+                updateRunningStatus();
         }
-        if (!isShutdown)
-            updateRunningStatus();
     }
     public void                     stopProxy() {
-        Log.d(TAG, "stopTcpdump");
         if (!stopMITMBehavior()) {
             //TODO: We need to close the Tcpdump current process, even if there is still MITM behavior
         }
         Proxy.getProxy().stop();
+        Log.d(TAG, "stopProxy");
         Singleton.getInstance().setProxyStarted(false);
         updateRunningStatus();
     }
@@ -130,13 +142,14 @@ public class                        MitManager {
             updateRunningStatus();
     }
     public boolean                  stopMITMBehavior() {
-        if (!isProxyRunning() && isTcpdumpRunning() && isDnsControlstarted()) {
+        if (!isProxyRunning() && isTcpdumpRunning() && isDnsmasqRunning()) {
             stopEverything();
             return true;
         } else {
             Log.d(TAG, "Still some Mitm modules alive");
             return false;
         }
+
     }
     public void                     stopEverything() {
         Log.d(TAG, "stopEverything");
@@ -155,6 +168,7 @@ public class                        MitManager {
     }
 
     public void                     loadHost(List<Host> targets) {
+        Log.d(TAG, "loadHost::" +  targets.size() + " targets");
         if (isAttackRunning)
             stopEverything();
         this.targets.clear();

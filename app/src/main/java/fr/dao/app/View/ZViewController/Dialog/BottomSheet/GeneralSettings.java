@@ -53,7 +53,7 @@ public class                    GeneralSettings {
         builder.addDividerItem();
         builder.addItem(3, PORT_REDIRECT, R.drawable.ic_checkbox_blank_outline_grey600_24dp);
         builder.addItem(4, PORT_FILTERING, R.drawable.ic_checkbox_blank_outline_grey600_24dp);
-        builder.addItem(5, DNS_SPOOFING, (MitManager.getInstance().isDnsControlstarted()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp )
+        builder.addItem(5, DNS_SPOOFING, (MitManager.getInstance().isDnsmasqRunning()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp )
                 .setItemClickListener(onClick())
                 .expandOnStart(true);
         mBottomSheet = builder.createDialog();

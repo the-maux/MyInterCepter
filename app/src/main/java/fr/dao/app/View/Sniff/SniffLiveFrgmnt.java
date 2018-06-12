@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Tcpdump.DashboardSniff;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
@@ -192,7 +193,7 @@ public class                    SniffLiveFrgmnt extends MyFragment {
             }
         } else {
             mMonitorAgv.setVisibility(View.GONE);
-            mTcpdump.stop();
+            MitManager.getInstance().stopTcpdump(false);
             mActivity.setToolbarTitle(null, "Sniffing finished");
             mActivity.updateNotifications();
         }
@@ -200,6 +201,31 @@ public class                    SniffLiveFrgmnt extends MyFragment {
     }
 
     private boolean             startTcpdump() {
+        if (selectTarget()) {
+            initTrameDispatcher();
+            MitManager.getInstance().loadHost(mListHostSelected);
+            DashboardSniff dashboardSniff = MitManager.getInstance().initTcpDump(mTrameDispatcher);
+            mAdapterDashboardWireshark.setDashboard(dashboardSniff);
+            dashboardSniff.setAdapter(mAdapterDashboardWireshark);
+            bottom_subtitle_sniffer.setText(mListHostSelected.size() + " targets");
+            mMonitorAgv.setText(Tcpdump.getTcpdump().getCmd());
+            mActivity.updateNotifications();
+            return true;
+        }
+        return false;
+    }
+
+    private void                initTrameDispatcher() {
+        if (mTrameDispatcher == null) {
+            mTrameDispatcher = new SniffDispatcher(mRV_Wireshark, mAdapterDetailWireshark, isDashboardMode);
+        } else if (wasLaunched && !Tcpdump.isRunning()) {/* Clear shit its a restart*/
+            mAdapterDetailWireshark.reset();
+            mAdapterDashboardWireshark.reset();
+            mTrameDispatcher.reset();
+        }
+    }
+
+    private boolean             selectTarget() {
         if (mSingleton.hostList == null || mSingleton.hostList.isEmpty()) {
             mActivity.showSnackbar("No target available");
             return false;
@@ -215,20 +241,6 @@ public class                    SniffLiveFrgmnt extends MyFragment {
                 return false;
             }
         }
-        if (mTrameDispatcher == null) {
-            mTrameDispatcher = new SniffDispatcher(mRV_Wireshark, mAdapterDetailWireshark, isDashboardMode);
-        } else if (wasLaunched && !Tcpdump.isRunning()) {/* Clear shit its a restart*/
-            mAdapterDetailWireshark.reset();
-            mAdapterDashboardWireshark.reset();
-            mTrameDispatcher.reset();
-        }
-        String argv = mTcpdump.initCmd(mListHostSelected);
-        DashboardSniff dashboardSniff = mTcpdump.start(mTrameDispatcher);
-        mAdapterDashboardWireshark.setDashboard(dashboardSniff);
-        dashboardSniff.setAdapter(mAdapterDashboardWireshark);
-        bottom_subtitle_sniffer.setText(mListHostSelected.size() + " clients");
-        mMonitorAgv.setText(argv.replace(mSingleton.Settings.PcapPath, ""));
-        mActivity.updateNotifications();
         return true;
     }
 

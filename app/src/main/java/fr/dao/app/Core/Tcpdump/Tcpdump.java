@@ -14,7 +14,6 @@ import java.util.List;
 import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
-import fr.dao.app.Core.Network.IPTables;
 import fr.dao.app.Model.Config.Action;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.Model.Target.Host;
@@ -58,8 +57,6 @@ public class                        Tcpdump {
     }
 
     public String                   initCmd(List<Host> hosts) {
-        int a = IPTables.startForwardingStream();
-        Log.d(TAG, "IPtable returned: " + a);
         String actualParam = "";
         actualCmd = mTcpdumpConf.buildWiresharkCmd(actualParam, isDumpingInFile, "No Filter", hosts);
         return actualCmd.replace("nmap/nmap", "nmap")
@@ -231,5 +228,10 @@ public class                        Tcpdump {
         if (mDispatcher != null) {
             mDispatcher.switchOutputType(isDashboard);
         }
+    }
+
+    public String                   getCmd() {
+        return actualCmd.replace("nmap/nmap", "nmap")
+                .replace(mSingleton.Settings.FilesPath, "");
     }
 }

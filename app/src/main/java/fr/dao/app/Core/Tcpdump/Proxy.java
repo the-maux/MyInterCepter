@@ -13,7 +13,6 @@ import java.util.List;
 import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
-import fr.dao.app.Core.Network.IPTables;
 import fr.dao.app.Model.Config.Action;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.Model.Target.Host;
@@ -58,8 +57,6 @@ public class                        Proxy {
     }
 
     public String                   initCmd(List<Host> hosts) {
-        int a = IPTables.startForwardingStream();
-        Log.d(TAG, "IPtable returned: " + a);
         //sites.google.com/site/jimmyxu101/testing/use-tcpdump-to-monitor-http-traffic
         String actualParam = "-A -s 0 'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'";
         actualCmd = mProxyConf.buildProxyCmd(actualParam, isDumpingInFile, "No Filter", hosts);

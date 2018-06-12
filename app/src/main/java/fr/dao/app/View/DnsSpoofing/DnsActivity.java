@@ -47,7 +47,7 @@ public class                            DnsActivity extends MITMActivity {
     private RelativeLayout              mClipper;
     private TextView                    mAction_deleteall, mAction_import, mAction_export, textEmpty, title;
     private Singleton                   mSingleton = Singleton.getInstance();
-    private DnsmasqControl mDnsControler = MitManager.getInstance().getDnsControler();
+    private DnsmasqControl              mDnsControler = MitManager.getInstance().getDnsControler();
     private DnsSpoofConfAdapter         mDnsSpoofAdapter;
     private DnsLogsAdapter              mDnsConsoleAdapter;
     private String                      NAME_CONF_MENU = "Domains intercepted:", NAME_LOGS_MENU = "Dnsmasq logs:";
@@ -98,7 +98,7 @@ public class                            DnsActivity extends MITMActivity {
 //        ViewAnimate.setVisibilityToVisibleQuick(mFab);
         ViewAnimate.FabAnimateReveal(mInstance, mFab);
 //        mFab.show();
-        if (MitManager.getInstance().isDnsControlstarted()) {
+        if (MitManager.getInstance().isDnsmasqRunning()) {
             mFab.setImageResource(R.mipmap.ic_stop);
         } else {
             mFab.setImageResource(R.drawable.ic_media_play);
@@ -107,7 +107,7 @@ public class                            DnsActivity extends MITMActivity {
             @Override
             public void onClick(View view) {
                 Utils.vibrateDevice(mInstance);
-                if (!MitManager.getInstance().isDnsControlstarted()) {
+                if (!MitManager.getInstance().isDnsmasqRunning()) {
                     mDnsControler.start();
                     mFab.setImageResource(R.drawable.ic_stop);
                 } else {

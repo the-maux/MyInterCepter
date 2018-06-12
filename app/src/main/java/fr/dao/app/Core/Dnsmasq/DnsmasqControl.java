@@ -1,5 +1,7 @@
 package fr.dao.app.Core.Dnsmasq;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -14,6 +16,7 @@ import fr.dao.app.Model.Target.DNSSpoofItem;
 import fr.dao.app.Model.Target.SniffSession;
 import fr.dao.app.Model.Unix.DNSLog;
 import fr.dao.app.View.DnsSpoofing.DnsActivity;
+import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Adapter.DnsLogsAdapter;
 
 public class                    DnsmasqControl {
@@ -22,7 +25,7 @@ public class                    DnsmasqControl {
     private RootProcess         mProcess;
     private DnsLogsAdapter      mRV_Adapter = null;
     private DnsmasqConfig       mDnsConf;
-    private DnsActivity         mActivity;
+    private MyActivity          mActivity;
     private SniffSession        sniffSession;
     private boolean             isRunning = false;
     private Thread              mThreadProcess = null;
@@ -50,7 +53,7 @@ public class                    DnsmasqControl {
     public DnsmasqControl       start() {
         isRunning = true;
         initRVLink();
-        if (!MitManager.getInstance().isDnsControlstarted()) {
+        if (!MitManager.getInstance().isDnsmasqRunning()) {
             mThreadProcess = runThread();
             mThreadProcess.start();
         } else
@@ -71,7 +74,7 @@ public class                    DnsmasqControl {
                         buffer = buffer.replace("dnsmasq: ", "");
                         if (buffer.contains("failed to create listening socket")){
                             stop();
-                            mActivity.onError(buffer);
+                            onError(buffer);
                             break;
                         }
                         if (strip(buffer)) {
@@ -81,9 +84,28 @@ public class                    DnsmasqControl {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    mActivity.onError(e.getMessage());
+                    onError(e.getMessage());
                 }
                 Log.d(TAG, "dnsmasq terminated");
+            }
+        });
+    }
+
+    public void                         onError(String error) {
+        mActivity.showSnackbar(error);
+        mActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                new AlertDialog.Builder(mActivity)
+                        .setTitle("Dns error detected")
+                        .setMessage("Would you like to restart the dns process ?")
+                        .setPositiveButton(mActivity.getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                stop();
+                                start();
+                            }
+                        })
+                        .setNegativeButton(mActivity.getResources().getString(android.R.string.no), null)
+                        .show();
             }
         });
     }

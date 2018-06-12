@@ -89,7 +89,7 @@ public class                            ProxyActivity extends MITMActivity {
 //        ViewAnimate.setVisibilityToVisibleQuick(mFab);
         ViewAnimate.FabAnimateReveal(mInstance, mFab);
 //        mFab.show();
-        if (MitManager.getInstance().isDnsControlstarted()) {
+        if (MitManager.getInstance().isDnsmasqRunning()) {
             mFab.setImageResource(R.mipmap.ic_stop);
             if (!mSingleton.isProxyStarted()) {
                 mFab.setImageResource(R.drawable.ic_media_play);
@@ -198,6 +198,7 @@ public class                            ProxyActivity extends MITMActivity {
         super.onBackPressed();
         mSingleton.hostList = mSingleton.savedHostList;
         //TODO:Check if sniffing was loading
+        MitManager.getInstance().stopEverything();
     }
 
     public void                         onError() {
@@ -235,7 +236,6 @@ public class                            ProxyActivity extends MITMActivity {
                 super.onLayoutChildren(recycler, state);
             } catch (IndexOutOfBoundsException e) {
                 mProxyRV.post(new Runnable() {
-                    @Override
                     public void run() {
                         mAdapterDetailWireshark.notifyDataSetChanged();
                     }

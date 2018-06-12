@@ -20,8 +20,8 @@ import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.R;
 import fr.dao.app.View.DnsSpoofing.DnsActivity;
-import fr.dao.app.View.Sniff.SniffActivity;
 import fr.dao.app.View.Proxy.ProxyActivity;
+import fr.dao.app.View.Sniff.SniffActivity;
 import fr.dao.app.View.WebServer.WebServerActivity;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 
@@ -107,7 +107,7 @@ public abstract class               MITMActivity extends MyActivity  {
                 mBottomBar.setNotification(Tcpdump.isRunning() ? greenNotif : redNotif, 1);
             else
                 mBottomBar.setNotification(redNotif, 1);
-            mBottomBar.setNotification(MitManager.getInstance().isDnsControlstarted() ? greenNotif : redNotif, 2);
+            mBottomBar.setNotification(MitManager.getInstance().isDnsmasqRunning() ? greenNotif : redNotif, 2);
             mBottomBar.setNotification(redNotif, 0);
             mBottomBar.setNotification(MitManager.getInstance().iswebSpoofed() ? greenNotif : redNotif, 3);
         }
