@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import fr.dao.app.Core.Tcpdump.Proxy;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.R;
+import fr.dao.app.View.Proxy.ProxyActivity;
 import fr.dao.app.View.ZViewController.Adapter.SniffPacketsAdapter;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
@@ -30,10 +31,10 @@ public class ProxyReaderFrgmnt extends MyFragment {
     private Context             mCtx;
     private ConstraintLayout    rootViewForDashboard;
     private RelativeLayout      rootViewForLiveFlux;
-    private SniffActivity       mActivity;
+    private ProxyActivity       mActivity;
     private RecyclerView        mRV_Wireshark;
     private SniffPacketsAdapter mAdapterWireshark;
-    private Proxy mTcpdump;
+    private Proxy               mTcpdump;
     private File                mPcapFile;
     ProgressDialog              dialog;
 
@@ -41,8 +42,8 @@ public class ProxyReaderFrgmnt extends MyFragment {
         View rootView = inflater.inflate(R.layout.fragment_wireshark, container, false);
         mCtx = getActivity();
         initXml(rootView);
-        mActivity = (SniffActivity) getActivity();
-        mTcpdump = Proxy.getProxy(mActivity, true);
+        mActivity = (ProxyActivity) getActivity();
+        mTcpdump = Proxy.getProxy(this, true);
         init();
         return rootView;
     }
@@ -79,7 +80,11 @@ public class ProxyReaderFrgmnt extends MyFragment {
         mRV_Wireshark.setLayoutManager(new LinearLayoutManager(mActivity));
     }
 
-    public void onSniffingOver(final ArrayList<Trame> bufferOfTrame) {
+    public void                         onProxystopped() {
+        mActivity.setToolbarTitle("Proxy", "Stopped");
+    }
+
+    public void                 onSniffingOver(final ArrayList<Trame> bufferOfTrame) {
         Log.d(TAG, " onSniffingOver:" + bufferOfTrame.size());
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
@@ -97,9 +102,5 @@ public class ProxyReaderFrgmnt extends MyFragment {
                 dialog.setMessage(monitor);
             }
         });
-    }
-
-    public void                 initUIActivtyAsReading() {
-        mActivity.ReadingMode();
     }
 }

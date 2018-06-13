@@ -14,6 +14,7 @@ import fr.dao.app.Core.Tcpdump.DashboardSniff;
 import fr.dao.app.Core.Tcpdump.Proxy;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.Model.Target.Host;
+import fr.dao.app.View.Sniff.HTTPDispatcher;
 import fr.dao.app.View.Sniff.SniffDispatcher;
 
 public class                        MitManager {
@@ -28,7 +29,7 @@ public class                        MitManager {
     private boolean                 webSpoofedstarted = false;
     private boolean                 trafficRedirected = false;
     private boolean                 isAttackRunning = false;
-    SniffDispatcher                 mTrameDispatcher;
+    HTTPDispatcher                  mHttpTrameDispatcher;
 
     public boolean                  isProxyRunning() {
         return Proxy.isRunning();
@@ -72,14 +73,14 @@ public class                        MitManager {
         if (!isProxyRunning()) {
             initMitmConnection();
             Log.d(TAG, "initProxy");
+            Proxy.getProxy().initCmd(targets);
             if (Proxy.getProxy() != null) {
-                Proxy.getProxy().initCmd(targets);
-                if (mTrameDispatcher == null) {
-                    mTrameDispatcher = new SniffDispatcher(recyclerView, adapter, false);
+                if (mHttpTrameDispatcher == null) {
+                    mHttpTrameDispatcher = new HTTPDispatcher(recyclerView, adapter);
                 } else {/* Clear shit its a restart*/
-                    mTrameDispatcher.reset();
+                    mHttpTrameDispatcher.reset();
                 }
-                Proxy.getProxy().start(mTrameDispatcher);
+                Proxy.getProxy().start(mHttpTrameDispatcher);
                 initDNSSpoofing();
                 Singleton.getInstance().setProxyStarted(true);
                 return true;

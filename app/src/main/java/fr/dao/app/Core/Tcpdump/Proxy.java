@@ -1,7 +1,5 @@
 package fr.dao.app.Core.Tcpdump;
 
-import android.app.Activity;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -9,17 +7,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 
-import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Config.Action;
+import fr.dao.app.Model.Net.HttpTrame;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.Model.Target.Host;
-import fr.dao.app.R;
-import fr.dao.app.View.Proxy.ProxyActivity;
+import fr.dao.app.View.Sniff.HTTPDispatcher;
 import fr.dao.app.View.Sniff.ProxyReaderFrgmnt;
-import fr.dao.app.View.Sniff.SniffDispatcher;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 
 
@@ -33,7 +30,7 @@ public class                        Proxy {
     private boolean                 isRunning = false;
     public  boolean                 isDumpingInFile = true, isPcapReading = false;
     private String                  actualCmd = "";
-    private SniffDispatcher         mDispatcher = null;
+    private HTTPDispatcher          mDispatcher = null;
     private ProxyReaderFrgmnt       mFragment = null;
     private ArrayList<Trame>        mBufferOfTrame = new ArrayList<>();
 
@@ -67,22 +64,18 @@ public class                        Proxy {
                 .replace(mSingleton.Settings.FilesPath, "");
     }
 
-    public DashboardSniff           start(final SniffDispatcher trameDispatcher) {
+    public void           start(final HTTPDispatcher trameDispatcher) {
         Log.i(TAG, "Proxy execution started");
         isPcapReading = false;
         mDispatcher = trameDispatcher;
         isRunning = true;
-        final DashboardSniff dashboardSniff = new DashboardSniff();
-        mDispatcher.setDashboard(dashboardSniff);
         Singleton.getInstance().Session.addAction(Action.ActionType.PROXY, true);
         new Thread(new Runnable() {
             public void run() {
                 try {
                     Log.i(TAG, actualCmd);
                     mTcpDumpProcess = new RootProcess("Proxy").exec(actualCmd);
-                    mInstance.run(mTcpDumpProcess.getReader(), dashboardSniff);
-                    Log.i(TAG, "Proxy execution over");
-                    stop();
+                    mInstance.run(mTcpDumpProcess.getReader());
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.e(TAG, "Process Error: " + e.getMessage());
@@ -96,45 +89,35 @@ public class                        Proxy {
                 Log.i(TAG, "End of Proxy thread");
             }
         }).start();
-        return dashboardSniff;
     }
 
-    private void                    run(final BufferedReader reader, final DashboardSniff dashboardSniff) throws IOException {
-        String buffer;
-        while ((buffer = reader.readLine()) != null) {
-            final String line = buffer;
-            new Thread(new Runnable() {
-                public void run() {
-                    if (isRunning) {
-                        readAndAnalyse(line);
+    private void                    run(final BufferedReader reader) throws IOException {
+        String tmp;
+        final ArrayList<String> buffer = new ArrayList<>();
+        while ((tmp = reader.readLine()) != null && isRunning) {
+            final String line = tmp;
+            buffer.add(tmp);
+            if (Pattern.compile("/([0-9])\\w+:([0-9])\\w+:([0-9])\\w+.+([0-9])\\w+ +IP/g").matcher(line).find()) {
+                new Thread(new Runnable() {
+                    public void run() {
+                        readAndAnalyse(new HttpTrame(buffer));
                     }
-                }
-            }).start();
+                }).start();
+                buffer.clear();
+            }
         }
+        stop();
+        Log.i(TAG, "Proxy execution over");
     }
 
     /**
      * Trame sended to mBufferOfTrame
      * TODO: big analyse with dump of each packets
+     * @param trame
      */
-    private void                    readAndAnalyse(String line) {
-        Log.d(TAG, "readAndAnalyse[" + line + "]");
-        if (line.contains("Quiting...")) {
-            Log.d(TAG, "Finishing Adapter trame");
-            Trame trame = new Trame("Processus over");
-            trame.connectionOver = true;
-            mBufferOfTrame.add(trame);
-            stop();
-            return;
-        }
-        Trame trame = new Trame(line);
-        if (trame.initialised && !trame.skipped) {
-            mBufferOfTrame.add(trame);
-        } else if (!trame.skipped) {
-            Log.d(TAG, "trame created not initialized and not skipped, STOP TCPDUMP");
-            mFragment.onError(/*trame*/);
-            stop();
-        }//else skipped
+    private void                    readAndAnalyse(HttpTrame trame) {
+        Log.d(TAG, "readAndAnalyse[" + trame.getDump().length() + " charactere ]");
+        mDispatcher.addToQueue(trame);
     }
 
     public void                     stop() {
@@ -145,18 +128,6 @@ public class                        Proxy {
                 mFragment.onProxystopped();
             if (mFragment != null)
                 mFragment.onSniffingOver(mBufferOfTrame);
-        }
-    }
-
-    public void                     flushToAdapter() {
-        Log.d(TAG, "flushToAdapter");
-        if (mDispatcher != null)
-            mDispatcher.flush();
-    }
-
-    public void                     switchOutputType(boolean isDashboard) {
-        if (mDispatcher != null) {
-            mDispatcher.switchOutputType(isDashboard);
         }
     }
 }
