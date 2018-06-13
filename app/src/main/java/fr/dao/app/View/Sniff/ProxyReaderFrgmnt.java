@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,6 +16,7 @@ import android.widget.RelativeLayout;
 import java.io.File;
 import java.util.ArrayList;
 
+import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Tcpdump.Proxy;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.R;
@@ -25,17 +25,16 @@ import fr.dao.app.View.ZViewController.Adapter.SniffPacketsAdapter;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 
-public class ProxyReaderFrgmnt extends MyFragment {
+public class                    ProxyReaderFrgmnt extends MyFragment {
     private String              TAG = "SniffReaderFrgmnt";
     private CoordinatorLayout   mCoordinatorLayout;
     private Context             mCtx;
     private ConstraintLayout    rootViewForDashboard;
     private RelativeLayout      rootViewForLiveFlux;
     private ProxyActivity       mActivity;
-    private RecyclerView        mRV_Wireshark;
+    private RecyclerView mProxy_RV;
     private SniffPacketsAdapter mAdapterWireshark;
-    private Proxy               mTcpdump;
-    private File                mPcapFile;
+    private Proxy               mProxy;
     ProgressDialog              dialog;
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
@@ -43,44 +42,36 @@ public class ProxyReaderFrgmnt extends MyFragment {
         mCtx = getActivity();
         initXml(rootView);
         mActivity = (ProxyActivity) getActivity();
-        mTcpdump = Proxy.getProxy(this, true);
+        mProxy = Proxy.getProxy(this, true);
         init();
         return rootView;
     }
     
     private void                initXml(View rootView) {
         mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
-        mRV_Wireshark = rootView.findViewById(R.id.RV_Wireshark);
+        mProxy_RV = rootView.findViewById(R.id.RV_Wireshark);
         rootViewForLiveFlux = rootView.findViewById(R.id.rootViewForLiveFlux);
-        rootViewForDashboard = rootView.findViewById(R.id.rootViewForDashboard);
+        rootViewForLiveFlux.setVisibility(View.VISIBLE);
     }
 
     public void                 init() {
-        //TODO: Hide le btn Dashboard dans toolbar when in Reading mode
-        if (getArguments() != null && getArguments().getString("Pcap") != null) {
-            rootViewForDashboard.setVisibility(View.GONE);
-            rootViewForLiveFlux.setVisibility(View.VISIBLE);
-            mPcapFile = new File(getArguments().getString("Pcap"));
-            Log.d(TAG, "reading:" + mPcapFile.getPath());
-            initRV();
-            dialog = ProgressDialog.show(mActivity, mPcapFile.getName(), "Loading. Please wait...", true);
-            dialog.show();
-        } else {
-            Log.e(TAG, "no Pcap returned");
-            mActivity.showSnackbar("No Pcap to read",  ContextCompat.getColor(mActivity, R.color.stop_color));
-        }
-
+        initRV();
     }
 
     private void                initRV() {
-        mAdapterWireshark = new SniffPacketsAdapter(mActivity, mRV_Wireshark);
-        mRV_Wireshark.setAdapter(mAdapterWireshark);
-        mRV_Wireshark.setItemAnimator(null);
-        mRV_Wireshark.setLayoutManager(new LinearLayoutManager(mActivity));
+        mAdapterWireshark = new SniffPacketsAdapter(mActivity, mProxy_RV);
+        mProxy_RV.setAdapter(mAdapterWireshark);
+        mProxy_RV.setItemAnimator(null);
+        mProxy_RV.setLayoutManager(new LinearLayoutManager(mActivity));
     }
 
-    public void                         onProxystopped() {
-        mActivity.setToolbarTitle("Proxy", "Stopped");
+    public boolean              start() {
+        if (mSingleton.isProxyStarted()) {
+            MitManager.getInstance().stopProxy();
+        } else {
+            return MitManager.getInstance().initProxy(mProxy_RV, mAdapterWireshark);
+        }
+        return true;
     }
 
     public void                 onSniffingOver(final ArrayList<Trame> bufferOfTrame) {
@@ -101,5 +92,13 @@ public class ProxyReaderFrgmnt extends MyFragment {
                 dialog.setMessage(monitor);
             }
         });
+    }
+
+    public void                 onError() {
+    }
+
+    public void                 onProxystopped() {
+        Log.e(TAG, "onProxystopped");
+        mActivity.onProxystopped();
     }
 }

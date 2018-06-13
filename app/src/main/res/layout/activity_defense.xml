@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/black_primary_light"
+        android:paddingBottom="4dp"
         android:transitionName="appBarTransition"
         app:elevation="4dp">
 
@@ -46,6 +47,7 @@
                 android:id="@+id/toolbar2"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:transitionName="title"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/searchView"
                 app:layout_constraintHorizontal_weight="5"
@@ -115,8 +117,8 @@
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg3"
-        android:visibility="gone"
+        android:background="#440d47a1"
+        android:visibility="visible"
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
         <RelativeLayout
@@ -151,8 +153,8 @@
 
         <ImageView
             android:id="@+id/logo_defense2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignParentBottom="true"
             android:layout_margin="8dp"
             android:alpha="0.8"
@@ -163,6 +165,6 @@
             app:layout_constraintLeft_toLeftOf="@+id/blue_card"
             app:layout_constraintRight_toRightOf="@+id/blue_card"
             app:layout_constraintTop_toTopOf="@+id/blue_card"
-            app:srcCompat="@drawable/ic_security_svg" />
+            app:srcCompat="@drawable/scylla_transparent" />
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

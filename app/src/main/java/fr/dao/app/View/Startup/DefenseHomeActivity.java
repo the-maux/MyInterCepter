@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -41,7 +43,7 @@ public class                    DefenseHomeActivity extends MyActivity {
 
     private void                pushViewToFront() {
         startPostponedEnterTransition();
-        ViewAnimate.setVisibilityToVisibleQuick(rootView);
+
     }
 
     private void                initXml() {
@@ -61,6 +63,17 @@ public class                    DefenseHomeActivity extends MyActivity {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
 
+    protected void onResume() {
+        super.onResume();
+        ViewAnimate.setVisibilityToVisibleQuick(rootView);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ViewAnimate.setVisibilityToGoneQuick(rootView);
+    }
+
     public class MenuDefenseAdapter extends RecyclerView.Adapter<MenuItemHolder> {
         private String              TAG = "NetworksAdapter";
         private DefenseHomeActivity mActivity;
@@ -76,7 +89,7 @@ public class                    DefenseHomeActivity extends MyActivity {
 
         public void                 onBindViewHolder(final MenuItemHolder holder, int position) {
             switch (position) {
-                case 0:
+                case 5:
                     holder.titleCard.setText("Network bodyguard");
                     holder.logo_card.setImageResource(R.drawable.scan);
                     holder.progressBar_monitor.setVisibility(View.GONE);
@@ -87,8 +100,9 @@ public class                    DefenseHomeActivity extends MyActivity {
                             Utils.vibrateDevice(mActivity, 100);
                             mActivity.showSnackbar(holder.titleCard.getText().toString());
                         }
-                    });     break;
-                case 1:
+                    });
+                    break;
+                case 0:
                     holder.titleCard.setText("Terminal");
                     holder.logo_card.setImageResource(R.drawable.linuxicon);
                     holder.progressBar_monitor.setVisibility(View.GONE);
@@ -99,7 +113,8 @@ public class                    DefenseHomeActivity extends MyActivity {
                             Utils.vibrateDevice(mActivity, 100);
                             mActivity.showSnackbar(holder.titleCard.getText().toString());
                         }
-                    });                break;
+                    });
+                    break;
                 case 2:
                     holder.titleCard.setText("Self Proxy");
                     holder.logo_card.setImageResource(R.drawable.cage);
@@ -139,7 +154,7 @@ public class                    DefenseHomeActivity extends MyActivity {
                         }
                     });
                     break;
-                case 5:
+                case 1:
                     holder.titleCard.setText("Dora Diagnostic");
                     holder.progressBar_monitor.setVisibility(View.GONE);
                     holder.logo_card.setImageResource(R.drawable.pepper);
@@ -155,8 +170,11 @@ public class                    DefenseHomeActivity extends MyActivity {
             }
             ViewGroup.LayoutParams lp = holder.card_view.getLayoutParams();
             lp.width = CardView.LayoutParams.MATCH_PARENT;
+                ViewAnimate.setVisibilityToVisibleLong(holder.card_view);
             holder.card_view.setLayoutParams(lp);
-
+            holder.card_view.setAlpha(0.9f);
+            Animation animation = AnimationUtils.loadAnimation(mInstance, android.R.anim.slide_in_left);
+            holder.card_view.startAnimation(animation);
         }
 
         public int                  getItemCount() {

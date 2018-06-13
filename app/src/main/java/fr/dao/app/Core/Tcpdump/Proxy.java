@@ -42,6 +42,7 @@ public class                        Proxy {
     public static synchronized Proxy getProxy(ProxyReaderFrgmnt fragment, boolean isProxyActivity) {
         if (isProxyActivity && mInstance == null) {
             mInstance = new Proxy(fragment);
+            mInstance.mFragment = fragment;
         }
         return mInstance;
     }

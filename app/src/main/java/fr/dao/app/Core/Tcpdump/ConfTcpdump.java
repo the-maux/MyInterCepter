@@ -89,16 +89,18 @@ class                           ConfTcpdump {
 
     String buildProxyCmd(String actualParam, boolean isDumpingInFile,
                              String typeScan, List<Host> hosts) {
-        String hostFilter = buildHostFilterCommand(hosts, typeScan);
         String date =  Words.getGenericDateFormat(new Date());
         String nameFile = "Proxy" + "_" + date;
         String pcapFile = (isDumpingInFile) ? buildForDumpingPcap(nameFile, hosts) : "";
 
         String cmd = (mSingleton.Settings.FilesPath + "tcpdump " +
-                pcapFile + actualParam + hostFilter)
+                pcapFile + actualParam)
                 .replace("//", "/").replace("  ", " ");
         Log.d(TAG, cmd);
-        return cmd ;
+        for (Host host : hosts) {
+            cmd = cmd + " host " + host.ip;
+        }
+        return cmd + '\'';
     }
 
     public String buildWiresharkCmd(File mPcapFile) {

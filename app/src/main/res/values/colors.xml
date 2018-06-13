@@ -23,7 +23,7 @@
     <color name="filtered_color">@color/material_orange_500</color>
     <color name="tint_svg">#ddcccccc</color>
     <color name="redteam_color">#B71C1C</color><!-- material_red_900 -->
-    <color name="blueteam_color">#0D47A1</color><!-- material_blue_900 -->
+    <color name="blueteam_color">#0d47a1</color><!-- material_blue_900 -->
     <color name="msf_light">#dd0E77B9</color>
     <color name="msf_dark">#dd276890</color>
     <color name="trans">#00FFFFFF</color>

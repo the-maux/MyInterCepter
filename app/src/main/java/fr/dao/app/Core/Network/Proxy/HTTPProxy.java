@@ -42,6 +42,7 @@ public class                    HTTPProxy {
 
     public boolean              stop() {
         isRunning = false;
+        Log.d(TAG, "stopping Proxy");
         if (server != null) {
             try {
                 stopOnNext = true;

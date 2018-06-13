@@ -127,7 +127,8 @@ public class                    HomeActivity extends MyActivity {
                 Intent intent = new Intent(mInstance, DefenseHomeActivity.class);
                 Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_defense), "logo_defense2");
                 Pair<View, String> p2 = Pair.create(findViewById(R.id.blue_card), "rootViewTransition");
-                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2).toBundle());
+                Pair<View, String> p3 = Pair.create(findViewById(R.id.title_defense), "title");
+                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2, p3).toBundle());
             }
         };
     }

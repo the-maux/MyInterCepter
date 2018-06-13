@@ -59,7 +59,8 @@ public class                            Singleton {
         Log.i("setockScreenActived", "Not implemented");
     }
     public boolean                      isProxyStarted() {
-        return proxyStarted; }
+        return proxyStarted;
+    }
     public void                         setProxyStarted(boolean proxyStarted) {
         this.proxyStarted = proxyStarted;
     }
