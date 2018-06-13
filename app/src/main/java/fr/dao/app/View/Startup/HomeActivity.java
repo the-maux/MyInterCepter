@@ -119,17 +119,29 @@ public class                    HomeActivity extends MyActivity {
         }
         getAndroidPermission();
     }
+
+    private View.OnClickListener onDefenseClicked() {
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+                Utils.vibrateDevice(mInstance, 100);
+                Intent intent = new Intent(mInstance, DefenseHomeActivity.class);
+                Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_defense), "logo_defense2");
+                Pair<View, String> p2 = Pair.create(findViewById(R.id.blue_card), "rootViewTransition");
+                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2).toBundle());
+            }
+        };
+    }
     private View.OnClickListener onDashboardClick() {
         return new View.OnClickListener() {
             public void onClick(View view) {
                 Utils.vibrateDevice(mInstance, 100);
                 Intent intent = new Intent(mInstance, DashboardActivity.class);
                 Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_dashboard), "logo_activity");
-                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1).toBundle());
+                Pair<View, String> p2 = Pair.create(findViewById(R.id.dashboard_card), "rootViewTransition");
+                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p2).toBundle());
             }
         };
     }
-
     private View.OnClickListener onSettingsClick() {
         return new View.OnClickListener() {
             public void onClick(View view) {
@@ -140,18 +152,6 @@ public class                    HomeActivity extends MyActivity {
             }
         };
     }
-
-    private View.OnClickListener onDefenseClicked() {
-        return new View.OnClickListener() {
-            public void onClick(View view) {
-                Utils.vibrateDevice(mInstance, 100);
-                Intent intent = new Intent(mInstance, DefenseHomeActivity.class);
-                Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_defense), "logo_defense2");
-                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1).toBundle());
-            }
-        };
-    }
-
     private View.OnClickListener onAttackclicked() {
         return new View.OnClickListener() {
             public void onClick(View view) {
@@ -165,7 +165,8 @@ public class                    HomeActivity extends MyActivity {
                         }
                         Intent intent = new Intent(mInstance, HostDiscoveryActivity.class);
                         Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_attack), "logo_activity");
-                        startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1).toBundle());
+                        Pair<View, String> p2 = Pair.create(findViewById(R.id.red_card), "rootViewTransition");
+                        startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2).toBundle());
                     }
                 });
             }
@@ -178,7 +179,6 @@ public class                    HomeActivity extends MyActivity {
 
     private void                getRootPermission() {
         PB_Root.setVisibility(View.VISIBLE);
-        Log.d(TAG, "getRootPermission");
         if (rootCheck()) {
             statusRoot.setImageDrawable(new ColorDrawable(getResources().getColor(R.color.online_color)));
             PB_Root.setVisibility(View.GONE);

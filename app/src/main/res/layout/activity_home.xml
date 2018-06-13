@@ -244,6 +244,7 @@
             android:elevation="4dp"
             android:focusableInTouchMode="false"
             android:tint="@color/material_light_white"
+            android:transitionName="attackIcon"
             app:layout_constraintBottom_toTopOf="@+id/title_attack"
             app:layout_constraintDimensionRatio="4:4"
             app:layout_constraintLeft_toLeftOf="@+id/red_card"

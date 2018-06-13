@@ -405,7 +405,10 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 mFragment = NetDiscoveryFragment;
             }
         } else {
-            startActivity(new Intent(mInstance, HomeActivity.class));
+            Log.d(TAG, "Backked");
+            super.onBackPressed();
+            //Pair<View, String> p1 = Pair.create(findViewById(R.id.OsImg), "attackIcon");
+            //startActivity(new Intent(mInstance, HomeActivity.class),  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1).toBundle());
         }
     }
 }

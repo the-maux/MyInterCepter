@@ -110,7 +110,7 @@ public class                    NmapActivity extends MITMActivity {
         mScanType.setOnClickListener(onClickTypeOfScan());
         initFragment();
         initHostBehavior();
-        initNavigationBottomBar(SCANNER, true);
+        initNavigationBottomBar(PROXY, true);
     }
 
     private void                initHostBehavior() {

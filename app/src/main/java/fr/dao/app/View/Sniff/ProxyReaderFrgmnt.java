@@ -65,7 +65,6 @@ public class ProxyReaderFrgmnt extends MyFragment {
             initRV();
             dialog = ProgressDialog.show(mActivity, mPcapFile.getName(), "Loading. Please wait...", true);
             dialog.show();
-
         } else {
             Log.e(TAG, "no Pcap returned");
             mActivity.showSnackbar("No Pcap to read",  ContextCompat.getColor(mActivity, R.color.stop_color));

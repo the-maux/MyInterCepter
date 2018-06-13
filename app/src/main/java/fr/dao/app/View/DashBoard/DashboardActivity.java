@@ -2,6 +2,7 @@ package fr.dao.app.View.DashBoard;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -21,6 +22,7 @@ import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Adapter.NetworksAdapter;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
+import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Dialog.RV_dialog;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
@@ -37,11 +39,26 @@ public class                        DashboardActivity extends MyActivity {
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        postponeEnterTransition();
         initXml();
         setToolbarTitle("General Statistique", "");
         initTabs();
         initNetworkFilterBtn();
-        initGeneral();
+        pushViewToFront();
+    }
+
+    private void                    pushViewToFront() {
+        startPostponedEnterTransition();
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                mInstance.runOnUiThread(new Runnable() {
+                    public void run() {
+                        initGeneral();
+                        ViewAnimate.setVisibilityToVisibleQuick(findViewById(R.id.frame_container));
+                    }
+                });
+            }
+        }, 1000);
     }
 
     private void                    initNetworkFilterBtn() {

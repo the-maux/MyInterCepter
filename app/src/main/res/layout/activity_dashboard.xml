@@ -4,7 +4,8 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splashscreen">
+    android:background="@drawable/splashscreen"
+    android:transitionName="rootViewTransition">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -160,17 +161,16 @@
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
 
-
         <FrameLayout
             android:id="@+id/frame_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            ></FrameLayout>
+            app:layout_constraintTop_toTopOf="parent"></FrameLayout>
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline3"

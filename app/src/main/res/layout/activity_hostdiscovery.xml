@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:transitionName="rootViewTransition">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -42,15 +43,14 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 android:elevation="4dp"
-                android:padding="4dp"
-                android:tint="@color/tint_svg"
+                android:tint="@color/redteam_color"
                 android:transitionName="logo_activity"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toStartOf="@+id/toolbar2"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_fingerprint_svg" />
+                app:srcCompat="@drawable/target" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar2"

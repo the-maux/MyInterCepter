@@ -50,7 +50,8 @@
                 <com.github.mikephil.charting.charts.LineChart xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/chart"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
             </FrameLayout>
 
         </android.support.constraint.ConstraintLayout>
@@ -60,6 +61,7 @@
         android:id="@+id/rv_dash_general"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

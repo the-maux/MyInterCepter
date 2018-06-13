@@ -104,6 +104,7 @@ public class                    HostDetailActivity extends MyActivity {
             collapsBackground.postDelayed(new Runnable() {
                 public void run() {
                     try {
+
                         GlideRequest r = GlideApp.with(mInstance)
                                 .load(R.drawable.bg1)
                                 .centerCrop()

@@ -34,6 +34,7 @@ import fr.dao.app.Model.Config.Session;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Adapter.SessionAdapter;
+import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 
@@ -66,6 +67,8 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
         sessionManager = new SessionManager();
         initChart();
         initRV();
+        ViewAnimate.setVisibilityToVisibleQuick(jcoolGraph);
+        ViewAnimate.setVisibilityToVisibleQuick(mRv_dash_general);
     }
 
     private void                initRV() {
