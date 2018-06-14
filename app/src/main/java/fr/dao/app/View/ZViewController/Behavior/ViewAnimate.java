@@ -9,6 +9,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import fr.dao.app.R;
+import fr.dao.app.View.ZViewController.Activity.MyActivity;
 
 public class                    ViewAnimate {
     private static int          SHORT_DURATION = 250, LONG_DURATION = 150;
@@ -45,21 +46,25 @@ public class                    ViewAnimate {
                 });
     }
 
-    public static void          FabAnimateReveal(Context context, final View fab,  final Runnable runnable) {
-        Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.fab_scale_up);
-        scaleUp.setDuration(LONG_DURATION);
-        scaleUp.setAnimationListener(new Animation.AnimationListener() {
-            public void onAnimationStart(Animation animation) {
-                fab.setVisibility(View.VISIBLE);
+    public static void          FabAnimateReveal(final MyActivity context, final View fab, final Runnable runnable) {
+        context.runOnUiThread(new Runnable() {
+            public void run() {
+                Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.fab_scale_up);
+                scaleUp.setDuration(LONG_DURATION);
+                scaleUp.setAnimationListener(new Animation.AnimationListener() {
+                    public void onAnimationStart(Animation animation) {
+                        fab.setVisibility(View.VISIBLE);
+                    }
+                    public void onAnimationEnd(Animation animation) {
+                        if (runnable != null) {
+                            new Thread(runnable).start();
+                        }
+                    }
+                    public void onAnimationRepeat(Animation animation) {}
+                });
+                fab.startAnimation(scaleUp);
             }
-            public void onAnimationEnd(Animation animation) {
-                if (runnable != null) {
-                    new Thread(runnable).start();
-                }
-            }
-            public void onAnimationRepeat(Animation animation) {}
         });
-        fab.startAnimation(scaleUp);
     }
     public static void          FabAnimateHide(Context context, final View fab, final Runnable runnable) {
         Animation scaleDown = AnimationUtils.loadAnimation(context, R.anim.fab_scale_down);

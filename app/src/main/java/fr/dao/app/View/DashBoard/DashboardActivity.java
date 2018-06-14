@@ -41,7 +41,7 @@ public class                        DashboardActivity extends MyActivity {
         setContentView(R.layout.activity_dashboard);
         postponeEnterTransition();
         initXml();
-        setToolbarTitle("General Statistique", "");
+        setToolbarTitle("Statistique", null);
         initTabs();
         initNetworkFilterBtn();
         pushViewToFront();
@@ -54,11 +54,11 @@ public class                        DashboardActivity extends MyActivity {
                 mInstance.runOnUiThread(new Runnable() {
                     public void run() {
                         initGeneral();
-                        ViewAnimate.setVisibilityToVisibleQuick(findViewById(R.id.frame_container));
+                        ViewAnimate.FabAnimateReveal(mInstance, findViewById(R.id.frame_container), null);
                     }
                 });
             }
-        }, 1000);
+        }, 100);
     }
 
     private void                    initNetworkFilterBtn() {
@@ -80,7 +80,6 @@ public class                        DashboardActivity extends MyActivity {
 
     private void                    initXml() {
         mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
-        MyGlideLoader.coordoBackgroundXMM(this, (CoordinatorLayout) findViewById(R.id.coordinatorLayout));
         mToolbar = findViewById(R.id.toolbar2);
         appBarLayout = findViewById(R.id.appBarLayout);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -160,8 +159,10 @@ public class                        DashboardActivity extends MyActivity {
     public void                     onBackPressed() {
         if (mTabs.getSelectedTabPosition() == 1 || mTabs.getSelectedTabPosition() == 2)
             mTabs.getTabAt(0).select();
-        else
+        else {
             super.onBackPressed();
+            findViewById(R.id.frame_container).setVisibility(View.GONE);
+        }
     }
 
     public void                     onNetworkFocused(Network accessPoint) {

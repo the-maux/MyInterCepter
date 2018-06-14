@@ -139,6 +139,7 @@ public class                    HomeActivity extends MyActivity {
                 Intent intent = new Intent(mInstance, DashboardActivity.class);
                 Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_dashboard), "logo_activity");
                 Pair<View, String> p2 = Pair.create(findViewById(R.id.dashboard_card), "rootViewTransition");
+                Pair<View, String> p3 = Pair.create(findViewById(R.id.title_dashboard), "title");
                 startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p2).toBundle());
             }
         };
@@ -149,7 +150,9 @@ public class                    HomeActivity extends MyActivity {
                 Utils.vibrateDevice(mInstance, 100);
                 Intent intent = new Intent(mInstance, SettingsActivity.class);
                 Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_settings), "logo_activity");
-                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1).toBundle());
+                Pair<View, String> p2 = Pair.create(findViewById(R.id.dashboard_card), "rootViewTransition");
+                Pair<View, String> p3 = Pair.create(findViewById(R.id.title_settings), "title");
+                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2, p3).toBundle());
             }
         };
     }
@@ -166,8 +169,9 @@ public class                    HomeActivity extends MyActivity {
                         }
                         Intent intent = new Intent(mInstance, HostDiscoveryActivity.class);
                         Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_attack), "logo_activity");
+                        Pair<View, String> p3 = Pair.create(findViewById(R.id.title_attack), "title");
                         Pair<View, String> p2 = Pair.create(findViewById(R.id.red_card), "rootViewTransition");
-                        startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2).toBundle());
+                        startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2, p3).toBundle());
                     }
                 });
             }

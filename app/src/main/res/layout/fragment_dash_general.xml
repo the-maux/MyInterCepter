@@ -5,12 +5,14 @@
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:alpha="0.90">
+    android:alpha="0.90"
+    android:background="@color/DashboardPrimary">
 
     <android.support.v7.widget.CardView
         android:id="@+id/HeaderCardDashboard"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:cardBackgroundColor="@color/DashboardPrimary"
         app:cardCornerRadius="2dp"
         app:cardElevation="4dp"
         app:cardPreventCornerOverlap="true"
@@ -24,8 +26,7 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/HeaderCardDashboardLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/DashboardPrimary">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/titleChartDashboard"
@@ -61,7 +62,7 @@
         android:id="@+id/rv_dash_general"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

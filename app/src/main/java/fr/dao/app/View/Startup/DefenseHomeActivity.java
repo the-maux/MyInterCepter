@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +29,7 @@ public class                    DefenseHomeActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
     private DefenseHomeActivity mInstance = this;
     private CoordinatorLayout   mCoordinatorLayout;
+    private AppBarLayout        appBarLayout;
     private CardView            blue_card, dashboard_card, settings_card, red_card;
     private RelativeLayout      rootView;
     private RecyclerView        RV_menu;
@@ -48,6 +51,12 @@ public class                    DefenseHomeActivity extends MyActivity {
         RV_menu = findViewById(R.id.RV_menu);
         RV_menu.setLayoutManager(new GridLayoutManager(this, 2));
         rootView = findViewById(R.id.rootView);
+        appBarLayout = findViewById(R.id.appBarLayout);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                ViewCompat.setElevation(appBarLayout, 4);
+            }
+        });
     }
 
     private void                init() {
@@ -76,7 +85,7 @@ public class                    DefenseHomeActivity extends MyActivity {
                     }
                 });
             }
-        }, 100);
+        }, 10);
     }
 
     protected void              onPause() {
@@ -100,11 +109,11 @@ public class                    DefenseHomeActivity extends MyActivity {
 
         public void                 onBindViewHolder(final MenuItemHolder holder, int position) {
             switch (position) {
-                case 5:
-                    holder.titleCard.setText("Network bodyguard");
-                    holder.logo_card.setImageResource(R.drawable.scan);
+                case 0:
+                    holder.titleCard.setText("Terminal");
+                    holder.logo_card.setImageResource(R.drawable.linuxicon);
                     holder.progressBar_monitor.setVisibility(View.GONE);
-                    holder.statusIconCardView.setImageResource(R.color.filtered_color);
+                    holder.statusIconCardView.setImageResource(R.color.online_color);
                     holder.logo_card.setVisibility(View.VISIBLE);
                     holder.card_view.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
@@ -113,16 +122,16 @@ public class                    DefenseHomeActivity extends MyActivity {
                         }
                     });
                     break;
-                case 0:
-                    holder.titleCard.setText("Terminal");
-                    holder.logo_card.setImageResource(R.drawable.linuxicon);
+                case 1:
+                    holder.titleCard.setText("Dora Diagnostic");
                     holder.progressBar_monitor.setVisibility(View.GONE);
-                    holder.statusIconCardView.setImageResource(R.color.filtered_color);
+                    holder.logo_card.setImageResource(R.drawable.pepper);
+                    holder.statusIconCardView.setImageResource(R.color.online_color);
                     holder.logo_card.setVisibility(View.VISIBLE);
                     holder.card_view.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             Utils.vibrateDevice(mActivity, 100);
-                            mActivity.showSnackbar(holder.titleCard.getText().toString());
+                            mActivity.startActivity(new Intent(mActivity, DoraActivity.class));
                         }
                     });
                     break;
@@ -143,7 +152,7 @@ public class                    DefenseHomeActivity extends MyActivity {
                     holder.titleCard.setText("ARP Controller");
                     holder.progressBar_monitor.setVisibility(View.GONE);
                     holder.logo_card.setImageResource(R.drawable.poiz);
-                    holder.statusIconCardView.setImageResource(R.color.filtered_color);
+                    holder.statusIconCardView.setImageResource(R.color.offline_color);
                     holder.logo_card.setVisibility(View.VISIBLE);
                     holder.card_view.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
@@ -156,6 +165,45 @@ public class                    DefenseHomeActivity extends MyActivity {
                     holder.titleCard.setText("Crypt Check");
                     holder.progressBar_monitor.setVisibility(View.GONE);
                     holder.logo_card.setImageResource(R.mipmap.ic_lock);
+                    holder.statusIconCardView.setImageResource(R.color.offline_color);
+                    holder.logo_card.setVisibility(View.VISIBLE);
+                    holder.card_view.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            Utils.vibrateDevice(mActivity, 100);
+                            mActivity.showSnackbar(holder.titleCard.getText().toString());
+                        }
+                    });
+                    break;
+                case 5:
+                    holder.titleCard.setText("Network bodyguard");
+                    holder.logo_card.setImageResource(R.drawable.scan);
+                    holder.progressBar_monitor.setVisibility(View.GONE);
+                    holder.statusIconCardView.setImageResource(R.color.offline_color);
+                    holder.logo_card.setVisibility(View.VISIBLE);
+                    holder.card_view.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            Utils.vibrateDevice(mActivity, 100);
+                            mActivity.showSnackbar(holder.titleCard.getText().toString());
+                        }
+                    });
+                    break;
+                case 6:
+                    holder.titleCard.setText("Straight FIGHT");
+                    holder.logo_card.setImageResource(R.drawable.gallery);
+                    holder.progressBar_monitor.setVisibility(View.GONE);
+                    holder.statusIconCardView.setImageResource(R.color.offline_color);
+                    holder.logo_card.setVisibility(View.VISIBLE);
+                    holder.card_view.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            Utils.vibrateDevice(mActivity, 100);
+                            mActivity.showSnackbar(holder.titleCard.getText().toString());
+                        }
+                    });
+                    break;
+                case 7:
+                    holder.titleCard.setText("Armitage");
+                    holder.logo_card.setImageResource(R.drawable.network);
+                    holder.progressBar_monitor.setVisibility(View.GONE);
                     holder.statusIconCardView.setImageResource(R.color.filtered_color);
                     holder.logo_card.setVisibility(View.VISIBLE);
                     holder.card_view.setOnClickListener(new View.OnClickListener() {
@@ -165,31 +213,23 @@ public class                    DefenseHomeActivity extends MyActivity {
                         }
                     });
                     break;
-                case 1:
-                    holder.titleCard.setText("Dora Diagnostic");
-                    holder.progressBar_monitor.setVisibility(View.GONE);
-                    holder.logo_card.setImageResource(R.drawable.pepper);
-                    holder.statusIconCardView.setImageResource(R.color.filtered_color);
-                    holder.logo_card.setVisibility(View.VISIBLE);
-                    holder.card_view.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            Utils.vibrateDevice(mActivity, 100);
-                            mActivity.startActivity(new Intent(mActivity, DoraActivity.class));
-                        }
-                    });
-                    break;
             }
             ViewGroup.LayoutParams lp = holder.card_view.getLayoutParams();
             lp.width = CardView.LayoutParams.MATCH_PARENT;
 //                ViewAnimate.setVisibilityToVisibleLong(holder.card_view);
             holder.card_view.setLayoutParams(lp);
-            holder.card_view.setAlpha(0.9f);
+            ViewAnimate.FabAnimateReveal(mInstance, holder.card_view, new Runnable() {
+                public void run() {
+                    holder.card_view.setAlpha(0.8f);
+                }
+            });
 //            Animation animation = AnimationUtils.loadAnimation(mInstance, android.R.anim.slide_in_left);
 //            holder.card_view.startAnimation(animation);
+
         }
 
         public int                  getItemCount() {
-            return 6;
+            return 8;
         }
     }
 

@@ -67,8 +67,11 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
         sessionManager = new SessionManager();
         initChart();
         initRV();
-        ViewAnimate.setVisibilityToVisibleQuick(jcoolGraph);
-        ViewAnimate.setVisibilityToVisibleQuick(mRv_dash_general);
+        ViewAnimate.FabAnimateReveal(mActivity, jcoolGraph, new Runnable() {
+            public void run() {
+                ViewAnimate.FabAnimateReveal(mActivity, mRv_dash_general, null);
+            }
+        });
     }
 
     private void                initRV() {
@@ -121,7 +124,7 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
         jcoolGraph.setDescription(description);
         titleChartDashboard.setText(titleChart);
         jcoolGraph.invalidate(); // refresh
-        mActivity.setToolbarTitle("General Statistique", nbrActionPerformed + " actions performed");
+        mActivity.setToolbarTitle("Statistique", nbrActionPerformed + " actions performed");
     }
 
     private LineDataSet             initLineDataSet(List<Entry> defenseEntry, String title, int color) {
