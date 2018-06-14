@@ -156,10 +156,11 @@ public class                            DnsActivity extends MITMActivity {
         mAction_import.setOnClickListener(onClickTopMenu());
         mAction_export.setOnClickListener(onClickTopMenu());
         mClipper.setOnClickListener(onClickTopMenu());
+        int dns = MitManager.getInstance()
+                .getDnsControler() == null ? 0 :
+                MitManager.getInstance().getDnsControler().getDnsConf().listDomainSpoofable.size();
         setToolbarTitle(null,
-                MitManager.getInstance()
-                        .getDnsControler().getDnsConf()
-                        .listDomainSpoofable.size() + " title spoofable");
+                dns + " title spoofable");
     }
 
     private View.OnClickListener        onClickTopMenu() {
@@ -262,6 +263,7 @@ public class                            DnsActivity extends MITMActivity {
     }
 
     private void                        initRVConfiguration() {
+        //TODO: le mDnsControler est null car il est init qu'une fois alors que faut le get depuis Mitm
         mDnsSpoofAdapter = new DnsSpoofConfAdapter(this, mDnsControler.getDnsConf().listDomainSpoofable);
         ViewAnimate.setVisibilityToVisibleQuick(mDnsSpoof_RV);
         mDnsSpoof_RV.setAdapter(mDnsSpoofAdapter);
