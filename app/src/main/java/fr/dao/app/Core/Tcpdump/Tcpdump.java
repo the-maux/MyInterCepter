@@ -77,21 +77,19 @@ public class                        Tcpdump {
                     Log.i(TAG, actualCmd);
                     mTcpDumpProcess = new RootProcess("Wireshark").exec(actualCmd);
                     Tcpdump.this.run(mTcpDumpProcess.getReader(), dashboardSniff);
-                    Log.i(TAG, "Tcpdump execution over");
-                    stop();
+                    Log.i(TAG, "Tcpdump execution over normaly");
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.e(TAG, "Process Error: " + e.getMessage());
                     mActivity.showSnackbar(e.getMessage(), ContextCompat.getColor(mActivity, R.color.stop_color));
                     mActivity.setToolbarTitle("Execution stopped", e.getMessage());
-                    stop();
-                    Log.d(TAG, "Restarting ?");
+                    Log.i(TAG, "Restarting ?");
                 } finally {
                     if (mTcpDumpProcess != null)
                         mTcpDumpProcess.closeProcess();
                     readLineForLivePrint("Quiting...", dashboardSniff);
+                    Log.i(TAG, "End of Tcpdump thread");
                 }
-                Log.i(TAG, "End of Tcpdump thread");
             }
         }).start();
         return dashboardSniff;
@@ -164,9 +162,8 @@ public class                        Tcpdump {
     }
 
     public void                     stop() {
-        Log.d(TAG, "stop");
         if (isRunning) {
-            MitManager.getInstance().stopTcpdump(true);
+            Log.d(TAG, "stop");
             mTcpDumpProcess.closeDontWait();
             mActivity.onTcpdumpstopped();
             isRunning = false;

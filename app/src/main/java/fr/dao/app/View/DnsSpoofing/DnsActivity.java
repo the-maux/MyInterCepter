@@ -156,7 +156,10 @@ public class                            DnsActivity extends MITMActivity {
         mAction_import.setOnClickListener(onClickTopMenu());
         mAction_export.setOnClickListener(onClickTopMenu());
         mClipper.setOnClickListener(onClickTopMenu());
-        setToolbarTitle(null, mDnsControler.getDnsConf().listDomainSpoofable.size() + " title spoofable");
+        setToolbarTitle(null,
+                MitManager.getInstance()
+                        .getDnsControler().getDnsConf()
+                        .listDomainSpoofable.size() + " title spoofable");
     }
 
     private View.OnClickListener        onClickTopMenu() {

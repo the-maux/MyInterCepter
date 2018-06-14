@@ -146,7 +146,7 @@ public class                        MitManager {
             updateRunningStatus();
     }
     public boolean                  stopMITMBehavior() {
-        if (!isProxyRunning() && isTcpdumpRunning() && isDnsmasqRunning()) {
+        if (!isProxyRunning() && !isTcpdumpRunning() && !isDnsmasqRunning()) {
             stopEverything();
             return true;
         } else {
