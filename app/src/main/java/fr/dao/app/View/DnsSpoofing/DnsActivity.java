@@ -65,7 +65,7 @@ public class                            DnsActivity extends MITMActivity {
         initTabs();
         initRVConfiguration();
       //  initSearchView();
-        initNavigationBottomBar(DNS, true);
+        initNavigationBottomBar(DNS);
         mDnsControler.setActivity(this);
     }
 

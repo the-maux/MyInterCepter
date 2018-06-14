@@ -75,7 +75,7 @@ public class                    SniffActivity extends MITMActivity {
                 setToolbarTitle("Sniffer", (mSingleton.hostList == null) ? "0" : mSingleton.hostList.size() + " target");
             }
             initSettings();
-            initNavigationBottomBar(SNIFFER, true);
+            initNavigationBottomBar(SNIFFER);
             ViewAnimate.FabAnimateReveal(mInstance, mFab);
         } else {
             Log.d(TAG, "Pcap Reading mode activated");

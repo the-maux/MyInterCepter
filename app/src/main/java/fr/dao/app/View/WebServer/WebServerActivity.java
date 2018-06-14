@@ -67,7 +67,7 @@ public class                    WebServerActivity extends MITMActivity {
     private void                init() {
         mToolbar.setSubtitle(myUrl);
         mFab.setOnClickListener(onFabClick());
-        initNavigationBottomBar(WEB, true);
+        initNavigationBottomBar(WEB);
         WebSettings webSettings = mWebview.getSettings();
         webSettings.setJavaScriptEnabled(true);
         mWebview.setWebViewClient(new MyWebViewClient(mToolbar));

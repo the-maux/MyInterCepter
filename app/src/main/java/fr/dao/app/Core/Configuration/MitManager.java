@@ -81,8 +81,8 @@ public class                        MitManager {
                     mHttpTrameDispatcher.reset();
                 }
                 Proxy.getProxy().start(mHttpTrameDispatcher);
-                initDNSSpoofing();
-                Singleton.getInstance().setProxyStarted(true);
+                //initDNSSpoofing();
+
                 return true;
             } else
                 Log.e(TAG, "Proxy is null, can't do shit");
@@ -129,7 +129,6 @@ public class                        MitManager {
         }
         Proxy.getProxy().stop();
         Log.d(TAG, "stopProxy");
-        Singleton.getInstance().setProxyStarted(false);
         updateRunningStatus();
     }
     public boolean                  stopDnsSpoofing(boolean isShutdown) {

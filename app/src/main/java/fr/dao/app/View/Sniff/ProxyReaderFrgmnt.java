@@ -18,9 +18,11 @@ import java.util.ArrayList;
 
 import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Tcpdump.Proxy;
+import fr.dao.app.Model.Net.HttpTrame;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.R;
 import fr.dao.app.View.Proxy.ProxyActivity;
+import fr.dao.app.View.ZViewController.Adapter.HTTProxyAdapter;
 import fr.dao.app.View.ZViewController.Adapter.SniffPacketsAdapter;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
@@ -32,8 +34,8 @@ public class                    ProxyReaderFrgmnt extends MyFragment {
     private ConstraintLayout    rootViewForDashboard;
     private RelativeLayout      rootViewForLiveFlux;
     private ProxyActivity       mActivity;
-    private RecyclerView mProxy_RV;
-    private SniffPacketsAdapter mAdapterWireshark;
+    private RecyclerView        mProxy_RV;
+    private HTTProxyAdapter     mAdapterWireshark;
     private Proxy               mProxy;
     ProgressDialog              dialog;
 
@@ -59,46 +61,30 @@ public class                    ProxyReaderFrgmnt extends MyFragment {
     }
 
     private void                initRV() {
-        mAdapterWireshark = new SniffPacketsAdapter(mActivity, mProxy_RV);
+        mAdapterWireshark = new HTTProxyAdapter(mActivity);
         mProxy_RV.setAdapter(mAdapterWireshark);
         mProxy_RV.setItemAnimator(null);
         mProxy_RV.setLayoutManager(new LinearLayoutManager(mActivity));
     }
 
     public boolean              start() {
-        if (mSingleton.isProxyStarted()) {
+        Log.d(TAG, "start");
+        if (MitManager.getInstance().isProxyRunning()) {
             MitManager.getInstance().stopProxy();
         } else {
+            mActivity.setToolbarTitle("Proxy starting", null);
             return MitManager.getInstance().initProxy(mProxy_RV, mAdapterWireshark);
         }
         return true;
     }
 
-    public void                 onSniffingOver(final ArrayList<Trame> bufferOfTrame) {
-        Log.d(TAG, " onSniffingOver:" + bufferOfTrame.size());
+    public void                 onProxyStopped() {
+        Log.d(TAG, " onProxyStopped");
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
-                mAdapterWireshark.loadListOfTrame(bufferOfTrame, dialog);
-                mActivity.setToolbarTitle(null, bufferOfTrame.size() + " packets");
+                mActivity.setToolbarTitle("Proxy stopped", null);
+                mActivity.onProxystopped();
             }
         });
-    }
-    private int rax = 0;
-    public synchronized void    loadingMonitor() {
-        final String monitor = "Loading. Reading " + rax++ + " packets";
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                dialog.setMessage(monitor);
-            }
-        });
-    }
-
-    public void                 onError() {
-    }
-
-    public void                 onProxystopped() {
-        Log.e(TAG, "onProxystopped");
-        mActivity.onProxystopped();
     }
 }

@@ -21,7 +21,7 @@ public class                            Singleton {
     public  NetworkInformation          NetworkInformation = null;
     public  Network                     CurrentNetwork = null;
     private SniffSession                CurrentSniffSession = null;
-    private boolean                     webSpoofedstarted = false, proxyStarted = false;
+    private boolean                     webSpoofedstarted = false;
     public  Session                     Session;
     public  SettingsControler           Settings = null;
     public  ArrayList<Host>             hostList = null, savedHostList = null;
@@ -57,12 +57,6 @@ public class                            Singleton {
         Settings.getUserPreferences().Lockscreen = lockScreen;
         //TODO: LockScreen
         Log.i("setockScreenActived", "Not implemented");
-    }
-    public boolean                      isProxyStarted() {
-        return proxyStarted;
-    }
-    public void                         setProxyStarted(boolean proxyStarted) {
-        this.proxyStarted = proxyStarted;
     }
 
     public void                         resetActualSniffSession() {

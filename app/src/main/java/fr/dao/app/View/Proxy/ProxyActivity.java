@@ -6,7 +6,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -22,7 +21,6 @@ import fr.dao.app.Core.Network.Proxy.HTTPProxy;
 import fr.dao.app.R;
 import fr.dao.app.View.Sniff.ProxyReaderFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MITMActivity;
-import fr.dao.app.View.ZViewController.Adapter.HTTProxyAdapter;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
@@ -38,25 +36,24 @@ public class                            ProxyActivity extends MITMActivity {
     private ImageButton                 mSettingsBtn;
     private ImageView                   mAction_add_host;
     private TabLayout                   mTabs;
-    private RecyclerView                mProxyRV;
-    private HTTProxyAdapter             mAdapterDetailWireshark;
+    private MitManager                  mMitManager = MitManager.getInstance();
     private HTTPProxy                   proxyActivity;
     private Singleton                   mSingleton = Singleton.getInstance();
     private MyFragment                  mFragment;
 
     public void                         onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_spysniff);
+        setContentView(R.layout.activity_proxyf);
         initXml();
         init();
-        setToolbarTitle("Proxy", "Not started");
+        setToolbarTitle("Proxy", "Ready to start");
     }
 
     private void                        init() {
         initFab();
         initTabs();
         initFragment(new ProxyReaderFrgmnt());
-        initNavigationBottomBar(PROXY, true);
+        initNavigationBottomBar(PROXY);
         proxyActivity = new HTTPProxy(this);
     }
 
@@ -83,7 +80,7 @@ public class                            ProxyActivity extends MITMActivity {
         ViewAnimate.FabAnimateReveal(mInstance, mFab);
 //        mFab.show();
         mFab.setImageResource(R.mipmap.ic_stop);
-        if (!mSingleton.isProxyStarted()) {
+        if (!mMitManager.isProxyRunning()) {
             mFab.setImageResource(R.drawable.ic_media_play);
         } else {
             mFab.setImageResource(R.mipmap.ic_stop);
@@ -92,7 +89,7 @@ public class                            ProxyActivity extends MITMActivity {
             public void onClick(View view) {
                 Utils.vibrateDevice(mInstance);
                 mFragment.start();
-                if (mSingleton.isProxyStarted()) {
+                if (!mMitManager.isProxyRunning()) {
                     mFab.setImageResource(R.drawable.ic_media_play);
                 } else {
                     mFab.setImageResource(R.mipmap.ic_stop);
@@ -103,7 +100,7 @@ public class                            ProxyActivity extends MITMActivity {
     }
 
     public void                         onProxystopped() {
-        setToolbarTitle("Proxy", "Stopped");
+
     }
 
     private void                        initTabs() {
@@ -167,6 +164,6 @@ public class                            ProxyActivity extends MITMActivity {
         super.onBackPressed();
         mSingleton.hostList = mSingleton.savedHostList;
         //TODO:Check if sniffing was loading
-        MitManager.getInstance().stopEverything();
+        mMitManager.stopEverything();
     }
 }

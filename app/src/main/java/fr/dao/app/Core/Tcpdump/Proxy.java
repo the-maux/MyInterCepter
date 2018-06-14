@@ -21,7 +21,7 @@ import fr.dao.app.View.ZViewController.Activity.MyActivity;
 
 
 public class                        Proxy {
-    private String                  TAG = "Proxy";
+    private static String           TAG = "Proxy";
     private static Proxy            mInstance = null;
     private RootProcess             mTcpDumpProcess;
     private Singleton               mSingleton = Singleton.getInstance();
@@ -32,11 +32,12 @@ public class                        Proxy {
     private String                  actualCmd = "";
     private HTTPDispatcher          mDispatcher = null;
     private ProxyReaderFrgmnt       mFragment = null;
-    private ArrayList<Trame>        mBufferOfTrame = new ArrayList<>();
+    private ArrayList<HttpTrame>    mBufferOfTrame = new ArrayList<>();
 
     private                         Proxy(ProxyReaderFrgmnt activity) {
+        Log.d(TAG, "Constructor");
         this.mActivity = (MyActivity) activity.getActivity();
-        LinkedHashMap<String, String> mCmds = mProxyConf.initCmds();
+        mProxyConf.initCmds();
     }
 
     public static synchronized Proxy getProxy(ProxyReaderFrgmnt fragment, boolean isProxyActivity) {
@@ -44,6 +45,7 @@ public class                        Proxy {
             mInstance = new Proxy(fragment);
             mInstance.mFragment = fragment;
         }
+        Log.d(TAG, "getProxy");
         return mInstance;
     }
 
@@ -52,9 +54,8 @@ public class                        Proxy {
     }
 
     public static synchronized boolean  isRunning() {
-        if (mInstance == null)
-            return false;
-        return mInstance.isRunning;
+        Log.d(TAG, "isRunning:" + ((mInstance != null) && mInstance.isRunning));
+        return mInstance != null && mInstance.isRunning;
     }
 
     public String                   initCmd(List<Host> hosts) {
@@ -86,8 +87,8 @@ public class                        Proxy {
                 } finally {
                     if (mTcpDumpProcess != null)
                         mTcpDumpProcess.closeProcess();
+                    Log.i(TAG, "End of Proxy thread");
                 }
-                Log.i(TAG, "End of Proxy thread");
             }
         }).start();
     }
@@ -96,16 +97,30 @@ public class                        Proxy {
         String tmp;
         final ArrayList<String> buffer = new ArrayList<>();
         while ((tmp = reader.readLine()) != null && isRunning) {
-            final String line = tmp;
-            buffer.add(tmp);
-            if (Pattern.compile("/([0-9])\\w+:([0-9])\\w+:([0-9])\\w+.+([0-9])\\w+ +IP/g").matcher(line).find()) {
-                new Thread(new Runnable() {
-                    public void run() {
-                        readAndAnalyse(new HttpTrame(buffer));
+            if (!tmp.contains("tcpdump: verbose ") && !tmp.contains("listening on ")) {
+                if (!tmp.isEmpty())
+                    buffer.add(tmp);
+                else if (!buffer.isEmpty()) {
+                        try {
+                            Log.e(TAG, "Dump de la trame:");
+                            for (String s : buffer) {
+                                Log.e(TAG, "[" + s + "]");
+                            }
+                            //Not in thread cause .clear() is too fast for the thread
+                            final HttpTrame trame = new HttpTrame(buffer);
+                            new Thread(new Runnable() {
+                                public void run() {
+                                    readAndAnalyse(trame);
+                                }
+                            }).start();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Log.d(TAG, "Trame parsing error");
+                        }
+                        buffer.clear();
                     }
-                }).start();
-                buffer.clear();
-            }
+            } else
+                Log.i(TAG, "Skipped[" + tmp + "]");
         }
         stop();
         Log.i(TAG, "Proxy execution over");
@@ -125,10 +140,150 @@ public class                        Proxy {
         Log.d(TAG, "stop");
         if (isRunning) {
             isRunning = false;
-            if (mActivity != null)
-                mFragment.onProxystopped();
             if (mFragment != null)
-                mFragment.onSniffingOver(mBufferOfTrame);
+                mFragment.onProxyStopped();
         }
     }
 }
+
+
+/**
+ * listening on wlan0, link-type EN10MB (Ethernet), capture size 65535 bytes
+
+
+22:12:25.147615 IP 192.168.0.24.33048 > 52.1.35.184.www: . 504:505(1) ack 1653 win 256
+E..)..@.........4.#....P.....$DiP...B.........
+22:12:25.147790 IP 192.168.0.24.33048 > 52.1.35.184.www: . 504:505(1) ack 1653 win 256
+E..)..@.........4.#....P.....$DiP...B....
+22:12:35.239490 IP 192.168.0.24.33048 > 52.1.35.184.www: . 504:505(1) ack 1653 win 256
+E..)..@.........4.#....P.....$DiP...B.........
+22:12:35.239861 IP 192.168.0.24.33048 > 52.1.35.184.www: . 504:505(1) ack 1653 win 256
+E..)..@.........4.#....P.....$DiP...B....
+22:12:45.422886 IP 192.168.0.24.33048 > 52.1.35.184.www: . 504:505(1) ack 1653 win 256
+E..)..@.........4.#....P.....$DiP...B.........
+22:12:45.423333 IP 192.168.0.24.33048 > 52.1.35.184.www: . 504:505(1) ack 1653 win 256
+E..)..@.........4.#....P.....$DiP...B....
+22:12:45.615902 IP 192.168.0.24.33048 > 52.1.35.184.www: P 505:931(426) ack 1653 win 256
+E.....@....(....4.#....P.....$DiP...L...GET /bearer HTTP/1.1
+Host: httpbin.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0
+Accept: application/json
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://httpbin.org/
+origin: http://httpbin.org
+Cookie: _gauges_unique_day=1; _gauges_unique_month=1; _gauges_unique_year=1; _gauges_unique=1; _gauges_unique_hour=1
+Connection: keep-alive
+
+
+22:12:45.616113 IP 192.168.0.24.33048 > 52.1.35.184.www: P 505:931(426) ack 1653 win 256
+E.....@....(....4.#....P.....$DiP...L...GET /bearer HTTP/1.1
+Host: httpbin.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0
+Accept: application/json
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://httpbin.org/
+origin: http://httpbin.org
+Cookie: _gauges_unique_day=1; _gauges_unique_month=1; _gauges_unique_year=1; _gauges_unique=1; _gauges_unique_hour=1
+Connection: keep-alive
+
+
+22:12:46.959007 IP 192.168.0.24.33048 > 52.1.35.184.www: P 931:1357(426) ack 1958 win 255
+E.....@....&....4.#....P.....$E.P...I...GET /bearer HTTP/1.1
+Host: httpbin.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0
+Accept: application/json
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://httpbin.org/
+origin: http://httpbin.org
+Cookie: _gauges_unique_day=1; _gauges_unique_month=1; _gauges_unique_year=1; _gauges_unique=1; _gauges_unique_hour=1
+Connection: keep-alive
+
+
+22:12:46.959172 IP 192.168.0.24.33048 > 52.1.35.184.www: P 931:1357(426) ack 1958 win 255
+E.....@....&....4.#....P.....$E.P...I...GET /bearer HTTP/1.1
+Host: httpbin.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0
+Accept: application/json
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://httpbin.org/
+origin: http://httpbin.org
+Cookie: _gauges_unique_day=1; _gauges_unique_month=1; _gauges_unique_year=1; _gauges_unique=1; _gauges_unique_hour=1
+Connection: keep-alive
+
+
+22:12:57.096499 IP 192.168.0.24.33048 > 52.1.35.184.www: . 1356:1357(1) ack 2263 win 254
+E..)..@.........4.#....P...6.$F.P...<.........
+22:12:57.096751 IP 192.168.0.24.33048 > 52.1.35.184.www: . 1356:1357(1) ack 2263 win 254
+E..)..@.........4.#....P...6.$F.P...<....
+22:13:07.235509 IP 192.168.0.24.33048 > 52.1.35.184.www: . 1356:1357(1) ack 2263 win 254
+E..)..@.........4.#....P...6.$F.P...<.........
+22:13:07.236173 IP 192.168.0.24.33048 > 52.1.35.184.www: . 1356:1357(1) ack 2263 win 254
+E..)..@.........4.#....P...6.$F.P...<....
+22:13:13.275944 IP 192.168.0.24.33048 > 52.1.35.184.www: P 1357:1810(453) ack 2263 win 254
+E.....@.........4.#....P...7.$F.P...p...GET /basic-auth/LOGIN_ICI/PASSWORD_ICI HTTP/1.1
+Host: httpbin.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0
+Accept: application/json
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://httpbin.org/
+origin: http://httpbin.org
+Cookie: _gauges_unique_day=1; _gauges_unique_month=1; _gauges_unique_year=1; _gauges_unique=1; _gauges_unique_hour=1
+Connection: keep-alive
+
+
+22:13:13.276161 IP 192.168.0.24.33048 > 52.1.35.184.www: P 1357:1810(453) ack 2263 win 254
+E.....@.........4.#....P...7.$F.P...p...GET /basic-auth/LOGIN_ICI/PASSWORD_ICI HTTP/1.1
+Host: httpbin.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0
+Accept: application/json
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://httpbin.org/
+origin: http://httpbin.org
+Cookie: _gauges_unique_day=1; _gauges_unique_month=1; _gauges_unique_year=1; _gauges_unique=1; _gauges_unique_hour=1
+Connection: keep-alive
+
+
+22:13:23.414540 IP 192.168.0.24.33048 > 52.1.35.184.www: . 1809:1810(1) ack 2546 win 253
+E..)..@.........4.#....P.....$G.P...:.........
+22:13:23.415130 IP 192.168.0.24.33048 > 52.1.35.184.www: . 1809:1810(1) ack 2546 win 253
+E..)..@.........4.#....P.....$G.P...:....
+22:13:24.744980 IP 192.168.0.24.33048 > 52.1.35.184.www: P 1810:2326(516) ack 2546 win 253
+E..,..@.........4.#....P.....$G.P....}..GET /basic-auth/LOGIN_ICI/PASSWORD_ICI HTTP/1.1
+Host: httpbin.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0
+Accept: application/json
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://httpbin.org/
+origin: http://httpbin.org
+Cookie: _gauges_unique_day=1; _gauges_unique_month=1; _gauges_unique_year=1; _gauges_unique=1; _gauges_unique_hour=1
+Connection: keep-alive
+Authorization: Basic TU9OIExPR0lOIElDSTpNT04gUEFTU1dPUkQgSUNJ
+
+
+22:13:24.745416 IP 192.168.0.24.33048 > 52.1.35.184.www: P 1810:2326(516) ack 2546 win 253
+E..,..@.........4.#....P.....$G.P....}..GET /basic-auth/LOGIN_ICI/PASSWORD_ICI HTTP/1.1
+Host: httpbin.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0
+Accept: application/json
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://httpbin.org/
+origin: http://httpbin.org
+Cookie: _gauges_unique_day=1; _gauges_unique_month=1; _gauges_unique_year=1; _gauges_unique=1; _gauges_unique_hour=1
+Connection: keep-alive
+Authorization: Basic TU9OIExPR0lOIElDSTpNT04gUEFTU1dPUkQgSUNJ
+
+
+^C
+22 packets captured
+22 packets received by filter
+0 packets dropped by kernel
+ * 
+ **/
