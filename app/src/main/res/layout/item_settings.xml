@@ -55,8 +55,17 @@
             app:layout_constraintRight_toLeftOf="@+id/switch_sw"
             app:layout_constraintTop_toBottomOf="@+id/title" />
 
-        <Switch
+        <android.support.v7.widget.SwitchCompat
             android:id="@+id/switch_sw"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/userAgentLogo"
             android:layout_width="50dp"
             android:layout_height="40dp"
             android:layout_marginRight="8dp"
