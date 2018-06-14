@@ -210,6 +210,18 @@ public class                    HomeActivity extends MyActivity {
         }
     }
 
+    @Override
+    protected void              onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause");
+    }
+
     public void                 onBackPressed() {
         finish();
     }

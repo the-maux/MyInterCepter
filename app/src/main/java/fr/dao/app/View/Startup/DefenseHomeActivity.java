@@ -2,17 +2,17 @@ package fr.dao.app.View.Startup;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -35,27 +35,26 @@ public class                    DefenseHomeActivity extends MyActivity {
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_defense);
-        postponeEnterTransition();
         initXml();
         init();
-        pushViewToFront();
     }
 
     private void                pushViewToFront() {
         startPostponedEnterTransition();
-
     }
 
     private void                initXml() {
         mCoordinatorLayout = findViewById(R.id.Coordonitor);
         RV_menu = findViewById(R.id.RV_menu);
+        RV_menu.setLayoutManager(new GridLayoutManager(this, 2));
         rootView = findViewById(R.id.rootView);
     }
 
     private void                init() {
-        mAdapter = new MenuDefenseAdapter(this);
-        RV_menu.setAdapter(mAdapter);
-        RV_menu.setLayoutManager(new GridLayoutManager(this, 2));
+        //mAdapter = new MenuDefenseAdapter(this);
+        //RV_menu.setAdapter(mAdapter);
+        //RV_menu.setLayoutManager(new GridLayoutManager(this, 2));
+
     }
 
     public void                 showSnackbar(String txt) {
@@ -63,19 +62,31 @@ public class                    DefenseHomeActivity extends MyActivity {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
 
-    protected void onResume() {
+    protected void              onResume() {
         super.onResume();
-        ViewAnimate.setVisibilityToVisibleQuick(rootView);
+        Log.d(TAG, "onResume");
+        mAdapter = new MenuDefenseAdapter(this);
+        RV_menu.setAdapter(mAdapter);
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                mInstance.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Log.d(TAG, "RV show");
+                        ViewAnimate.FabAnimateReveal(mInstance, RV_menu, null);
+                    }
+                });
+            }
+        }, 100);
     }
 
-    @Override
-    protected void onPause() {
+    protected void              onPause() {
         super.onPause();
-        ViewAnimate.setVisibilityToGoneQuick(rootView);
+        Log.d(TAG, "onPause");
+
     }
 
     public class MenuDefenseAdapter extends RecyclerView.Adapter<MenuItemHolder> {
-        private String              TAG = "NetworksAdapter";
+        private String              TAG = "DefenseHomeActivity";
         private DefenseHomeActivity mActivity;
 
         public MenuDefenseAdapter(DefenseHomeActivity activity) {
@@ -170,15 +181,20 @@ public class                    DefenseHomeActivity extends MyActivity {
             }
             ViewGroup.LayoutParams lp = holder.card_view.getLayoutParams();
             lp.width = CardView.LayoutParams.MATCH_PARENT;
-                ViewAnimate.setVisibilityToVisibleLong(holder.card_view);
+//                ViewAnimate.setVisibilityToVisibleLong(holder.card_view);
             holder.card_view.setLayoutParams(lp);
             holder.card_view.setAlpha(0.9f);
-            Animation animation = AnimationUtils.loadAnimation(mInstance, android.R.anim.slide_in_left);
-            holder.card_view.startAnimation(animation);
+//            Animation animation = AnimationUtils.loadAnimation(mInstance, android.R.anim.slide_in_left);
+//            holder.card_view.startAnimation(animation);
         }
 
         public int                  getItemCount() {
             return 6;
         }
+    }
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        rootView.setVisibility(View.GONE);
     }
 }
