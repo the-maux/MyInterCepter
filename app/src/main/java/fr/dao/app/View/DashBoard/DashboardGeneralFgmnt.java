@@ -75,7 +75,7 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
     }
 
     private void                initRV() {
-        SessionAdapter adapter = new SessionAdapter((MyActivity) getActivity(), sessionManager.getSessionsFromDate(null, null));
+        SessionAdapter adapter = new SessionAdapter((MyActivity) getActivity(), sessionManager.getSessionsFromDate(null, null), R.color.DashboardPrimary);
         mRv_dash_general.setAdapter(adapter);
         mRv_dash_general.setHasFixedSize(true);
         mRv_dash_general.setLayoutManager(new LinearLayoutManager(mActivity));
@@ -86,8 +86,6 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
         super.onResume();
         init();
     }
-
-
     /**
      * XAxis(<->) = NBR_SESSIONS
      * YAxis(↕) = NBR ACTIONS
