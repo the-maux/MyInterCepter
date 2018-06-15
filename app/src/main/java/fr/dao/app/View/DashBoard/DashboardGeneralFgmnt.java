@@ -63,8 +63,8 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
     }
 
     public void                 init() {
-        nbrActionPerformed = 0;
         sessionManager = new SessionManager();
+        nbrActionPerformed = 0x0;
         initChart();
         initRV();
         ViewAnimate.FabAnimateReveal(mActivity, jcoolGraph, new Runnable() {
@@ -119,7 +119,7 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
         jcoolGraph.setData(data);
         String titleChart = (DBNetwork.getAllAccessPoint() == null ? "0" : DBNetwork.getAllAccessPoint().size()) + " network audit";
         Description description = new Description();
-        description.setText("6 sessions");
+        description.setText(sessionManager.getSessionsFromDate(null, null).size() + " sessions");
         description.setTextColor(ContextCompat.getColor(mActivity, R.color.white_secondary));
         jcoolGraph.setDescription(description);
         titleChartDashboard.setText(titleChart);
@@ -138,15 +138,17 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
         return setComp1;
     }
 
-    public IAxisValueFormatter getSessionValueFormater() {
-        return new MyCustomXAxisValueFormatter();
-    }
+
 
     public Session getSessionFromValue(float value) {
         //TODO get Session from value in graph
         return null;
     }
 
+
+    public IAxisValueFormatter getSessionValueFormater() {
+        return new MyCustomXAxisValueFormatter();
+    }
     /**
      * Print The date of the session in XAxis value
      */
