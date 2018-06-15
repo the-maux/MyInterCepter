@@ -26,10 +26,12 @@ public class                        SessionAdapter extends RecyclerView.Adapter<
     private Singleton               mSingleton = Singleton.getInstance();
     private MyActivity              mActivity;
     private List<Session>           mSessions;
+    private int                     color;
 
-    public                          SessionAdapter(MyActivity activity, List<Session> sessions) {
+    public                          SessionAdapter(MyActivity activity, List<Session> sessions, int color) {
         this.mActivity = activity;
         this.mSessions = sessions;
+        this.color = color;
     }
 
     public GenericLittleCardAvatarHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -39,7 +41,7 @@ public class                        SessionAdapter extends RecyclerView.Adapter<
 
     public void                     onBindViewHolder(GenericLittleCardAvatarHolder holder, int position) {
         Session session = mSessions.get(position);
-        holder.card_view.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.DashboardPrimary));
+        holder.card_view.setBackgroundColor(ContextCompat.getColor(mActivity, this.color));
         holder.title.setText("Session du " + session.getDateString().replace("/", " "));
         holder.subtitle.setText(session.Actions().size() + " actions performed");
         setLogo(holder.logo);

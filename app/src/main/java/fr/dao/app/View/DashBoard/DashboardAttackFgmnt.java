@@ -36,6 +36,7 @@ import fr.dao.app.Core.Database.DBSniffSession;
 import fr.dao.app.Core.Network.SessionManager;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Adapter.SniffSessionAdapter;
+import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 
@@ -66,14 +67,20 @@ public class                    DashboardAttackFgmnt extends MyFragment {
 
     public void                 init() {
         mActivity.setToolbarTitle("Attack stats", null);
-        sessionManager = new SessionManager();
+        if (sessionManager != null)
+            sessionManager = new SessionManager();
         initChart();
         initRV();
+        ViewAnimate.FabAnimateReveal(mActivity, mChart, new Runnable() {
+            public void run() {
+                ViewAnimate.FabAnimateReveal(mActivity, mAttack_RV, null);
+            }
+        });
     }
-
+    SniffSessionAdapter adapter;
     private void                initRV() {
         //TODO: les sniff sessions ne sont pas lié au sessions !!!
-        SniffSessionAdapter adapter = new SniffSessionAdapter(mActivity, DBSniffSession.getAllSniffSession());
+        adapter = new SniffSessionAdapter(mActivity, DBSniffSession.getAllSniffSession());
         mAttack_RV.setAdapter(adapter);
         mAttack_RV.setHasFixedSize(true);
         mAttack_RV.setLayoutManager(new LinearLayoutManager(mActivity));
@@ -93,13 +100,17 @@ public class                    DashboardAttackFgmnt extends MyFragment {
         mChart.setWebLineWidthInner(1f);
         mChart.setWebColorInner(Color.LTGRAY);
         mChart.setWebAlpha(100);
+        mChart.animateXY(1400, 1400);
         int nbrNetworkSaved = mNameNetworkSaved.length, nbrTypeOfAttack = 5, range = 5;
 
         ArrayList<IRadarDataSet> sets = new ArrayList<IRadarDataSet>();
+        float maximum = 0;
         for (String nameNetwork : mNameNetworkSaved) {
             ArrayList<RadarEntry> entries = new ArrayList<>();
             for (int i = 0; i < nbrTypeOfAttack; i++) {
                 float val = (float) new Random().nextInt(50);
+                if (val > maximum)
+                    maximum = val;
                 entries.add(new RadarEntry(val));
             }
             RadarDataSet set1 = new RadarDataSet(entries, nameNetwork);
@@ -107,26 +118,21 @@ public class                    DashboardAttackFgmnt extends MyFragment {
             int color = getColorForWifi();
             set1.setColor(color);
             set1.setFillColor(color);
-            set1.setDrawFilled(true);
-            set1.setFillAlpha(180);
-            set1.setLineWidth(1f);
-            set1.setDrawHighlightCircleEnabled(true);
-            set1.setDrawHighlightIndicators(false);
+            set1.setDrawFilled(false);
+//            set1.setFillAlpha(180);
+            set1.setLineWidth(1.8f);
             sets.add(set1);
         }
-
         RadarData data = new RadarData(sets);
         data.setValueTextSize(8f);
         data.setDrawValues(false);
         data.setValueTextColor(Color.WHITE);
 
-        mChart.setData(data);
-        mChart.invalidate();
 
         XAxis xAxis = mChart.getXAxis();
         xAxis.setTextSize(9f);
-        xAxis.setYOffset(0f);
-        xAxis.setXOffset(0f);
+        xAxis.setYOffset(1f);
+        xAxis.setXOffset(1f);
         xAxis.setValueFormatter(new IAxisValueFormatter() {
             private String[] mActivities = new String[]{"Proxy", "Wireshark", "Dns Spoofing", "Nmap", "Exploit"};
 
@@ -140,21 +146,24 @@ public class                    DashboardAttackFgmnt extends MyFragment {
         yAxis.setLabelCount(5, false);
         yAxis.setTextSize(9f);
         yAxis.setAxisMinimum(0f);
-        yAxis.setAxisMaximum(80f);
+        yAxis.setAxisMaximum(maximum);
         yAxis.setDrawLabels(false);
 
         Legend l = mChart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        l.setOrientation(Legend.LegendOrientation.VERTICAL);
         l.setDrawInside(false);
-        l.setXEntrySpace(3f);//7
-        l.setYEntrySpace(2f);//5
+        l.setXEntrySpace(7f);//7
+        l.setYEntrySpace(5f);//5
         l.setTextColor(Color.WHITE);
 
         Description description = mChart.getDescription();
         description.setTextColor(ContextCompat.getColor(mActivity, R.color.white_secondary));
         description.setText("5 types d'attaques");
+        mChart.setData(data);
+        mChart.invalidate();
+
     }
 
     private String[]            getAllWifiSniffed() {

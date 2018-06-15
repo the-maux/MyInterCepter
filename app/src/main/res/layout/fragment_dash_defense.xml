@@ -4,16 +4,19 @@
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:alpha="0.90">
+    android:alpha="0.90"
+    android:background="@color/blueteam_color">
+
 
     <android.support.v7.widget.CardView
         android:id="@+id/HeaderCardDashboard"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:cardBackgroundColor="@color/blueteam_color"
         app:cardCornerRadius="2dp"
         app:cardElevation="4dp"
         app:cardPreventCornerOverlap="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/Defense_RV"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -23,8 +26,7 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/HeaderCardDashboardLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/blueteam_color">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/titleChartDashboard"
@@ -40,7 +42,6 @@
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="300dp"
-                android:padding="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -50,10 +51,20 @@
                 <com.github.mikephil.charting.charts.PieChart xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/chart"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingBottom="40dp" />
+                    android:layout_height="match_parent" />
             </FrameLayout>
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/Defense_RV"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/HeaderCardDashboard"
+        app:layout_constraintVertical_weight="4" />
 </android.support.constraint.ConstraintLayout>
