@@ -1,4 +1,4 @@
-package fr.dao.app.View.Sniff;
+package fr.dao.app.View.Proxy;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -28,7 +28,7 @@ import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 
 public class                    ProxyReaderFrgmnt extends MyFragment {
-    private String              TAG = "SniffReaderFrgmnt";
+    private String              TAG = "ProxyReaderFrgmnt";
     private CoordinatorLayout   mCoordinatorLayout;
     private Context             mCtx;
     private ConstraintLayout    rootViewForDashboard;
@@ -45,23 +45,30 @@ public class                    ProxyReaderFrgmnt extends MyFragment {
         initXml(rootView);
         mActivity = (ProxyActivity) getActivity();
         mProxy = Proxy.getProxy(this, true);
-        init();
         return rootView;
     }
-    
+
+    public void onResume() {
+        super.onResume();
+        init();
+    }
+
     private void                initXml(View rootView) {
         mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
         mProxy_RV = rootView.findViewById(R.id.RV_Wireshark);
         rootViewForLiveFlux = rootView.findViewById(R.id.rootViewForLiveFlux);
         rootViewForLiveFlux.setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.topBar).setVisibility(View.GONE);
     }
 
     public void                 init() {
-        initRV();
+        String mode = getArguments().getString("mode");
+        Log.d(TAG, "init => mode[" + mode + "]");
+        initRV(mode == null ? HTTProxyAdapter.mode.HTTP.name() : mode);
     }
 
-    private void                initRV() {
-        mAdapterWireshark = new HTTProxyAdapter(mActivity);
+    private void                initRV(String mode) {
+        mAdapterWireshark = new HTTProxyAdapter(mActivity, HTTProxyAdapter.mode.valueOf(mode));
         mProxy_RV.setAdapter(mAdapterWireshark);
         mProxy_RV.setItemAnimator(null);
         mProxy_RV.setLayoutManager(new LinearLayoutManager(mActivity));

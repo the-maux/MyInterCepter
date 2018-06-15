@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Core.Tcpdump.Proxy;
 import fr.dao.app.Model.Net.HttpTrame;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
@@ -20,11 +21,20 @@ import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 public class                    HTTProxyAdapter extends RecyclerView.Adapter<SettingHolder> {
     private String              TAG = "DnsSpoofConfAdapter";
     private MyActivity          mActivity;
-    private List<HttpTrame>     httpTrames = new ArrayList<>();
-    private Singleton           mSingleton = Singleton.getInstance();
+    private ArrayList<HttpTrame> httpTrames;
+    private mode                typeOfFilter;
+    public enum                 mode {
+        HTTP, SECRET, RESSOURCE
+    }
 
-    public                      HTTProxyAdapter(MyActivity activity) {
+    public                      HTTProxyAdapter(MyActivity activity, mode filteredType) {
         this.mActivity = activity;
+        this.typeOfFilter = filteredType;
+        if (Proxy.isRunning()) {
+            httpTrames = Proxy.getProxy().getActualTrameStack();
+            filterTheStack();
+        } else
+            httpTrames = new ArrayList<>();
     }
 
     public SettingHolder        onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -38,9 +48,23 @@ public class                    HTTProxyAdapter extends RecyclerView.Adapter<Set
         holder.subtitle.setText(trameHttp.request);
         holder.switch_sw.setVisibility(View.GONE);
         holder.rightLogo.setVisibility(View.VISIBLE);
-        initUserAgent(trameHttp.userAgent.toLowerCase(), holder.rightLogo);
-
+        if (this.typeOfFilter == mode.HTTP)
+            initUserAgent(trameHttp.userAgent.toLowerCase(), holder.rightLogo);
+        else if (this.typeOfFilter == mode.RESSOURCE)
+            initPicRessource(trameHttp.request, holder.rightLogo);
     }
+
+    private void                initPicRessource(String s, ImageView rightLogo) {
+        int res;
+        if (s.contains(".js"))
+            res = R.drawable.javascript;
+        else if (s.contains(".css"))
+            res = R.drawable.css;
+        else
+            return;
+        MyGlideLoader.loadDrawableInImageView(mActivity, res, rightLogo, true);
+    }
+
 
     private void                initUserAgent(String userAgent, ImageView rightLogo) {
         int res;
@@ -73,9 +97,29 @@ public class                    HTTProxyAdapter extends RecyclerView.Adapter<Set
         notifyDataSetChanged();*/
     }
 
-    public void             addTrameOnAdapter(HttpTrame poppedTrame) {
-        httpTrames.add(poppedTrame);
-        mActivity.setToolbarTitle(null, httpTrames.size() + " Request");
+    public void                 addTrameOnAdapter(HttpTrame poppedTrame) {
+        if (trameIsRight(poppedTrame))
+            httpTrames.add(poppedTrame);
         notifyItemInserted(0);
     }
+
+    private void                filterTheStack() {
+        ArrayList<HttpTrame> httpTrames = new ArrayList<>();
+        for (HttpTrame trame : this.httpTrames) {
+            if (trameIsRight(trame))
+                httpTrames.add(trame);
+        }
+        this.httpTrames.clear();
+        this.httpTrames = httpTrames;
+    }
+
+    private boolean             trameIsRight(HttpTrame trame) {
+        return (trame.type == HttpTrame.typeOfRequest.GET || trame.type == HttpTrame.typeOfRequest.POST ||
+                trame.type == HttpTrame.typeOfRequest.DELETE || trame.type == HttpTrame.typeOfRequest.PUT) &&
+                    typeOfFilter == mode.HTTP ||
+                trame.type == HttpTrame.typeOfRequest.RESSOURCE &&
+                typeOfFilter == mode.RESSOURCE || trame.importante;
+    }
+
+
 }

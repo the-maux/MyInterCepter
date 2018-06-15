@@ -5,18 +5,15 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Config.Action;
 import fr.dao.app.Model.Net.HttpTrame;
-import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.View.Sniff.HTTPDispatcher;
-import fr.dao.app.View.Sniff.ProxyReaderFrgmnt;
+import fr.dao.app.View.Proxy.ProxyReaderFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 
 
@@ -66,7 +63,7 @@ public class                        Proxy {
                 .replace(mSingleton.Settings.FilesPath, "");
     }
 
-    public void           start(final HTTPDispatcher trameDispatcher) {
+    public void                     start(final HTTPDispatcher trameDispatcher) {
         Log.i(TAG, "Proxy execution started");
         isPcapReading = false;
         mDispatcher = trameDispatcher;
@@ -143,6 +140,12 @@ public class                        Proxy {
             if (mFragment != null)
                 mFragment.onProxyStopped();
         }
+    }
+
+    public ArrayList<HttpTrame>     getActualTrameStack() {
+        if (mDispatcher != null)
+            return mDispatcher.getActualTrameStack();
+        return new ArrayList<>();
     }
 }
 

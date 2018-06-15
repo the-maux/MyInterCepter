@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.dao.app.Model.Net.HttpTrame;
 import fr.dao.app.View.ZViewController.Adapter.HTTProxyAdapter;
@@ -84,5 +85,9 @@ public class                        HTTPDispatcher {
         TrameBuffer.clear();
         mIsRunning = true;
         adapterRefreshDeamon();
+    }
+
+    public ArrayList<HttpTrame>     getActualTrameStack() {
+        return TrameBuffer;
     }
 }

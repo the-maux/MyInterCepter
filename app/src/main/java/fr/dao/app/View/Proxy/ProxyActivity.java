@@ -19,8 +19,8 @@ import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Network.Proxy.HTTPProxy;
 import fr.dao.app.R;
-import fr.dao.app.View.Sniff.ProxyReaderFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MITMActivity;
+import fr.dao.app.View.ZViewController.Adapter.HTTProxyAdapter;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
@@ -52,7 +52,11 @@ public class                            ProxyActivity extends MITMActivity {
     private void                        init() {
         initFab();
         initTabs();
-        initFragment(new ProxyReaderFrgmnt());
+        http = new ProxyReaderFrgmnt();
+        Bundle args = new Bundle();
+        args.putString("mode", HTTProxyAdapter.mode.HTTP.name());
+        http.setArguments(args);
+        initFragment(http);
         initNavigationBottomBar(PROXY);
         proxyActivity = new HTTPProxy(this);
     }
@@ -102,22 +106,37 @@ public class                            ProxyActivity extends MITMActivity {
     public void                         onProxystopped() {
 
     }
-
+    ProxyReaderFrgmnt http, secret, ressource;
     private void                        initTabs() {
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             public void onTabSelected(TabLayout.Tab tab) {
+                Bundle args = new Bundle();
+                ProxyReaderFrgmnt fragment = new ProxyReaderFrgmnt();
+                fragment.setArguments(args);
                 switch (tab.getText().toString()) {
                     case "GLOBAL":
-                        //title.setText("GLOBAL");
-                        initFragment(new ProxyReaderFrgmnt());
+                        initFragment(http);
                         break;
                     case "CREDENTIALS":
-                        //title.setText("CREDENTIALS");
+                        if (secret != null) {
+                            initFragment(secret);
+                            return;
+                        } else {
+                            secret = fragment;
+                            args.putString("mode", HTTProxyAdapter.mode.SECRET.name());
+                        }
                         break;
                     case "RESSOURCES":
-                        //title.setText("RESSOURCES");
+                        if (ressource != null) {
+                            initFragment(ressource);
+                            return;
+                        } else {
+                            ressource = fragment;
+                            args.putString("mode", HTTProxyAdapter.mode.RESSOURCE.name());
+                        }
                         break;
                 }
+                initFragment(fragment);
             }
             public void onTabUnselected(TabLayout.Tab tab) {}
             public void onTabReselected(TabLayout.Tab tab) {}
