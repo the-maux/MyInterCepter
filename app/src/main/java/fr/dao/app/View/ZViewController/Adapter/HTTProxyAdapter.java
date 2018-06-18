@@ -1,12 +1,14 @@
 package fr.dao.app.View.ZViewController.Adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import fr.dao.app.Core.Configuration.Singleton;
@@ -30,11 +32,9 @@ public class                    HTTProxyAdapter extends RecyclerView.Adapter<Set
     public                      HTTProxyAdapter(MyActivity activity, mode filteredType) {
         this.mActivity = activity;
         this.typeOfFilter = filteredType;
-        if (Proxy.isRunning()) {
-            httpTrames = Proxy.getProxy().getActualTrameStack();
-            filterTheStack();
-        } else
-            httpTrames = new ArrayList<>();
+        httpTrames = Proxy.getProxy().getActualTrameStack();
+        Log.d(TAG, "HTTProxyAdapter(" + filteredType.name() +") loaded " + httpTrames.size() + " trames");
+        filterTheStack();
     }
 
     public SettingHolder        onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -56,7 +56,9 @@ public class                    HTTProxyAdapter extends RecyclerView.Adapter<Set
 
     private void                initPicRessource(String s, ImageView rightLogo) {
         int res;
-        if (s.contains(".js"))
+        if (s.contains(".json"))
+            res = R.drawable.json;
+        else if (s.contains(".js"))
             res = R.drawable.javascript;
         else if (s.contains(".css"))
             res = R.drawable.css;
@@ -97,19 +99,37 @@ public class                    HTTProxyAdapter extends RecyclerView.Adapter<Set
         notifyDataSetChanged();*/
     }
 
-    public void                 addTrameOnAdapter(HttpTrame poppedTrame) {
-        if (trameIsRight(poppedTrame))
-            httpTrames.add(poppedTrame);
-        notifyItemInserted(0);
+    public synchronized void    addTrameOnAdapter(HttpTrame poppedTrame, int size) {
+        Log.i(TAG, "addTrameOnAdapter:" + poppedTrame.request);
+        mActivity.setToolbarTitle(null, size + " http packets");
+        if (trameIsRight(poppedTrame)) {
+            if ((!httpTrames.isEmpty() && !httpTrames.get(0).request.contains(poppedTrame.request)) ||
+                    httpTrames.isEmpty()) {
+                httpTrames.add(poppedTrame);
+                notifyItemInserted(0);
+                Log.d(TAG, "Inserted:" + poppedTrame.request);
+            } else {
+                Log.e(TAG, "Doublon Rejected:" + poppedTrame.request);
+            }
+        } else
+            Log.e(TAG, "Rejected:" + poppedTrame.request);
     }
 
     private void                filterTheStack() {
         ArrayList<HttpTrame> httpTrames = new ArrayList<>();
+        Log.d(TAG, "filterTheStack()");
         for (HttpTrame trame : this.httpTrames) {
             if (trameIsRight(trame))
-                httpTrames.add(trame);
+                if ((!httpTrames.isEmpty() && !httpTrames.get(0).request.contains(trame.request)) ||
+                        httpTrames.isEmpty())
+                    httpTrames.add(trame);
+            else if (this.httpTrames.indexOf(trame) != 0) {
+                    Collections.swap(this.httpTrames, this.httpTrames.indexOf(trame), 0);
+                    filterTheStack();
+                    return;
+                }
         }
-        this.httpTrames.clear();
+     //   this.httpTrames.clear();
         this.httpTrames = httpTrames;
     }
 

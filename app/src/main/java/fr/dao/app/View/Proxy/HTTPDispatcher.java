@@ -1,4 +1,4 @@
-package fr.dao.app.View.Sniff;
+package fr.dao.app.View.Proxy;
 
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +16,7 @@ public class                        HTTPDispatcher {
     private RecyclerView            mRV_Proxy;
     private ArrayList<HttpTrame>    TrameBuffer = new ArrayList();
     private RecyclerView.Adapter    mAdapterProxy;
-    private boolean                 mIsRunning = false, mAutoscroll = true;
+    private boolean                 mIsRunning, mAutoscroll = true;
     private int                     REFRESH_TIME = 800;
 
     public                          HTTPDispatcher(RecyclerView recyclerView, RecyclerView.Adapter adapter) {
@@ -61,14 +61,19 @@ public class                        HTTPDispatcher {
         mRV_Proxy.post(new Runnable() {
             public void run() {
                 int size = queue.size();
-                if (size > 0) {
+                if (size >= 2) {
                     for (int i = 0; i < size; i++) {
                         HttpTrame poppedTrame = pop();
+                        HttpTrame poppedTrame2 = pop();
                         TrameBuffer.add(poppedTrame);
-                        if (poppedTrame != null) {
-                            poppedTrame.offsett = TrameBuffer.indexOf(poppedTrame);
+                        ((HTTProxyAdapter) mAdapterProxy).addTrameOnAdapter(poppedTrame, TrameBuffer.size());
+                        if (poppedTrame.request.contentEquals(poppedTrame2.request)) {
+                            Log.e(TAG, "deleting Doublon ->> [" + poppedTrame.request);
+                            Log.e(TAG, "deleting Doublon ->> [" + poppedTrame2.request);
+                        } else {
+                            TrameBuffer.add(poppedTrame2);
+                            ((HTTProxyAdapter) mAdapterProxy).addTrameOnAdapter(poppedTrame2, TrameBuffer.size());
                         }
-                        ((HTTProxyAdapter) mAdapterProxy).addTrameOnAdapter(poppedTrame);
                     }
                     if (mAutoscroll)
                         mRV_Proxy.smoothScrollToPosition(0);

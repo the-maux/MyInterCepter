@@ -31,7 +31,6 @@ public class                        IcmpScanNetmask {
     private volatile int            mNbrHostScanned = 0;
     private volatile boolean        alreadySend = false;
     private ArrayList<String>       mListIpReachable = new ArrayList<>();
-    private boolean                 debuglog = Singleton.getInstance().Settings.DebugMode;
     private NetworkDiscoveryControler mScanner;
     private Date                    startScanning;
 

@@ -81,8 +81,6 @@ public class                    DashboardAttackFgmnt extends MyFragment {
     }
     SniffSessionAdapter adapter;
     private void                initRV() {
-        List<Session> sessions = sessionManager.getSessionsFromDate(null, null);
-        List<SniffSession> sniffSessions = new ArrayList<>();
         adapter = new SniffSessionAdapter(mActivity, DBSniffSession.getAllSniffSession());
         mAttack_RV.setAdapter(adapter);
         mAttack_RV.setHasFixedSize(true);

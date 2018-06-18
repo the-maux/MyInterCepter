@@ -19,36 +19,46 @@ public class                HttpTrame {
     public String           userAgent = "No Info";
     public ArrayList<String> keys = new ArrayList<>(), values = new ArrayList<>();
     public String           dump = "No Info";
-    public int              offsett;
     public String           cookie = "No Info";
     public typeOfRequest    type = typeOfRequest.UNKNOW;
-    public boolean          importante = false;
+    public boolean          importante = false, isInit = false;
     public enum             typeOfRequest {
         GET, POST, PUT, DELETE, UNKNOW, RESSOURCE
     }
 
     public HttpTrame(ArrayList<String> buffer) {
-        Log.d(TAG, "request:[" + buffer.get(0) +"]");
-        request = buffer.get(1).substring(39, buffer.get(1).length()).replace("HTTP/1.1", "");
-        StringBuilder tmp = new StringBuilder("");
-        for (String line : buffer) {
-            tmp.append(line).append('\n');
-            if (line.contains("Host:"))
-                initHost(line);
-            else if (line.contains("Cookie:"))
-                initCookie(line);
-            else if (line.contains("User-Agent:"))
-                initUserAgent(line);
-            else {
-                if (line.contains(":")) {
-                    keys.add(line.substring(0, line.indexOf(':')));
-                    values.add(line.substring(line.indexOf(':') + 1, line.length()));
-                    Log.d(TAG, "[" + line.substring(0, line.indexOf(':')) + "] -> [" + line.substring(line.indexOf(':') + 1, line.length()) + "]");
+        try {
+            if (buffer.get(1).length() >= 40)
+                request = buffer.get(1).substring(39, buffer.get(1).length()).replace("HTTP/1.1", "");
+            else if (buffer.get(2).length() >= 40)
+                request = buffer.get(2).substring(39, buffer.get(1).length()).replace("HTTP/1.1", "");
+            else
+                request = buffer.get(1);
+            Log.d(TAG, "request:[" + request + "]");
+            StringBuilder tmp = new StringBuilder("");
+            for (String line : buffer) {
+                tmp.append(line).append('\n');
+                if (line.contains("Host:"))
+                    initHost(line);
+                else if (line.contains("Cookie:"))
+                    initCookie(line);
+                else if (line.contains("User-Agent:"))
+                    initUserAgent(line);
+                else {
+                    if (line.contains(":")) {
+                        keys.add(line.substring(0, line.indexOf(':')));
+                        values.add(line.substring(line.indexOf(':') + 1, line.length()));
+                        //  Log.d(TAG, "[" + line.substring(0, line.indexOf(':')) + "] -> [" + line.substring(line.indexOf(':') + 1, line.length()) + "]");
+                    }
                 }
             }
+            dump = tmp.toString();
+            analyse();
+            isInit = true;
+        } catch (Exception e) {
+            Log.e(TAG,"->>>>" + buffer.toString());
+            e.printStackTrace();
         }
-        dump = tmp.toString();
-        analyse();
     }
 
     private void            analyse() {
@@ -75,7 +85,7 @@ public class                HttpTrame {
     }
 
     private void            initHost(String line) {
-        host = line.replace("Host:", "");
+        host = line.replace("Host:", "").replace("www.", "");
     }
 
     /* TODO parser la trame pour HOST / HEADER ETC*/

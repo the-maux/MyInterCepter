@@ -157,7 +157,6 @@ public class                    SniffActivity extends MITMActivity {
 
     private View.OnClickListener onclickFab() {
         return new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
                 if (mFragment.start()) {
                     mProgressBar.setVisibility(View.VISIBLE);

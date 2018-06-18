@@ -47,7 +47,7 @@ public class                            DnsActivity extends MITMActivity {
     private RelativeLayout              mClipper;
     private TextView                    mAction_deleteall, mAction_import, mAction_export, textEmpty, title;
     private Singleton                   mSingleton = Singleton.getInstance();
-    private DnsmasqControl              mDnsControler = MitManager.getInstance().getDnsControler();
+    private DnsmasqControl              mDnsControler;
     private DnsSpoofConfAdapter         mDnsSpoofAdapter;
     private DnsLogsAdapter              mDnsConsoleAdapter;
     private String                      NAME_CONF_MENU = "Domains intercepted:", NAME_LOGS_MENU = "Dnsmasq logs:";
@@ -56,6 +56,7 @@ public class                            DnsActivity extends MITMActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dnsspoofing);
         initXml();
+        mDnsControler = MitManager.getInstance().getDnsControler();
         init();
     }
 
@@ -63,10 +64,10 @@ public class                            DnsActivity extends MITMActivity {
         initFab();
         initMenu();
         initTabs();
+        mDnsControler.setActivity(this);
         initRVConfiguration();
       //  initSearchView();
         initNavigationBottomBar(DNS);
-        mDnsControler.setActivity(this);
     }
 
     private void                        initXml() {
@@ -158,7 +159,7 @@ public class                            DnsActivity extends MITMActivity {
         mClipper.setOnClickListener(onClickTopMenu());
         int dns = MitManager.getInstance()
                 .getDnsControler() == null ? 0 :
-                MitManager.getInstance().getDnsControler().getDnsConf().listDomainSpoofable.size();
+                mDnsControler.getDnsConf().listDomainSpoofable.size();
         setToolbarTitle(null,
                 dns + " title spoofable");
     }

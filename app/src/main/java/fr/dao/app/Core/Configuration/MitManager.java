@@ -14,7 +14,7 @@ import fr.dao.app.Core.Tcpdump.DashboardSniff;
 import fr.dao.app.Core.Tcpdump.Proxy;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.Model.Target.Host;
-import fr.dao.app.View.Sniff.HTTPDispatcher;
+import fr.dao.app.View.Proxy.HTTPDispatcher;
 import fr.dao.app.View.Sniff.SniffDispatcher;
 
 public class                        MitManager {
@@ -78,7 +78,8 @@ public class                        MitManager {
                 if (mHttpTrameDispatcher == null) {
                     mHttpTrameDispatcher = new HTTPDispatcher(recyclerView, adapter);
                 } else {/* Clear shit its a restart*/
-                    mHttpTrameDispatcher.reset();
+                    Log.e(TAG, "mHttpTrameDispatcher reseted");
+                   // mHttpTrameDispatcher.reset();
                 }
                 Proxy.getProxy().start(mHttpTrameDispatcher);
                 //initDNSSpoofing();
@@ -91,14 +92,15 @@ public class                        MitManager {
         return false;
     }
     public DnsmasqControl           initDNSSpoofing() {
-        if (isDnsmasqRunning()) {
+        if (!isDnsmasqRunning()) {
+            Log.d(TAG, "initDNSSpoofing");
             if (!trafficRedirected)
                 initMitmConnection();
-            Log.d(TAG, "initDNSSpoofing");
             IPTables.startDnsPacketRedirect();
             isAttackRunning = true;
             dnsSpoofed = new DnsmasqControl();
-        }
+        } else
+            Log.e(TAG, "DNS already init");
         return dnsSpoofed;
     }
     public boolean                  initWebserver() {
@@ -124,10 +126,9 @@ public class                        MitManager {
         }
     }
     public void                     stopProxy() {
-        if (!stopMITMBehavior()) {
-            //TODO: We need to close the Tcpdump current process, even if there is still MITM behavior
-        }
         Proxy.getProxy().stop();
+        if (dnsSpoofed != null && dnsSpoofed.isRunning())
+            stopDnsSpoofing(true);
         Log.d(TAG, "stopProxy");
         updateRunningStatus();
     }
@@ -156,13 +157,16 @@ public class                        MitManager {
     }
     public void                     stopEverything() {
         Log.d(TAG, "stopEverything");
-        if (dnsSpoofed != null && dnsSpoofed.isRunning())
-            stopDnsSpoofing(true);
         if (webSpoofedstarted)
             stopWebserver(true);
         if (Tcpdump.isRunning() && Tcpdump.getTcpdump() != null) {
             stopTcpdump(true);
         }
+        if (Proxy.isRunning() && Proxy.getProxy() != null) {
+            stopProxy();
+        }
+        if (dnsSpoofed != null && dnsSpoofed.isRunning())
+            stopDnsSpoofing(true);
         trafficRedirected = false;
         RootProcess.kill("tcpdump");
         ArpSpoof.stopArpSpoof();
@@ -178,8 +182,8 @@ public class                        MitManager {
         this.targets.addAll(targets);
     }
     private void                    updateRunningStatus() {
-        Log.d(TAG, "updateRunningStatus");
-        stopMITMBehavior();
+     //   Log.d(TAG, "updateRunningStatus");
+  //      stopMITMBehavior();
     }
     public DnsmasqControl           getDnsControler() {
         if (dnsSpoofed == null) {

@@ -12,7 +12,7 @@ import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Config.Action;
 import fr.dao.app.Model.Net.HttpTrame;
 import fr.dao.app.Model.Target.Host;
-import fr.dao.app.View.Sniff.HTTPDispatcher;
+import fr.dao.app.View.Proxy.HTTPDispatcher;
 import fr.dao.app.View.Proxy.ProxyReaderFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 
@@ -29,7 +29,6 @@ public class                        Proxy {
     private String                  actualCmd = "";
     private HTTPDispatcher          mDispatcher = null;
     private ProxyReaderFrgmnt       mFragment = null;
-    private ArrayList<HttpTrame>    mBufferOfTrame = new ArrayList<>();
 
     private                         Proxy(ProxyReaderFrgmnt activity) {
         Log.d(TAG, "Constructor");
@@ -99,17 +98,14 @@ public class                        Proxy {
                     buffer.add(tmp);
                 else if (!buffer.isEmpty()) {
                         try {
-                            Log.e(TAG, "Dump de la trame:");
-                            for (String s : buffer) {
-                                Log.e(TAG, "[" + s + "]");
-                            }
                             //Not in thread cause .clear() is too fast for the thread
                             final HttpTrame trame = new HttpTrame(buffer);
-                            new Thread(new Runnable() {
-                                public void run() {
-                                    readAndAnalyse(trame);
-                                }
-                            }).start();
+                            if (trame.isInit)
+                                new Thread(new Runnable() {
+                                    public void run() {
+                                        readAndAnalyse(trame);
+                                    }
+                                }).start();
                         } catch (Exception e) {
                             e.printStackTrace();
                             Log.d(TAG, "Trame parsing error");
@@ -119,7 +115,6 @@ public class                        Proxy {
             } else
                 Log.i(TAG, "Skipped[" + tmp + "]");
         }
-        stop();
         Log.i(TAG, "Proxy execution over");
     }
 
@@ -129,7 +124,9 @@ public class                        Proxy {
      * @param trame
      */
     private void                    readAndAnalyse(HttpTrame trame) {
-        Log.d(TAG, "readAndAnalyse[" + trame.getDump().length() + " charactere ]");
+        //TODO: total byte in toolbar
+     //   Log.d(TAG, "readAndAnalyse[" + trame.getDump().length() + " charactere ]");
+
         mDispatcher.addToQueue(trame);
     }
 
@@ -139,6 +136,8 @@ public class                        Proxy {
             isRunning = false;
             if (mFragment != null)
                 mFragment.onProxyStopped();
+            if (mDispatcher != null)
+                mDispatcher.stop();
         }
     }
 

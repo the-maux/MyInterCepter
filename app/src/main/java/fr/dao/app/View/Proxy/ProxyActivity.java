@@ -1,5 +1,7 @@
 package fr.dao.app.View.Proxy;
 
+import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -23,6 +25,7 @@ import fr.dao.app.View.ZViewController.Activity.MITMActivity;
 import fr.dao.app.View.ZViewController.Adapter.HTTProxyAdapter;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
+import fr.dao.app.View.ZViewController.Dialog.QuestionDialog;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 //https://danielmiessler.com/study/bettercap/
@@ -37,7 +40,6 @@ public class                            ProxyActivity extends MITMActivity {
     private ImageView                   mAction_add_host;
     private TabLayout                   mTabs;
     private MitManager                  mMitManager = MitManager.getInstance();
-    private HTTPProxy                   proxyActivity;
     private Singleton                   mSingleton = Singleton.getInstance();
     private MyFragment                  mFragment;
 
@@ -58,7 +60,7 @@ public class                            ProxyActivity extends MITMActivity {
         http.setArguments(args);
         initFragment(http);
         initNavigationBottomBar(PROXY);
-        proxyActivity = new HTTPProxy(this);
+
     }
 
     private void                        initXml() {
@@ -86,8 +88,10 @@ public class                            ProxyActivity extends MITMActivity {
         mFab.setImageResource(R.mipmap.ic_stop);
         if (!mMitManager.isProxyRunning()) {
             mFab.setImageResource(R.drawable.ic_media_play);
+            findViewById(R.id.progressBar2).setVisibility(View.GONE);
         } else {
-            mFab.setImageResource(R.mipmap.ic_stop);
+            findViewById(R.id.progressBar2).setVisibility(View.VISIBLE);
+            mFab.setImageResource(R.mipmap.ic_pause);
         }
         mFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -95,8 +99,10 @@ public class                            ProxyActivity extends MITMActivity {
                 mFragment.start();
                 if (!mMitManager.isProxyRunning()) {
                     mFab.setImageResource(R.drawable.ic_media_play);
+                    findViewById(R.id.progressBar2).setVisibility(View.GONE);
                 } else {
-                    mFab.setImageResource(R.mipmap.ic_stop);
+                    findViewById(R.id.progressBar2).setVisibility(View.VISIBLE);
+                    mFab.setImageResource(R.mipmap.ic_pause);
                 }
                 updateNotifications();
             }
@@ -180,9 +186,36 @@ public class                            ProxyActivity extends MITMActivity {
     }
 
     public void                         onBackPressed() {
-        super.onBackPressed();
-        mSingleton.hostList = mSingleton.savedHostList;
-        //TODO:Check if sniffing was loading
+        //super.onBackPressed();
+        if (mMitManager.isTrafficRedirected()) {
+            new QuestionDialog(mInstance)
+                    .setTitle("Warning")
+                    .setIcon(R.drawable.ico)
+                    .setText("We detected an attack still activated")
+                    .onNegativeButton("Don't leave", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Utils.vibrateDevice(mInstance, 100);
+                        }
+                    })
+                    .onPositiveButton("Dirty Quick", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            leave();
+                        }
+                    })
+                    .show();
+        } else {
+            leave();
+        }
+    }
+
+    private void        leave() {
+        Utils.vibrateDevice(mInstance, 100);
         mMitManager.stopEverything();
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+            fm.popBackStack();
+        }
+        mSingleton.hostList = mSingleton.savedHostList;
+        super.onBackPressed();
     }
 }

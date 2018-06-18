@@ -48,7 +48,7 @@ public class                    ProxyReaderFrgmnt extends MyFragment {
         return rootView;
     }
 
-    public void onResume() {
+    public void                 onResume() {
         super.onResume();
         init();
     }

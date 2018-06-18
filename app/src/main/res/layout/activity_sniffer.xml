@@ -152,6 +152,7 @@
             android:layout_marginRight="16dp"
             android:soundEffectsEnabled="true"
             android:src="@drawable/ic_media_play"
+            android:visibility="gone"
             app:backgroundTint="@color/snifferPrimary"
             app:fabSize="normal" />
 
