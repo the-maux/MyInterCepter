@@ -30,7 +30,6 @@ import java.util.List;
 import fr.dao.app.Core.Database.DBNetwork;
 import fr.dao.app.Core.Network.SessionManager;
 import fr.dao.app.Model.Config.Action;
-import fr.dao.app.Model.Config.Session;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Adapter.SessionAdapter;
@@ -93,7 +92,7 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
     private void                    initChart() {
 
         LineDataSet setComp1, setComp2;
-        if (42 == 41) {/* Tester les vrai valeurs*/
+        if (42 == 42) {/* Tester les vrai valeurs*/
             setComp1 = initLineDataSet(sessionManager.getEntryFromLoadedSessionsByType(Action.TeamAction.BLUETEAM),
                     "Defense", R.color.blueteam_color);
             setComp2 = initLineDataSet(sessionManager.getEntryFromLoadedSessionsByType(Action.TeamAction.READTEAM),
@@ -136,25 +135,14 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
         return setComp1;
     }
 
-
-
-    public Session getSessionFromValue(float value) {
-        //TODO get Session from value in graph
-        return null;
-    }
-
-
     public IAxisValueFormatter getSessionValueFormater() {
         return new MyCustomXAxisValueFormatter();
     }
-    /**
-     * Print The date of the session in XAxis value
-     */
     public class MyCustomXAxisValueFormatter implements IAxisValueFormatter {
 
         public String getFormattedValue(float value, AxisBase axis) {
-            return getSessionFromValue(value) == null ? "00/00" : getSessionFromValue(value).getDateString();
-
+            return (sessionManager.getSessionFromOffset(value) == null) ?
+                    "00/00" : sessionManager.getSessionFromOffset(value).getDateString();
         }
     }
 }

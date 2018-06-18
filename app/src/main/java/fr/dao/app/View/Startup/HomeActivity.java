@@ -45,17 +45,19 @@ public class                    HomeActivity extends MyActivity {
     private ProgressBar         PB_Root, PB_Permission, PB_Updated;
     private CircleImageView     statusRoot, statusPermission, statusUpdated;
     private static final int    PERMISSIONS_MULTIPLE_REQUEST = 123;
+    private Singleton           mSingleton = Singleton.getInstance();
 
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        mSingleton.init(this);
         initXml();
         init();
     }
 
     protected void              onPostResume() {
         super.onPostResume();
-        Singleton.getInstance().init(this);
+
         getRootPermission();
         getAndroidPermission();
     }
@@ -77,7 +79,7 @@ public class                    HomeActivity extends MyActivity {
         statusUpdated = monitorUpdated.findViewById(R.id.statusIconCardView);
         TV_Root.setText("Root");
         TV_Permission.setText("Permission");
-        TV_Updated.setText("New release");
+        TV_Updated.setText("Internet");
         PB_Root = monitorRoot.findViewById(R.id.progressBar_monitor);
         PB_Permission = monitorPermission.findViewById(R.id.progressBar_monitor);
         PB_Updated = monitorUpdated.findViewById(R.id.progressBar_monitor);
@@ -88,13 +90,25 @@ public class                    HomeActivity extends MyActivity {
         blue_card.setOnClickListener(onDefenseClicked());
         settings_card.setOnClickListener(onSettingsClick());
         dashboard_card.setOnClickListener(onDashboardClick());
+        defensifCheck();
         initBottomMonitor();
-        Singleton.getInstance().Session = DBSessions.getSession();
+        mSingleton.Session = DBSessions.getSession();
+    }
+
+    private void                defensifCheck() {
+        if (mSingleton.NetworkInformation == null || mSingleton.NetworkInformation.myIp == null) {
+            showSnackbar("You need to be connected to a NetworkInformation");
+            statusUpdated.setImageResource(R.color.offline_color);
+        } else {
+            statusUpdated.setImageResource(R.color.online_color);
+        }
     }
 
     private void                initBottomMonitor() {
         statusRoot.setImageResource(R.color.material_deep_orange_400);
         statusPermission.setImageResource(R.color.material_deep_orange_400);
+        statusPermission.setImageResource(R.color.material_deep_orange_400);
+
     }
 
     private void                getAndroidPermission() {
@@ -212,18 +226,6 @@ public class                    HomeActivity extends MyActivity {
             e.printStackTrace();
             return false;
         }
-    }
-
-    @Override
-    protected void              onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause");
     }
 
     public void                 onBackPressed() {

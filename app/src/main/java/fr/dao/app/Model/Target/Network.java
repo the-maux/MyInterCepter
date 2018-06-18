@@ -12,8 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Model.Net.Service;
+
+import static fr.dao.app.Model.Config.Action.ActionType.SCAN;
 
 @Table(name = "NetworkInformation", id = "_id")
 public class                Network extends Model {
@@ -76,4 +79,12 @@ public class                Network extends Model {
         super();
     }
 
+    public boolean          safeUpdateGateway(Host host) {
+        if (Singleton.getInstance().Session != null) {
+            Singleton.getInstance().Session.addAction(SCAN, false);
+            Log.i(NAME_COLUMN, "Gateway ARP CHECKED AND OK");
+        } else
+            Log.e(NAME_COLUMN, "defensif action set but Session can be loaded");
+        return Gateway == null || Gateway.mac.contains(host.mac);
+    }
 }

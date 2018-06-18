@@ -15,6 +15,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Core.Configuration.GlideApp;
 import fr.dao.app.Core.Configuration.GlideRequest;
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Model.Config.Action;
 import fr.dao.app.Model.Config.Session;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
@@ -43,7 +44,19 @@ public class                        SessionAdapter extends RecyclerView.Adapter<
         Session session = mSessions.get(position);
         holder.card_view.setBackgroundColor(ContextCompat.getColor(mActivity, this.color));
         holder.title.setText("Session du " + session.getDateString().replace("/", " "));
-        holder.subtitle.setText(session.Actions().size() + " actions performed");
+        int def = 0, attack = 0;
+        for (Action action : session.Actions()) {
+            if (action.teamActionType == Action.TeamAction.READTEAM)
+                attack++;
+            else
+                def++;
+        }
+        if (color == R.color.blueteam_color)
+            holder.subtitle.setText(def + " def actions performed");
+        else if (color == R.color.redteam_color)
+            holder.subtitle.setText(attack + " attacks actions performed");
+        else
+            holder.subtitle.setText(session.Actions().size() + " actions performed");
         setLogo(holder.logo);
         holder.icon.setVisibility(View.GONE);
         holder.card_view.setOnClickListener(onCardClicked(position));

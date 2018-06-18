@@ -12,16 +12,16 @@ import fr.dao.app.Core.Database.DBSessions;
 import fr.dao.app.Model.Config.Action;
 import fr.dao.app.Model.Config.Session;
 
-public class                SessionManager {
-    private String          TAG = "SessionManager";
-    private List<Session>   sessionsFromBDD;
-    private ArrayList<Session> loadedSessions = null;
+public class                        SessionManager {
+    private String                  TAG = "SessionManager";
+    private List<Session>           sessionsFromBDD;
+    private ArrayList<Session>      loadedSessions = null;
 
     public SessionManager() {
         sessionsFromBDD = DBSessions.getAllSession();
     }
 
-    private ArrayList<Session>  getSessionBetweenDate(Date start, Date end) {
+    private ArrayList<Session>      getSessionBetweenDate(Date start, Date end) {
         if (start == null || end == null) {
             return update();
         }
@@ -34,18 +34,18 @@ public class                SessionManager {
         return loadedSessions;
     }
 
-    public ArrayList<Session> update() {
+    public ArrayList<Session>       update() {
         sessionsFromBDD = DBSessions.getAllSession();
         Collections.sort(sessionsFromBDD, Comparators.getSessionComparator());
         loadedSessions = new ArrayList<>(sessionsFromBDD);
         return loadedSessions;
     }
 
-    public  int             getNbrSessionsRecorded() {
+    public  int                     getNbrSessionsRecorded() {
         return (sessionsFromBDD == null) ? 0 : sessionsFromBDD.size() ;
     }
 
-    public List<Entry>      getEntryFromLoadedSessionsByType(Action.TeamAction type) {
+    public List<Entry>              getEntryFromLoadedSessionsByType(Action.TeamAction type) {
         List<Entry> attackEntry = new ArrayList<>();
         if (loadedSessions == null)
             getSessionBetweenDate(null, null);
@@ -55,11 +55,11 @@ public class                SessionManager {
         return attackEntry;
     }
 
-    public List<Session>      getSessionsFromDate(Date start, Date end) {
+    public List<Session>            getSessionsFromDate(Date start, Date end) {
         return (start == null && end == null) ? update() : getSessionBetweenDate(start, end);
     }
 
-    public List<Entry>      getFakeAttackEntry() {
+    public List<Entry>              getFakeAttackEntry() {
         List<Entry> attackEntry = new ArrayList<Entry>();
         int raxattack = 0;
         for (;raxattack< 10;raxattack++) { //For nbr session in networkFocused
@@ -90,7 +90,7 @@ public class                SessionManager {
         return attackEntry;
     }
 
-    public List<Entry>      getFakeDefenseEntry() {
+    public List<Entry>              getFakeDefenseEntry() {
         List<Entry> defenseEntry = new ArrayList<Entry>();
         //FOR TEST X: nbrAttack Y: nbrDef
         //Simulate 9 Session
@@ -121,5 +121,10 @@ public class                SessionManager {
             }
         }
         return defenseEntry;
+    }
+
+    public Session                  getSessionFromOffset(float value) {
+        return loadedSessions.get((int)value);
+
     }
 }

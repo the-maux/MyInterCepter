@@ -34,6 +34,8 @@ import java.util.Random;
 
 import fr.dao.app.Core.Database.DBSniffSession;
 import fr.dao.app.Core.Network.SessionManager;
+import fr.dao.app.Model.Config.Session;
+import fr.dao.app.Model.Target.SniffSession;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Adapter.SniffSessionAdapter;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
@@ -79,7 +81,8 @@ public class                    DashboardAttackFgmnt extends MyFragment {
     }
     SniffSessionAdapter adapter;
     private void                initRV() {
-        //TODO: les sniff sessions ne sont pas lié au sessions !!!
+        List<Session> sessions = sessionManager.getSessionsFromDate(null, null);
+        List<SniffSession> sniffSessions = new ArrayList<>();
         adapter = new SniffSessionAdapter(mActivity, DBSniffSession.getAllSniffSession());
         mAttack_RV.setAdapter(adapter);
         mAttack_RV.setHasFixedSize(true);

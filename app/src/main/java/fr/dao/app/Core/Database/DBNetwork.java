@@ -2,7 +2,6 @@ package fr.dao.app.Core.Database;
 
 import android.util.Log;
 
-import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Select;
 
 import java.util.ArrayList;
@@ -76,25 +75,6 @@ public class                                DBNetwork {
         accessPoint.nbrOs = osList.size();
         accessPoint.save();
         return accessPoint;
-    }
-
-    static void                             updateNetworkInfoInBDD(Network accessPoint, String Gateway,
-                                                                   List<Host> devicesConnected, String TypeScan, ArrayList<Os> osList) {
-        ActiveAndroid.beginTransaction();
-        if (Singleton.getInstance().Settings.DebugMode)
-            Log.d(TAG, "Updating NetworkInformation::" + accessPoint.Ssid + " discovered " + devicesConnected.size() + " host");
-        accessPoint.lastScanDate = Calendar.getInstance().getTime();
-        accessPoint.listDevicesSerialized = DBHost.SerializeListDevices(devicesConnected);
-        accessPoint.nbrOs = osList.size();
-        for (Host host : devicesConnected) {
-            if (host.ip.contains(Gateway)) {
-                accessPoint.Gateway = host;
-                break;
-            }
-        }
-        accessPoint.save();
-        ActiveAndroid.setTransactionSuccessful();
-        ActiveAndroid.endTransaction();
     }
 
 }

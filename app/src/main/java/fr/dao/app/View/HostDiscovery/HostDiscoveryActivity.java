@@ -90,7 +90,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         findViewById(R.id.OsImg).setOnClickListener(initTabs());
         mTimer = findViewById(R.id.timer);
         mProgressBar = findViewById(R.id.progressBar);
-        mToolbarBackground = (TransitionDrawable)findViewById(R.id.appBarLayout).getBackground();
+        mToolbarBackground = (TransitionDrawable)(findViewById(R.id.appBarLayout).getBackground());
         appBarLayout = findViewById(R.id.appBarLayout);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -104,7 +104,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         NetDiscovering.initNetworkInfo(this);
         if (mSingleton.NetworkInformation == null || mSingleton.NetworkInformation.myIp == null) {
             showSnackbar("You need to be connected to a NetworkInformation");
-            finish();
+            onBackPressed();
         } else {
             initFabs();
             initMonitor();

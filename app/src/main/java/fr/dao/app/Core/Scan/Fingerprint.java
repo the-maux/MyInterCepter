@@ -16,12 +16,13 @@ import fr.dao.app.Model.Unix.Os;
  */
 public class                            Fingerprint {
     private static String               TAG = "Fingerprint";
+    private static Singleton            mSingleton = Singleton.getInstance();
 
     public static void                  initHost(Host host) {
         host.getPorts();
         guessosType(host);
         if (host.name.contains("My Device") ||
-                host.ip.contentEquals(Singleton.getInstance().NetworkInformation.myIp)) {/* host.isItMyDevice is not saved on BDD for optimiz*/
+                host.ip.contentEquals(mSingleton.NetworkInformation.myIp)) {/* host.isItMyDevice is not saved on BDD for optimiz*/
             host.isItMyDevice = true;
             host.state = State.ONLINE;
             host.osType = Os.Android;
@@ -38,8 +39,10 @@ public class                            Fingerprint {
             host.osType = Os.Gateway;
             if (host.osDetail.contains("Unknown"))
                 host.osDetail = "Gateway";
-            if (Singleton.getInstance().CurrentNetwork != null)
-                Singleton.getInstance().CurrentNetwork.Gateway = host;
+            if (mSingleton.CurrentNetwork != null) {
+                if (mSingleton.CurrentNetwork.safeUpdateGateway(host))
+                    mSingleton.CurrentNetwork.Gateway = host;
+            }
         }
     }
 
@@ -112,14 +115,14 @@ public class                            Fingerprint {
     }
 
     public static boolean               isItMyGateway(Host host) {
-        return host.ip.contains(Singleton.getInstance().NetworkInformation.gateway) &&
-                host.ip.length() == Singleton.getInstance().NetworkInformation.gateway.length();
+        return host.ip.contains(mSingleton.NetworkInformation.gateway) &&
+                host.ip.length() == mSingleton.NetworkInformation.gateway.length();
     }
 
     public static String                getVendorFrom(String mac) {
         String tmp = mac.contains(":") ? mac.replaceAll(":", "").substring(0, 6) : mac ;
         BufferedReader reader = new RootProcess("Nmap")
-                .exec("grep \"" + tmp.substring(0, 6) + "\" " + Singleton.getInstance().Settings.FilesPath + "nmap/nmap-mac-prefixes").getReader();
+                .exec("grep \"" + tmp.substring(0, 6) + "\" " + mSingleton.Settings.FilesPath + "nmap/nmap-mac-prefixes").getReader();
         String buffer;
         StringBuilder s = new StringBuilder("");
         try {
