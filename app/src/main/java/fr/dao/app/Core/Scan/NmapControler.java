@@ -176,10 +176,10 @@ public class                        NmapControler {
         String parameter = getParamOfScan(mActualScan);
         String cmd = PATH_NMAP + parameter + " " + hostFilter + " -d";
         cmd = cmd.replace("  ", " ").replace("\n", "");
-        Log.i(TAG, cmd);
         nmapOutputFragment.printCmdInTerminal(cmd
                 .replace("nmap/nmap", "nmap")
                 .replace(mSingleton.Settings.FilesPath, ""));
+        Log.i(TAG, cmd);
         return cmd;
     }
 

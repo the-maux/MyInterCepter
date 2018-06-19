@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewCompat;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,24 +37,23 @@ import fr.dao.app.Model.Config.NmapParam;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MITMActivity;
+import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Dialog.DialogQuestionWithInput;
 
-public class                    NmapActivity extends MITMActivity {
+public class                    NmapActivity extends MyActivity {
     private String              TAG = "NmapActivity";
     private NmapActivity        mInstance = this;
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
-    private NmapOutputView nmapOutputFragment;
+    protected FloatingActionButton mFab;
+    private NmapOutputView      nmapOutputFragment;
     private AppBarLayout        appBarLayout;
-    private TextView            monitorHostTargeted, monitorNmapParam;
-    private TextView            MonitorInoptionTheTarget;
-    private RelativeLayout      mNmapConfEditorLayout, nmapConfLayout;
     private Toolbar             mToolbar;
     private List<Host>          mListHostSelected = new ArrayList<>();
     private TabLayout           mTabs;
-    private ImageButton         mSettingsMenu, mScript, mScanType;
+    private ImageView           mSettingsMenu, mScript, mScanType;
     private NmapControler       nmapControler;
     private ProgressBar         mProgressBar;
     private boolean             isExternalTarget = false, isInScriptMode = false;
@@ -61,38 +62,24 @@ public class                    NmapActivity extends MITMActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nmap);
         initXml();
+    }
+
+    protected void              onResume() {
+        super.onResume();
         init();
     }
 
     private void                initXml() {
         mCoordinatorLayout = findViewById(R.id.Coordonitor);
-        monitorHostTargeted = (EditText) findViewById(R.id.hostEditext);
-        monitorNmapParam = (EditText) findViewById(R.id.nmapMonitorParameter);
         mTabs = findViewById(R.id.tabs);
+        mTabs.setVisibility(View.VISIBLE);
         mToolbar = findViewById(R.id.toolbar);
         mProgressBar = findViewById(R.id.progressBar);
         mSettingsMenu = findViewById(R.id.settingsMenu);
-        MonitorInoptionTheTarget = findViewById(R.id.targetMonitor);
         mScript = findViewById(R.id.scriptBtn);
         mScanType = findViewById(R.id.typeScanBtn);
-        mNmapConfEditorLayout = findViewById(R.id.nmapConfEditorLayout);
-        nmapConfLayout = findViewById(R.id.nmapConfLayout);
         mFab = findViewById(R.id.fab);
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startNmap();
-            }
-        });
-        monitorNmapParam.setOnEditorActionListener(new EditText.OnEditorActionListener() {
-            public boolean      onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    startNmap();
-                    return true;
-                }
-                return false;
-            }
-        });
+        mFab.setOnClickListener(onClickFAB());
         appBarLayout = findViewById(R.id.appBarLayout);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -100,38 +87,35 @@ public class                    NmapActivity extends MITMActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
+        mScript.setOnClickListener(onClickScript());
+        mScanType.setOnClickListener(onClickTypeOfScan());
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
     }
 
     private void                init() {
         if (nmapControler == null)
             nmapControler = new NmapControler();
-        mScript.setOnClickListener(onClickScript());
-        mScanType.setOnClickListener(onClickTypeOfScan());
         initFragment();
         initHostBehavior();
-        initNavigationBottomBar(PROXY);
     }
 
     private void                initHostBehavior() {
         if (mSingleton.hostList == null || mSingleton.hostList.isEmpty()) {//MODE: No targert
             Log.d(TAG, "MODE: NO TARGET");
-            MonitorInoptionTheTarget.setText("No target selected");
             isExternalTarget = true;
-            askForExternalTarget();
+            askForExternalTarget();//TODO: NMAP MODE: NO TARGET
         } else {
             isExternalTarget = false;
             if (getIntent() != null && getIntent().getExtras() != null) {//MODE: FOCUSED TARGETx
-                Log.d(TAG, "MODE: SINGLE TARGET");
                 int position = getIntent().getExtras().getInt("position", 0);
+                Log.d(TAG, "MODE: SINGLE TARGET:"+mSingleton.hostList.get(position));
                 mListHostSelected.add(mSingleton.hostList.get(position));
-                hideBottomBar();
+
             } else { //MODE: TARGET LIST {
-                Log.d(TAG, "MODE: LIST OF TARGET");
+                Log.d(TAG, "MODE: LIST OF TARGET:"+ mListHostSelected.toString());
                 mListHostSelected = mSingleton.hostList;
             }
             initTabswithTargets(mListHostSelected);
-            monitorNmapParam.setText(nmapControler.getParamOfScan(nmapControler.getNameOfScan(0)));
             initUIWithTarget(mListHostSelected.get(0));
             ViewAnimate.FabAnimateReveal(mInstance, mFab);
         }
@@ -180,8 +164,6 @@ public class                    NmapActivity extends MITMActivity {
         List<Host> TmpHost = new ArrayList<>();
         TmpHost.add(host);
         nmapControler.setHosts(TmpHost);
-        MonitorInoptionTheTarget.setText(host.ip);
-        monitorHostTargeted.setText(host.ip);
         nmapOutputFragment.refresh(host);
     }
 
@@ -199,17 +181,6 @@ public class                    NmapActivity extends MITMActivity {
 
     public void                 showSnackbar(String txt) {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
-    }
-
-    public void                 startNmap() {
-        Utils.vibrateDevice(mInstance);
-        mProgressBar.setVisibility(View.VISIBLE);
-        if (!isInScriptMode) {
-//            nmapControler.startScript(nmapOutputFragment, mProgressBar);
-            showSnackbar("Need to implemente the nmap scan");
-            nmapOutputFragment.flushOutput(null, mProgressBar);
-        } else if (!nmapControler.startScan(nmapOutputFragment, mProgressBar))
-            showSnackbar("No target selected");
     }
 
     private void                askForExternalTarget() {
@@ -252,6 +223,21 @@ public class                    NmapActivity extends MITMActivity {
         askForExternalTarget();
     }
 
+    private View.OnClickListener onClickFAB() {
+        return new View.OnClickListener() {
+            public void onClick(View v) {
+                Utils.vibrateDevice(mInstance);
+                mProgressBar.setVisibility(View.VISIBLE);
+                if (!isInScriptMode) {
+                    if (!nmapControler.startScan(nmapOutputFragment, mProgressBar))
+                       showSnackbar("Need to implemente the nmap scan");
+                    nmapOutputFragment.flushOutput(null, mProgressBar);
+                } else if (!nmapControler.startScan(nmapOutputFragment, mProgressBar))
+                    showSnackbar("No target selected");
+            }
+        };
+    }
+
     private View.OnClickListener onClickTypeOfScan() {
         return new View.OnClickListener() {
             public void onClick(View view) {
@@ -268,7 +254,6 @@ public class                    NmapActivity extends MITMActivity {
                                 Log.d(TAG, "NEW Nmap TypeScan:" + typeScan);
                                 String param = nmapControler.getParamOfScan(typeScan);
                                 Log.d(TAG, "NEW Nmap Param:" + param);
-                                monitorNmapParam.setText(param);
                                 nmapControler.setmActualScan(typeScan);
                                 if (param != null)
                                     setToolbarTitle(null, typeScan);
@@ -294,7 +279,6 @@ public class                    NmapActivity extends MITMActivity {
                                 Log.d(TAG, "NEW Nmap Script:" + typeScan);
                                 String param = nmapControler.getParamOfScan(typeScan);
                                 Log.d(TAG, "NEW Nmap Script Param:" + param);
-                                monitorNmapParam.setText(param);
                                 nmapControler.setmActualScan(typeScan);
                                 if (param != null)
                                     setToolbarTitle(null, typeScan);
@@ -305,20 +289,7 @@ public class                    NmapActivity extends MITMActivity {
     }
 
     public void                 onBackPressed() {
-        if (MitManager.getInstance().isSniffServiceActif(this)) {
-             new AlertDialog.Builder(this)
-                        .setTitle("Warning: Sniffing service is active")
-                        .setMessage("You press ok we will terminate every process for you")
-                        .setPositiveButton(getResources().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                MitManager.getInstance().stopEverything();
-                                onBackPressed();
-                            }
-                        })
-                        .setNegativeButton(getResources().getString(android.R.string.cancel), null)
-                        .show();
-        } else {
             super.onBackPressed();
-        }
+        //TODO; detect if command is still run
     }
 }
