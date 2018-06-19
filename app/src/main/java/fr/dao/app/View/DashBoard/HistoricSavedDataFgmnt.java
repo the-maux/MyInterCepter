@@ -272,7 +272,7 @@ public class HistoricSavedDataFgmnt extends MyFragment {
             subtitleWireshark.setText("0 pcap recorded");
             cardWireshark.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    mActivity.showSnackbar("No recorded session");
+                    mActivity.showSnackbar("No recorded network");
                 }
             });
         }
@@ -284,7 +284,7 @@ public class HistoricSavedDataFgmnt extends MyFragment {
                 List<File> pcaps;
                 if (session.SniffSessions() == null || session.SniffSessions().isEmpty()) {
                     pcaps = Pcap.getListFiles(new File(mSingleton.Settings.PcapPath));
-                    mActivity.showSnackbar("No session recorded, showing all pcaps");
+                    mActivity.showSnackbar("No network recorded, showing all pcaps");
                     setTitleToolbar("/sdcard/Pcap",  pcaps.size() + " records");
                 } else {
                     pcaps = DBManager.getListPcapFormSSIDFile(session.Ssid);
@@ -374,7 +374,7 @@ public class HistoricSavedDataFgmnt extends MyFragment {
         List<SniffSession> allsniffedSessions = DBSniffSession.getAllSniffSession();
         for (SniffSession sniffSession : allsniffedSessions) {
             Log.d(TAG, "SNIFFSESSION:\t:" + sniffSession);
-            Log.d(TAG, "SNIFFSESSION:\t:SESSION: " + sniffSession.session);
+            Log.d(TAG, "SNIFFSESSION:\t:SESSION: " + sniffSession.network);
             Log.d(TAG, "SNIFFSESSION:\t:SERIAL: " + sniffSession.listDevicesSerialized);
             for (Host host : sniffSession.listDevices()) {
                 Log.d(TAG, "SNIFFSESSION:\t:CLIENT: " + host);

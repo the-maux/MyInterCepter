@@ -92,7 +92,7 @@ public class                    HomeActivity extends MyActivity {
         dashboard_card.setOnClickListener(onDashboardClick());
         defensifCheck();
         initBottomMonitor();
-        mSingleton.Session = DBSessions.getSession();
+        mSingleton.Session = DBSessions.createOrUpdateSession();
     }
 
     private void                defensifCheck() {

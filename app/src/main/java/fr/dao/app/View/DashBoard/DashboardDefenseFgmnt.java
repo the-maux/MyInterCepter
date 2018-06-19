@@ -16,11 +16,13 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 
-import fr.dao.app.Core.Network.SessionManager;
+import fr.dao.app.Core.Database.DBNetwork;
+import fr.dao.app.Model.Config.Action;
+import fr.dao.app.Model.Config.Session;
+import fr.dao.app.Model.Target.Network;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Adapter.SessionAdapter;
@@ -33,7 +35,6 @@ public class                    DashboardDefenseFgmnt extends MyFragment {
     private ConstraintLayout    mRootView;
     private PieChart            jcoolGraph;
     private TextView            titleChartDashboard;
-    private SessionManager      sessionManager;
     private RecyclerView        mRV;
     private int                 nbrActionPerformed = 0;
 
@@ -54,7 +55,6 @@ public class                    DashboardDefenseFgmnt extends MyFragment {
 
     public void                 init() {
         mActivity.setToolbarTitle("BlueTeam Statistique", null);
-        sessionManager = new SessionManager();
         initChart();
         initRV();
     }
@@ -64,11 +64,16 @@ public class                    DashboardDefenseFgmnt extends MyFragment {
         init();
     }
     private void                initRV() {
-        SessionAdapter adapter = new SessionAdapter((MyActivity) getActivity(), sessionManager.getSessionsFromDate(null, null), R.color.blueteam_color);
+        for (Session session : mActivity.sessionManager.getActualListSessions()) {
+            nbrActionPerformed = nbrActionPerformed + session.getNbrActionType(Action.TeamAction.BLUETEAM);
+        }
+        mActivity.setToolbarTitle(null, nbrActionPerformed + " actions performed");
+        SessionAdapter adapter = new SessionAdapter((MyActivity) getActivity(), mActivity.sessionManager.getActualListSessions(), R.color.blueteam_color);
         mRV.setAdapter(adapter);
         mRV.setHasFixedSize(true);
         mRV.setLayoutManager(new LinearLayoutManager(mActivity));
-        Log.d(TAG, "Loaded " + sessionManager.getSessionsFromDate(null, null).size() + " sessions");
+
+        Log.d(TAG, "Loaded " + mActivity.sessionManager.getSessionsFromDate(null, null).size() + " sessions");
     }
 
     /**
@@ -78,18 +83,35 @@ public class                    DashboardDefenseFgmnt extends MyFragment {
     private void                    initChart() {
         int count = 4;
         ArrayList<PieEntry> entries1 = new ArrayList<>();
-        for(int i = 0; i < count; i++) {
-            entries1.add(new PieEntry((float) ((Math.random() * 60) + 40), "DORA " + (i+1)));
+        for (Network network : DBNetwork.getAllAccessPoint()) {
+            PieEntry entry = new PieEntry((float) network.nbrScanned, network.Ssid);
+            entries1.add(entry);
         }
-        PieDataSet ds1 = new PieDataSet(entries1, "Quarterly Revenues 2015");
-        ds1.setColors(ColorTemplate.VORDIPLOM_COLORS);
+        PieDataSet ds1 = new PieDataSet(entries1, DBNetwork.getAllAccessPoint() + " network");
+        ds1.setColors(
+                ContextCompat.getColor(mActivity, mSingleton.Settings.preferedColors[0]),
+                ContextCompat.getColor(mActivity, mSingleton.Settings.preferedColors[1]),
+                ContextCompat.getColor(mActivity, mSingleton.Settings.preferedColors[2]),
+                ContextCompat.getColor(mActivity, mSingleton.Settings.preferedColors[3]),
+                ContextCompat.getColor(mActivity, mSingleton.Settings.preferedColors[4]),
+                ContextCompat.getColor(mActivity, mSingleton.Settings.preferedColors[5]),
+                ContextCompat.getColor(mActivity, mSingleton.Settings.preferedColors[6]),
+                ContextCompat.getColor(mActivity, mSingleton.Settings.preferedColors[7]),
+                ContextCompat.getColor(mActivity, mSingleton.Settings.preferedColors[8]),
+                ContextCompat.getColor(mActivity, mSingleton.Settings.preferedColors[9]));
         ds1.setSliceSpace(2f);
         ds1.setValueTextColor(Color.WHITE);
         ds1.setValueTextSize(12f);
         PieData d = new PieData(ds1);
         jcoolGraph.animateX(2000);
         jcoolGraph.setData(d);
+        d.setDrawValues(true);
+        d.setHighlightEnabled(true);
         jcoolGraph.setHoleColor(ContextCompat.getColor(mActivity, R.color.trans));
-        mActivity.setToolbarTitle("General Statistique", "27 actions performed");
     }
+
 }
+
+/**
+ *
+ **/

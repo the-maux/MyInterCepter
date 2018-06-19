@@ -28,8 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.dao.app.Core.Database.DBNetwork;
-import fr.dao.app.Core.Network.SessionManager;
 import fr.dao.app.Model.Config.Action;
+import fr.dao.app.Model.Config.Session;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Adapter.SessionAdapter;
@@ -43,9 +43,8 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
     private ConstraintLayout    mRootView;
     private LineChart           jcoolGraph;
     private TextView            titleChartDashboard;
-    private SessionManager      sessionManager;
-    private int                 nbrActionPerformed = 0;
     private RecyclerView        mRv_dash_general;
+    private int                 nbrActionPerformed = 0;
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_dash_general, container, false);
@@ -62,7 +61,6 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
     }
 
     public void                 init() {
-        sessionManager = new SessionManager();
         nbrActionPerformed = 0x0;
         initChart();
         initRV();
@@ -74,11 +72,17 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
     }
 
     private void                initRV() {
-        SessionAdapter adapter = new SessionAdapter((MyActivity) getActivity(), sessionManager.getSessionsFromDate(null, null), R.color.DashboardPrimary);
+        nbrActionPerformed = 0;
+        List<Session> sessions = mActivity.sessionManager.getSessionsFromDate(null, null);
+        for (Session session : sessions) {
+            nbrActionPerformed += session.Actions().size();
+        }
+        mActivity.setToolbarTitle("Statistique", nbrActionPerformed + " actions performed");
+        SessionAdapter adapter = new SessionAdapter((MyActivity) getActivity(), sessions, R.color.DashboardPrimary);
         mRv_dash_general.setAdapter(adapter);
         mRv_dash_general.setHasFixedSize(true);
         mRv_dash_general.setLayoutManager(new LinearLayoutManager(mActivity));
-        Log.d(TAG, "Loaded " + sessionManager.getSessionsFromDate(null, null).size() + " sessions");
+        Log.d(TAG, "Loaded " + mActivity.sessionManager.getSessionsFromDate(null, null).size() + " sessions");
     }
 
     public void                 onResume() {
@@ -93,13 +97,13 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
 
         LineDataSet setComp1, setComp2;
         if (42 == 42) {/* Tester les vrai valeurs*/
-            setComp1 = initLineDataSet(sessionManager.getEntryFromLoadedSessionsByType(Action.TeamAction.BLUETEAM),
+            setComp1 = initLineDataSet(mActivity.sessionManager.getEntryFromLoadedSessionsByType(Action.TeamAction.BLUETEAM),
                     "Defense", R.color.blueteam_color);
-            setComp2 = initLineDataSet(sessionManager.getEntryFromLoadedSessionsByType(Action.TeamAction.READTEAM),
+            setComp2 = initLineDataSet(mActivity.sessionManager.getEntryFromLoadedSessionsByType(Action.TeamAction.READTEAM),
                     "Attack", R.color.redteam_color);
         } else {
-            setComp1 = initLineDataSet(sessionManager.getFakeDefenseEntry(), "Defense", R.color.blueteam_color);
-            setComp2 = initLineDataSet(sessionManager.getFakeAttackEntry(), "Attack", R.color.redteam_color);
+            setComp1 = initLineDataSet(mActivity.sessionManager.getFakeDefenseEntry(), "Defense", R.color.blueteam_color);
+            setComp2 = initLineDataSet(mActivity.sessionManager.getFakeAttackEntry(), "Attack", R.color.redteam_color);
         }
         List<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(setComp1);
@@ -116,12 +120,12 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
         jcoolGraph.setData(data);
         String titleChart = (DBNetwork.getAllAccessPoint() == null ? "0" : DBNetwork.getAllAccessPoint().size()) + " network audit";
         Description description = new Description();
-        description.setText(sessionManager.getSessionsFromDate(null, null).size() + " sessions");
+        description.setText(mActivity.sessionManager.getSessionsFromDate(null, null).size() + " sessions");
         description.setTextColor(ContextCompat.getColor(mActivity, R.color.white_secondary));
         jcoolGraph.setDescription(description);
         titleChartDashboard.setText(titleChart);
         jcoolGraph.invalidate(); // refresh
-        mActivity.setToolbarTitle("Statistique", nbrActionPerformed + " actions performed");
+
     }
 
     private LineDataSet             initLineDataSet(List<Entry> defenseEntry, String title, int color) {
@@ -141,8 +145,8 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
     public class MyCustomXAxisValueFormatter implements IAxisValueFormatter {
 
         public String getFormattedValue(float value, AxisBase axis) {
-            return (sessionManager.getSessionFromOffset(value) == null) ?
-                    "00/00" : sessionManager.getSessionFromOffset(value).getDateString();
+            return (mActivity.sessionManager.getSessionFromOffset(value) == null) ?
+                    "00/00" : mActivity.sessionManager.getSessionFromOffset(value).getDateString();
         }
     }
 }

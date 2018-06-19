@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import fr.dao.app.Model.Config.Preferences;
+import fr.dao.app.R;
 
 public class                SettingsControler {
     private String          TAG = "SettingsControler";
@@ -25,6 +26,7 @@ public class                SettingsControler {
     public String           FilesPath = null;
     public String           DumpsPath = null;
     public boolean          DebugMode = true, UltraDebugMode = false;
+    public int[]            preferedColors;
 
     public SettingsControler(String FilesPath) {
         Log.d(TAG, TAG+"::initialisation");
@@ -39,6 +41,48 @@ public class                SettingsControler {
             else {
                 build();
                 Log.d(TAG, "no Settings.json found");
+            }
+        }
+        initColors();
+    }
+
+    private void            initColors() {
+        preferedColors = new int[50];
+        for (int i=0;i<10;i++) {
+            switch (i) {
+                case 0:
+                    preferedColors[i] = R.color.colorTarget1;
+                    break;
+                case 1:
+                    preferedColors[i] = R.color.colorTarget2;
+                    break;
+                case 2:
+                    preferedColors[i] = R.color.colorTarget3;
+                    break;
+                case 3:
+                    preferedColors[i] = R.color.colorTarget4;
+                    break;
+                case 4:
+                    preferedColors[i] = R.color.colorTarget11;
+                    break;
+                case 5:
+                    preferedColors[i] = R.color.colorTarget6;
+                    break;
+                case 6:
+                    preferedColors[i] = R.color.colorTarget7;
+                    break;
+                case 9:
+                    preferedColors[i] = R.color.colorTarget8;
+                    break;
+                case 8:
+                    preferedColors[i] = R.color.colorTarget9;
+                    break;
+                case 7:
+                    preferedColors[i] = R.color.colorTarget10;
+                    break;
+                default:
+                    preferedColors[i] = R.color.accent;
+                    break;
             }
         }
     }

@@ -74,4 +74,27 @@
     <color name="dns">#66bb6a</color>
     <color name="blue_grey_10000">#2d3031</color>
 
+    <!-- Target color  -->
+    <color name="colorTarget1">#ffa000</color>
+    <color name="colorTarget10">#673ab7</color>
+    <color name="colorTarget4">#689f38</color>
+    <color name="colorTarget2">#212121</color>
+    <color name="colorTarget3">#FFFFFF</color>
+    <color name="colorTarget5">#4caf50</color>
+    <color name="colorTarget6">#5d4037</color>
+    <color name="colorTarget7">#757575</color>
+    <color name="colorTarget8">#BDBDBD</color>
+    <color name="colorTarget9">#afb42b</color>
+    <color name="colorTarget11">#00796b</color>
+    <color name="colorTarget12">#b2dfdb</color>
+    <color name="colorTarget13">#e64a19</color>
+    <color name="colorTarget14">#ffccbc</color>
+    <color name="colorTarget15">#d6e7ff</color>
+    <color name="colorTarget16">#d6e7ff</color>
+    <color name="colorTarget17">#d6e7ff</color>
+    <color name="colorTarget18">#d6e7ff</color>
+    <color name="colorTarget19">#d6e7ff</color>
+    <color name="colorTarget20">#d6e7ff</color>
+
+
 </resources>

@@ -17,11 +17,11 @@ import android.widget.Toast;
 
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Database.DBNetwork;
+import fr.dao.app.Core.Network.SessionManager;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Adapter.NetworksAdapter;
-import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Dialog.RV_dialog;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
@@ -35,16 +35,27 @@ public class                        DashboardActivity extends MyActivity {
     private TabLayout               mTabs;
     private ImageView               OsImg;
     private ImageView               iconSettings2;
+    SessionManager                  sessionManager;
 
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         postponeEnterTransition();
         initXml();
+        init();
+    }
+
+    private void                    init() {
         setToolbarTitle("Statistique", null);
         initTabs();
         initNetworkFilterBtn();
+        sessionManager = new SessionManager();
         pushViewToFront();
+    }
+
+    protected void                  onResume() {
+        super.onResume();
+        sessionManager.update();
     }
 
     private void                    pushViewToFront() {
