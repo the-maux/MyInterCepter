@@ -32,7 +32,7 @@ public class                        NmapControler {
     private Date                    startParsing;
     private boolean                 mIsLiveDump;
     private List<Host>              mHost = null;
-    private RootProcess             process = new RootProcess("Nmap", mSingleton.Settings.FilesPath);
+    private RootProcess             process;
     private String                  mActualScan = "Ping scan", mActualScript = "Heartbleed check";//Default
 
     /**
@@ -47,7 +47,8 @@ public class                        NmapControler {
                     String tmp;
                     String cmd = PATH_NMAP + mParams.getFullScanForVulns() + host.ip;
                     StringBuilder outputBuilder = new StringBuilder();
-                    BufferedReader reader = process.exec(cmd).getReader();
+                    Log.i(TAG, cmd.replace(PATH_NMAP, ""));
+                    BufferedReader reader = process().exec(cmd).getReader();
                     while ((tmp = reader.readLine()) != null && !tmp.startsWith("Nmap done")) {
                         outputBuilder.append(tmp).append('\n');
                     }
@@ -81,6 +82,7 @@ public class                        NmapControler {
                 try {
                     String tmp;
                     String realCmd = PATH_NMAP + cmd;
+                    Log.i(TAG, cmd.replace(PATH_NMAP, ""));
                     StringBuilder outputBuilder = new StringBuilder();
 //                    BufferedReader reader = process.exec(realCmd).getReader();
 //                    while ((tmp = reader.readLine()) != null && !tmp.startsWith("Nmap done")) {
@@ -135,23 +137,16 @@ public class                        NmapControler {
                     buildAction();
                     String tmp;
                     StringBuilder outputBuilder = new StringBuilder();
-                    BufferedReader reader = process.exec(cmd).getReader();
-                    while ((tmp = reader.readLine()) != null && !tmp.startsWith("Nmap done")) {
+                    Log.i(TAG, cmd.replace(PATH_NMAP, ""));
+                    BufferedReader reader = process().exec(cmd).getReader();
+                    while ((tmp = reader.readLine()) != null && !tmp.startsWith("Nmap done"))
                         outputBuilder.append(tmp).append('\n');
-                    }
-                    /*
-                     * Hello dear, If you're here,
-                     * Trying to understand why the condition is
-                     * outputBuilder.toString().isEmpty()
-                     * I love you, thank you, for existing
-                     * You're not alone, we are connected
-                     */
-                    if (outputBuilder.toString().isEmpty() || tmp.isEmpty() || !tmp.startsWith("Nmap done")) {
-                        Log.d(TAG, "Error in nmap execution, Nmap didn't end");
-                        outputBuilder.append(tmp);
-                        Log.e(TAG, outputBuilder.toString());
-                        setTitleToolbar("NetworkInformation scan", "Nmap Error");
-                        return;
+/* Hello dear, If you're here*/         if (outputBuilder.toString().isEmpty() || tmp.isEmpty() || !tmp.startsWith("Nmap done")) {
+/* Trying to understand why the condition is*/Log.d(TAG, "Error in nmap execution, Nmap didn't end");
+/* outputBuilder.toString().isEmpty()*/       outputBuilder.append(tmp);
+/* I love you, thank you, for existing*/      Log.e(TAG, outputBuilder.toString());
+/*You're not alone, we are connected*/        setTitleToolbar("NetworkInformation scan", "Nmap Error");
+                                              return;
                     }
                     outputBuilder.append(tmp);
                     String FullDUMP = outputBuilder.toString().substring(1);
@@ -174,7 +169,7 @@ public class                        NmapControler {
         }
         String hostFilter = res.toString();
         String parameter = getParamOfScan(mActualScan);
-        String cmd = PATH_NMAP + parameter + " " + hostFilter + " -d";
+        String cmd = PATH_NMAP + parameter + " " + hostFilter + " -d -Pn";
         cmd = cmd.replace("  ", " ").replace("\n", "");
         nmapOutputFragment.printCmdInTerminal(cmd
                 .replace("nmap/nmap", "nmap")
@@ -190,7 +185,7 @@ public class                        NmapControler {
                     try {
                         String tmp;
                         StringBuilder dumpOutputBuilder = new StringBuilder();
-                        BufferedReader reader = process.exec(build(nmapOutputFragment)).getReader();
+                        BufferedReader reader = process().exec(build(nmapOutputFragment)).getReader();
                         while ((tmp = reader.readLine()) != null && !tmp.contains("Nmap done")) {
                             if (!tmp.isEmpty()) {
                                 if (tmp.charAt(0) == '\n')
@@ -212,6 +207,11 @@ public class                        NmapControler {
             return false;
         }
         return true;
+    }
+
+    private RootProcess             process() {
+        process = new RootProcess("Nmap", mSingleton.Settings.FilesPath);
+        return process;
     }
 
     public void                     onHostActualized(ArrayList<Host> hosts) {

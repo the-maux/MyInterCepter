@@ -153,7 +153,7 @@ class                               NmapHostDiscoveryParser {
         host.Notes = host.Notes.concat("OxBABOBAB").concat(nmapStdout);
         if (host.osType == Os.Unknow || (host.osType == Os.Android && !host.isItMyDevice)) {
             Log.i(TAG, "HOST[" + host.ip + "] STILL UNKNOWN !");
-            InetAddress inetAddress = null;
+            InetAddress inetAddress;
             try {
                 inetAddress = InetAddress.getByName(host.ip);
                 String name = inetAddress.getCanonicalHostName();

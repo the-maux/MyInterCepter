@@ -11,15 +11,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
@@ -29,14 +23,13 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
+import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Scan.NmapControler;
 import fr.dao.app.Model.Config.NmapParam;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
-import fr.dao.app.View.ZViewController.Activity.MITMActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
@@ -72,7 +65,6 @@ public class                    NmapActivity extends MyActivity {
     private void                initXml() {
         mCoordinatorLayout = findViewById(R.id.Coordonitor);
         mTabs = findViewById(R.id.tabs);
-        mTabs.setVisibility(View.VISIBLE);
         mToolbar = findViewById(R.id.toolbar);
         mProgressBar = findViewById(R.id.progressBar);
         mSettingsMenu = findViewById(R.id.settingsMenu);
@@ -100,25 +92,26 @@ public class                    NmapActivity extends MyActivity {
     }
 
     private void                initHostBehavior() {
-        if (mSingleton.hostList == null || mSingleton.hostList.isEmpty()) {//MODE: No targert
-            Log.d(TAG, "MODE: NO TARGET");
-            isExternalTarget = true;
-            askForExternalTarget();//TODO: NMAP MODE: NO TARGET
-        } else {
-            isExternalTarget = false;
-            if (getIntent() != null && getIntent().getExtras() != null) {//MODE: FOCUSED TARGETx
-                int position = getIntent().getExtras().getInt("position", 0);
-                Log.d(TAG, "MODE: SINGLE TARGET:"+mSingleton.hostList.get(position));
-                mListHostSelected.add(mSingleton.hostList.get(position));
-
-            } else { //MODE: TARGET LIST {
-                Log.d(TAG, "MODE: LIST OF TARGET:"+ mListHostSelected.toString());
-                mListHostSelected = mSingleton.hostList;
+        isExternalTarget = false;
+        if (getIntent() != null && getIntent().getExtras() != null) {//MODE: FOCUSED TARGETx
+            bundle = getIntent().getExtras();
+            if (bundle == null || bundle.getString("macAddress") == null) {
+                Log.e(TAG, "No target selected");
+                showSnackbar("No target selected");
+            } else {
+                mListHostSelected.add(DBHost.getDevicesFromMAC(bundle.getString("macAddress")));
+                Log.d(TAG, "UNIQUE TARGET" + mListHostSelected.toString());
             }
-            initTabswithTargets(mListHostSelected);
-            initUIWithTarget(mListHostSelected.get(0));
-            ViewAnimate.FabAnimateReveal(mInstance, mFab);
+        } else { //MODE: TARGET LIST {
+            Log.d(TAG, "MODE: LIST OF TARGET:" + mListHostSelected.toString());
+            mListHostSelected = mSingleton.hostList;
         }
+        if (mListHostSelected.size() > 1) {
+            mTabs.setVisibility(View.VISIBLE);
+            initTabswithTargets(mListHostSelected);
+        }
+        initUIWithTarget(mListHostSelected.get(0));
+        ViewAnimate.FabAnimateReveal(mInstance, mFab);
     }
 
     private void                initFragment() {
@@ -160,7 +153,7 @@ public class                    NmapActivity extends MyActivity {
     }
 
     public void                 initUIWithTarget(Host host) {
-        setToolbarTitle("Nmap v6.40", nmapControler.getActualCmd());
+        setToolbarTitle(host.getName(), nmapControler.getActualCmd());
         List<Host> TmpHost = new ArrayList<>();
         TmpHost.add(host);
         nmapControler.setHosts(TmpHost);
@@ -231,7 +224,7 @@ public class                    NmapActivity extends MyActivity {
                 if (!isInScriptMode) {
                     if (!nmapControler.startScan(nmapOutputFragment, mProgressBar))
                        showSnackbar("Need to implemente the nmap scan");
-                    nmapOutputFragment.flushOutput(null, mProgressBar);
+
                 } else if (!nmapControler.startScan(nmapOutputFragment, mProgressBar))
                     showSnackbar("No target selected");
             }

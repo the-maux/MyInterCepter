@@ -40,7 +40,7 @@ public class                    NmapOutputView extends MyFragment  {
         mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
         Output = rootView.findViewById(R.id.RV_Wireshark);
         Output.setMovementMethod(new ScrollingMovementMethod());
-        String output = "<font color='red'>" + PROMPT + "</font> ";
+        String output = "<font color='red'>" + PROMPT + "</font> " + "<font color='cyan'> $> </font>";
         Output.setText(Html.fromHtml(output), TextView.BufferType.SPANNABLE);
     }
 
@@ -67,7 +67,7 @@ public class                    NmapOutputView extends MyFragment  {
             @Override
             public void run() {
                 String output = "<font color='red'>" + PROMPT + "</font> " +
-                        "<font color='darkcyan'>" +  " $> " + "</font>" +
+                                    "<font color='cyan'>" +  " $> " + "</font>" +
                         txt + "<br>";
                 Output.setText(Html.fromHtml(output), TextView.BufferType.SPANNABLE);
                 actualOutput = output;

@@ -196,6 +196,7 @@ public class                            NmapParam {
 
     /**
      * VulnerabilityScan
+     * nmap --script=broadcast-dns-service-discovery
      */
     public String                       getFullScanForVulns() {//TODO: dump all ports
         return " -PN -sS -sU " + /* Deleted but why not : -T3 */

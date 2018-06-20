@@ -187,7 +187,8 @@ public class                    HostDetailActivity extends MyActivity {
                     case VULN_SCAN:
                         p1  = Pair.create((View)fabBtn, "VulnIconTransition");
                         intent = new Intent(mInstance, VulnsScanActivity.class);
-                        intent.putExtra("macAddress", getIntent().getExtras().getString("macAddress"));                        break;
+                        intent.putExtra("macAddress", getIntent().getExtras().getString("macAddress"));
+                        break;
                     case BLOCK_INTERNET:
                         intent = new Intent(mInstance, NmapActivity.class);
                         p1  = Pair.create((View)fabBtn, "NmapIconTransition");
