@@ -46,16 +46,17 @@ public class                    SniffLiveFrgmnt extends MyFragment {
     private SniffActivity       mActivity;
     private RecyclerView        mRV_Wireshark, dashboard_RV;
     private SniffPacketsAdapter mAdapterDetailWireshark;
-    private SniffDashboardAdapter mAdapterDashboardWireshark;
+    private SniffDashboardAdapter   mAdapterDashboardWireshark;
     private List<Host>          mListHostSelected = new ArrayList<>();
     private TextView            mMonitorAgv;
     private Tcpdump             mTcpdump;
     private boolean             isDashboardMode = true, wasLaunched = false;
     private CircleImageView     statusIconSniffing;
     private ImageView           headerWifi;
-    private TextView            title_sniffer, subtitle_sniffer, bottom_title_sniffer, bottom_subtitle_sniffer;
+    private TextView nameTarget, nbrPacket, timer, nameFile;
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView");
         View rootView = inflater.inflate(R.layout.fragment_wireshark, container, false);
         mActivity = (SniffActivity) getActivity();
         initXml(rootView);
@@ -71,10 +72,10 @@ public class                    SniffLiveFrgmnt extends MyFragment {
         rootViewForLiveFlux = rootView.findViewById(R.id.rootViewForLiveFlux);
         rootViewForDashboard = rootView.findViewById(R.id.rootViewForDashboard);
         statusIconSniffing = rootView.findViewById(R.id.statusIconSniffing);
-        title_sniffer = rootView.findViewById(R.id.title_sniffer);
-        subtitle_sniffer = rootView.findViewById(R.id.subtitle_sniffer);
-        bottom_title_sniffer = rootView.findViewById(R.id.bottom_subtitle_sniffer);
-        bottom_subtitle_sniffer = rootView.findViewById(R.id.bottom_title_sniffer);
+        nameTarget = rootView.findViewById(R.id.title_sniffer);
+        nbrPacket = rootView.findViewById(R.id.subtitle_sniffer);
+        timer = rootView.findViewById(R.id.bottom_subtitle_sniffer);
+        nameFile = rootView.findViewById(R.id.bottom_title_sniffer);
         headerWifi = rootView.findViewById(R.id.headerWifi);
         dashboard_RV = rootView.findViewById(R.id.dashboard_RV);
   //      mMonitorCmd =  rootView.findViewById(R.id.cmd);
@@ -107,18 +108,20 @@ public class                    SniffLiveFrgmnt extends MyFragment {
     private void                initDashboard() {
         int res = (Tcpdump.isRunning()) ? R.color.online_color : R.color.offline_color;
         statusIconSniffing.setImageResource(res);
-        if (mAdapterDashboardWireshark == null) {
-            putTitle(title_sniffer);
-            subtitle_sniffer.setText("No packets recorded");
-            bottom_title_sniffer.setText("Not started");
-            bottom_subtitle_sniffer.setText("");
-            MyGlideLoader.loadDrawableInImageView(mActivity, R.drawable.wireshark, headerWifi, false);
-            mAdapterDashboardWireshark = new SniffDashboardAdapter(mActivity, subtitle_sniffer,
-                    bottom_title_sniffer, bottom_subtitle_sniffer, statusIconSniffing);
-            dashboard_RV.setAdapter(mAdapterDashboardWireshark);
-            LinearLayoutManager layoutManager = new GridLayoutManager(mActivity, 3);
-            dashboard_RV.setLayoutManager(layoutManager);
+        putTitle(nameTarget);
+        if (!Tcpdump.isRunning()) {
+            nbrPacket.setText("No packets recorded");
+            timer.setText("00:00:00");
+            if (mTcpdump.isDumpingInFile)
+                nameFile.setText(mSingleton.Settings.PcapPath);
+            else
+                nameFile.setText("Will not be saved as .pcap");
         }
+        mAdapterDashboardWireshark = mTcpdump.getDashboardAdapter(mActivity, nbrPacket, timer, nameFile, statusIconSniffing);
+        MyGlideLoader.loadDrawableInImageView(mActivity, R.drawable.wireshark, headerWifi, false);
+        dashboard_RV.setAdapter(mAdapterDashboardWireshark);
+        LinearLayoutManager layoutManager = new GridLayoutManager(mActivity, 3);
+        dashboard_RV.setLayoutManager(layoutManager);
     }
 
     private void                putTitle(TextView title_sniffer) {
@@ -187,6 +190,7 @@ public class                    SniffLiveFrgmnt extends MyFragment {
                     statusIconSniffing.setImageResource(R.color.filtered_color);
                 mMonitorAgv.setVisibility(View.VISIBLE);
                 wasLaunched = true;
+                mActivity.setToolbarTitle(null, "Poisonning target");
                 return true;
             }
         } else {
@@ -204,10 +208,8 @@ public class                    SniffLiveFrgmnt extends MyFragment {
         if (selectTarget()) {
             initTrameDispatcher();
             MitManager.getInstance().loadHost(mListHostSelected);
-            DashboardSniff dashboardSniff = MitManager.getInstance().initTcpDump(mTrameDispatcher);
-            mAdapterDashboardWireshark.setDashboard(dashboardSniff);
+            DashboardSniff dashboardSniff = MitManager.getInstance().initTcpDump(mTrameDispatcher, mAdapterDashboardWireshark);
             dashboardSniff.setAdapter(mAdapterDashboardWireshark);
-            bottom_subtitle_sniffer.setText(mListHostSelected.size() + " targets");
             mMonitorAgv.setText(Tcpdump.getTcpdump().getCmd());
             mActivity.updateNotifications();
             return true;
@@ -267,29 +269,6 @@ public class                    SniffLiveFrgmnt extends MyFragment {
 
     /**
      *
-     * private void                initFilter() {
-     tcp_cb.setOnClickListener(onChangePermissionFilter(Protocol.TCP, tcp_cb));
-     dns_cb.setOnClickListener(onChangePermissionFilter(Protocol.DNS, dns_cb));
-     http_cb.setOnClickListener(onChangePermissionFilter(Protocol.HTTP, http_cb));
-     https_cb.setOnClickListener(onChangePermissionFilter(Protocol.HTTPS, https_cb));
-     udp_cb.setOnClickListener(onChangePermissionFilter(Protocol.UDP, udp_cb));
-     arp_cb.setOnClickListener(onChangePermissionFilter(Protocol.ARP, arp_cb));
-     ip_cb.setOnClickListener(onChangePermissionFilter(Protocol.IP, ip_cb));
-     }
-     private View.OnClickListener onChangePermissionFilter(final Protocol protocol, final TextView tv) {
-     return new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-    int pL = tv.getPaddingLeft();
-    int pT = tv.getPaddingTop();
-    int pR = tv.getPaddingRight();
-    int pB = tv.getPaddingBottom();
-    tv.setBackgroundResource(
-    (mAdapterDetailWireshark.changePermissionFilter(protocol)) ?
-    R.drawable.rounded_corner_on : R.drawable.rounded_corner_off);
-    tv.setPadding(pL, pT, pR, pB);
-    }
-    };
      }
      private void                initSpinner() {
      final Map<String, String> mParams = new HashMap<>();

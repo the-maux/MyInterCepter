@@ -113,7 +113,7 @@ public class                    VulnsScanActivity extends MyActivity {
                 onFabClick();
             }
         });
-        appBarLayout = findViewById(R.id.appBarLayout);
+        appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewCompat.setElevation(appBarLayout, 4);

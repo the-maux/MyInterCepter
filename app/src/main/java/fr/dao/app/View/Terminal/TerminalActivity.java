@@ -48,7 +48,7 @@ public class                    TerminalActivity extends MyActivity {
         mScript = findViewById(R.id.scriptBtn);
         mScanType = findViewById(R.id.typeScanBtn);
         mFab = findViewById(R.id.fab);
-        appBarLayout = findViewById(R.id.appBarLayout);
+        appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewCompat.setElevation(findViewById(R.id.relativeLayout), 2);

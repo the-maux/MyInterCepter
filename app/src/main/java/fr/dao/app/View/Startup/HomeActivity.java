@@ -32,17 +32,18 @@ import fr.dao.app.View.DashBoard.DashboardActivity;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
 import fr.dao.app.View.Settings.SettingsActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
+import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 
 public class                    HomeActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
     private HomeActivity        mInstance = this;
     private CoordinatorLayout   mCoordinatorLayout;
     private CardView            blue_card, dashboard_card, settings_card, red_card;
-    private RadioButton         radioButton, radioButton2, radioButton3;
     private int                 MAXIMUM_TRY_PERMISSION = 5, try_permission = 0;
     private View                monitorRoot, monitorPermission, monitorUpdated;
     private TextView            TV_Root, TV_Permission, TV_Updated;
     private ProgressBar         PB_Root, PB_Permission, PB_Updated;
+    private CardView            cardRoot, cardPermission, cardUpdated;
     private CircleImageView     statusRoot, statusPermission, statusUpdated;
     private static final int    PERMISSIONS_MULTIPLE_REQUEST = 123;
     private Singleton           mSingleton = Singleton.getInstance();
@@ -57,7 +58,6 @@ public class                    HomeActivity extends MyActivity {
 
     protected void              onPostResume() {
         super.onPostResume();
-
         getRootPermission();
         getAndroidPermission();
     }
@@ -83,6 +83,16 @@ public class                    HomeActivity extends MyActivity {
         PB_Root = monitorRoot.findViewById(R.id.progressBar_monitor);
         PB_Permission = monitorPermission.findViewById(R.id.progressBar_monitor);
         PB_Updated = monitorUpdated.findViewById(R.id.progressBar_monitor);
+        ViewAnimate.FabAnimateReveal(mInstance, monitorRoot, new Runnable() {
+            public void run() {
+
+            }
+        });
+        ViewAnimate.FabAnimateReveal(mInstance, monitorPermission, new Runnable() {
+            public void run() {
+            }
+        });
+        ViewAnimate.FabAnimateReveal(mInstance, monitorUpdated, null);
     }
 
     private void                init() {

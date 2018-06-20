@@ -7,7 +7,7 @@
     android:transitionName="rootViewTransition">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBarLayout"
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/backgroundtransition"
@@ -154,7 +154,7 @@
         android:visibility="visible"
         app:backgroundTint="@color/fab_color"
         app:fabSize="normal"
-        app:layout_anchor="@id/appBarLayout"
+        app:layout_anchor="@id/appBar"
         app:layout_anchorGravity="bottom|right|end" />
 
 

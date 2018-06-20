@@ -3,6 +3,7 @@ package fr.dao.app.Core.Tcpdump;
 import android.app.Activity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import fr.dao.app.Core.Configuration.MitManager;
+import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Config.Action;
@@ -21,6 +22,7 @@ import fr.dao.app.R;
 import fr.dao.app.View.Sniff.SniffActivity;
 import fr.dao.app.View.Sniff.SniffDispatcher;
 import fr.dao.app.View.Sniff.SniffReaderFrgmnt;
+import fr.dao.app.View.ZViewController.Adapter.SniffDashboardAdapter;
 
 public class                        Tcpdump {
     private String                  TAG = "Tcpdump";
@@ -35,6 +37,7 @@ public class                        Tcpdump {
     private SniffDispatcher         mDispatcher = null;
     private SniffReaderFrgmnt       mFragment = null;
     private ArrayList<Trame>        mBufferOfTrame = new ArrayList<>();
+    private SniffDashboardAdapter   mAdapterDashboardWireshark;
 
     private                         Tcpdump(SniffActivity activity) {
         this.mActivity = activity;
@@ -59,8 +62,7 @@ public class                        Tcpdump {
     public String                   initCmd(List<Host> hosts) {
         String actualParam = "";
         actualCmd = mTcpdumpConf.buildWiresharkCmd(actualParam, isDumpingInFile, "No Filter", hosts);
-        return actualCmd.replace("nmap/nmap", "nmap")
-                .replace(mSingleton.Settings.FilesPath, "");
+        return mTcpdumpConf.currentNameFile;
     }
 
     public DashboardSniff           start(final SniffDispatcher trameDispatcher) {
@@ -71,7 +73,6 @@ public class                        Tcpdump {
         mDispatcher.setDashboard(dashboardSniff);
         Singleton.getInstance().Session.addAction(Action.ActionType.SNIFF, true);
         new Thread(new Runnable() {
-            @Override
             public void run() {
                 try {
                     Log.i(TAG, actualCmd);
@@ -124,7 +125,7 @@ public class                        Tcpdump {
             Trame trame = new Trame("Processus over");
             trame.connectionOver = true;
             mBufferOfTrame.add(trame);
-            stop();
+            stop(null);
             return;
         }
         Trame trame = new Trame(line);
@@ -133,7 +134,7 @@ public class                        Tcpdump {
         } else if (!trame.skipped) {
             Log.d(TAG, "trame created not initialized and not skipped, STOP TCPDUMP");
             mActivity.onError(/*trame*/);
-            stop();
+            stop(null);
         }//else skipped
     }
 
@@ -148,7 +149,7 @@ public class                        Tcpdump {
             trame.connectionOver = true;
             mDispatcher.addToQueue(trame);
             dashboardSniff.stop();
-            stop();
+            stop(dashboardSniff);
             return;
         }
         Trame trame = new Trame(line);
@@ -157,15 +158,17 @@ public class                        Tcpdump {
         } else if (!trame.skipped) {
             Log.d(TAG, "trame created not initialized and not skipped, STOP TCPDUMP");
             mActivity.onError(/*trame*/);
-            stop();
+            stop(dashboardSniff);
         }//else skipped
     }
 
-    public void                     stop() {
+    public void                     stop(DashboardSniff dashboardSniff) {
         if (isRunning) {
             Log.d(TAG, "stop");
             mTcpDumpProcess.closeDontWait();
             mActivity.onTcpdumpstopped();
+            if (dashboardSniff != null)
+                dashboardSniff.stop();
             isRunning = false;
             if (isDumpingInFile && !isPcapReading) {
                 Log.d(TAG, "allow right on pcap's dump directory");
@@ -191,20 +194,19 @@ public class                        Tcpdump {
         Log.d(TAG, "reading Pcap:" + pcapFile.getPath());
         actualCmd = mTcpdumpConf.buildWiresharkCmd(pcapFile);
         new Thread(new Runnable() {
-            @Override
             public void run() {
                 try {
                     mTcpDumpProcess = new RootProcess("Wireshark")
                             .exec(actualCmd);
                     mInstance.run(mTcpDumpProcess.getReader(), null);
                     Log.i(TAG, "Tcpdump execution over");
-                    stop();
+                    stop(null);
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.e(TAG, "Process Error: " + e.getMessage());
                     mActivity.showSnackbar(e.getMessage(), ContextCompat.getColor(mActivity, R.color.stop_color));
                     mActivity.setToolbarTitle("Execution stopped", e.getMessage());
-                    stop();
+                    stop(null);
                     Log.d(TAG, "Restarting ?");
                 } finally {
                     if (mTcpDumpProcess != null)
@@ -216,7 +218,7 @@ public class                        Tcpdump {
     }
 
     public void                     flushToAdapter() {
-        Log.d(TAG, "flushToAdapter");
+        Log.d(TAG, "flushToAdapter packet dispatcher is " + ((mDispatcher != null) ? "actif" : "null"));
         if (mDispatcher != null)
             mDispatcher.flush();
     }
@@ -230,5 +232,15 @@ public class                        Tcpdump {
     public String                   getCmd() {
         return actualCmd.replace("nmap/nmap", "nmap")
                 .replace(mSingleton.Settings.FilesPath, "");
+    }
+
+    public SniffDashboardAdapter getDashboardAdapter(SniffActivity mActivity, TextView nbrPacket, TextView timer, TextView nameFile, CircleImageView statusIconSniffing) {
+        if (mAdapterDashboardWireshark == null)
+            mAdapterDashboardWireshark = new SniffDashboardAdapter(mActivity, nbrPacket,
+                    timer, nameFile, statusIconSniffing);
+        else
+            mAdapterDashboardWireshark.updateFragmentWidget(mActivity, nbrPacket,
+                timer, nameFile, statusIconSniffing);
+        return mAdapterDashboardWireshark;
     }
 }

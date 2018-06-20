@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBarLayout"
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
@@ -109,7 +109,7 @@
         android:layout_marginRight="7dp"
         android:elevation="5dp"
         android:visibility="gone"
-        app:layout_anchor="@id/appBarLayout"
+        app:layout_anchor="@id/appBar"
         app:layout_anchorGravity="bottom|right|end" />
 
     <android.support.design.widget.FloatingActionButton
@@ -124,7 +124,7 @@
         app:backgroundTint="@color/primary_dark"
         app:elevation="6dp"
         app:fabSize="normal"
-        app:layout_anchor="@id/appBarLayout"
+        app:layout_anchor="@id/appBar"
         app:layout_anchorGravity="bottom|right|end" />
 
     <android.support.v7.widget.RecyclerView

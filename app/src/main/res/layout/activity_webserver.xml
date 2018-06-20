@@ -9,7 +9,7 @@
 
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBarLayout"
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/NmapPrimary"
@@ -18,7 +18,7 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:background="@color/webserverSpoofPrimary"
             android:elevation="4dp"
             android:paddingBottom="8dp">
@@ -26,22 +26,17 @@
 
             <ImageView
                 android:id="@+id/OsImg"
-                android:layout_width="@dimen/icon_toolbar_size"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
                 android:padding="8dp"
                 android:src="@drawable/ic_vpn_lock_svg"
                 android:tint="@color/tint_svg"
                 android:transitionName="NmapIconTransition"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/toolbar"
-                app:layout_constraintHeight_min="50dp"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_min="@dimen/icon_toolbar_size" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -50,19 +45,21 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/config"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_weight="5"
+                app:layout_constraintHorizontal_weight="4.5"
                 app:layout_constraintStart_toEndOf="@+id/OsImg"
                 app:layout_constraintTop_toTopOf="parent"
                 app:subtitle="Spoof any website !"
+                app:subtitleTextAppearance="@style/TextAppearance.AppCompat"
                 app:subtitleTextColor="@color/tint_svg"
                 app:title="Webserver spoofing"
+                app:titleTextAppearance="@style/TextAppearance.AppCompat"
                 app:titleTextColor="@android:color/primary_text_dark">
 
             </android.support.v7.widget.Toolbar>
 
             <ImageButton
                 android:id="@+id/config"
-                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
 
@@ -71,17 +68,15 @@
                 android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/settingsMenu"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/toolbar"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.50"
-                app:layout_constraintWidth_min="45dp"
                 app:srcCompat="@drawable/ic_settings_svg" />
 
             <ImageButton
                 android:id="@+id/settingsMenu"
-                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginRight="8dp"
                 android:background="@android:color/transparent"
@@ -90,8 +85,8 @@
                 android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintHorizontal_weight="0.5"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/config"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.5"
@@ -129,7 +124,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="5dp"
         android:visibility="gone"
-        app:layout_anchor="@id/appBarLayout"
+        app:layout_anchor="@id/appBar"
         app:layout_anchorGravity="bottom|right|end" />
 
 

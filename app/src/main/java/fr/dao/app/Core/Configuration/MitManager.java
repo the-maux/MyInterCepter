@@ -16,6 +16,7 @@ import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.View.Proxy.HTTPDispatcher;
 import fr.dao.app.View.Sniff.SniffDispatcher;
+import fr.dao.app.View.ZViewController.Adapter.SniffDashboardAdapter;
 
 public class                        MitManager {
     private String                  TAG = "MitmManager";
@@ -63,11 +64,14 @@ public class                        MitManager {
         } else
             Log.i(TAG, "Traffic already redicreted");
     }
-    public DashboardSniff           initTcpDump(SniffDispatcher mTrameDispatcher) {
+    public DashboardSniff           initTcpDump(SniffDispatcher mTrameDispatcher, SniffDashboardAdapter mAdapterDashboardWireshark) {
         initMitmConnection();
         Log.d(TAG, "initTcpDump");
-        Tcpdump.getTcpdump().initCmd(targets);
-        return Tcpdump.getTcpdump().start(mTrameDispatcher);
+        String nameFile = Tcpdump.getTcpdump().initCmd(targets);
+        DashboardSniff dashboardSniff = Tcpdump.getTcpdump().start(mTrameDispatcher);
+        mAdapterDashboardWireshark.setDashboard(dashboardSniff);
+        dashboardSniff.setFilename(nameFile);
+        return dashboardSniff;
     }
     public boolean                  initProxy(RecyclerView recyclerView, RecyclerView.Adapter adapter) {
         if (!isProxyRunning()) {
@@ -117,7 +121,7 @@ public class                        MitManager {
     public void                     stopTcpdump(boolean isShutdown) {
         if (isTcpdumpRunning()) {
             if (!stopMITMBehavior()) {
-                Tcpdump.getTcpdump().stop();
+                Tcpdump.getTcpdump().stop(null);
                 //TODO: We need to close the Tcpdump current process, even if there is still MITM behavior
             }
             Log.d(TAG, "stopTcpdump");

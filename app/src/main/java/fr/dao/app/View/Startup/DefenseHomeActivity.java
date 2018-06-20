@@ -51,7 +51,7 @@ public class                    DefenseHomeActivity extends MyActivity {
         RV_menu = findViewById(R.id.RV_menu);
         RV_menu.setLayoutManager(new GridLayoutManager(this, 2));
         rootView = findViewById(R.id.rootView);
-        appBarLayout = findViewById(R.id.appBarLayout);
+        appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewCompat.setElevation(appBarLayout, 4);

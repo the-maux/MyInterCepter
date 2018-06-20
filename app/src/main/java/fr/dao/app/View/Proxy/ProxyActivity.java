@@ -1,6 +1,5 @@
 package fr.dao.app.View.Proxy;
 
-import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
-import fr.dao.app.Core.Network.Proxy.HTTPProxy;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MITMActivity;
 import fr.dao.app.View.ZViewController.Adapter.HTTProxyAdapter;
@@ -72,7 +70,7 @@ public class                            ProxyActivity extends MITMActivity {
         mFab = findViewById(R.id.fab);
         mTabs = findViewById(R.id.tabs);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
-        appBarLayout = findViewById(R.id.appBarLayout);
+        appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewCompat.setElevation(findViewById(R.id.toptoolbar2), 4);

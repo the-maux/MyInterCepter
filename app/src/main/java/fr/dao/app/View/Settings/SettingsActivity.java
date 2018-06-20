@@ -58,7 +58,7 @@ public class                        SettingsActivity extends MyActivity {
         mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
         MyGlideLoader.coordoBackgroundXMM(this, (CoordinatorLayout) findViewById(R.id.coordinatorLayout));
         mToolbar = findViewById(R.id.toolbar2);
-        appBarLayout = findViewById(R.id.appBarLayout);
+        appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewCompat.setElevation(appBarLayout, 4);

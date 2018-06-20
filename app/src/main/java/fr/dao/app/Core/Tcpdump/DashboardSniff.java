@@ -6,6 +6,7 @@ import android.widget.TextView;
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.R;
+import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Adapter.SniffDashboardAdapter;
 
 /**
@@ -27,12 +28,12 @@ import fr.dao.app.View.ZViewController.Adapter.SniffDashboardAdapter;
 
 public class                DashboardSniff {
     private String          TAG = "DashboardSniff";
-    private boolean         mIsRunning = false;
+    private MyActivity      myActivity;
     private SniffDashboardAdapter mAdapterDashboardWireshark;
-    private int             nbrPackets = 0;
-    private TextView        monitorPackets, nbrTargets, timer;
+    private TextView        monitorPackets, nameFile;
     private CircleImageView status;
-    private boolean         isStatusUpdated = false;
+    private boolean         mIsRunning = false, isStatusUpdated = false;
+    private int             nbrPackets = 0;
     public int              UDP_packet = 0, TCP_packet = 0, FTP_packet = 0, ICMP_packet = 0;
     public int              HTTP_packet = 0, HTTPS_packet = 0, DNS_packet = 0, ARP_Packet = 0;
 
@@ -52,6 +53,7 @@ public class                DashboardSniff {
         if (!isStatusUpdated) {
             isStatusUpdated = true;
             status.setImageResource(R.color.online_color);
+            myActivity.setToolbarTitle(null, "Processing");
         }
         switch (trame.protocol) {
             case IP:
@@ -81,7 +83,12 @@ public class                DashboardSniff {
 
     public void             stop() {
         mIsRunning = false;
-        mAdapterDashboardWireshark.stopTimer();
+        myActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                mAdapterDashboardWireshark.stopTimer();
+                status.setImageResource(R.color.offline_color);
+            }
+        });
     }
 
     public void             setAdapter(SniffDashboardAdapter adapterDashboardWireshark) {
@@ -95,10 +102,10 @@ public class                DashboardSniff {
         }
     }
 
-    public void             setMonitorView(TextView packetsNumber, TextView nbrTargets, TextView timer, CircleImageView status) {
+    public void             setMonitorView(MyActivity activity, TextView packetsNumber, TextView nameFile, CircleImageView status) {
+        this.myActivity = activity;
         this.monitorPackets = packetsNumber;
-        this.nbrTargets = nbrTargets;
-        this.timer = timer;
+        this.nameFile = nameFile;
         this.status = status;
     }
 
@@ -111,4 +118,7 @@ public class                DashboardSniff {
         }
     }
 
+    public void             setFilename(String nameFile) {
+        this.nameFile.setText(nameFile);
+    }
 }

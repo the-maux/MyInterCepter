@@ -24,7 +24,7 @@ class                           ConfTcpdump {
                                  level header) in hex.*/
     String                      SNARF = "-s 0 ";             //  Snarf snaplen bytes of data from each  packet , no idea what this mean
     Singleton                   mSingleton = Singleton.getInstance();
-    
+    public String               currentNameFile = "No pcap dump";
     ConfTcpdump() {
 
     }
@@ -77,8 +77,8 @@ class                           ConfTcpdump {
                              String typeScan, List<Host> hosts) {
         String hostFilter = buildHostFilterCommand(hosts, typeScan);
         String date =  Words.getGenericDateFormat(new Date());
-        String nameFile = mSingleton.NetworkInformation.ssid + "_" + date;
-        String pcapFile = (isDumpingInFile) ? buildForDumpingPcap(nameFile, hosts) : "";
+        currentNameFile = mSingleton.NetworkInformation.ssid + "_" + date;
+        String pcapFile = (isDumpingInFile) ? buildForDumpingPcap(currentNameFile, hosts) : "";
 
         String cmd = (mSingleton.Settings.FilesPath + "tcpdump " +
                 pcapFile + actualParam + hostFilter)

@@ -80,7 +80,7 @@ public abstract class               MITMActivity extends MyActivity  {
 
             }
         });
-        mBottomBar.setOnTabSelectedListener(onSelectedListener());
+        mBottomBar.setOnTabSelectedListener(IntentMitmManager.getInstance().onSelectedListener(mInstance, mType, mBottomBar));
         updateNotifications();
     }
 
@@ -107,55 +107,6 @@ public abstract class               MITMActivity extends MyActivity  {
                 .setBackgroundColor(ContextCompat.getColor(mInstance, R.color.stop_color))
                 .setTextColor(ContextCompat.getColor(mInstance, R.color.primary_text))
                 .build();
-    }
-
-    private AHBottomNavigation.OnTabSelectedListener onSelectedListener() {
-        return new AHBottomNavigation.OnTabSelectedListener() {
-            public boolean onTabSelected(final int position, boolean wasSelected) {
-                Intent intent = null;
-                if (position != mType) {
-                    switch (position) {
-                        case 0:
-                            intent = new Intent(mInstance, ProxyActivity.class);
-                            break;
-                        case 1:
-                            intent = new Intent(mInstance, SniffActivity.class);
-                            break;
-                        case 2:
-                            intent = new Intent(mInstance, DnsActivity.class);
-                            break;
-                        case 3:
-                            intent = new Intent(mInstance, WebServerActivity.class);
-                            break;
-                        default:
-                            Log.d(TAG, "No activity found");
-                            break;
-                    }
-                    ViewAnimate.FabAnimateHide(mInstance, (FloatingActionButton) findViewById(R.id.fab));
-                    Utils.vibrateDevice(mInstance);
-                    final Intent finalIntent = intent;
-                    new Thread(new Runnable() {
-                        public void run() {
-                            try {
-                                Thread.sleep(170);
-                            } catch (InterruptedException e) {
-                            }
-                            mInstance.runOnUiThread(new Runnable() {
-                                public void run() {
-                                    if (finalIntent != null) {
-                                        finalIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(finalIntent/*, options.toBundle()*/);
-                                    }
-                                    startActivity(finalIntent/*, options.toBundle()*/);
-                                }
-                            });
-                        }
-                    }).start();
-                    return true;
-                }
-                return false;
-            }
-        };
     }
 
     protected void                  onResume() {

@@ -38,16 +38,16 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
+            android:name=".View.Settings.SettingsActivity" />
+        <activity
             android:name=".View.DashBoard.DashboardActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".View.DnsSpoofing.DnsActivity"
-            android:launchMode="singleTask" />
-        <activity
             android:name=".View.HostDiscovery.HostDiscoveryActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".View.Settings.SettingsActivity" />
+        <activity android:name=".View.HostDetail.HostDetailActivity"
+            android:launchMode="standard"/>
         <activity
             android:name=".View.Scan.NmapActivity"
             android:launchMode="singleTask" />
@@ -61,13 +61,14 @@
             android:name=".View.Sniff.SniffActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".View.Dora.DoraActivity"
+            android:name=".View.DnsSpoofing.DnsActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".View.WebServer.WebServerActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".View.HostDetail.HostDetailActivity"
-            android:launchMode="standard"/>
+        <activity
+            android:name=".View.Dora.DoraActivity"
+            android:launchMode="singleTask" />
         <meta-data android:name="AA_MODELS"
             android:value="
             fr.dao.app.Model.Target.Network,

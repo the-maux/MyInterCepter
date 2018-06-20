@@ -51,6 +51,7 @@ public class                    SniffActivity extends MITMActivity {
      */
     protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_sniffer);
         initXml();
         init(getIntent());
@@ -58,7 +59,8 @@ public class                    SniffActivity extends MITMActivity {
 
     private void                init(Intent intent) {
         String PcapFilePath = intent  == null ? null : intent.getStringExtra("Pcap");
-        if (PcapFilePath == null) {
+        if (PcapFilePath == null && mFragment == null) {// || !mFragment.getClass().getName().contentEquals(SniffReaderFrgmnt.class.getName()))
+            Log.e(TAG, "Creating new SniffLiveFrgmnt");
             mFragment = new SniffLiveFrgmnt();
             hideBottomBar();
             if (intent != null && intent.getStringExtra("macAddress") != null) {// FROM HOSTDETAILACTIVITY
@@ -82,7 +84,7 @@ public class                    SniffActivity extends MITMActivity {
             initSettings();
             initNavigationBottomBar(SNIFFER);
             ViewAnimate.FabAnimateReveal(mInstance, mFab);
-        } else {
+        } else if (PcapFilePath != null){
             Log.d(TAG, "Pcap Reading mode activated");
             hideBottomBar();
             ViewAnimate.FabAnimateHide(mInstance, mFab);
@@ -109,12 +111,17 @@ public class                    SniffActivity extends MITMActivity {
         init(intent);
     }
 
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume");
+    }
+
     private void                initXml() {
         mCoordinatorLayout = findViewById(R.id.Coordonitor);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
         //mFrame_container = findViewById(R.id.frame_container);
         mProgressBar =  findViewById(R.id.progressBar);
-        mAppBar = findViewById(R.id.appBarLayout);
+        mAppBar = findViewById(R.id.appBar);
         mToolbar = findViewById(R.id.toolbar);
         mFab =  findViewById(R.id.fab);
         mFab.setOnClickListener(onclickFab());
@@ -151,7 +158,7 @@ public class                    SniffActivity extends MITMActivity {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.frame_container, mFragment)
-                    //.addToBackStack(fragment.getClass().getName()) TANT KE PAS DE SETTINGS NO BACKSTACK
+                    //.addToBackStack(fragment.getClass().getName())// TANT KE PAS DE SETTINGS NO BACKSTACK
                     .commit();
         } catch (IllegalStateException e) {
             showSnackbar("Error in fragment: " + e.getCause().getMessage(), -1);

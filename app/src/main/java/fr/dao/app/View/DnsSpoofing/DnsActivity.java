@@ -86,7 +86,7 @@ public class                            DnsActivity extends MITMActivity {
         textEmpty = findViewById(R.id.textEmpty);
         mTabs = findViewById(R.id.tabs);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
-        appBarLayout = findViewById(R.id.appBarLayout);
+        appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewCompat.setElevation(findViewById(R.id.topToolbar), 4);

@@ -90,8 +90,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
         findViewById(R.id.OsImg).setOnClickListener(initTabs());
         mTimer = findViewById(R.id.timer);
         mProgressBar = findViewById(R.id.progressBar);
-        mToolbarBackground = (TransitionDrawable)(findViewById(R.id.appBarLayout).getBackground());
-        appBarLayout = findViewById(R.id.appBarLayout);
+        mToolbarBackground = (TransitionDrawable)(findViewById(R.id.appBar).getBackground());
+        appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewCompat.setElevation(appBarLayout, 4);
@@ -240,7 +240,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
             public void onClick(View v) {
                 try {
                     Utils.vibrateDevice(mInstance, 100);
-                    NetDiscoveryFragment.onSettingsClick((AppBarLayout) findViewById(R.id.appBarLayout), mInstance).show();
+                    NetDiscoveryFragment.onSettingsClick((AppBarLayout) findViewById(R.id.appBar), mInstance).show();
                 } catch (Exception error) {
                     showSnackbar("BottomSheet is shitty");
                 }

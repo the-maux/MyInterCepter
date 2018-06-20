@@ -36,7 +36,8 @@ public class                        ArpSpoof {
                     String read;
                     try {
                         while ((read = reader.readLine()) != null) {
-                            Log.d(TAG, mTarget.ip + "::" + read);
+
+                            //Log.d(TAG, mTarget.ip + "::" + read);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();

@@ -50,7 +50,6 @@ public class                        Proxy {
     }
 
     public static synchronized boolean  isRunning() {
-        Log.d(TAG, "isRunning:" + ((mInstance != null) && mInstance.isRunning));
         return mInstance != null && mInstance.isRunning;
     }
 
