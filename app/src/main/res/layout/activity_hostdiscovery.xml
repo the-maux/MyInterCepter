@@ -51,7 +51,10 @@
                 app:layout_constraintStart_toEndOf="@+id/OsImg"
                 app:layout_constraintTop_toTopOf="parent"
                 app:subtitle="Subtitle"
-                app:title="Title">
+                app:subtitleTextAppearance="@style/TextAppearance.AppCompat"
+                app:subtitleTextColor="@color/tint_svg"
+                app:title="Title"
+                app:titleTextAppearance="@style/TextAppearance.AppCompat">
 
             </android.support.v7.widget.Toolbar>
 

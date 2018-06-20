@@ -183,15 +183,15 @@ public class                    SniffLiveFrgmnt extends MyFragment {
         Utils.vibrateDevice(mActivity);
         if (!Tcpdump.isRunning()) {
             if (startTcpdump()) {
-                if (isDashboardMode) {
-                    int color = R.color.filtered_color;
-                    statusIconSniffing.setImageResource(color);
-                }
+                if (isDashboardMode)
+                    statusIconSniffing.setImageResource(R.color.filtered_color);
                 mMonitorAgv.setVisibility(View.VISIBLE);
                 wasLaunched = true;
                 return true;
             }
         } else {
+            if (isDashboardMode)
+                statusIconSniffing.setImageResource(R.color.offline_color);
             mMonitorAgv.setVisibility(View.GONE);
             MitManager.getInstance().stopTcpdump(false);
             mActivity.setToolbarTitle(null, "Sniffing finished");

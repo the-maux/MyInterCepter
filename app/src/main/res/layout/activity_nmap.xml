@@ -47,7 +47,11 @@
                 app:layout_constraintHorizontal_weight="2.5"
                 app:layout_constraintStart_toEndOf="@+id/OsImg"
                 app:layout_constraintTop_toTopOf="parent"
+                app:subtitle="Regular scan"
+                app:subtitleTextAppearance="@style/TextAppearance.AppCompat"
                 app:subtitleTextColor="@color/tint_svg"
+                app:title="192.168.10.18"
+                app:titleTextAppearance="@android:style/TextAppearance.Material.Menu"
                 app:titleTextColor="@android:color/primary_text_dark">
 
             </android.support.v7.widget.Toolbar>
@@ -57,7 +61,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
-                android:baselineAlignBottom="false"
+                android:paddingTop="2dp"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/primary_white"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -79,7 +83,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/settingsMenu"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintHorizontal_weight="0.9"
                 app:layout_constraintStart_toEndOf="@+id/typeScanBtn"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@mipmap/ic_script_listing" />
@@ -89,12 +93,11 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
-                android:paddingLeft="4dp"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/primary_white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintHorizontal_weight="0.8"
                 app:layout_constraintStart_toEndOf="@+id/scriptBtn"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@mipmap/ic_more_scan" />

@@ -10,7 +10,7 @@
         android:id="@+id/rootViewForDashboard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <android.support.constraint.Guideline
             android:id="@+id/verti_035"
@@ -63,9 +63,9 @@
                     android:id="@+id/title_sniffer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
                     android:gravity="right"
                     android:singleLine="true"
+                    android:text="192.168.10.24"
                     app:layout_constraintHorizontal_bias="0.05"
                     app:layout_constraintLeft_toRightOf="@+id/headerWifi"
                     app:layout_constraintRight_toRightOf="parent"
@@ -78,6 +78,7 @@
                     android:layout_marginTop="8dp"
                     android:gravity="left"
                     android:singleLine="true"
+                    android:text="497 packets"
                     app:layout_constraintLeft_toLeftOf="@+id/title_sniffer"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/title_sniffer" />
@@ -89,6 +90,7 @@
                     android:layout_marginTop="8dp"
                     android:gravity="left"
                     android:singleLine="true"
+                    android:text="Not started"
                     app:layout_constraintLeft_toLeftOf="@+id/title_sniffer"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/subtitle_sniffer" />
@@ -100,6 +102,7 @@
                     android:layout_marginTop="8dp"
                     android:gravity="left"
                     android:singleLine="true"
+                    android:text="00:00:00"
                     app:layout_constraintLeft_toLeftOf="@+id/title_sniffer"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/bottom_subtitle_sniffer" />
@@ -111,7 +114,7 @@
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
                     android:cropToPadding="true"
-                    android:padding="16dp"
+                    android:padding="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintDimensionRatio="w,1:1"
                     app:layout_constraintHeight_max="150dp"
@@ -121,7 +124,8 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_max="80dp"
-                    app:layout_constraintWidth_min="40dp" />
+                    app:layout_constraintWidth_min="40dp"
+                    app:srcCompat="@drawable/wireshark" />
             </android.support.constraint.ConstraintLayout>
         </android.support.v7.widget.CardView>
 

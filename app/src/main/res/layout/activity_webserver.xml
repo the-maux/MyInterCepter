@@ -164,6 +164,7 @@
             android:soundEffectsEnabled="true"
             android:src="@drawable/ic_media_play"
             android:tint="@color/tint_svg"
+            android:visibility="gone"
             app:backgroundTint="@color/webserverSpoofPrimary"
             app:fabSize="normal"
             app:layout_constraintBottom_toTopOf="@+id/navigation"

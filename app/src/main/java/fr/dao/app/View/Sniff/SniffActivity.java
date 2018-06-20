@@ -44,6 +44,11 @@ public class                    SniffActivity extends MITMActivity {
     private ImageButton         SwitchViewBackBtn;
     private boolean             readerFragment = false;
 
+    /**
+     * KAN STOP LE VOYANT RESTE VERT ET LE TIMER CONTINUE + Le layout header est décalé vers le bas
+     * Pk lest Notes ne s'inscrive plus ?
+     * @param savedInstanceState
+     */
     protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sniffer);
@@ -222,7 +227,6 @@ public class                    SniffActivity extends MITMActivity {
     public void                 onError() {
         Log.d(TAG, "onError");
         mInstance.runOnUiThread(new Runnable() {
-            @Override
             public void run() {
                 updateNotifications();
                 setToolbarTitle(null, "Error in processing");
@@ -277,10 +281,10 @@ public class                    SniffActivity extends MITMActivity {
 
     public void                 onTcpdumpstopped() {
         mInstance.runOnUiThread(new Runnable() {
-            @Override
             public void run() {
                 mProgressBar.setVisibility(View.GONE);
                 mFab.setImageResource(R.drawable.ic_media_play);
+
             }
         });
     }
