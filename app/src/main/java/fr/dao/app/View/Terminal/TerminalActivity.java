@@ -1,6 +1,7 @@
 package fr.dao.app.View.Terminal;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -13,7 +14,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Core.Shell;
 import fr.dao.app.R;
 import fr.dao.app.View.Scan.NmapOutputView;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
@@ -25,13 +29,13 @@ public class                    TerminalActivity extends MyActivity {
     private TerminalActivity    mInstance = this;
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
-    protected FloatingActionButton mFab;
     private NmapOutputView      nmapOutputFragment;
     private AppBarLayout        appBarLayout;
     private Toolbar             mToolbar;
     private TabLayout           mTabs;
     private ImageView           mSettingsMenu, mScript, mScanType, OsImg;
     private ProgressBar         mProgressBar;
+    private ArrayList<Shell>    mShell;
 
     protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,12 +48,12 @@ public class                    TerminalActivity extends MyActivity {
         mCoordinatorLayout = findViewById(R.id.Coordonitor);
         mTabs = findViewById(R.id.tabs);
         mToolbar = findViewById(R.id.toolbar);
+
         mProgressBar = findViewById(R.id.progressBar);
         mSettingsMenu = findViewById(R.id.settingsMenu);
         mScript = findViewById(R.id.scriptBtn);
         mScanType = findViewById(R.id.typeScanBtn);
         OsImg = findViewById(R.id.OsImg);
-        mFab = findViewById(R.id.fab);
         appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -57,17 +61,23 @@ public class                    TerminalActivity extends MyActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
+        mTabs.setBackgroundResource(R.color.terminalPrimary);
+        findViewById(R.id.relativeLayout).setBackgroundResource(R.color.terminalPrimary);
         MyGlideLoader.loadDrawableInImageView(this, R.drawable.linuxicon, OsImg, true);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
-        mScanType.setVisibility(View.GONE);
-        mScript.setVisibility(View.GONE);
+        mScanType.setVisibility(View.INVISIBLE);
+        mScript.setImageResource(R.drawable.ic_add_circle);
         mToolbar.setTitle("Terminal");
-        mToolbar.setSubtitle("");
+        mToolbar.setSubtitle(Environment.getExternalStorageDirectory().getPath() + "/Dao/");
+
     }
 
     private void                init() {
         initFragment();
-        ViewAnimate.FabAnimateReveal(mInstance, mFab);
+        if (mShell == null) {
+            mShell = new ArrayList<>();
+            mShell.add(new Shell(this));
+        }
         //GET id to prompt
         //checkId if 'sudo' in cmd
         //Add buton + to open new terminal

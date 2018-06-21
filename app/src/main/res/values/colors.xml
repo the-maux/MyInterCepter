@@ -41,6 +41,7 @@
     <color name="dnsSpoofPrimary">#dd004D40</color>
     <color name="webserverSpoofPrimary">#dd3E2723</color>
     <color name="settingsPrimary">#dd455a64</color>
+    <color name="terminalPrimary">#ddbf360c</color>
 
     
     <!-- switch color  -->
