@@ -58,7 +58,7 @@ public class NmapSettingsFrgmnt extends SettingsFrgmnt {
                 mActivity.runOnUiThread(new Runnable() {
                     public void run() {
                         new QuestionMultipleAnswerDialog(mActivity, items,
-                                click, "Type of network discovery", mSingleton.Settings.getUserPreferences().NmapMode);
+                                click, "Type of NetworkInformation discovery", mSingleton.Settings.getUserPreferences().NmapMode);
                     }
                 });
             }

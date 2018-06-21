@@ -38,39 +38,47 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
+            android:name=".View.Settings.SettingsActivity" />
+        <activity
             android:name=".View.DashBoard.DashboardActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".View.DnsSpoofing.DnsActivity"
-            android:launchMode="singleTask" />
-        <activity
             android:name=".View.HostDiscovery.HostDiscoveryActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".View.Settings.SettingsActivity" />
+        <activity android:name=".View.HostDetail.HostDetailActivity"
+            android:launchMode="standard"/>
         <activity
             android:name=".View.Scan.NmapActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".View.SpyMITM.SpyMitmActivity"
+            android:name=".View.Scan.VulnsScanActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".View.Proxy.ProxyActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".View.Sniff.SniffActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".View.Dora.DoraActivity"
+            android:name=".View.DnsSpoofing.DnsActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".View.WebServer.WebServerActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".View.HostDetail.HostDetailActivity"
-            android:launchMode="standard"/>
+        <activity
+            android:name=".View.Dora.DoraActivity"
+            android:launchMode="singleTask" />
         <meta-data android:name="AA_MODELS"
             android:value="
             fr.dao.app.Model.Target.Network,
             fr.dao.app.Model.Target.Host,
             fr.dao.app.Model.Target.ExternalHost,
             fr.dao.app.Model.Target.SniffSession,
+            fr.dao.app.Model.Target.VulnerabilityScan,
+            fr.dao.app.Model.Unix.DNSLog,
+            fr.dao.app.Model.Config.Action,
+            fr.dao.app.Model.Config.Session,
             fr.dao.app.Model.Unix.DNSLog,
             fr.dao.app.Model.Net.Pcap,
             fr.dao.app.Model.Net.Service" />
@@ -79,7 +87,7 @@
             android:value="DaoDatabase" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="12" />
+            android:value="1" />
     </application>
 
 </manifest>

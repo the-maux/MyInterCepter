@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.dao.app.Core.Configuration.RootProcess;
@@ -14,7 +15,8 @@ public class                        ArpSpoof {
     private static final String     TAG = "ArpSpoof";
     private ArpSpoof                mInstance = this;
     private Host                    mTarget;
-    private RootProcess mProcess;
+    private RootProcess             mProcess;
+    public static List<ArpSpoof>    ArpSpoofProcessStack = new ArrayList<>();
 
     private                         ArpSpoof(Host target) {
         this.mTarget = target;
@@ -26,15 +28,16 @@ public class                        ArpSpoof {
         new Thread(new Runnable() {
             public void run() {
                 mProcess = new RootProcess("ARPSPoof::" + mTarget.ip);
-
-                mProcess.exec(Singleton.getInstance().Settings.BinaryPath + "arpspoof -i wlan0 -t " + mTarget.ip + " " + Singleton.getInstance().network.gateway);
-                Singleton.getInstance().ArpSpoofProcessStack.add(mInstance);
+                mProcess.exec(Singleton.getInstance().Settings.BinaryPath + "arpspoof -i wlan0 -t " +
+                        mTarget.ip + " " + Singleton.getInstance().NetworkInformation.gateway);
+                ArpSpoof.ArpSpoofProcessStack.add(mInstance);
                 if (Singleton.getInstance().Settings.DebugMode) {
                     BufferedReader reader = mProcess.getReader();
                     String read;
                     try {
                         while ((read = reader.readLine()) != null) {
-                            //Log.d(TAG, mTarget.subtitle + "::" + read);
+
+                            //Log.d(TAG, mTarget.ip + "::" + read);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -49,7 +52,6 @@ public class                        ArpSpoof {
         if (Singleton.getInstance().Settings.DebugMode)
             Log.d(TAG, "STOP ARPSpooging Attacking ");
         new Thread(new Runnable() {
-            @Override
             public void run() {
                 RootProcess process = new RootProcess("stopArpSpoof ARPSpoof");
                 process.exec("ps | grep arpspoof");
@@ -66,7 +68,7 @@ public class                        ArpSpoof {
                     e.printStackTrace();
                 }
                 process.closeProcess();
-
+                ArpSpoof.ArpSpoofProcessStack.clear();
             }
         }).start();
     }

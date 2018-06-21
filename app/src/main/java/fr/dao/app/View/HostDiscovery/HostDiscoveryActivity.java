@@ -23,14 +23,15 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
 import fr.dao.app.Core.Network.NetDiscovering;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.R;
-import fr.dao.app.View.DashBoard.NetDiscoveryHistoricFrgmnt;
-import fr.dao.app.View.SpyMITM.SpyMitmActivity;
+import fr.dao.app.View.DashBoard.HistoricSavedDataFgmnt;
+import fr.dao.app.View.Proxy.ProxyActivity;
 import fr.dao.app.View.Startup.HomeActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
@@ -39,7 +40,6 @@ import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 /**
  * TODO:    + Add manual target
- *          + filterOs scrollView (bottom or top ?)
  *          + filter Text as SearchView
  *          + Button add -> No target mode / Settings /
  *          + detect target onFly ?
@@ -52,12 +52,11 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private CoordinatorLayout       mCoordinatorLayout;
     private AppBarLayout            appBarLayout;
     private TextView                mBottomMonitor, mTimer;
-    private ImageView               mSettingsMenu, mHistory;
+    private ImageView               mSettingsMenu, mOsFilter;
     private SearchView              mSearchView;
     private Toolbar                 mToolbar;
     private TransitionDrawable      mToolbarBackground;
-    private MyFragment              HistoricFragment = null, NetDiscoveryFragment = null;
-    private MyFragment              mFragment = null;
+    private MyFragment              NetDiscoveryFragment = null, mFragment = null;
     public Network                  actualNetwork;
     public Date                     date;
     private Timer                   timer = new Timer();
@@ -83,16 +82,16 @@ public class                        HostDiscoveryActivity extends MyActivity {
         ViewCompat.setElevation(mBottomMonitor, 2);
         mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
-        mHistory = findViewById(R.id.history);
-        mHistory.setOnClickListener(onOsFilter());
+        mOsFilter = findViewById(R.id.OsFilter);
+        mOsFilter.setOnClickListener(onOsFilter());
         mSearchView = findViewById(R.id.searchView);
         mToolbar = findViewById(R.id.toolbar2);
         mSettingsMenu = findViewById(R.id.settingsMenu);
         findViewById(R.id.OsImg).setOnClickListener(initTabs());
         mTimer = findViewById(R.id.timer);
         mProgressBar = findViewById(R.id.progressBar);
-        mToolbarBackground = (TransitionDrawable)findViewById(R.id.appBarLayout).getBackground();
-        appBarLayout = findViewById(R.id.appBarLayout);
+        mToolbarBackground = (TransitionDrawable)(findViewById(R.id.appBar).getBackground());
+        appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewCompat.setElevation(appBarLayout, 4);
@@ -103,9 +102,9 @@ public class                        HostDiscoveryActivity extends MyActivity {
 
     private void                    init()  {
         NetDiscovering.initNetworkInfo(this);
-        if (mSingleton.network == null || mSingleton.network.myIp == null) {
-            showSnackbar("You need to be connected to a Network");
-            finish();
+        if (mSingleton.NetworkInformation == null || mSingleton.NetworkInformation.myIp == null) {
+            showSnackbar("You need to be connected to a NetworkInformation");
+            onBackPressed();
         } else {
             initFabs();
             initMonitor();
@@ -143,6 +142,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         ViewAnimate.FabAnimateReveal(mInstance, mFab);
         //mFab.show();
        // ViewAnimate.setVisibilityToVisibleQuick(mFab);
+        Log.d(TAG, "onScanOver");
     }
 
     private View.OnClickListener    initTabs(){
@@ -161,6 +161,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     private void                    initFabs() {
         mFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Log.i(TAG, "FabClicked::"+mFragment.getClass().getName());
                 mFab.startAnimation(AnimationUtils.loadAnimation(mInstance, R.anim.shake));
                 Utils.vibrateDevice(mInstance);
                 if (mFragment.getClass().getName().contains("HostDiscoveryScanFrgmnt") &&
@@ -168,6 +169,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                     mSingleton.savedHostList = mSingleton.hostList;
                     mSingleton.hostList = ((HostDiscoveryScanFrgmnt) mFragment).getTargetSelectedFromHostList();
                     if (mSingleton.hostList == null) {
+                        Log.e(TAG, "HostList is null");
                         mSingleton.hostList = mSingleton.savedHostList;
                         return;
                     }
@@ -176,12 +178,13 @@ public class                        HostDiscoveryActivity extends MyActivity {
                         Log.d(TAG, "mSingleton.hostsListSize:" +
                                 ((mSingleton.hostList != null) ? mSingleton.hostList.size() : "0"));
                     }
-                    startActivity(new Intent(mInstance, SpyMitmActivity.class));
+                    MitManager.getInstance().loadHost(mSingleton.hostList);
+                    startActivity(new Intent(mInstance, ProxyActivity.class));
                 }
                 else if (!mFragment.start()) {
                     Log.i(TAG, "fragment start false");
                 } else
-                    Log.i(TAG, "FabClicked");
+                    Log.i(TAG, "FabClicked but no action");
             }
         });
     }
@@ -204,15 +207,15 @@ public class                        HostDiscoveryActivity extends MyActivity {
     public void                     initMonitor() {
         String monitor = "";
         if (!monitor.contains("WiFi")) {
-            monitor += " Ip Address : " + mSingleton.network.myIp;
-            monitor += "\n" + mSingleton.network.ssid + " : " + mSingleton.network.gateway;
+            monitor += " Ip Address : " + mSingleton.NetworkInformation.myIp;
+            monitor += "\n" + mSingleton.NetworkInformation.ssid + " : " + mSingleton.NetworkInformation.gateway;
         } else {
             monitor += "Not Connected";
         }
-        if (Singleton.getInstance().network.isConnectedToNetwork())
+        if (Singleton.getInstance().NetworkInformation.isConnectedToNetwork())
             mBottomMonitor.setText(monitor);
         else
-            mBottomMonitor.setText(mSingleton.network.ssid + ": No connection");
+            mBottomMonitor.setText(mSingleton.NetworkInformation.ssid + ": No connection");
         //ViewAnimate.setVisibilityToVisibleQuick(mBottomMonitor);
         ViewAnimate.FabAnimateReveal(this, mBottomMonitor, new Runnable() {
             public void run() {
@@ -228,6 +231,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         ViewAnimate.FabAnimateHide(mInstance, mFab);
         //mFab.hide();
         mBottomMonitor.setVisibility(View.GONE);
+        mToolbarBackground.setCrossFadeEnabled(true);
         mToolbarBackground.startTransition(500);
     }
 
@@ -236,7 +240,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
             public void onClick(View v) {
                 try {
                     Utils.vibrateDevice(mInstance, 100);
-                    NetDiscoveryFragment.onSettingsClick((AppBarLayout) findViewById(R.id.appBarLayout), mInstance).show();
+                    NetDiscoveryFragment.onSettingsClick((AppBarLayout) findViewById(R.id.appBar), mInstance).show();
                 } catch (Exception error) {
                     showSnackbar("BottomSheet is shitty");
                 }
@@ -254,23 +258,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 if (mFragment.getClass().getName().contains(HostDiscoveryScanFrgmnt.class.getName())) {
                     ((HostDiscoveryScanFrgmnt)mFragment).osFilterDialog();
                 }
-                /*
-                MyFragment fragment;
-                ViewAnimate.setVisibilityToVisibleQuick(mHistory);
-                if (HistoricFragment == null)
-                    HistoricFragment = new NetDiscoveryHistoricFrgmnt();
-                fragment = HistoricFragment;
-                Bundle args = new Bundle();
-                args.putString("mode", NetDiscoveryHistoricFrgmnt.DB_HISTORIC);
-                fragment.setArguments(args);
-                ViewAnimate.setVisibilityToInvisibleQuick(mHistory);
-                ViewAnimate.setVisibilityToInvisibleQuick(mSearchView);
-                ViewAnimate.FabAnimateHide(mInstance, mFab);
-                //ViewAnimate.setVisibilityToGoneQuick(mFab);
-                mFab.hide();
-                initFragment(fragment);
-                initSearchView();*/
-
             }
         };
     }
@@ -292,16 +279,13 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mToolbar.setAnimation(fadeOut);
         fadeOut.start();
         fadeOut.setAnimationListener(new Animation.AnimationListener() {
-            @Override
             public void onAnimationStart(Animation animation) {
             }
 
-            @Override
             public void onAnimationEnd(Animation animation) {
                 mToolbar.setBackgroundColor(color);
             }
 
-            @Override
             public void onAnimationRepeat(Animation animation) {
             }
         });
@@ -373,17 +357,20 @@ public class                        HostDiscoveryActivity extends MyActivity {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
 
-    protected void                  onResume() {
-        super.onResume();
-        //mFab.show();
-//        ViewAnimate.setVisibilityTo:VisibleQuick(mFab);
-        if (NetworkDiscoveryControler.over())
-            ViewAnimate.FabAnimateReveal(mInstance, mFab);
+    protected void                  onPostResume() {
+        super.onPostResume();
+        if (NetworkDiscoveryControler.over()) {
+            //ViewAnimate.FabAnimateReveal(mInstance, mFab);
+            ViewAnimate.setVisibilityToVisibleQuick(mFab);
+            mFab.show();
+            Log.d(TAG, "Scan is over so reveal FAB& opaque:"+mFab.isOpaque());
+            Log.d(TAG, "dirty:"+mFab.isDirty());
+            mFab.clearColorFilter();
+            mFab.clearAnimation();
+        } else
+            Log.i(TAG, "not showing FAB cause no !mInstance.inLoading of NetworkDiscoveryControler");
 //        mFragment = new HostDiscoveryScanFrgmnt();
-        if (mFragment != null)
-            Log.d(TAG, "visible:" + mFragment.isVisible());
         initFragment(mFragment);
-//        initFragment(NetDiscoveryFragment);
     }
 
     protected void                  onPause() {
@@ -396,10 +383,10 @@ public class                        HostDiscoveryActivity extends MyActivity {
             Log.d(TAG, "onBackPressed::" + mFragment.getClass().getName());
             if (mFragment.getClass().getName().contains(HostDiscoveryScanFrgmnt.class.getName())) {
                 startActivity(new Intent(mInstance, HomeActivity.class));
-            } else if (mFragment.getClass().getName().contains(NetDiscoveryHistoricFrgmnt.class.getName())) {
+            } else if (mFragment.getClass().getName().contains(HistoricSavedDataFgmnt.class.getName())) {
                 if (mFragment.onBackPressed()) {
                     Log.d(TAG, "Fragment historic is over, switching to Netdiscover");
-                    ViewAnimate.setVisibilityToVisibleQuick(mHistory, 300);
+                    ViewAnimate.setVisibilityToVisibleQuick(mOsFilter, 300);
                     ViewAnimate.setVisibilityToVisibleQuick(mSearchView, 400);
                     //ViewAnimate.setVisibilityToVisibleQuick(mFab, 500);
                     ViewAnimate.FabAnimateReveal(mInstance, mFab);
@@ -409,15 +396,19 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 }
             } else if (mFragment.getClass().getName().contains(HostDiscoverySettingsFrgmnt.class.getName())){
                 mToolbarBackground.reverseTransition(450);
-                ViewAnimate.setVisibilityToVisibleQuick(mHistory, 300);
+                ViewAnimate.setVisibilityToVisibleQuick(mOsFilter, 300);
                 ViewAnimate.setVisibilityToVisibleQuick(mSearchView, 400);
                 ViewAnimate.FabAnimateReveal(mInstance, mFab);
                 //mFab.show();
                // ViewAnimate.setVisibilityToVisibleQuick(mFab, 500);
                 getSupportFragmentManager().popBackStackImmediate();
+                mFragment = NetDiscoveryFragment;
             }
         } else {
-            startActivity(new Intent(mInstance, HomeActivity.class));
+            Log.d(TAG, "Backked");
+            super.onBackPressed();
+            //Pair<View, String> p1 = Pair.create(findViewById(R.id.OsImg), "attackIcon");
+            //startActivity(new Intent(mInstance, HomeActivity.class),  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1).toBundle());
         }
     }
 }

@@ -4,34 +4,32 @@ package fr.dao.app.Model.Target;
 import android.util.Log;
 import android.util.SparseIntArray;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
 import fr.dao.app.Core.Configuration.Comparator.Comparators;
 import fr.dao.app.Model.Net.Port;
+import fr.dao.app.Model.Net.PortState;
 import fr.dao.app.Model.Unix.Os;
 
 public class                    Ports {
-    private String              TAG = "Ports";
+    private String              TAG = "getPorts";
     private ArrayList<Port>     mPorts = new ArrayList<>();
     private SparseIntArray      primitivePortsLits = new SparseIntArray();
 
-    public                      Ports(ArrayList<String> lines, Host host) throws Exception {
-        if (lines != null) {
-            host.dumpPort = StringUtils.join(lines, "\n");
-        } else if (host.dumpPort == null) {
-            throw new Exception("No dump to analyze");
+    /**
+     * Parsing from Host.getPorts()
+     * @param host
+     * @throws Exception
+     */
+    public                      Ports(Host host) {
+        if (host.dumpPort == null) {
+            Log.e(TAG, "No dump to analyze");
         }
         init(host.dumpPort, host);
     }
-    public                      Ports(String lines, Host host) {
-        if (lines != null)
-            init(lines, host);
-    }
 
-    public void                  init(String dump, Host host) {
+    public void                 init(String dump, Host host) {
         for (String line : dump.split("\n")) {
             line = line.replaceAll("  ", " ");
             if (line.contains("|"))
@@ -47,7 +45,7 @@ public class                    Ports {
     */
     private void                initPort(String line, boolean open) {
         try {
-            Port port = (open) ? new Port(line) : add(line);
+            Port port = new Port(line);
             primitivePortsLits.append(port.getPort(), port.state.getValue());
             mPorts.add(port);
         } catch (Exception e) {
@@ -94,29 +92,34 @@ public class                    Ports {
     }
 
     public boolean              isPortOpen(int portNumber) {
-       // Log.d(TAG, "isPort(" + portNumber + ")Open:" + Port.State.valueOf(primitivePortsLits.get(portNumber)) + " => " + (Port.State.valueOf(primitivePortsLits.get(portNumber)) == Port.State.OPEN));
-        return primitivePortsLits.get(portNumber) == Port.State.OPEN.getValue();
+        // Log.d(TAG, "isPort(" + portNumber + ")Open:" + Port.PortState.valueOf(primitivePortsLits.get(portNumber)) + " => " + (Port.PortState.valueOf(primitivePortsLits.get(portNumber)) == Port.PortState.OPEN));
+        return primitivePortsLits.get(portNumber) == PortState.OPEN.value;
     }
 
     public void                 dump() {
-        Log.i(TAG, "22/tcp       ssh          " + Port.State.valueOf(primitivePortsLits.get(22)));
-        Log.i(TAG, "23/tcp       telnet       " + Port.State.valueOf(primitivePortsLits.get(23)));
-        Log.i(TAG, "25/tcp       smtp         " + Port.State.valueOf(primitivePortsLits.get(25)));
-        Log.i(TAG, "53/udp       title       " + Port.State.valueOf(primitivePortsLits.get(53)));
-        Log.i(TAG, "80/tcp       http         " + Port.State.valueOf(primitivePortsLits.get(80)));
-        Log.i(TAG, "110/tcp      pop3         " + Port.State.valueOf(primitivePortsLits.get(110)));
-        Log.i(TAG, "135/tcp      msrpx        " + Port.State.valueOf(primitivePortsLits.get(135)));
-        Log.i(TAG, "139/tcp      netbios-ssn  " + Port.State.valueOf(primitivePortsLits.get(139)));
-        Log.i(TAG, "443/tcp      https        " + Port.State.valueOf(primitivePortsLits.get(443)));
-        Log.i(TAG, "445/tcp      microsoft-ds " + Port.State.valueOf(primitivePortsLits.get(445)));
-        Log.i(TAG, "2869/tcp     upnp Server " + Port.State.valueOf(primitivePortsLits.get(2869)));
-        Log.i(TAG, "3031/udp     unknow       " + Port.State.valueOf(primitivePortsLits.get(3031)));
-        Log.i(TAG, "3128/tcp     squid-http   " + Port.State.valueOf(primitivePortsLits.get(3128)));
-        Log.i(TAG, "5353/udp     zeroconf     " + Port.State.valueOf(primitivePortsLits.get(5353)));
+        Log.i(TAG, "22/tcp       ssh          " + PortState.valueOf(primitivePortsLits.get(22)));
+        Log.i(TAG, "23/tcp       telnet       " + PortState.valueOf(primitivePortsLits.get(23)));
+        Log.i(TAG, "25/tcp       smtp         " + PortState.valueOf(primitivePortsLits.get(25)));
+        Log.i(TAG, "53/udp       dns          " +  PortState.valueOf(primitivePortsLits.get(53)));
+        Log.i(TAG, "80/tcp       http         " + PortState.valueOf(primitivePortsLits.get(80)));
+        Log.i(TAG, "110/tcp      pop3         " + PortState.valueOf(primitivePortsLits.get(110)));
+        Log.i(TAG, "135/tcp      msrpx        " + PortState.valueOf(primitivePortsLits.get(135)));
+        Log.i(TAG, "139/tcp      netbios-ssn  " + PortState.valueOf(primitivePortsLits.get(139)));
+        Log.i(TAG, "443/tcp      https        " + PortState.valueOf(primitivePortsLits.get(443)));
+        Log.i(TAG, "445/tcp      microsoft-ds " + PortState.valueOf(primitivePortsLits.get(445)));
+        Log.i(TAG, "2869/tcp     upnp HTTPProxy  " + PortState.valueOf(primitivePortsLits.get(2869)));
+        Log.i(TAG, "3031/udp     unknow       " + PortState.valueOf(primitivePortsLits.get(3031)));
+        Log.i(TAG, "3128/tcp     squid-http   " + PortState.valueOf(primitivePortsLits.get(3128)));
+        Log.i(TAG, "5353/udp     zeroconf     " + PortState.valueOf(primitivePortsLits.get(5353)));
     }
 
     public ArrayList<Port>      portArrayList() {
         Collections.sort(mPorts, Comparators.getPortComparator());
         return mPorts;
+    }
+
+    public Port                 getPortForAdapter(int position) {
+        Log.d(TAG, "getPortForAdapter(" + position + ") returning Port =>" + mPorts.get(position).toString());
+        return mPorts.get(position);
     }
 }

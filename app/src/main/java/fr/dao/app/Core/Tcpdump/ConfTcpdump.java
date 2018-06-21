@@ -3,11 +3,9 @@ package fr.dao.app.Core.Tcpdump;
 import android.util.Log;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Words;
@@ -26,7 +24,7 @@ class                           ConfTcpdump {
                                  level header) in hex.*/
     String                      SNARF = "-s 0 ";             //  Snarf snaplen bytes of data from each  packet , no idea what this mean
     Singleton                   mSingleton = Singleton.getInstance();
-    
+    public String               currentNameFile = "No pcap dump";
     ConfTcpdump() {
 
     }
@@ -61,26 +59,26 @@ class                           ConfTcpdump {
     private String              buildForDumpingPcap(String nameFile, List<Host> hosts) {
         String pcapFile = mSingleton.Settings.PcapPath + nameFile + ".pcap ";
         Pcap pcap = new Pcap(nameFile + ".pcap ", hosts);
-        pcap.sniffSession = mSingleton.getActualSniffSession();
+        pcap.sniffSession = mSingleton.getCurrentSniffSession();
 
         pcap.save();
-        if (mSingleton.getActualSniffSession() != null) {
-            mSingleton.getActualSniffSession().listPcapRecorded().add(pcap);
-            Log.d(TAG, "Pcap added to Sniff Network");
+        if (mSingleton.getCurrentSniffSession() != null) {
+            mSingleton.getCurrentSniffSession().listPcapRecorded().add(pcap);
+            Log.d(TAG, "Pcap added to Sniff NetworkInformation");
         } else {
-            Log.d(TAG, "Pcap not added to Sniff Network");
+            Log.d(TAG, "Pcap not added to Sniff NetworkInformation");
         }
         pcapFile =  " -w " + pcapFile;
         Log.d(TAG, pcap.toString());
         return pcapFile;
     }
 
-    String                      buildCmd(String actualParam, boolean isDumpingInFile,
-                                            String typeScan, List<Host> hosts) {
+    String buildWiresharkCmd(String actualParam, boolean isDumpingInFile,
+                             String typeScan, List<Host> hosts) {
         String hostFilter = buildHostFilterCommand(hosts, typeScan);
         String date =  Words.getGenericDateFormat(new Date());
-        String nameFile = mSingleton.network.ssid + "_" + date;
-        String pcapFile = (isDumpingInFile) ? buildForDumpingPcap(nameFile, hosts) : "";
+        currentNameFile = mSingleton.NetworkInformation.ssid + "_" + date;
+        String pcapFile = (isDumpingInFile) ? buildForDumpingPcap(currentNameFile, hosts) : "";
 
         String cmd = (mSingleton.Settings.FilesPath + "tcpdump " +
                 pcapFile + actualParam + hostFilter)
@@ -89,8 +87,24 @@ class                           ConfTcpdump {
         return cmd ;
     }
 
-    public String               buildCmd(File mPcapFile) {
-        Log.d(TAG, "buildCmd::" + mSingleton.Settings.FilesPath + "tcpdump " + "-r " + mPcapFile.getPath());
+    String buildProxyCmd(String actualParam, boolean isDumpingInFile,
+                             String typeScan, List<Host> hosts) {
+        String date =  Words.getGenericDateFormat(new Date());
+        String nameFile = "Proxy" + "_" + date;
+        String pcapFile = (isDumpingInFile) ? buildForDumpingPcap(nameFile, hosts) : "";
+
+        String cmd = (mSingleton.Settings.FilesPath + "tcpdump " +
+                pcapFile + actualParam)
+                .replace("//", "/").replace("  ", " ");
+        Log.d(TAG, cmd);
+        for (Host host : hosts) {
+            cmd = cmd + " host " + host.ip;
+        }
+        return cmd + '\'';
+    }
+
+    public String buildWiresharkCmd(File mPcapFile) {
+        Log.d(TAG, "buildWiresharkCmd::" + mSingleton.Settings.FilesPath + "tcpdump " + "-r " + mPcapFile.getPath());
         return mSingleton.Settings.FilesPath + "tcpdump " + "-r " + mPcapFile.getPath();
     }
 }

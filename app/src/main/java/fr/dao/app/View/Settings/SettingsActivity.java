@@ -15,11 +15,11 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 
 import fr.dao.app.R;
-import fr.dao.app.View.DashBoard.NetDiscoveryHistoricFrgmnt;
+import fr.dao.app.View.DashBoard.HistoricSavedDataFgmnt;
 import fr.dao.app.View.DnsSpoofing.DnsSettingsFrgmnt;
 import fr.dao.app.View.HostDiscovery.HostDiscoverySettingsFrgmnt;
 import fr.dao.app.View.Sniff.SniffSettingsFrgmnt;
-import fr.dao.app.View.SpyMITM.SpyMitmSettingsFrgmnt;
+import fr.dao.app.View.Proxy.ProxySettingsFrgmnt;
 import fr.dao.app.View.WebServer.WebserverSettingsFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
@@ -49,7 +49,7 @@ public class                        SettingsActivity extends MyActivity {
     
     public void                     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings2);
+        setContentView(R.layout.activity_settings);
         initXml();
         init();
     }
@@ -58,7 +58,7 @@ public class                        SettingsActivity extends MyActivity {
         mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
         MyGlideLoader.coordoBackgroundXMM(this, (CoordinatorLayout) findViewById(R.id.coordinatorLayout));
         mToolbar = findViewById(R.id.toolbar2);
-        appBarLayout = findViewById(R.id.appBarLayout);
+        appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewCompat.setElevation(appBarLayout, 4);
@@ -122,7 +122,7 @@ public class                        SettingsActivity extends MyActivity {
                                             appBarLayout.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.settingsPrimary));
                                             break;
                                         case 1:
-                                            fragment = new SpyMitmSettingsFrgmnt();
+                                            fragment = new ProxySettingsFrgmnt();
                                             appBarLayout.setBackgroundColor(ContextCompat.getColor(mInstance, R.color.spyPrimary));
                                             break;
                                         case 2:
@@ -160,7 +160,7 @@ public class                        SettingsActivity extends MyActivity {
                 fragment = new HostDiscoverySettingsFrgmnt();
             mFragment = fragment;
             Bundle args = new Bundle();
-            args.putString("mode", NetDiscoveryHistoricFrgmnt.HOST_HISTORIC);
+            args.putString("mode", HistoricSavedDataFgmnt.HOST_HISTORIC);
             mFragment.setArguments(args);
             getSupportFragmentManager()
                     .beginTransaction()

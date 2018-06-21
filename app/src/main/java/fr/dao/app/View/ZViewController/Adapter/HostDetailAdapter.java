@@ -61,11 +61,11 @@ public class                    HostDetailAdapter extends RecyclerView.Adapter<H
     private void                onItemClick(String[] line, boolean vib) {
         if (vib)
             Utils.vibrateDevice(myActivity, 100);
-        if (line[0].contains("Ports")) {
-            PortAdapter adapter = new PortAdapter(myActivity, mFocusedHost.Ports().portArrayList());
+        if (line[0].contains("getPorts")) {
+            PortAdapter adapter = new PortAdapter(myActivity, mFocusedHost.getPorts().portArrayList());
             new RV_dialog(myActivity)
                     .setAdapter(adapter, false)
-                    .setTitle("Ports : " + mFocusedHost.ip )
+                    .setTitle("getPorts : " + mFocusedHost.ip )
                     .onPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dialogInterface.dismiss();

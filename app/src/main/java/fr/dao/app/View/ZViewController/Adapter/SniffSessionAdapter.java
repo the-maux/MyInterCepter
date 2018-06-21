@@ -39,8 +39,8 @@ public class                    SniffSessionAdapter extends RecyclerView.Adapter
 
     public void                 onBindViewHolder(SniffSessionHolder holder, int position) {
         final SniffSession sniffSession = mSniffsession.get(position);
-        holder.title.setText(sniffSession.session.Ssid);
-        String subtitile = "Scanned " + sniffSession.session.nbrScanned + " times";
+        holder.title.setText(sniffSession.network.Ssid);
+        String subtitile = "Scanned " + sniffSession.network.nbrScanned + " times";
         List<Pcap> pcaps = sniffSession.listPcapRecorded();
         List<Host> devices = sniffSession.listDevices();
         int nbrDnsIntercepted = (sniffSession.logDnsSpoofed() == null) ? sniffSession.logDnsSpoofed().size() : 0 ;
@@ -99,7 +99,7 @@ public class                    SniffSessionAdapter extends RecyclerView.Adapter
             @Override
             public void onClick(View v) {
                 new QuestionDialog(mActivity)
-                        .setTitle("Supprimer le network ?")
+                        .setTitle("Supprimer le NetworkInformation ?")
                         .setText("Cette action est irreversible, etes vous sur d\'etre certains de vouloir supprimer cette record.")
                         .onPositiveButton("Oui", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {

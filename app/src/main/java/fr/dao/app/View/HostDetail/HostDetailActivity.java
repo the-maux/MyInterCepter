@@ -9,6 +9,8 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -36,13 +38,15 @@ import fr.dao.app.Core.Database.DBManager;
 import fr.dao.app.Model.Net.Pcap;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
-import fr.dao.app.View.DashBoard.NetDiscoveryHistoricFrgmnt;
+import fr.dao.app.View.DashBoard.HistoricSavedDataFgmnt;
 import fr.dao.app.View.Scan.NmapActivity;
+import fr.dao.app.View.Scan.VulnsScanActivity;
 import fr.dao.app.View.Sniff.SniffActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
+import fr.dao.app.View.ZViewController.Fragment.PcapListerFragment;
 
 public class                    HostDetailActivity extends MyActivity {
     private String              TAG = "HostDetailActivity";
@@ -58,6 +62,19 @@ public class                    HostDetailActivity extends MyActivity {
     private MyFragment          mCurrentFragment;
     private List<Pcap>          mPcapsList;
     private ImageView           collapsBackground;
+
+    public enum                 actionActivity {
+        NMAP(0), BLOCK_INTERNET(1), VULN_SCAN(2), SNIFFER(3);
+
+        private final int value;
+        private actionActivity(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
 
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,12 +103,17 @@ public class                    HostDetailActivity extends MyActivity {
             collapsBackground = findViewById(R.id.collapsBackground);
             collapsBackground.postDelayed(new Runnable() {
                 public void run() {
-                    GlideRequest r = GlideApp.with(mInstance)
-                            .load(R.drawable.bg1)
-                            .centerCrop()
-                            .transition(DrawableTransitionOptions.withCrossFade())
-                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
-                    r.into(collapsBackground);
+                    try {
+
+                        GlideRequest r = GlideApp.with(mInstance)
+                                .load(R.drawable.bg1)
+                                .centerCrop()
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+                        r.into(collapsBackground);
+                    } catch (IllegalArgumentException e) {
+                        Log.e(TAG, "PostDelayed while Activity is destroyed");
+                    }
                 }
             }, 800);
 
@@ -103,24 +125,15 @@ public class                    HostDetailActivity extends MyActivity {
     }
 
     private void                init() {
-        Bundle bundle = getIntent().getExtras();
         try {
+            bundle = getIntent().getExtras();
             if (bundle == null)
                 throw new InvalidParameterException("NO BUNDLE TRANSMITED");
             String mode = bundle.getString("mode");
             if (mode == null) {
                 throw new InvalidParameterException("NO MODE TRANSMITED IN BUNDLE");
             } else if (mode.contains("Live")) {
-                Animation scaleUp = AnimationUtils.loadAnimation(this, R.anim.fab_scale_up);
-                scaleUp.setDuration(1250);
-                scaleUp.setAnimationListener(new Animation.AnimationListener() {
-                    public void onAnimationStart(Animation animation) {
-                        mMenuFAB.setVisibility(View.VISIBLE);
-                    }
-                    public void onAnimationEnd(Animation animation) {}
-                    public void onAnimationRepeat(Animation animation) {}
-                });
-                mMenuFAB.startAnimation(scaleUp);
+                ViewAnimate.scaleUp(mInstance, mMenuFAB);
             } else if (mode.contains("Recorded")) {
                 mMenuFAB.setVisibility(View.GONE);
             }
@@ -139,72 +152,57 @@ public class                    HostDetailActivity extends MyActivity {
 
     private void                initMenuFab() {
         mMenuFAB.removeAllMenuButtons();
-        FloatingActionButton nmapFAB = new FloatingActionButton(this);
-        FloatingActionButton cutInternet = new FloatingActionButton(this);
-        FloatingActionButton vulnerabilityScanner = new FloatingActionButton(this);
-        FloatingActionButton sniffingFAB = new FloatingActionButton(this);
+        mMenuFAB.addMenuButton(initMenuBtn("Sniffing", R.mipmap.ic_hearing, actionActivity.SNIFFER), 0);
+        mMenuFAB.addMenuButton(initMenuBtn("Strip connection", R.mipmap.ic_cut_internet, actionActivity.BLOCK_INTERNET), 1);
+        mMenuFAB.addMenuButton(initMenuBtn("Nmap", R.mipmap.ic_eye_nosvg, actionActivity.NMAP), 2);
+        mMenuFAB.addMenuButton(initMenuBtn("Vulnerability Scanner", R.drawable.target_pad_30_white, actionActivity.VULN_SCAN), 3);
+    }
 
-        nmapFAB.setButtonSize(FloatingActionButton.SIZE_MINI);
-        nmapFAB.setLabelText("Nmap");
-        nmapFAB.setImageResource(R.mipmap.ic_eye_nosvg);
-        nmapFAB.setColorNormal(getResources().getColor(R.color.fab_color));
-        nmapFAB.setPadding(4, 4, 4, 4);
-        nmapFAB.setColorPressed(getResources().getColor(R.color.generic_background));
-        nmapFAB.setOnClickListener(new View.OnClickListener() {
+    private FloatingActionButton initMenuBtn(String title, int logo, actionActivity type) {
+        FloatingActionButton FabBtn = new FloatingActionButton(this);
+        FabBtn.setButtonSize(FloatingActionButton.SIZE_MINI);
+        FabBtn.setLabelText(title);
+        FabBtn.setImageResource(logo);
+        FabBtn.setColorNormal(getResources().getColor(R.color.fab_color));
+        FabBtn.setPadding(4, 4, 4, 4);
+        FabBtn.setColorPressed(getResources().getColor(R.color.generic_background));
+        FabBtn.setOnClickListener(onItemMenuClicked(type, FabBtn));
+        return FabBtn;
+    }
+
+    private View.OnClickListener onItemMenuClicked(final actionActivity classActivity, final FloatingActionButton fabBtn) {
+        return new View.OnClickListener() {
             public void onClick(View view) {
                 Utils.vibrateDevice(mInstance, 100);
                 mMenuFAB.close(true);
-                Intent intent = new Intent(mInstance, NmapActivity.class);
-                intent.putExtra("macAddress", getIntent().getExtras().getString("macAddress"));
-                startActivity(intent);
+                Intent intent = null;
+                Class classActivityToLaunch;
+                Pair<View, String> p1 = null;
+                switch (classActivity) {
+                    case NMAP:
+                        intent = new Intent(mInstance, NmapActivity.class);
+                        p1  = Pair.create((View)fabBtn, "NmapIconTransition");
+                        intent.putExtra("macAddress", getIntent().getExtras().getString("macAddress"));
+                        break;
+                    case VULN_SCAN:
+                        p1  = Pair.create((View)fabBtn, "VulnIconTransition");
+                        intent = new Intent(mInstance, VulnsScanActivity.class);
+                        intent.putExtra("macAddress", getIntent().getExtras().getString("macAddress"));
+                        break;
+                    case BLOCK_INTERNET:
+                        intent = new Intent(mInstance, NmapActivity.class);
+                        p1  = Pair.create((View)fabBtn, "NmapIconTransition");
+                        intent.putExtra("macAddress", getIntent().getExtras().getString("macAddress"));
+                        break;
+                    case SNIFFER:
+                        intent = new Intent(mInstance, SniffActivity.class);
+                        p1  = Pair.create((View)fabBtn, "wiresharkIcon");
+                        intent.putExtra("macAddress", getIntent().getExtras().getString("macAddress"));
+                        break;
+                }
+                startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1).toBundle());
             }
-        });
-        cutInternet.setButtonSize(FloatingActionButton.SIZE_MINI);
-        cutInternet.setLabelText("Strip connection");
-        cutInternet.setImageResource(R.mipmap.ic_cut_internet);
-        cutInternet.setColorNormal(getResources().getColor(R.color.fab_color));
-        cutInternet.setPadding(4, 4, 4, 4);
-        cutInternet.setColorPressed(getResources().getColor(R.color.generic_background));
-        cutInternet.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Utils.vibrateDevice(mInstance, 100);
-                Snackbar.make(findViewById(R.id.Coordonitor), "Not implemented yet", Snackbar.LENGTH_LONG).show();
-                mMenuFAB.close(true);
-            }
-        });
-        vulnerabilityScanner.setButtonSize(FloatingActionButton.SIZE_MINI);
-        vulnerabilityScanner.setLabelText("Vulnerability Scanner");
-        vulnerabilityScanner.setImageResource(R.drawable.ic_loop_search);
-        vulnerabilityScanner.setColorNormal(getResources().getColor(R.color.fab_color));
-        vulnerabilityScanner.setColorPressed(getResources().getColor(R.color.generic_background));
-        vulnerabilityScanner.setPadding(4, 4, 4, 4);
-        vulnerabilityScanner.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Utils.vibrateDevice(mInstance, 100);
-                Snackbar.make(findViewById(R.id.Coordonitor), "Not implemented yet", Snackbar.LENGTH_LONG).show();
-                mMenuFAB.close(true);
-            }
-        });
-        sniffingFAB.setButtonSize(FloatingActionButton.SIZE_MINI);
-        sniffingFAB.setLabelText("Sniffing");
-        sniffingFAB.setImageResource(R.mipmap.ic_hearing);
-        sniffingFAB.setPadding(4, 4, 4, 4);
-        sniffingFAB.setColorNormal(getResources().getColor(R.color.fab_color));
-        sniffingFAB.setColorPressed(getResources().getColor(R.color.generic_background));
-        sniffingFAB.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Utils.vibrateDevice(mInstance, 100);
-                mMenuFAB.close(true);
-                Intent intent = new Intent(mInstance, SniffActivity.class);
-                Log.d(TAG, "Sending mac[" + getIntent().getExtras().getString("macAddress") + "]");
-                intent.putExtra("macAddress", getIntent().getExtras().getString("macAddress"));
-                startActivity(intent);
-            }
-        });
-        mMenuFAB.addMenuButton(nmapFAB, 0);
-        mMenuFAB.addMenuButton(sniffingFAB, 1);
-        mMenuFAB.addMenuButton(cutInternet, 2);
-        mMenuFAB.addMenuButton(vulnerabilityScanner, 3);
+        };
     }
 
     private void                initAppBar() {
@@ -271,7 +269,7 @@ public class                    HostDetailActivity extends MyActivity {
                         displayNotes(mFocusedHost.mac);
                         break;
                     case "pcap":
-                        displayPcap();
+                        displayPcap(mFocusedHost.mac);
                         break;
                     case "infos":
                         displayInfosHost(mFocusedHost.mac);
@@ -295,9 +293,9 @@ public class                    HostDetailActivity extends MyActivity {
     }
 
     private void                displayHistoric(String macOfHostFocused) {
-        MyFragment fragment = new NetDiscoveryHistoricFrgmnt();
+        MyFragment fragment = new HistoricSavedDataFgmnt();
         Bundle args = new Bundle();
-        args.putString("mode", NetDiscoveryHistoricFrgmnt.HOST_HISTORIC);
+        args.putString("mode", HistoricSavedDataFgmnt.HOST_HISTORIC);
         args.putString("macAddress", macOfHostFocused);
         fragment.setArguments(args);
         initFragment(fragment);
@@ -311,13 +309,13 @@ public class                    HostDetailActivity extends MyActivity {
         initFragment(fragment);
     }
 
-    private void                displayPcap() {
-        List<Pcap> pcapList = DBManager.getListPcapFormHost(mFocusedHost);
-        if (pcapList == null || pcapList.isEmpty())
-            Snackbar.make(mCoordinator, "No Pcap Recorded for " + mFocusedHost.getName(), Snackbar.LENGTH_LONG).show();
-        else {
-            //TODO: faire l'adapter de pcap
-        }
+    private void                displayPcap(String macOfHostFocused) {
+        Snackbar.make(mCoordinator, "Affiche les Pcap Recorded for " + mFocusedHost.getName(), Snackbar.LENGTH_LONG).show();
+        MyFragment fragment = new PcapListerFragment();
+        Bundle args = new Bundle();
+        args.putString("macAddress", macOfHostFocused);
+        fragment.setArguments(args);
+        initFragment(fragment);
     }
 
     private void                initFragment(MyFragment fragment) {
@@ -361,11 +359,10 @@ public class                    HostDetailActivity extends MyActivity {
                 public void onAnimationStart(Animation animation) {}
                 public void onAnimationEnd(Animation animation) {
                     mMenuFAB.setVisibility(View.GONE);
+                    onBackMe();
                 }
                 public void onAnimationRepeat(Animation animation) {}
             });
-            onBackMe();
-
         }
     }
 

@@ -5,14 +5,14 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splashscreen">
+    android:background="@color/DashboardPrimary"
+    android:transitionName="rootViewTransition">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBarLayout"
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/DashboardPrimary"
-        android:fitsSystemWindows="true"
         app:elevation="2dp">
 
         <android.support.constraint.ConstraintLayout
@@ -33,24 +33,25 @@
                 android:transitionName="logo_activity"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toStartOf="@+id/toolbar2"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_developer_board_svg" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar2"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="8dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
+                android:transitionName="title"
                 android:visibility="visible"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toStartOf="@+id/searchViewRelative"
+                app:layout_constraintHorizontal_weight="6"
                 app:layout_constraintStart_toEndOf="@+id/OsImg"
                 app:layout_constraintTop_toTopOf="parent"
-                app:title="Dashboard">
+                app:title="Statistique">
 
             </android.support.v7.widget.Toolbar>
 
@@ -61,11 +62,10 @@
                 android:background="@android:color/transparent"
                 android:baselineAlignBottom="false"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
-                app:layout_constraintEnd_toStartOf="@+id/settingsIcon"
+                app:layout_constraintEnd_toStartOf="@+id/iconSettings2"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/toolbar2"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_max="150dp">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <android.support.v7.widget.SearchView
                     android:id="@+id/searchView"
@@ -81,16 +81,18 @@
                 android:id="@+id/iconSettings2"
                 android:layout_width="40dp"
                 android:layout_height="0dp"
+                android:layout_marginLeft="8dp"
                 android:baselineAlignBottom="false"
-                android:padding="4dp"
+                android:padding="6dp"
                 android:soundEffectsEnabled="true"
-                android:tint="@color/tint_svg"
-                android:visibility="gone"
+                android:tint="@color/primary_white"
+                android:visibility="visible"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toStartOf="@+id/settingsIcon"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/searchViewRelative"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_settings_input_svg" />
 
             <ImageView
                 android:id="@+id/settingsIcon"
@@ -99,14 +101,13 @@
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:soundEffectsEnabled="true"
-                android:tint="@color/tint_svg"
+                android:tint="@color/primary_white"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/iconSettings2"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_min="45dp"
                 app:srcCompat="@drawable/ic_more_svg" />
 
 
@@ -132,19 +133,19 @@
                 android:id="@+id/generalTab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="General" />
+                android:text="GENERAL" />
 
             <android.support.design.widget.TabItem
                 android:id="@+id/offensifTab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Offensif" />
+                android:text="OFFENSIF" />
 
             <android.support.design.widget.TabItem
                 android:id="@+id/defensifTab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Defensif" />
+                android:text="DEFENSIF" />
 
         </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>
@@ -155,59 +156,17 @@
         android:layout_height="match_parent"
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/HeaderCardDashboard"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:cardBackgroundColor="@color/DashboardPrimary"
-            app:cardCornerRadius="2dp"
-            app:cardElevation="4dp"
-            app:cardPreventCornerOverlap="true"
-            app:layout_constraintBottom_toTopOf="@+id/frame_container"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_weight="4">
-
-            <android.support.constraint.ConstraintLayout
-                android:id="@+id/HeaderCardDashboardLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:padding="8dp">
-
-                    <fr.dao.app.External.jgraph.graph.JcoolGraph xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/sug_recode_line"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:clickable="true"
-                        android:paddingRight="5dp"
-                        app:graphstyle="line"
-                        app:showymsg="true" />
-                    <!--app:linestyle="broken"-->
-                    <!--app:linewidth="3dp"-->
-                </FrameLayout>
-
-            </android.support.constraint.ConstraintLayout>
-        </android.support.v7.widget.CardView>
 
         <FrameLayout
             android:id="@+id/frame_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/HeaderCardDashboard"
-            app:layout_constraintVertical_weight="7"></FrameLayout>
+            app:layout_constraintTop_toTopOf="parent"></FrameLayout>
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline3"

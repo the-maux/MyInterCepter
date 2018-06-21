@@ -40,7 +40,7 @@ public class                    DBManager {
                 .execute();
         List<Pcap> listPcapWithNetworkIn = new ArrayList<>();
         for (Pcap pcap : allPcapsInDdd) {
-            if (pcap.sniffSession.session.Ssid.contains(ssid))
+            if (pcap.sniffSession.network.Ssid.contains(ssid))
                 listPcapWithNetworkIn.add(pcap);
         }
         return listPcapWithNetworkIn;

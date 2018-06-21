@@ -12,13 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Model.Net.Service;
 
-@Table(name = "Network", id = "_id")
-public class                Network extends Model {
-    public static String    NAME_COLUMN = "Network";
+import static fr.dao.app.Model.Config.Action.ActionType.SCAN;
 
+@Table(name = "NetworkInformation", id = "_id")
+public class                Network extends Model {
+    public static String    NAME_COLUMN = "NetworkInformation";
     @Column(name = "ssid")
     public String           Ssid;
     @Column(name = "lastScanDate")
@@ -29,10 +31,6 @@ public class                Network extends Model {
     public int              nbrOs;
     @Column(name = "nbrScanned")
     public int              nbrScanned;
-    @Column(name = "offensifAction")
-    public int              offensifAction;
-    @Column(name = "defensifAction")
-    public int              defensifAction;
 
     @Column(name = "Devices")
     public String           listDevicesSerialized;
@@ -44,7 +42,7 @@ public class                Network extends Model {
                 return listDevices;
             }
             listDevices = DBHost.getListFromSerialized(listDevicesSerialized);
-            Log.d(NAME_COLUMN, "liste Network deserialized " + listDevices.size() + " devices");
+            Log.d(NAME_COLUMN, "liste NetworkInformation deserialized " + listDevices.size() + " devices");
 
         }
         return listDevices;
@@ -71,15 +69,22 @@ public class                Network extends Model {
         List<Host> hosts = listDevices();
         for (Host host : hosts) {
             if (host.mac.contains(mac)) {
-               // Log.d(NAME_COLUMN, "getHostFromMac(" + host.toString() + ") in list of " + listDevices().size());
                 return host;
             }
         }
-       // Log.d(NAME_COLUMN, "not found");
         throw new UnknownHostException("Not host found in BDD with this mac[" + mac + "]");
     }
 
-    public              Network() {
+    public                  Network() {
         super();
+    }
+
+    public boolean          safeUpdateGateway(Host host) {
+        if (Singleton.getInstance().Session != null) {
+            Singleton.getInstance().Session.addAction(SCAN, false);
+            Log.i(NAME_COLUMN, "Gateway ARP CHECKED AND OK");
+        } else
+            Log.e(NAME_COLUMN, "defensif action set but Session can be loaded");
+        return Gateway == null || Gateway.mac.contains(host.mac);
     }
 }

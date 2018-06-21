@@ -16,26 +16,23 @@ import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Tcpdump.DashboardSniff;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.R;
+import fr.dao.app.View.Sniff.SniffActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Adapter.Holder.PacketHolder;
 
-public class SniffDashboardAdapter extends RecyclerView.Adapter<PacketHolder> {
+public class                    SniffDashboardAdapter extends RecyclerView.Adapter<PacketHolder> {
     private String              TAG = "SniffDashboardAdapter";
     private MyActivity          mActivity;
-    private DashboardSniff      wiresharkDashboard = new DashboardSniff();
-    private TextView            packetsNumber, nbrTargets, timerMonitor;
+    private DashboardSniff      wiresharkDashboard;
+    private TextView            packetsNumber, nbrTargetsNameFile, timerMonitor;
     private CircleImageView     status;
-    private Timer               timer = new Timer();
+    private Timer               timer;
     public final int            TCP = 0, UDP = 1, DNS = 2, HTTP = 3, HTTPS = 4, SPY = 5;
 
     public SniffDashboardAdapter(MyActivity activity, TextView packetsNumber, TextView nbrTargets,
                                  TextView timerMonitor, CircleImageView status) {
-        this.mActivity = activity;
-        this.packetsNumber = packetsNumber;
-        this.nbrTargets = nbrTargets;
-        this.timerMonitor = timerMonitor;
-        this.status = status;
+        updateFragmentWidget(activity, packetsNumber, nbrTargets, timerMonitor, status);
     }
 
     public PacketHolder         onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -53,19 +50,19 @@ public class SniffDashboardAdapter extends RecyclerView.Adapter<PacketHolder> {
     public void                 onBindViewHolder(final PacketHolder holder, int position) {
         switch (holder.getAdapterPosition()) {
             case TCP:
-                initCard(holder, wiresharkDashboard.TCP_packet, mActivity.getString(R.string.tcp), R.mipmap.ic_tcp);
+                initCard(holder, wiresharkDashboard != null ? wiresharkDashboard.TCP_packet : 0, mActivity.getString(R.string.tcp), R.mipmap.ic_tcp);
                 break;
             case UDP:
-                initCard(holder, wiresharkDashboard.UDP_packet, "UDP", R.mipmap.ic_udp);
+                initCard(holder, wiresharkDashboard != null ? wiresharkDashboard.UDP_packet : 0, "UDP", R.mipmap.ic_udp);
                 break;
             case HTTP:
-                initCard(holder, wiresharkDashboard.HTTP_packet, "HTTP", R.mipmap.ic_http);
+                initCard(holder, wiresharkDashboard != null ? wiresharkDashboard.HTTP_packet : 0, "HTTP", R.mipmap.ic_http);
                 break;
             case HTTPS:
-                initCard(holder, wiresharkDashboard.HTTPS_packet, "HTTPS", R.mipmap.ic_https);
+                initCard(holder, wiresharkDashboard != null ? wiresharkDashboard.HTTPS_packet : 0, "HTTPS", R.mipmap.ic_https);
                 break;
             case DNS:
-                initCard(holder, wiresharkDashboard.DNS_packet, "DNS", R.mipmap.ic_dns);
+                initCard(holder, wiresharkDashboard != null ? wiresharkDashboard.DNS_packet : 0, "DNS", R.mipmap.ic_dns);
                 break;
             case SPY:
                 initCard(holder, 0, " credential", R.mipmap.ic_spy);
@@ -89,7 +86,7 @@ public class SniffDashboardAdapter extends RecyclerView.Adapter<PacketHolder> {
 
     public void                 setDashboard(DashboardSniff dashboard) {
         this.wiresharkDashboard = dashboard;
-        dashboard.setMonitorView(packetsNumber, nbrTargets, timerMonitor, status);
+        dashboard.setMonitorView(mActivity, packetsNumber, nbrTargetsNameFile, status);
     }
 
     private View.OnClickListener onClick(final Network accessPoint) {
@@ -99,25 +96,40 @@ public class SniffDashboardAdapter extends RecyclerView.Adapter<PacketHolder> {
             }
         };
     }
+    UpdateTimer mytime;
 
-    public void                 startTimer() {
-        class UpdateTimer extends TimerTask {
-            private Date start = Calendar.getInstance().getTime();
-            public void run() {
-                mActivity.runOnUiThread(new Runnable() {
-                    public void run() {
-                        timerMonitor.setText(Utils.TimeDifference(start));
-                    }
-                });
-            }
+    public void updateFragmentWidget(MyActivity activity, TextView nbrPacket, TextView timer, TextView nameFile, CircleImageView statusIconSniffing) {
+        this.mActivity = activity;
+        this.packetsNumber = nbrPacket;
+        this.nbrTargetsNameFile = nameFile;
+        this.timerMonitor = timer;
+        this.status = statusIconSniffing;
+        if (wiresharkDashboard != null)
+            wiresharkDashboard.setAdapter(this);
+    }
+
+    class UpdateTimer extends TimerTask {
+        private Date start = Calendar.getInstance().getTime();
+        public void run() {
+            mActivity.runOnUiThread(new Runnable() {
+                public void run() {
+
+                    timerMonitor.setText(Utils.TimeDifference(start));
+                }
+            });
         }
-        if (timer == null)
+    }
+    public void                 startTimer() {
+        if (timer != null) {
             timer = new Timer();
-        timer.scheduleAtFixedRate(new UpdateTimer(), 0, 1000);
+            mytime = new UpdateTimer();
+            timer.scheduleAtFixedRate(mytime, 0, 1000);
+        }
     }
 
     public void                 stopTimer() {
         if (timer != null) {
+            mytime.cancel();
             timer.cancel();
             timer = null;
         }

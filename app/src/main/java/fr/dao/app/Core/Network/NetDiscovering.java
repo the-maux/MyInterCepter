@@ -38,10 +38,10 @@ public class                            NetDiscovering {
         }
         if (res[netmask].contains("0.0.0.0")) res[netmask] = "255.255.255.0";
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        Singleton.getInstance().network = new NetworkInformation(wifiManager, getMac(wifiInfo)).init();
+        Singleton.getInstance().NetworkInformation = new NetworkInformation(wifiManager, getMac(wifiInfo)).init();
         if ((activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)) != null)
             wifiInfo = ((WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
-        Singleton.getInstance().network.ssid = wifiInfo.getSSID().replace("\"", "");
+        Singleton.getInstance().NetworkInformation.ssid = wifiInfo.getSSID().replace("\"", "");
         return true;
     }
 
@@ -58,7 +58,7 @@ public class                            NetDiscovering {
                             already = true;
                     }
                     if (!already) {
-                        if (!reachable.contains(Singleton.getInstance().network.myIp)) {
+                        if (!reachable.contains(Singleton.getInstance().NetworkInformation.myIp)) {
                             if (Singleton.getInstance().Settings.UltraDebugMode)
                                 Log.d(TAG, "ARP_TABLE FIX:" + reachable);
                             listIpPlusMac.add(reachable);
@@ -68,7 +68,7 @@ public class                            NetDiscovering {
                     Log.e(TAG, "WTF reachable is null ?");
                 }
             }
-            String dumpMyDevice = Singleton.getInstance().network.myIp + ":" + Singleton.getInstance().network.mac;
+            String dumpMyDevice = Singleton.getInstance().NetworkInformation.myIp + ":" + Singleton.getInstance().NetworkInformation.mac;
             listIpPlusMac.add(dumpMyDevice);
 /*
         } catch (IOException e) {
@@ -93,7 +93,7 @@ public class                            NetDiscovering {
                 Object[] objArr = new Object[1];
                 objArr[0] = ip.replace(".", "\\.");
                 Matcher matcher = Pattern.compile(String.format(MAC_RE, objArr)).matcher(tmp);
-                if (matcher.matches() && !ip.contains(Singleton.getInstance().network.myIp) && !tmp.isEmpty()) {
+                if (matcher.matches() && !ip.contains(Singleton.getInstance().NetworkInformation.myIp) && !tmp.isEmpty()) {
                     IpExtracted.add(ip);
                     stringBuilder.append(ip);
                     listIpPlusMac.add(ip + ":" + matcher.group(1));
@@ -126,7 +126,7 @@ public class                            NetDiscovering {
             Object[] objArr = new Object[1];
             objArr[0] = ip.replace(".", "\\.");
             Matcher matcher = Pattern.compile(String.format(MAC_RE, objArr)).matcher(line);
-            if (matcher.matches() && !ip.contains(Singleton.getInstance().network.myIp)) {
+            if (matcher.matches() && !ip.contains(Singleton.getInstance().NetworkInformation.myIp)) {
                 listOfIP.add(ip);
                 if (Singleton.getInstance().Settings.UltraDebugMode)
                     Log.d(TAG, "ARP_TABLE: " + ip + ":" + matcher.group(1));

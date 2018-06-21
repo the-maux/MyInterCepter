@@ -16,6 +16,7 @@ import com.bumptech.glide.request.transition.Transition;
 import fr.dao.app.Core.Configuration.GlideApp;
 import fr.dao.app.Core.Configuration.GlideRequest;
 import fr.dao.app.Model.Target.Host;
+import fr.dao.app.Model.Target.State;
 import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
 
@@ -80,7 +81,7 @@ public class                MyGlideLoader {
 
     public static void      setOsIcon(Host host, ImageView osImageView) {
         if (host != null && host.osType != null) {
-            if (host.state == Host.State.FILTERED && host.vendor.contains("Unknown")) {
+            if (host.state == State.FILTERED && host.vendor.contains("Unknown")) {
                 osImageView.setImageResource(R.mipmap.ic_unknow);
                 return ;
             }

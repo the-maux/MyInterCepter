@@ -12,6 +12,7 @@ import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
 
+import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
@@ -29,8 +30,8 @@ public class                    GeneralSettings {
                                 SSLSTRIP_MODE = "SSLstrip Activated",
                                 LOCKSCREEN = "Lockscreen Activated",
                                 ADVANCED_SNIFF_ANAL = "Advanced trame analyse",
-                                PORT_REDIRECT = "Ports redirect",
-                                PORT_FILTERING = "Ports filtering",
+                                PORT_REDIRECT = "getPorts redirect",
+                                PORT_FILTERING = "getPorts filtering",
                                 DNS_SPOOFING = "Dns Spoofing";
 
     public                      GeneralSettings(Activity activity, CoordinatorLayout coordinatorLayout, Tcpdump tcpdump) {
@@ -52,7 +53,7 @@ public class                    GeneralSettings {
         builder.addDividerItem();
         builder.addItem(3, PORT_REDIRECT, R.drawable.ic_checkbox_blank_outline_grey600_24dp);
         builder.addItem(4, PORT_FILTERING, R.drawable.ic_checkbox_blank_outline_grey600_24dp);
-        builder.addItem(5, DNS_SPOOFING, (mSingleton.isDnsControlstarted()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp )
+        builder.addItem(5, DNS_SPOOFING, (MitManager.getInstance().isDnsmasqRunning()) ? R.drawable.ic_checkbox_marked_grey600_24dp: R.drawable.ic_checkbox_blank_outline_grey600_24dp )
                 .setItemClickListener(onClick())
                 .expandOnStart(true);
         mBottomSheet = builder.createDialog();

@@ -3,8 +3,10 @@ package fr.dao.app.Core.Configuration.Comparator;
 import java.util.Comparator;
 import java.util.Objects;
 
+import fr.dao.app.Model.Config.Session;
 import fr.dao.app.Model.Net.Port;
 import fr.dao.app.Model.Target.Host;
+import fr.dao.app.Model.Target.State;
 
 public class                            Comparators {
 
@@ -24,9 +26,9 @@ public class                            Comparators {
                     else if (Integer.parseInt(ip1[3]) < Integer.parseInt(ip2[3]))
                         return -1;
                 } else {
-                    if (o1.state == Host.State.ONLINE || o2.state == Host.State.OFFLINE)
+                    if (o1.state == State.ONLINE || o2.state == State.OFFLINE)
                         return -1;
-                    else if (o2.state == Host.State.ONLINE || o1.state == Host.State.OFFLINE)
+                    else if (o2.state == State.ONLINE || o1.state == State.OFFLINE)
                         return 1;
                 }
                 return 0;
@@ -49,6 +51,20 @@ public class                            Comparators {
                     if (o1.protocol.contains("tcp"))
                         return 1;
                 }
+                return 0;
+            }
+
+            ;
+        };
+    }
+    public static Comparator<Session>      getSessionComparator() {
+        return new Comparator<Session>() {
+
+            public int compare(Session o1, Session o2) {
+                if (o1.date.after(o2.date))
+                    return 1;
+                else if (o1.date.before(o2.date))
+                    return -1;
                 return 0;
             }
 

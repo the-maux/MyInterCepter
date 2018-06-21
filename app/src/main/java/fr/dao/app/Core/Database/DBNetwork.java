@@ -2,7 +2,6 @@ package fr.dao.app.Core.Database;
 
 import android.util.Log;
 
-import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Select;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class                                DBNetwork {
                     .from(Network.class)
                     .where("ssid = \"" + SSID + "\"").executeSingle();
 //            Log.d(TAG, "getAPFromSSID::" + new Select()
-//                    .from(Network.class)
+//                    .from(NetworkInformation.class)
 //                    .where("ssid = \"" + SSID + "\"").toSql());
             if (network != null) {
                 if (Singleton.getInstance().Settings.DebugMode)
@@ -58,7 +57,7 @@ public class                                DBNetwork {
             if (accessPoint.listDevicesSerialized.contains("" + host.getId()))
                 AllApWithDeviceIn.add(accessPoint);
         }
-        Log.i(TAG, "getAllAPWith(" + host.getName() + ")In:: returning " + AllApWithDeviceIn.size() + " Network ");
+        Log.i(TAG, "getAllAPWith(" + host.getName() + ")In:: returning " + AllApWithDeviceIn.size() + " NetworkInformation ");
         return AllApWithDeviceIn;
     }
 
@@ -76,25 +75,6 @@ public class                                DBNetwork {
         accessPoint.nbrOs = osList.size();
         accessPoint.save();
         return accessPoint;
-    }
-
-    static void                             updateNetworkInfoInBDD(Network accessPoint, String Gateway,
-                                                                   List<Host> devicesConnected, String TypeScan, ArrayList<Os> osList) {
-        ActiveAndroid.beginTransaction();
-        if (Singleton.getInstance().Settings.DebugMode)
-            Log.d(TAG, "Updating Network::" + accessPoint.Ssid + " discovered " + devicesConnected.size() + " host");
-        accessPoint.lastScanDate = Calendar.getInstance().getTime();
-        accessPoint.listDevicesSerialized = DBHost.SerializeListDevices(devicesConnected);
-        accessPoint.nbrOs = osList.size();
-        for (Host host : devicesConnected) {
-            if (host.ip.contains(Gateway)) {
-                accessPoint.Gateway = host;
-                break;
-            }
-        }
-        accessPoint.save();
-        ActiveAndroid.setTransactionSuccessful();
-        ActiveAndroid.endTransaction();
     }
 
 }

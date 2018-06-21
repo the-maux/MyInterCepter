@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import fr.dao.app.Core.Configuration.Singleton;
-import fr.dao.app.Core.Nmap.Fingerprint;
+import fr.dao.app.Core.Scan.Fingerprint;
 import fr.dao.app.Model.Target.Host;
 
 public class                                DBHost {
@@ -74,7 +74,7 @@ public class                                DBHost {
             Host device = findDeviceById(id.replace(";", ""));
             try {
                 Fingerprint.initHost(device);
-                device.build();
+                device.getPorts();
                 hosts.add(device);
             } catch (NullPointerException e) {
                 Log.e(TAG, "id[" + id + "] was not found in BDD");

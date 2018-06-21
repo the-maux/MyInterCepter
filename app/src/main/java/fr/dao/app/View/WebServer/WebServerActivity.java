@@ -16,9 +16,11 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.WebServer.GenericServer;
+import fr.dao.app.Model.Config.Action;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MITMActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
@@ -31,7 +33,7 @@ public class                    WebServerActivity extends MITMActivity {
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
     private AppBarLayout        appBarLayout;
-    private String              myUrl = "http://" + mSingleton.network.myIp + ":" + PORT;
+    private String              myUrl = "http://" + mSingleton.NetworkInformation.myIp + ":" + PORT;
     private Toolbar             mToolbar;
     private GenericServer       mWebServer;
     private ProgressBar         mProgressBar;
@@ -53,7 +55,7 @@ public class                    WebServerActivity extends MITMActivity {
         mFab = findViewById(R.id.fab);
         ViewAnimate.FabAnimateReveal(mInstance, mFab);
         mToolbar = findViewById(R.id.toolbar);
-        appBarLayout = findViewById(R.id.appBarLayout);
+        appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewCompat.setElevation(appBarLayout, 4);
@@ -65,7 +67,7 @@ public class                    WebServerActivity extends MITMActivity {
     private void                init() {
         mToolbar.setSubtitle(myUrl);
         mFab.setOnClickListener(onFabClick());
-        initNavigationBottomBar(WEB, true);
+        initNavigationBottomBar(WEB);
         WebSettings webSettings = mWebview.getSettings();
         webSettings.setJavaScriptEnabled(true);
         mWebview.setWebViewClient(new MyWebViewClient(mToolbar));
@@ -77,12 +79,12 @@ public class                    WebServerActivity extends MITMActivity {
             public void onClick(View v) {
                 Utils.vibrateDevice(mInstance);
                 ViewAnimate.setVisibilityToVisibleQuick(mProgressBar);
-                if (!mSingleton.iswebSpoofed() && startAndroidWebServer()) {
-                    mSingleton.setwebSpoofed(true);
+                if (!MitManager.getInstance().iswebSpoofed() && startAndroidWebServer()) {
+                    MitManager.getInstance().initWebserver();
                     showWebView();
                     mFab.setBackgroundTintList(ContextCompat.getColorStateList(WebServerActivity.this, R.color.start_color));
                 } else if (stopAndroidWebServer()) {
-                    mSingleton.setwebSpoofed(false);
+                    MitManager.getInstance().stopWebserver(false);
                     unShowWebView();
                 }
             }
@@ -90,27 +92,25 @@ public class                    WebServerActivity extends MITMActivity {
     }
 
     private boolean             startAndroidWebServer() {
-        if (!mSingleton.iswebSpoofed()) {
+        if (!MitManager.getInstance().iswebSpoofed()) {
                 try {
                     mWebServer = new GenericServer(PORT);
+                    mSingleton.Session.addAction(Action.ActionType.WEBSERVER, true);
                     mWebServer.start();
-                    mSingleton.actualNetwork.offensifAction = mSingleton.actualNetwork.offensifAction + 1;
-                    mSingleton.actualNetwork.save();
-
                     return true;
                 } catch (Exception io) {
                     io.getStackTrace();
                     showSnackbar("Error in server booting");
                 }
         } else {
-            showSnackbar("Server already launched");
+            showSnackbar("HTTPProxy already launched");
         }
         return false;
     }
     private boolean             stopAndroidWebServer() {
-        if (mSingleton.iswebSpoofed() && mWebServer != null) {
+        if (MitManager.getInstance().iswebSpoofed() && mWebServer != null) {
             mWebServer.stop();
-            mSingleton.setwebSpoofed(false);
+            MitManager.getInstance().stopWebserver(false);
             return true;
         }
         return false;
@@ -140,7 +140,7 @@ public class                    WebServerActivity extends MITMActivity {
         Log.d(TAG, "onDestroy");
         super.onDestroy();
         stopAndroidWebServer();
-        mSingleton.setwebSpoofed(false);
+        MitManager.getInstance().stopWebserver(false);
    }
 
 }

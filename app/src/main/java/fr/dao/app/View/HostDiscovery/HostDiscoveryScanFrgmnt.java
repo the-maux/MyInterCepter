@@ -26,13 +26,11 @@ import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickList
 import java.util.ArrayList;
 
 import fr.dao.app.Core.Configuration.Utils;
-import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Database.DBNetwork;
 import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
-import fr.dao.app.Core.Network.NetDiscovering;
-import fr.dao.app.Core.Nmap.Fingerprint;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
+import fr.dao.app.Model.Target.State;
 import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
 import fr.dao.app.View.Scan.NmapActivity;
@@ -41,7 +39,7 @@ import fr.dao.app.View.ZViewController.Adapter.OSFilterAdapter;
 import fr.dao.app.View.ZViewController.Dialog.RV_dialog;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
-public class HostDiscoveryScanFrgmnt extends MyFragment {
+public class                        HostDiscoveryScanFrgmnt extends MyFragment {
     private String                  TAG = "HostDiscoveryScanFrgmnt";
     private HostDiscoveryActivity   mActivity;
     private ArrayList<Host>         mHosts = new ArrayList<>();
@@ -69,9 +67,9 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
         initSwipeRefresh();
         if (mSingleton.hostList != null && !mSingleton.hostList.isEmpty()) {
             mHostLoaded = true;
-            mActivity.actualNetwork = mSingleton.actualNetwork;
+            mActivity.actualNetwork = mSingleton.CurrentNetwork;
             onHostActualized(mSingleton.hostList);
-        } else if (!mHostLoaded) {
+        } else if (!mHostLoaded) {//To not reload for nothing
             start();
         }
     }
@@ -81,10 +79,10 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
         Log.d(TAG, "onResume::scan discovery host :" + mHostAdapter.getItemCount());
         Log.d(TAG, "onResume::scan discovery hostList :" + mHosts.size());
         if (mHosts.size() == 0) {
-            mActivity.setToolbarTitle(mSingleton.network.ssid,
+            mActivity.setToolbarTitle(mSingleton.NetworkInformation.ssid,
                     "Searching devices");
         } else {
-            mActivity.setToolbarTitle(mSingleton.network.ssid,
+            mActivity.setToolbarTitle(mSingleton.NetworkInformation.ssid,
                     mHosts.size() + " device" + ((mHosts.size() > 1) ? "s" : ""));
         }
         if (mHosts == null || mHosts.isEmpty())
@@ -125,7 +123,6 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
         if (mHosts != null && !mHosts.isEmpty())
             mHostAdapter.updateHostList(mHosts);
     }
-
     public void                     initSearchView(SearchView searchView, final Toolbar toolbar) {
         searchView.setGravity(Gravity.END);
         searchView.setOnSearchClickListener(new View.OnClickListener() {
@@ -156,24 +153,23 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
     }
 
     public boolean                  start() {
-        mActivity.setToolbarTitle("Scanner", "Discovering Network");
+        mActivity.setToolbarTitle("Scanner", "Discovering NetworkInformation");
         if (!isWaiting()) {
             if (mScannerControler.run(false)) {
-                //TODO: if its a refreshing don't unload list of host
                 init_prologueScan();
                 mActivity.initMonitor();
                 mActivity.initTimer();
                 mActivity.progressAnimation();
-                Log.d(TAG, "start -> true");
+                Log.d(TAG, "Scanning is started");
                 mHostLoaded = false;
                 return true;
             } else {
-                Log.d(TAG, "start -> false no connection");
+                Log.d(TAG, "Scanning is not launched");
                 mEmptyList.setVisibility(View.VISIBLE);
                 mEmptyList.setText("No connection detected");
             }
         } else {
-            Log.d(TAG, "start -> false, already loading");
+            Log.d(TAG, "Scanning, already loading => Interupt the double start");
             mActivity.showSnackbar("Patientez, loading en cours");
         }
         return false;
@@ -182,7 +178,7 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
     private void                    init_prologueScan() {
         /**
          * TODO:
-         * + Get Last list of host from this SSID where Gateway.mac.equals(mSingleton.Network.gateway.mac)
+         * + Get Last list of host from this SSID where Gateway.mac.equals(mSingleton.NetworkInformation.gateway.mac)
          *      -> If not same Mac Alert we détected a roaming. Have to restart the process
          * - IF ITS THE FIST SCAN print the list of host in degraded mode
          * - IF You already have a lit:
@@ -205,7 +201,7 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
     }
 
     public void                     updateStateOfHostAfterIcmp(Network actualNetwork) {
-        mSingleton.actualNetwork = actualNetwork;
+        mSingleton.CurrentNetwork = actualNetwork;
         mActivity.actualNetwork = actualNetwork;
         mHosts = actualNetwork.listDevices();
         mHostAdapter.updateHostList(actualNetwork.listDevices());
@@ -216,21 +212,21 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
             public void run() {
                 int online = 0;
                 for (Host host : hosts) {
-                    if (host.state == Host.State.ONLINE)
+                    if (host.state == State.ONLINE)
                         online++;
                 }
                 mHosts = hosts;
                 mHostLoaded = true;
                 mActivity.setProgressState(mActivity.MAXIMUM_PROGRESS*2);
                 mSingleton.hostList = mHosts;
-                mActivity.setToolbarTitle(mSingleton.network.ssid,
+                mActivity.setToolbarTitle(mSingleton.NetworkInformation.ssid,
                         "(" + online + "/" + hosts.size()+ ") device" + ((hosts.size() > 1) ? "s" : ""));
                 Log.d(TAG, "onHostActualized: " + ((mSingleton.hostList == null) ? "null" : mSingleton.hostList.size()));
                 mHostAdapter.updateHostList(mHosts);
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
                 mSwipeRefreshLayout.setRefreshing(false);
                 mActivity.onScanOver();
-                DBNetwork.updateHostOfSessions(mSingleton.actualNetwork, hosts, mHostAdapter.getOsList());
+                DBNetwork.updateHostOfSessions(mSingleton.CurrentNetwork, hosts, mHostAdapter.getOsList());
             }
         });
     }

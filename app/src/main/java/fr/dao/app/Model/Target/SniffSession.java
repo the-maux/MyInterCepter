@@ -1,7 +1,5 @@
 package fr.dao.app.Model.Target;
 
-import android.util.Log;
-
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -25,7 +23,7 @@ public class                SniffSession extends Model {
     public Date             date;
 
     @Column(name = "Network")
-    public Network          session;
+    public Network network;
 
     @Column(name = "Devices")
     public String           listDevicesSerialized;
@@ -34,7 +32,6 @@ public class                SniffSession extends Model {
     public List<Host>       listDevices() {
         if (listDevices == null) {
             listDevices = DBHost.getListFromSerialized(listDevicesSerialized);
-            Log.d(NAME_COLUMN, "Liste devices deserialized " + listDevices.size() + " devices");
         }
         return listDevices;
     }

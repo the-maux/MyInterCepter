@@ -14,21 +14,28 @@ import java.util.List;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.R;
 import fr.dao.app.View.Sniff.SniffActivity;
-import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Adapter.Holder.PcapHolder;
+import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
+import fr.dao.app.View.ZViewController.Dialog.PcapListerDialogFragment;
 import fr.dao.app.View.ZViewController.Fragment.PcapListerFragment;
 
 public class                    PcapFileAdapter extends RecyclerView.Adapter<PcapHolder> {
     private String              TAG = "AccessPointAdapter";
     private Activity            mActivity;
     private List<File>          mPcaps;
-    private PcapListerFragment  pcapListerFragment;
+    private PcapListerDialogFragment  pcapListerDialogFragment = null;
 
-    public                      PcapFileAdapter(Activity activity, List<File> pcaps, PcapListerFragment pcapListerFragment) {
+    public                      PcapFileAdapter(Activity activity, List<File> pcaps) {
         this.mActivity = activity;
         this.mPcaps = pcaps;
-        this.pcapListerFragment = pcapListerFragment;
     }
+
+    public                      PcapFileAdapter(Activity activity, List<File> pcaps, PcapListerDialogFragment pcapListerFragment) {
+        this.mActivity = activity;
+        this.mPcaps = pcaps;
+        this.pcapListerDialogFragment = pcapListerFragment;
+    }
+
 
     public PcapHolder           onCreateViewHolder(ViewGroup parent, int viewType) {
         return new PcapHolder(LayoutInflater.from(parent.getContext())
@@ -48,6 +55,7 @@ public class                    PcapFileAdapter extends RecyclerView.Adapter<Pca
         holder.title.setOnClickListener(onFocusPcapFile(pcap));
         holder.subtitle.setOnClickListener(onFocusPcapFile(pcap));
         holder.icon.setOnClickListener(onFocusPcapFile(pcap));
+        holder.forward.setVisibility(View.GONE);
         MyGlideLoader.loadDrawableInImageView(mActivity, R.drawable.pcapfile, holder.icon, false);
     }
 
@@ -58,8 +66,8 @@ public class                    PcapFileAdapter extends RecyclerView.Adapter<Pca
                 Intent intent = new Intent(mActivity, SniffActivity.class);
                 Log.d(TAG, "newIntent Pcap:"+pcap.getPath());
                 intent.putExtra("Pcap", pcap.getPath());
-                if (pcapListerFragment != null)
-                    pcapListerFragment.dismiss();
+                if (pcapListerDialogFragment != null)
+                    pcapListerDialogFragment.dismiss();
                 mActivity.startActivity(intent);
             }
         };

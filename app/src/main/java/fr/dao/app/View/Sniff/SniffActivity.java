@@ -27,10 +27,10 @@ import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Tcpdump.Tcpdump;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MITMActivity;
-import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
-import fr.dao.app.View.ZViewController.Fragment.PcapListerFragment;
+import fr.dao.app.View.ZViewController.Dialog.PcapListerDialogFragment;
+import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 public class                    SniffActivity extends MITMActivity {
     private String              TAG = "SniffActivity";
@@ -44,16 +44,23 @@ public class                    SniffActivity extends MITMActivity {
     private ImageButton         SwitchViewBackBtn;
     private boolean             readerFragment = false;
 
+    /**
+     * KAN STOP LE VOYANT RESTE VERT ET LE TIMER CONTINUE + Le layout header est décalé vers le bas
+     * Pk lest Notes ne s'inscrive plus ?
+     * @param savedInstanceState
+     */
     protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wireshark);
+        Log.d(TAG, "onCreate");
+        setContentView(R.layout.activity_sniffer);
         initXml();
         init(getIntent());
     }
 
     private void                init(Intent intent) {
         String PcapFilePath = intent  == null ? null : intent.getStringExtra("Pcap");
-        if (PcapFilePath == null) {
+        if (PcapFilePath == null && mFragment == null) {// || !mFragment.getClass().getName().contentEquals(SniffReaderFrgmnt.class.getName()))
+            Log.e(TAG, "Creating new SniffLiveFrgmnt");
             mFragment = new SniffLiveFrgmnt();
             hideBottomBar();
             if (intent != null && intent.getStringExtra("macAddress") != null) {// FROM HOSTDETAILACTIVITY
@@ -75,9 +82,10 @@ public class                    SniffActivity extends MITMActivity {
                 setToolbarTitle("Sniffer", (mSingleton.hostList == null) ? "0" : mSingleton.hostList.size() + " target");
             }
             initSettings();
-            initNavigationBottomBar(SNIFFER, true);
+            initNavigationBottomBar(SNIFFER);
             ViewAnimate.FabAnimateReveal(mInstance, mFab);
-        } else {
+        } else if (PcapFilePath != null){
+            Log.d(TAG, "Pcap Reading mode activated");
             hideBottomBar();
             ViewAnimate.FabAnimateHide(mInstance, mFab);
             findViewById(R.id.navigation).setVisibility(View.GONE);
@@ -86,8 +94,11 @@ public class                    SniffActivity extends MITMActivity {
             Bundle bundle = new Bundle();
             bundle.putString("Pcap", PcapFilePath);
             mFragment.setArguments(bundle);
-            setToolbarTitle(PcapFilePath.replace(mSingleton.Settings.PcapPath, "")
-                    .replace("_", " ").replace(".pcap", ""),"Loading");
+            String Title = PcapFilePath.replace(mSingleton.Settings.PcapPath, "")
+                    .replace("_", " ").replace(".pcap", "");
+            String subtitle = Title.substring(PcapFilePath.replace(mSingleton.Settings.PcapPath, "").indexOf("_")+1, Title.length());//TODO: better cut than _, maybe ___ :p ?
+            Title = PcapFilePath.replace(mSingleton.Settings.PcapPath, "").substring(0, PcapFilePath.replace(mSingleton.Settings.PcapPath, "").indexOf("_"));
+            setToolbarTitle(Title,subtitle);
         }
         if (!readerFragment)
             ViewAnimate.setVisibilityToVisibleQuick(SwitchViewBackBtn);
@@ -100,18 +111,23 @@ public class                    SniffActivity extends MITMActivity {
         init(intent);
     }
 
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume");
+    }
+
     private void                initXml() {
         mCoordinatorLayout = findViewById(R.id.Coordonitor);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
         //mFrame_container = findViewById(R.id.frame_container);
         mProgressBar =  findViewById(R.id.progressBar);
-        mAppBar = findViewById(R.id.appBarLayout);
+        mAppBar = findViewById(R.id.appBar);
         mToolbar = findViewById(R.id.toolbar);
         mFab =  findViewById(R.id.fab);
         mFab.setOnClickListener(onclickFab());
         MyGlideLoader.loadDrawableInImageView(this, R.drawable.ic_sniff_barbutton, (ImageView) findViewById(R.id.OsImg), true);
         SwitchViewBackBtn = findViewById(R.id.SwitchViewBackBtn);
-        findViewById(R.id.history).setOnClickListener(onClickHistory());
+        findViewById(R.id.history).setOnClickListener(onClickPcaps());
         onSwitchViewClicked();
         mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -142,7 +158,7 @@ public class                    SniffActivity extends MITMActivity {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.frame_container, mFragment)
-                    //.addToBackStack(fragment.getClass().getName()) TANT KE PAS DE SETTINGS NO BACKSTACK
+                    //.addToBackStack(fragment.getClass().getName())// TANT KE PAS DE SETTINGS NO BACKSTACK
                     .commit();
         } catch (IllegalStateException e) {
             showSnackbar("Error in fragment: " + e.getCause().getMessage(), -1);
@@ -153,7 +169,6 @@ public class                    SniffActivity extends MITMActivity {
 
     private View.OnClickListener onclickFab() {
         return new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
                 if (mFragment.start()) {
                     mProgressBar.setVisibility(View.VISIBLE);
@@ -219,7 +234,6 @@ public class                    SniffActivity extends MITMActivity {
     public void                 onError() {
         Log.d(TAG, "onError");
         mInstance.runOnUiThread(new Runnable() {
-            @Override
             public void run() {
                 updateNotifications();
                 setToolbarTitle(null, "Error in processing");
@@ -239,13 +253,13 @@ public class                    SniffActivity extends MITMActivity {
         });
     }
 
-    private View.OnClickListener onClickHistory() {
+    private View.OnClickListener onClickPcaps() {
         return new View.OnClickListener() {
             public void onClick(View v) {
                 if (Tcpdump.isRunning()) {
                     showSnackbar("You cant load pcap while sniffing", -1);
                 } else {
-                    PcapListerFragment.newInstance().show(getSupportFragmentManager(), "");
+                    PcapListerDialogFragment.newInstance().show(getSupportFragmentManager(), "");
                 }
             }
         };
@@ -253,7 +267,6 @@ public class                    SniffActivity extends MITMActivity {
 
     public void                 setToolbarTitle(final String title, final String subtitle) {
         mInstance.runOnUiThread(new Runnable() {
-            @Override
             public void run() {
                 if (title != null)
                     mToolbar.setTitle(title);
@@ -275,15 +288,18 @@ public class                    SniffActivity extends MITMActivity {
 
     public void                 onTcpdumpstopped() {
         mInstance.runOnUiThread(new Runnable() {
-            @Override
             public void run() {
                 mProgressBar.setVisibility(View.GONE);
                 mFab.setImageResource(R.drawable.ic_media_play);
+
             }
         });
     }
 
     public void                 onBackPressed() {
         super.onBackPressed();
+    }
+
+    public void                 ReadingMode() {
     }
 }

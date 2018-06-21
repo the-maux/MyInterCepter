@@ -758,7 +758,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="2dp"
             android:layout_marginRight="4dp"
-            android:text="4 services discovered on network"
+            android:text="4 services discovered on NetworkInformation"
             android:textColor="@color/primary_text"
             android:textSize="12sp"
             android:textStyle="italic" />

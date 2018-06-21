@@ -10,30 +10,26 @@ import fr.dao.app.Core.Tcpdump.DashboardSniff;
 import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.View.ZViewController.Adapter.SniffPacketsAdapter;
 
-public class SniffDispatcher {
+public class                        SniffDispatcher {
     private String                  TAG = "SniffDispatcher";
     private java.util.Queue         queue = new java.util.LinkedList();
-    private SniffActivity mActivity;
     private RecyclerView            mRV_Wireshark;
-    private boolean                 mIsRunning = false, mAutoscroll = true, isDashboardMode;
+    private boolean                 mIsRunning = false, mAutoscroll = true, isDashboardMode = false;
     private int                     REFRESH_TIME = 800;
     private ArrayList<Trame>        TrameBuffer = new ArrayList();
     private DashboardSniff          mDashboard;
     private RecyclerView.Adapter    mAdapterWireshark;
 
-    public SniffDispatcher(RecyclerView.Adapter adapter, boolean isDashboardMode,
-                           RecyclerView recyclerView, SniffActivity activity) {
+    public SniffDispatcher(RecyclerView recyclerView, RecyclerView.Adapter adapter, boolean isDashboardMode) {
         mAdapterWireshark = adapter;
         mIsRunning = true;
-        mActivity = activity;
         mRV_Wireshark = recyclerView;
         this.isDashboardMode = isDashboardMode;
         adapterRefreshDeamon();
     }
 
-    public int                      flush() {
-        //Log.d(TAG, "flushing");
-        return ((SniffPacketsAdapter) mAdapterWireshark).flush(TrameBuffer);
+    public void                     setDashboard(DashboardSniff dashboard) {
+        this.mDashboard = dashboard;
     }
 
     private void                    adapterRefreshDeamon() {
@@ -49,6 +45,28 @@ public class SniffDispatcher {
         }
     }
 
+    public synchronized void        addToQueue(Trame o) {
+        queue.add(o);
+        notifyAll();
+    }
+
+    private synchronized Trame      pop() {
+        Trame msg;
+        while (queue.isEmpty()) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                return null;
+            }
+        }
+        msg = (Trame)queue.remove();
+        return msg;
+    }
+
+    public int                      flush() {
+        //Log.d(TAG, "flushing");
+        return ((SniffPacketsAdapter) mAdapterWireshark).flush(TrameBuffer);
+    }
     private synchronized void       publishNewTrame() {
         mRV_Wireshark.post(new Runnable() {
             @Override
@@ -78,35 +96,12 @@ public class SniffDispatcher {
             }
         });
     }
-
-    private synchronized Trame      pop() {
-        Trame msg;
-        while (queue.isEmpty()) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                return null;
-            }
-        }
-        msg = (Trame)queue.remove();
-        return msg;
-    }
-
-    public synchronized void        addToQueue(Trame o) {
-        queue.add(o);
-        notifyAll();
+    public void                     switchOutputType(boolean isDashboard) {
+        this.isDashboardMode = isDashboard;
     }
 
     public synchronized void        stop() {
         mIsRunning = false;
-    }
-
-    public void                     setDashboard(DashboardSniff dashboard) {
-        this.mDashboard = dashboard;
-    }
-
-    public void                     switchOutputType(boolean isDashboard) {
-        this.isDashboardMode = isDashboard;
     }
 
     public void                     reset() {

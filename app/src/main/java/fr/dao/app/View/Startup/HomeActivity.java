@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
@@ -24,35 +26,38 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
+import fr.dao.app.Core.Database.DBSessions;
 import fr.dao.app.R;
 import fr.dao.app.View.DashBoard.DashboardActivity;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
 import fr.dao.app.View.Settings.SettingsActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
+import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 
 public class                    HomeActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
     private HomeActivity        mInstance = this;
     private CoordinatorLayout   mCoordinatorLayout;
     private CardView            blue_card, dashboard_card, settings_card, red_card;
-    private RadioButton         radioButton, radioButton2, radioButton3;
     private int                 MAXIMUM_TRY_PERMISSION = 5, try_permission = 0;
     private View                monitorRoot, monitorPermission, monitorUpdated;
     private TextView            TV_Root, TV_Permission, TV_Updated;
     private ProgressBar         PB_Root, PB_Permission, PB_Updated;
+    private CardView            cardRoot, cardPermission, cardUpdated;
     private CircleImageView     statusRoot, statusPermission, statusUpdated;
     private static final int    PERMISSIONS_MULTIPLE_REQUEST = 123;
+    private Singleton           mSingleton = Singleton.getInstance();
 
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        mSingleton.init(this);
         initXml();
         init();
     }
 
     protected void              onPostResume() {
         super.onPostResume();
-        Singleton.getInstance().init(this);
         getRootPermission();
         getAndroidPermission();
     }
@@ -74,10 +79,20 @@ public class                    HomeActivity extends MyActivity {
         statusUpdated = monitorUpdated.findViewById(R.id.statusIconCardView);
         TV_Root.setText("Root");
         TV_Permission.setText("Permission");
-        TV_Updated.setText("New release");
+        TV_Updated.setText("Internet");
         PB_Root = monitorRoot.findViewById(R.id.progressBar_monitor);
         PB_Permission = monitorPermission.findViewById(R.id.progressBar_monitor);
         PB_Updated = monitorUpdated.findViewById(R.id.progressBar_monitor);
+        ViewAnimate.FabAnimateReveal(mInstance, monitorRoot, new Runnable() {
+            public void run() {
+
+            }
+        });
+        ViewAnimate.FabAnimateReveal(mInstance, monitorPermission, new Runnable() {
+            public void run() {
+            }
+        });
+        ViewAnimate.FabAnimateReveal(mInstance, monitorUpdated, null);
     }
 
     private void                init() {
@@ -85,12 +100,25 @@ public class                    HomeActivity extends MyActivity {
         blue_card.setOnClickListener(onDefenseClicked());
         settings_card.setOnClickListener(onSettingsClick());
         dashboard_card.setOnClickListener(onDashboardClick());
+        defensifCheck();
         initBottomMonitor();
+        mSingleton.Session = DBSessions.createOrUpdateSession();
+    }
+
+    private void                defensifCheck() {
+        if (mSingleton.NetworkInformation == null || mSingleton.NetworkInformation.myIp == null) {
+            showSnackbar("You need to be connected to a NetworkInformation");
+            statusUpdated.setImageResource(R.color.offline_color);
+        } else {
+            statusUpdated.setImageResource(R.color.online_color);
+        }
     }
 
     private void                initBottomMonitor() {
         statusRoot.setImageResource(R.color.material_deep_orange_400);
         statusPermission.setImageResource(R.color.material_deep_orange_400);
+        statusPermission.setImageResource(R.color.material_deep_orange_400);
+
     }
 
     private void                getAndroidPermission() {
@@ -115,45 +143,71 @@ public class                    HomeActivity extends MyActivity {
         }
         getAndroidPermission();
     }
-    private View.OnClickListener onDashboardClick() {
-        return new View.OnClickListener() {
-            public void onClick(View view) {
-                Utils.vibrateDevice(mInstance, 100);
-               startActivity(new Intent(mInstance, DashboardActivity.class));
-            }
-        };
-    }
-
-    private View.OnClickListener onSettingsClick() {
-        return new View.OnClickListener() {
-            public void onClick(View view) {
-                Utils.vibrateDevice(mInstance, 100);
-                startActivity(new Intent(mInstance, SettingsActivity.class));
-            }
-        };
-    }
 
     private View.OnClickListener onDefenseClicked() {
         return new View.OnClickListener() {
             public void onClick(View view) {
                 Utils.vibrateDevice(mInstance, 100);
-                startActivity(new Intent(mInstance, DefenseHomeActivity.class));
+                Intent intent = new Intent(mInstance, DefenseHomeActivity.class);
+                Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_defense), "logo_defense2");
+                Pair<View, String> p2 = Pair.create(findViewById(R.id.blue_card), "rootViewTransition");
+                Pair<View, String> p3 = Pair.create(findViewById(R.id.title_defense), "title");
+                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2, p3).toBundle());
+            }
+        };
+    }
+    private View.OnClickListener onDashboardClick() {
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+                Utils.vibrateDevice(mInstance, 100);
+                Intent intent = new Intent(mInstance, DashboardActivity.class);
+                Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_dashboard), "logo_activity");
+                Pair<View, String> p2 = Pair.create(findViewById(R.id.dashboard_card), "rootViewTransition");
+                Pair<View, String> p3 = Pair.create(findViewById(R.id.title_dashboard), "title");
+                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p2).toBundle());
+            }
+        };
+    }
+    private View.OnClickListener onSettingsClick() {
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+                Utils.vibrateDevice(mInstance, 100);
+                Intent intent = new Intent(mInstance, SettingsActivity.class);
+                Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_settings), "logo_activity");
+                Pair<View, String> p2 = Pair.create(findViewById(R.id.dashboard_card), "rootViewTransition");
+                Pair<View, String> p3 = Pair.create(findViewById(R.id.title_settings), "title");
+                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2, p3).toBundle());
+            }
+        };
+    }
+    private View.OnClickListener onAttackclicked() {
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+                Utils.vibrateDevice(mInstance);
+                runOnThreadDelay(new Runnable() {
+                    public void run() {
+                        try {
+                            Thread.sleep(40);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        Intent intent = new Intent(mInstance, HostDiscoveryActivity.class);
+                        Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_attack), "logo_activity");
+                        Pair<View, String> p3 = Pair.create(findViewById(R.id.title_attack), "title");
+                        Pair<View, String> p2 = Pair.create(findViewById(R.id.red_card), "rootViewTransition");
+                        startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2, p3).toBundle());
+                    }
+                });
             }
         };
     }
 
-    private View.OnClickListener onAttackclicked() {
-        return new View.OnClickListener() {
-            public void onClick(View view) {
-                Utils.vibrateDevice(mInstance, 100);
-                startActivity(new Intent(mInstance, HostDiscoveryActivity.class));
-            }
-        };
+    private void                runOnThreadDelay(Runnable runnable) {
+        mInstance.runOnUiThread(runnable);
     }
 
     private void                getRootPermission() {
         PB_Root.setVisibility(View.VISIBLE);
-        Log.d(TAG, "getRootPermission");
         if (rootCheck()) {
             statusRoot.setImageDrawable(new ColorDrawable(getResources().getColor(R.color.online_color)));
             PB_Root.setVisibility(View.GONE);

@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +22,12 @@ import fr.dao.app.Core.Configuration.Comparator.Comparators;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Model.Target.Host;
+import fr.dao.app.Model.Target.State;
 import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
 import fr.dao.app.View.HostDetail.HostDetailActivity;
-import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Adapter.Holder.HostDiscoveryHolder;
+import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 
 
 public class                    HostDiscoveryAdapter extends RecyclerView.Adapter<HostDiscoveryHolder> {
@@ -56,7 +58,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         String ipHostname = host.ip + ((host.getName().contains(host.ip)) ? "" : " [" + host.getName() + "]");
         holder.ipAndHostname.setText(ipHostname);
         holder.mac.setText(host.mac);
-        if (host.state == Host.State.FILTERED) {
+        if (host.state == State.FILTERED) {
             pushThisShyGuyToFront(holder, host);
         }
         //String os = host.os.contains("Unknow") ? "No os information" : host.os;
@@ -67,7 +69,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         else
             printHostState(holder, host);
         checkedBehavior(holder, host, position);
-        holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity,        /*Special background to notice my device*/
+        holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity, /*Special background to notice my device*/
                 (host.isItMyDevice) ? R.color.primary_dark : R.color.cardview_dark_background));
         MyGlideLoader.setOsIcon(host, holder.osIcon);
         setAnimation(holder.cardView, holder);
@@ -114,6 +116,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
     private void                onHostChecked(final HostDiscoveryHolder holder, Host host, final int position) {
         Utils.vibrateDevice(mActivity);
         host.selected = !host.selected;
+        Log.d(TAG, "onHostChecked:"+ host.selected);
         holder.selected.setSelected(host.selected);
         mHost_RV.post(new Runnable() {
             @Override
@@ -137,8 +140,13 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
             public boolean onLongClick(View v) {
                 mActivity.runOnUiThread(new Runnable() {
                     public void run() {
-                        host.dumpMe();
                         Utils.vibrateDevice(mActivity);
+                    }
+                });
+                mActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        //host.dumpMe();
+
                         ActivityOptionsCompat options;
                         Intent intent = new Intent(mActivity, HostDetailActivity.class);
                         Pair<View, String> p1 = Pair.create((View)holder.osIcon, "hostPicture");
@@ -222,6 +230,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                 notifyDataSetChanged();
             }
         });
+        Log.d(TAG, "updateHostList");
     }
 
     public void                 setAnimation(CardView cardView, HostDiscoveryHolder holder) {

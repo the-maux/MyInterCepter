@@ -11,10 +11,11 @@ import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Network.IPv4Utils;
 import fr.dao.app.Core.Network.NetDiscovering;
-import fr.dao.app.Core.Nmap.Fingerprint;
-import fr.dao.app.Core.Nmap.NmapControler;
+import fr.dao.app.Core.Scan.Fingerprint;
+import fr.dao.app.Core.Scan.NmapControler;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
+import fr.dao.app.Model.Target.State;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryScanFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 
@@ -63,7 +64,7 @@ public class                        NetworkDiscoveryControler {
 
     public boolean                   run(boolean isJustCheckingWhoIsAlive) {
         Log.i(TAG, "run::WifiInit");
-        if (!NetDiscovering.initNetworkInfo(mActivity) || !mSingleton.network.updateInfo().isConnectedToNetwork()) {
+        if (!NetDiscovering.initNetworkInfo(mActivity) || !mSingleton.NetworkInformation.updateInfo().isConnectedToNetwork()) {
             mActivity.showSnackbar("No wifi connection detected");
             Log.i(TAG, "No wifi connection detected");
             return false;
@@ -89,7 +90,7 @@ public class                        NetworkDiscoveryControler {
         mActivity.setProgressState(0);
         new Thread(new Runnable() {
             public void run() {
-                new IcmpScanNetmask(new IPv4Utils(mSingleton.network), mInstance);
+                new IcmpScanNetmask(new IPv4Utils(mSingleton.NetworkInformation), mInstance);
             }
         }).start();
         Log.i(TAG, "startScan::IcmpScanNetmask::started");
@@ -102,30 +103,30 @@ public class                        NetworkDiscoveryControler {
         mActivity.setToolbarTitle(null, ipsreachables.size() + " hosts detected");
         ArrayList<String> basicHost = NetDiscovering.readARPTable(ipsreachables);
         Log.i(TAG, "onArpScanOver::readARPTable::"+ ipReachable.size() + " device(s) from ARP");
-        Singleton.getInstance().actualNetwork = updateHostStatus(basicHost);
+        Singleton.getInstance().CurrentNetwork = updateHostStatus(basicHost);
         if (isFromHostDiscoveryActivity) {
             Log.i(TAG, "onArpScanOver::mFragment.updateStateOfHostAfterIcmp");
-            mFragment.updateStateOfHostAfterIcmp(Singleton.getInstance().actualNetwork);
+            mFragment.updateStateOfHostAfterIcmp(Singleton.getInstance().CurrentNetwork);
         }
         mActivity.MAXIMUM_PROGRESS = basicHost.size();
         if (mSingleton.Settings.getUserPreferences().NmapMode > 0 && isFromHostDiscoveryActivity) {
             Log.i(TAG, "onArpScanOver::Nmap::TypeScan::"+mSingleton.Settings.getUserPreferences().NmapMode+"::StartingNmap");
-            new NmapControler(Singleton.getInstance().actualNetwork.listDevices(), this, Singleton.getInstance().actualNetwork, mActivity);
-            return;
-        }
-        if (isJustCheckingWhoIsAlive) {
-            Log.i(TAG, "onArpScanOver::Nmap::JustCheckingHostAlive::BypassNmap");
+            new NmapControler(Singleton.getInstance().CurrentNetwork, this, mActivity);
         } else {
-            Log.i(TAG, "onArpScanOver::Nmap::TypeScan::"+mSingleton.Settings.getUserPreferences().NmapMode+"::BypassNmap");
+            if (isJustCheckingWhoIsAlive) {
+                Log.i(TAG, "onArpScanOver::Nmap::JustCheckingHostAlive::BypassNmap");
+            } else {
+                Log.i(TAG, "onArpScanOver::Nmap::TypeScan::"+mSingleton.Settings.getUserPreferences().NmapMode+"::BypassNmap");
+            }
+            onScanFinished(Singleton.getInstance().CurrentNetwork.listDevices());
         }
-        onScanFinished(Singleton.getInstance().actualNetwork.listDevices());
     }
 
     private Network                    updateHostStatus(ArrayList<String> ipReachables) {
-        Network actualNetwork = mSingleton.actualNetwork;
+        Network actualNetwork = mSingleton.CurrentNetwork;
         int rax = 0;
         for (Host host : actualNetwork.listDevices()) {
-            host.state = Host.State.OFFLINE;
+            host.state = State.OFFLINE;
         }
         if (ipReachables != null)
             for (String ipAndMacReachable : ipReachables) {
@@ -135,7 +136,7 @@ public class                        NetworkDiscoveryControler {
                 boolean isHostInList = false;
                 for (Host host : actualNetwork.listDevices()) {
                     if (host.mac.contains(mac)) {
-                        host.state = Host.State.ONLINE;
+                        host.state = State.ONLINE;
                         isHostInList = true;
                         break;
                     }
@@ -149,15 +150,13 @@ public class                        NetworkDiscoveryControler {
                         Fingerprint.initHost(host);
                     }
                     DBHost.saveOrGetInDatabase(host);
-                    host.state = Host.State.ONLINE;
+                    host.state = State.ONLINE;
                     host.save();
                     actualNetwork.listDevices().add(host);
                 }
             }
-        actualNetwork.offensifAction = actualNetwork.offensifAction + 1;
-        actualNetwork.save();
         Log.i(TAG, "(" + (actualNetwork.listDevices().size() - rax) + " offline/ " + actualNetwork.listDevices().size() + "inCache) ");
-        mSingleton.actualNetwork = actualNetwork;
+        mSingleton.CurrentNetwork = actualNetwork;
         return actualNetwork;
     }
 

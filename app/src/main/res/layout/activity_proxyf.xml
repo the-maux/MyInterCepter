@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/spyPrimary"
+        android:transitionName="appBarTransition"
+        app:elevation="4dp">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/toptoolbar2"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/spyPrimary"
+            android:elevation="6dp"
+            android:paddingLeft="8dp"
+            android:visibility="visible">
+
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="@dimen/icon_toolbar_size"
+                android:layout_height="0dp"
+                android:elevation="4dp"
+                android:padding="2dp"
+                android:soundEffectsEnabled="true"
+                android:transitionName="wiresharkIcon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/toolbar2"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_max="40dp"
+                app:layout_constraintWidth_min="@dimen/icon_toolbar_size"
+                app:srcCompat="@mipmap/ic_spy" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/searchView"
+                app:layout_constraintHorizontal_weight="5"
+                app:layout_constraintStart_toEndOf="@+id/imageView2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:subtitle="Not started"
+                app:subtitleTextColor="@color/tint_svg"
+                app:title="Proxy"
+                app:titleTextColor="@android:color/primary_text_dark">
+
+            </android.support.v7.widget.Toolbar>
+
+
+            <ImageView
+                android:id="@+id/searchView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="8dp"
+                android:soundEffectsEnabled="true"
+                android:src="@drawable/ic_search_svg"
+                android:tint="@color/tint_svg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/action_add_host"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/toolbar2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/action_add_host"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:soundEffectsEnabled="true"
+                android:src="@drawable/ic_list_svg"
+                android:tint="@color/tint_svg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/settingsMenu"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/searchView"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/settingsMenu"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginRight="8dp"
+                android:background="@android:color/transparent"
+                android:soundEffectsEnabled="true"
+                android:tint="@color/tint_svg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/action_add_host"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_more_svg" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toptoolbar2"
+            app:tabMode="scrollable">
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/listSpoof"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:soundEffectsEnabled="true"
+                android:text="GLOBAL" />
+
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/historique"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:soundEffectsEnabled="true"
+                android:text="CREDENTIALS" />
+
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/historique2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:soundEffectsEnabled="true"
+                android:text="RESSOURCES" />
+
+        </android.support.design.widget.TabLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
+
+
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="75dp"
+            android:layout_height="74dp"
+            android:layout_marginBottom="7dp"
+            android:layout_marginRight="7dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/navigation"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_stop"
+            android:visibility="gone"
+            app:backgroundTint="@color/spyPrimary"
+            app:fabSize="normal"
+            app:layout_constraintBottom_toTopOf="@+id/navigation"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/frame_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/navigation"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </FrameLayout>
+
+        <include
+            android:id="@+id/navigation"
+            layout="@layout/bottom_navigation_sniff"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:transitionName="navigation"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.design.widget.CoordinatorLayout>

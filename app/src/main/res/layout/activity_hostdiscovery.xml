@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:transitionName="rootViewTransition">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBarLayout"
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/backgroundtransition"
@@ -14,26 +15,13 @@
         android:paddingBottom="24dp"
         app:elevation="2dp">
 
+
         <android.support.constraint.ConstraintLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
+            android:layout_height="56dp"
             android:elevation="4dp">
 
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tabs"
-                android:background="#00FFFFFF"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
             <ImageView
                 android:id="@+id/OsImg"
@@ -41,28 +29,32 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 android:elevation="4dp"
-                android:tint="@color/tint_svg"
+                android:tint="@color/redteam_color"
                 android:transitionName="logo_activity"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toStartOf="@+id/toolbar2"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_fingerprint_svg" />
+                app:srcCompat="@drawable/target" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar2"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:visibility="visible"
+                android:transitionName="title"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toStartOf="@+id/searchViewRelative"
+                app:layout_constraintHorizontal_weight="5"
                 app:layout_constraintStart_toEndOf="@+id/OsImg"
                 app:layout_constraintTop_toTopOf="parent"
                 app:subtitle="Subtitle"
-                app:title="Title">
+                app:subtitleTextAppearance="@style/TextAppearance.AppCompat"
+                app:subtitleTextColor="@color/tint_svg"
+                app:title="Title"
+                app:titleTextAppearance="@style/TextAppearance.AppCompat">
 
             </android.support.v7.widget.Toolbar>
 
@@ -73,7 +65,7 @@
                 android:background="@android:color/transparent"
                 android:baselineAlignBottom="false"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
-                app:layout_constraintEnd_toStartOf="@+id/history"
+                app:layout_constraintEnd_toStartOf="@+id/OsFilter"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/toolbar2"
                 app:layout_constraintTop_toTopOf="parent"
@@ -84,13 +76,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
-                    android:background="@android:color/transparent"
                     android:gravity="right" />
             </RelativeLayout>
 
 
             <ImageView
-                android:id="@+id/history"
+                android:id="@+id/OsFilter"
                 android:layout_width="40dp"
                 android:layout_height="0dp"
                 android:baselineAlignBottom="false"
@@ -106,19 +97,18 @@
 
             <ImageView
                 android:id="@+id/settingsMenu"
-                android:layout_width="40dp"
-                android:layout_height="0dp"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:padding="4dp"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/history"
+                app:layout_constraintStart_toEndOf="@+id/OsFilter"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_min="45dp"
+                app:layout_constraintWidth_max="40dp"
                 app:srcCompat="@drawable/ic_more_svg" />
 
 
@@ -127,10 +117,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="65dp" />
+                app:layout_constraintGuide_begin="56dp" />
 
 
         </android.support.constraint.ConstraintLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tabs"
+            android:indeterminateOnly="true"
+            android:paddingTop="4dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline2" />
+
     </android.support.design.widget.AppBarLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -146,10 +151,10 @@
         android:src="@drawable/ic_search_svg"
         android:tint="@color/tint_svg"
         android:transitionName="fab"
-        android:visibility="gone"
+        android:visibility="visible"
         app:backgroundTint="@color/fab_color"
         app:fabSize="normal"
-        app:layout_anchor="@id/appBarLayout"
+        app:layout_anchor="@id/appBar"
         app:layout_anchorGravity="bottom|right|end" />
 
 
@@ -166,9 +171,10 @@
             app:layout_constraintBottom_toTopOf="@+id/Message"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_weight="9"></FrameLayout>
+            app:layout_constraintVertical_weight="9">
+
+        </FrameLayout>
 
         <TextView
             android:id="@+id/timer"
@@ -200,7 +206,7 @@
             android:padding="8dp"
             android:textColor="@color/accent_material_dark"
             android:textSize="12sp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

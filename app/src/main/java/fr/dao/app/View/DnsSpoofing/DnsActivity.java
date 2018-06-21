@@ -10,7 +10,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -21,16 +20,17 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 
+import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Dnsmasq.DnsmasqConfig;
 import fr.dao.app.Core.Dnsmasq.DnsmasqControl;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MITMActivity;
-import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
-import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Adapter.DnsLogsAdapter;
 import fr.dao.app.View.ZViewController.Adapter.DnsSpoofConfAdapter;
+import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
+import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Dialog.DialogQuestionWithInput;
 
 
@@ -40,14 +40,14 @@ public class                            DnsActivity extends MITMActivity {
     private CoordinatorLayout           mCoordinatorLayout;
     private AppBarLayout                appBarLayout;
     private Toolbar                     mToolbar;
-    private SearchView                  mSearchView;
+  //  private SearchView                  mSearchView;
     private ImageButton                 mAction_add_host, mSettingsBtn;
     private TabLayout                   mTabs;
     private RecyclerView                mDnsSpoof_RV;
     private RelativeLayout              mClipper;
     private TextView                    mAction_deleteall, mAction_import, mAction_export, textEmpty, title;
     private Singleton                   mSingleton = Singleton.getInstance();
-    private DnsmasqControl              mDnsSpoof = mSingleton.getDnsControler();
+    private DnsmasqControl              mDnsControler;
     private DnsSpoofConfAdapter         mDnsSpoofAdapter;
     private DnsLogsAdapter              mDnsConsoleAdapter;
     private String                      NAME_CONF_MENU = "Domains intercepted:", NAME_LOGS_MENU = "Dnsmasq logs:";
@@ -56,6 +56,7 @@ public class                            DnsActivity extends MITMActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dnsspoofing);
         initXml();
+        mDnsControler = MitManager.getInstance().getDnsControler();
         init();
     }
 
@@ -63,16 +64,16 @@ public class                            DnsActivity extends MITMActivity {
         initFab();
         initMenu();
         initTabs();
+        mDnsControler.setActivity(this);
         initRVConfiguration();
-        initSearchView();
-        initNavigationBottomBar(DNS, true);
-        mDnsSpoof.setActivity(this);
+      //  initSearchView();
+        initNavigationBottomBar(DNS);
     }
 
     private void                        initXml() {
         mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
         mToolbar = findViewById(R.id.toolbar2);
-        mSearchView = findViewById(R.id.searchView);
+        //mSearchView = findViewById(R.id.searchView);
         mAction_add_host = findViewById(R.id.action_add_host);
         mSettingsBtn = findViewById(R.id.history);
         mFab = findViewById(R.id.fab);
@@ -85,7 +86,7 @@ public class                            DnsActivity extends MITMActivity {
         textEmpty = findViewById(R.id.textEmpty);
         mTabs = findViewById(R.id.tabs);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
-        appBarLayout = findViewById(R.id.appBarLayout);
+        appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewCompat.setElevation(findViewById(R.id.topToolbar), 4);
@@ -98,7 +99,7 @@ public class                            DnsActivity extends MITMActivity {
 //        ViewAnimate.setVisibilityToVisibleQuick(mFab);
         ViewAnimate.FabAnimateReveal(mInstance, mFab);
 //        mFab.show();
-        if (mSingleton.isDnsControlstarted()) {
+        if (MitManager.getInstance().isDnsmasqRunning()) {
             mFab.setImageResource(R.mipmap.ic_stop);
         } else {
             mFab.setImageResource(R.drawable.ic_media_play);
@@ -107,11 +108,11 @@ public class                            DnsActivity extends MITMActivity {
             @Override
             public void onClick(View view) {
                 Utils.vibrateDevice(mInstance);
-                if (!mSingleton.isDnsControlstarted()) {
-                    mDnsSpoof.start();
+                if (!MitManager.getInstance().isDnsmasqRunning()) {
+                    mDnsControler.start();
                     mFab.setImageResource(R.drawable.ic_stop);
                 } else {
-                    mDnsSpoof.stop();
+                    mDnsControler.stop();
                     mFab.setImageResource(R.drawable.ic_media_play);
                 }
                 updateNotifications();
@@ -121,7 +122,6 @@ public class                            DnsActivity extends MITMActivity {
 
     private void                        initTabs() {
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getText().toString()) {
                     case "Domain":
@@ -134,8 +134,8 @@ public class                            DnsActivity extends MITMActivity {
                         break;
                 }
             }
-            @Override public void onTabUnselected(TabLayout.Tab tab) {}
-            @Override public void onTabReselected(TabLayout.Tab tab) {}
+            public void onTabUnselected(TabLayout.Tab tab) {}
+            public void onTabReselected(TabLayout.Tab tab) {}
         });
     }
 
@@ -157,7 +157,11 @@ public class                            DnsActivity extends MITMActivity {
         mAction_import.setOnClickListener(onClickTopMenu());
         mAction_export.setOnClickListener(onClickTopMenu());
         mClipper.setOnClickListener(onClickTopMenu());
-        setToolbarTitle(null, mDnsSpoof.getDnsConf().listDomainSpoofable.size() + " title spoofable");
+        int dns = MitManager.getInstance()
+                .getDnsControler() == null ? 0 :
+                mDnsControler.getDnsConf().listDomainSpoofable.size();
+        setToolbarTitle(null,
+                dns + " title spoofable");
     }
 
     private View.OnClickListener        onClickTopMenu() {
@@ -181,14 +185,14 @@ public class                            DnsActivity extends MITMActivity {
                                 if (nameOfFile.contains(".") || nameOfFile.length() < 4) {
                                     Snackbar.make(mCoordinatorLayout, "Syntax incorrect", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    mDnsSpoof.saveDnsConf(nameOfFile);
+                                    mDnsControler.saveDnsConf(nameOfFile);
                                 }
                             }
                         })
                                 .show();
                         break;
                     case R.id.action_deleteall:
-                        mDnsSpoof.clear();
+                        mDnsControler.clear();
                         mDnsSpoofAdapter.notifyDataSetChanged();
                         break;
                     case R.id.action_import:
@@ -205,7 +209,7 @@ public class                            DnsActivity extends MITMActivity {
                                 if (nameOfFile.contains(".") || nameOfFile.length() < 4) {
                                     Snackbar.make(mCoordinatorLayout, "Syntax incorrect", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    mDnsSpoof.saveDnsConf(nameOfFile);
+                                    mDnsControler.saveDnsConf(nameOfFile);
                                 }
                             }
                         }).show();
@@ -224,7 +228,7 @@ public class                            DnsActivity extends MITMActivity {
                 .setHintToTILFirstQuestion("Domain")
                 .setHintToEDFirstQuestion("Ex: google.com")
                 .setHintToTILSecoundQuestion("Ip address")
-                .setHintToEDSecoundQuestion("Ex: " + mSingleton.network.myIp);
+                .setHintToEDSecoundQuestion("Ex: " + mSingleton.NetworkInformation.myIp);
         dialog.onPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface d, int which) {
@@ -243,13 +247,13 @@ public class                            DnsActivity extends MITMActivity {
                     mySnackbar = Snackbar.make(mCoordinatorLayout, "Ip incorrect", Snackbar.LENGTH_LONG);
                     mySnackbar.setAction("RETRY", retryListene);
                 } else {
-                    mDnsSpoof.getDnsConf().addHost(ip, host);
+                    mDnsControler.getDnsConf().addHost(ip, host);
                     mDnsSpoofAdapter.notifyItemInserted(0);
                     mySnackbar = Snackbar.make(mCoordinatorLayout,  host + " -> " + ip, Snackbar.LENGTH_LONG);
                     mySnackbar.setAction("SAVE", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mDnsSpoof.getDnsConf().saveConf();
+                            mDnsControler.getDnsConf().saveConf();
                         }
                     });
                 }
@@ -260,19 +264,20 @@ public class                            DnsActivity extends MITMActivity {
     }
 
     private void                        initRVConfiguration() {
-        mDnsSpoofAdapter = new DnsSpoofConfAdapter(this, mDnsSpoof.getDnsConf().listDomainSpoofable);
+        //TODO: le mDnsControler est null car il est init qu'une fois alors que faut le get depuis Mitm
+        mDnsSpoofAdapter = new DnsSpoofConfAdapter(this, mDnsControler.getDnsConf().listDomainSpoofable);
         ViewAnimate.setVisibilityToVisibleQuick(mDnsSpoof_RV);
         mDnsSpoof_RV.setAdapter(mDnsSpoofAdapter);
         mDnsSpoof_RV.setHasFixedSize(true);
         mDnsSpoof_RV.setLayoutManager(new LinearLayoutManager(mInstance));
-        if (mDnsSpoof.getDnsConf().listDomainSpoofable.isEmpty()) {
+        if (mDnsControler.getDnsConf().listDomainSpoofable.isEmpty()) {
             Snackbar.make(mCoordinatorLayout, "No dnsmasq configuration could be loaded", Snackbar.LENGTH_LONG);
             Log.e(TAG, "No dnsmasq configuration saved");
         } else {
             textEmpty.setVisibility(View.GONE);
         }
-        mDnsConsoleAdapter = new DnsLogsAdapter(this, mDnsSpoof.mDnsLogs);
-        mDnsSpoof.setRV_Adapter(mDnsConsoleAdapter);
+        mDnsConsoleAdapter = new DnsLogsAdapter(this, mDnsControler.mDnsLogs);
+        mDnsControler.setRV_Adapter(mDnsConsoleAdapter);
     }
 
     private void                        initViewConsoleLogs() {
@@ -281,7 +286,7 @@ public class                            DnsActivity extends MITMActivity {
         mDnsSpoof_RV.setLayoutManager(new LinearLayoutManager(mInstance));
     }
 
-    private void                        initSearchView() {
+    /*private void                        initSearchView() {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             public boolean onQueryTextSubmit(String query) {
                 if (title.getText().toString().contains(NAME_CONF_MENU)) {//CONF VIEW
@@ -307,14 +312,14 @@ public class                            DnsActivity extends MITMActivity {
                 return false;
             }
         });
-    }
+    }*/
 
     public void                         onDnsmasqConfChanged(String msg) {
         Snackbar mySnackbar = Snackbar.make(mCoordinatorLayout, msg, Snackbar.LENGTH_LONG);
         mySnackbar.setAction("SAVE CONFIG", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDnsSpoof.getDnsConf().saveConf();
+                mDnsControler.getDnsConf().saveConf();
             }
         });
         mySnackbar.show();
@@ -350,7 +355,8 @@ public class                            DnsActivity extends MITMActivity {
                         .setMessage("Would you like to restart the dns process ?")
                         .setPositiveButton(getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                mDnsSpoof.start();
+                                mDnsControler.stop();
+                                mDnsControler.start();
                             }
                         })
                         .setNegativeButton(getResources().getString(android.R.string.no), null)

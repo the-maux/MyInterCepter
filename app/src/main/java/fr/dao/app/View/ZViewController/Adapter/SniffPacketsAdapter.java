@@ -19,8 +19,6 @@ import fr.dao.app.View.ZViewController.Adapter.Holder.WiresharkHolder;
 
 public class SniffPacketsAdapter extends RecyclerView.Adapter<WiresharkHolder> {
     private String              TAG = "SniffPacketsAdapter";
-/*    private CopyOnWriteArrayList<Trame> originalListOfTrames;
-    private CopyOnWriteArrayList<Trame> listOfTrame;*/
     private ArrayList<Trame>    originalListOfTrames;
     private ArrayList<Trame>    listOfTrame;
     private Activity            mActivity;
