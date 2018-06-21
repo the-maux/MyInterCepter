@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
@@ -21,6 +23,7 @@ import android.widget.Toast;
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.R;
 import fr.dao.app.View.Dora.DoraActivity;
+import fr.dao.app.View.Terminal.TerminalActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Adapter.Holder.MenuItemHolder;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
@@ -118,7 +121,11 @@ public class                    DefenseHomeActivity extends MyActivity {
                     holder.card_view.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             Utils.vibrateDevice(mActivity, 100);
-                            mActivity.showSnackbar(holder.titleCard.getText().toString());
+                            Intent intent = new Intent(mInstance, TerminalActivity.class);
+                            Pair<View, String> p1 = Pair.create((View)holder.logo_card, "LogoTransition");
+                            Pair<View, String> p2 = Pair.create((View)holder.titleCard, "title_transition");
+                            Pair<View, String> p3 = Pair.create((View)holder.card_view, "rootViewTransition");
+                            startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2, p3).toBundle());
                         }
                     });
                     break;
@@ -131,7 +138,10 @@ public class                    DefenseHomeActivity extends MyActivity {
                     holder.card_view.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             Utils.vibrateDevice(mActivity, 100);
-                            mActivity.startActivity(new Intent(mActivity, DoraActivity.class));
+                            Intent intent = new Intent(mInstance, DoraActivity.class);
+                            Pair<View, String> p1 = Pair.create((View)holder.titleCard, "title_transition");
+                            Pair<View, String> p2 = Pair.create((View)holder.card_view, "rootViewTransition");
+                            startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2).toBundle());
                         }
                     });
                     break;

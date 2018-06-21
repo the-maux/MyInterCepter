@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -16,13 +17,17 @@ import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 
 import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import fr.dao.app.Core.Configuration.GlideApp;
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
@@ -33,6 +38,8 @@ import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
 import fr.dao.app.View.Settings.SettingsActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 public class                    HomeActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
@@ -83,16 +90,42 @@ public class                    HomeActivity extends MyActivity {
         PB_Root = monitorRoot.findViewById(R.id.progressBar_monitor);
         PB_Permission = monitorPermission.findViewById(R.id.progressBar_monitor);
         PB_Updated = monitorUpdated.findViewById(R.id.progressBar_monitor);
+        statusRoot.setImageResource(R.color.material_deep_orange_400);
+        statusPermission.setImageResource(R.color.material_deep_orange_400);
+        statusPermission.setImageResource(R.color.material_deep_orange_400);
+        GlideApp.with(mInstance)
+                .load(R.drawable.bg3)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .transition(withCrossFade())
+                .placeholder(R.drawable.ico)
+                .into(new SimpleTarget<Drawable>() {
+                    @Override
+                    public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
+                        findViewById(R.id.rootView).setBackground(resource);
+                    }
+                });
+        ViewAnimate.FabAnimateReveal(mInstance, blue_card, new Runnable() {
+            public void run() {
+                ViewAnimate.FadeAnimateReveal(mInstance, red_card, new Runnable() {
+                    public void run() {
+                        ViewAnimate.FadeAnimateReveal(mInstance, dashboard_card, new Runnable() {
+                            public void run() {
+                                ViewAnimate.FadeAnimateReveal(mInstance, settings_card, null);
+                            }
+                        });
+                    }
+                });
+            }
+        });
         ViewAnimate.FabAnimateReveal(mInstance, monitorRoot, new Runnable() {
             public void run() {
-
+                ViewAnimate.FadeAnimateReveal(mInstance, monitorPermission, new Runnable() {
+                    public void run() {
+                        ViewAnimate.FadeAnimateReveal(mInstance, monitorUpdated, null);
+                    }
+                });
             }
         });
-        ViewAnimate.FabAnimateReveal(mInstance, monitorPermission, new Runnable() {
-            public void run() {
-            }
-        });
-        ViewAnimate.FabAnimateReveal(mInstance, monitorUpdated, null);
     }
 
     private void                init() {
@@ -101,7 +134,6 @@ public class                    HomeActivity extends MyActivity {
         settings_card.setOnClickListener(onSettingsClick());
         dashboard_card.setOnClickListener(onDashboardClick());
         defensifCheck();
-        initBottomMonitor();
         mSingleton.Session = DBSessions.createOrUpdateSession();
     }
 
@@ -112,13 +144,6 @@ public class                    HomeActivity extends MyActivity {
         } else {
             statusUpdated.setImageResource(R.color.online_color);
         }
-    }
-
-    private void                initBottomMonitor() {
-        statusRoot.setImageResource(R.color.material_deep_orange_400);
-        statusPermission.setImageResource(R.color.material_deep_orange_400);
-        statusPermission.setImageResource(R.color.material_deep_orange_400);
-
     }
 
     private void                getAndroidPermission() {

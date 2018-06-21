@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:transitionName="rootViewTransition">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
@@ -36,6 +37,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_toLeftOf="@+id/searchView"
                     android:minWidth="100dp"
+                    android:transitionName="title_transition"
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:subtitle="Easy Q.O.S"
                     app:title="Diagnostique D.O.R.A">

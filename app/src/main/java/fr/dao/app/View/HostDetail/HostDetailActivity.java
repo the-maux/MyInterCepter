@@ -181,7 +181,7 @@ public class                    HostDetailActivity extends MyActivity {
                 switch (classActivity) {
                     case NMAP:
                         intent = new Intent(mInstance, NmapActivity.class);
-                        p1  = Pair.create((View)fabBtn, "NmapIconTransition");
+                        p1  = Pair.create((View)fabBtn, "LogoTransition");
                         intent.putExtra("macAddress", getIntent().getExtras().getString("macAddress"));
                         break;
                     case VULN_SCAN:
@@ -191,7 +191,7 @@ public class                    HostDetailActivity extends MyActivity {
                         break;
                     case BLOCK_INTERNET:
                         intent = new Intent(mInstance, NmapActivity.class);
-                        p1  = Pair.create((View)fabBtn, "NmapIconTransition");
+                        p1  = Pair.create((View)fabBtn, "LogoTransition");
                         intent.putExtra("macAddress", getIntent().getExtras().getString("macAddress"));
                         break;
                     case SNIFFER:

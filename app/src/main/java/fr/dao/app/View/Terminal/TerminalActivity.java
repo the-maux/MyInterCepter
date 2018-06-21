@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -29,7 +30,7 @@ public class                    TerminalActivity extends MyActivity {
     private AppBarLayout        appBarLayout;
     private Toolbar             mToolbar;
     private TabLayout           mTabs;
-    private ImageView           mSettingsMenu, mScript, mScanType;
+    private ImageView           mSettingsMenu, mScript, mScanType, OsImg;
     private ProgressBar         mProgressBar;
 
     protected void              onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class                    TerminalActivity extends MyActivity {
         mSettingsMenu = findViewById(R.id.settingsMenu);
         mScript = findViewById(R.id.scriptBtn);
         mScanType = findViewById(R.id.typeScanBtn);
+        OsImg = findViewById(R.id.OsImg);
         mFab = findViewById(R.id.fab);
         appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -55,12 +57,21 @@ public class                    TerminalActivity extends MyActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
+        MyGlideLoader.loadDrawableInImageView(this, R.drawable.linuxicon, OsImg, true);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
+        mScanType.setVisibility(View.GONE);
+        mScript.setVisibility(View.GONE);
+        mToolbar.setTitle("Terminal");
+        mToolbar.setSubtitle("");
     }
 
     private void                init() {
         initFragment();
         ViewAnimate.FabAnimateReveal(mInstance, mFab);
+        //GET id to prompt
+        //checkId if 'sudo' in cmd
+        //Add buton + to open new terminal
+        //
     }
 
     private void                initFragment() {
