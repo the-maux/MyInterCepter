@@ -64,7 +64,7 @@ public class                    TerminalActivity extends MyActivity {
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
         mScanType.setVisibility(View.GONE);
         mScript.setImageResource(R.drawable.ic_add_circle);
-        mScript.setPadding(12,12,12,12);
+        mScript.setPadding(14,14,14,14);
         mToolbar.setTitle("Terminal");
         mToolbar.setSubtitle(Environment.getExternalStorageDirectory().getPath() + "/Dao/");
         initFragment();

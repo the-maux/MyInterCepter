@@ -17,6 +17,7 @@ public class                        Shell {
     private String                  USER = "shell";
     public String                   PROMPT = "<font color='red'>" + USER + "</font> " + "<font color='cyan'> $> </font>";
     private RootProcess             mProcess;
+    private boolean                 isComandRunning = false;
 
     public  Shell(TerminalActivity terminalActivity, TerminalFrgmnt frgmnt) {
         this.frgmnt = frgmnt;
@@ -30,12 +31,19 @@ public class                        Shell {
         new Thread(new Runnable() {
             public void run() {
                 BufferedReader reader = mProcess.getReader();
+                StringBuilder buffer = new StringBuilder("");
                 String read;
                 try {
                     while ((read = reader.readLine()) != null) {
-
-                        Log.d(TAG, "STDOUT[" + read + "]");
+                        if (read.contains("333333333333333333333333333333333333333333")) {
+                            isComandRunning = false;
+                            Log.d(TAG, "Command over");
+                            frgmnt.stdout(buffer.toString());
+                            buffer = new StringBuilder("");
+                        } else
+                            buffer.append(read).append("<br>");
                     }
+                    Log.d(TAG, "SHELL PROCESS OVER");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -43,16 +51,20 @@ public class                        Shell {
         }).start();
     }
 
-    public void                     exec(String cmd) {
-        Log.d(TAG, "exec:" + cmd);
-//        frgmnt.stdin();
-        if (cmd.contains("cd "))
-            updatePath();
-        frgmnt.stdin("Output: " + cmd);
-        updateUser();
-        mProcess.shell(cmd);
-
-
+    public boolean                  exec(String cmd) {
+        if (!isComandRunning) {
+            isComandRunning = true;
+            Log.d(TAG, "exec:" + cmd);
+            if (cmd.contains("cd "))
+                updatePath();
+            //frgmnt.stdin("Output: " + cmd);
+            updateUser();
+            mProcess.shell(cmd);
+            return isComandRunning;
+        } else {
+            Log.e(TAG, "Already in start");
+            return false;
+        }
     }
 
     private void                    updateUser() {

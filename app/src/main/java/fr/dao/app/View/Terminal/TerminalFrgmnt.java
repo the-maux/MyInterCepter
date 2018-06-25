@@ -1,5 +1,6 @@
 package fr.dao.app.View.Terminal;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.text.Html;
@@ -20,6 +21,7 @@ import java.util.Map;
 
 import fr.dao.app.Core.Shell;
 import fr.dao.app.R;
+import fr.dao.app.View.ZViewController.Dialog.QuestionDialog;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 public class                    TerminalFrgmnt extends MyFragment  {
@@ -59,8 +61,9 @@ public class                    TerminalFrgmnt extends MyFragment  {
         stdout.setMovementMethod(new ScrollingMovementMethod());
         stdin.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_GO) {
-                    execCmd(stdin.getText().toString());
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    if (!execCmd(stdin.getText().toString()))
+                        previousExecutionNotFinished();
                     return true;
                 }
                 return false;
@@ -68,33 +71,57 @@ public class                    TerminalFrgmnt extends MyFragment  {
         });
     }
 
-    private void                execCmd(String s) {
+    private void                previousExecutionNotFinished() {
+        new QuestionDialog(mActivity)
+                .setTitle("Previous command not over")
+                .setText("You want to start this command in new Terminal ?")
+                .onPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        mActivity.showSnackbar("Oe bah cest pas fait, attends");
+                    }
+                })
+                .show();
+    }
+
+    private boolean                execCmd(String s) {
         if (mActivity.mProgressBar != null && mActivity.mProgressBar.getVisibility() == View.VISIBLE)
             mActivity.mProgressBar.setVisibility(View.VISIBLE);
-        getShell().exec(s);
-        mActivity.showSnackbar(s);
+        return getShell().exec(s);
     }
 
 
-    public void                 stdin(String line) {
+    public void                 stdin(final String line) {
         Log.d(TAG, "stdin[" + line + "]");
-     //   stdin.setText(Html.fromHtml(line), TextView.BufferType.SPANNABLE);
+        mActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                stdin.setText(Html.fromHtml(line), TextView.BufferType.SPANNABLE);
+            }
+        });
     }
-    public void                 stdout(String line) {
+    public void                 stdout(final String line) {
         Log.d(TAG, "stdout[" + line + "]");
-      //  stdin.setText(Html.fromHtml(line), TextView.BufferType.SPANNABLE);
-        if (mActivity.mProgressBar != null && mActivity.mProgressBar.getVisibility() == View.VISIBLE)
-            mActivity.mProgressBar.setVisibility(View.GONE);
+        mActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                stdout.setText(Html.fromHtml(line), TextView.BufferType.SPANNABLE);
+                if (mActivity.mProgressBar != null && mActivity.mProgressBar.getVisibility() == View.VISIBLE)
+                    mActivity.mProgressBar.setVisibility(View.GONE);
+            }
+        });
     }
 
     public void                 refresh() {
-        prompt.setText(Html.fromHtml(getShell().actualOutput), TextView.BufferType.SPANNABLE);
+        mActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                prompt.setText(Html.fromHtml(getShell().actualOutput), TextView.BufferType.SPANNABLE);
+            }
+        });
+
     }
 
     public void                 printCmdInTerminal(final String txt) {
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
-                getShell().actualOutput = getShell().PROMPT + txt + "<br>";
+                getShell().actualOutput = getShell().PROMPT + txt ;
                 stdout.setText(Html.fromHtml(getShell().actualOutput), TextView.BufferType.SPANNABLE);
             }
         });

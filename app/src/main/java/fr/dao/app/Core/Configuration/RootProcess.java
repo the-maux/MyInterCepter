@@ -95,6 +95,7 @@ public class                    RootProcess {
                 Log.d(TAG, mLogID + "::" + cmd);
             if (mOutputStream != null) {
                 mOutputStream.writeBytes(cmd + " 2>&1 \n");
+                mOutputStream.writeBytes("echo \"333333333333333333333333333333333333333333\" \n");
                 mOutputStream.flush();
                 Field f = mProcess.getClass().getDeclaredField("pid");
                 f.setAccessible(true);
