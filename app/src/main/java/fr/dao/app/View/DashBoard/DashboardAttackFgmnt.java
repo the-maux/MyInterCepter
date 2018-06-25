@@ -55,8 +55,8 @@ public class                    DashboardAttackFgmnt extends MyFragment {
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_dash_attack, container, false);
-        initXml(rootView);
         mActivity = (DashboardActivity) getActivity();
+        initXml(rootView);
         return rootView;
     }
 
@@ -65,6 +65,7 @@ public class                    DashboardAttackFgmnt extends MyFragment {
         titleChartDashboard = rootView.findViewById(R.id.titleChartDashboard);
         mChart = rootView.findViewById(R.id.chart);
         mAttack_RV = rootView.findViewById(R.id.Attack_RV);
+        mActivity.statusBarColor(R.color.redteam_color);
     }
 
     public void                 init() {

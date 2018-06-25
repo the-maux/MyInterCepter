@@ -1,5 +1,6 @@
 package fr.dao.app.View.Terminal;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -11,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -28,6 +31,7 @@ public class                    TerminalFrgmnt extends MyFragment  {
     private String              TAG = "NmapOutputView";
     private TerminalActivity    mActivity;
     private TerminalFrgmnt      mInstance = this;
+    private boolean             root = true;
     private CoordinatorLayout   mCoordinatorLayout;
     private Map                 ttyByTabs = new HashMap();
     private ArrayList<Shell>    mShell;
@@ -49,16 +53,16 @@ public class                    TerminalFrgmnt extends MyFragment  {
         } else {
 
         }
-        refresh();
     }
 
     private void                initXml(View rootView) {
         mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
         prompt = rootView.findViewById(R.id.prompt);
-        stdin = rootView.findViewById(R.id.stdin);
+        stdin = rootView.findViewById(R.id.EditexTextCmd);
         stdout = rootView.findViewById(R.id.stdout);
-
+        stdout.setText("");
         stdout.setMovementMethod(new ScrollingMovementMethod());
+        stdin.setBackgroundResource(android.R.color.transparent);
         stdin.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -86,6 +90,8 @@ public class                    TerminalFrgmnt extends MyFragment  {
     private boolean                execCmd(String s) {
         if (mActivity.mProgressBar != null && mActivity.mProgressBar.getVisibility() == View.VISIBLE)
             mActivity.mProgressBar.setVisibility(View.VISIBLE);
+        prompt.setVisibility(View.INVISIBLE);
+        stdin.setVisibility(View.INVISIBLE);
         return getShell().exec(s);
     }
 
@@ -98,42 +104,18 @@ public class                    TerminalFrgmnt extends MyFragment  {
             }
         });
     }
-    public void                 stdout(final String line) {
+    public void                 stdout(final String line, final boolean isCmdOver) {
         Log.d(TAG, "stdout[" + line + "]");
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
                 stdout.setText(Html.fromHtml(line), TextView.BufferType.SPANNABLE);
                 if (mActivity.mProgressBar != null && mActivity.mProgressBar.getVisibility() == View.VISIBLE)
                     mActivity.mProgressBar.setVisibility(View.GONE);
-            }
-        });
-    }
-
-    public void                 refresh() {
-        mActivity.runOnUiThread(new Runnable() {
-            public void run() {
-                prompt.setText(Html.fromHtml(getShell().actualOutput), TextView.BufferType.SPANNABLE);
-            }
-        });
-
-    }
-
-    public void                 printCmdInTerminal(final String txt) {
-        mActivity.runOnUiThread(new Runnable() {
-            public void run() {
-                getShell().actualOutput = getShell().PROMPT + txt ;
-                stdout.setText(Html.fromHtml(getShell().actualOutput), TextView.BufferType.SPANNABLE);
-            }
-        });
-    }
-
-    public void                 flushOutput(final String stdout, final ProgressBar progressBar) {
-        getShell().actualOutput = (stdout == null) ? "Shell error" : (getShell().actualOutput + stdout).replace("\n", "<br>");
-        mActivity.runOnUiThread(new Runnable() {
-            public void run() {
-
-                mInstance.stdout.setText(Html.fromHtml(getShell().actualOutput), TextView.BufferType.SPANNABLE);
-
+                if (isCmdOver) {
+                    stdin.setText("");
+                    prompt.setVisibility(View.VISIBLE);
+                    stdin.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -142,4 +124,14 @@ public class                    TerminalFrgmnt extends MyFragment  {
         return mShell.get(mActivity.mTabs.getSelectedTabPosition());
     }
 
+    public void                 rootClicker(ImageView mScanType) {
+        if (root) {
+            root = false;
+            mScanType.setImageResource(R.mipmap.ic_root_off);
+        } else {
+            mScanType.setImageResource(R.mipmap.ic_root_on);
+            root = true;
+        }
+        getShell().changeUser(root);
+    }
 }

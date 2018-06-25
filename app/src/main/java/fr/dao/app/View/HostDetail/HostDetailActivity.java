@@ -90,6 +90,7 @@ public class                    HostDetailActivity extends MyActivity {
         settingsMenuDetail = findViewById(R.id.settingsMenuDetail);
         mTabs  = findViewById(R.id.tabs);
         mMenuFAB = findViewById(R.id.fab_menu);
+        setStatusBarColor(R.color.generic_background);
     }
 
     protected void              onResume() {

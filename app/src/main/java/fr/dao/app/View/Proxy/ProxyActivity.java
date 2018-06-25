@@ -77,6 +77,7 @@ public class                            ProxyActivity extends MITMActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
+        setStatusBarColor(R.color.spyPrimary);
     }
 
     private void                        initFab() {

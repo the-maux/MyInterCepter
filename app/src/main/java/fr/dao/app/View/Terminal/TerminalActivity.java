@@ -9,6 +9,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -23,7 +25,7 @@ public class                    TerminalActivity extends MyActivity {
     private TerminalActivity    mInstance = this;
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
-    private TerminalFrgmnt      nmapOutputFragment;
+    private TerminalFrgmnt terminalFragmet;
     private AppBarLayout        appBarLayout;
     private Toolbar             mToolbar;
     TabLayout                   mTabs;
@@ -47,6 +49,8 @@ public class                    TerminalActivity extends MyActivity {
         mScript = findViewById(R.id.scriptBtn);
         mScanType = findViewById(R.id.typeScanBtn);
         OsImg = findViewById(R.id.OsImg);
+        //findViewById(R.id.rootView).setBackgroundResource(0);
+        findViewById(R.id.rootView).setBackgroundResource(R.color.black_primary);
         appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -54,28 +58,37 @@ public class                    TerminalActivity extends MyActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
-
     }
 
     private void                init() {
         mTabs.setBackgroundResource(R.color.material_deep_orange_900);
         findViewById(R.id.relativeLayout).setBackgroundResource(R.color.material_deep_orange_400);
+        setStatusBarColor(R.color.material_deep_orange_400);
         MyGlideLoader.loadDrawableInImageView(this, R.drawable.linuxicon, OsImg, true);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
-        mScanType.setVisibility(View.GONE);
+        mScanType.setImageResource(R.mipmap.ic_root_on);
+        mScanType.setOnClickListener(onRootClicker());
         mScript.setImageResource(R.drawable.ic_add_circle);
-        mScript.setPadding(14,14,14,14);
+        mScript.setPadding(18,18,18,18);
         mToolbar.setTitle("Terminal");
         mToolbar.setSubtitle(Environment.getExternalStorageDirectory().getPath() + "/Dao/");
         initFragment();
     }
 
+    private View.OnClickListener onRootClicker() {
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+                terminalFragmet.rootClicker(mScanType);
+            }
+        };
+    }
+
     private void                initFragment() {
         try {
-            nmapOutputFragment = new TerminalFrgmnt();
+            terminalFragmet = new TerminalFrgmnt();
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.frame_container, nmapOutputFragment)
+                    .replace(R.id.frame_container, terminalFragmet)
                     .commit();
         } catch (IllegalStateException e) {
             showSnackbar("Error in fragment: " + e.getCause().getMessage());

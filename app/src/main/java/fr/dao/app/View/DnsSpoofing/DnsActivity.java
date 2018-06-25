@@ -93,6 +93,7 @@ public class                            DnsActivity extends MITMActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
+        setStatusBarColor(R.color.dnsSpoofPrimary);
     }
 
     private void                        initFab() {
@@ -203,7 +204,7 @@ public class                            DnsActivity extends MITMActivity {
                                 .setHintToTILFirstQuestion("Name of file")
                                 .setHintToEDFirstQuestion(DnsmasqConfig.PATH_HOST_FILE);
                         dialog2.onPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
+
                             public void onClick(DialogInterface d, int which) {
                                 String nameOfFile = dialog2.getFirstInputQuestion();
                                 if (nameOfFile.contains(".") || nameOfFile.length() < 4) {

@@ -84,6 +84,7 @@ public class                    DoraActivity extends MyActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
+        setStatusBarColor(R.color.doraPrimary);
     }
 
     private void                onFabClick() {

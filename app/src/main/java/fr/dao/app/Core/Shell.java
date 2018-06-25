@@ -11,13 +11,13 @@ import fr.dao.app.View.Terminal.TerminalFrgmnt;
 
 public class                        Shell {
     private String                  TAG = "Shell";
+    private RootProcess             mProcess;
     private TerminalActivity        mActivity;
     private TerminalFrgmnt          frgmnt;
-    public String                   actualOutput;
     private String                  USER = "shell";
-    public String                   PROMPT = "<font color='red'>" + USER + "</font> " + "<font color='cyan'> $> </font>";
-    private RootProcess             mProcess;
     private boolean                 isComandRunning = false;
+    public String                   PROMPT = "<font color='red'>" + USER + "</font> " + "<font color='cyan'> $> </font>";
+    public String                   actualOutput;
 
     public  Shell(TerminalActivity terminalActivity, TerminalFrgmnt frgmnt) {
         this.frgmnt = frgmnt;
@@ -38,7 +38,8 @@ public class                        Shell {
                         if (read.contains("333333333333333333333333333333333333333333")) {
                             isComandRunning = false;
                             Log.d(TAG, "Command over");
-                            frgmnt.stdout(buffer.toString());
+                            actualOutput = actualOutput + buffer.toString();
+                            frgmnt.stdout(actualOutput, true);
                             buffer = new StringBuilder("");
                         } else
                             buffer.append(read).append("<br>");
@@ -53,12 +54,12 @@ public class                        Shell {
 
     public boolean                  exec(String cmd) {
         if (!isComandRunning) {
+            actualOutput += PROMPT + " " + cmd + "<br>";
+            frgmnt.stdout(actualOutput, false);
             isComandRunning = true;
             Log.d(TAG, "exec:" + cmd);
             if (cmd.contains("cd "))
                 updatePath();
-            //frgmnt.stdin("Output: " + cmd);
-            updateUser();
             mProcess.shell(cmd);
             return isComandRunning;
         } else {
@@ -67,11 +68,11 @@ public class                        Shell {
         }
     }
 
-    private void                    updateUser() {
-        //mProcess.getUser();
-    }
-
     private void                    updatePath() {
         //mProcess.getPath();
+    }
+
+    public void                     changeUser(boolean isRoot) {
+        USER = isRoot ? "root" : "shell";
     }
 }

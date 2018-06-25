@@ -167,6 +167,10 @@ public class                        DashboardActivity extends MyActivity {
         });
     }
 
+    public void                     statusBarColor(int color) {
+        setStatusBarColor(color);
+    }
+
     public void                     onBackPressed() {
         if (mTabs.getSelectedTabPosition() == 1 || mTabs.getSelectedTabPosition() == 2)
             mTabs.getTabAt(0).select();

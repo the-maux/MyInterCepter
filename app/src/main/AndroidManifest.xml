@@ -53,7 +53,8 @@
             android:launchMode="singleTask" />
         <activity
             android:name=".View.Terminal.TerminalActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".View.Scan.VulnsScanActivity"
             android:launchMode="singleTask" />

@@ -93,6 +93,7 @@ public class                    HomeActivity extends MyActivity {
         statusRoot.setImageResource(R.color.material_deep_orange_400);
         statusPermission.setImageResource(R.color.material_deep_orange_400);
         statusPermission.setImageResource(R.color.material_deep_orange_400);
+        setStatusBarColor(R.color.generic_background);
         GlideApp.with(mInstance)
                 .load(R.drawable.bg3)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)

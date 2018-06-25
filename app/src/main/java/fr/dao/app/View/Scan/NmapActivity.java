@@ -82,6 +82,8 @@ public class                    NmapActivity extends MyActivity {
         mScript.setOnClickListener(onClickScript());
         mScanType.setOnClickListener(onClickTypeOfScan());
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
+        findViewById(R.id.rootView).setBackgroundResource(android.R.drawable.alert_dark_frame);
+        setStatusBarColor(R.color.NmapPrimary);
     }
 
     private void                init() {

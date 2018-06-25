@@ -61,6 +61,7 @@ public class                    WebServerActivity extends MITMActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
+
     }
 
     @SuppressLint("SetJavaScriptEnabled")

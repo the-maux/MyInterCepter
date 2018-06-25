@@ -60,6 +60,7 @@ public class                    DefenseHomeActivity extends MyActivity {
             }
         });
         ViewAnimate.FabAnimateReveal(mInstance, RV_menu, null);
+        setStatusBarColor(R.color.blueteam_color);
         /*new Handler().postDelayed(new Runnable() {
             public void run() {
                 mInstance.runOnUiThread(new Runnable() {

@@ -41,8 +41,8 @@ public class                    DashboardDefenseFgmnt extends MyFragment {
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_dash_defense, container, false);
-        initXml(rootView);
         mActivity = (DashboardActivity) getActivity();
+        initXml(rootView);
         return rootView;
     }
 
@@ -51,6 +51,7 @@ public class                    DashboardDefenseFgmnt extends MyFragment {
         titleChartDashboard = rootView.findViewById(R.id.titleChartDashboard);
         jcoolGraph = rootView.findViewById(R.id.chart);
         mRV = rootView.findViewById(R.id.Defense_RV);
+        mActivity.statusBarColor(R.color.blueteam_color);
     }
 
     public void                 init() {

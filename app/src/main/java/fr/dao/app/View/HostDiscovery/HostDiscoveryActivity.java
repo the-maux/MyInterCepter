@@ -98,6 +98,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
             }
         });
         mFab.setImageResource(R.drawable.ic_media_play);
+        setStatusBarColor(R.color.generic_background);
     }
 
     private void                    init()  {

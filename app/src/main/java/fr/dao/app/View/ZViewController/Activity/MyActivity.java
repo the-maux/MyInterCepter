@@ -5,12 +5,15 @@ import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Target.Host;
+import fr.dao.app.R;
 
 
 public class                    MyActivity extends AppCompatActivity {
@@ -25,6 +28,13 @@ public class                    MyActivity extends AppCompatActivity {
     public void                 setToolbarTitle(final String title, final String subtitle) {}
 
     public void                 setToolbarBackgroundColor(final int color) {}
+
+    public void                 setStatusBarColor(final int color) {
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(getResources().getColor(color));
+    }
 
     public void                 initSettingsButton() {}
 

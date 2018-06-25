@@ -4,7 +4,6 @@
     android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splashscreen"
     android:transitionName="rootViewTransition">
 
 
@@ -46,7 +45,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/typeScanBtn"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_weight="2.5"
+                app:layout_constraintHorizontal_weight="4"
                 app:layout_constraintStart_toEndOf="@+id/OsImg"
                 app:layout_constraintTop_toTopOf="parent"
                 app:subtitle="Regular scan"
@@ -133,7 +132,6 @@
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/generic_background"
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
         <RelativeLayout
@@ -149,8 +147,7 @@
                 android:id="@+id/frame_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:alpha="0.95"
-                android:background="@android:drawable/dialog_frame" />
+                android:alpha="0.95" />
 
         </RelativeLayout>
 

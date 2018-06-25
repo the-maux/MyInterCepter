@@ -48,9 +48,9 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_dash_general, container, false);
-        initXml(rootView);
         mActivity = (DashboardActivity) getActivity();
-        return rootView;
+        initXml(rootView);
+          return rootView;
     }
     
     private void                initXml(View rootView) {
@@ -58,6 +58,7 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
         titleChartDashboard = rootView.findViewById(R.id.titleChartDashboard);
         jcoolGraph = rootView.findViewById(R.id.chart);
         mRv_dash_general = rootView.findViewById(R.id.rv_dash_general);
+        mActivity.statusBarColor(R.color.DashboardPrimary);
     }
 
     public void                 init() {

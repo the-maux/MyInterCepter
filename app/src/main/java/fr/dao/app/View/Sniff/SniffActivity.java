@@ -135,6 +135,7 @@ public class                    SniffActivity extends MITMActivity {
                 ViewCompat.setElevation(mAppBar, 4);
             }
         });
+        setStatusBarColor(R.color.snifferPrimary);
     }
 
     private void                onSwitchViewClicked() {

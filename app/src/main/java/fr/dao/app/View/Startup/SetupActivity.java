@@ -37,6 +37,7 @@ public class                    SetupActivity extends MyActivity {
         MyGlideLoader.coordoBackgroundXMM(this, (CoordinatorLayout)findViewById(R.id.Coordonitor));
         monitor("Requesting permission");
         getPermission();
+        setStatusBarColor(R.color.generic_background);
     }
 
     private void                getPermission() {

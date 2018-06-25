@@ -64,6 +64,7 @@ public class                        SettingsActivity extends MyActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
+        setStatusBarColor(R.color.settingsPrimary);
     }
 
     private void                    init() {
