@@ -2,7 +2,6 @@ package fr.dao.app.View.Startup;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -60,6 +59,17 @@ public class                    DefenseHomeActivity extends MyActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
+        ViewAnimate.FabAnimateReveal(mInstance, RV_menu, null);
+        /*new Handler().postDelayed(new Runnable() {
+            public void run() {
+                mInstance.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Log.d(TAG, "RV show");
+
+                    }
+                });
+            }
+        }, 10);*/
     }
 
     private void                init() {
@@ -79,16 +89,6 @@ public class                    DefenseHomeActivity extends MyActivity {
         Log.d(TAG, "onResume");
         mAdapter = new MenuDefenseAdapter(this);
         RV_menu.setAdapter(mAdapter);
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                mInstance.runOnUiThread(new Runnable() {
-                    public void run() {
-                        Log.d(TAG, "RV show");
-                        ViewAnimate.FabAnimateReveal(mInstance, RV_menu, null);
-                    }
-                });
-            }
-        }, 10);
     }
 
     protected void              onPause() {

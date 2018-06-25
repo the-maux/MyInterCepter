@@ -88,12 +88,47 @@ public class                    RootProcess {
         return this;
     }
 
+    public RootProcess          shell(String cmd) {
+        try {
+            cmd = cmd.replace("//", "/");
+            if (mDebugLog)
+                Log.d(TAG, mLogID + "::" + cmd);
+            if (mOutputStream != null) {
+                mOutputStream.writeBytes(cmd + " 2>&1 \n");
+                mOutputStream.flush();
+                Field f = mProcess.getClass().getDeclaredField("pid");
+                f.setAccessible(true);
+                mPid = f.getInt(mProcess);
+                if (mDebugLog)
+                    Log.d(TAG, mLogID + "[PID:" + mPid + "]::" + cmd);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            Log.d(TAG, "IllegalAccessException PID");
+            e.printStackTrace();
+            mPid = -1;
+        } catch (NoSuchFieldException e) {
+            Log.d(TAG, "NoSuchFieldException PID");
+            e.printStackTrace();
+            mPid = -1;
+        }
+        return this;
+    }
+
     public RootProcess          noDebugOutput() {
         mDebugLog = false;
         return this;
     }
 
+    public RootProcess          debugOutput() {
+        mDebugLog = true;
+        return this;
+    }
+
     private int                 waitFor() {
+        if (mDebugLog)
+            Log.d(TAG, "waitFor");
         /* Pro-Tip: You want to close process fd ? Purge it */
         try {
             BufferedReader reader = new BufferedReader(getReader());
@@ -136,11 +171,15 @@ public class                    RootProcess {
     }
 
     public int                  closeProcess() {
+        if (mDebugLog)
+            Log.d(TAG, "closeProcess");
         closeDontWait();
         return mProcess == null ? -1 : waitFor();
     }
 
     public RootProcess         closeDontWait() {
+        if (mDebugLog)
+            Log.d(TAG, "closeDontWait");
         try {
             mOutputStream.close();
         } catch (IOException e) {

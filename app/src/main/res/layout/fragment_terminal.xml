@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EE000000"
+    android:paddingTop="4dp">
+
+
+    <TextView
+        android:id="@+id/prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:text="root $>   "
+        android:textAppearance="@android:style/TextAppearance.Material"
+        app:layout_constraintBottom_toBottomOf="@+id/stdin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/stdin"
+        app:layout_constraintTop_toTopOf="@+id/stdin" />
+
+    <EditText
+        android:id="@+id/stdin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#EE000000"
+        android:imeOptions="actionGo"
+        android:inputType="text|textNoSuggestions"
+        android:scrollHorizontally="true"
+        android:scrollbars="vertical"
+        android:singleLine="true"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/stdout"
+        app:layout_constraintLeft_toRightOf="@+id/prompt"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/stdout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:maxLines="200"
+        android:padding="16dp"
+        android:scrollbars="vertical"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stdin" />
+
+</android.support.constraint.ConstraintLayout>

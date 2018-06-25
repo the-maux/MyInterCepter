@@ -82,7 +82,6 @@ public class                        DialogQuestionWithInput {
         dial.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dial.show();
         mED_FirstQuestion.setOnEditorActionListener(new EditText.OnEditorActionListener() {
-            @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     dial.getButton(DialogInterface.BUTTON_POSITIVE).performClick();

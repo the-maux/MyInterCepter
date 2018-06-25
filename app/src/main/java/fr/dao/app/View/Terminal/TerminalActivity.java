@@ -28,7 +28,7 @@ public class                    TerminalActivity extends MyActivity {
     private Toolbar             mToolbar;
     TabLayout                   mTabs;
     private ImageView           mSettingsMenu, mScript, mScanType, OsImg;
-    private ProgressBar         mProgressBar;
+    ProgressBar                 mProgressBar;
 
 
     protected void              onCreate(Bundle savedInstanceState) {
@@ -62,9 +62,9 @@ public class                    TerminalActivity extends MyActivity {
         findViewById(R.id.relativeLayout).setBackgroundResource(R.color.material_deep_orange_400);
         MyGlideLoader.loadDrawableInImageView(this, R.drawable.linuxicon, OsImg, true);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
-        mScanType.setVisibility(View.INVISIBLE);
+        mScanType.setVisibility(View.GONE);
         mScript.setImageResource(R.drawable.ic_add_circle);
-        mScript.setPadding(8,8,8,8);
+        mScript.setPadding(12,12,12,12);
         mToolbar.setTitle("Terminal");
         mToolbar.setSubtitle(Environment.getExternalStorageDirectory().getPath() + "/Dao/");
         initFragment();
