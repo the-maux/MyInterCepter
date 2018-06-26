@@ -188,7 +188,7 @@ public class                    SniffActivity extends MITMActivity {
                                 FILTERING = "Output filtering",
                                 GLOBAL_SETTINGS = "Global settings";
 
-        findViewById(R.id.settingsMenu).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.toolbarSettings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BottomSheetBuilder builder = new BottomSheetBuilder(mInstance)

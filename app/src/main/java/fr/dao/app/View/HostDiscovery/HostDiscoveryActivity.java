@@ -86,7 +86,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mOsFilter.setOnClickListener(onOsFilter());
         mSearchView = findViewById(R.id.searchView);
         mToolbar = findViewById(R.id.toolbar2);
-        mSettingsMenu = findViewById(R.id.settingsMenu);
+        mSettingsMenu = findViewById(R.id.toolbarSettings);
         findViewById(R.id.OsImg).setOnClickListener(initTabs());
         mTimer = findViewById(R.id.timer);
         mProgressBar = findViewById(R.id.progressBar);

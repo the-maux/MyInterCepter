@@ -87,13 +87,13 @@
                 android:src="@drawable/ic_list_svg"
                 android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/settingsMenu"
+                app:layout_constraintEnd_toStartOf="@+id/toolbarSettings"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/searchView"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/settingsMenu"
+                android:id="@+id/toolbarSettings"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginRight="8dp"

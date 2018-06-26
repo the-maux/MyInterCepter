@@ -67,9 +67,9 @@ public class                    NmapActivity extends MyActivity {
         mTabs = findViewById(R.id.tabs);
         mToolbar = findViewById(R.id.toolbar);
         mProgressBar = findViewById(R.id.progressBar);
-        mSettingsMenu = findViewById(R.id.settingsMenu);
-        mScript = findViewById(R.id.scriptBtn);
-        mScanType = findViewById(R.id.typeScanBtn);
+        mSettingsMenu = findViewById(R.id.toolbarSettings);
+        mScript = findViewById(R.id.toolbarBtn2);
+        mScanType = findViewById(R.id.toolbarBtn1);
         mFab = findViewById(R.id.fab);
         mFab.setOnClickListener(onClickFAB());
         appBarLayout = findViewById(R.id.appBar);

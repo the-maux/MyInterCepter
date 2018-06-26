@@ -29,12 +29,12 @@ import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 public class                    TerminalFrgmnt extends MyFragment  {
     private String              TAG = "NmapOutputView";
-    private TerminalActivity    mActivity;
     private TerminalFrgmnt      mInstance = this;
-    private boolean             root = true;
     private CoordinatorLayout   mCoordinatorLayout;
+    ArrayList<Shell>            mShell;
+    private TerminalActivity    mActivity;
+    private boolean             root = true;
     private Map                 ttyByTabs = new HashMap();
-    private ArrayList<Shell>    mShell;
     private TextView            stdout, prompt;
     private EditText            stdin;
 
@@ -87,7 +87,7 @@ public class                    TerminalFrgmnt extends MyFragment  {
                 .show();
     }
 
-    private boolean                execCmd(String s) {
+    private boolean             execCmd(String s) {
         if (mActivity.mProgressBar != null && mActivity.mProgressBar.getVisibility() == View.VISIBLE)
             mActivity.mProgressBar.setVisibility(View.VISIBLE);
         prompt.setVisibility(View.INVISIBLE);
@@ -122,6 +122,9 @@ public class                    TerminalFrgmnt extends MyFragment  {
 
     public Shell                getShell() {
         return mShell.get(mActivity.mTabs.getSelectedTabPosition());
+    }
+    int                         addTerminal() {
+        //AJOUTE UN SHELL ET UPDATE LA UI KAN CLICK TAB
     }
 
     public void                 rootClicker(ImageView mScanType) {

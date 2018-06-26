@@ -9,8 +9,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -29,7 +27,7 @@ public class                    TerminalActivity extends MyActivity {
     private AppBarLayout        appBarLayout;
     private Toolbar             mToolbar;
     TabLayout                   mTabs;
-    private ImageView           mSettingsMenu, mScript, mScanType, OsImg;
+    private ImageView           mSettingsMenu, addTerminal, mScanType, OsImg;
     ProgressBar                 mProgressBar;
 
 
@@ -45,11 +43,10 @@ public class                    TerminalActivity extends MyActivity {
         mTabs = findViewById(R.id.tabs);
         mToolbar = findViewById(R.id.toolbar);
         mProgressBar = findViewById(R.id.progressBar);
-        mSettingsMenu = findViewById(R.id.settingsMenu);
-        mScript = findViewById(R.id.scriptBtn);
-        mScanType = findViewById(R.id.typeScanBtn);
+        mSettingsMenu = findViewById(R.id.toolbarSettings);
+        addTerminal = findViewById(R.id.toolbarBtn2);
+        mScanType = findViewById(R.id.toolbarBtn1);
         OsImg = findViewById(R.id.OsImg);
-        //findViewById(R.id.rootView).setBackgroundResource(0);
         findViewById(R.id.rootView).setBackgroundResource(R.color.black_primary);
         appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -58,19 +55,22 @@ public class                    TerminalActivity extends MyActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
+        mTabs.setBackgroundResource(R.color.material_deep_orange_900);
+        findViewById(R.id.relativeLayout).setBackgroundResource(R.color.material_deep_orange_400);
+        MyGlideLoader.loadDrawableInImageView(this, R.drawable.linuxicon, OsImg, true);
+        MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
+
+        mScanType.setImageResource(R.mipmap.ic_root_on);
+        mScanType.setOnClickListener(onRootClicker());
+        addTerminal.setImageResource(R.drawable.ic_add_circle);
+        addTerminal.setPadding(18,18,18,18);
+        mToolbar.setTitle("Terminal");
+        setStatusBarColor(R.color.material_deep_orange_400);
+        addTerminal.setOnClickListener(onAddTerminalClick());
     }
 
     private void                init() {
-        mTabs.setBackgroundResource(R.color.material_deep_orange_900);
-        findViewById(R.id.relativeLayout).setBackgroundResource(R.color.material_deep_orange_400);
-        setStatusBarColor(R.color.material_deep_orange_400);
-        MyGlideLoader.loadDrawableInImageView(this, R.drawable.linuxicon, OsImg, true);
-        MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
-        mScanType.setImageResource(R.mipmap.ic_root_on);
-        mScanType.setOnClickListener(onRootClicker());
-        mScript.setImageResource(R.drawable.ic_add_circle);
-        mScript.setPadding(18,18,18,18);
-        mToolbar.setTitle("Terminal");
+
         mToolbar.setSubtitle(Environment.getExternalStorageDirectory().getPath() + "/Dao/");
         initFragment();
     }
@@ -110,6 +110,18 @@ public class                    TerminalActivity extends MyActivity {
 
     public void                 showSnackbar(String txt) {
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
+    }
+
+    private View.OnClickListener onAddTerminalClick() {
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+                if (mTabs.getVisibility() == View.GONE) {
+                    mTabs.setVisibility(View.VISIBLE);
+                    mTabs.addTab(mTabs.newTab().setText("Terminal 1"));
+                    mTabs.addTab(mTabs.newTab().setText("Terminal 2"));
+                }
+            }
+        };
     }
 
 }

@@ -43,7 +43,7 @@
                 android:layout_height="0dp"
                 android:transitionName="title_transition"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/typeScanBtn"
+                app:layout_constraintEnd_toStartOf="@+id/toolbarBtn1"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="4"
                 app:layout_constraintStart_toEndOf="@+id/OsImg"
@@ -58,7 +58,7 @@
             </android.support.v7.widget.Toolbar>
 
             <ImageView
-                android:id="@+id/typeScanBtn"
+                android:id="@+id/toolbarBtn1"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
@@ -66,7 +66,7 @@
                 android:soundEffectsEnabled="true"
                 android:tint="@color/primary_white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/scriptBtn"
+                app:layout_constraintEnd_toStartOf="@+id/toolbarBtn2"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/toolbar"
@@ -74,7 +74,7 @@
                 app:srcCompat="@mipmap/ic_type_scan" />
 
             <ImageView
-                android:id="@+id/scriptBtn"
+                android:id="@+id/toolbarBtn2"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
@@ -82,15 +82,15 @@
                 android:soundEffectsEnabled="true"
                 android:tint="@color/primary_white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/settingsMenu"
+                app:layout_constraintEnd_toStartOf="@+id/toolbarSettings"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="0.9"
-                app:layout_constraintStart_toEndOf="@+id/typeScanBtn"
+                app:layout_constraintStart_toEndOf="@+id/toolbarBtn1"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@mipmap/ic_script_listing" />
 
             <ImageView
-                android:id="@+id/settingsMenu"
+                android:id="@+id/toolbarSettings"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
@@ -99,7 +99,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="0.8"
-                app:layout_constraintStart_toEndOf="@+id/scriptBtn"
+                app:layout_constraintStart_toEndOf="@+id/toolbarBtn2"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@mipmap/ic_more_scan" />
 
