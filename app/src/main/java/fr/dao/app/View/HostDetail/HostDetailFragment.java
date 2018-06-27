@@ -23,7 +23,7 @@ import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 public class                    HostDetailFragment extends MyFragment {
     private String              TAG = "HostNotesFragment";
  //   private CoordinatorLayout   mCoordinatorLayout;
-    private Host                mFocusedHost;//TODO need to be init
+    private Host                mFocusedHost;//TODO:CORRIGER LE .Notes
     private Context             mCtx;
     private HostDetailActivity mActivity;
     private RecyclerView        mRV;

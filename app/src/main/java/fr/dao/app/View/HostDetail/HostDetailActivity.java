@@ -80,6 +80,11 @@ public class                    HostDetailActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hostdetail);
         initXml();
+        mFocusedHost = DBHost.getDevicesFromMAC(getIntent().getExtras().getString("macAddress"));
+        if (mFocusedHost == null) {
+            showSnackbar("User can't be loaded from BDD");
+        }
+        MyGlideLoader.setOsIcon(mFocusedHost, osHostImage);
     }
 
     private void                initXml() {
@@ -138,8 +143,6 @@ public class                    HostDetailActivity extends MyActivity {
             } else if (mode.contains("Recorded")) {
                 mMenuFAB.setVisibility(View.GONE);
             }
-            mFocusedHost = DBHost.getDevicesFromMAC(bundle.getString("macAddress"));
-            MyGlideLoader.setOsIcon(mFocusedHost, osHostImage);
             initMenuFab();
             initTabs();
             initAppBar();
