@@ -134,13 +134,13 @@ public class                    TerminalFrgmnt extends MyFragment  {
 
 
     public void                 rootClicker(ImageView mScanType) {
-        /*if (root) {
+        if (root) {
             root = false;
             mScanType.setImageResource(R.mipmap.ic_root_off);
         } else {
             mScanType.setImageResource(R.mipmap.ic_root_on);
             root = true;
-        }*/
+        }
         getShell().changeUser(root);
     }
 

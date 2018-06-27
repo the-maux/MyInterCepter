@@ -60,7 +60,7 @@ public class                    TerminalActivity extends MyActivity {
         MyGlideLoader.loadDrawableInImageView(this, R.drawable.linuxicon, OsImg, true);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
 
-        //mScanType.setImageResource(R.mipmap.ic_root_on);
+        mScanType.setImageResource(R.mipmap.ic_root_on);
         mScanType.setOnClickListener(onRootClicker());
         addTerminal.setImageResource(R.drawable.ic_add_circle);
         addTerminal.setPadding(18,18,18,18);
