@@ -1,40 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-    <android.support.v4.widget.NestedScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:paddingBottom="12dp"
+    android:paddingTop="4dp"
+    android:background="#EE000000">
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/layout"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/stdout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="#EE000000"
-            android:paddingBottom="12dp"
-            android:paddingTop="4dp">
-
-            <TextView
-                android:id="@+id/stdout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:maxHeight="400dp"
-                android:maxLines="200"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:scrollbars="vertical"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/stdin"
-                app:layout_constraintHeight_min="wrap"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_weight="10"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            android:maxLines="500"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:scrollbars="vertical"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/stdin"
+            app:layout_constraintHeight_min="wrap"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_weight="10"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
@@ -43,7 +37,7 @@
             android:layout_height="32dp"
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
-            android:text="shell $>"
+            android:text="-------"
             android:textAppearance="@android:style/TextAppearance.Material"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -90,4 +84,3 @@
 
     </android.support.constraint.ConstraintLayout>
 
-</android.support.v4.widget.NestedScrollView>

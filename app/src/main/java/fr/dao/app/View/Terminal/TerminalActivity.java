@@ -55,12 +55,12 @@ public class                    TerminalActivity extends MyActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
-        mTabs.setBackgroundResource(R.color.material_deep_orange_900);
+
         findViewById(R.id.relativeLayout).setBackgroundResource(R.color.material_deep_orange_400);
         MyGlideLoader.loadDrawableInImageView(this, R.drawable.linuxicon, OsImg, true);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
 
-        mScanType.setImageResource(R.mipmap.ic_root_on);
+        //mScanType.setImageResource(R.mipmap.ic_root_on);
         mScanType.setOnClickListener(onRootClicker());
         addTerminal.setImageResource(R.drawable.ic_add_circle);
         addTerminal.setPadding(18,18,18,18);
@@ -73,6 +73,28 @@ public class                    TerminalActivity extends MyActivity {
 
         mToolbar.setSubtitle(Environment.getExternalStorageDirectory().getPath() + "/Dao/");
         initFragment();
+        initTabs();
+    }
+
+    private void                initTabs() {
+        mTabs.setBackgroundResource(R.color.material_deep_orange_900);
+        TabLayout.Tab tmpTab = mTabs.getTabAt(0);
+        tmpTab.select();
+        tmpTab.setText("Terminal 0");
+        mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (mTabs.getVisibility() == View.VISIBLE)
+                    terminalFragmet.updateStdout();
+            }
+
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     private View.OnClickListener onRootClicker() {
@@ -117,9 +139,11 @@ public class                    TerminalActivity extends MyActivity {
             public void onClick(View view) {
                 if (mTabs.getVisibility() == View.GONE) {
                     mTabs.setVisibility(View.VISIBLE);
-                    mTabs.addTab(mTabs.newTab().setText("Terminal 1"));
-                    mTabs.addTab(mTabs.newTab().setText("Terminal 2"));
                 }
+                int nbr = mTabs.getTabCount();
+                mTabs.addTab(mTabs.newTab().setText("Terminal " + (nbr+ 1)));
+                terminalFragmet.addTerminal();
+                mTabs.getTabAt(nbr).select();
             }
         };
     }

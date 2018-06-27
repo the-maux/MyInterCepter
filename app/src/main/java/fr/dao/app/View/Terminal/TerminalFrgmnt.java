@@ -1,6 +1,5 @@
 package fr.dao.app.View.Terminal;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -12,10 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -50,6 +47,7 @@ public class                    TerminalFrgmnt extends MyFragment  {
         if (mShell == null) {
             mShell = new ArrayList<>();
             mShell.add(new Shell(mActivity, mInstance));
+            prompt.setText(Html.fromHtml(getShell().PROMPT), TextView.BufferType.SPANNABLE);
         } else {
 
         }
@@ -119,22 +117,30 @@ public class                    TerminalFrgmnt extends MyFragment  {
             }
         });
     }
+    void                        addTerminal() {
+        mShell.add(new Shell(mActivity, mInstance));
+        updateStdout();
+    }
 
-    public Shell                getShell() {
-        return mShell.get(mActivity.mTabs.getSelectedTabPosition());
-    }
-    int                         addTerminal() {
-        //AJOUTE UN SHELL ET UPDATE LA UI KAN CLICK TAB
-    }
+
 
     public void                 rootClicker(ImageView mScanType) {
-        if (root) {
+        /*if (root) {
             root = false;
             mScanType.setImageResource(R.mipmap.ic_root_off);
         } else {
             mScanType.setImageResource(R.mipmap.ic_root_on);
             root = true;
-        }
+        }*/
         getShell().changeUser(root);
+    }
+
+    public Shell                getShell() {
+        return mShell.get(mActivity.mTabs.getSelectedTabPosition());
+    }
+
+    public void                 updateStdout() {
+        stdout(getShell().actualOutput, true);
+        prompt.setText(Html.fromHtml(getShell().PROMPT), TextView.BufferType.SPANNABLE);
     }
 }

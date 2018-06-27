@@ -22,7 +22,7 @@ public class                        Shell {
     public  Shell(TerminalActivity terminalActivity, TerminalFrgmnt frgmnt) {
         this.frgmnt = frgmnt;
         this.mActivity = terminalActivity;
-        actualOutput = PROMPT;
+        actualOutput = "";
         mProcess = new RootProcess("Shell").exec("sh");
         startProcess();
     }
