@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.text.Html;
+import android.text.Layout;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -114,6 +115,14 @@ public class                    TerminalFrgmnt extends MyFragment  {
                     prompt.setVisibility(View.VISIBLE);
                     stdin.setVisibility(View.VISIBLE);
                 }
+                final Layout layout = stdout.getLayout();
+                if(layout != null){
+                    int scrollDelta = layout.getLineBottom(stdout.getLineCount() - 1)
+                            - stdout.getScrollY() - stdout.getHeight();
+                    if(scrollDelta > 0)
+                        stdout.scrollBy(0, scrollDelta);
+                }
+               // stdout.scrollTo(0, );
             }
         });
     }
