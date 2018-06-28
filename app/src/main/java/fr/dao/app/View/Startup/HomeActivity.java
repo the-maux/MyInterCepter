@@ -65,6 +65,7 @@ public class                    HomeActivity extends MyActivity {
 
     protected void              onPostResume() {
         super.onPostResume();
+        hideKeyboard();
         getRootPermission();
         getAndroidPermission();
     }

@@ -1,8 +1,9 @@
 package fr.dao.app.View.Terminal;
 
 import android.content.DialogInterface;
+import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
+import android.support.constraint.ConstraintLayout;
 import android.text.Html;
 import android.text.Layout;
 import android.text.method.ScrollingMovementMethod;
@@ -11,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,13 +30,14 @@ import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 public class                    TerminalFrgmnt extends MyFragment  {
     private String              TAG = "NmapOutputView";
     private TerminalFrgmnt      mInstance = this;
-    private CoordinatorLayout   mCoordinatorLayout;
+    private ConstraintLayout    mCoordinatorLayout;
     ArrayList<Shell>            mShell;
     private TerminalActivity    mActivity;
     private boolean             root = true;
     private Map                 ttyByTabs = new HashMap();
     private TextView            stdout, prompt;
     private EditText            stdin;
+    private boolean             isKeyboardON = true;
 
     public View                 onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_terminal, container, false);
@@ -52,6 +55,20 @@ public class                    TerminalFrgmnt extends MyFragment  {
         } else {
 
         }
+        mCoordinatorLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                mCoordinatorLayout.getWindowVisibleDisplayFrame(r);
+                int screenHeight = mCoordinatorLayout.getRootView().getHeight();
+                int keypadHeight = screenHeight - r.bottom;
+                if (keypadHeight > screenHeight * 0.15) {
+                    isKeyboardON = true;
+                }
+                else {
+                    isKeyboardON = false;
+                }
+            }
+        });
     }
 
     private void                initXml(View rootView) {
@@ -60,6 +77,17 @@ public class                    TerminalFrgmnt extends MyFragment  {
         stdin = rootView.findViewById(R.id.EditexTextCmd);
         stdout = rootView.findViewById(R.id.stdout);
         stdout.setText("");
+        stdout.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (isKeyboardON) {
+                    mActivity.hideKeyboard();
+                    isKeyboardON = false;
+                } else {
+                    mActivity.showKeyboard();
+                    isKeyboardON = true;
+                }
+            }
+        });
         stdout.setMovementMethod(new ScrollingMovementMethod());
         stdin.setBackgroundResource(android.R.color.transparent);
         stdin.setOnEditorActionListener(new EditText.OnEditorActionListener() {
@@ -122,16 +150,14 @@ public class                    TerminalFrgmnt extends MyFragment  {
                     if(scrollDelta > 0)
                         stdout.scrollBy(0, scrollDelta);
                 }
-               // stdout.scrollTo(0, );
             }
         });
     }
+
     void                        addTerminal() {
         mShell.add(new Shell(mActivity, mInstance));
         updateStdout();
     }
-
-
 
     public void                 rootClicker(ImageView mScanType) {
         if (root) {

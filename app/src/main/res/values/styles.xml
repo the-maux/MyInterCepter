@@ -6,6 +6,12 @@
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:colorPrimaryDark">#212121</item>
         <item name="android:statusBarColor">#212121</item>
+        <item name="actionOverflowMenuStyle">@style/MyOverflowMenu</item>
+    </style>
+
+    <style name="MyOverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow" >
+        <item name="overlapAnchor">false</item>
+        <item name="android:dropDownVerticalOffset">-4.0dip</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
@@ -46,4 +52,5 @@
     <style name="BrandedSwitch" parent="AppTheme">
         <item name="colorAccent">#39ac39</item>
     </style>
+
 </resources>

@@ -40,6 +40,8 @@ public class                        Shell {
                             Log.d(TAG, "Command over");
                             actualOutput = actualOutput + buffer.toString();
                             frgmnt.stdout(actualOutput, true);
+
+                            updatePath();
                             buffer = new StringBuilder("");
                         } else
                             buffer.append(read).append("<br>");
@@ -58,10 +60,8 @@ public class                        Shell {
             frgmnt.stdout(actualOutput, false);
             isComandRunning = true;
             Log.d(TAG, "exec:" + cmd);
-            if (cmd.contains("cd "))
-                updatePath();
             mProcess.shell(cmd);
-            return isComandRunning;
+            return true;
         } else {
             Log.e(TAG, "Already in start");
             return false;
