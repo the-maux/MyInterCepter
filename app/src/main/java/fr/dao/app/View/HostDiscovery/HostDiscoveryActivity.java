@@ -90,8 +90,9 @@ public class                        HostDiscoveryActivity extends MyActivity {
         findViewById(R.id.OsImg).setOnClickListener(initTabs());
         mTimer = findViewById(R.id.timer);
         mProgressBar = findViewById(R.id.progressBar);
-        mToolbarBackground = (TransitionDrawable)(findViewById(R.id.appBar).getBackground());
         appBarLayout = findViewById(R.id.appBar);
+        mToolbarBackground = (TransitionDrawable)(appBarLayout).getBackground();
+
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewCompat.setElevation(appBarLayout, 4);
@@ -99,6 +100,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
         });
         mFab.setImageResource(R.drawable.ic_media_play);
         setStatusBarColor(R.color.generic_background);
+
+
     }
 
     private void                    init()  {

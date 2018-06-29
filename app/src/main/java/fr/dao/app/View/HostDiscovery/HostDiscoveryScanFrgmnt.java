@@ -38,6 +38,8 @@ import fr.dao.app.View.ZViewController.Adapter.HostDiscoveryAdapter;
 import fr.dao.app.View.ZViewController.Adapter.OSFilterAdapter;
 import fr.dao.app.View.ZViewController.Dialog.RV_dialog;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
+import fr.dao.app.View.ZViewController.MSkeleton.RecyclerViewSkeletonScreen;
+import fr.dao.app.View.ZViewController.MSkeleton.Skeleton;
 
 public class                        HostDiscoveryScanFrgmnt extends MyFragment {
     private String                  TAG = "HostDiscoveryScanFrgmnt";
@@ -49,6 +51,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
     private SwipeRefreshLayout      mSwipeRefreshLayout;
     private NetworkDiscoveryControler mScannerControler;
     boolean                         mHostLoaded = false;
+    private RecyclerViewSkeletonScreen skeletonScreen;
 
     public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -68,9 +71,20 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         if (mSingleton.hostList != null && !mSingleton.hostList.isEmpty()) {
             mHostLoaded = true;
             mActivity.actualNetwork = mSingleton.CurrentNetwork;
+            Log.d(TAG, "Host already loaded");
             onHostActualized(mSingleton.hostList);
         } else if (!mHostLoaded) {//To not reload for nothing
             start();
+            Log.d(TAG, "Host already NOT loaded SKELETON");
+            skeletonScreen = Skeleton.bind(mHost_RV)
+                    .adapter(mHostAdapter)
+                    .shimmer(true)
+                    .angle(10)
+                    .frozen(false)
+                    .duration(1000)
+                    .count(10)
+                    .load(R.layout.item_hostdiscovery_skeleton)
+                    .show();
         }
     }
 
@@ -85,9 +99,8 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
             mActivity.setToolbarTitle(mSingleton.NetworkInformation.ssid,
                     mHosts.size() + " device" + ((mHosts.size() > 1) ? "s" : ""));
         }
-        if (mHosts == null || mHosts.isEmpty())
-        mHostAdapter.updateHostList(mHosts);
-        mHost_RV.setAdapter(mHostAdapter);
+        //if (mHosts == null || mHosts.isEmpty())
+        //    mHostAdapter.updateHostList(mHosts);
         mActivity.initToolbarButton();
     }
 
@@ -117,11 +130,22 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
     private void                    initHostsRecyclerView() {
         if (mHostAdapter == null)
             mHostAdapter = new HostDiscoveryAdapter(getActivity(), mHost_RV, false, mActivity.mFab);
-        mHost_RV.setAdapter(mHostAdapter);
-        mHost_RV.setHasFixedSize(true);
+        //mHost_RV.setAdapter(mHostAdapter);
+        //mHost_RV.setHasFixedSize(true);
         mHost_RV.setLayoutManager(new LinearLayoutManager(mActivity));
-        if (mHosts != null && !mHosts.isEmpty())
+        if (mHosts != null && !mHosts.isEmpty()) {
             mHostAdapter.updateHostList(mHosts);
+            Log.e(TAG, "TARGET ALLOWED");
+        }
+        /**
+         *
+         * .shimmer(true)      // whether show shimmer animation.                      default is true
+           .count(10)          // the recycler view item count.                        default is 10
+           .color(color)       // the shimmer color.                                   default is #a2878787
+           .angle(20)          // the shimmer angle.                                   default is 20;
+           .duration(1000)     // the shimmer animation duration.                      default is 1000;
+           .frozen(false)      // whether frozen recyclerView during skeleton showing  default is true;
+         */
     }
     public void                     initSearchView(SearchView searchView, final Toolbar toolbar) {
         searchView.setGravity(Gravity.END);
@@ -210,18 +234,19 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
     public void                     onHostActualized(final ArrayList<Host> hosts) {
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
+                Log.d(TAG, "onHostActualized: " + (( hosts == null) ? "null" : hosts.size()));
                 int online = 0;
                 for (Host host : hosts) {
                     if (host.state == State.ONLINE)
                         online++;
                 }
+                skeletonScreen.hide();
                 mHosts = hosts;
                 mHostLoaded = true;
                 mActivity.setProgressState(mActivity.MAXIMUM_PROGRESS*2);
                 mSingleton.hostList = mHosts;
                 mActivity.setToolbarTitle(mSingleton.NetworkInformation.ssid,
                         "(" + online + "/" + hosts.size()+ ") device" + ((hosts.size() > 1) ? "s" : ""));
-                Log.d(TAG, "onHostActualized: " + ((mSingleton.hostList == null) ? "null" : mSingleton.hostList.size()));
                 mHostAdapter.updateHostList(mHosts);
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
                 mSwipeRefreshLayout.setRefreshing(false);
