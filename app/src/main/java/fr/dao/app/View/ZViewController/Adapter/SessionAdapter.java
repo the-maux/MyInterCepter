@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -28,11 +29,28 @@ public class                        SessionAdapter extends RecyclerView.Adapter<
     private MyActivity              mActivity;
     private List<Session>           mSessions;
     private int                     color;
+    private int                     type = 0; //0: General, 1: Attack, 2: Defense
 
     public                          SessionAdapter(MyActivity activity, List<Session> sessions, int color) {
         this.mActivity = activity;
-        this.mSessions = sessions;
+        if (color == R.color.redteam_color)
+            type = 1;
+        else if (color == R.color.blueteam_color)
+            type = 2;
+        filterSessions(sessions);
         this.color = color;
+    }
+
+    private void                    filterSessions(List<Session> sessions) {
+        this.mSessions = new ArrayList<>();
+        for (Session session : sessions) {
+            if (type == 0 && !session.Actions().isEmpty())
+                this.mSessions.add(session);
+            else if (type == 1 && session.getNbrActionType(Action.TeamAction.READTEAM) > 0)
+                this.mSessions.add(session);
+            else if (type == 2 && session.getNbrActionType(Action.TeamAction.BLUETEAM) > 0)
+                this.mSessions.add(session);
+        }
     }
 
     public GenericLittleCardAvatarHolder onCreateViewHolder(ViewGroup parent, int viewType) {

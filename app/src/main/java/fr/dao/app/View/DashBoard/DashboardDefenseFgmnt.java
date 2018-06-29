@@ -55,7 +55,7 @@ public class                    DashboardDefenseFgmnt extends MyFragment {
     }
 
     public void                 init() {
-        mActivity.setToolbarTitle("BlueTeam Statistique", null);
+        mActivity.setToolbarTitle("Defense", null);
         initChart();
         initRV();
     }
@@ -73,7 +73,6 @@ public class                    DashboardDefenseFgmnt extends MyFragment {
         mRV.setAdapter(adapter);
         mRV.setHasFixedSize(true);
         mRV.setLayoutManager(new LinearLayoutManager(mActivity));
-
         Log.d(TAG, "Loaded " + mActivity.sessionManager.getSessionsFromDate(null, null).size() + " sessions");
     }
 

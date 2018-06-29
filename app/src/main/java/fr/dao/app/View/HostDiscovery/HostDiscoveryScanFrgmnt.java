@@ -100,7 +100,10 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
                     mHosts.size() + " device" + ((mHosts.size() > 1) ? "s" : ""));
         }
         //if (mHosts == null || mHosts.isEmpty())
-        //    mHostAdapter.updateHostList(mHosts);
+        if (mHost_RV.getAdapter() == null) {
+            mHost_RV.setAdapter(mHostAdapter);
+            //mHostAdapter.updateHostList(mHosts);
+        }
         mActivity.initToolbarButton();
     }
 
@@ -240,7 +243,8 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
                     if (host.state == State.ONLINE)
                         online++;
                 }
-                skeletonScreen.hide();
+                if (skeletonScreen != null)
+                    skeletonScreen.hide();
                 mHosts = hosts;
                 mHostLoaded = true;
                 mActivity.setProgressState(mActivity.MAXIMUM_PROGRESS*2);

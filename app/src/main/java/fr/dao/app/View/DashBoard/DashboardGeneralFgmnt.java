@@ -27,6 +27,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Database.DBNetwork;
 import fr.dao.app.Model.Config.Action;
 import fr.dao.app.Model.Config.Session;
@@ -78,7 +79,8 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
         for (Session session : sessions) {
             nbrActionPerformed += session.Actions().size();
         }
-        mActivity.setToolbarTitle("Statistique", nbrActionPerformed + " actions performed");
+
+        mActivity.setToolbarTitle("Statistique", DBHost.getAllDevicesNbr() + " scanned devices");
         SessionAdapter adapter = new SessionAdapter((MyActivity) getActivity(), sessions, R.color.DashboardPrimary);
         mRv_dash_general.setAdapter(adapter);
         mRv_dash_general.setHasFixedSize(true);

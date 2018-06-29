@@ -89,7 +89,7 @@ public class                Host extends Model {
     private Ports           listPorts = null;
     public Ports            getPorts() {
         /*  Build Ports from String dumped in BDD */
-        if (listPorts == null && dumpPort != null && !dumpPort.isEmpty())
+        if (listPorts == null)
             listPorts = new Ports(this);
         return listPorts;
     }

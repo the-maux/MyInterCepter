@@ -98,12 +98,13 @@ public class                    HostDetailFragment extends MyFragment {
             arrayList.add(title10);
         }
         try {
-            if (mFocusedHost.getPorts() != null) {
+            if (mFocusedHost.Deepest_Scan > 0 && mFocusedHost.getPorts() != null) {
                 String[] title11 = {"getPorts", mFocusedHost.getPorts().portArrayList().size() + " ports scanned"};
                 arrayList.add(title11);
-            } else {
-                Log.e(TAG, "NO DUMP IN PORTS");
             }
+//            } else {
+//                Log.e(TAG, "NO DUMP IN PORTS");
+//            }
         } catch (Exception e) {
             Log.e(TAG, "ERROR PORTS FOR HOST[" + mFocusedHost.ip + "]");
         }

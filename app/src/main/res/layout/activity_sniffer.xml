@@ -13,8 +13,7 @@
         android:background="@color/snifferPrimary"
         android:paddingBottom="2dp"
         android:transitionName="appBarTransition"
-        android:visibility="visible"
-        app:elevation="6dp">
+        android:visibility="visible">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/appBarConstraint"

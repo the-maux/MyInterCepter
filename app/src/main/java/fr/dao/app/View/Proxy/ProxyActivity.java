@@ -73,8 +73,8 @@ public class                            ProxyActivity extends MITMActivity {
         appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                ViewCompat.setElevation(findViewById(R.id.toptoolbar2), 4);
-                ViewCompat.setElevation(appBarLayout, 4);
+                ViewCompat.setElevation(findViewById(R.id.tabs), -2);
+                ViewCompat.setElevation(appBarLayout, 2);
             }
         });
         setStatusBarColor(R.color.spyPrimary);

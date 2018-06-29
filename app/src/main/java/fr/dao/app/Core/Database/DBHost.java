@@ -16,6 +16,13 @@ import fr.dao.app.Model.Target.Host;
 public class                                DBHost {
     private static String                   TAG = "DBHost";
 
+    public static List<Host>             getAllDevices() {
+        return new Select()
+                .all()
+                .from(Host.class)
+                .execute();
+    }
+
     public static Host                      findDeviceById(String id) {
         return new Select()
                 .from(Host.class)
@@ -91,5 +98,9 @@ public class                                DBHost {
                 return i;
         }
         return -1;
+    }
+
+    public static String                        getAllDevicesNbr() {
+        return getAllDevices().size() + "";
     }
 }

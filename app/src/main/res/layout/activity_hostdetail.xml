@@ -22,14 +22,15 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/app_bar_height"
             android:elevation="2dp"
-            android:fitsSystemWindows="true"
+            android:fitsSystemWindows="false"
             android:transitionName="hostTitle"
             app:contentScrim="@color/generic_background"
             app:expandedTitleGravity="center_vertical"
             app:expandedTitleMarginBottom="18dp"
             app:expandedTitleMarginStart="90dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:toolbarId="@+id/toolbar">
+            app:toolbarId="@+id/toolbar"
+            >
 
             <ImageView
                 android:id="@+id/collapsBackground"

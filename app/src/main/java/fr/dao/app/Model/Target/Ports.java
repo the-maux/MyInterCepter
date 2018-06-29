@@ -25,8 +25,8 @@ public class                    Ports {
     public                      Ports(Host host) {
         if (host.dumpPort == null) {
             Log.e(TAG, "No dump to analyze");
-        }
-        init(host.dumpPort, host);
+        } else
+            init(host.dumpPort, host);
     }
 
     public void                 init(String dump, Host host) {

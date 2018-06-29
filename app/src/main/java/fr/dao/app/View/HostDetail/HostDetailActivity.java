@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -95,6 +94,14 @@ public class                    HostDetailActivity extends MyActivity {
         settingsMenuDetail = findViewById(R.id.settingsMenuDetail);
         mTabs  = findViewById(R.id.tabs);
         mMenuFAB = findViewById(R.id.fab_menu);
+        collapsBackground = findViewById(R.id.collapsBackground);
+        //collapsBackground.setImageResource(R.drawable.bg1);
+        GlideRequest r = GlideApp.with(mInstance)
+                .load(R.drawable.bg1)
+                .centerCrop()
+                //.transition(DrawableTransitionOptions.withCrossFade())
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+        r.into(collapsBackground);
         setStatusBarColor(R.color.generic_background);
     }
 
@@ -106,17 +113,11 @@ public class                    HostDetailActivity extends MyActivity {
     protected void              onPostResume() {
         super.onPostResume();
         try {
-            collapsBackground = findViewById(R.id.collapsBackground);
+
             collapsBackground.postDelayed(new Runnable() {
                 public void run() {
                     try {
 
-                        GlideRequest r = GlideApp.with(mInstance)
-                                .load(R.drawable.bg1)
-                                .centerCrop()
-                                .transition(DrawableTransitionOptions.withCrossFade())
-                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
-                        r.into(collapsBackground);
                     } catch (IllegalArgumentException e) {
                         Log.e(TAG, "PostDelayed while Activity is destroyed");
                     }
