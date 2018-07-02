@@ -3,6 +3,7 @@ package fr.dao.app.View.ZViewController.Behavior;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Looper;
 import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
 import android.widget.ImageView;
@@ -64,11 +65,14 @@ public class                MyGlideLoader {
             builder.apply(new RequestOptions()
                     .fitCenter()
                     .override(100, 100));
-        context.runOnUiThread(new Runnable() {
-            public void run() {
-                builder.into(imageView);
-            }
-        });
+        if (Looper.myLooper() == Looper.getMainLooper())
+            builder.into(imageView);
+        else
+            context.runOnUiThread(new Runnable() {
+                public void run() {
+                    builder.into(imageView);
+                }
+            });
     }
 
     public static void      coordoBackgroundXMM(Activity context, final CoordinatorLayout layout) {
