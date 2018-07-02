@@ -10,8 +10,21 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/rootView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bg3">
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/icoScylla"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:transitionName="icoScylla"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHeight_max="200dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="200dp"
+            app:srcCompat="@drawable/ico" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline_top"
@@ -78,7 +91,7 @@
             android:visibility="gone"
             app:cardBackgroundColor="@color/blueteam_color"
             app:cardCornerRadius="@dimen/material_component_button_corner_radius"
-            app:cardElevation="2dp"
+            app:cardElevation="4dp"
             app:cardUseCompatPadding="true"
             app:layout_constraintBottom_toTopOf="@+id/guideline_middle_hori"
             app:layout_constraintEnd_toStartOf="@+id/guideline_middle_verti"
@@ -103,8 +116,7 @@
                     app:layout_constraintDimensionRatio="4:4"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_security_svg" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/title_defense"
@@ -136,7 +148,7 @@
             android:visibility="gone"
             app:cardBackgroundColor="@color/DashboardPrimary"
             app:cardCornerRadius="@dimen/material_component_button_corner_radius"
-            app:cardElevation="2dp"
+            app:cardElevation="4dp"
             app:cardUseCompatPadding="true"
             app:layout_constraintBottom_toTopOf="@+id/guideline_middle_hori"
             app:layout_constraintDimensionRatio="10:9"
@@ -163,8 +175,7 @@
                     app:layout_constraintDimensionRatio=""
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_developer_board_svg" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/title_dashboard"
@@ -197,7 +208,7 @@
             android:visibility="gone"
             app:cardBackgroundColor="@color/material_blue_grey_700"
             app:cardCornerRadius="@dimen/material_component_button_corner_radius"
-            app:cardElevation="2dp"
+            app:cardElevation="4dp"
             app:cardUseCompatPadding="true"
             app:layout_constraintBottom_toBottomOf="@+id/guideline_bottom"
             app:layout_constraintDimensionRatio="10:9"
@@ -227,8 +238,7 @@
                     app:layout_constraintDimensionRatio=""
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_build_svg" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/title_settings"
@@ -260,7 +270,7 @@
             android:visibility="gone"
             app:cardBackgroundColor="@color/redteam_color"
             app:cardCornerRadius="@dimen/material_component_button_corner_radius"
-            app:cardElevation="2dp"
+            app:cardElevation="4dp"
             app:cardUseCompatPadding="true"
             app:layout_constraintBottom_toBottomOf="@+id/guideline_bottom"
             app:layout_constraintLeft_toLeftOf="@+id/guideline_middle_verti"
@@ -285,8 +295,7 @@
                     app:layout_constraintDimensionRatio="4:4"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/target" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/title_attack"

@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -16,18 +15,14 @@ import android.support.v4.util.Pair;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
-
 import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import fr.dao.app.Core.Configuration.GlideApp;
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Configuration.Utils;
@@ -37,9 +32,8 @@ import fr.dao.app.View.DashBoard.DashboardActivity;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
 import fr.dao.app.View.Settings.SettingsActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
+import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
-
-import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 public class                    HomeActivity extends MyActivity {
     private String              TAG = this.getClass().getName();
@@ -63,11 +57,49 @@ public class                    HomeActivity extends MyActivity {
         init();
     }
 
+    protected void              onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        ViewAnimate.FabAnimateReveal(mInstance, blue_card, new Runnable() {
+            public void run() {
+                ViewAnimate.FadeAnimateReveal(mInstance, red_card, new Runnable() {
+                    public void run() {
+                        ViewAnimate.FadeAnimateReveal(mInstance, dashboard_card, new Runnable() {
+                            public void run() {
+                                ViewAnimate.FadeAnimateReveal(mInstance, settings_card, new Runnable() {
+                                    public void run() {
+                                        mInstance.runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.ic_security_svg, (ImageView) findViewById(R.id.logo_defense), true, false);
+                                                MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.target, (ImageView)findViewById(R.id.logo_attack), true, false);
+                                                MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.ic_developer_board_svg, (ImageView)findViewById(R.id.logo_dashboard), true, false);
+                                                MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.ic_build_svg,(ImageView) findViewById(R.id.logo_settings), true, false);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+        ViewAnimate.FabAnimateReveal(mInstance, monitorRoot, new Runnable() {
+            public void run() {
+                ViewAnimate.FadeAnimateReveal(mInstance, monitorPermission, new Runnable() {
+                    public void run() {
+                        ViewAnimate.FadeAnimateReveal(mInstance, monitorUpdated, null);
+                    }
+                });
+            }
+        });
+    }
+
     protected void              onPostResume() {
         super.onPostResume();
         hideKeyboard();
         getRootPermission();
         getAndroidPermission();
+
     }
 
     private void                initXml() {
@@ -91,11 +123,13 @@ public class                    HomeActivity extends MyActivity {
         PB_Root = monitorRoot.findViewById(R.id.progressBar_monitor);
         PB_Permission = monitorPermission.findViewById(R.id.progressBar_monitor);
         PB_Updated = monitorUpdated.findViewById(R.id.progressBar_monitor);
+
         statusRoot.setImageResource(R.color.material_deep_orange_400);
         statusPermission.setImageResource(R.color.material_deep_orange_400);
         statusPermission.setImageResource(R.color.material_deep_orange_400);
+
         setStatusBarColor(R.color.generic_background);
-        GlideApp.with(mInstance)
+        /*GlideApp.with(mInstance)
                 .load(R.drawable.bg3)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .transition(withCrossFade())
@@ -105,29 +139,8 @@ public class                    HomeActivity extends MyActivity {
                     public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
                         findViewById(R.id.rootView).setBackground(resource);
                     }
-                });
-        ViewAnimate.FabAnimateReveal(mInstance, blue_card, new Runnable() {
-            public void run() {
-                ViewAnimate.FadeAnimateReveal(mInstance, red_card, new Runnable() {
-                    public void run() {
-                        ViewAnimate.FadeAnimateReveal(mInstance, dashboard_card, new Runnable() {
-                            public void run() {
-                                ViewAnimate.FadeAnimateReveal(mInstance, settings_card, null);
-                            }
-                        });
-                    }
-                });
-            }
-        });
-        ViewAnimate.FabAnimateReveal(mInstance, monitorRoot, new Runnable() {
-            public void run() {
-                ViewAnimate.FadeAnimateReveal(mInstance, monitorPermission, new Runnable() {
-                    public void run() {
-                        ViewAnimate.FadeAnimateReveal(mInstance, monitorUpdated, null);
-                    }
-                });
-            }
-        });
+                });*/
+
     }
 
     private void                init() {

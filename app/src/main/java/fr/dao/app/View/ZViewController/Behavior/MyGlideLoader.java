@@ -51,6 +51,20 @@ public class                MyGlideLoader {
                         .override(100, 100));
         builder.into(imageView);
     }
+    public static void      loadDrawableInImageView(Context context, int ressource, ImageView imageView, boolean override, boolean anim) {
+        GlideRequest builder = GlideApp.with(context)
+                .load(ressource)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+        if (!anim)
+            builder.dontAnimate();
+        else
+            builder.transition(DrawableTransitionOptions.withCrossFade());
+        if (override)
+            builder.apply(new RequestOptions()
+                    .fitCenter()
+                    .override(100, 100));
+        builder.into(imageView);
+    }
 
     public static void      coordoBackgroundXMM(Activity context, final CoordinatorLayout layout) {
         GlideApp.with(context)
