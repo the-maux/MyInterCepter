@@ -32,7 +32,6 @@ import fr.dao.app.View.DashBoard.DashboardActivity;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
 import fr.dao.app.View.Settings.SettingsActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
-import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 
 public class                    HomeActivity extends MyActivity {
@@ -55,20 +54,22 @@ public class                    HomeActivity extends MyActivity {
         mSingleton.init(this);
         initXml();
         init();
+
     }
 
     protected void              onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.ic_security_svg, (ImageView) findViewById(R.id.logo_defense), true, true);
+        //MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.ic_security_svg, (ImageView) findViewById(R.id.logo_defense), true, true);
+        ((ImageView) findViewById(R.id.logo_defense)).setImageResource(R.drawable.ic_security_svg);
         ViewAnimate.FabAnimateReveal(mInstance, blue_card, new Runnable() {
             public void run() {
-                MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.target, (ImageView)findViewById(R.id.logo_attack), true, true);
+                ((ImageView) findViewById(R.id.logo_attack)).setImageResource(R.drawable.target);
                 ViewAnimate.FadeAnimateReveal(mInstance, red_card, new Runnable() {
                     public void run() {
-                        MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.ic_developer_board_svg, (ImageView)findViewById(R.id.logo_dashboard), true, true);
+                        ((ImageView) findViewById(R.id.logo_dashboard)).setImageResource(R.drawable.ic_developer_board_svg);
                         ViewAnimate.FadeAnimateReveal(mInstance, dashboard_card, new Runnable() {
                             public void run() {
-                                MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.ic_build_svg,(ImageView) findViewById(R.id.logo_settings), true, true);
+                                ((ImageView) findViewById(R.id.logo_settings)).setImageResource(R.drawable.ic_build_svg);
                                 ViewAnimate.FadeAnimateReveal(mInstance, settings_card, null);
                             }
                         });
@@ -85,6 +86,7 @@ public class                    HomeActivity extends MyActivity {
                 });
             }
         });
+
     }
 
     protected void              onPostResume() {
@@ -183,7 +185,7 @@ public class                    HomeActivity extends MyActivity {
                 Utils.vibrateDevice(mInstance, 100);
                 Intent intent = new Intent(mInstance, DefenseHomeActivity.class);
                 Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_defense), "logo_defense2");
-                Pair<View, String> p2 = Pair.create(findViewById(R.id.blue_card), "rootViewTransition");
+                Pair<View, String> p2 = Pair.create(findViewById(R.id.blue_card), "appBarTransition");
                 Pair<View, String> p3 = Pair.create(findViewById(R.id.title_defense), "title");
                 startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2, p3).toBundle());
             }

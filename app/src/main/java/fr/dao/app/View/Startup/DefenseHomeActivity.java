@@ -39,7 +39,13 @@ public class                    DefenseHomeActivity extends MyActivity {
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_defense);
+        postponeEnterTransition();
         initXml();
+        if (mAdapter == null) {
+            mAdapter = new MenuDefenseAdapter(mInstance);
+            RV_menu.setAdapter(mAdapter);
+        }
+        startPostponedEnterTransition();
     }
 
     private void                initXml() {
@@ -48,8 +54,6 @@ public class                    DefenseHomeActivity extends MyActivity {
         appBarLayout = findViewById(R.id.appBar);
         RV_menu = findViewById(R.id.RV_menu);
         RV_menu.setLayoutManager(new GridLayoutManager(this, 2));
-        mAdapter = new MenuDefenseAdapter(this);
-        RV_menu.setAdapter(mAdapter);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewCompat.setElevation(appBarLayout, 4);
@@ -58,6 +62,9 @@ public class                    DefenseHomeActivity extends MyActivity {
         setStatusBarColor(R.color.blueteam_color);
     }
 
+   protected void               onPostResume() {
+        super.onPostResume();
+    }
 
     public void                 showSnackbar(String txt) {
         super.showSnackbar(txt);
@@ -65,7 +72,7 @@ public class                    DefenseHomeActivity extends MyActivity {
     }
 
     public class MenuDefenseAdapter extends RecyclerView.Adapter<MenuItemHolder> {
-        private String              TAG = "DefenseHomeActivity";
+        private String              TAG = "DefenseHomeAdapter";
         private DefenseHomeActivity mActivity;
 
         public MenuDefenseAdapter(DefenseHomeActivity activity) {
@@ -100,7 +107,7 @@ public class                    DefenseHomeActivity extends MyActivity {
                 case 1:
                     holder.titleCard.setText("Dora Diagnostic");
                     holder.progressBar_monitor.setVisibility(View.GONE);
-                    MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.pepper, holder.logo_card, false, false);
+                    MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.scan, holder.logo_card, false, false);
 //                    holder.logo_card.setImageResource(R.drawable.pepper);
                     holder.statusIconCardView.setImageResource(R.color.online_color);
                     holder.logo_card.setVisibility(View.VISIBLE);
@@ -132,7 +139,7 @@ public class                    DefenseHomeActivity extends MyActivity {
                     holder.titleCard.setText("ARP Controller");
                     holder.progressBar_monitor.setVisibility(View.GONE);
                     holder.logo_card.setImageResource(R.drawable.poiz);
-                    MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.poiz, holder.logo_card, false, false);
+                    //MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.poiz, holder.logo_card, false, false);
 //                  holder.statusIconCardView.setImageResource(R.color.offline_color);
                     holder.logo_card.setVisibility(View.VISIBLE);
                     holder.card_view.setOnClickListener(new View.OnClickListener() {
