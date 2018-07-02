@@ -19,6 +19,7 @@ import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.State;
 import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
+import fr.dao.app.View.ZViewController.Activity.MyActivity;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
@@ -51,8 +52,8 @@ public class                MyGlideLoader {
                         .override(100, 100));
         builder.into(imageView);
     }
-    public static void      loadDrawableInImageView(Context context, int ressource, ImageView imageView, boolean override, boolean anim) {
-        GlideRequest builder = GlideApp.with(context)
+    public static void      loadDrawableInImageView(MyActivity context, int ressource, final ImageView imageView, boolean override, boolean anim) {
+        final GlideRequest builder = GlideApp.with(context)
                 .load(ressource)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
         if (!anim)
@@ -63,7 +64,11 @@ public class                MyGlideLoader {
             builder.apply(new RequestOptions()
                     .fitCenter()
                     .override(100, 100));
-        builder.into(imageView);
+        context.runOnUiThread(new Runnable() {
+            public void run() {
+                builder.into(imageView);
+            }
+        });
     }
 
     public static void      coordoBackgroundXMM(Activity context, final CoordinatorLayout layout) {

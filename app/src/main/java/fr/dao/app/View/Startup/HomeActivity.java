@@ -59,24 +59,17 @@ public class                    HomeActivity extends MyActivity {
 
     protected void              onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.ic_security_svg, (ImageView) findViewById(R.id.logo_defense), true, true);
         ViewAnimate.FabAnimateReveal(mInstance, blue_card, new Runnable() {
             public void run() {
+                MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.target, (ImageView)findViewById(R.id.logo_attack), true, true);
                 ViewAnimate.FadeAnimateReveal(mInstance, red_card, new Runnable() {
                     public void run() {
+                        MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.ic_developer_board_svg, (ImageView)findViewById(R.id.logo_dashboard), true, true);
                         ViewAnimate.FadeAnimateReveal(mInstance, dashboard_card, new Runnable() {
                             public void run() {
-                                ViewAnimate.FadeAnimateReveal(mInstance, settings_card, new Runnable() {
-                                    public void run() {
-                                        mInstance.runOnUiThread(new Runnable() {
-                                            public void run() {
-                                                MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.ic_security_svg, (ImageView) findViewById(R.id.logo_defense), true, false);
-                                                MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.target, (ImageView)findViewById(R.id.logo_attack), true, false);
-                                                MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.ic_developer_board_svg, (ImageView)findViewById(R.id.logo_dashboard), true, false);
-                                                MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.ic_build_svg,(ImageView) findViewById(R.id.logo_settings), true, false);
-                                            }
-                                        });
-                                    }
-                                });
+                                MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.ic_build_svg,(ImageView) findViewById(R.id.logo_settings), true, true);
+                                ViewAnimate.FadeAnimateReveal(mInstance, settings_card, null);
                             }
                         });
                     }

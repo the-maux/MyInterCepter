@@ -58,7 +58,7 @@ public class                    ViewAnimate {
                         if (runnable != null) {
                             context.runOnUiThread(new Runnable() {
                                 public void run() {
-                                    new Thread(runnable).start();
+                                    runnable.run();
                                 }
                             });
                         }
