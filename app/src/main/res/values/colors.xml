@@ -76,24 +76,20 @@
     <color name="blue_grey_10000">#2d3031</color>
 
     <!-- Target color  -->
-    <color name="colorTarget1">#ffa000</color>
-    <color name="colorTarget2">#212121</color>
-    <color name="colorTarget3">#5d4037</color>
-    <color name="colorTarget4">#689f38</color>
-    <color name="colorTarget5">#757575</color>
-    <color name="colorTarget6">#673ab7</color>
-    <color name="colorTarget7">#00796b</color>
-    <color name="colorTarget8">#BDBDBD</color>
-    <color name="colorTarget9">#afb42b</color>
-    <color name="colorTarget10">#e64a19</color>
-    <color name="colorTarget11">#4caf50</color>
-    <color name="colorTarget12">#b2dfdb</color>
-    <color name="colorTarget14">#ffccbc</color>
-    <color name="colorTarget15">#d6e7ff</color>
-    <color name="colorTarget16">#d6e7ff</color>
-    <color name="colorTarget17">#d6e7ff</color>
-    <color name="colorTarget18">#d6e7ff</color>
-    <color name="colorTarget19">#d6e7ff</color>
+    <color name="colorTarget1">#4CAF50</color>
+    <color name="colorTarget2">#FF9800</color>
+    <color name="colorTarget3">@color/primary_dark</color>
+    <color name="colorTarget4">#FFEB3B</color>
+    <color name="colorTarget5">#00796b</color>
+    <color name="colorTarget6">#212121</color>
+    <color name="colorTarget7">#5d4037</color>
+    <color name="colorTarget8">#689f38</color>
+    <color name="colorTarget9">#757575</color>
+    <color name="colorTarget10">#673ab7</color>
+    <color name="colorTarget11">#BDBDBD</color>
+    <color name="colorTarget12">#e64a19</color>
+    <color name="colorTarget13">#4caf50</color>
+    <color name="colorTarget14">#b2dfdb</color>
     <color name="colorTarget20">#d6e7ff</color>
 
 
@@ -103,7 +99,6 @@
     <color name="colorFontGreyDark">#333333</color>
     <color name="colorFontGreyLight">#666666</color>
     <color name="colorLine">#dfdfdf</color>
-    <color name="colorFontGreen">#388e3c</color>
     <color name="colorFontRed">#F96650</color>
 
     <color name="shimmer_color">#a2878787</color>

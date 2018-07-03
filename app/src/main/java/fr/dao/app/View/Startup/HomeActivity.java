@@ -32,6 +32,7 @@ import fr.dao.app.View.DashBoard.DashboardActivity;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
 import fr.dao.app.View.Settings.SettingsActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
+import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 
 public class                    HomeActivity extends MyActivity {
@@ -54,15 +55,16 @@ public class                    HomeActivity extends MyActivity {
         mSingleton.init(this);
         initXml();
         init();
-
     }
 
     protected void              onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+
         //MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.ic_security_svg, (ImageView) findViewById(R.id.logo_defense), true, true);
         ((ImageView) findViewById(R.id.logo_defense)).setImageResource(R.drawable.ic_security_svg);
-        ((ImageView) findViewById(R.id.logo_attack)).setImageResource(R.drawable.target);
+        //((ImageView) findViewById(R.id.logo_attack)).setImageResource(R.drawable.target);
         ((ImageView) findViewById(R.id.logo_dashboard)).setImageResource(R.drawable.ic_developer_board_svg);
+        MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.target, ((ImageView) findViewById(R.id.logo_attack)), false);
         ((ImageView) findViewById(R.id.logo_settings)).setImageResource(R.drawable.ic_build_svg);
         ViewAnimate.FabAnimateReveal(mInstance, blue_card, new Runnable() {
             public void run() {
@@ -70,14 +72,17 @@ public class                    HomeActivity extends MyActivity {
                     public void run() {
                         ViewAnimate.FadeAnimateReveal(mInstance, dashboard_card, new Runnable() {
                             public void run() {
+                                ViewAnimate.FadeAnimateReveal(mInstance, monitorRoot, null);
                                 ViewAnimate.FadeAnimateReveal(mInstance, settings_card, null);
                             }
                         });
+                        ViewAnimate.FadeAnimateReveal(mInstance, monitorPermission, null);
                     }
                 });
+                ViewAnimate.FabAnimateReveal(mInstance, monitorUpdated, null);
             }
         });
-        ViewAnimate.FabAnimateReveal(mInstance, monitorUpdated, new Runnable() {
+        /*ViewAnimate.FabAnimateReveal(mInstance, monitorUpdated, new Runnable() {
             public void run() {
                 ViewAnimate.FadeAnimateReveal(mInstance, monitorPermission, new Runnable() {
                     public void run() {
@@ -85,7 +90,7 @@ public class                    HomeActivity extends MyActivity {
                     }
                 });
             }
-        });
+        });*/
 
     }
 
@@ -198,7 +203,7 @@ public class                    HomeActivity extends MyActivity {
                 Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_dashboard), "logo_activity");
                 Pair<View, String> p2 = Pair.create(findViewById(R.id.dashboard_card), "rootViewTransition");
                 Pair<View, String> p3 = Pair.create(findViewById(R.id.title_dashboard), "title");
-                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p2).toBundle());
+                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2).toBundle());
             }
         };
     }
@@ -227,9 +232,8 @@ public class                    HomeActivity extends MyActivity {
                         }
                         Intent intent = new Intent(mInstance, HostDiscoveryActivity.class);
                         Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_attack), "logo_activity");
-                        Pair<View, String> p3 = Pair.create(findViewById(R.id.title_attack), "title");
                         Pair<View, String> p2 = Pair.create(findViewById(R.id.red_card), "rootViewTransition");
-                        startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2, p3).toBundle());
+                        startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2).toBundle());
                     }
                 });
             }

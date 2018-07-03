@@ -80,7 +80,7 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
             nbrActionPerformed += session.Actions().size();
         }
 
-        mActivity.setToolbarTitle("Statistique", DBHost.getAllDevicesNbr() + " scanned devices");
+        mActivity.setToolbarTitle("Statistique", DBHost.getAllDevicesNbr() + "devices scanned");
         SessionAdapter adapter = new SessionAdapter((MyActivity) getActivity(), sessions, R.color.DashboardPrimary);
         mRv_dash_general.setAdapter(adapter);
         mRv_dash_general.setHasFixedSize(true);
