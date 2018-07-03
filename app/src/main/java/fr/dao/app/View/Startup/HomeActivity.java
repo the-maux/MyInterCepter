@@ -61,15 +61,15 @@ public class                    HomeActivity extends MyActivity {
         super.onPostCreate(savedInstanceState);
         //MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.ic_security_svg, (ImageView) findViewById(R.id.logo_defense), true, true);
         ((ImageView) findViewById(R.id.logo_defense)).setImageResource(R.drawable.ic_security_svg);
+        ((ImageView) findViewById(R.id.logo_attack)).setImageResource(R.drawable.target);
+        ((ImageView) findViewById(R.id.logo_dashboard)).setImageResource(R.drawable.ic_developer_board_svg);
+        ((ImageView) findViewById(R.id.logo_settings)).setImageResource(R.drawable.ic_build_svg);
         ViewAnimate.FabAnimateReveal(mInstance, blue_card, new Runnable() {
             public void run() {
-                ((ImageView) findViewById(R.id.logo_attack)).setImageResource(R.drawable.target);
                 ViewAnimate.FadeAnimateReveal(mInstance, red_card, new Runnable() {
                     public void run() {
-                        ((ImageView) findViewById(R.id.logo_dashboard)).setImageResource(R.drawable.ic_developer_board_svg);
                         ViewAnimate.FadeAnimateReveal(mInstance, dashboard_card, new Runnable() {
                             public void run() {
-                                ((ImageView) findViewById(R.id.logo_settings)).setImageResource(R.drawable.ic_build_svg);
                                 ViewAnimate.FadeAnimateReveal(mInstance, settings_card, null);
                             }
                         });
@@ -77,11 +77,11 @@ public class                    HomeActivity extends MyActivity {
                 });
             }
         });
-        ViewAnimate.FabAnimateReveal(mInstance, monitorRoot, new Runnable() {
+        ViewAnimate.FabAnimateReveal(mInstance, monitorUpdated, new Runnable() {
             public void run() {
                 ViewAnimate.FadeAnimateReveal(mInstance, monitorPermission, new Runnable() {
                     public void run() {
-                        ViewAnimate.FadeAnimateReveal(mInstance, monitorUpdated, null);
+                        ViewAnimate.FadeAnimateReveal(mInstance, monitorRoot, null);
                     }
                 });
             }
@@ -182,7 +182,6 @@ public class                    HomeActivity extends MyActivity {
     private View.OnClickListener onDefenseClicked() {
         return new View.OnClickListener() {
             public void onClick(View view) {
-                Utils.vibrateDevice(mInstance, 100);
                 Intent intent = new Intent(mInstance, DefenseHomeActivity.class);
                 Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_defense), "logo_defense2");
                 Pair<View, String> p2 = Pair.create(findViewById(R.id.blue_card), "appBarTransition");

@@ -95,7 +95,6 @@ public class                    DefenseHomeActivity extends MyActivity {
                     holder.logo_card.setVisibility(View.VISIBLE);
                     holder.card_view.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
-                            Utils.vibrateDevice(mActivity, 100);
                             Intent intent = new Intent(mInstance, TerminalActivity.class);
                             Pair<View, String> p1 = Pair.create((View)holder.logo_card, "LogoTransition");
                             Pair<View, String> p2 = Pair.create((View)holder.titleCard, "title_transition");
