@@ -24,6 +24,7 @@ public class                    RootProcess {
         try {
             mProcess = Runtime.getRuntime().exec("su", null);
             mOutputStream = new DataOutputStream(mProcess.getOutputStream());
+            noRootAllowed = false;
         } catch (IOException e) {
             Log.d(TAG, "e:[" + e.getMessage()+ "]");
             e.printStackTrace();

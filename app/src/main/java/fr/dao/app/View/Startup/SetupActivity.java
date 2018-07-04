@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import java.io.IOException;
 
+import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Setup;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Core.Network.NetDiscovering;
@@ -29,7 +30,7 @@ public class                    SetupActivity extends MyActivity {
     /*static {
         System.loadLibrary("native-lib");
     }*/
-
+    //TODO: TU DOIS PROTEGER CONTRE LE NOROOT ET FAIRE LA VISU INSTALL CLASS
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View rootView = LayoutInflater.from(this).inflate(R.layout.activity_setup, null);
@@ -51,10 +52,24 @@ public class                    SetupActivity extends MyActivity {
             ActivityCompat.requestPermissions(this, PERMISSION_STORAGE, PERMISSIONS_MULTIPLE_REQUEST);
             return ;
         } else {
-            initialisation();
+            if (rootCheck())
+                initialisation();
+            else {
+                startActivity(new Intent(this, HomeActivity.class));
+                finish();
+            }
         }
     }
-
+    private boolean             rootCheck() {
+        try {
+            String RootOk = new RootProcess("RootCheck").exec("id").getReader().readLine();
+            return (RootOk != null && RootOk.contains("uid=0(root)"));
+        } catch (IOException e) {
+            Log.d("Splashscreen", "RootOK[IOException]");
+            e.printStackTrace();
+            return false;
+        }
+    }
     public void                 onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         if (grantResults.length <= 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
             monitor("Vous ne pouvez pas utiliser l'application sans ces permissions");

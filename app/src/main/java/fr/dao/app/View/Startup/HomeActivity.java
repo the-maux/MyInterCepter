@@ -269,7 +269,7 @@ public class                    HomeActivity extends MyActivity {
         try {
             String RootOk = new RootProcess("RootCheck").exec("id").getReader().readLine();
             return (RootOk != null && RootOk.contains("uid=0(root)"));
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.d("Splashscreen", "RootOK[IOException]");
             e.printStackTrace();
             return false;

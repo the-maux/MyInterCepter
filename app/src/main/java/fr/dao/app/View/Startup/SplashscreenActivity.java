@@ -25,5 +25,6 @@ public class                    SplashscreenActivity extends AppCompatActivity {
                         this.getFilesDir().getPath() + '/',
                         SettingsControler.NAME_FILE_PREFERENCE).exists() ?
                         HomeActivity.class : SetupActivity.class));
+        finish();
     }
 }

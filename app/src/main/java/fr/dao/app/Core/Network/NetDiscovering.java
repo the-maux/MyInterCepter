@@ -141,7 +141,8 @@ public class                            NetDiscovering {
 
     public static String                getMac(WifiInfo wifiInfo) {
         if (MAC == null) {
-            BufferedReader reader = new RootProcess("GetMacADDR")
+            RootProcess process = new RootProcess("GetMacADDR");
+            BufferedReader reader = process
                     .exec("cat /sys/class/net/wlan0/address").getReader();
             try {
                 String tmp;
@@ -152,7 +153,7 @@ public class                            NetDiscovering {
                 MAC = stringBuilder.toString().toUpperCase();
                 Log.i(TAG, "ADDR MAC DETECTED[" + stringBuilder.toString().toUpperCase() + "]");
                 return stringBuilder.toString().toUpperCase();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return wifiInfo.getMacAddress().toUpperCase();
                 //Using getMacAddress() is not recommended, gna gna gna
