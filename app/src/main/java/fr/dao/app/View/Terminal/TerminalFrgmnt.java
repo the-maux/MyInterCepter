@@ -162,12 +162,14 @@ public class                    TerminalFrgmnt extends MyFragment  {
     public void                 rootClicker(ImageView mScanType) {
         if (root) {
             root = false;
+            getShell().exec("exit");
             mScanType.setImageResource(R.mipmap.ic_root_off);
         } else {
             mScanType.setImageResource(R.mipmap.ic_root_on);
             root = true;
+            getShell().exec("su");
         }
-        getShell().changeUser(root);
+
     }
 
     public Shell                getShell() {
@@ -175,7 +177,11 @@ public class                    TerminalFrgmnt extends MyFragment  {
     }
 
     public void                 updateStdout() {
-        stdout(getShell().actualOutput, true);
-        prompt.setText(Html.fromHtml(getShell().PROMPT), TextView.BufferType.SPANNABLE);
+        mActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                stdout(getShell().actualOutput, true);
+                prompt.setText(Html.fromHtml(getShell().PROMPT), TextView.BufferType.SPANNABLE);
+            }
+        });
     }
 }

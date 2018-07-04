@@ -21,12 +21,12 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/icon"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_centerVertical="true"
             android:layout_margin="4dp"
             android:elevation="2dp"
-            android:src="@color/blue_grey_10000"
+            android:src="@color/material_grey_700"
             android:transitionName="hostPicture" />
 
         <View
@@ -37,7 +37,7 @@
             android:layout_alignTop="@+id/icon"
             android:layout_marginRight="4dp"
             android:layout_marginTop="14dp"
-            android:background="@color/blue_grey_10000"
+            android:background="@color/material_grey_700"
             android:elevation="2dp"
             android:transitionName="hostPicture" />
 
@@ -54,11 +54,11 @@
 
             <View
                 android:id="@+id/ipHostname"
-                android:layout_width="250dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:layout_weight="1"
-                android:background="@color/blue_grey_10000"
+                android:background="@color/material_grey_700"
                 android:maxLines="1"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="12sp"
@@ -66,11 +66,11 @@
 
             <View
                 android:id="@+id/mac"
-                android:layout_width="250dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:layout_weight="1"
-                android:background="@color/blue_grey_10000"
+                android:background="@color/material_grey_700"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="12sp"
                 android:transitionName="hostTitle"
@@ -78,21 +78,21 @@
 
             <View
                 android:id="@+id/os"
-                android:layout_width="250dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:layout_weight="1"
-                android:background="@color/blue_grey_10000"
+                android:background="@color/material_grey_700"
                 android:maxLines="1"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="12sp" />
 
             <View
                 android:id="@+id/vendor"
-                android:layout_width="250dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/blue_grey_10000"
+                android:background="@color/material_grey_700"
                 android:maxLines="1"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="12sp"
@@ -108,8 +108,9 @@
             android:layout_centerHorizontal="false"
             android:layout_centerInParent="false"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:background="@color/blue_grey_10000"
+            android:background="@color/material_grey_700"
             android:padding="6dp" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>

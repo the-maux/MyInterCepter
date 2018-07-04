@@ -17,6 +17,7 @@ public class                    RootProcess {
     private String              mLogID;
     private boolean             mDebugLog = false;
     private boolean             noRootAllowed = true;
+    private String[]            env = {"PATH=/su/bin:/sbin:/system/sbin:/system/bin:/su/xbin:/system/xbin:/system/xbin/su"};
 
     public                      RootProcess(String LogID) {
         this.mLogID = LogID;
@@ -34,7 +35,7 @@ public class                    RootProcess {
     }
     public                      RootProcess(String LogID, String workingDirectory) {
         this.mLogID = LogID;
-        String[] env = {"PATH=/su/bin:/sbin:/system/sbin:/system/bin:/su/xbin:/system/xbin:/system/xbin/su"};
+
         Log.d(TAG, "");
         /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         } else {*/
@@ -53,7 +54,7 @@ public class                    RootProcess {
         /* Ye noRoot is never used, why bother ? */
         this.mLogID = LogID;
         try {
-            mProcess = Runtime.getRuntime().exec("ls\n", null, new File("/"));
+            mProcess = Runtime.getRuntime().exec("sh \n", env, new File("/"));
             mOutputStream = new DataOutputStream(mProcess.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
@@ -96,9 +97,9 @@ public class                    RootProcess {
             if (mOutputStream != null) {
                 mOutputStream.writeBytes(cmd + " 2>&1 \n");
                 mOutputStream.writeBytes("echo \"111111111111111111111111111111111111111111\" \n");
-                mOutputStream.writeBytes("pwd");
+                mOutputStream.writeBytes("pwd \n");
                 mOutputStream.writeBytes("echo \"222222222222222222222222222222222222222222\" \n");
-                mOutputStream.writeBytes("id");
+                mOutputStream.writeBytes("id \n");
                 mOutputStream.writeBytes("echo \"333333333333333333333333333333333333333333\" \n");
                 mOutputStream.flush();
                 Field f = mProcess.getClass().getDeclaredField("pid");

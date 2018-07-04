@@ -21,14 +21,24 @@
             android:background="@color/NmapPrimary">
 
 
+            <ProgressBar
+                android:id="@+id/progressBar3"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="60dp"
+                android:layout_height="0dp"
+                android:layout_marginLeft="6dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <ImageView
                 android:id="@+id/OsImg"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginLeft="8dp"
                 android:elevation="4dp"
-                android:padding="4dp"
-                android:src="@drawable/nmap2"
+                android:padding="2dp"
                 android:transitionName="LogoTransition"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/toolbar"

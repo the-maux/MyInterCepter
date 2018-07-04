@@ -4,6 +4,9 @@ import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.View.Terminal.TerminalActivity;
@@ -16,16 +19,19 @@ public class                        Shell {
     private TerminalFrgmnt          frgmnt;
     private String                  USER = "shell";
     private boolean                 isComandRunning = false;
-    public String                   PROMPT = "<font color='red'>" + USER + "</font> " + "<font color='cyan'> $> </font>";
+    public String                   PROMPT;
     public String                   actualOutput;
+    public ArrayList<String>        mHistory = new ArrayList<>();
 
     public  Shell(TerminalActivity terminalActivity, TerminalFrgmnt frgmnt) {
         this.frgmnt = frgmnt;
         this.mActivity = terminalActivity;
         actualOutput = "";
-        mProcess = new RootProcess("Shell").exec("sh");
+        updatePrompt();
+        mProcess = new RootProcess("Shell", false);
         startProcess();
     }
+
 
     private void                    startProcess() {
         new Thread(new Runnable() {
@@ -38,13 +44,13 @@ public class                        Shell {
                         if (read.contains("333333333333333333333333333333333333333333")) {
                             isComandRunning = false;
                             Log.d(TAG, "Command over");
-                            actualOutput = actualOutput + buffer.toString();
+                            actualOutput = actualOutput + buffer.toString().substring(0, buffer.toString().indexOf("111111111111111111111111111111111111111111"));
+                            updatePath(buffer.toString());
                             frgmnt.stdout(actualOutput, true);
-
-                            updatePath();
                             buffer = new StringBuilder("");
-                        } else
+                        } else {
                             buffer.append(read).append("<br>");
+                        }
                     }
                     Log.d(TAG, "SHELL PROCESS OVER");
                 } catch (IOException e) {
@@ -58,21 +64,45 @@ public class                        Shell {
         if (!isComandRunning) {
             actualOutput += PROMPT + " " + cmd + "<br>";
             frgmnt.stdout(actualOutput, false);
-            isComandRunning = true;
-            Log.d(TAG, "exec:" + cmd);
-            mProcess.shell(cmd);
+            if (!cmd.contentEquals("exit")) {
+                mProcess.shell(cmd);
+                mHistory.add(cmd);
+                isComandRunning = true;
+                Log.d(TAG, "exec:" + cmd);
+            }
+            //TODO if user not root, close actual terminal
             return true;
         } else {
-            Log.e(TAG, "Already in start");
+            Log.e(TAG, "Already in start, dumping HISTORY");
+            for (String s : mHistory) {
+                Log.e(TAG, "\t" + s);
+            }
             return false;
         }
     }
 
-    private void                    updatePath() {
-        //mProcess.getPath();
+    private void                    updatePath(String s) {
+        Log.d(TAG, s);
+        String path = s.substring(s.indexOf("111111111111111111111111111111111111111111")+"111111111111111111111111111111111111111111".length(), s.indexOf("222222222222222222222222222222222222222222")).replace("<br>", "");
+        Pattern p = Pattern.compile(".*uid=0\\( *(.*) *\\) gid.");
+        Matcher m = p.matcher(s);
+        if (m.find())
+            USER = m.group(1);
+        if (USER.contentEquals("root"))
+            USER = "root ";
+        Log.i(TAG, "PATH[" + path + "]");
+        mActivity.setToolbarTitle(null, path);
+        Log.i(TAG, "USER[" + USER + "]");
+        updatePrompt();
+        frgmnt.updateStdout();
     }
 
     public void                     changeUser(boolean isRoot) {
         USER = isRoot ? "root" : "shell";
+    }
+
+
+    private void                    updatePrompt() {
+        PROMPT = "<font color='red'>" + USER + "</font> " + "<font color='cyan'> $> </font>";
     }
 }

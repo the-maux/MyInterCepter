@@ -46,7 +46,7 @@ public class                    NmapActivity extends MyActivity {
     private Toolbar             mToolbar;
     private List<Host>          mListHostSelected = new ArrayList<>();
     private TabLayout           mTabs;
-    private ImageView           mSettingsMenu, mScript, mScanType;
+    private ImageView           mSettingsMenu, mScript, mScanType, osImg;
     private NmapControler       nmapControler;
     private ProgressBar         mProgressBar;
     private boolean             isExternalTarget = false, isInScriptMode = false;
@@ -72,6 +72,11 @@ public class                    NmapActivity extends MyActivity {
         mScanType = findViewById(R.id.toolbarBtn1);
         mFab = findViewById(R.id.fab);
         mFab.setOnClickListener(onClickFAB());
+        osImg = findViewById(R.id.OsImg);
+        float scale = getResources().getDisplayMetrics().density;
+        int dpAsPixels = (int) (4*scale + 0.5f);
+        osImg.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
+        MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.nmap2, osImg, false);
         appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {

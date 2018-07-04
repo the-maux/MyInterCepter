@@ -47,7 +47,7 @@ public class                    TerminalActivity extends MyActivity {
         mCoordinatorLayout = findViewById(R.id.Coordonitor);
         mTabs = findViewById(R.id.tabs);
         mToolbar = findViewById(R.id.toolbar);
-        mProgressBar = findViewById(R.id.progressBar);
+        mProgressBar = findViewById(R.id.progressBar3);
         mSettingsMenu = findViewById(R.id.toolbarSettings);
         addTerminal = findViewById(R.id.toolbarBtn2);
         mScanType = findViewById(R.id.toolbarBtn1);
@@ -78,12 +78,12 @@ public class                    TerminalActivity extends MyActivity {
 
         mScanType.setImageResource(R.mipmap.ic_root_on);
         mScanType.setOnClickListener(onRootClicker());
+        addTerminal.setVisibility(View.GONE);
         addTerminal.setImageResource(R.drawable.ic_add_circle);
         addTerminal.setPadding(18,18,18,18);
         mToolbar.setTitle("Terminal");
         setStatusBarColor(R.color.material_deep_orange_400);
         addTerminal.setOnClickListener(onAddTerminalClick());
-        //setSupportActionBar(mToolbar);
     }
 
     private void                init() {
