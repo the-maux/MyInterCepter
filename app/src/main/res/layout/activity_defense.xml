@@ -134,8 +134,8 @@
 
         <ImageView
             android:id="@+id/iconScylla"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_margin="8dp"
             android:alpha="0.8"
             android:focusableInTouchMode="false"

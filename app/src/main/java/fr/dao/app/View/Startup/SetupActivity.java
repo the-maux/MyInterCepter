@@ -35,10 +35,13 @@ public class                    SetupActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         View rootView = LayoutInflater.from(this).inflate(R.layout.activity_setup, null);
         setContentView(rootView);
-        MyGlideLoader.coordoBackgroundXMM(this, (CoordinatorLayout)findViewById(R.id.Coordonitor));
         monitor("Requesting permission");
-        getPermission();
         setStatusBarColor(R.color.generic_background);
+    }
+
+    protected void              onPostResume() {
+        super.onPostResume();
+        getPermission();
     }
 
     private void                getPermission() {
@@ -91,7 +94,9 @@ public class                    SetupActivity extends MyActivity {
                             Pair<View, String> p1;
                             p1 = Pair.create(findViewById(R.id.monitor), "title");
                             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1);
-                            startActivity(new Intent(mInstance, HomeActivity.class), options.toBundle());
+                            Intent i = new Intent(mInstance, HomeActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i, options.toBundle());
                         }
                     });
                 } catch (IOException e) {
@@ -107,7 +112,6 @@ public class                    SetupActivity extends MyActivity {
 
     public void                 monitor(final String log) {
         mInstance.runOnUiThread(new Runnable() {
-            @Override
             public void run() {
                 ((TextView)findViewById(R.id.monitor)).setText(log);
             }
