@@ -106,7 +106,7 @@ public class                    DefenseHomeActivity extends MyActivity {
                 case 1:
                     holder.titleCard.setText("Dora Diagnostic");
                     holder.progressBar_monitor.setVisibility(View.GONE);
-                    MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.scan, holder.logo_card, false, false);
+                    MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_dora, holder.logo_card, false, false);
 //                    holder.logo_card.setImageResource(R.drawable.pepper);
                     holder.statusIconCardView.setImageResource(R.color.online_color);
                     holder.logo_card.setVisibility(View.VISIBLE);
@@ -122,7 +122,7 @@ public class                    DefenseHomeActivity extends MyActivity {
                     break;
                 case 2:
                     holder.titleCard.setText("Self Proxy");
-                    MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.cage, holder.logo_card, false, false);
+                    MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_self_proxy, holder.logo_card, false, false);
 //                    holder.logo_card.setImageResource(R.drawable.cage);
                     holder.progressBar_monitor.setVisibility(View.GONE);
                     holder.statusIconCardView.setImageResource(R.color.filtered_color);
@@ -151,7 +151,7 @@ public class                    DefenseHomeActivity extends MyActivity {
                 case 4:
                     holder.titleCard.setText("Crypt Check");
                     holder.progressBar_monitor.setVisibility(View.GONE);
-                    MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_lock, holder.logo_card, false, false);
+                    MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_verified, holder.logo_card, false, false);
 //                    holder.logo_card.setImageResource(R.mipmap.ic_lock);
                     holder.statusIconCardView.setImageResource(R.color.offline_color);
                     holder.logo_card.setVisibility(View.VISIBLE);
@@ -164,7 +164,7 @@ public class                    DefenseHomeActivity extends MyActivity {
                     break;
                 case 5:
                     holder.titleCard.setText("Network bodyguard");
-                    MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.scan, holder.logo_card, false, false);
+                    MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_bodyguard, holder.logo_card, false, false);
 //                    holder.logo_card.setImageResource(R.drawable.scan);
                     holder.progressBar_monitor.setVisibility(View.GONE);
                     holder.statusIconCardView.setImageResource(R.color.offline_color);

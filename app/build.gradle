@@ -79,7 +79,7 @@ dependencies {
     implementation 'com.jaredrummler:material-spinner:1.1.0'
     implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
     implementation 'org.apache.commons:commons-lang3:3.6'
-    implementation 'com.dmitrymalkovich.android:material-design-dimens:1.2'
+    implementation 'com.dmitrymalkovich.android:material-design-dimens:1.4'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.github.clans:fab:1.6.4'
     implementation 'com.android.volley:volley:1.1.0'
