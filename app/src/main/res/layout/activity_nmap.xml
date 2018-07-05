@@ -17,7 +17,7 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/app_bar_height"
             android:background="@color/NmapPrimary">
 
 
@@ -122,7 +122,7 @@
             android:layout_height="match_parent"
             android:background="@color/NmapPrimary"
             android:visibility="gone"
-            app:layout_constraintHeight_min="56dp"
+            app:layout_constraintHeight_min="@dimen/app_bar_height"
             app:layout_constraintLeft_toLeftOf="@+id/OsImg"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/OsImg"
@@ -189,8 +189,8 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="@dimen/app_bar_height"
+            android:layout_height="@dimen/app_bar_height"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_margin="16dp"

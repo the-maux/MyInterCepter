@@ -42,7 +42,7 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="@dimen/app_bar_height"
                 android:elevation="2dp"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|snap"
@@ -94,7 +94,7 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/app_bar_height"
             android:background="@color/generic_background"
             android:elevation="2dp"
             app:layout_scrollFlags="">
@@ -149,7 +149,7 @@
         fab:menu_labels_paddingRight="8dp"
         fab:menu_labels_paddingTop="4dp"
         fab:menu_labels_textColor="#FFFFFF"
-        fab:menu_labels_textSize="14sp">
+        fab:menu_labels_textSize="@dimen/text_size_2">
 
     </com.github.clans.fab.FloatingActionMenu>
 

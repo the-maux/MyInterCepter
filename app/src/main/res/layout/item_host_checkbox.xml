@@ -30,7 +30,7 @@
         android:paddingLeft="8dp"
         android:text="Android"
         android:textColor="@color/material_light_white"
-        android:textSize="14sp" />
+        android:textSize="@dimen/text_size_2" />
 
     <CheckBox
         android:id="@+id/icon2"

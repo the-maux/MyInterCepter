@@ -18,7 +18,7 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/toptoolbar2"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/app_bar_height"
             android:paddingLeft="8dp"
             android:visibility="visible">
 
@@ -161,8 +161,8 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="@dimen/app_bar_height"
+            android:layout_height="@dimen/app_bar_height"
             android:layout_margin="16dp"
             android:src="@drawable/ic_stop"
             android:visibility="gone"

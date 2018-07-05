@@ -25,7 +25,7 @@
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:text="Protocole:"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_2"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -51,7 +51,7 @@
                     android:singleLine="true"
                     android:text="TCP"
                     android:textColor="@color/primary_text"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_size_2"
                     android:textStyle="bold" />
 
                 <TextView
@@ -90,7 +90,7 @@
                     android:singleLine="true"
                     android:text="ARP"
                     android:textColor="@color/primary_text"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_size_2"
                     android:textStyle="bold" />
 
                 <TextView
@@ -109,7 +109,7 @@
                     android:singleLine="true"
                     android:text="HTTPS"
                     android:textColor="@color/primary_text"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_size_1"
                     android:textStyle="bold" />
 
                 <TextView
@@ -128,7 +128,7 @@
                     android:singleLine="true"
                     android:text="HTTP"
                     android:textColor="@color/primary_text"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_size_2"
                     android:textStyle="bold" />
 
                 <TextView
@@ -147,7 +147,7 @@
                     android:singleLine="true"
                     android:text="UDP"
                     android:textColor="@color/primary_text"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_size_2"
                     android:textStyle="bold" />
 
                 <TextView
@@ -164,7 +164,7 @@
                     android:padding="4dp"
                     android:text=" IP"
                     android:textColor="?attr/actionMenuTextColor"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_size_2"
                     android:textStyle="bold"
                     android:visibility="gone" />
             </LinearLayout>
@@ -184,7 +184,7 @@
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:text="Section:"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_2"
                 android:textStyle="bold" />
 
             <CheckBox
@@ -198,7 +198,7 @@
                 android:checked="true"
                 android:text="Autoscroll"
                 android:textColor="@color/material_light_white"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_2"
                 android:textStyle="bold" />
 
             <CheckBox
@@ -209,7 +209,7 @@
                 android:checked="true"
                 android:text="N°"
                 android:textColor="@color/material_light_white"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_2"
                 android:textStyle="bold" />
 
             <CheckBox
@@ -222,7 +222,7 @@
                 android:checked="true"
                 android:text="Timef"
                 android:textColor="@color/material_light_white"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_2"
                 android:textStyle="bold" />
 
         </RelativeLayout>

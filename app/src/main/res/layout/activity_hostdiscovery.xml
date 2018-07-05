@@ -19,21 +19,20 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/app_bar_height"
             android:elevation="4dp">
-
 
             <ImageView
                 android:id="@+id/OsImg"
                 android:layout_width="40dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="8dp"
                 android:elevation="4dp"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
                 android:tint="@color/redteam_color"
                 android:transitionName="logo_activity"
-                app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                app:layout_constraintBottom_toTopOf="@+id/progressBar"
                 app:layout_constraintEnd_toStartOf="@+id/toolbar2"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -45,9 +44,9 @@
                 android:layout_height="0dp"
                 android:paddingLeft="8dp"
                 android:transitionName="title"
-                app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                app:layout_constraintBottom_toTopOf="@+id/progressBar"
                 app:layout_constraintEnd_toStartOf="@+id/searchViewRelative"
-                app:layout_constraintHorizontal_weight="5"
+                app:layout_constraintHorizontal_weight="10"
                 app:layout_constraintStart_toEndOf="@+id/OsImg"
                 app:layout_constraintTop_toTopOf="parent"
                 app:subtitle="Subtitle"
@@ -64,9 +63,9 @@
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
                 android:baselineAlignBottom="false"
-                app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                app:layout_constraintBottom_toTopOf="@+id/progressBar"
                 app:layout_constraintEnd_toStartOf="@+id/OsFilter"
-                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintHorizontal_weight="1.5"
                 app:layout_constraintStart_toEndOf="@+id/toolbar2"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_max="150dp">
@@ -89,59 +88,57 @@
                 android:soundEffectsEnabled="true"
                 android:src="@drawable/ic_important_devices_svg"
                 android:tint="@color/tint_svg"
-                app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                app:layout_constraintBottom_toTopOf="@+id/progressBar"
                 app:layout_constraintEnd_toStartOf="@+id/toolbarSettings"
-                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintHorizontal_weight="1.5"
                 app:layout_constraintStart_toEndOf="@+id/searchViewRelative"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/toolbarSettings"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:padding="4dp"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/tint_svg"
-                app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                app:layout_constraintBottom_toTopOf="@+id/progressBar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/OsFilter"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_max="40dp"
                 app:srcCompat="@drawable/ic_more_svg" />
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tabs"
+                android:indeterminateOnly="true"
+                android:paddingTop="2dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="56dp" />
-
-
+                app:layout_constraintGuide_begin="60dp" />
         </android.support.constraint.ConstraintLayout>
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tabs"
-            android:indeterminateOnly="true"
-            android:paddingTop="4dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     </android.support.design.widget.AppBarLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="@dimen/app_bar_height"
+        android:layout_height="@dimen/app_bar_height"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="16dp"
@@ -162,7 +159,24 @@
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/generic_background"
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
+
+        <ImageView
+            android:id="@+id/icoScyllaHostDiscovery"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="16dp"
+            android:alpha="0.08"
+            android:transitionName="icoScylla"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="5:5"
+            app:layout_constraintHeight_max="80dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintWidth_max="80dp"
+            app:srcCompat="@drawable/ico" />
 
         <FrameLayout
             android:id="@+id/frame_container"
@@ -188,7 +202,7 @@
             android:paddingLeft="8dp"
             android:paddingTop="4dp"
             android:textColor="@color/accent_material_dark"
-            android:textSize="12sp"
+            android:textSize="@dimen/text_size_1"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@+id/Message"
@@ -205,7 +219,7 @@
             android:lines="2"
             android:padding="8dp"
             android:textColor="@color/accent_material_dark"
-            android:textSize="12sp"
+            android:textSize="@dimen/text_size_1"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

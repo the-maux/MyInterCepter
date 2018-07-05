@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="is_tab">true</bool>
+
+    <dimen name="app_bar_height">64dp</dimen>
+    <dimen name="icon_toolbar_size">50dp</dimen>
+    <dimen name="text_size_1">14sp</dimen>
+    <dimen name="text_size_2">16sp</dimen>
+    <dimen name="text_size_3">20sp</dimen>
+    <dimen name="text_size_4">22sp</dimen>
+    <dimen name="text_size_5">24sp</dimen>
+    <dimen name="text_size_header">28sp</dimen>
+
+</resources>

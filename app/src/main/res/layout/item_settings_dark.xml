@@ -34,7 +34,7 @@
             android:paddingLeft="8dp"
             android:text="Verifier les applis via USB"
             android:textColor="?android:attr/textColorPrimary"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_2"
             app:layout_constraintRight_toLeftOf="@+id/switch_sw"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,7 +48,7 @@
             android:paddingTop="4dp"
             android:text="Forcer orient droite à gauche pour toutes langues alors lache rien ty es presque ma guelle il faut juste encore pousser un petit peu"
             android:textColor="?android:attr/textColorSecondary"
-            android:textSize="12sp"
+            android:textSize="@dimen/text_size_1"
             android:typeface="normal"
             android:visibility="visible"
             app:layout_constraintLeft_toLeftOf="@+id/title"

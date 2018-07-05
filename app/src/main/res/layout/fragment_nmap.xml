@@ -14,7 +14,7 @@
         android:padding="16dp"
         android:scrollbars="vertical"
         android:textColor="#FFFFFF"
-        android:textSize="12sp"
+        android:textSize="@dimen/text_size_1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 

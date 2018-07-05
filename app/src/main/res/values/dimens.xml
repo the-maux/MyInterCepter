@@ -1,10 +1,22 @@
 <resources>
-    <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="list_item_spacing">16dp</dimen>
-    <dimen name="list_item_spacing_half">8dp</dimen>
     <dimen name="btn_toolbar_size">55dp</dimen>
-    <dimen name="icon_toolbar_size">50dp</dimen>
     <dimen name="icon_toolbar2_size">50dp</dimen>
+
+
+
+    <bool name="is_tab">false</bool>
+    <dimen name="icon_toolbar_size">50dp</dimen>
+    <dimen name="list_item_spacing_half">8dp</dimen>
+    <dimen name="app_bar_height">56dp</dimen>
+    <dimen name="text_size_1">12sp</dimen>
+    <dimen name="text_size_2">14sp</dimen>
+    <dimen name="text_size_3">16sp</dimen>
+    <dimen name="text_size_4">18sp</dimen>
+    <dimen name="text_size_5">20sp</dimen>
+    <dimen name="text_size_header">24sp</dimen>
+
+
 </resources>

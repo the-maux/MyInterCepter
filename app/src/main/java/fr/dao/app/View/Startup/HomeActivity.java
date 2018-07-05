@@ -43,6 +43,7 @@ public class                    HomeActivity extends MyActivity {
     private TextView            TV_Root, TV_Permission, TV_Updated;
     private ProgressBar         PB_Root, PB_Permission, PB_Updated;
     private CardView            cardRoot, cardPermission, cardUpdated;
+    private ImageView           icoScylla;
     private CircleImageView     statusRoot, statusPermission, statusUpdated;
     private static final int    PERMISSIONS_MULTIPLE_REQUEST = 123;
     private Singleton           mSingleton = Singleton.getInstance();
@@ -57,9 +58,7 @@ public class                    HomeActivity extends MyActivity {
 
     private void                animMe() {
         if (blue_card.getVisibility() == View.INVISIBLE) {
-            //MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.ic_security_svg, (ImageView) findViewById(R.id.logo_defense), true, true);
             ((ImageView) findViewById(R.id.logo_defense)).setImageResource(R.drawable.ic_security_svg);
-            //((ImageView) findViewById(R.id.logo_attack)).setImageResource(R.drawable.target);
             ((ImageView) findViewById(R.id.logo_dashboard)).setImageResource(R.drawable.ic_developer_board_svg);
             MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.target, ((ImageView) findViewById(R.id.logo_attack)), false);
             ((ImageView) findViewById(R.id.logo_settings)).setImageResource(R.drawable.ic_build_svg);
@@ -70,7 +69,11 @@ public class                    HomeActivity extends MyActivity {
                             ViewAnimate.FadeAnimateReveal(mInstance, dashboard_card, new Runnable() {
                                 public void run() {
                                     ViewAnimate.FadeAnimateReveal(mInstance, monitorRoot, null);
-                                    ViewAnimate.FadeAnimateReveal(mInstance, settings_card, null);
+                                    ViewAnimate.FadeAnimateReveal(mInstance, settings_card, new Runnable() {
+                                        public void run() {
+                                            ViewAnimate.FadeAnimateReveal(mInstance, icoScylla, null);
+                                        }
+                                    });
                                 }
                             });
                             ViewAnimate.FadeAnimateReveal(mInstance, monitorPermission, null);
@@ -101,6 +104,7 @@ public class                    HomeActivity extends MyActivity {
         red_card = findViewById(R.id.red_card);
         dashboard_card = findViewById(R.id.dashboard_card);
         settings_card = findViewById(R.id.settings_card);
+        icoScylla = findViewById(R.id.icoScylla);
         monitorRoot = findViewById(R.id.monitorRoot);
         monitorPermission = findViewById(R.id.monitorPermission);
         monitorUpdated = findViewById(R.id.monitorUpdated);
@@ -226,7 +230,8 @@ public class                    HomeActivity extends MyActivity {
                         Intent intent = new Intent(mInstance, HostDiscoveryActivity.class);
                         Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_attack), "logo_activity");
                         Pair<View, String> p2 = Pair.create(findViewById(R.id.red_card), "rootViewTransition");
-                        startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2).toBundle());
+                        Pair<View, String> p3 = Pair.create((View)icoScylla, "icoScylla");
+                        startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2, p3).toBundle());
                     }
                 });
             }

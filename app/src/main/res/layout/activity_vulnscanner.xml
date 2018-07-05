@@ -124,8 +124,8 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="@dimen/app_bar_height"
+        android:layout_height="@dimen/app_bar_height"
         android:layout_marginRight="16dp"
         android:elevation="3dp"
         android:soundEffectsEnabled="true"

@@ -42,7 +42,7 @@
                 android:maxLines="1"
                 android:text="Session de dourges"
                 android:textColor="@color/material_light_white"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_2"
                 android:textStyle="bold" />
 
 
@@ -56,7 +56,7 @@
                 android:enabled="false"
                 android:text="Groupe ADEO"
                 android:textColor="@color/primary_white"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_size_1"
                 android:textStyle="italic" />
 
 
@@ -74,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Enregistree le 12 octobre 2017 à 18h30, sniffant 18 devices pendant 12 minutes en spoofant le dns avec 3 interception. \n Dump pcap sous le fichier : GROUPE_ADEO_19_01_18h51.pcap"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_size_1" />
         </RelativeLayout>
 
         <RelativeLayout

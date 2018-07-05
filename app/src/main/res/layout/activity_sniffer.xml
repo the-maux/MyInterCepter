@@ -18,7 +18,7 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/appBarConstraint"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/app_bar_height"
             android:elevation="6dp"
             android:paddingLeft="8dp"
             android:visibility="visible">
@@ -142,8 +142,8 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="@dimen/app_bar_height"
+            android:layout_height="@dimen/app_bar_height"
             android:layout_above="@+id/navigation"
             android:layout_alignParentRight="true"
             android:layout_alignWithParentIfMissing="true"

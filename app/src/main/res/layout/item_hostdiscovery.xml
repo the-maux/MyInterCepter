@@ -61,7 +61,7 @@
                 android:layout_weight="1"
                 android:maxLines="1"
                 android:textColor="?android:attr/textColorPrimary"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_size_1"
                 android:transitionName="hostTitle" />
 
             <TextView
@@ -71,7 +71,7 @@
                 android:layout_marginBottom="2dp"
                 android:layout_weight="1"
                 android:textColor="?android:attr/textColorSecondary"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_size_1"
                 android:transitionName="hostTitle"
                 android:typeface="monospace" />
 
@@ -83,7 +83,7 @@
                 android:layout_weight="1"
                 android:maxLines="1"
                 android:textColor="?android:attr/textColorSecondary"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_size_1" />
 
             <TextView
                 android:id="@+id/vendor"
@@ -92,7 +92,7 @@
                 android:layout_weight="1"
                 android:maxLines="1"
                 android:textColor="?android:attr/textColorSecondary"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_size_1"
                 android:visibility="visible" />
         </LinearLayout>
 

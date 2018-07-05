@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -79,10 +80,10 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
             skeletonScreen = Skeleton.bind(mHost_RV)
                     .adapter(mHostAdapter)
                     .shimmer(true)
-                    .angle(10)
+                    .angle(5)
                     .frozen(false)
                     .duration(1000)
-                    .count(10)
+                    .count(13)
                     .load(R.layout.item_hostdiscovery_skeleton)
                     .show();
         }
@@ -134,8 +135,9 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         if (mHostAdapter == null)
             mHostAdapter = new HostDiscoveryAdapter(getActivity(), mHost_RV, false, mActivity.mFab);
         //mHost_RV.setAdapter(mHostAdapter);
-        //mHost_RV.setHasFixedSize(true);
-        mHost_RV.setLayoutManager(new LinearLayoutManager(mActivity));
+        //mHost_RV.setHasFixedSize(true);new GridLayoutManager(this, 2)
+        mHost_RV.setLayoutManager(new GridLayoutManager(mActivity,
+                mActivity.getResources().getBoolean(R.bool.is_tab) ? 2 : 1));
         if (mHosts != null && !mHosts.isEmpty()) {
             mHostAdapter.updateHostList(mHosts);
             Log.e(TAG, "TARGET ALLOWED");

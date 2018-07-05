@@ -25,6 +25,7 @@
             android:layout_height="50dp"
             android:layout_centerVertical="true"
             android:layout_margin="4dp"
+            android:alpha="0.4"
             android:elevation="2dp"
             android:src="@color/material_grey_700"
             android:transitionName="hostPicture" />
@@ -37,6 +38,7 @@
             android:layout_alignTop="@+id/icon"
             android:layout_marginRight="4dp"
             android:layout_marginTop="14dp"
+            android:alpha="0.4"
             android:background="@color/material_grey_700"
             android:elevation="2dp"
             android:transitionName="hostPicture" />
@@ -50,6 +52,7 @@
             android:layout_marginTop="2dp"
             android:layout_toEndOf="@+id/icon"
             android:layout_toStartOf="@+id/checkbox_selected"
+            android:alpha="0.4"
             android:orientation="vertical">
 
             <View
@@ -61,7 +64,7 @@
                 android:background="@color/material_grey_700"
                 android:maxLines="1"
                 android:textColor="?android:attr/textColorPrimary"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_size_1"
                 android:transitionName="hostTitle" />
 
             <View
@@ -72,7 +75,7 @@
                 android:layout_weight="1"
                 android:background="@color/material_grey_700"
                 android:textColor="?android:attr/textColorSecondary"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_size_1"
                 android:transitionName="hostTitle"
                 android:typeface="monospace" />
 
@@ -85,7 +88,7 @@
                 android:background="@color/material_grey_700"
                 android:maxLines="1"
                 android:textColor="?android:attr/textColorSecondary"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_size_1" />
 
             <View
                 android:id="@+id/vendor"
@@ -95,7 +98,7 @@
                 android:background="@color/material_grey_700"
                 android:maxLines="1"
                 android:textColor="?android:attr/textColorSecondary"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_size_1"
                 android:visibility="visible" />
         </LinearLayout>
 
@@ -110,6 +113,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:alpha="0.4"
             android:background="@color/material_grey_700"
             android:padding="6dp" />
     </RelativeLayout>
