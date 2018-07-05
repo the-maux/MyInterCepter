@@ -18,5 +18,9 @@
     <dimen name="text_size_5">20sp</dimen>
     <dimen name="text_size_header">24sp</dimen>
 
+    <dimen name="icon_status_size">8dp</dimen>
+    <dimen name="icon_generic_size">50dp</dimen>
+    <dimen name="icon_header_size">120dp</dimen>
+
 
 </resources>

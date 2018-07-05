@@ -13,17 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import java.io.File;
-import java.util.ArrayList;
-
 import fr.dao.app.Core.Configuration.MitManager;
 import fr.dao.app.Core.Tcpdump.Proxy;
-import fr.dao.app.Model.Net.HttpTrame;
-import fr.dao.app.Model.Net.Trame;
 import fr.dao.app.R;
-import fr.dao.app.View.Proxy.ProxyActivity;
 import fr.dao.app.View.ZViewController.Adapter.HTTProxyAdapter;
-import fr.dao.app.View.ZViewController.Adapter.SniffPacketsAdapter;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 
@@ -40,7 +33,7 @@ public class                    ProxyReaderFrgmnt extends MyFragment {
     ProgressDialog              dialog;
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_wireshark, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_sniff, container, false);
         mCtx = getActivity();
         initXml(rootView);
         mActivity = (ProxyActivity) getActivity();

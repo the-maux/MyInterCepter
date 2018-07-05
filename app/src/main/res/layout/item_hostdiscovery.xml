@@ -9,7 +9,8 @@
     android:padding="16dp"
     app:cardBackgroundColor="@color/cardview_dark_background"
     app:cardCornerRadius="4dp"
-    app:cardElevation="4dp">
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true">
 
     <RelativeLayout
         android:id="@+id/relative_layout"
@@ -20,11 +21,12 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/icon"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="@dimen/icon_generic_size"
+            android:layout_height="@dimen/icon_generic_size"
             android:layout_centerVertical="true"
             android:layout_margin="4dp"
             android:elevation="2dp"
+            android:src="@drawable/bluebird"
             android:transitionName="hostPicture"
             app:civ_border_color="#FF414141"
             app:civ_border_width="1dp" />
@@ -36,8 +38,9 @@
             android:layout_alignRight="@+id/icon"
             android:layout_alignTop="@+id/icon"
             android:layout_marginRight="4dp"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="12dp"
             android:elevation="2dp"
+            android:src="@color/green"
             android:transitionName="hostPicture"
             app:civ_border_color="#FF313131"
             app:civ_border_width="1dp" />

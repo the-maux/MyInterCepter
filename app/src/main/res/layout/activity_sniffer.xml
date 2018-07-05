@@ -26,8 +26,8 @@
 
             <ImageView
                 android:id="@+id/OsImg"
-                android:layout_width="@dimen/icon_toolbar_size"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_height="@dimen/btn_toolbar_size"
                 android:elevation="4dp"
                 android:padding="6dp"
                 android:tint="@color/tint_svg"
@@ -59,9 +59,9 @@
 
             <ImageView
                 android:id="@+id/history"
-                android:layout_width="0dp"
-                android:layout_height="36dp"
-                android:padding="8dp"
+                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_height="@dimen/btn_toolbar_size"
+                android:padding="16dp"
                 android:soundEffectsEnabled="true"
                 android:src="@drawable/pcapfile"
                 android:tint="#85cccccc"
@@ -74,8 +74,8 @@
 
             <ImageButton
                 android:id="@+id/SwitchViewBackBtn"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_height="@dimen/btn_toolbar_size"
                 android:background="@android:color/transparent"
                 android:soundEffectsEnabled="true"
                 android:src="@drawable/ic_flip_to_front_svg"
@@ -89,8 +89,8 @@
 
             <ImageButton
                 android:id="@+id/toolbarSettings"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_height="@dimen/btn_toolbar_size"
                 android:layout_marginRight="8dp"
                 android:background="@android:color/transparent"
                 android:soundEffectsEnabled="true"

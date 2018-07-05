@@ -191,7 +191,7 @@
 
     <TextView
         android:id="@+id/Protocol"
-        android:layout_width="50dp"
+        android:layout_width="@dimen/icon_generic_size"
         android:layout_height="match_parent"
         android:layout_marginLeft="1px"
         android:background="@color/material_light_white"

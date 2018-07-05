@@ -34,8 +34,8 @@
 
             <ImageView
                 android:id="@+id/OsImg"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_height="@dimen/btn_toolbar_size"
                 android:layout_marginLeft="8dp"
                 android:elevation="4dp"
                 android:padding="2dp"
@@ -69,8 +69,8 @@
 
             <ImageView
                 android:id="@+id/toolbarBtn1"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_height="@dimen/btn_toolbar_size"
                 android:background="@android:color/transparent"
                 android:paddingTop="2dp"
                 android:soundEffectsEnabled="true"
@@ -85,8 +85,8 @@
 
             <ImageView
                 android:id="@+id/toolbarBtn2"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_height="@dimen/btn_toolbar_size"
                 android:background="@android:color/transparent"
                 android:baselineAlignBottom="false"
                 android:soundEffectsEnabled="true"
@@ -101,8 +101,8 @@
 
             <ImageView
                 android:id="@+id/toolbarSettings"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_height="@dimen/btn_toolbar_size"
                 android:background="@android:color/transparent"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/primary_white"

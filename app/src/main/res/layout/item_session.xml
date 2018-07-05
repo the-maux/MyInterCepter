@@ -36,7 +36,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="50dp"
+        app:layout_constraintWidth_max="@dimen/icon_generic_size"
         app:layout_constraintWidth_min="40dp" />
 
     <TextView
@@ -84,7 +84,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="50dp"
+        app:layout_constraintWidth_max="@dimen/icon_generic_size"
         app:layout_constraintWidth_min="40dp"
         app:srcCompat="@mipmap/ic_trash2" />
 
