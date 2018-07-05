@@ -25,6 +25,7 @@ public class                    SetupActivity extends MyActivity {
     private String              TAG = "SetupActivity";
     private SetupActivity       mInstance = this;
     private static final int    PERMISSIONS_MULTIPLE_REQUEST = 123;
+    private boolean flag = false;
     /*static {
         System.loadLibrary("native-lib");
     }*/
@@ -38,24 +39,28 @@ public class                    SetupActivity extends MyActivity {
     }
 
     private void                getPermission() {
-        Log.i(TAG, "Get PERMISSION");
-        String[] PERMISSION_STORAGE = {
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-        };
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            monitor("Need write permission for many reasons");
-            ActivityCompat.requestPermissions(this, PERMISSION_STORAGE, PERMISSIONS_MULTIPLE_REQUEST);
-            return ;
-        } else {
-            if (rootCheck())
-                initialisation();
-            else {
-                Intent i = new Intent(mInstance, HomeActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
+        if (!flag) {
+            Log.i(TAG, "Get PERMISSION");
+            String[] PERMISSION_STORAGE = {
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+            };
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                monitor("Need write permission for many reasons");
+                ActivityCompat.requestPermissions(this, PERMISSION_STORAGE, PERMISSIONS_MULTIPLE_REQUEST);
+                return ;
+            } else {
+                if (rootCheck())
+                    initialisation();
+                else {
+                    Intent i = new Intent(mInstance, HomeActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                }
             }
+        } else {
+            Log.e(TAG, "multiple init DETECTED /!\\");
         }
     }
     private boolean             rootCheck() {
@@ -80,28 +85,24 @@ public class                    SetupActivity extends MyActivity {
         getPermission();
     }
 
-    private boolean flag = false;
+
     private void                initialisation() {
         new Thread(new Runnable() {
             public void run() {
-                if (!flag) {
-                    Log.e(TAG, "INSTALL OK /!\\");
-                    flag = true;
-                    try {
-                        Singleton.getInstance().init(mInstance);
-                        Log.d(TAG, "Installation");
-                        monitor("Network initialization");
-                        NetDiscovering.initNetworkInfo(mInstance);
-                        new Setup(mInstance).install();
-                    } catch (IOException e) {
-                        monitor("Error IO");
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        monitor("Error Interupted");
-                        e.printStackTrace();
-                    }
-                } else {
-                    Log.e(TAG, "multiple DETECTED /!\\");
+                Log.e(TAG, "INSTALL OK /!\\");
+                flag = true;
+                try {
+                    Singleton.getInstance().init(mInstance);
+                    Log.d(TAG, "Installation");
+                    monitor("Network initialization");
+                    NetDiscovering.initNetworkInfo(mInstance);
+                    new Setup(mInstance).install();
+                } catch (IOException e) {
+                    monitor("Error IO");
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    monitor("Error Interupted");
+                    e.printStackTrace();
                 }
             }
         }).start();
