@@ -20,8 +20,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Core.Configuration.RootProcess;
 import fr.dao.app.Core.Configuration.Singleton;
@@ -57,41 +55,31 @@ public class                    HomeActivity extends MyActivity {
         init();
     }
 
-    protected void              onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-        //MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.ic_security_svg, (ImageView) findViewById(R.id.logo_defense), true, true);
-        ((ImageView) findViewById(R.id.logo_defense)).setImageResource(R.drawable.ic_security_svg);
-        //((ImageView) findViewById(R.id.logo_attack)).setImageResource(R.drawable.target);
-        ((ImageView) findViewById(R.id.logo_dashboard)).setImageResource(R.drawable.ic_developer_board_svg);
-        MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.target, ((ImageView) findViewById(R.id.logo_attack)), false);
-        ((ImageView) findViewById(R.id.logo_settings)).setImageResource(R.drawable.ic_build_svg);
-        ViewAnimate.FabAnimateReveal(mInstance, blue_card, new Runnable() {
-            public void run() {
-                ViewAnimate.FadeAnimateReveal(mInstance, red_card, new Runnable() {
-                    public void run() {
-                        ViewAnimate.FadeAnimateReveal(mInstance, dashboard_card, new Runnable() {
-                            public void run() {
-                                ViewAnimate.FadeAnimateReveal(mInstance, monitorRoot, null);
-                                ViewAnimate.FadeAnimateReveal(mInstance, settings_card, null);
-                            }
-                        });
-                        ViewAnimate.FadeAnimateReveal(mInstance, monitorPermission, null);
-                    }
-                });
-                ViewAnimate.FabAnimateReveal(mInstance, monitorUpdated, null);
-            }
-        });
-        /*ViewAnimate.FabAnimateReveal(mInstance, monitorUpdated, new Runnable() {
-            public void run() {
-                ViewAnimate.FadeAnimateReveal(mInstance, monitorPermission, new Runnable() {
-                    public void run() {
-                        ViewAnimate.FadeAnimateReveal(mInstance, monitorRoot, null);
-                    }
-                });
-            }
-        });*/
-
+    private void                animMe() {
+        if (blue_card.getVisibility() == View.INVISIBLE) {
+            //MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.ic_security_svg, (ImageView) findViewById(R.id.logo_defense), true, true);
+            ((ImageView) findViewById(R.id.logo_defense)).setImageResource(R.drawable.ic_security_svg);
+            //((ImageView) findViewById(R.id.logo_attack)).setImageResource(R.drawable.target);
+            ((ImageView) findViewById(R.id.logo_dashboard)).setImageResource(R.drawable.ic_developer_board_svg);
+            MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.target, ((ImageView) findViewById(R.id.logo_attack)), false);
+            ((ImageView) findViewById(R.id.logo_settings)).setImageResource(R.drawable.ic_build_svg);
+            ViewAnimate.FabAnimateReveal(mInstance, blue_card, new Runnable() {
+                public void run() {
+                    ViewAnimate.FadeAnimateReveal(mInstance, red_card, new Runnable() {
+                        public void run() {
+                            ViewAnimate.FadeAnimateReveal(mInstance, dashboard_card, new Runnable() {
+                                public void run() {
+                                    ViewAnimate.FadeAnimateReveal(mInstance, monitorRoot, null);
+                                    ViewAnimate.FadeAnimateReveal(mInstance, settings_card, null);
+                                }
+                            });
+                            ViewAnimate.FadeAnimateReveal(mInstance, monitorPermission, null);
+                        }
+                    });
+                    ViewAnimate.FabAnimateReveal(mInstance, monitorUpdated, null);
+                }
+            });
+        }
     }
 
     protected void              onPostResume() {
@@ -99,7 +87,12 @@ public class                    HomeActivity extends MyActivity {
         hideKeyboard();
         getRootPermission();
         getAndroidPermission();
-
+        runOnThreadDelay(new Runnable() {
+            public void run() {
+                mSingleton.Session = DBSessions.createOrUpdateSession();
+            }
+        });
+        animMe();
     }
 
     private void                initXml() {
@@ -149,7 +142,7 @@ public class                    HomeActivity extends MyActivity {
         settings_card.setOnClickListener(onSettingsClick());
         dashboard_card.setOnClickListener(onDashboardClick());
         defensifCheck();
-        mSingleton.Session = DBSessions.createOrUpdateSession();
+
     }
 
     private void                defensifCheck() {
@@ -276,8 +269,9 @@ public class                    HomeActivity extends MyActivity {
         }
     }
 
+    @Override
     public void                 onBackPressed() {
-        finish();
+        super.finishAfterTransition();
     }
 
     public void                 showSnackbar(String txt) {

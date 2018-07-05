@@ -46,6 +46,7 @@
             app:layout_constraintGuide_percent="0.90" />
 
         <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginEnd="8dp"

@@ -90,18 +90,20 @@ public class                    RootProcess {
         return this;
     }
 
-    public RootProcess          shell(String cmd) {
+    public RootProcess          shell(String cmd, boolean isShell) {
         try {
             cmd = cmd.replace("//", "/");
             if (mDebugLog)
                 Log.d(TAG, mLogID + "::" + cmd);
             if (mOutputStream != null) {
                 mOutputStream.writeBytes(cmd + " 2>&1 \n");
-                mOutputStream.writeBytes("echo \"111111111111111111111111111111111111111111\" \n");
-                mOutputStream.writeBytes("pwd \n");
-                mOutputStream.writeBytes("echo \"222222222222222222222222222222222222222222\" \n");
-                mOutputStream.writeBytes("id \n");
-                mOutputStream.writeBytes("echo \"333333333333333333333333333333333333333333\" \n");
+                if (isShell) {
+                    mOutputStream.writeBytes("echo \"111111111111111111111111111111111111111111\" \n");
+                    mOutputStream.writeBytes("pwd \n");
+                    mOutputStream.writeBytes("echo \"222222222222222222222222222222222222222222\" \n");
+                    mOutputStream.writeBytes("id \n");
+                    mOutputStream.writeBytes("echo \"333333333333333333333333333333333333333333\" \n");
+                }
                 mOutputStream.flush();
                 Field f = mProcess.getClass().getDeclaredField("pid");
                 f.setAccessible(true);

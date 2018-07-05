@@ -65,7 +65,7 @@ public class                        Shell {
             actualOutput += PROMPT + " " + cmd + "<br>";
             frgmnt.stdout(actualOutput, false);
             if (!cmd.contentEquals("exit")) {
-                mProcess.shell(cmd);
+                mProcess.shell(cmd, true);
                 mHistory.add(cmd);
                 isComandRunning = true;
                 Log.d(TAG, "exec:" + cmd);
