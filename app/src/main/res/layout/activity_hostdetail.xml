@@ -29,8 +29,7 @@
             app:expandedTitleMarginBottom="18dp"
             app:expandedTitleMarginStart="90dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:toolbarId="@+id/toolbar"
-            >
+            app:toolbarId="@+id/toolbar">
 
             <ImageView
                 android:id="@+id/collapsBackground"
@@ -131,11 +130,11 @@
         android:layout_marginTop="216dp"
         android:tint="@color/tint_svg"
         android:transitionName="fabTransition"
-        app:layout_behavior="fr.dao.app.View.ZViewController.Coordinator.HostDetail.FAMCollapseBehavior"
-        android:visibility="gone"
+        android:visibility="visible"
         app:elevation="2dp"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="end"
+        app:layout_behavior="fr.dao.app.View.ZViewController.Coordinator.HostDetail.FAMCollapseBehavior"
         app:menu_icon="@mipmap/ic_action"
         app:menu_openDirection="down"
         fab:menu_animationDelayPerItem="50"

@@ -264,7 +264,6 @@ public class                    HostDetailActivity extends MyActivity {
             mTabs.addTab(mTabs.newTab().setText("Pcap"), ++rax);
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             public void onTabSelected(TabLayout.Tab tab) {
-                Utils.vibrateDevice(mInstance, 100);
                 Log.d(TAG, "tab.getFirstInputQuestion().toString():" + tab.getText().toString());
                 switch (tab.getText().toString().toLowerCase()) {
                     case "historic":

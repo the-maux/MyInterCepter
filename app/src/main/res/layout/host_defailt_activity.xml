@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="112dp"
+        android:background="@drawable/modern_bg1"
+        android:transitionName="appBarTransition">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/app_bar_height">
+
+            <ProgressBar
+                android:id="@+id/progressBar3"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="60dp"
+                android:layout_height="0dp"
+                android:layout_marginLeft="6dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/OsImg"
+                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_height="@dimen/btn_toolbar_size"
+                android:layout_marginLeft="8dp"
+                android:elevation="4dp"
+                android:padding="2dp"
+                android:src="@drawable/linuxicon"
+                android:transitionName="LogoTransition"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/toolbar"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:transitionName="title_transition"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/toolbarBtn1"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_weight="4"
+                app:layout_constraintStart_toEndOf="@+id/OsImg"
+                app:layout_constraintTop_toTopOf="parent"
+                app:subtitle="Regular scan"
+                app:subtitleTextAppearance="@style/TextAppearance.AppCompat"
+                app:subtitleTextColor="@color/tint_svg"
+                app:title="192.168.10.18"
+                app:titleTextAppearance="@android:style/TextAppearance.Material.Menu"
+                app:titleTextColor="@android:color/primary_text_dark">
+
+            </android.support.v7.widget.Toolbar>
+
+            <ImageView
+                android:id="@+id/toolbarBtn1"
+                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_height="@dimen/btn_toolbar_size"
+                android:background="@android:color/transparent"
+                android:paddingTop="2dp"
+                android:soundEffectsEnabled="true"
+                android:tint="@color/primary_white"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/toolbarBtn2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/toolbar"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/toolbarBtn2"
+                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_height="@dimen/btn_toolbar_size"
+                android:background="@android:color/transparent"
+                android:baselineAlignBottom="false"
+                android:padding="14dp"
+                android:soundEffectsEnabled="true"
+                android:tint="@color/primary_white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/toolbarSettings"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_weight="0.9"
+                app:layout_constraintStart_toEndOf="@+id/toolbarBtn1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_edit_svg" />
+
+            <ImageView
+                android:id="@+id/toolbarSettings"
+                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_height="@dimen/btn_toolbar_size"
+                android:background="@android:color/transparent"
+                android:soundEffectsEnabled="true"
+                android:tint="@color/primary_white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="0.8"
+                app:layout_constraintStart_toEndOf="@+id/toolbarBtn2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@mipmap/ic_more_scan" />
+
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/app_bar_height"
+            android:visibility="visible"
+            app:layout_constraintHeight_min="@dimen/app_bar_height"
+            app:layout_constraintLeft_toLeftOf="@+id/OsImg"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/OsImg"
+            app:tabMode="scrollable">
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tab1" />
+        </android.support.design.widget.TabLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBar">
+
+        <FrameLayout
+            android:id="@+id/frame_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tabs"
+            android:background="@color/generic_background" />
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fab_menu"
+        android:layout_width="@dimen/app_bar_height"
+        android:layout_height="@dimen/app_bar_height"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:tint="@color/tint_svg"
+        android:transitionName="fabTransition"
+        android:visibility="visible"
+        app:elevation="2dp"
+        app:layout_anchor="@+id/appBar"
+        app:layout_anchorGravity="right|bottom"
+        app:menu_icon="@mipmap/ic_action"
+        app:menu_openDirection="down"
+        fab:menu_animationDelayPerItem="50"
+        fab:menu_colorNormal="@color/fab_color"
+        fab:menu_colorPressed="#414141"
+        fab:menu_colorRipple="#343434"
+        fab:menu_labels_cornerRadius="3dp"
+        fab:menu_labels_padding="8dp"
+        fab:menu_labels_paddingBottom="4dp"
+        fab:menu_labels_paddingLeft="8dp"
+        fab:menu_labels_paddingRight="8dp"
+        fab:menu_labels_paddingTop="4dp"
+        fab:menu_labels_textColor="#FFFFFF"
+        fab:menu_labels_textSize="@dimen/text_size_2"
+        tools:layout_editor_absoluteX="302dp"
+        tools:layout_editor_absoluteY="79dp">
+
+    </com.github.clans.fab.FloatingActionMenu>
+
+</android.support.design.widget.CoordinatorLayout>
