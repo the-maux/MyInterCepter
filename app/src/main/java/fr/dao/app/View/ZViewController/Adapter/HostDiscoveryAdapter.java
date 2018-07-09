@@ -153,14 +153,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                         Intent intent = new Intent(mActivity, HostDetailActivity.class);
                         Pair<View, String> p1 = Pair.create((View)holder.osIcon, "hostPicture");
                         Pair<View, String> p2 = Pair.create((View)holder.ipAndHostname, "hostTitle");
-                        if (mFab != null && 1 == 2) {
-                            Pair<View, String> p3 = Pair.create((View)mFab, "fabTransition");
-                            options = ActivityOptionsCompat
-                                    .makeSceneTransitionAnimation(mActivity, p1, p2, p3);
-                        } else {
-                            options = ActivityOptionsCompat
-                                    .makeSceneTransitionAnimation(mActivity, p1, p2);
-                        }
+                        options = ActivityOptionsCompat.makeSceneTransitionAnimation(mActivity, p1, p2);
                         intent.putExtra("mode", "Live");
                         intent.putExtra("macAddress", host.mac);
                         mActivity.startActivity(intent, options.toBundle());

@@ -25,7 +25,7 @@ public class                    HostDetailFragment extends MyFragment {
  //   private CoordinatorLayout   mCoordinatorLayout;
     private Host                mFocusedHost;//TODO:CORRIGER LE .Notes
     private Context             mCtx;
-    private HostDetailActivity mActivity;
+    private HostDetailActivity  mActivity;
     private RecyclerView        mRV;
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {

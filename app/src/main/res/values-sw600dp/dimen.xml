@@ -10,7 +10,13 @@
     <dimen name="text_size_4">22sp</dimen>
     <dimen name="text_size_5">24sp</dimen>
     <dimen name="text_size_header">28sp</dimen>
+
     <dimen name="icon_generic_size">62dp</dimen>
     <dimen name="icon_status_size">10dp</dimen>
     <dimen name="icon_header_size">200dp</dimen>
+
+    <dimen name="icon_collapsing_size">120dp</dimen>
+    <dimen name="collapsing_size">300dp</dimen>
+    <dimen name="collapsing_size_mini">128dp</dimen>
+
 </resources>

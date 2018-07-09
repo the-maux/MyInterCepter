@@ -6,28 +6,31 @@
     android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="bottom|end"
     android:fitsSystemWindows="true"
+    app:layout_anchorGravity="bottom|end"
     tools:context=".View.HostDetail.HostDetailActivity">
+
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        android:paddingBottom="12dp"
         app:elevation="4dp">
+
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/settings_menu_hostdetail"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/app_bar_height"
+            android:layout_height="@dimen/collapsing_size"
             android:elevation="2dp"
-            android:fitsSystemWindows="false"
+            android:minHeight="@dimen/collapsing_size_mini"
             android:transitionName="hostTitle"
+            app:collapsedTitleGravity="left|center"
+
             app:contentScrim="@color/generic_background"
-            app:expandedTitleGravity="center_vertical"
-            app:expandedTitleMarginBottom="18dp"
-            app:expandedTitleMarginStart="90dp"
+            app:expandedTitleGravity="bottom|center_horizontal"
+            app:expandedTitleMarginBottom="30dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:toolbarId="@+id/toolbar">
 
@@ -35,13 +38,18 @@
                 android:id="@+id/collapsBackground"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:scaleType="center"
                 app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.5" />
+                app:layout_collapseParallaxMultiplier="0.5"
+                app:srcCompat="@drawable/bg1_windows" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/app_bar_height"
+                android:layout_marginLeft="80dp"
+                android:layout_marginRight="150dp"
+                android:background="@android:color/transparent"
                 android:elevation="2dp"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|snap"
@@ -54,12 +62,12 @@
 
             <ImageView
                 android:id="@+id/history"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_height="@dimen/btn_toolbar_size"
                 android:layout_gravity="right"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginRight="48dp"
+                android:layout_marginRight="52dp"
                 android:layout_marginTop="8dp"
                 android:elevation="4dp"
                 android:padding="6dp"
@@ -71,8 +79,8 @@
 
             <ImageView
                 android:id="@+id/settingsMenuDetail"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_height="@dimen/btn_toolbar_size"
                 android:layout_gravity="right"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp"
@@ -94,11 +102,20 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="@dimen/app_bar_height"
+            android:layout_gravity="bottom"
             android:background="@color/generic_background"
             android:elevation="2dp"
-            app:layout_scrollFlags="">
+            app:layout_scrollFlags="snap"
+            app:tabIndicatorColor="@color/fab_color"
+            app:tabMode="scrollable">
 
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabItem2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tab2" />
         </android.support.design.widget.TabLayout>
+
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
@@ -120,21 +137,32 @@
 
     </android.support.v4.widget.NestedScrollView>
 
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/OsImg"
+        android:layout_width="@dimen/icon_collapsing_size"
+        android:layout_height="@dimen/icon_collapsing_size"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="90dp"
+        android:elevation="4dp"
+        android:src="@drawable/bg1_linux"
+        android:transitionName="hostPicture"
+        app:civ_border_color="@color/fab_color"
+        app:civ_border_width="2dp"
+        app:layout_behavior="fr.dao.app.View.ZViewController.Coordinator.HostDetail.ImageCollapseBehavior" />
+
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/fab_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="216dp"
-        android:tint="@color/tint_svg"
+        android:clickable="false"
+        android:fillAfter="false"
         android:transitionName="fabTransition"
-        android:visibility="visible"
+        android:visibility="gone"
         app:elevation="2dp"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="end"
-        app:layout_behavior="fr.dao.app.View.ZViewController.Coordinator.HostDetail.FAMCollapseBehavior"
+        app:layout_anchor="@id/settings_menu_hostdetail"
+        app:layout_anchorGravity="bottom|end"
         app:menu_icon="@mipmap/ic_action"
         app:menu_openDirection="down"
         fab:menu_animationDelayPerItem="50"
@@ -150,17 +178,8 @@
         fab:menu_labels_textColor="#FFFFFF"
         fab:menu_labels_textSize="@dimen/text_size_2">
 
+
     </com.github.clans.fab.FloatingActionMenu>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/OsImg"
-        android:layout_width="60dp"
-        android:layout_height="@dimen/app_bar_height"
-        android:layout_marginLeft="16dp"
-        android:elevation="6dp"
-        android:transitionName="hostPicture"
-        app:civ_border_color="#eedddddd"
-        app:civ_border_width="1px"
-        app:layout_behavior="fr.dao.app.View.ZViewController.Coordinator.HostDetail.ImageCollapseBehavior" />
 
 </android.support.design.widget.CoordinatorLayout>

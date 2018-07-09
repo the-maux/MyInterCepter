@@ -3,20 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="1dp"
     android:alpha="0.90"
     android:padding="16dp"
     app:cardBackgroundColor="@color/cardview_dark_background"
     app:cardCornerRadius="4dp"
-    app:cardElevation="4dp">
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true">
 
     <RelativeLayout
         android:id="@+id/relative_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
         android:background="@android:color/transparent"
+        android:clickable="true"
         android:padding="4dp">
 
         <de.hdodenhof.circleimageview.CircleImageView

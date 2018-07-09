@@ -25,6 +25,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -50,7 +51,6 @@ import fr.dao.app.View.ZViewController.Fragment.PcapListerFragment;
 public class                    HostDetailActivity extends MyActivity {
     private String              TAG = "HostDetailActivity";
     private HostDetailActivity  mInstance = this;
-    private Singleton           mSingleton = Singleton.getInstance();
     private Host                mFocusedHost;
     private CoordinatorLayout   mCoordinator;
     private CollapsingToolbarLayout collapsingToolbarLayout;
@@ -61,7 +61,7 @@ public class                    HostDetailActivity extends MyActivity {
     private MyFragment          mCurrentFragment;
     private List<Pcap>          mPcapsList;
     private ImageView           collapsBackground;
-
+    private boolean             isClosed = false, isFabAnim = false;
     public enum                 actionActivity {
         NMAP(0), BLOCK_INTERNET(1), VULN_SCAN(2), SNIFFER(3);
 
@@ -89,13 +89,20 @@ public class                    HostDetailActivity extends MyActivity {
 
     private void                initXml() {
         mCoordinator = findViewById(R.id.Coordonitor);
-        MyGlideLoader.coordoBackgroundXMM(this, mCoordinator);
+        //MyGlideLoader.coordoBackgroundXMM(this, mCoordinator);
         osHostImage = findViewById(R.id.OsImg);
         history = findViewById(R.id.history);
         settingsMenuDetail = findViewById(R.id.settingsMenuDetail);
         mTabs  = findViewById(R.id.tabs);
         mMenuFAB = findViewById(R.id.fab_menu);
+
         collapsBackground = findViewById(R.id.collapsBackground);
+        printBackground();
+        //mMenuFAB.hideMenuButton(true);
+        setStatusBarColor(android.R.color.transparent);
+    }
+
+    private void                printBackground() {
         int res = R.drawable.bg1;
         switch (mFocusedHost.osType) {
             case Ios:
@@ -131,7 +138,6 @@ public class                    HostDetailActivity extends MyActivity {
                 //.transition(DrawableTransitionOptions.withCrossFade())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
         r.into(collapsBackground);
-        setStatusBarColor(R.color.generic_background);
     }
 
     protected void              onResume() {
@@ -167,11 +173,55 @@ public class                    HostDetailActivity extends MyActivity {
 
     private void                initMenuFab() {
         mMenuFAB.removeAllMenuButtons();
+        mMenuFAB.open(false);
         mMenuFAB.addMenuButton(initMenuBtn("Sniffing", R.mipmap.ic_hearing, actionActivity.SNIFFER), 0);
         mMenuFAB.addMenuButton(initMenuBtn("Strip connection", R.mipmap.ic_cut_internet, actionActivity.BLOCK_INTERNET), 1);
         mMenuFAB.addMenuButton(initMenuBtn("Nmap", R.mipmap.ic_eye_nosvg, actionActivity.NMAP), 2);
         mMenuFAB.addMenuButton(initMenuBtn("Vulnerability Scanner", R.drawable.target_pad_30_white, actionActivity.VULN_SCAN), 3);
+        mMenuFAB.setOnMenuButtonClickListener(onMenuButtonListener());
     }
+
+    private View.OnClickListener onMenuButtonListener() {
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+                if (!isFabAnim) {
+                    if (!isClosed) {
+                        isFabAnim = true;
+                        ViewAnimate.FabAnimateReveal(mInstance, menuBtn.get(0), null);
+                        ViewAnimate.FabAnimateReveal(mInstance, menuBtn.get(1), new Runnable() {
+                            public void run() {
+                                ViewAnimate.FabAnimateReveal(mInstance, menuBtn.get(2), new Runnable() {
+                                    public void run() {
+                                        ViewAnimate.FabAnimateReveal(mInstance, menuBtn.get(3), new Runnable() {
+                                            public void run() {
+                                                isFabAnim = false;
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        isFabAnim = true;
+                        ViewAnimate.FabAnimateHide(mInstance, menuBtn.get(0), new Runnable() {
+                            public void run() {
+                                ViewAnimate.FabAnimateHide(mInstance, menuBtn.get(1), new Runnable() {
+                                    public void run() {
+                                        ViewAnimate.FabAnimateHide(mInstance, menuBtn.get(2), null);
+                                        ViewAnimate.FabAnimateHide(mInstance, menuBtn.get(3), null);
+                                        isFabAnim = false;
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    isClosed = !isClosed;
+                }
+            }
+        };
+    }
+
+    private ArrayList<FloatingActionButton> menuBtn = new ArrayList<>();
 
     private FloatingActionButton initMenuBtn(String title, int logo, actionActivity type) {
         FloatingActionButton FabBtn = new FloatingActionButton(this);
@@ -182,13 +232,14 @@ public class                    HostDetailActivity extends MyActivity {
         FabBtn.setPadding(4, 4, 4, 4);
         FabBtn.setColorPressed(getResources().getColor(R.color.generic_background));
         FabBtn.setOnClickListener(onItemMenuClicked(type, FabBtn));
+        FabBtn.setVisibility(View.GONE);
+        menuBtn.add(FabBtn);
         return FabBtn;
     }
 
     private View.OnClickListener onItemMenuClicked(final actionActivity classActivity, final FloatingActionButton fabBtn) {
         return new View.OnClickListener() {
             public void onClick(View view) {
-                Utils.vibrateDevice(mInstance, 100);
                 mMenuFAB.close(true);
                 Intent intent = null;
                 Class classActivityToLaunch;
@@ -230,7 +281,7 @@ public class                    HostDetailActivity extends MyActivity {
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewCompat.setElevation(collapsingToolbarLayout, 4);
-                int alpha = appBarLayout.getTotalScrollRange() - Math.abs(verticalOffset);
+                /*int alpha = appBarLayout.getTotalScrollRange() - Math.abs(verticalOffset);
                 if (alpha < 40) {
                     if (osImg.getVisibility() == View.VISIBLE) {
                         osImg.animate()
@@ -255,7 +306,7 @@ public class                    HostDetailActivity extends MyActivity {
                                     }
                                 });
 
-                }
+                }*/
             }
         });
     }

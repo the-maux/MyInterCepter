@@ -12,7 +12,7 @@ import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 
 public class                    ViewAnimate {
-    private static int          SHORT_DURATION = 300, LONG_DURATION = 350;
+    private static int          SHORT_DURATION = 250, LONG_DURATION = 350;
 
     public static void          setVisibilityToGoneQuick(final View view) {
         setVisibilty(view, SHORT_DURATION, View.GONE);

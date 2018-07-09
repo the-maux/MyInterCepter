@@ -31,14 +31,17 @@ public class                                DBHost {
 
     public static Host                      getDevicesFromMAC(String MAC) {
         for (Host host : Singleton.getInstance().alreadyExtracted) {/*Optimisation to Transition while SQL running */
-            if (host.mac.contentEquals(MAC)) {
+            if (host != null && host.mac.contentEquals(MAC)) {
                 Log.i(TAG, "host:" + MAC + " already extracted, no sql needed");
                 return host;
             }
         }
         Host tmp = new Select().from(Host.class).where("mac = \"" + MAC + "\"").executeSingle();
-        if (tmp != null) Fingerprint.initHost(tmp);
-        Singleton.getInstance().alreadyExtracted.add(tmp);
+        if (tmp != null)  {
+            Fingerprint.initHost(tmp);
+            if (!Singleton.getInstance().alreadyExtracted.contains(tmp))
+                Singleton.getInstance().alreadyExtracted.add(tmp);
+        }
         return tmp;
     }
 
