@@ -173,12 +173,12 @@ public class                    HostDetailActivity extends MyActivity {
 
     private void                initMenuFab() {
         mMenuFAB.removeAllMenuButtons();
-        mMenuFAB.open(false);
+       // mMenuFAB.open(false);
         mMenuFAB.addMenuButton(initMenuBtn("Sniffing", R.mipmap.ic_hearing, actionActivity.SNIFFER), 0);
         mMenuFAB.addMenuButton(initMenuBtn("Strip connection", R.mipmap.ic_cut_internet, actionActivity.BLOCK_INTERNET), 1);
         mMenuFAB.addMenuButton(initMenuBtn("Nmap", R.mipmap.ic_eye_nosvg, actionActivity.NMAP), 2);
         mMenuFAB.addMenuButton(initMenuBtn("Vulnerability Scanner", R.drawable.target_pad_30_white, actionActivity.VULN_SCAN), 3);
-        mMenuFAB.setOnMenuButtonClickListener(onMenuButtonListener());
+        //mMenuFAB.setOnMenuButtonClickListener(onMenuButtonListener());
     }
 
     private View.OnClickListener onMenuButtonListener() {
@@ -229,10 +229,13 @@ public class                    HostDetailActivity extends MyActivity {
         FabBtn.setLabelText(title);
         FabBtn.setImageResource(logo);
         FabBtn.setColorNormal(getResources().getColor(R.color.fab_color));
-        FabBtn.setPadding(4, 4, 4, 4);
+        if (title.contentEquals("Vulnerability Scanner") || title.contentEquals("Strip connection"))
+            FabBtn.setPadding(8, 8, 8, 8);
+        else
+           FabBtn.setPadding(4, 4, 4, 4);
         FabBtn.setColorPressed(getResources().getColor(R.color.generic_background));
         FabBtn.setOnClickListener(onItemMenuClicked(type, FabBtn));
-        FabBtn.setVisibility(View.GONE);
+        //FabBtn.setVisibility(View.GONE);
         menuBtn.add(FabBtn);
         return FabBtn;
     }
