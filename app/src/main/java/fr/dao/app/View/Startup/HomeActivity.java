@@ -275,9 +275,8 @@ public class                    HomeActivity extends MyActivity {
         }
     }
 
-    @Override
-    public void                 onBackPressed() {
-        super.finishAfterTransition();
+    public void             onBackPressed() {
+        //super.onBackPressed();
     }
 
     public void                 showSnackbar(String txt) {

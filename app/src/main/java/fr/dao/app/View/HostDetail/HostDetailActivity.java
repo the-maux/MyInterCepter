@@ -78,12 +78,13 @@ public class                    HostDetailActivity extends MyActivity {
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hostdetail);
-        initXml();
         mFocusedHost = DBHost.getDevicesFromMAC(getIntent().getExtras().getString("macAddress"));
         if (mFocusedHost == null) {
             showSnackbar("User can't be loaded from BDD");
+        } else {
+            initXml();
+            MyGlideLoader.setOsIcon(mFocusedHost, osHostImage);
         }
-        MyGlideLoader.setOsIcon(mFocusedHost, osHostImage);
     }
 
     private void                initXml() {
@@ -95,9 +96,37 @@ public class                    HostDetailActivity extends MyActivity {
         mTabs  = findViewById(R.id.tabs);
         mMenuFAB = findViewById(R.id.fab_menu);
         collapsBackground = findViewById(R.id.collapsBackground);
+        int res = R.drawable.bg1;
+        switch (mFocusedHost.osType) {
+            case Ios:
+            case Apple:
+                res = R.drawable.bg1_mac;
+                break;
+            case Android:
+            case Mobile:
+            case Samsung:
+            case Bluebird:
+                res = R.drawable.bg1_android;
+                break;
+            case Windows:
+            case WindowsXP:
+            case Windows7_8_10:
+            case Windows2000:
+            case Cisco:
+                res = R.drawable.bg1_windows;
+                break;
+            case Raspberry:
+            case Linux_Unix:
+            case Ps4:
+            case QUANTA:
+            case OpenBSD:
+            case Unix:
+                res = R.drawable.bg1_linux;
+                break;
+        }
         //collapsBackground.setImageResource(R.drawable.bg1);
         GlideRequest r = GlideApp.with(mInstance)
-                .load(R.drawable.bg1)
+                .load(res)
                 .centerCrop()
                 //.transition(DrawableTransitionOptions.withCrossFade())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
@@ -108,25 +137,6 @@ public class                    HostDetailActivity extends MyActivity {
     protected void              onResume() {
         super.onResume();
         init();
-    }
-
-    protected void              onPostResume() {
-        super.onPostResume();
-        try {
-
-            collapsBackground.postDelayed(new Runnable() {
-                public void run() {
-                    try {
-
-                    } catch (IllegalArgumentException e) {
-                        Log.e(TAG, "PostDelayed while Activity is destroyed");
-                    }
-                }
-            }, 800);
-
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
         ViewAnimate.setVisibilityToVisibleQuick(settingsMenuDetail, 800);
         ViewAnimate.setVisibilityToVisibleQuick(history, 500);
     }
@@ -227,7 +237,6 @@ public class                    HostDetailActivity extends MyActivity {
                                 .alpha(0.0f)
                                 .setDuration(250)
                                 .setListener(new AnimatorListenerAdapter() {
-                                    @Override
                                     public void onAnimationEnd(Animator animation) {
                                         super.onAnimationEnd(animation);
                                         osImg.setVisibility(View.GONE);
@@ -240,7 +249,6 @@ public class                    HostDetailActivity extends MyActivity {
                                 .alpha(1.0f)
                                 .setDuration(250)
                                 .setListener(new AnimatorListenerAdapter() {
-                                    @Override
                                     public void onAnimationEnd(Animator animation) {
                                         super.onAnimationEnd(animation);
                                         osImg.setVisibility(View.VISIBLE);
@@ -338,7 +346,6 @@ public class                    HostDetailActivity extends MyActivity {
 
     public void                 setToolbarTitle(final String title, final String subtitle) {
         mInstance.runOnUiThread(new Runnable() {
-            @Override
             public void run() {
                 if (title != null)
                     collapsingToolbarLayout.setTitle(title);

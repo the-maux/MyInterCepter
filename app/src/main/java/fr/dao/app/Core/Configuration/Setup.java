@@ -30,6 +30,11 @@ public class                    Setup {
         exec("Creating Directory:", "mkdir -p " + mSingleton.Settings.PcapPath);/*  Build directory    */
         exec("Creating Directory:", "mkdir -p " + mSingleton.Settings.FilesPath);
         exec("Creating Directory:", "chmod 777 " + mSingleton.Settings.FilesPath);
+        mActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                mActivity.HeaderTitle.setText("Installation");
+            }
+        });
         buildFiles();
         exec("Dumping binary:","mount -o rw,remount /system");
         exec("Dumping binary:","cp ./ping /system/bin/;");
@@ -147,7 +152,11 @@ public class                    Setup {
     }
 
     private void                cleanTheKitchenBoy() {
-        mActivity.monitor("Cleaning installation");
+        mActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                mActivity.HeaderTitle.setText("Cleaning installation");
+            }
+        });
         Log.d(TAG, "busybox killall cepter::exit::" + exec(mSingleton.Settings.BinaryPath + "busybox killall cepter"));
         Log.d(TAG, "busybox killall tcpdump::exit::" + exec(mSingleton.Settings.BinaryPath + "busybox killall tcpdump"));
         Log.d(TAG, "busybox killall arpspoof::exit::" + exec(mSingleton.Settings.BinaryPath + "busybox killall arpspoof"));

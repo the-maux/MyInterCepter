@@ -139,7 +139,7 @@ public class                            NetDiscovering {
     }
 
 
-    public static String                getMac(WifiInfo wifiInfo) {
+    private static String                getMac(WifiInfo wifiInfo) {
         if (MAC == null) {
             RootProcess process = new RootProcess("GetMacADDR");
             BufferedReader reader = process.exec("cat /sys/class/net/wlan0/address").getReader();

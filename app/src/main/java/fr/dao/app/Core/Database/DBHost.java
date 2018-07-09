@@ -2,7 +2,6 @@ package fr.dao.app.Core.Database;
 
 import android.util.Log;
 
-import com.activeandroid.query.From;
 import com.activeandroid.query.Select;
 
 import java.util.ArrayList;
@@ -31,21 +30,15 @@ public class                                DBHost {
     }
 
     public static Host                      getDevicesFromMAC(String MAC) {
-        From from = new Select()
-                .from(Host.class)
-                .where("mac = \"" + MAC + "\"");
-        Host tmp = from.executeSingle();
-        if (Singleton.getInstance().Settings.UltraDebugMode) {
-            if (tmp != null) {
-                Log.d(TAG, "SQL STRING [" + from.toSql() + "]: FOUND");
-            } else {
-                Log.d(TAG, "SQL STRING [" + from.toSql() + "]: NOT FOUND");
+        for (Host host : Singleton.getInstance().alreadyExtracted) {/*Optimisation to Transition while SQL running */
+            if (host.mac.contentEquals(MAC)) {
+                Log.i(TAG, "host:" + MAC + " already extracted, no sql needed");
+                return host;
             }
         }
-        //if (tmp != null)
-            //tmp.dumpMe();
-        if (tmp != null)
-            Fingerprint.initHost(tmp);
+        Host tmp = new Select().from(Host.class).where("mac = \"" + MAC + "\"").executeSingle();
+        if (tmp != null) Fingerprint.initHost(tmp);
+        Singleton.getInstance().alreadyExtracted.add(tmp);
         return tmp;
     }
 
