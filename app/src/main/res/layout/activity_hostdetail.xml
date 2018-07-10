@@ -12,6 +12,16 @@
     tools:context=".View.HostDetail.HostDetailActivity">
 
 
+    <View
+        android:id="@+id/myView"
+        android:layout_width="@dimen/icon_generic_size"
+        android:layout_height="@dimen/icon_generic_size"
+        android:layout_gravity="top|left"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/material_deep_orange_100"
+        app:layout_collapseMode="pin" />
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"

@@ -11,9 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import fr.dao.app.R;
+
 public class                        ImageCollapseBehavior extends CoordinatorLayout.Behavior {
     private String                  TAG = "ImageCollapseBehavior";
-    private int                     hehightImg = -42, widthImg = -42;
+    private int                     hehightImg = -1, widthImg = -1;
+    private int                     mini_H = -42, mini_W = -42;
+    public float                    X_toGO = -1f, Y_toGO=-1f, X_from=-1f, Y_from=-1f;
+    int                             location_toGO[] = new int[2], location_FROM[] = new int[2];
+
     public ImageCollapseBehavior(){
         super();
     }
@@ -22,12 +28,26 @@ public class                        ImageCollapseBehavior extends CoordinatorLay
     }
 
     public boolean                  layoutDependsOn(final CoordinatorLayout parent, final View child, View dependency){
-        //Log.d(TAG, "layoutDependsOn::child(" + child.getClass().getName() + ")::parent(" + dependency.getClass().getName() + ")");
+        //Log.d(TAG, "parent(" + dependency.getClass().getName() + ") child(" + child.getClass().getName() + "):: dependency("+ dependency.getClass().getName()+")");
+        if (dependency.getId() == R.id.myView && Y_toGO == -1f && dependency.getLeft() != 0 && dependency.getTop() != 0) {
+            dependency.getLocationInWindow(location_toGO);
+            X_toGO = location_toGO[0];
+            Y_toGO = location_toGO[1];
+            mini_H = dependency.getHeight();
+            mini_W = dependency.getWidth();
+            Log.e(TAG, "TAG1");
+        }
+
+        if (child.getId() == R.id.OsImg && X_from == -1 && child.getLeft() != 0 && child.getTop() != 0) {
+            child.getLocationInWindow(location_FROM);
+            hehightImg = child.getLayoutParams().height;
+            widthImg = child.getLayoutParams().width;
+            X_from = location_FROM[0];
+            Y_from = location_FROM[1];
+            Log.e(TAG, "TAG2");
+        }
+
         if (dependency instanceof AppBarLayout && child instanceof ImageView) {
-            if (hehightImg == -42 && widthImg == -42) {
-                hehightImg = child.getLayoutParams().height;
-                widthImg = child.getLayoutParams().width;
-            }
             ((AppBarLayout) dependency).addOnOffsetChangedListener(new ImageOffseter(parent, (ImageView) child));
         }
         return dependency instanceof AppBarLayout;
@@ -50,29 +70,21 @@ public class                        ImageCollapseBehavior extends CoordinatorLay
         }
         private int actualOffset = 0;
         public void                 onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-            float displacementFraction = -verticalOffset / (float) appBarLayout.getTotalScrollRange();
-            Log.d(TAG, "onOffsetChanged:" + appBarLayout.getScrollY() + "----" + verticalOffset);
-//            Log.d(TAG, "onOffsetChanged:displacementFraction(" + displacementFraction + ")");
-//            Log.d(TAG, "onOffsetChanged:opposite(" + -oppposite + ")");
-            boolean isGoDown = actualOffset < verticalOffset;
-            if (verticalOffset < 100) {
+            if (X_from != -1) {
+                float displacementFraction = -verticalOffset / (float) appBarLayout.getTotalScrollRange();
+                float X_transition = (X_from - X_toGO) * displacementFraction;
+                float Y_transition = (Y_from - Y_toGO) * displacementFraction;
+                imageView.setTranslationY(-Y_transition);
+                imageView.setTranslationX(-X_transition);
+                Log.d(TAG, "onOffsetChanged:" + displacementFraction + " X:" + X_transition + "  ->Y:" + Y_transition);
+                boolean isGoDown = actualOffset < verticalOffset;
                 ViewGroup.LayoutParams params = imageView.getLayoutParams();
-                if (params.height > 58 || isGoDown) {
-
-                }
-                Log.d(TAG, "params.height[" + params.height+ "] && imgTop+v[" +(imageView.getY() + verticalOffset) +"]");
-                if (appBarLayout.getY() < (imageView.getY() + (verticalOffset * 0.6f)) || isGoDown)
-                    imageView.setTranslationY(verticalOffset * 0.6f);
-                if (appBarLayout.getX() < (imageView.getX() + (verticalOffset)) || isGoDown) {
-                    float oppposite = displacementFraction - (float)1.0;
+                float oppposite = (displacementFraction - 1.0f);
+                if ((int) (-oppposite * hehightImg) > mini_H) {
                     params.height = (int) (-oppposite * hehightImg);
-                    params.width = (int) (-oppposite * widthImg)    ;
+                    params.width = (int) (-oppposite * widthImg);
                     imageView.setLayoutParams(params);
-                    imageView.setTranslationX(verticalOffset * 1.8f);
                 }
-                //
-//  Log.d(TAG, "onOffsetChanged:alpha(" + (-oppposite) + ")");
-                //imageView.setAlpha(-oppposite);
                 imageView.requestLayout();
                 actualOffset = verticalOffset;
             }
