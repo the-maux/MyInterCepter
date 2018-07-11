@@ -12,14 +12,14 @@ import fr.dao.app.View.Settings.SettingsFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Dialog.QuestionMultipleAnswerDialog;
 
-public class DnsSettingsFrgmnt extends SettingsFrgmnt {
+public class                        DnsSettingsFrgmnt extends SettingsFrgmnt {
     private String                  Title = "Settings Dns";
     private MyActivity              mActivity;
 
     public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         mActivity = (MyActivity) getActivity();
-        setTitle(Title);
+        mActivity.setToolbarTitle("Settings", "Dns spoofing");
         mActivity.setToolbarBackgroundColor(0x111111);//TODO change for the right color
         buildSettings();
         return rootView;

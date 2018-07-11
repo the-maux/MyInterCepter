@@ -69,8 +69,8 @@
 
                 <ImageView
                     android:id="@+id/history"
-                    android:layout_width="@dimen/btn_toolbar_size"
-                    android:layout_height="@dimen/btn_toolbar_size"
+                    android:layout_width="@dimen/icon_generic_size"
+                    android:layout_height="@dimen/icon_generic_size"
                     android:layout_alignParentRight="true"
                     android:layout_marginEnd="8dp"
                     android:padding="2dp"

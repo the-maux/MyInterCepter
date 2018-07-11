@@ -19,13 +19,13 @@
 
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <RelativeLayout
                 android:id="@+id/topToolbar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/app_bar_height"
                 android:layout_marginBottom="20dp"
                 android:gravity="right">
 
@@ -67,14 +67,13 @@
 
                 <ImageView
                     android:id="@+id/history"
-                    android:layout_width="@dimen/btn_toolbar_size"
+                    android:layout_width="@dimen/icon_generic_size"
                     android:layout_height="@dimen/btn_toolbar_size"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="8dp"
-                    android:padding="12dp"
                     android:soundEffectsEnabled="true"
-                    android:src="@drawable/ic_more_vert" />
+                    android:src="@mipmap/ic_imore_png" />
 
             </RelativeLayout>
 

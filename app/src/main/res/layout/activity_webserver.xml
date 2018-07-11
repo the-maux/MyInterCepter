@@ -26,7 +26,7 @@
 
             <ImageView
                 android:id="@+id/OsImg"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/icon_toolbar_size"
                 android:layout_height="0dp"
                 android:padding="8dp"
                 android:src="@drawable/ic_vpn_lock_svg"
@@ -59,7 +59,7 @@
 
             <ImageButton
                 android:id="@+id/config"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/icon_generic_size"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
 
@@ -76,11 +76,10 @@
 
             <ImageButton
                 android:id="@+id/toolbarSettings"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/icon_generic_size"
                 android:layout_height="0dp"
                 android:layout_marginRight="8dp"
                 android:background="@android:color/transparent"
-                android:padding="4dp"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -90,7 +89,7 @@
                 app:layout_constraintStart_toEndOf="@+id/config"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.5"
-                app:srcCompat="@drawable/ic_more_svg" />
+                app:srcCompat="@mipmap/ic_imore_png" />
 
 
         </android.support.constraint.ConstraintLayout>

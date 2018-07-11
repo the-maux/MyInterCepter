@@ -24,11 +24,11 @@
 
             <ImageView
                 android:id="@+id/OsImg"
-                android:layout_width="@dimen/icon_generic_size"
-                android:layout_height="@dimen/icon_generic_size"
+                android:layout_width="@dimen/icon_toolbar_size"
+                android:layout_height="@dimen/icon_toolbar_size"
+                android:layout_marginLeft="8dp"
                 android:elevation="4dp"
-                android:paddingLeft="8dp"
-                android:paddingTop="4dp"
+                android:padding="4dp"
                 android:tint="@color/redteam_color"
                 android:transitionName="logo_activity"
                 app:layout_constraintBottom_toTopOf="@+id/progressBar"
@@ -80,9 +80,8 @@
                 android:layout_width="@dimen/icon_generic_size"
                 android:layout_height="@dimen/icon_generic_size"
                 android:baselineAlignBottom="false"
-                android:padding="8dp"
                 android:soundEffectsEnabled="true"
-                android:src="@drawable/ic_important_devices_svg"
+                android:src="@mipmap/ic_important_devices_png"
                 android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toTopOf="@+id/progressBar"
                 app:layout_constraintEnd_toStartOf="@+id/toolbarSettings"
@@ -93,7 +92,6 @@
                 android:id="@+id/toolbarSettings"
                 android:layout_width="@dimen/icon_generic_size"
                 android:layout_height="@dimen/icon_generic_size"
-                android:padding="4dp"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toTopOf="@+id/progressBar"
@@ -101,7 +99,7 @@
                 app:layout_constraintStart_toEndOf="@+id/OsFilter"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_max="40dp"
-                app:srcCompat="@drawable/ic_more_svg" />
+                app:srcCompat="@mipmap/ic_imore_png" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -119,10 +117,12 @@
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="@dimen/app_bar_height" />
+                app:layout_constraintGuide_begin="@dimen/app_bar_height"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
         </android.support.constraint.ConstraintLayout>
 
     </android.support.design.widget.AppBarLayout>

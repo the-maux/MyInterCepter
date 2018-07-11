@@ -15,13 +15,13 @@ import fr.dao.app.View.Settings.SettingsFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Dialog.QuestionMultipleAnswerDialog;
 
-public class HostDiscoverySettingsFrgmnt extends SettingsFrgmnt {
+public class                        HostDiscoverySettingsFrgmnt extends SettingsFrgmnt {
     private MyActivity              mActivity;
 
     public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         mActivity = (MyActivity) getActivity();
-        setTitle("Host discovery settings");
+        mActivity.setToolbarTitle("Settings", "Network discovery");
         mActivity.setToolbarBackgroundColor(0x111111);
         buildSettings();
         return rootView;

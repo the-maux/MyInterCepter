@@ -188,7 +188,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
                 init_prologueScan();
                 mActivity.initMonitor();
                 mActivity.initTimer();
-                mActivity.progressAnimation();
+                //mActivity.progressAnimation();
                 Log.d(TAG, "Scanning is started");
                 mHostLoaded = false;
                 return true;

@@ -20,7 +20,7 @@
 
     <dimen name="icon_collapsing_size">120dp</dimen>
     <dimen name="collapsing_size">300dp</dimen>
-    <dimen name="collapsing_size_fab">265dp</dimen>
+    <dimen name="collapsing_size_fab">350dp</dimen>
     <dimen name="collapsing_size_mini">128dp</dimen>
 
     <dimen name="text_margin">16dp</dimen>

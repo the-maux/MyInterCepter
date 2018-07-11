@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -72,38 +73,35 @@
 
             <ImageView
                 android:id="@+id/history"
-                android:layout_width="@dimen/btn_toolbar_size"
-                android:layout_height="@dimen/btn_toolbar_size"
+                android:layout_width="@dimen/icon_generic_size"
+                android:layout_height="@dimen/icon_generic_size"
                 android:layout_gravity="right"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="52dp"
                 android:layout_marginTop="8dp"
                 android:elevation="4dp"
-                android:padding="6dp"
+                android:padding="12dp"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/tint_svg"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_collapseMode="pin"
                 app:srcCompat="@drawable/ic_edit_svg" />
 
             <ImageView
                 android:id="@+id/settingsMenuDetail"
-                android:layout_width="@dimen/btn_toolbar_size"
-                android:layout_height="@dimen/btn_toolbar_size"
+                android:layout_width="@dimen/icon_generic_size"
+                android:layout_height="@dimen/icon_generic_size"
                 android:layout_gravity="right"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
                 android:elevation="4dp"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/tint_svg"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_collapseMode="pin"
-                app:srcCompat="@drawable/ic_more_svg" />
+                app:srcCompat="@mipmap/ic_imore_png" />
 
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -159,7 +157,7 @@
         android:transitionName="hostPicture"
         app:civ_border_color="@color/fab_color"
         app:civ_border_width="2dp"
-        app:layout_behavior="fr.dao.app.View.ZViewController.Coordinator.HostDetail.ImageCollapseBehavior" />
+        app:layout_behavior="fr.dao.app.View.ZViewController.Coordinator.HostDetail.HostDetailBehavior" />
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/fab_menu"
@@ -187,7 +185,9 @@
         fab:menu_labels_paddingRight="8dp"
         fab:menu_labels_paddingTop="4dp"
         fab:menu_labels_textColor="#FFFFFF"
-        fab:menu_labels_textSize="@dimen/text_size_2">
+        fab:menu_labels_textSize="@dimen/text_size_2"
+        app:layout_behavior="fr.dao.app.View.ZViewController.Coordinator.HostDetail.HostDetailBehavior"
+        >
 
 
     </com.github.clans.fab.FloatingActionMenu>

@@ -2,7 +2,6 @@ package fr.dao.app.View.ZViewController.Coordinator.HostDetail;
 
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
@@ -11,20 +10,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.github.clans.fab.FloatingActionMenu;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.R;
 
-public class                        ImageCollapseBehavior extends CoordinatorLayout.Behavior {
-    private String                  TAG = "ImageCollapseBehavior";
+public class                        HostDetailBehavior extends CoordinatorLayout.Behavior {
+    private String                  TAG = "HostDetailBehavior";
     private int                     hehightImg = -1, widthImg = -1;
     private int                     mini_H = -42, mini_W = -42;
     public float                    X_toGO = -1f, Y_toGO=-1f, X_from=-1f, Y_from=-1f;
-    int                             location_toGO[] = new int[2], location_FROM[] = new int[2];
+    private int                     location_toGO[] = new int[2], location_FROM[] = new int[2];
+    private HostDetailBehaviorOffsetChanger imageOffseter;
 
-    public ImageCollapseBehavior(){
-        super();
-    }
-    public ImageCollapseBehavior(Context context, AttributeSet attrs){
+    public HostDetailBehavior(Context context, AttributeSet attrs){
         super(context, attrs);
+        imageOffseter = new HostDetailBehaviorOffsetChanger();
     }
 
     public boolean                  layoutDependsOn(final CoordinatorLayout parent, final View child, View dependency){
@@ -47,8 +48,12 @@ public class                        ImageCollapseBehavior extends CoordinatorLay
             Log.e(TAG, "TAG2");
         }
 
-        if (dependency instanceof AppBarLayout && child instanceof ImageView) {
-            ((AppBarLayout) dependency).addOnOffsetChangedListener(new ImageOffseter(parent, (ImageView) child));
+        if (dependency instanceof AppBarLayout && child instanceof CircleImageView) {
+            imageOffseter.init((AppBarLayout) dependency, child);
+            ((AppBarLayout) dependency).addOnOffsetChangedListener(imageOffseter);
+        } else if (dependency instanceof AppBarLayout && child instanceof FloatingActionMenu) {
+            imageOffseter.init((AppBarLayout) dependency, child);
+            ((AppBarLayout) dependency).addOnOffsetChangedListener(imageOffseter);
         }
         return dependency instanceof AppBarLayout;
     }
@@ -60,17 +65,41 @@ public class                        ImageCollapseBehavior extends CoordinatorLay
             return super.onDependentViewChanged(parent, child, dependency);
     }
 
-    private class                    ImageOffseter implements AppBarLayout.OnOffsetChangedListener {
-        private final CoordinatorLayout parent;
-        private final ImageView imageView;
+    private class                   HostDetailBehaviorOffsetChanger implements AppBarLayout.OnOffsetChangedListener {
+        private AppBarLayout        parent = null;
+        private CircleImageView     imageView = null;
+        private FloatingActionMenu  fam = null;
+        private int                 actualOffset = 0;
 
-        public                      ImageOffseter(@NonNull CoordinatorLayout parent, @NonNull  ImageView child) {
+        public HostDetailBehaviorOffsetChanger() { }
+
+
+        public void                 init(AppBarLayout parent, View child) {
             this.parent = parent;
-            this.imageView = child;
+            if (child.getClass() == FloatingActionMenu.class)
+                fam = (FloatingActionMenu) child;
+            if (child.getClass() == CircleImageView.class)
+                imageView = (CircleImageView) child;
+            Log.d(TAG, "init:" + child.getClass().getName() + " ->" +
+                    ((imageView == null) ? "nullImage" : "imageOK") + ((fam == null) ? "nullFAM" : "FAMOK"));
         }
-        private int actualOffset = 0;
+
         public void                 onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-            if (X_from != -1) {
+            updateOsImage(appBarLayout, verticalOffset);
+            updateFAM(appBarLayout, verticalOffset);
+        }
+
+        private void                updateFAM(AppBarLayout appBarLayout, int verticalOffset) {
+            if (fam != null) {
+
+                float pourcentageScrollTotal = -verticalOffset / (float) appBarLayout.getTotalScrollRange();
+                float Y_transition = (Y_from - Y_toGO) * pourcentageScrollTotal;
+                fam.setTranslationY(verticalOffset);
+            }
+        }
+
+        private void                updateOsImage(AppBarLayout appBarLayout, int verticalOffset) {
+            if (X_from != -1 && imageView != null) {
                 float displacementFraction = -verticalOffset / (float) appBarLayout.getTotalScrollRange();
                 float X_transition = (X_from - X_toGO) * displacementFraction;
                 float Y_transition = (Y_from - Y_toGO) * displacementFraction;
@@ -80,7 +109,7 @@ public class                        ImageCollapseBehavior extends CoordinatorLay
                 boolean isGoDown = actualOffset < verticalOffset;
                 ViewGroup.LayoutParams params = imageView.getLayoutParams();
                 float oppposite = (displacementFraction - 1.0f);
-                if ((int) (-oppposite * hehightImg) > mini_H) {
+                if ((int) (-oppposite * hehightImg) > (mini_H - 20)) {
                     params.height = (int) (-oppposite * hehightImg);
                     params.width = (int) (-oppposite * widthImg);
                     imageView.setLayoutParams(params);
@@ -90,11 +119,13 @@ public class                        ImageCollapseBehavior extends CoordinatorLay
             }
         }
 
-        public boolean              equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            ImageOffseter that = (ImageOffseter) o;
+       /* public boolean              equals(Object o) {
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
+            HostDetailBehaviorOffsetChanger that = (HostDetailBehaviorOffsetChanger) o;
             return parent.equals(that.parent) && imageView.equals(that.imageView);
-        }
+        }*/
     }
 }

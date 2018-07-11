@@ -25,7 +25,7 @@
             <ImageView
                 android:id="@+id/imageView3"
                 android:layout_width="@dimen/icon_toolbar_size"
-                android:layout_height="0dp"
+                android:layout_height="@dimen/icon_toolbar_size"
                 android:elevation="4dp"
                 android:padding="8dp"
                 android:tint="@color/tint_svg"
@@ -75,8 +75,8 @@
 
             <ImageButton
                 android:id="@+id/action_add_host"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/icon_generic_size"
+                android:layout_height="@dimen/btn_toolbar_size"
                 android:background="@android:color/transparent"
                 android:soundEffectsEnabled="true"
                 android:src="@drawable/ic_add_svg"
@@ -90,9 +90,8 @@
 
             <ImageButton
                 android:id="@+id/history"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginRight="8dp"
+                android:layout_width="@dimen/icon_generic_size"
+                android:layout_height="@dimen/btn_toolbar_size"
                 android:background="@android:color/transparent"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/tint_svg"
@@ -102,7 +101,7 @@
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/action_add_host"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_more_svg" />
+                app:srcCompat="@mipmap/ic_imore_png" />
 
         </android.support.constraint.ConstraintLayout>
 
