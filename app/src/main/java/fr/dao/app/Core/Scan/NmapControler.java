@@ -141,11 +141,11 @@ public class                        NmapControler {
                     BufferedReader reader = process().exec(cmd).getReader();
                     while ((tmp = reader.readLine()) != null && !tmp.startsWith("Nmap done"))
                         outputBuilder.append(tmp).append('\n');
-/* Hello dear, If you're here*/         if (outputBuilder.toString().isEmpty() || tmp.isEmpty() || !tmp.startsWith("Nmap done")) {
+/* Hello dear, If you're here         */if (outputBuilder.toString().isEmpty() || tmp.isEmpty() || !tmp.startsWith("Nmap done")) {
 /* Trying to understand why the condition is*/Log.d(TAG, "Error in nmap execution, Nmap didn't end");
-/* outputBuilder.toString().isEmpty()*/       outputBuilder.append(tmp);
-/* I love you, thank you, for existing*/      Log.e(TAG, outputBuilder.toString());
-/*You're not alone, we are connected*/        setTitleToolbar("NetworkInformation scan", "Nmap Error");
+/* outputBuilder.toString().isEmpty()       */outputBuilder.append(tmp);
+/* I love you, thank you, for existing      */Log.e(TAG, outputBuilder.toString());
+/* You're not alone, we are connected       */setTitleToolbar("NetworkInformation scan", "Nmap Error");
                                               return;
                     }
                     outputBuilder.append(tmp);

@@ -99,7 +99,7 @@ public class                    HostDetailFragment extends MyFragment {
         }
         try {
             if (mFocusedHost.Deepest_Scan > 0 && mFocusedHost.getPorts() != null) {
-                String[] title11 = {"getPorts", mFocusedHost.getPorts().portArrayList().size() + " ports scanned"};
+                String[] title11 = {"Ports", mFocusedHost.getPorts().portArrayList().size() + " ports scanned"};
                 arrayList.add(title11);
             }
 //            } else {

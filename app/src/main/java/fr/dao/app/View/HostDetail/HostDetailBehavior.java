@@ -1,11 +1,10 @@
-package fr.dao.app.View.ZViewController.Coordinator.HostDetail;
+package fr.dao.app.View.HostDetail;
 
 
 import android.content.Context;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -36,7 +35,6 @@ public class                        HostDetailBehavior extends CoordinatorLayout
             Y_toGO = location_toGO[1];
             mini_H = dependency.getHeight();
             mini_W = dependency.getWidth();
-            Log.e(TAG, "TAG1");
         }
 
         if (child.getId() == R.id.OsImg && X_from == -1 && child.getLeft() != 0 && child.getTop() != 0) {
@@ -45,7 +43,6 @@ public class                        HostDetailBehavior extends CoordinatorLayout
             widthImg = child.getLayoutParams().width;
             X_from = location_FROM[0];
             Y_from = location_FROM[1];
-            Log.e(TAG, "TAG2");
         }
 
         if (dependency instanceof AppBarLayout && child instanceof CircleImageView) {
@@ -80,8 +77,6 @@ public class                        HostDetailBehavior extends CoordinatorLayout
                 fam = (FloatingActionMenu) child;
             if (child.getClass() == CircleImageView.class)
                 imageView = (CircleImageView) child;
-            Log.d(TAG, "init:" + child.getClass().getName() + " ->" +
-                    ((imageView == null) ? "nullImage" : "imageOK") + ((fam == null) ? "nullFAM" : "FAMOK"));
         }
 
         public void                 onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -105,7 +100,7 @@ public class                        HostDetailBehavior extends CoordinatorLayout
                 float Y_transition = (Y_from - Y_toGO) * displacementFraction;
                 imageView.setTranslationY(-Y_transition);
                 imageView.setTranslationX(-X_transition);
-                Log.d(TAG, "onOffsetChanged:" + displacementFraction + " X:" + X_transition + "  ->Y:" + Y_transition);
+                //Log.d(TAG, "onOffsetChanged:" + displacementFraction + " X:" + X_transition + "  ->Y:" + Y_transition);
                 boolean isGoDown = actualOffset < verticalOffset;
                 ViewGroup.LayoutParams params = imageView.getLayoutParams();
                 float oppposite = (displacementFraction - 1.0f);
