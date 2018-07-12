@@ -216,8 +216,20 @@ public class                        NmapControler {
 
     public void                     onHostActualized(ArrayList<Host> hosts) {
         Log.d(TAG, "All node was parsed in :" + Utils.TimeDifference(startParsing));
-        if (mNnetworkDiscoveryControler != null)
+        if (mNnetworkDiscoveryControler != null) {
             mNnetworkDiscoveryControler.onScanFinished(hosts);
+            if (mSingleton.Settings.getUserPreferences().NmapMode == 3) {
+                for (Host host : hosts) {
+                    if (host.Deepest_Scan >= 3) {
+                        new Thread(new Runnable() {
+                            public void run() {
+
+                            }
+                        }).start();
+                    }
+                }
+            }
+        }
         else
             Log.e(TAG, "onHostActualized but networkDiscoveryControler is null ");
     }

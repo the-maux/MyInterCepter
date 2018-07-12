@@ -51,8 +51,8 @@ public class                Preferences {
     public boolean          autoSaveNmapSession = true;
     /**
      * 1 - Basic No nmap
-     * 2 - Nmap 5 Port
-     * 3 - Nmap Script + -T4
+     * 2 - Nmap to discover port + nbstat
+     * 3 - Nmap if Open port use script to get more (Upnp, dns, bonjour etc)
      * 4 - Nmap All Script -T1
      */
     @SerializedName("NmapMode")

@@ -290,6 +290,7 @@ class                               NmapHostDiscoveryParser {
                     Log.d(TAG, "-------------");
                 }*/
             }
+
             mNmapControler.onHostActualized(mNetwork.listDevices());
         } catch (ConcurrentModificationException ex) {
             ex.getStackTrace();

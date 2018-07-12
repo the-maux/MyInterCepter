@@ -157,7 +157,7 @@
         android:transitionName="hostPicture"
         app:civ_border_color="@color/fab_color"
         app:civ_border_width="2dp"
-        app:layout_behavior="fr.dao.app.View.ZViewController.Coordinator.HostDetail.HostDetailBehavior" />
+        app:layout_behavior="fr.dao.app.View.HostDetail.HostDetailBehavior" />
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/fab_menu"
@@ -186,7 +186,7 @@
         fab:menu_labels_paddingTop="4dp"
         fab:menu_labels_textColor="#FFFFFF"
         fab:menu_labels_textSize="@dimen/text_size_2"
-        app:layout_behavior="fr.dao.app.View.ZViewController.Coordinator.HostDetail.HostDetailBehavior"
+        app:layout_behavior="fr.dao.app.View.HostDetail.HostDetailBehavior"
         >
 
 
