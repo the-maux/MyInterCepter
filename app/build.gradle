@@ -1,8 +1,7 @@
 allprojects {
     repositories {
-        mavenCentral()
+
         google()
-        jcenter()
         maven { url 'https://maven.google.com' }
         maven { url "https://jitpack.io" }
         maven { url "https://dl.bintray.com/firzenyogesh/maven" }
@@ -13,12 +12,12 @@ allprojects {
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "fr.dao.app"
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         externalNativeBuild {
@@ -74,8 +73,8 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:2.0.0-alpha1'
     implementation 'com.android.support:preference-v7:27.1.1'
     implementation 'com.google.code.gson:gson:2.8.0'
-    implementation 'com.github.bumptech.glide:glide:4.6.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     implementation 'com.jaredrummler:material-spinner:1.1.0'
     implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
     implementation 'org.apache.commons:commons-lang3:3.6'

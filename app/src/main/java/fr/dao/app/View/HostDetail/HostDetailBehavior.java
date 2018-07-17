@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -35,9 +36,13 @@ public class                        HostDetailBehavior extends CoordinatorLayout
             Y_toGO = location_toGO[1];
             mini_H = dependency.getHeight();
             mini_W = dependency.getWidth();
-        }
-
-        if (child.getId() == R.id.OsImg && X_from == -1 && child.getLeft() != 0 && child.getTop() != 0) {
+        } else if (dependency.getId() == R.id.hostDetailIcon1)
+            Log.i(TAG, "hostDetailIcon1 DETECTED");
+        else if (dependency.getId() == R.id.hostDetailIcon2)
+            Log.i(TAG, "hostDetailIcon2 DETECTED");
+        else if (dependency.getId() == R.id.hostDetailIcon3)
+            Log.i(TAG, "hostDetailIcon3 DETECTED");
+        else if (child.getId() == R.id.OsImg && X_from == -1 && child.getLeft() != 0 && child.getTop() != 0) {
             child.getLocationInWindow(location_FROM);
             hehightImg = child.getLayoutParams().height;
             widthImg = child.getLayoutParams().width;
