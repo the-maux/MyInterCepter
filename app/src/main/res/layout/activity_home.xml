@@ -19,7 +19,7 @@
             android:layout_height="0dp"
             android:alpha="0.08"
             android:transitionName="icoScylla"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/monitorRoot"
             app:layout_constraintDimensionRatio="5:5"
             app:layout_constraintHeight_max="80dp"

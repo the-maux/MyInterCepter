@@ -1,7 +1,5 @@
 package fr.dao.app.View.HostDetail;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -31,8 +29,6 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Core.Configuration.GlideApp;
 import fr.dao.app.Core.Configuration.GlideRequest;
-import fr.dao.app.Core.Configuration.Singleton;
-import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Database.DBManager;
 import fr.dao.app.Model.Net.Pcap;
@@ -98,7 +94,7 @@ public class                    HostDetailActivity extends MyActivity {
 
         collapsBackground = findViewById(R.id.collapsBackground);
         printBackground();
-        //mMenuFAB.hideMenuButton(true);
+
         setStatusBarColor(android.R.color.transparent);
     }
 
@@ -128,7 +124,7 @@ public class                    HostDetailActivity extends MyActivity {
             case QUANTA:
             case OpenBSD:
             case Unix:
-                res = R.drawable.bg1_linux;
+                res = R.drawable.linux3;
                 break;
         }
         //collapsBackground.setImageResource(R.drawable.bg1);
@@ -284,32 +280,6 @@ public class                    HostDetailActivity extends MyActivity {
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewCompat.setElevation(collapsingToolbarLayout, 4);
-                /*int alpha = appBarLayout.getTotalScrollRange() - Math.abs(verticalOffset);
-                if (alpha < 40) {
-                    if (osImg.getVisibility() == View.VISIBLE) {
-                        osImg.animate()
-                                .alpha(0.0f)
-                                .setDuration(250)
-                                .setListener(new AnimatorListenerAdapter() {
-                                    public void onAnimationEnd(Animator animation) {
-                                        super.onAnimationEnd(animation);
-                                        osImg.setVisibility(View.GONE);
-                                    }
-                                });
-                    }
-                } else {
-                    if (osImg.getVisibility() == View.GONE)
-                        osImg.animate()
-                                .alpha(1.0f)
-                                .setDuration(250)
-                                .setListener(new AnimatorListenerAdapter() {
-                                    public void onAnimationEnd(Animator animation) {
-                                        super.onAnimationEnd(animation);
-                                        osImg.setVisibility(View.VISIBLE);
-                                    }
-                                });
-
-                }*/
             }
         });
     }

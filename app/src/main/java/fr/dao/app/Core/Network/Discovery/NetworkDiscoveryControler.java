@@ -63,18 +63,14 @@ public class                        NetworkDiscoveryControler {
     }
 
     public boolean                   run(boolean isJustCheckingWhoIsAlive) {
-        Log.i(TAG, "run::WifiInit");
         if (!NetDiscovering.initNetworkInfo(mActivity) || !mSingleton.NetworkInformation.updateInfo().isConnectedToNetwork()) {
             mActivity.showSnackbar("No wifi connection detected");
-            Log.i(TAG, "No wifi connection detected");
             return false;
         }
-        Log.i(TAG, "run::init");
         if (!inLoading) {
             this.isJustCheckingWhoIsAlive = isJustCheckingWhoIsAlive;
             inLoading = true;
             startScanning = Calendar.getInstance().getTime();
-            Log.i(TAG, "run::mSingleton.resetActualSniffSession");
             mSingleton.resetActualSniffSession();
             startScan();
             return true;
@@ -86,14 +82,11 @@ public class                        NetworkDiscoveryControler {
 
     private void                    startScan() {
         startScanning = Calendar.getInstance().getTime();
-        mActivity.setToolbarTitle(null, "Icmp scanning");
-        mActivity.setProgressState(0);
         new Thread(new Runnable() {
             public void run() {
                 new IcmpScanNetmask(new IPv4Utils(mSingleton.NetworkInformation), mInstance);
             }
         }).start();
-        Log.i(TAG, "startScan::IcmpScanNetmask::started");
     }
 
     synchronized void               onArpScanOver(ArrayList<String> ipReachable) {
@@ -105,18 +98,18 @@ public class                        NetworkDiscoveryControler {
         Log.i(TAG, "onArpScanOver::readARPTable::"+ ipReachable.size() + " device(s) from ARP");
         Singleton.getInstance().CurrentNetwork = updateHostStatus(basicHost);
         if (isFromHostDiscoveryActivity) {
-            Log.i(TAG, "onArpScanOver::mFragment.updateStateOfHostAfterIcmp");
+            //Log.i(TAG, "onArpScanOver::mFragment.updateStateOfHostAfterIcmp");
             mFragment.updateStateOfHostAfterIcmp(Singleton.getInstance().CurrentNetwork);
         }
-        mActivity.MAXIMUM_PROGRESS = basicHost.size();
+        //mActivity.MAXIMUM_PROGRESS = basicHost.size();
         if (mSingleton.Settings.getUserPreferences().NmapMode > 0 && isFromHostDiscoveryActivity) {
-            Log.i(TAG, "onArpScanOver::Nmap::TypeScan::"+mSingleton.Settings.getUserPreferences().NmapMode+"::StartingNmap");
+            //Log.i(TAG, "onArpScanOver::Nmap::TypeScan::"+mSingleton.Settings.getUserPreferences().NmapMode+"::StartingNmap");
             new NmapControler(Singleton.getInstance().CurrentNetwork, this, mActivity);
         } else {
             if (isJustCheckingWhoIsAlive) {
                 Log.i(TAG, "onArpScanOver::Nmap::JustCheckingHostAlive::BypassNmap");
             } else {
-                Log.i(TAG, "onArpScanOver::Nmap::TypeScan::"+mSingleton.Settings.getUserPreferences().NmapMode+"::BypassNmap");
+                //Log.i(TAG, "onArpScanOver::Nmap::TypeScan::"+mSingleton.Settings.getUserPreferences().NmapMode+"::BypassNmap");
             }
             onScanFinished(Singleton.getInstance().CurrentNetwork.listDevices());
         }

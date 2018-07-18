@@ -24,7 +24,8 @@ public class                    Ports {
      */
     public                      Ports(Host host) {
         if (host.dumpPort == null) {
-            Log.e(TAG, "No dump to analyze");
+            if (host.Deepest_Scan > 0)
+                Log.e(TAG, "No dump to analyze");
         } else
             init(host.dumpPort, host);
     }

@@ -41,6 +41,7 @@ public class                        IcmpScanNetmask {
             startScanning = Calendar.getInstance().getTime();
             mNumberOfHosts = iPv4CIDR.getNumberOfHosts() - 2;
             List<String> availableIPs = iPv4CIDR.getAvailableIPs(mNumberOfHosts);
+
             Log.i(TAG, "mNumberOfHosts:" + mNumberOfHosts + " ipAvailable:" + availableIPs.size());
             int rax = 0;
             for (final String ip : availableIPs) {

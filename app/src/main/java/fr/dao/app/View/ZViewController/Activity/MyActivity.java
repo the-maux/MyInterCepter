@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
@@ -69,25 +68,6 @@ public class                    MyActivity extends AppCompatActivity {
             Log.d(TAG, "onHostActualize -> Saved to Singleton");
         } else {
             Log.e(TAG, "onHostActualize -> Not Saved to Singleton cause is null or empty");
-        }
-    }
-
-    protected ProgressBar       mProgressBar;/* Generic ProgressBar mecanics, but can be everywhere*/
-    protected int               mProgress = 0;
-    public int                  MAXIMUM_PROGRESS = 100;
-    public void                 setProgressState(final int progress){
-        if (mProgressBar != null) {
-            mInstance.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mProgressBar.setVisibility(View.VISIBLE);
-                    if (progress != -1) {
-                        if (progress >= MAXIMUM_PROGRESS)
-                            mProgressBar.setVisibility(View.GONE);
-                        mProgress = progress;
-                    }
-                }
-            });
         }
     }
 

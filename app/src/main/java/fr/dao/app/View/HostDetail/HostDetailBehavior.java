@@ -113,7 +113,8 @@ public class                        HostDetailBehavior extends CoordinatorLayout
                     params.height = (int) (-oppposite * hehightImg);
                     params.width = (int) (-oppposite * widthImg);
                     imageView.setLayoutParams(params);
-                }
+                } else
+                    Log.d(TAG, "opposite:"+oppposite);
                 imageView.requestLayout();
                 actualOffset = verticalOffset;
             }

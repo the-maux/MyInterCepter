@@ -66,10 +66,26 @@ public class                    HostDetailFragment extends MyFragment {
     private ArrayList<String[]> buildInfoArray() {
         ArrayList<String[]> arrayList = new ArrayList<>();
         buildBasicInfos(arrayList);
+        buildWithPort(arrayList);
         buildUpnP(arrayList);
         buildNetBIOS(arrayList);
         buildBonjour(arrayList);
         return arrayList;
+    }
+
+    private void                buildWithPort(ArrayList<String[]> arrayList) {
+        try {
+            if (mFocusedHost.Deepest_Scan > 0 && mFocusedHost.getPorts() != null) {
+                String[] title11 = {"Ports", mFocusedHost.getPorts().portArrayList().size() + " ports scanned"};
+                arrayList.add(title11);
+                return;
+            }
+        } catch (Exception e) {
+            if (mFocusedHost.Deepest_Scan > 0)
+                Log.e(TAG, "ERROR IN PARSING PORTS FOR HOST[" + mFocusedHost.ip + "]");
+        }
+        String[] title11 = {"Ports", "Not scanned"};
+        arrayList.add(title11);
     }
 
     private void                buildBasicInfos(ArrayList<String[]> arrayList) {
@@ -96,17 +112,6 @@ public class                    HostDetailFragment extends MyFragment {
         if (!mFocusedHost.Brand_and_Model.contains("Unknown")) {
             String[] title10 = {"Brand and Model", mFocusedHost.Brand_and_Model};
             arrayList.add(title10);
-        }
-        try {
-            if (mFocusedHost.Deepest_Scan > 0 && mFocusedHost.getPorts() != null) {
-                String[] title11 = {"Ports", mFocusedHost.getPorts().portArrayList().size() + " ports scanned"};
-                arrayList.add(title11);
-            }
-//            } else {
-//                Log.e(TAG, "NO DUMP IN PORTS");
-//            }
-        } catch (Exception e) {
-            Log.e(TAG, "ERROR PORTS FOR HOST[" + mFocusedHost.ip + "]");
         }
     }
 
@@ -152,7 +157,6 @@ public class                    HostDetailFragment extends MyFragment {
             arrayList.add(title14);
             arrayList.add(title15);
         }
-
     }
 
 }
