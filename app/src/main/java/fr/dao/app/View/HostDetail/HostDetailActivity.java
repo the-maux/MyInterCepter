@@ -1,5 +1,6 @@
 package fr.dao.app.View.HostDetail;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -10,12 +11,14 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -31,6 +34,7 @@ import fr.dao.app.Core.Configuration.GlideApp;
 import fr.dao.app.Core.Configuration.GlideRequest;
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Database.DBManager;
+import fr.dao.app.Core.Scan.NmapControler;
 import fr.dao.app.Model.Net.Pcap;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.R;
@@ -41,6 +45,7 @@ import fr.dao.app.View.Sniff.SniffActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
+import fr.dao.app.View.ZViewController.Dialog.QuestionMultipleAnswerDialog;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 import fr.dao.app.View.ZViewController.Fragment.PcapListerFragment;
 
@@ -52,12 +57,15 @@ public class                    HostDetailActivity extends MyActivity {
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private FloatingActionMenu  mMenuFAB;
     private CircleImageView     osHostImage;
-    private ImageView           history, settingsMenuDetail;
+    private ProgressBar         progressBarDetail;
+    private ImageView           history, rescan, settingsMenuDetail;
     private TabLayout           mTabs;
     private MyFragment          mCurrentFragment;
     private List<Pcap>          mPcapsList;
     private ImageView           collapsBackground;
     private boolean             isClosed = false, isFabAnim = false;
+
+
     public enum                 actionActivity {
         NMAP(0), BLOCK_INTERNET(1), VULN_SCAN(2), SNIFFER(3);
 
@@ -85,16 +93,15 @@ public class                    HostDetailActivity extends MyActivity {
 
     private void                initXml() {
         mCoordinator = findViewById(R.id.Coordonitor);
-        //MyGlideLoader.coordoBackgroundXMM(this, mCoordinator);
         osHostImage = findViewById(R.id.OsImg);
         history = findViewById(R.id.history);
         settingsMenuDetail = findViewById(R.id.settingsMenuDetail);
+        rescan = findViewById(R.id.rescan);
         mTabs  = findViewById(R.id.tabs);
         mMenuFAB = findViewById(R.id.fab_menu);
-
         collapsBackground = findViewById(R.id.collapsBackground);
+        progressBarDetail = findViewById(R.id.progressBarDetail);
         printBackground();
-
         setStatusBarColor(android.R.color.transparent);
     }
 
@@ -282,6 +289,7 @@ public class                    HostDetailActivity extends MyActivity {
                 ViewCompat.setElevation(collapsingToolbarLayout, 4);
             }
         });
+        rescan.setOnClickListener(onRescanTarget());
     }
 
     private void                initTabs() {
@@ -343,6 +351,32 @@ public class                    HostDetailActivity extends MyActivity {
         args.putString("macAddress", macOfHostFocused);
         fragment.setArguments(args);
         initFragment(fragment);
+    }
+
+    private View.OnClickListener onRescanTarget() {
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        final CharSequence[] items = new CharSequence[]{"Discrete", "Basic", "Advanced", "Brutal"};
+                        new QuestionMultipleAnswerDialog(mInstance, items,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        dialog.dismiss();
+                                        int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                                        Log.d("SettingsDiscovery", "Type of scan: " + items[selectedPosition]);
+                                        new NmapControler(null, mInstance, mFocusedHost, true);
+                                    }
+                                }, "Wich Scan", 0, R.mipmap.ic_refresh_png);
+                    }
+                });
+            }
+        };
+    }
+
+    public void                 onHostScanned() {
+        progressBarDetail.setVisibility(View.VISIBLE);
+        showSnackbar( mFocusedHost.getName() + " was updated");
     }
 
     private void                displayPcap(String macOfHostFocused) {

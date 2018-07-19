@@ -19,6 +19,7 @@ import fr.dao.app.Model.Config.Action;
 import fr.dao.app.Model.Config.NmapParam;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
+import fr.dao.app.View.HostDetail.HostDetailActivity;
 import fr.dao.app.View.Scan.NmapOutputView;
 
 
@@ -33,19 +34,20 @@ public class                        NmapControler {
     private boolean                 mIsLiveDump;
     private List<Host>              mHost = null;
     private RootProcess             process;
+
     private String                  mActualScan = "Ping scan", mActualScript = "Heartbleed check";//Default
 
     /**
-     * <- VulnsScanner: to update Host ports status
-     * @param scanner
-     * @param host
+     * <- VulnsScanner & HostDetail: start a scan for a single host
      */
-    public                          NmapControler(final ExploitScanner scanner, final Host host) {
+    public                          NmapControler(final ExploitScanner scanner, final HostDetailActivity activity, final Host host, final boolean isExploitScanner) {
         new Thread(new Runnable() {
             public void run() {
                 try {
                     String tmp;
-                    String cmd = PATH_NMAP + mParams.getFullScanForVulns() + host.ip;
+                    String cmd = (isExploitScanner) ?
+                                    PATH_NMAP + mParams.getFullScanForVulns() + host.ip:
+                                    PATH_NMAP + mParams.getHostQuickDiscoverArgs() + host.ip;
                     StringBuilder outputBuilder = new StringBuilder();
                     Log.i(TAG, cmd.replace(PATH_NMAP, ""));
                     BufferedReader reader = process().exec(cmd).getReader();
@@ -62,7 +64,10 @@ public class                        NmapControler {
                     outputBuilder.append(tmp);
                     String FullDUMP = outputBuilder.toString().substring(1);
                     Log.d(TAG, "\t\t LastLine[" + tmp + "]");
-                    PortParser.parsePorts4Vulns(FullDUMP.split("\n"), host, scanner);
+                    if (isExploitScanner)
+                        PortParser.parsePorts4Vulns(FullDUMP.split("\n"), host, scanner);
+                    else
+                        activity.onHostScanned();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -72,8 +77,6 @@ public class                        NmapControler {
 
     /**
      *  <-  VulnsScanner: To launch a NSE script
-     *
-     * @param cmd
      */
     public                          NmapControler(final ExploitScanner scanner, final ExploitScanner.TypeScanner type, final String cmd) {
         buildAction();
@@ -116,9 +119,6 @@ public class                        NmapControler {
 
     /**
      *  <-  HostDiscoveryActivity: To discover hosts on subnet
-     * @param ap
-     * @param discoveryControler
-     * @param context
      */
     public                          NmapControler(Network ap, NetworkDiscoveryControler discoveryControler, Context context) {
         buildAction();

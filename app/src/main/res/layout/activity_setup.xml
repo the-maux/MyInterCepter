@@ -71,6 +71,7 @@
                 android:text="Installation"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textColor="@color/accent"
+                android:textSize="@dimen/text_size_2"
                 android:textStyle="italic"
                 android:transitionName="title"
                 app:layout_constraintBottom_toBottomOf="parent"

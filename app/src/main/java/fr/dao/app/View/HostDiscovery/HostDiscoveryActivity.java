@@ -278,9 +278,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     public void                     initFragmentSettings() {
         mFragment = new HostDiscoverySettingsFrgmnt();
         initFragment(mFragment);
-//        mFab.setVisibility(View.GONE);
         ViewAnimate.FabAnimateHide(mInstance, mFab);
-        //mFab.hide();
         mBottomMonitor.setVisibility(View.GONE);
         mToolbarBackground.setCrossFadeEnabled(true);
         mToolbarBackground.startTransition(500);

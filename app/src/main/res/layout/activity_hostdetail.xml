@@ -18,6 +18,7 @@
         android:layout_width="@dimen/icon_generic_size"
         android:layout_height="@dimen/icon_generic_size"
         android:layout_gravity="top|left"
+        android:layout_marginLeft="1dp"
         android:layout_marginTop="8dp"
         android:background="@color/material_deep_orange_100"
         app:layout_collapseMode="pin" />
@@ -169,12 +170,14 @@
                 app:srcCompat="@mipmap/ic_web_icon" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
+
         <ProgressBar
-            android:id="@+id/progressBar4"
+            android:id="@+id/progressBarDetail"
             style="?android:attr/progressBarStyleHorizontal"
-            android:indeterminate="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone" />
 
 
         <android.support.design.widget.TabLayout

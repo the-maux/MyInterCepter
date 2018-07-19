@@ -25,7 +25,7 @@ public class                        HostDetailBehavior extends CoordinatorLayout
 
     public HostDetailBehavior(Context context, AttributeSet attrs){
         super(context, attrs);
-        imageOffseter = new HostDetailBehaviorOffsetChanger();
+        imageOffseter = new HostDetailBehaviorOffsetChanger(context.getResources().getBoolean(R.bool.is_tab));
     }
 
     public boolean                  layoutDependsOn(final CoordinatorLayout parent, final View child, View dependency){
@@ -33,6 +33,7 @@ public class                        HostDetailBehavior extends CoordinatorLayout
         if (dependency.getId() == R.id.myView && Y_toGO == -1f && dependency.getLeft() != 0 && dependency.getTop() != 0) {
             dependency.getLocationInWindow(location_toGO);
             X_toGO = location_toGO[0];
+            Log.d(TAG, "X_toGO:" + X_toGO);
             Y_toGO = location_toGO[1];
             mini_H = dependency.getHeight();
             mini_W = dependency.getWidth();
@@ -72,8 +73,11 @@ public class                        HostDetailBehavior extends CoordinatorLayout
         private CircleImageView     imageView = null;
         private FloatingActionMenu  fam = null;
         private int                 actualOffset = 0;
+        private boolean             isTablette;
 
-        public HostDetailBehaviorOffsetChanger() { }
+        public HostDetailBehaviorOffsetChanger(boolean tablette) {
+            this.isTablette = tablette;
+        }
 
 
         public void                 init(AppBarLayout parent, View child) {
@@ -87,11 +91,11 @@ public class                        HostDetailBehavior extends CoordinatorLayout
         public void                 onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
             updateOsImage(appBarLayout, verticalOffset);
             updateFAM(appBarLayout, verticalOffset);
+
         }
 
         private void                updateFAM(AppBarLayout appBarLayout, int verticalOffset) {
             if (fam != null) {
-
                 float pourcentageScrollTotal = -verticalOffset / (float) appBarLayout.getTotalScrollRange();
                 float Y_transition = (Y_from - Y_toGO) * pourcentageScrollTotal;
                 fam.setTranslationY(verticalOffset);
@@ -101,7 +105,7 @@ public class                        HostDetailBehavior extends CoordinatorLayout
         private void                updateOsImage(AppBarLayout appBarLayout, int verticalOffset) {
             if (X_from != -1 && imageView != null) {
                 float displacementFraction = -verticalOffset / (float) appBarLayout.getTotalScrollRange();
-                float X_transition = (X_from - X_toGO) * displacementFraction;
+                float X_transition = (X_from - X_toGO) * (displacementFraction * ((isTablette) ? 1.04f : 1.1f));
                 float Y_transition = (Y_from - Y_toGO) * displacementFraction;
                 imageView.setTranslationY(-Y_transition);
                 imageView.setTranslationX(-X_transition);
@@ -117,16 +121,9 @@ public class                        HostDetailBehavior extends CoordinatorLayout
                     Log.d(TAG, "opposite:"+oppposite);
                 imageView.requestLayout();
                 actualOffset = verticalOffset;
-            }
+            } else
+                Log.d(TAG, "X_FROM(" + X_from + ")  imageView:" + ((imageView == null) ? "null" : "setted)"));
         }
 
-       /* public boolean              equals(Object o) {
-            if (this == o)
-                return true;
-            if (o == null || getClass() != o.getClass())
-                return false;
-            HostDetailBehaviorOffsetChanger that = (HostDetailBehaviorOffsetChanger) o;
-            return parent.equals(that.parent) && imageView.equals(that.imageView);
-        }*/
     }
 }
