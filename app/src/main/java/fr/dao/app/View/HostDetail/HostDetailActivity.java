@@ -361,6 +361,12 @@ public class                    HostDetailActivity extends MyActivity {
 
     }
 
+    /**
+     * Si les port 8008 et 8009 sont ouvert c'est une chromecast
+     *if 62078 its an iphone ? wtf
+     * @param succeed
+     */
+
     public void                 onHostScanned(boolean succeed) {
         if (succeed)
             runOnUiThread(new Runnable() {
