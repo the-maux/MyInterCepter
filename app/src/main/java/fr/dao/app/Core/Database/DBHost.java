@@ -30,10 +30,12 @@ public class                                DBHost {
     }
 
     public static Host                      getDevicesFromMAC(String MAC) {
-        for (Host host : Singleton.getInstance().alreadyExtracted) {/*Optimisation to Transition while SQL running */
-            if (host != null && host.mac.contentEquals(MAC)) {
-                Log.i(TAG, "host:" + MAC + " already extracted, no sql needed");
-                return host;
+        if (Singleton.getInstance().hostList != null) {
+            for (Host host : Singleton.getInstance().hostList) {/*Optimisation to Transition while SQL running */
+                if (host.mac.contentEquals(MAC)) {
+                    Log.i(TAG, "host:" + MAC + " already extracted, no sql needed");
+                    return host;
+                }
             }
         }
         Host tmp = new Select().from(Host.class).where("mac = \"" + MAC + "\"").executeSingle();

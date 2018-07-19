@@ -66,7 +66,7 @@ public class                        IcmpScanNetmask {
                 Log.d(TAG, ipReachable + " reachable");
             }
         }
-        Log.i(TAG, "Icmp scan last for " + getTimeSpend());
+        Log.i(TAG, "Icmp scan last for " + getTimeSpend() + " and found " + mListIpReachable.size() + "  host alive");
         mScanner.onArpScanOver(mListIpReachable);
     }
 

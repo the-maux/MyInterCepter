@@ -33,17 +33,10 @@ public class                        HostDetailBehavior extends CoordinatorLayout
         if (dependency.getId() == R.id.myView && Y_toGO == -1f && dependency.getLeft() != 0 && dependency.getTop() != 0) {
             dependency.getLocationInWindow(location_toGO);
             X_toGO = location_toGO[0];
-            Log.d(TAG, "X_toGO:" + X_toGO);
             Y_toGO = location_toGO[1];
             mini_H = dependency.getHeight();
             mini_W = dependency.getWidth();
-        } else if (dependency.getId() == R.id.hostDetailIcon1)
-            Log.i(TAG, "hostDetailIcon1 DETECTED");
-        else if (dependency.getId() == R.id.hostDetailIcon2)
-            Log.i(TAG, "hostDetailIcon2 DETECTED");
-        else if (dependency.getId() == R.id.hostDetailIcon3)
-            Log.i(TAG, "hostDetailIcon3 DETECTED");
-        else if (child.getId() == R.id.OsImg && X_from == -1 && child.getLeft() != 0 && child.getTop() != 0) {
+        } else if (child.getId() == R.id.OsImg && X_from == -1 && child.getLeft() != 0 && child.getTop() != 0) {
             child.getLocationInWindow(location_FROM);
             hehightImg = child.getLayoutParams().height;
             widthImg = child.getLayoutParams().width;
@@ -52,10 +45,10 @@ public class                        HostDetailBehavior extends CoordinatorLayout
         }
 
         if (dependency instanceof AppBarLayout && child instanceof CircleImageView) {
-            imageOffseter.init((AppBarLayout) dependency, child);
+            imageOffseter.init(child);
             ((AppBarLayout) dependency).addOnOffsetChangedListener(imageOffseter);
         } else if (dependency instanceof AppBarLayout && child instanceof FloatingActionMenu) {
-            imageOffseter.init((AppBarLayout) dependency, child);
+            imageOffseter.init(child);
             ((AppBarLayout) dependency).addOnOffsetChangedListener(imageOffseter);
         }
         return dependency instanceof AppBarLayout;
@@ -69,10 +62,8 @@ public class                        HostDetailBehavior extends CoordinatorLayout
     }
 
     private class                   HostDetailBehaviorOffsetChanger implements AppBarLayout.OnOffsetChangedListener {
-        private AppBarLayout        parent = null;
         private CircleImageView     imageView = null;
         private FloatingActionMenu  fam = null;
-        private int                 actualOffset = 0;
         private boolean             isTablette;
 
         public HostDetailBehaviorOffsetChanger(boolean tablette) {
@@ -80,8 +71,7 @@ public class                        HostDetailBehavior extends CoordinatorLayout
         }
 
 
-        public void                 init(AppBarLayout parent, View child) {
-            this.parent = parent;
+        public void                 init(View child) {
             if (child.getClass() == FloatingActionMenu.class)
                 fam = (FloatingActionMenu) child;
             if (child.getClass() == CircleImageView.class)
@@ -90,16 +80,8 @@ public class                        HostDetailBehavior extends CoordinatorLayout
 
         public void                 onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
             updateOsImage(appBarLayout, verticalOffset);
-            updateFAM(appBarLayout, verticalOffset);
-
-        }
-
-        private void                updateFAM(AppBarLayout appBarLayout, int verticalOffset) {
-            if (fam != null) {
-                float pourcentageScrollTotal = -verticalOffset / (float) appBarLayout.getTotalScrollRange();
-                float Y_transition = (Y_from - Y_toGO) * pourcentageScrollTotal;
+            if (fam != null)
                 fam.setTranslationY(verticalOffset);
-            }
         }
 
         private void                updateOsImage(AppBarLayout appBarLayout, int verticalOffset) {
@@ -110,19 +92,16 @@ public class                        HostDetailBehavior extends CoordinatorLayout
                 imageView.setTranslationY(-Y_transition);
                 imageView.setTranslationX(-X_transition);
                 //Log.d(TAG, "onOffsetChanged:" + displacementFraction + " X:" + X_transition + "  ->Y:" + Y_transition);
-                boolean isGoDown = actualOffset < verticalOffset;
+//                boolean isGoDown = actualOffset < verticalOffset;
                 ViewGroup.LayoutParams params = imageView.getLayoutParams();
                 float oppposite = (displacementFraction - 1.0f);
                 if ((int) (-oppposite * hehightImg) > (mini_H - 20)) {
                     params.height = (int) (-oppposite * hehightImg);
                     params.width = (int) (-oppposite * widthImg);
                     imageView.setLayoutParams(params);
-                } else
-                    Log.d(TAG, "opposite:"+oppposite);
+                }
                 imageView.requestLayout();
-                actualOffset = verticalOffset;
-            } else
-                Log.d(TAG, "X_FROM(" + X_from + ")  imageView:" + ((imageView == null) ? "null" : "setted)"));
+            }
         }
 
     }

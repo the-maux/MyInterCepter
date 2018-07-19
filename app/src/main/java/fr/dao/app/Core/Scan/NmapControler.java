@@ -67,7 +67,7 @@ public class                        NmapControler {
                     if (isExploitScanner)
                         PortParser.parsePorts4Vulns(FullDUMP.split("\n"), host, scanner);
                     else
-                        activity.onHostScanned();
+                        new NmapHostDiscoveryParser(host, FullDUMP, activity);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

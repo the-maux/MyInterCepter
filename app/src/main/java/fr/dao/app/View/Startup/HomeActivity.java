@@ -60,7 +60,7 @@ public class                    HomeActivity extends MyActivity {
         if (blue_card.getVisibility() == View.INVISIBLE) {
             ((ImageView) findViewById(R.id.logo_defense)).setImageResource(R.drawable.ic_security_svg);
             ((ImageView) findViewById(R.id.logo_dashboard)).setImageResource(R.drawable.ic_developer_board_svg);
-            MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.target, ((ImageView) findViewById(R.id.logo_attack)), false);
+            MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_aim_png, ((ImageView) findViewById(R.id.logo_attack)), false);
             ((ImageView) findViewById(R.id.logo_settings)).setImageResource(R.drawable.ic_build_svg);
             ViewAnimate.FabAnimateReveal(mInstance, blue_card, new Runnable() {
                 public void run() {

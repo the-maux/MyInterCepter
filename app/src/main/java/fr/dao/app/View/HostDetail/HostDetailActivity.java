@@ -9,6 +9,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
@@ -25,8 +26,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -37,6 +39,7 @@ import fr.dao.app.Core.Database.DBManager;
 import fr.dao.app.Core.Scan.NmapControler;
 import fr.dao.app.Model.Net.Pcap;
 import fr.dao.app.Model.Target.Host;
+import fr.dao.app.Model.Target.State;
 import fr.dao.app.R;
 import fr.dao.app.View.DashBoard.HistoricSavedDataFgmnt;
 import fr.dao.app.View.Scan.NmapActivity;
@@ -57,14 +60,12 @@ public class                    HostDetailActivity extends MyActivity {
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private FloatingActionMenu  mMenuFAB;
     private CircleImageView     osHostImage;
-    private ProgressBar         progressBarDetail;
+    private ProgressBar         mProgressBarDetail;
     private ImageView           history, rescan, settingsMenuDetail;
     private TabLayout           mTabs;
     private MyFragment          mCurrentFragment;
     private List<Pcap>          mPcapsList;
     private ImageView           collapsBackground;
-    private boolean             isClosed = false, isFabAnim = false;
-
 
     public enum                 actionActivity {
         NMAP(0), BLOCK_INTERNET(1), VULN_SCAN(2), SNIFFER(3);
@@ -100,7 +101,7 @@ public class                    HostDetailActivity extends MyActivity {
         mTabs  = findViewById(R.id.tabs);
         mMenuFAB = findViewById(R.id.fab_menu);
         collapsBackground = findViewById(R.id.collapsBackground);
-        progressBarDetail = findViewById(R.id.progressBarDetail);
+        mProgressBarDetail = findViewById(R.id.progressBarDetail);
         printBackground();
         setStatusBarColor(android.R.color.transparent);
     }
@@ -134,7 +135,6 @@ public class                    HostDetailActivity extends MyActivity {
                 res = R.drawable.linux3;
                 break;
         }
-        //collapsBackground.setImageResource(R.drawable.bg1);
         GlideRequest r = GlideApp.with(mInstance)
                 .load(res)
                 .centerCrop()
@@ -166,7 +166,7 @@ public class                    HostDetailActivity extends MyActivity {
             initMenuFab();
             initTabs();
             initAppBar();
-            displayInfosHost(mFocusedHost.mac);
+            refresh();
         } catch (Exception e) {
             Log.e(TAG, "Error in init, Back to previous fragment");
             e.printStackTrace();
@@ -176,55 +176,11 @@ public class                    HostDetailActivity extends MyActivity {
 
     private void                initMenuFab() {
         mMenuFAB.removeAllMenuButtons();
-       // mMenuFAB.open(false);
         mMenuFAB.addMenuButton(initMenuBtn("Sniffing", R.mipmap.ic_hearing, actionActivity.SNIFFER), 0);
         mMenuFAB.addMenuButton(initMenuBtn("Strip connection", R.mipmap.ic_cut_internet, actionActivity.BLOCK_INTERNET), 1);
         mMenuFAB.addMenuButton(initMenuBtn("Nmap", R.mipmap.ic_eye_nosvg, actionActivity.NMAP), 2);
         mMenuFAB.addMenuButton(initMenuBtn("Vulnerability Scanner", R.drawable.target_pad_30_white, actionActivity.VULN_SCAN), 3);
-        //mMenuFAB.setOnMenuButtonClickListener(onMenuButtonListener());
     }
-
-    private View.OnClickListener onMenuButtonListener() {
-        return new View.OnClickListener() {
-            public void onClick(View view) {
-                if (!isFabAnim) {
-                    if (!isClosed) {
-                        isFabAnim = true;
-                        ViewAnimate.FabAnimateReveal(mInstance, menuBtn.get(0), null);
-                        ViewAnimate.FabAnimateReveal(mInstance, menuBtn.get(1), new Runnable() {
-                            public void run() {
-                                ViewAnimate.FabAnimateReveal(mInstance, menuBtn.get(2), new Runnable() {
-                                    public void run() {
-                                        ViewAnimate.FabAnimateReveal(mInstance, menuBtn.get(3), new Runnable() {
-                                            public void run() {
-                                                isFabAnim = false;
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    } else {
-                        isFabAnim = true;
-                        ViewAnimate.FabAnimateHide(mInstance, menuBtn.get(0), new Runnable() {
-                            public void run() {
-                                ViewAnimate.FabAnimateHide(mInstance, menuBtn.get(1), new Runnable() {
-                                    public void run() {
-                                        ViewAnimate.FabAnimateHide(mInstance, menuBtn.get(2), null);
-                                        ViewAnimate.FabAnimateHide(mInstance, menuBtn.get(3), null);
-                                        isFabAnim = false;
-                                    }
-                                });
-                            }
-                        });
-                    }
-                    isClosed = !isClosed;
-                }
-            }
-        };
-    }
-
-    private ArrayList<FloatingActionButton> menuBtn = new ArrayList<>();
 
     private FloatingActionButton initMenuBtn(String title, int logo, actionActivity type) {
         FloatingActionButton FabBtn = new FloatingActionButton(this);
@@ -238,8 +194,6 @@ public class                    HostDetailActivity extends MyActivity {
            FabBtn.setPadding(4, 4, 4, 4);
         FabBtn.setColorPressed(getResources().getColor(R.color.generic_background));
         FabBtn.setOnClickListener(onItemMenuClicked(type, FabBtn));
-        //FabBtn.setVisibility(View.GONE);
-        menuBtn.add(FabBtn);
         return FabBtn;
     }
 
@@ -248,7 +202,6 @@ public class                    HostDetailActivity extends MyActivity {
             public void onClick(View view) {
                 mMenuFAB.close(true);
                 Intent intent = null;
-                Class classActivityToLaunch;
                 Pair<View, String> p1 = null;
                 switch (classActivity) {
                     case NMAP:
@@ -365,18 +318,61 @@ public class                    HostDetailActivity extends MyActivity {
                                         dialog.dismiss();
                                         int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
                                         Log.d("SettingsDiscovery", "Type of scan: " + items[selectedPosition]);
-                                        new NmapControler(null, mInstance, mFocusedHost, true);
+                                        mFocusedHost.Deepest_Scan = selectedPosition;
+                                        mProgressBarDetail.setVisibility(View.VISIBLE);
+                                        new Thread(new Runnable() {
+                                            public void run() {
+                                                try {
+                                                    if (InetAddress.getByName(mFocusedHost.ip).isReachable(null, 64, 10000)) {
+                                                        new NmapControler(null, mInstance, mFocusedHost, false);
+                                                        return;
+                                                    } else
+                                                        mFocusedHost.state = State.OFFLINE;
+                                                } catch (IOException e) {
+                                                    mFocusedHost.state = State.OFFLINE;
+                                                }
+                                                onHostScanned(false);
+                                            }
+                                            //TODO tu dois detecter quand le truc est hors ligne
+                                        }).start();
                                     }
-                                }, "Wich Scan", 0, R.mipmap.ic_refresh_png);
+                                }, "Which Scan", 0, R.mipmap.ic_refresh_png);
                     }
                 });
             }
         };
     }
 
-    public void                 onHostScanned() {
-        progressBarDetail.setVisibility(View.VISIBLE);
-        showSnackbar( mFocusedHost.getName() + " was updated");
+    private void                refresh() {
+        int res = R.color.offline_color;
+        switch (mFocusedHost.state) {
+            case OFFLINE:
+                res = R.color.offline_color;
+                break;
+            case FILTERED:
+                res = R.color.filtered_color;
+                break;
+            case ONLINE:
+                res = R.color.online_color;
+                break;
+        }
+        osHostImage.setBorderColor(ContextCompat.getColor(mInstance, res));
+        displayInfosHost(mFocusedHost.mac);
+
+    }
+
+    public void                 onHostScanned(boolean succeed) {
+        if (succeed)
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    mProgressBarDetail.setVisibility(View.GONE);
+                    refresh();
+                    showSnackbar( mFocusedHost.getName() + " was updated");
+                }
+            });
+        else{
+
+        }
     }
 
     private void                displayPcap(String macOfHostFocused) {

@@ -295,7 +295,6 @@
                     android:id="@+id/logo_attack"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_margin="24dp"
                     android:elevation="4dp"
                     android:focusableInTouchMode="false"
                     android:tint="@color/material_light_white"

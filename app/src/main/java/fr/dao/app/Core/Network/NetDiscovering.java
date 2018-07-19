@@ -19,6 +19,7 @@ import fr.dao.app.Core.Configuration.Singleton;
 public class                            NetDiscovering {
     private static String               TAG = "NetDiscovering";
     private static String               MAC = null;
+
     public static boolean               initNetworkInfo(Activity activity) {
         WifiManager wifiManager = (WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if (wifiManager == null)
