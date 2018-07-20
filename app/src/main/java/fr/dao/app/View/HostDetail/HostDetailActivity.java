@@ -40,6 +40,7 @@ import fr.dao.app.Core.Scan.NmapControler;
 import fr.dao.app.Model.Net.Pcap;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.State;
+import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
 import fr.dao.app.View.DashBoard.HistoricSavedDataFgmnt;
 import fr.dao.app.View.Scan.NmapActivity;
@@ -109,29 +110,29 @@ public class                    HostDetailActivity extends MyActivity {
     private void                printBackground() {
         int res = R.drawable.bg1;
         switch (mFocusedHost.osType) {
-            case Ios:
-            case Apple:
+            case Os.Ios:
+            case Os.Apple:
                 res = R.drawable.bg1_mac;
                 break;
-            case Android:
-            case Mobile:
-            case Samsung:
-            case Bluebird:
+            case Os.Android:
+            case Os.Mobile:
+            case Os.Samsung:
+            case Os.Bluebird:
                 res = R.drawable.bg1_android;
                 break;
-            case Windows:
-            case WindowsXP:
-            case Windows7_8_10:
-            case Windows2000:
-            case Cisco:
+            case Os.Windows:
+            case Os.WindowsXP:
+            case Os.Windows7_8_10:
+            case Os.Windows2000:
+            case Os.Cisco:
                 res = R.drawable.bg1_windows;
                 break;
-            case Raspberry:
-            case Linux_Unix:
-            case Ps4:
-            case QUANTA:
-            case OpenBSD:
-            case Unix:
+            case Os.Raspberry:
+            case Os.Linux_Unix:
+            case Os.Ps4:
+            case Os.QUANTA:
+            case Os.OpenBSD:
+            case Os.Unix:
                 res = R.drawable.linux3;
                 break;
         }

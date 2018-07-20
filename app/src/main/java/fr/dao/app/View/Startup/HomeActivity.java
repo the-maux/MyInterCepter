@@ -60,7 +60,7 @@ public class                    HomeActivity extends MyActivity {
         if (blue_card.getVisibility() == View.INVISIBLE) {
             ((ImageView) findViewById(R.id.logo_defense)).setImageResource(R.drawable.ic_security_svg);
             ((ImageView) findViewById(R.id.logo_dashboard)).setImageResource(R.drawable.ic_developer_board_svg);
-            MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_aim_png, ((ImageView) findViewById(R.id.logo_attack)), false);
+            MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.target, ((ImageView) findViewById(R.id.logo_attack)), false);
             ((ImageView) findViewById(R.id.logo_settings)).setImageResource(R.drawable.ic_build_svg);
             ViewAnimate.FabAnimateReveal(mInstance, blue_card, new Runnable() {
                 public void run() {
@@ -126,18 +126,6 @@ public class                    HomeActivity extends MyActivity {
         statusPermission.setImageResource(R.color.material_deep_orange_400);
 
         setStatusBarColor(R.color.generic_background);
-        /*GlideApp.with(mInstance)
-                .load(R.drawable.bg3)
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .transition(withCrossFade())
-                .placeholder(R.drawable.ico)
-                .into(new SimpleTarget<Drawable>() {
-                    @Override
-                    public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
-                        findViewById(R.id.rootView).setBackground(resource);
-                    }
-                });*/
-
     }
 
     private void                init() {

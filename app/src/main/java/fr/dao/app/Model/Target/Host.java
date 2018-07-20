@@ -83,7 +83,7 @@ public class                Host extends Model {
 
     public boolean          selected = false;
     public boolean          isItMyDevice = false;
-    public Os               osType = Os.Unknow;
+    public int              osType = Os.Unknow;
     public State            state = State.OFFLINE;
 
     private Ports           listPorts = null;
@@ -125,7 +125,7 @@ public class                Host extends Model {
         Log.i(TAG, "mac: " + mac);// + "]");
         Log.i(TAG, "vendor: " + vendor);// + "]" + "VENDOR[" + sameHost.vendor + "]");
         Log.i(TAG, "os: " + os);// + "] OS[" + sameHost.os + "]");
-        Log.i(TAG, "osType: " + osType.name());// + "] OSTYPE[" + sameHost.osType + "]");
+        Log.i(TAG, "osType: " + Os.toString(osType));// + "] OSTYPE[" + sameHost.osType + "]");
         Log.i(TAG, "osDetail: " + osDetail);// + "] OSDETAIL[" + osDetail + "]");
         Log.i(TAG, "name: " + getName());// + "] NAME[" + sameHost.getName() +"]");
         Log.i(TAG, "NetworkDistance: " + NetworkDistance);//+ "]");

@@ -176,22 +176,22 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
         return (mHosts == null || mOriginalList.isEmpty()) ? 10 : mHosts.size();
     }
 
-    public ArrayList<Os>        getOsList() {
-        ArrayList<Os> listOs = new ArrayList<>();
+    public ArrayList<Integer>        getOsList() {
+        ArrayList<Integer> listOs = new ArrayList<>();
         if (mOriginalList != null) {
             for (Host host : mOriginalList) {
-                if (host.osType != null && !listOs.contains(host.osType))
+                if (!listOs.contains(host.osType))
                     listOs.add(host.osType);
             }
         }
         return listOs;
     }
 
-    public int                  filterByOs(ArrayList<Os> Os) {
+    public int                  filterByOs(ArrayList<Integer> OsList) {
         mHosts.clear();
         for (Host host : mOriginalList) {
-            for (Os os : Os) {
-                if (os.name().contentEquals(host.osType.name())) {
+            for (Integer os : OsList) {
+                if (Os.toString(os).contentEquals(Os.toString(host.osType))) {
                     mHosts.add(host);
                     break;
                 }

@@ -103,7 +103,7 @@ public class                MyGlideLoader {
     }
 
     public static void      setOsIcon(Host host, ImageView osImageView) {
-        if (host != null && host.osType != null) {
+        if (host != null) {
             if (host.state == State.FILTERED && host.vendor.contains("Unknown")) {
                 osImageView.setImageResource(R.mipmap.ic_unknow);
                 return ;
@@ -114,55 +114,55 @@ public class                MyGlideLoader {
         osImageView.setImageResource(R.drawable.monitor);
     }
 
-    public static void      setOsIcon(Os os, ImageView osImageView) {
+    public static void      setOsIcon(int os, ImageView osImageView) {
         int ImageRessource;
         switch (os) {
-            case Windows:
+            case Os.Windows:
                 ImageRessource = R.drawable.windows;
                 break;
-            case Cisco:
+            case Os.Cisco:
                 ImageRessource = R.drawable.cisco;
                 break;
-            case Raspberry:
+            case Os.Raspberry:
                 ImageRessource = R.drawable.rasp;
                 break;
-            case QUANTA:
+            case Os.QUANTA:
                 ImageRessource = R.drawable.quanta;
                 break;
-            case Bluebird:
+            case Os.Bluebird:
                 ImageRessource = R.drawable.bluebird;
                 break;
-            case Apple://Need MacBOOK, MacAIR, Iphone, AppleTV
+            case Os.Apple://Need MacBOOK, MacAIR, Iphone, AppleTV
                 ImageRessource = R.drawable.ios;
                 break;
-            case Ios:
+            case Os.Ios:
                 ImageRessource = R.drawable.ios;
                 break;
-            case Unix:
+            case Os.Unix:
                 ImageRessource = R.drawable.linuxicon;
                 break;
-            case Linux_Unix:
+            case Os.Linux_Unix:
                 ImageRessource = R.drawable.linuxicon;
                 break;
-            case OpenBSD:
+            case Os.OpenBSD:
                 ImageRessource = R.drawable.linuxicon;
                 break;
-            case Android:
+            case Os.Android:
                 ImageRessource = R.drawable.android8;
                 break;
-            case Mobile:
+            case Os.Mobile:
                 ImageRessource = R.mipmap.ic_logo_android_trans_round;
                 break;
-            case Samsung:
+            case Os.Samsung:
                 ImageRessource = R.mipmap.ic_logo_android_trans_round;
                 break;
-            case Ps4:
+            case Os.Ps4:
                 ImageRessource = R.drawable.ps4;
                 break;
-            case Gateway:
+            case Os.Gateway:
                 ImageRessource = R.drawable.router1;
                 break;
-            case Unknow:
+            case Os.Unknow:
                 ImageRessource = R.drawable.secure_computer1;
                 break;
             default:

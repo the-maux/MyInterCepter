@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Model.Target.Host;
+import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Adapter.HostDetailAdapter;
@@ -91,7 +92,7 @@ public class                    HostDetailFragment extends MyFragment {
     private void                buildBasicInfos(ArrayList<String[]> arrayList) {
         String[] title1 = {"Name", mFocusedHost.name};
         arrayList.add(title1);
-        String[] titleOs = {"Operating System", mFocusedHost.osType.name()};
+        String[] titleOs = {"Operating System", Os.toString(mFocusedHost.osType)};
         arrayList.add(titleOs);
         if (!mFocusedHost.osDetail.contains("Unknown")) {
             String[] titleOsDetail = {"Os Detail", mFocusedHost.osDetail};
@@ -102,7 +103,7 @@ public class                    HostDetailFragment extends MyFragment {
         String[] title3 = {"MAC Address", mFocusedHost.mac};
         arrayList.add(title3);
         if (!mFocusedHost.deviceType.contains("Unknown")) {
-            String[] title4 = {"Device Type", mFocusedHost.osType.name().toUpperCase()};
+            String[] title4 = {"Device Type", Os.toString(mFocusedHost.osType).toUpperCase()};
             arrayList.add(title4);
         }
         String[] title5 = {"MAC Vendor", mFocusedHost.vendor};

@@ -31,7 +31,6 @@ import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.Model.Target.State;
-import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
 import fr.dao.app.View.Scan.NmapActivity;
 import fr.dao.app.View.ZViewController.Adapter.HostDiscoveryAdapter;
@@ -41,19 +40,19 @@ import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 import fr.dao.app.View.ZViewController.MSkeleton.RecyclerViewSkeletonScreen;
 import fr.dao.app.View.ZViewController.MSkeleton.Skeleton;
 
-public class                        HostDiscoveryScanFrgmnt extends MyFragment {
-    private String                  TAG = "HostDiscoveryScanFrgmnt";
-    private HostDiscoveryActivity   mActivity;
-    private ArrayList<Host>         mHosts = new ArrayList<>();
-    private HostDiscoveryAdapter    mHostAdapter = null;
-    private RecyclerView            mHost_RV;
-    private TextView                mEmptyList;
-    private SwipeRefreshLayout      mSwipeRefreshLayout;
+public class HostDiscoveryScanFrgmnt extends MyFragment {
+    private String TAG = "HostDiscoveryScanFrgmnt";
+    private HostDiscoveryActivity mActivity;
+    private ArrayList<Host> mHosts = new ArrayList<>();
+    private HostDiscoveryAdapter mHostAdapter = null;
+    private RecyclerView mHost_RV;
+    private TextView mEmptyList;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private NetworkDiscoveryControler mScannerControler;
-    boolean                         mHostLoaded = false;
+    boolean mHostLoaded = false;
     private RecyclerViewSkeletonScreen skeletonScreen;
 
-    public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         Log.d(TAG, "onCreateView:mSingleton.hostList " + ((mSingleton.hostList == null) ? "null" : mSingleton.hostList.size()));
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hostdiscovery_scan, container, false);
@@ -63,7 +62,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         return rootView;
     }
 
-    public void                     init() {
+    public void init() {
         mScannerControler = NetworkDiscoveryControler.getInstance(this);
         mActivity.initSettingsButton();
         initHostsRecyclerView();
@@ -88,7 +87,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         }
     }
 
-    public void                     onResume() {
+    public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume::scan discovery host :" + mHostAdapter.getItemCount());
         Log.d(TAG, "onResume::scan discovery hostList :" + mHosts.size());
@@ -107,13 +106,13 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         mActivity.initToolbarButton();
     }
 
-    private void                    initXml(View rootView) {
+    private void initXml(View rootView) {
         mHost_RV = rootView.findViewById(R.id.recycler_view);
         mEmptyList = rootView.findViewById(R.id.emptyList);
         mSwipeRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayout);
     }
 
-    private void                    initSwipeRefresh() {
+    private void initSwipeRefresh() {
         mSwipeRefreshLayout.setColorSchemeResources(
                 R.color.dnsSpoofPrimary,
                 R.color.NmapPrimary,
@@ -130,7 +129,8 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
             }
         });
     }
-    private void                    initHostsRecyclerView() {
+
+    private void initHostsRecyclerView() {
         if (mHostAdapter == null)
             mHostAdapter = new HostDiscoveryAdapter(getActivity(), mHost_RV, false, mActivity.mFab);
         //mHost_RV.setAdapter(mHostAdapter);
@@ -144,14 +144,15 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         /**
          *
          * .shimmer(true)      // whether show shimmer animation.                      default is true
-           .count(10)          // the recycler view item count.                        default is 10
-           .color(color)       // the shimmer color.                                   default is #a2878787
-           .angle(20)          // the shimmer angle.                                   default is 20;
-           .duration(1000)     // the shimmer animation duration.                      default is 1000;
-           .frozen(false)      // whether frozen recyclerView during skeleton showing  default is true;
+         .count(10)          // the recycler view item count.                        default is 10
+         .color(color)       // the shimmer color.                                   default is #a2878787
+         .angle(20)          // the shimmer angle.                                   default is 20;
+         .duration(1000)     // the shimmer animation duration.                      default is 1000;
+         .frozen(false)      // whether frozen recyclerView during skeleton showing  default is true;
          */
     }
-    public void                     initSearchView(SearchView searchView, final Toolbar toolbar) {
+
+    public void initSearchView(SearchView searchView, final Toolbar toolbar) {
         searchView.setGravity(Gravity.END);
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -180,7 +181,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         });
     }
 
-    public boolean                  start() {
+    public boolean start() {
         mActivity.setToolbarTitle("Scanner", "Discovering NetworkInformation");
         if (!isWaiting()) {
             if (mScannerControler.run(false)) {
@@ -203,7 +204,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         return false;
     }
 
-    private void                    init_prologueScan() {
+    private void init_prologueScan() {
         /**
          * TODO:
          * + Get Last list of host from this SSID where Gateway.mac.equals(mSingleton.NetworkInformation.gateway.mac)
@@ -215,7 +216,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
          */
     }
 
-    public ArrayList<Host>          getTargetSelectedFromHostList() {
+    public ArrayList<Host> getTargetSelectedFromHostList() {
         ArrayList<Host> selectedHost = new ArrayList<>();
         for (Host host : mHosts) {
             if (host.selected)
@@ -228,17 +229,17 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         return selectedHost;
     }
 
-    public void                     updateStateOfHostAfterIcmp(Network actualNetwork) {
+    public void updateStateOfHostAfterIcmp(Network actualNetwork) {
         mSingleton.CurrentNetwork = actualNetwork;
         mActivity.actualNetwork = actualNetwork;
         mHosts = actualNetwork.listDevices();
         mHostAdapter.updateHostList(actualNetwork.listDevices());
     }
 
-    public void                     onHostActualized(final ArrayList<Host> hosts) {
+    public void onHostActualized(final ArrayList<Host> hosts) {
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
-                Log.d(TAG, "onHostActualized: " + (( hosts == null) ? "null" : hosts.size()));
+                Log.d(TAG, "onHostActualized: " + ((hosts == null) ? "null" : hosts.size()));
                 int online = 0;
                 for (Host host : hosts) {
                     if (host.state == State.ONLINE)
@@ -250,7 +251,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
                 mHostLoaded = true;
                 mSingleton.hostList = mHosts;
                 mActivity.setToolbarTitle(mSingleton.NetworkInformation.ssid,
-                        "(" + online + "/" + hosts.size()+ ") device" + ((hosts.size() > 1) ? "s" : ""));
+                        "(" + online + "/" + hosts.size() + ") device" + ((hosts.size() > 1) ? "s" : ""));
                 mHostAdapter.updateHostList(mHosts);
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -260,9 +261,9 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         });
     }
 
-    public void                     osFilterDialog() {
+    public void osFilterDialog() {
         if (!mScannerControler.inLoading) {
-            final ArrayList<Os> osList = mHostAdapter.getOsList();
+            final ArrayList<Integer> osList = mHostAdapter.getOsList();
             final OSFilterAdapter adapter = new OSFilterAdapter(mActivity, osList);
             new RV_dialog(mActivity)
                     .setAdapter(adapter, false)
@@ -281,7 +282,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         }
     }
 
-    public BottomSheetMenuDialog    onSettingsClick(final AppBarLayout mAppbar, Activity activity) {
+    public BottomSheetMenuDialog onSettingsClick(final AppBarLayout mAppbar, Activity activity) {
         return new BottomSheetBuilder(activity)
                 .setMode(BottomSheetBuilder.MODE_LIST)
                 .setBackgroundColor(ContextCompat.getColor(activity, R.color.material_light_white))
@@ -293,7 +294,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
                 .setItemClickListener(new BottomSheetItemClickListener() {
                     @Override
                     public void onBottomSheetItemClick(MenuItem menuItem) {
-                        Log.d(TAG, "STRING:"+menuItem.getTitle().toString());
+                        Log.d(TAG, "STRING:" + menuItem.getTitle().toString());
                         switch (menuItem.getTitle().toString()) {
                             case "Select all":
                                 mHostAdapter.selectAll();
@@ -311,7 +312,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
                 .createDialog();
     }
 
-    public boolean                  isWaiting() {
+    public boolean isWaiting() {
         return mScannerControler.inLoading;
     }
 

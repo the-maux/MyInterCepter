@@ -27,6 +27,10 @@ public class                            Fingerprint {
             host.state = State.ONLINE;
             host.osType = Os.Android;
             host.name = "My Device";//Need reafect in case of nmap_mode == 1
+        } else if (Fingerprint.isItChromecast(host)) {
+            host.osType = Os.Chromecast;
+            host.os = "Windows";
+            host.osDetail = "Windows";
         } else if (Fingerprint.isItWindows(host)) {
             Log.d(TAG, "HOST[" + host.ip  + "] is windows");
             host.osType = Os.Windows;
@@ -143,5 +147,11 @@ public class                            Fingerprint {
         }
         Log.e(TAG, "HOST[" + mac + "] -> VENDOR[" + "Unknown vendor error" + "]");
         return "Unknown";
+    }
+
+    public static boolean               isItChromecast(Host host) {
+        return host.getPorts() != null &&
+                host.getPorts().isPortOpen(8009) &&
+                host.getPorts().isPortOpen(8008);
     }
 }

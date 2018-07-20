@@ -11,15 +11,15 @@ import java.util.ArrayList;
 
 import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
-import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Adapter.Holder.HostSelectionHolder;
+import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 
 public class                    OSFilterAdapter extends RecyclerView.Adapter<HostSelectionHolder> {
     private String              TAG = "OSFilterAdapter";
     private Context             mCtx;
-    private ArrayList<Os>       mOsList, mOsListSelected = new ArrayList<>();
+    private ArrayList<Integer>  mOsList, mOsListSelected = new ArrayList<>();
 
-    public                      OSFilterAdapter(Activity activity, ArrayList<Os> osList) {
+    public                      OSFilterAdapter(Activity activity, ArrayList<Integer> osList) {
         this.mOsList = osList;
         this.mCtx = activity;
     }
@@ -30,8 +30,8 @@ public class                    OSFilterAdapter extends RecyclerView.Adapter<Hos
     }
 
     public void                 onBindViewHolder(HostSelectionHolder holder, int position) {
-        final Os os = mOsList.get(position);
-        holder.nameOS.setText(os.name().replace("_", "/"));
+        final int os = mOsList.get(position);
+        holder.nameOS.setText(Os.toString(os).replace("_", "/"));
         MyGlideLoader.setOsIcon(os, holder.imageOS);
         holder.checkBox.setChecked(false);
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -49,7 +49,7 @@ public class                    OSFilterAdapter extends RecyclerView.Adapter<Hos
         return mOsList.size();
     }
 
-    public ArrayList<Os>        getSelected() {
+    public ArrayList<Integer>        getSelected() {
         return (mOsListSelected.isEmpty()) ? mOsList : mOsListSelected;
     }
 
