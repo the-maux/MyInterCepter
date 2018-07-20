@@ -356,6 +356,7 @@ public class                    HostDetailActivity extends MyActivity {
                 res = R.color.online_color;
                 break;
         }
+
         osHostImage.setBorderColor(ContextCompat.getColor(mInstance, res));
         displayInfosHost(mFocusedHost.mac);
 
