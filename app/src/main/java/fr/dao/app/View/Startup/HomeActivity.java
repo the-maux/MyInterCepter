@@ -134,7 +134,6 @@ public class                    HomeActivity extends MyActivity {
         settings_card.setOnClickListener(onSettingsClick());
         dashboard_card.setOnClickListener(onDashboardClick());
         defensifCheck();
-
     }
 
     private void                defensifCheck() {
@@ -156,7 +155,6 @@ public class                    HomeActivity extends MyActivity {
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, PERMISSION_STORAGE, PERMISSIONS_MULTIPLE_REQUEST);
         } else {
-
             statusPermission.setImageDrawable(new ColorDrawable(getResources().getColor(R.color.online_color)));
             PB_Permission.setVisibility(View.GONE);
         }

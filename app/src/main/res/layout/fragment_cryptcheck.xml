@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentEnd="false"
+    android:layout_alignParentStart="false"
+    android:layout_below="@+id/topBar"
+    android:background="@color/material_light_white"
+    android:fillViewport="true"
+    android:scrollbars="horizontal"
+    android:visibility="visible">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/rootView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/header"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="@color/material_blue_grey_100"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/Name"
+                android:layout_width="150dp"
+                android:layout_height="0dp"
+                android:layout_margin="1px"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:background="@color/material_light_white"
+                android:gravity="bottom"
+                android:padding="2dp"
+                android:text="Name"
+                android:textColor="?android:attr/textColorPrimaryInverse"
+                android:textSize="@dimen/text_size_2"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/Key_exchange"
+                android:layout_width="150dp"
+                android:layout_height="25dp"
+                android:layout_margin="1px"
+                android:background="@color/material_light_white"
+                android:padding="2dp"
+                android:text="Key exchange"
+                android:textColor="?android:attr/textColorPrimaryInverse"
+                android:textSize="@dimen/text_size_2"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toRightOf="@+id/Name"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/TypeKE"
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:layout_margin="2px"
+                android:background="@color/material_light_white"
+                android:padding="2dp"
+                android:text="Type"
+                android:textColor="?android:attr/textColorPrimaryInverse"
+                android:textSize="@dimen/text_size_2"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/Name"
+                app:layout_constraintRight_toLeftOf="@+id/KeySize"
+                app:layout_constraintTop_toBottomOf="@+id/Key_exchange" />
+
+            <TextView
+                android:id="@+id/KeySize"
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:background="@color/material_light_white"
+                android:padding="2dp"
+                android:text="Key size"
+                android:textColor="?android:attr/textColorPrimaryInverse"
+                android:textSize="@dimen/text_size_2"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/TypeKE"
+                app:layout_constraintRight_toRightOf="@+id/Key_exchange"
+                app:layout_constraintTop_toBottomOf="@+id/Key_exchange" />
+
+
+            <TextView
+                android:id="@+id/Authentification"
+                android:layout_width="150dp"
+                android:layout_height="25dp"
+                android:layout_margin="1px"
+                android:background="@color/material_light_white"
+                android:padding="2dp"
+                android:text="Authentification"
+                android:textColor="?android:attr/textColorPrimaryInverse"
+                android:textSize="@dimen/text_size_2"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toRightOf="@+id/Key_exchange"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/keySizeAuthentification"
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:background="@color/material_light_white"
+                android:padding="2dp"
+                android:text="Key size"
+                android:textColor="?android:attr/textColorPrimaryInverse"
+                android:textSize="@dimen/text_size_2"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/TypeKE"
+                app:layout_constraintRight_toRightOf="@+id/Authentification"
+                app:layout_constraintTop_toBottomOf="@+id/Authentification" />
+
+            <TextView
+                android:id="@+id/typeKEAuthentification"
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:layout_margin="2px"
+                android:background="@color/material_light_white"
+                android:padding="2dp"
+                android:text="Type"
+                android:textColor="?android:attr/textColorPrimaryInverse"
+                android:textSize="@dimen/text_size_2"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/Name"
+                app:layout_constraintRight_toLeftOf="@+id/keySizeAuthentification"
+                app:layout_constraintTop_toBottomOf="@+id/Authentification" />
+
+
+            <TextView
+                android:id="@+id/Encryption"
+                android:layout_width="150dp"
+                android:layout_height="25dp"
+                android:layout_margin="1px"
+                android:background="@color/material_light_white"
+                android:padding="2dp"
+                android:text="Encryption"
+                android:textColor="?android:attr/textColorPrimaryInverse"
+                android:textSize="@dimen/text_size_2"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toRightOf="@+id/Authentification"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/MAC"
+                android:layout_width="150dp"
+                android:layout_height="25dp"
+                android:layout_margin="1px"
+                android:background="@color/material_light_white"
+                android:padding="2dp"
+                android:text="MAC"
+                android:textColor="?android:attr/textColorPrimaryInverse"
+                android:textSize="@dimen/text_size_2"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toRightOf="@+id/Encryption"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/keySizeMAC"
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:background="@color/material_light_white"
+                android:padding="2dp"
+                android:text="Key size"
+                android:textColor="?android:attr/textColorPrimaryInverse"
+                android:textSize="@dimen/text_size_2"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/TypeKE"
+                app:layout_constraintRight_toRightOf="@+id/MAC"
+                app:layout_constraintTop_toBottomOf="@+id/MAC" />
+
+            <TextView
+                android:id="@+id/typeKEMAC"
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:layout_margin="2px"
+                android:background="@color/material_light_white"
+                android:padding="2dp"
+                android:text="Type"
+                android:textColor="?android:attr/textColorPrimaryInverse"
+                android:textSize="@dimen/text_size_2"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/Name"
+                app:layout_constraintRight_toLeftOf="@+id/keySizeMAC"
+                app:layout_constraintTop_toBottomOf="@+id/MAC" />
+
+            <TextView
+                android:id="@+id/PFS"
+                android:layout_width="150dp"
+                android:layout_height="0dp"
+                android:layout_margin="1px"
+                android:layout_marginBottom="8dp"
+                android:background="@color/material_light_white"
+                android:gravity="bottom"
+                android:padding="2dp"
+                android:text="PFS"
+                android:textColor="?android:attr/textColorPrimaryInverse"
+                android:textSize="@dimen/text_size_2"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/MAC"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/RV_Wireshark"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:scrollbars="vertical"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/header"
+            tools:listitem="@layout/item_tcpdump" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</HorizontalScrollView>

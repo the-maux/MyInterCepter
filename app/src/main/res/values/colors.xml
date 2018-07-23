@@ -42,6 +42,7 @@
     <color name="webserverSpoofPrimary">#dd3E2723</color>
     <color name="settingsPrimary">#dd455a64</color>
     <color name="terminalPrimary">#ddbf360c</color>
+    <color name="cryptcheckPrimary">#311B92</color><!-- mateiral_blue900 -->
 
     
     <!-- switch color  -->

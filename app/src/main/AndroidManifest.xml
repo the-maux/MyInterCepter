@@ -71,6 +71,9 @@
             android:name=".View.WebServer.WebServerActivity"
             android:launchMode="singleTask" />
         <activity
+            android:name=".View.Cryptcheck.CryptCheckActivity"
+            android:launchMode="singleTask" />
+        <activity
             android:name=".View.Dora.DoraActivity"
             android:launchMode="singleTask" />
         <meta-data android:name="AA_MODELS"
