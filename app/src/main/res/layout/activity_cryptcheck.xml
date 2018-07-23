@@ -163,7 +163,7 @@
             android:layout_height="77dp"
             android:layout_marginBottom="6dp"
             android:layout_marginRight="6dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/navigation"
             app:layout_constraintRight_toRightOf="parent" />
 
@@ -176,7 +176,7 @@
             android:layout_margin="16dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_loop_search"
-            android:visibility="visible"
+            android:visibility="gone"
             app:backgroundTint="@color/cryptcheckPrimary"
             app:fabSize="normal"
             app:layout_constraintBottom_toTopOf="@+id/navigation"
