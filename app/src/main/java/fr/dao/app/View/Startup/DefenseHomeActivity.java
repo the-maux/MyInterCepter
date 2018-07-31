@@ -181,7 +181,7 @@ public class                    DefenseHomeActivity extends MyActivity {
                     });
                     break;
                 case 6:
-                    holder.titleCard.setText("Straight FIGHT");
+                    holder.titleCard.setText("Elin Ersson");
                     MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.gallery, holder.logo_card, false, false);
 //                    holder.logo_card.setImageResource(R.drawable.gallery);
                     holder.progressBar_monitor.setVisibility(View.GONE);
