@@ -16,6 +16,9 @@ public class                Preferences {
     public boolean          feedBackToServer = true;
     @SerializedName("MaxSizeOfDbSpaceInMB")
     public int              maxSizeOfDbSpace = 200;
+    @SerializedName("DefaultSite")
+    public String           defaultTarget = "blog.valvin.fr";
+
 
     @SerializedName("PATH_TO_FILES")
     public String           PATH_TO_FILES = Environment.getExternalStorageDirectory().getPath();

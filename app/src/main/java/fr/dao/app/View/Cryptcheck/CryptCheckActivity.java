@@ -1,7 +1,6 @@
 package fr.dao.app.View.Cryptcheck;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -80,8 +79,6 @@ public class CryptCheckActivity extends MyActivity {
     }
 
     private void                init() {
-
-        mToolbar.setSubtitle(Environment.getExternalStorageDirectory().getPath() + "/Dao/");
         initFragment();
         mTabs.setVisibility(View.GONE);
     }

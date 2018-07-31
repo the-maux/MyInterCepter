@@ -13,12 +13,12 @@ import android.widget.TextView;
 
 import fr.dao.app.R;
 
-public class                        DialogQuestionWithInput {
+public class QuestionDialogInput {
     private TextInputLayout         mTIL_firstQuestion, mTIL_SecondQuestion;
     private EditText                mED_FirstQuestion, mED_SeconfQuestion;
     protected AlertDialog.Builder   dialog;
 
-    public                          DialogQuestionWithInput(Activity activity) {
+    public QuestionDialogInput(Activity activity) {
         dialog = new AlertDialog.Builder(activity);
         dialog.setCancelable(true);
         View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_question_with_input, null);
@@ -29,41 +29,41 @@ public class                        DialogQuestionWithInput {
         mED_SeconfQuestion = dialogView.findViewById(R.id.subtitle_card);
     }
 
-    public DialogQuestionWithInput  setIcon(int ressource) {
+    public QuestionDialogInput setIcon(int ressource) {
         dialog.setIcon(ressource);
         return this;
     }
-    public DialogQuestionWithInput  setTitle(String title) {
+    public QuestionDialogInput setTitle(String title) {
         dialog.setTitle(title);
         return this;
     }
 
-    public DialogQuestionWithInput  onPositiveButton(String msg, DialogInterface.OnClickListener listener) {
+    public QuestionDialogInput onPositiveButton(String msg, DialogInterface.OnClickListener listener) {
         dialog.setPositiveButton(msg, listener);
         return this;
     }
 
-    public DialogQuestionWithInput setHintToTILFirstQuestion(String hint) {
+    public QuestionDialogInput setHintToTILFirstQuestion(String hint) {
         mTIL_firstQuestion.setHint(hint);
         return this;
     }
 
-    public DialogQuestionWithInput setHintToEDFirstQuestion(String hint) {
+    public QuestionDialogInput setHintToEDFirstQuestion(String hint) {
         mED_FirstQuestion.setHint(hint);
         return this;
     }
 
-    public DialogQuestionWithInput setHintToTILSecoundQuestion(String hint) {
+    public QuestionDialogInput setHintToTILSecoundQuestion(String hint) {
         mTIL_SecondQuestion.setHint(hint);
         return this;
     }
 
-    public DialogQuestionWithInput setHintToEDSecoundQuestion(String hint) {
+    public QuestionDialogInput setHintToEDSecoundQuestion(String hint) {
         mED_SeconfQuestion.setHint(hint);
         return this;
     }
 
-    public DialogQuestionWithInput hideSecondInput() {
+    public QuestionDialogInput hideSecondInput() {
         mTIL_SecondQuestion.setVisibility(View.GONE);
         return this;
     }

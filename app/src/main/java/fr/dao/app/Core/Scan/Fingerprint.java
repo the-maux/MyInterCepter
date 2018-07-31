@@ -135,17 +135,12 @@ public class                            Fingerprint {
             }
             tmp = s.toString();
             if (tmp.contains(" ")) {
-                Log.d(TAG, "HOST[" + mac + "] -> VENDOR[" + tmp.substring(tmp.indexOf(" ")+1, tmp.length()) + "]");
                 return tmp.substring(tmp.indexOf(" ")+1, tmp.length());
-            } else {
-                Log.i(TAG, "HOST[" + mac + "] -> VENDOR[" + "Unknown vendor" + "]");
+            } else
                 return "Unknown vendor";
-            }
         } catch (IOException e) {
-            Log.e(TAG+"::MAC", "get Mac root error:");
             e.printStackTrace();
         }
-        Log.e(TAG, "HOST[" + mac + "] -> VENDOR[" + "Unknown vendor error" + "]");
         return "Unknown";
     }
 

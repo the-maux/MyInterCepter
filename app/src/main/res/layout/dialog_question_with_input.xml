@@ -21,7 +21,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:hint="Url: google.com"
             android:imeOptions="actionNext"
             android:inputType="text|textUri|textWebEmailAddress"
             android:nextFocusDown="@id/TIL_ip" />
@@ -46,7 +45,6 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:digits="0123456789."
-            android:hint="IP: 192.168.0.42"
             android:imeOptions="actionDone"
             android:inputType="number" />
     </android.support.design.widget.TextInputLayout>

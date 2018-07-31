@@ -33,7 +33,7 @@ import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
-import fr.dao.app.View.ZViewController.Dialog.DialogQuestionWithInput;
+import fr.dao.app.View.ZViewController.Dialog.QuestionDialogInput;
 
 public class                    NmapActivity extends MyActivity {
     private String              TAG = "NmapActivity";
@@ -184,7 +184,7 @@ public class                    NmapActivity extends MyActivity {
     }
 
     private void                askForExternalTarget() {
-        final DialogQuestionWithInput dialog = new DialogQuestionWithInput(this)
+        final QuestionDialogInput dialog = new QuestionDialogInput(this)
                 .hideSecondInput()
                 .setIcon(R.drawable.dns) //IMAGE HOST
                 .setTitle("Choose your target")

@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.R;
+import fr.dao.app.View.Cryptcheck.CryptCheckActivity;
 import fr.dao.app.View.Dora.DoraActivity;
 import fr.dao.app.View.Terminal.TerminalActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
@@ -158,7 +159,10 @@ public class                    DefenseHomeActivity extends MyActivity {
                     holder.card_view.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             Utils.vibrateDevice(mActivity, 100);
-                            mActivity.showSnackbar(holder.titleCard.getText().toString());
+                            Intent intent = new Intent(mInstance, CryptCheckActivity.class);
+                            Pair<View, String> p1 = Pair.create((View)holder.titleCard, "title_transition");
+                            Pair<View, String> p2 = Pair.create((View)holder.card_view, "rootViewTransition");
+                            startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2).toBundle());
                         }
                     });
                     break;

@@ -31,7 +31,7 @@ import fr.dao.app.View.ZViewController.Adapter.DnsLogsAdapter;
 import fr.dao.app.View.ZViewController.Adapter.DnsSpoofConfAdapter;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
-import fr.dao.app.View.ZViewController.Dialog.DialogQuestionWithInput;
+import fr.dao.app.View.ZViewController.Dialog.QuestionDialogInput;
 
 
 public class                            DnsActivity extends MITMActivity {
@@ -173,7 +173,7 @@ public class                            DnsActivity extends MITMActivity {
                 mFab.setVisibility(View.VISIBLE);
                 switch (v.getId()) {
                     case R.id.action_export:
-                        final DialogQuestionWithInput dialog = new DialogQuestionWithInput(mInstance)
+                        final QuestionDialogInput dialog = new QuestionDialogInput(mInstance)
                                 .setIcon(R.drawable.dns)
                                 .setTitle("Exporter la liste des dns")
                                 .setHintToEDFirstQuestion(DnsmasqConfig.PATH_HOST_FILE)
@@ -197,7 +197,7 @@ public class                            DnsActivity extends MITMActivity {
                         mDnsSpoofAdapter.notifyDataSetChanged();
                         break;
                     case R.id.action_import:
-                        final DialogQuestionWithInput dialog2 = new DialogQuestionWithInput(mInstance)
+                        final QuestionDialogInput dialog2 = new QuestionDialogInput(mInstance)
                                 .setIcon(R.drawable.dns)
                                 .setTitle("Importez la liste des dns")
                                 .hideSecondInput()
@@ -223,7 +223,7 @@ public class                            DnsActivity extends MITMActivity {
     }
 
     private void                        onAddHostDialog() {
-        final DialogQuestionWithInput dialog = new DialogQuestionWithInput(mInstance)
+        final QuestionDialogInput dialog = new QuestionDialogInput(mInstance)
                 .setIcon(R.drawable.dns)
                 .setTitle("Ajouter un title")
                 .setHintToTILFirstQuestion("Domain")

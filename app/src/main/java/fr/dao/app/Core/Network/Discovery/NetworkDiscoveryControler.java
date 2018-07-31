@@ -139,6 +139,7 @@ public class                        NetworkDiscoveryControler {
                     host.ip = ip;
                     host.mac = mac;
                     if (mSingleton.Settings.getUserPreferences().NmapMode == 0) {/*No nmap so, Local vendor*/
+
                         host.vendor = Fingerprint.getVendorFrom(host.mac);//TODO: Thread this
                         Fingerprint.initHost(host);
                     }
