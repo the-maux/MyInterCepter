@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import fr.dao.app.Core.Api.CryptCheckApi;
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Model.Config.CryptCheckModel;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Dialog.QuestionDialogInput;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
@@ -74,6 +75,14 @@ public class                    CryptFrgmnt extends MyFragment  {
             mActivity.showSnackbar("Server didnt answer");
         else
             output.setText(result);
+        progressBarCrypt.setVisibility(View.GONE);
+    }
+
+    public void                 onResponseServer(CryptCheckModel siteAnal) {
+        if (!siteAnal.analysed)
+            mActivity.showSnackbar("Server didnt answer");
+        else
+            output.setText("RESULT");
         progressBarCrypt.setVisibility(View.GONE);
     }
 }
