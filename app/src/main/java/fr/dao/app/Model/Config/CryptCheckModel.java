@@ -11,49 +11,41 @@ public class                        CryptCheckModel {
     private String                  TAG = "CryptCheckModel";
     public String                   domain = "None";
     public String                   dateScan = "None";
-    public String                   ipv4 = "None", ipv6 = "None";
-    public String                   gradeIpv4 = "None", gradeIpv6 = "None";
     public static final int         GOOD = 0x01, WARNING = 0x02, ERROR = 0x03;
-    public ArrayList<Annonce>       annoncesIpv4 = new ArrayList<>(), annoncesIpv6 = new ArrayList<>();
-    public ArrayList<CypherProto>   protos = new ArrayList<>(), protosIpv6 = new ArrayList<>();
+    public ArrayList<Server>        servers = new ArrayList<>();
     public boolean                  analysed = false;
 
-    public CryptCheckModel(Elements elems) {
+    public                          CryptCheckModel(Elements elems) {
         int a = 0;
         Log.w(TAG, "Il y a " + elems.size() + " tag dans cette page");
-        for (Element elem : elems) {
-            switch (a) {
-                case 0:
-                    parseHeader(elem);
-                    break;
-                case 1:
-                    parseHeaderServer(elem, true);
-                    break;
-                case 2:
-                    parseWarningServer(elem, true);
-                    break;
-                case 3:
-                    parseBodyServer(elem, true);
-                    break;
-                case 4:
-                    parseHeaderServer(elem, false);
-                    break;
-                case 5:
-                    parseWarningServer(elem, false);
-                    break;
-                case 6:
-                    parseBodyServer(elem, false);
-                    break;
-                default:
-                    Log.e(TAG, "DEFAULT" + elem.outerHtml());
-                    break;
+        Element header = elems.get(0);
+        for (int i = 1; i < elems.size(); i = i +2) {
+            Element headerServer = elems.get(i);
+
+            Server server = new Server();
+            Elements tmp = elems.get(i+1).children();
+            /* Ici tu check si dans les child il y a un comment
+            *           Si oui tu le vires
+            *  Ensuite tu checks si y a un table dedans
+            *       Si oui alors cest le body
+            *  Sinon c'est les warnings
+            *
+            *           */
+
+            if (tmp.hasClass("table")) {
+                parseBodyServer(tmp, server);
+            } else {
+                parseWarningServer(tmp, server);
+                parseBodyServer(elems.get(i+2), server);
             }
-            a = a + 1;
+            servers.add(server);
+            Log.d(TAG, "------------------------------------------------------------------");
+
         }
         analysed = true;
     }
 
-    private void                        parseHeader(Element elem) {
+    private void                        parseHeader(Element elem, Server server) {
         /**
          <div class="col-sm-11">
          <h1> [HTTPS] blog.valvin.fr <span class="small">(Tue, 31 Jul 2018 10:53:33 +0000)</span> </h1>
@@ -67,7 +59,7 @@ public class                        CryptCheckModel {
         Log.w(TAG, "Date" + elem.getElementsByTag("span").outerHtml());
     }
 
-    private void                        parseHeaderServer(Element elem, boolean isIpv6) {
+    private void                        parseHeaderServer(Element elem, Server server) {
         /**
          <div class="col-sm-12">
          <h2> <span class="label label-state-warning">E</span> 2001:bc8:4700:2200::1:c2b : 443 <span class="small">(blog.valvin.fr)</span></h2>
@@ -75,29 +67,16 @@ public class                        CryptCheckModel {
          </div>
          * */
         Elements spans = elem.getElementsByTag("span");
-        if (isIpv6) {
-            gradeIpv6 = spans.get(0).text();
-            ipv6 = spans.get(1).text();
-            Log.i(TAG, "IPV6=>[" + ipv6 + "] GRADE:" + gradeIpv6);
-        } else {
-            gradeIpv4 = spans.get(0).text();
-            ipv4 = spans.get(1).text();
-            Log.i(TAG, "IPV6=>[" + ipv4 + "] GRADE:" + gradeIpv4);
-        }
+        server.grade = spans.get(0).text();
+        server.ip = spans.get(1).text();
+        Log.i(TAG, "IPV6=>[" + server.ip + "] GRADE:" + server.grade);
     }
 
-    private void                        parseWarningServer(Element elem, boolean isIpv6) {
-        ArrayList<Annonce> annonces;
-        if (isIpv6) {
-            Log.i(TAG, "Warning" + elem.outerHtml());
-            annonces = annoncesIpv6;
-        } else {
-            Log.d(TAG, "Warning" + elem.outerHtml());
-            annonces = annoncesIpv4;
-        }
+    private void                        parseWarningServer(Element elem, Server server) {
         Elements divs = elem.getElementsByTag("div");
+        Log.d(TAG, "LES ANNONCES");
         for (Element div : divs) {
-            annonces.add(new Annonce(div));
+            server.annonces.add(new Annonce(div));
         }
         /**
          *
@@ -163,13 +142,7 @@ public class                        CryptCheckModel {
          */
     }
 
-    private void                        parseBodyServer(Element elem, boolean b) {
-        if (b) {
-            Log.i(TAG, "Body" + elem.outerHtml());
-        } else {
-            Log.d(TAG, "Body" + elem.outerHtml());
-        }
-
+    private void                        parseBodyServer(Element elem, Server server) {
         /**
          *
          *
@@ -286,7 +259,13 @@ public class                        CryptCheckModel {
     }
 
 
+    private class                       Server {
+        public String                   ip = "None";
+        public ArrayList<CypherProto>   protos = new ArrayList<>();
+        public ArrayList<Annonce>       annonces = new ArrayList<>();
+        public String                   grade = "None";
 
+    }
 
     private class           Annonce {
         public int          type;
@@ -294,12 +273,16 @@ public class                        CryptCheckModel {
 
         public              Annonce(Element elem) {
             String className = elem.className();
-            if (className.contains(""))
+            if (className.contains("")) {
                 type = GOOD;
-            else if (className.contains(""))
+                Log.d(TAG, elem.text());
+            } else if (className.contains("")) {
                 type = WARNING;
-            else
+                Log.i(TAG, elem.text());
+            } else {
                 type = ERROR;
+                Log.e(TAG, elem.text());
+            }
             msg = elem.text();
         }
     }

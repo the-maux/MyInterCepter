@@ -41,7 +41,7 @@ public class                    CryptFrgmnt extends MyFragment  {
             CryptCheckApi.getInstance().callForSite(mInstance, mDefaultSite);
         } catch (IOException e) {
             e.printStackTrace();
-            onResponseServer(null);
+            onResponseServer("");
         }
         return true;
     }
@@ -71,7 +71,7 @@ public class                    CryptFrgmnt extends MyFragment  {
     }
 
     public void                 onResponseServer(String result) {
-        if (result == null)
+        if (result == null || result.isEmpty())
             mActivity.showSnackbar("Server didnt answer");
         else
             output.setText(result);

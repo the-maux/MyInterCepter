@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewCompat;
@@ -41,6 +42,7 @@ public class                            DnsActivity extends MITMActivity {
     private AppBarLayout                appBarLayout;
     private Toolbar                     mToolbar;
   //  private SearchView                  mSearchView;
+    protected FloatingActionButton mFab;
     private ImageButton                 mAction_add_host, mSettingsBtn;
     private TabLayout                   mTabs;
     private RecyclerView                mDnsSpoof_RV;
@@ -151,7 +153,7 @@ public class                            DnsActivity extends MITMActivity {
             @Override
             public void onClick(View v) {
                 mInstance.findViewById(R.id.clipper).setVisibility(View.VISIBLE);
-                mFab.setVisibility(View.GONE);
+                mFab.hide();
             }
         });
         mAction_deleteall.setOnClickListener(onClickTopMenu());
@@ -170,7 +172,7 @@ public class                            DnsActivity extends MITMActivity {
             @Override
             public void onClick(View v) {
                 mInstance.findViewById(R.id.clipper).setVisibility(View.GONE);
-                mFab.setVisibility(View.VISIBLE);
+                mFab.show();
                 switch (v.getId()) {
                     case R.id.action_export:
                         final QuestionDialogInput dialog = new QuestionDialogInput(mInstance)
