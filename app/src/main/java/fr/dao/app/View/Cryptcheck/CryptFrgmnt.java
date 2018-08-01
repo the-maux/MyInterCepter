@@ -3,6 +3,8 @@ package fr.dao.app.View.Cryptcheck;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import fr.dao.app.Core.Api.CryptCheckApi;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Config.CryptCheckModel;
 import fr.dao.app.R;
+import fr.dao.app.View.ZViewController.Adapter.CryptCheckAdapter;
 import fr.dao.app.View.ZViewController.Dialog.QuestionDialogInput;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
@@ -25,7 +28,9 @@ public class                    CryptFrgmnt extends MyFragment  {
     private ConstraintLayout    mCoordinatorLayout;
     private TextView            output;
     private ProgressBar         progressBarCrypt;
+    private RecyclerView        mRV_cryptcheck;
     private String              mDefaultSite = Singleton.getInstance().Settings.getUserPreferences().defaultTarget;
+    private CryptCheckAdapter   mAdapter;
 
     public View                 onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_cryptcheck, container, false);
@@ -47,7 +52,6 @@ public class                    CryptFrgmnt extends MyFragment  {
     }
 
     public void                 init() {
-
         final QuestionDialogInput dialog = new QuestionDialogInput(mActivity)
                 .hideSecondInput()
                 .setIcon(R.mipmap.ic_cryptcheck_png) //IMAGE HOST
@@ -62,12 +66,16 @@ public class                    CryptFrgmnt extends MyFragment  {
                 start();
             }
         }).show();
+        mAdapter = new CryptCheckAdapter(mActivity);
+        mRV_cryptcheck.setAdapter(mAdapter);
+        mRV_cryptcheck.setLayoutManager(new LinearLayoutManager(mActivity));
     }
 
     private void                initXml(View rootView) {
         mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
         output = rootView.findViewById(R.id.textView2);
         progressBarCrypt = rootView.findViewById(R.id.progressBarCrypt);
+        mRV_cryptcheck = rootView.findViewById(R.id.RV_cryptcheck);
     }
 
     public void                 onResponseServer(String result) {
@@ -78,11 +86,13 @@ public class                    CryptFrgmnt extends MyFragment  {
         progressBarCrypt.setVisibility(View.GONE);
     }
 
-    public void                 onResponseServer(CryptCheckModel siteAnal) {
-        if (!siteAnal.analysed)
-            mActivity.showSnackbar("Server didnt answer");
-        else
-            output.setText("RESULT");
-        progressBarCrypt.setVisibility(View.GONE);
+    public void                 onResponseServer(final CryptCheckModel siteAnal) {
+        mActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                output.setText("RESULT");
+                mAdapter.putOnListOfTrame(siteAnal.servers.get(0).protos);
+                progressBarCrypt.setVisibility(View.GONE);
+            }
+        });
     }
 }

@@ -36,6 +36,7 @@
         <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -362,7 +363,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:scrollbars="vertical"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/header"
             tools:listitem="@layout/item_tcpdump" />

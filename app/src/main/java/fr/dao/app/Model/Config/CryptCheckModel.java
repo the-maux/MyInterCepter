@@ -13,39 +13,31 @@ public class                        CryptCheckModel {
     public String                   dateScan = "None";
     public static final int         GOOD = 0x01, WARNING = 0x02, ERROR = 0x03;
     public ArrayList<Server>        servers = new ArrayList<>();
-    public boolean                  analysed = false;
 
     public                          CryptCheckModel(Elements elems) {
         int a = 0;
         Log.w(TAG, "Il y a " + elems.size() + " tag dans cette page");
         Element header = elems.get(0);
+        parseHeader(header);
         for (int i = 1; i < elems.size(); i = i +2) {
-            Element headerServer = elems.get(i);
-
             Server server = new Server();
+            Element headerServer = elems.get(i);
+            parseHeaderServer(headerServer, server);
             Elements tmp = elems.get(i+1).children();
-            /* Ici tu check si dans les child il y a un comment
-            *           Si oui tu le vires
-            *  Ensuite tu checks si y a un table dedans
-            *       Si oui alors cest le body
-            *  Sinon c'est les warnings
-            *
-            *           */
-
-            if (tmp.hasClass("table")) {
+            if (!tmp.outerHtml().contains("<h3><span class=\"translation_missing\" title=\"translation missing: en.Checks\">Checks</span></h3>")) {
                 parseBodyServer(tmp, server);
             } else {
-                parseWarningServer(tmp, server);
-                parseBodyServer(elems.get(i+2), server);
+                parseWarningServer(tmp.get(0).children(), server);
+                parseBodyServer(elems.get(i+2).children(), server);
+                i = i+ 1;
             }
             servers.add(server);
             Log.d(TAG, "------------------------------------------------------------------");
 
         }
-        analysed = true;
     }
 
-    private void                        parseHeader(Element elem, Server server) {
+    private void                    parseHeader(Element elem) {
         /**
          <div class="col-sm-11">
          <h1> [HTTPS] blog.valvin.fr <span class="small">(Tue, 31 Jul 2018 10:53:33 +0000)</span> </h1>
@@ -59,7 +51,7 @@ public class                        CryptCheckModel {
         Log.w(TAG, "Date" + elem.getElementsByTag("span").outerHtml());
     }
 
-    private void                        parseHeaderServer(Element elem, Server server) {
+    private void                    parseHeaderServer(Element elem, Server server) {
         /**
          <div class="col-sm-12">
          <h2> <span class="label label-state-warning">E</span> 2001:bc8:4700:2200::1:c2b : 443 <span class="small">(blog.valvin.fr)</span></h2>
@@ -72,8 +64,7 @@ public class                        CryptCheckModel {
         Log.i(TAG, "IPV6=>[" + server.ip + "] GRADE:" + server.grade);
     }
 
-    private void                        parseWarningServer(Element elem, Server server) {
-        Elements divs = elem.getElementsByTag("div");
+    private void                    parseWarningServer(Elements divs, Server server) {
         Log.d(TAG, "LES ANNONCES");
         for (Element div : divs) {
             server.annonces.add(new Annonce(div));
@@ -142,124 +133,26 @@ public class                        CryptCheckModel {
          */
     }
 
-    private void                        parseBodyServer(Element elem, Server server) {
-        /**
-         *
-         *
-         <div class="row">
-         <div class="col-sm-12">
-         <table class="table table-bordered table-condensed table-striped center">
-         <thead>
-         <tr>
-         <th rowspan="2">Name</th>
-         <th rowspan="2">Key exchange</th>
-         <th rowspan="2">Authentication</th>
-         <th colspan="4">Encryption</th>
-         <th colspan="2">MAC</th>
-         <th rowspan="2">PFS</th>
-         </tr>
-         <tr>
-         <th>Type</th>
-         <th>Key size</th>
-         <th>Block size</th>
-         <th>Mode</th>
-         <th>Type</th>
-         <th>Size</th>
-         </tr>
-         </thead>
-         <tbody>
-         <tr>
-         <th colspan="12"><span class="label label-state-default">TLSv1_2</span></th>
-         </tr>
-         <tr>
-         <th><span class="label label-state-success">&nbsp;</span>&nbsp;ECDHE-RSA-AES128-GCM-SHA256</th>
-         <td class="label-state-">ECDH</td>
-         <td class="label-state-">RSA</td>
-         <td class="label-state-">AES</td>
-         <td class="label-state-">128</td>
-         <td class="label-state-">128</td>
-         <td class="label-state-success">GCM</td>
-         <td class="label-state-">SHA256</td>
-         <td class="label-state-">256</td>
-         <td class="label-state-">PFS</td>
-         </tr>
-         <tr>
-         <th><span class="label label-state-success">&nbsp;</span>&nbsp;ECDHE-RSA-AES256-GCM-SHA384</th>
-         <td class="label-state-">ECDH</td>
-         <td class="label-state-">RSA</td>
-         <td class="label-state-">AES</td>
-         <td class="label-state-">256</td>
-         <td class="label-state-">256</td>
-         <td class="label-state-success">GCM</td>
-         <td class="label-state-">SHA384</td>
-         <td class="label-state-">384</td>
-         <td class="label-state-">PFS</td>
-         </tr>
-         <tr>
-         <th><span class="label label-state-default">&nbsp;</span>&nbsp;ECDHE-RSA-AES128-SHA</th>
-         <td class="label-state-">ECDH</td>
-         <td class="label-state-">RSA</td>
-         <td class="label-state-">AES</td>
-         <td class="label-state-">128</td>
-         <td class="label-state-">128</td>
-         <td class="label-state-">CBC</td>
-         <td class="label-state-warning">SHA1</td>
-         <td class="label-state-">160</td>
-         <td class="label-state-">PFS</td>
-         </tr>
-         <tr>
-         <th><span class="label label-state-default">&nbsp;</span>&nbsp;ECDHE-RSA-AES128-SHA256</th>
-         <td class="label-state-">ECDH</td>
-         <td class="label-state-">RSA</td>
-         <td class="label-state-">AES</td>
-         <td class="label-state-">128</td>
-         <td class="label-state-">128</td>
-         <td class="label-state-">CBC</td>
-         <td class="label-state-">SHA256</td>
-         <td class="label-state-">256</td>
-         <td class="label-state-">PFS</td>
-         </tr>
-         <tr>
-         <th><span class="label label-state-default">&nbsp;</span>&nbsp;ECDHE-RSA-AES256-SHA</th>
-         <td class="label-state-">ECDH</td>
-         <td class="label-state-">RSA</td>
-         <td class="label-state-">AES</td>
-         <td class="label-state-">256</td>
-         <td class="label-state-">256</td>
-         <td class="label-state-">CBC</td>
-         <td class="label-state-warning">SHA1</td>
-         <td class="label-state-">160</td>
-         <td class="label-state-">PFS</td>
-         </tr>
-         <tr>
-         <th><span class="label label-state-default">&nbsp;</span>&nbsp;ECDHE-RSA-AES256-SHA384</th>
-         <td class="label-state-">ECDH</td>
-         <td class="label-state-">RSA</td>
-         <td class="label-state-">AES</td>
-         <td class="label-state-">256</td>
-         <td class="label-state-">256</td>
-         <td class="label-state-">CBC</td>
-         <td class="label-state-">SHA384</td>
-         <td class="label-state-">384</td>
-         <td class="label-state-">PFS</td>
-         </tr>
-         <tr>
-         <th><span class="label label-state-warning">&nbsp;</span>&nbsp;DHE-RSA-AES128-GCM-SHA256</th>
-         <td class="label-state-warning">DH</td>
-         <td class="label-state-">RSA</td>
-         <td class="label-state-">AES</td>
-         <td class="label-state-">128</td>
-         <td class="label-state-">128</td>
-         <td class="label-state-success">GCM</td>
-         <td class="label-state-">SHA256</td>
-         <td class="label-state-">256</td>
-         <td class="label-state-">PFS</td>
-         *
-         */
+    private void                    parseBodyServer(Elements divs, Server server) {
+        Elements table = divs.get(0).getElementsByClass("table");
+        Element tbody = table.get(0).child(1);
+        for (Element element : tbody.children()) {
+            try {
+                if (element.children().size() == 1) {
+                    server.protos.add(new CypherProto(element, true));
+                } else {
+                    server.protos.add(new CypherProto(element, false));
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error in boy building");
+                e.printStackTrace();
+            }
+        }
     }
 
 
-    private class                       Server {
+
+    public class        Server {
         public String                   ip = "None";
         public ArrayList<CypherProto>   protos = new ArrayList<>();
         public ArrayList<Annonce>       annonces = new ArrayList<>();
@@ -267,7 +160,7 @@ public class                        CryptCheckModel {
 
     }
 
-    private class           Annonce {
+    public class        Annonce {
         public int          type;
         public String       msg;
 
@@ -287,37 +180,63 @@ public class                        CryptCheckModel {
         }
     }
 
-    private class           CypherProto {
-        String              name;
-        String              KeyExchange[] = new String[2];
-        String              Authentification[] = new String[2];
-        String              Encryption[] = new String[4];
-        String              MAC[] = new String[2];
-        boolean             PFS;
+    public class        CypherProto {
+        public String   name;
+        public String   KeyExchange[] = new String[2];
+        public String   Authentification[] = new String[2];
+        public String   Encryption[] = new String[4];
+        public String   MAC[] = new String[2];
+        public boolean  PFS;
+        public boolean  isNameTLS;
 
-
-        public              CypherProto(String html) {
-            /**
-             *
-                 <tr>
-                     <th colspan="12"><span class="label label-state-default">TLSv1_2</span></th>
-                 </tr>
-                 <tr>
-                     <th><span class="label label-state-success">&nbsp;</span>&nbsp;ECDHE-RSA-AES128-GCM-SHA256</th>
-                     <td class="label-state-">ECDH</td>
-                     <td class="label-state-">RSA</td>
-                     <td class="label-state-">AES</td>
-                     <td class="label-state-">128</td>
-                     <td class="label-state-">128</td>
-                     <td class="label-state-success">GCM</td>
-                     <td class="label-state-">SHA256</td>
-                     <td class="label-state-">256</td>
-                     <td class="label-state-">PFS</td>
-                 </tr>
-             */
-
+        public              CypherProto(Element element, boolean isTLSName) {
+            if (isTLSName) {
+                this.isNameTLS = true;
+                name = element.text();
+            } else {
+                this.isNameTLS = false;
+                for (int i = 0; i < element.children().size(); i++) {
+                    switch (i) {
+                        case 0:
+                            this.name = element.children().get(i).text();
+                            break;
+                        case 1:
+                            this.KeyExchange[0] = element.children().get(i).text();
+                            break;
+                        case 2:
+                            this.KeyExchange[1] = element.children().get(i).text();
+                            break;
+                        case 3:
+                            this.Authentification[0] = element.children().get(i).text();
+                            break;
+                        case 4:
+                            this.Authentification[1] = element.children().get(i).text();
+                            break;
+                        case 5:
+                            this.Encryption[0] = element.children().get(i).text();
+                            break;
+                        case 6:
+                            this.Encryption[1] = element.children().get(i).text();
+                            break;
+                        case 7:
+                            this.Encryption[2] = element.children().get(i).text();
+                            break;
+                        case 8:
+                            this.Encryption[3] = element.children().get(i).text();
+                            break;
+                        case 9:
+                            this.MAC[0] = element.children().get(i).text();
+                            break;
+                        case 10:
+                            this.MAC[1] = element.children().get(i).text();
+                            break;
+                        case 11:
+                            PFS = !element.children().get(i).text().contains("No PFS");
+                            break;
+                    }
+                }
+            }
         }
-
     }
 
 }
