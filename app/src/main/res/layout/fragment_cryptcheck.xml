@@ -316,7 +316,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.7"
                 app:layout_constraintLeft_toLeftOf="@+id/MAC"
-                app:layout_constraintRight_toLeftOf="@+id/TypeKEMAC"
+                app:layout_constraintRight_toLeftOf="@+id/typeKEMAC"
                 app:layout_constraintTop_toBottomOf="@+id/MAC" />
 
             <TextView

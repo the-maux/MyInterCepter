@@ -44,6 +44,7 @@ public class                    HTTProxyAdapter extends RecyclerView.Adapter<Set
 
     public void                 onBindViewHolder(SettingHolder holder, int position) {
         HttpTrame trameHttp = httpTrames.get(position);
+
         holder.title.setText(trameHttp.host);
         holder.subtitle.setText(trameHttp.request);
         holder.switch_sw.setVisibility(View.GONE);
@@ -118,19 +119,22 @@ public class                    HTTProxyAdapter extends RecyclerView.Adapter<Set
     private void                filterTheStack() {
         ArrayList<HttpTrame> httpTrames = new ArrayList<>();
         Log.d(TAG, "filterTheStack()");
-        for (HttpTrame trame : this.httpTrames) {
-            if (trameIsRight(trame))
-                if ((!httpTrames.isEmpty() && !httpTrames.get(0).request.contains(trame.request)) ||
-                        httpTrames.isEmpty())
-                    httpTrames.add(trame);
-            else if (this.httpTrames.indexOf(trame) != 0) {
-                    Collections.swap(this.httpTrames, this.httpTrames.indexOf(trame), 0);
-                    filterTheStack();
-                    return;
+        if (!this.httpTrames.isEmpty() && this.httpTrames.size() > 1) {
+            for (HttpTrame trame : this.httpTrames) {
+                if (trameIsRight(trame)) {
+                    if ((!httpTrames.isEmpty() && !httpTrames.get(0).request.contains(trame.request)) ||
+                            httpTrames.isEmpty())
+                        httpTrames.add(trame);
+                    else if (this.httpTrames.indexOf(trame) != 0 && !trame.request.contains(httpTrames.get(0).request)) {
+                        Collections.swap(this.httpTrames, this.httpTrames.indexOf(trame), 0);
+                       // filterTheStack();
+                        return;
+                    }
                 }
+            }
+            //   this.httpTrames.clear();
+            this.httpTrames = httpTrames;
         }
-     //   this.httpTrames.clear();
-        this.httpTrames = httpTrames;
     }
 
     private boolean             trameIsRight(HttpTrame trame) {

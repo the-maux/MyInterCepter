@@ -77,12 +77,13 @@ public class HostDiscoveryScanFrgmnt extends MyFragment {
             Log.d(TAG, "Host already NOT loaded SKELETON");
             skeletonScreen = Skeleton.bind(mHost_RV)
                     .adapter(mHostAdapter)
+                    .load(R.layout.item_hostdiscovery_skeleton)
                     .shimmer(true)
                     .angle(5)
                     .frozen(false)
                     .duration(1000)
-                    .count(13)
-                    .load(R.layout.item_hostdiscovery_skeleton)
+                    .count(mSingleton.hostList == null ? 13 : mSingleton.hostList.size())
+
                     .show();
         }
     }

@@ -22,7 +22,6 @@ import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 public class                    ProxyReaderFrgmnt extends MyFragment {
     private String              TAG = "ProxyReaderFrgmnt";
-    private CoordinatorLayout   mCoordinatorLayout;
     private Context             mCtx;
     private ConstraintLayout    rootViewForDashboard;
     private RelativeLayout      rootViewForLiveFlux;
@@ -33,7 +32,7 @@ public class                    ProxyReaderFrgmnt extends MyFragment {
     ProgressDialog              dialog;
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_sniff, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_proxy, container, false);
         mCtx = getActivity();
         initXml(rootView);
         mActivity = (ProxyActivity) getActivity();
@@ -47,11 +46,7 @@ public class                    ProxyReaderFrgmnt extends MyFragment {
     }
 
     private void                initXml(View rootView) {
-        mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
-        mProxy_RV = rootView.findViewById(R.id.RV_Wireshark);
-        rootViewForLiveFlux = rootView.findViewById(R.id.rootViewForLiveFlux);
-        rootViewForLiveFlux.setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.topBar).setVisibility(View.GONE);
+        mProxy_RV = rootView.findViewById(R.id.recyclerView2);
     }
 
     public void                 init() {
