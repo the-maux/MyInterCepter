@@ -33,7 +33,7 @@ public class                    TerminalFrgmnt extends MyFragment  {
     private ConstraintLayout    mCoordinatorLayout;
     ArrayList<Shell>            mShell;
     private TerminalActivity    mActivity;
-    private boolean             root = true;
+    private boolean             root = false;
     private Map                 ttyByTabs = new HashMap();
     private TextView            stdout, prompt;
     private EditText            stdin;
@@ -115,10 +115,14 @@ public class                    TerminalFrgmnt extends MyFragment  {
     }
 
     private boolean             execCmd(String s) {
-        if (mActivity.mProgressBar != null && mActivity.mProgressBar.getVisibility() == View.VISIBLE)
-            mActivity.mProgressBar.setVisibility(View.VISIBLE);
-        prompt.setVisibility(View.INVISIBLE);
-        stdin.setVisibility(View.INVISIBLE);
+        mActivity.mProgressBar.setVisibility(View.VISIBLE);
+        mActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                prompt.setVisibility(View.INVISIBLE);
+                stdin.setVisibility(View.INVISIBLE);
+            }
+        });
+
         return getShell().exec(s);
     }
 
@@ -142,6 +146,7 @@ public class                    TerminalFrgmnt extends MyFragment  {
                     stdin.setText("");
                     prompt.setVisibility(View.VISIBLE);
                     stdin.setVisibility(View.VISIBLE);
+                    mActivity.mProgressBar.setVisibility(View.GONE);
                 }
                 final Layout layout = stdout.getLayout();
                 if(layout != null){
@@ -183,5 +188,15 @@ public class                    TerminalFrgmnt extends MyFragment  {
                 prompt.setText(Html.fromHtml(getShell().PROMPT), TextView.BufferType.SPANNABLE);
             }
         });
+    }
+
+    public void                 clearShellRunning() {
+        if (mShell != null) {
+            for (Shell shell : mShell) {
+                shell.close();
+            }
+            mShell = null;
+        }
+
     }
 }

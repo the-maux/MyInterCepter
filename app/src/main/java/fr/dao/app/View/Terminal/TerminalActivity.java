@@ -28,7 +28,7 @@ public class                    TerminalActivity extends MyActivity {
     private TerminalActivity    mInstance = this;
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
-    private TerminalFrgmnt terminalFragmet;
+    private TerminalFrgmnt      terminalFragmet;
     private AppBarLayout        appBarLayout;
     private Toolbar             mToolbar;
     TabLayout                   mTabs;
@@ -168,8 +168,7 @@ public class                    TerminalActivity extends MyActivity {
         return true;
     }
 
-
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean              onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.ACTION1:
                 Log.d(TAG, "ACTION1 item");
@@ -181,5 +180,10 @@ public class                    TerminalActivity extends MyActivity {
                 Log.d(TAG, "default item");
                 return true;
         }
+    }
+
+    protected void              onStop() {
+        super.onStop();
+        terminalFragmet.clearShellRunning();
     }
 }

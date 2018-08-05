@@ -53,7 +53,7 @@ public class                                DBNetwork {
         List<Network> AllApWithDeviceIn = new ArrayList<>();
 
         for (Network accessPoint : DBNetwork.getAllAccessPoint()) {
-            if (accessPoint.listDevicesSerialized.contains("" + host.getId()))
+            if (accessPoint.listDevicesSerialized != null && accessPoint.listDevicesSerialized.contains("" + host.getId()))
                 AllApWithDeviceIn.add(accessPoint);
         }
         Log.i(TAG, "getAllAPWith(" + host.getName() + ")In:: returning " + AllApWithDeviceIn.size() + " NetworkInformation ");

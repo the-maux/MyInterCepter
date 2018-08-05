@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
+import android.util.AndroidRuntimeException;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -34,16 +35,21 @@ public class                    ViewAnimate {
         setVisibilty(view, LONG_DURATION, View.VISIBLE);
     }
     private static void         setVisibilty(final View view, int duration, final int visibility) {
-        view.animate()
-                .alpha((visibility == View.VISIBLE) ? 1.0f : 0.0f)
-                .setDuration(duration)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        view.setVisibility(visibility);
-                    }
-                });
+        try {
+            view.animate()
+                    .alpha((visibility == View.VISIBLE) ? 1.0f : 0.0f)
+                    .setDuration(duration)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            view.setVisibility(visibility);
+                        }
+                    });
+        } catch (AndroidRuntimeException e) {
+            e.printStackTrace();
+
+        }
     }
     public static void          FadeAnimateReveal(final MyActivity context, final View fab, final Runnable runnable) {
         context.runOnUiThread(new Runnable() {

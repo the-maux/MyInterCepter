@@ -32,7 +32,6 @@ public class                        Shell {
         startProcess();
     }
 
-
     private void                    startProcess() {
         new Thread(new Runnable() {
             public void run() {
@@ -97,12 +96,11 @@ public class                        Shell {
         frgmnt.updateStdout();
     }
 
-    public void                     changeUser(boolean isRoot) {
-        USER = isRoot ? "root" : "shell";
-    }
-
-
     private void                    updatePrompt() {
         PROMPT = "<font color='red'>" + USER + "</font> " + "<font color='cyan'> $> </font>";
+    }
+
+    public void                     close() {
+        mProcess.closeDontWait();
     }
 }

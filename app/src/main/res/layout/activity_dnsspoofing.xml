@@ -23,7 +23,7 @@
 
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/imageView5"
                 android:layout_width="@dimen/icon_toolbar_size"
                 android:layout_height="@dimen/icon_toolbar_size"
                 android:elevation="4dp"
@@ -46,7 +46,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/searchView"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="5"
-                app:layout_constraintStart_toEndOf="@+id/imageView3"
+                app:layout_constraintStart_toEndOf="@+id/imageView5"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_min="@dimen/icon_toolbar_size"
                 app:layout_scrollFlags="scroll|enterAlways"

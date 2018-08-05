@@ -13,6 +13,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -40,6 +41,7 @@ public class                    DoraActivity extends MyActivity {
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
     private AppBarLayout        appBarLayout;
+    private Toolbar mToolbar;
     private SearchView          searchView;
     private TabItem             radar, signalQuality;
     private ImageView           add, more;
@@ -54,8 +56,20 @@ public class                    DoraActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dora);
         initXml();
-    }
+        setToolbarTitle("D.O.R.A", "Easy Q.O.S");
 
+    }
+    public void                     setToolbarTitle(final String title, final String subtitle) {
+        mInstance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (title != null)
+                    mToolbar.setTitle(title);
+                if (subtitle != null)
+                    mToolbar.setSubtitle(subtitle);
+            }
+        });
+    }
     protected void              onResume() {
         super.onResume();
         getDoraWrapper();
@@ -65,11 +79,11 @@ public class                    DoraActivity extends MyActivity {
     private void                initXml() {
         mCoordinatorLayout = findViewById(R.id.Coordonitor);
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
-        searchView =  findViewById(R.id.searchView);
+        //searchView =  findViewById(R.id.searchView);
         radar = findViewById(R.id.radar);
         signalQuality = findViewById(R.id.signalQuality);
         add = findViewById(R.id.add);
-        more = findViewById(R.id.action_add_host);
+        //more = findViewById(R.id.action_add_host);
         mRV_dora = findViewById(R.id.RV_dora);
         mFab = findViewById(R.id.fab);
         progressBar = findViewById(R.id.progressBarDora);
@@ -84,7 +98,9 @@ public class                    DoraActivity extends MyActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
-        setStatusBarColor(R.color.doraPrimary);
+        mToolbar = findViewById(R.id.toolbar2);
+        setStatusBarColor(R.
+                color.doraPrimary);
     }
 
     private void                onFabClick() {
@@ -120,15 +136,15 @@ public class                    DoraActivity extends MyActivity {
         } else
             ViewAnimate.FabAnimateReveal(mInstance, mFab);
         mFab.setImageResource((!Dora.isRunning()) ? R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
-        more.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                for (DoraProcess doraProcess : mDoraWrapper.getmListOfHostDored()) {
-                    if (Dora.isRunning()) {
-                        doraProcess.reset();
-                    }
-                }
-            }
-        });
+//        more.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                for (DoraProcess doraProcess : mDoraWrapper.getmListOfHostDored()) {
+//                    if (Dora.isRunning()) {
+//                        doraProcess.reset();
+//                    }
+//                }
+//            }
+//        });
     }
 
     private void                initRV() {
@@ -198,4 +214,5 @@ public class                    DoraActivity extends MyActivity {
         super.showSnackbar(txt);
         Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
     }
+
 }
