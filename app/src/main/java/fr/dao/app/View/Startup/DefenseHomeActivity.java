@@ -86,6 +86,7 @@ public class                    DefenseHomeActivity extends MyActivity {
         }
 
         public void                 onBindViewHolder(final MenuItemHolder holder, int position) {
+            holder.card_view.setBackgroundColor(getResources().getColor(R.color.vulnsPrimary));
             switch (position) {
                 case 0:
                     holder.titleCard.setText("Terminal");
@@ -107,7 +108,7 @@ public class                    DefenseHomeActivity extends MyActivity {
                 case 1:
                     holder.titleCard.setText("Dora Diagnostic");
                     holder.progressBar_monitor.setVisibility(View.GONE);
-                    MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_dora, holder.logo_card, false, false);
+                    MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_dora_png, holder.logo_card, false, false);
 //                    holder.logo_card.setImageResource(R.drawable.pepper);
                     holder.statusIconCardView.setImageResource(R.color.online_color);
                     holder.logo_card.setVisibility(View.VISIBLE);
@@ -123,10 +124,10 @@ public class                    DefenseHomeActivity extends MyActivity {
                     break;
                 case 2:
                     holder.titleCard.setText("Self Proxy");
-                    MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_self_proxy, holder.logo_card, false, false);
+                    MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_proxy_png, holder.logo_card, false, false);
 //                    holder.logo_card.setImageResource(R.drawable.cage);
                     holder.progressBar_monitor.setVisibility(View.GONE);
-                    holder.statusIconCardView.setImageResource(R.color.filtered_color);
+                    holder.statusIconCardView.setImageResource(R.color.offline_color);
                     holder.logo_card.setVisibility(View.VISIBLE);
                     holder.card_view.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
@@ -138,9 +139,9 @@ public class                    DefenseHomeActivity extends MyActivity {
                 case 3:
                     holder.titleCard.setText("ARP Controller");
                     holder.progressBar_monitor.setVisibility(View.GONE);
-                    holder.logo_card.setImageResource(R.drawable.poiz);
+                    holder.logo_card.setImageResource(R.mipmap.ic_arp_png);
                     //MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.poiz, holder.logo_card, false, false);
-//                  holder.statusIconCardView.setImageResource(R.color.offline_color);
+                      holder.statusIconCardView.setImageResource(R.color.offline_color);
                     holder.logo_card.setVisibility(View.VISIBLE);
                     holder.card_view.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
@@ -152,9 +153,9 @@ public class                    DefenseHomeActivity extends MyActivity {
                 case 4:
                     holder.titleCard.setText("Crypt Check");
                     holder.progressBar_monitor.setVisibility(View.GONE);
-                    MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_verified, holder.logo_card, false, false);
+                    MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_cryptcheck_png, holder.logo_card, false, false);
 //                    holder.logo_card.setImageResource(R.mipmap.ic_lock);
-                    holder.statusIconCardView.setImageResource(R.color.offline_color);
+                    holder.statusIconCardView.setImageResource(R.color.online_color);
                     holder.logo_card.setVisibility(View.VISIBLE);
                     holder.card_view.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
@@ -168,7 +169,7 @@ public class                    DefenseHomeActivity extends MyActivity {
                     break;
                 case 5:
                     holder.titleCard.setText("Network bodyguard");
-                    MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_bodyguard, holder.logo_card, false, false);
+                    MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_networkbody_png, holder.logo_card, false, false);
 //                    holder.logo_card.setImageResource(R.drawable.scan);
                     holder.progressBar_monitor.setVisibility(View.GONE);
                     holder.statusIconCardView.setImageResource(R.color.offline_color);
@@ -182,7 +183,7 @@ public class                    DefenseHomeActivity extends MyActivity {
                     break;
                 case 6:
                     holder.titleCard.setText("Elin Ersson");
-                    MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.gallery, holder.logo_card, false, false);
+                    MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_elin_png, holder.logo_card, false, false);
 //                    holder.logo_card.setImageResource(R.drawable.gallery);
                     holder.progressBar_monitor.setVisibility(View.GONE);
                     holder.statusIconCardView.setImageResource(R.color.offline_color);
@@ -195,8 +196,8 @@ public class                    DefenseHomeActivity extends MyActivity {
                     });
                     break;
                 case 7:
-                    holder.titleCard.setText("Armitage");
-                    MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.network, holder.logo_card, false, false);
+                    holder.titleCard.setText("Data Leaker");
+                    MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_vpn_png, holder.logo_card, false, false);
                     holder.logo_card.setImageResource(R.drawable.network);
                     holder.progressBar_monitor.setVisibility(View.GONE);
                     holder.statusIconCardView.setImageResource(R.color.filtered_color);

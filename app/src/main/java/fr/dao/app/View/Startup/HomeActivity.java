@@ -51,6 +51,7 @@ public class                    HomeActivity extends MyActivity {
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        Log.d(TAG, "" + getResources().getBoolean(R.bool.is_phone_big));
         mSingleton.init(this);
         initXml();
         init();

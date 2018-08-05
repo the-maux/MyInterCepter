@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <bool name="is_tab">false</bool>
-    <bool name="is_phone_big">false</bool>
-
+    <bool name="is_phone_big">true</bool>
     <dimen name="text_size_1">12sp</dimen>
     <dimen name="text_size_2">14sp</dimen>
     <dimen name="text_size_3">16sp</dimen>
