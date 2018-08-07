@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import fr.dao.app.Model.Config.CryptCheckModel;
+import fr.dao.app.Model.Config.Cryptcheck.CryptCheckScan;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Adapter.Holder.CryptCheckHolder;
 import fr.dao.app.View.ZViewController.Adapter.Holder.WiresharkHolder;
@@ -50,21 +51,11 @@ public class                    CryptCheckAdapter extends RecyclerView.Adapter<C
 //        setBackgroundColor(cypherProto.type, holder);
     }
 
-    private void                setBackgroundColor(int color, WiresharkHolder holder) {
-        holder.No.setBackgroundColor(ContextCompat.getColor(mActivity, color));
-        holder.time.setBackgroundColor(ContextCompat.getColor(mActivity, color));
-        holder.source.setBackgroundColor(ContextCompat.getColor(mActivity, color));
-        holder.dest.setBackgroundColor(ContextCompat.getColor(mActivity, color));
-        holder.proto.setBackgroundColor(ContextCompat.getColor(mActivity, color));
-        holder.info.setBackgroundColor(ContextCompat.getColor(mActivity, color));
-        holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.material_grey_700));
-    }
-
     public int                  getItemCount() {
         return protoArrayList == null ? 0 : protoArrayList.size();
     }
 
-    public void                putOnListOfTrame(final ArrayList<CryptCheckModel.CypherProto> protoArrayList) {
+    public void                 putOnListOfTrame(final ArrayList<CryptCheckModel.CypherProto> protoArrayList) {
         this.protoArrayList = protoArrayList;
         notifyDataSetChanged();
     }
@@ -75,4 +66,7 @@ public class                    CryptCheckAdapter extends RecyclerView.Adapter<C
         notifyDataSetChanged();
     }
 
+    public void                 putOnListOfTrame(CryptCheckScan scan) {
+
+    }
 }

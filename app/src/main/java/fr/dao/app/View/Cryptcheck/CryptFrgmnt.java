@@ -16,6 +16,7 @@ import java.io.IOException;
 import fr.dao.app.Core.Api.CryptCheckApi;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Config.CryptCheckModel;
+import fr.dao.app.Model.Config.Cryptcheck.CryptCheckScan;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Adapter.CryptCheckAdapter;
 import fr.dao.app.View.ZViewController.Dialog.QuestionDialogInput;
@@ -91,6 +92,17 @@ public class                    CryptFrgmnt extends MyFragment  {
             public void run() {
                 output.setText("RESULT");
                 mAdapter.putOnListOfTrame(siteAnal.servers.get(0).protos);
+                progressBarCrypt.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    public void                 onResponseServer(final CryptCheckScan scan) {
+        mActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                output.setText("RESULT");
+                /*TODO: TU DOIS CRER UNE LISTE DE CRYPTMODELS.PROTOCOL POUR LADAPTER ET FAIRE UN TRICKS POUR LES TITRES*/
+                mAdapter.putOnListOfTrame(scan);
                 progressBarCrypt.setVisibility(View.GONE);
             }
         });
