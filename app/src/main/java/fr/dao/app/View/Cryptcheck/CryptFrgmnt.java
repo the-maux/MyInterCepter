@@ -27,7 +27,6 @@ public class                    CryptFrgmnt extends MyFragment  {
     private CryptCheckActivity  mActivity;
     private CryptFrgmnt         mInstance = this;
     private ConstraintLayout    mCoordinatorLayout;
-    private TextView            output;
     private ProgressBar         progressBarCrypt;
     private RecyclerView        mRV_cryptcheck;
     private String              mDefaultSite = Singleton.getInstance().Settings.getUserPreferences().defaultTarget;
@@ -74,7 +73,6 @@ public class                    CryptFrgmnt extends MyFragment  {
 
     private void                initXml(View rootView) {
         mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
-        output = rootView.findViewById(R.id.textView2);
         progressBarCrypt = rootView.findViewById(R.id.progressBarCrypt);
         mRV_cryptcheck = rootView.findViewById(R.id.RV_cryptcheck);
     }
@@ -82,16 +80,12 @@ public class                    CryptFrgmnt extends MyFragment  {
     public void                 onResponseServer(String result) {
         if (result == null || result.isEmpty())
             mActivity.showSnackbar("Server didnt answer");
-        else
-            output.setText(result);
         progressBarCrypt.setVisibility(View.GONE);
     }
 
     public void                 onResponseServer(final CryptCheckScan scan) {
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
-                output.setText("RESULT");
-                /*TODO: TU DOIS CRER UNE LISTE DE CRYPTMODELS.PROTOCOL POUR LADAPTER ET FAIRE UN TRICKS POUR LES TITRES*/
                 mAdapter.putOnListOfTrame(scan.getProtos());
                 progressBarCrypt.setVisibility(View.GONE);
             }

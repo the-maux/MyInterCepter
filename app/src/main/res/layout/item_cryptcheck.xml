@@ -18,39 +18,38 @@
 
         android:gravity="center"
         android:padding="3dp"
-        android:text="Name"
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="@dimen/text_size_2"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/TypeKE"
+        app:layout_constraintEnd_toStartOf="@+id/KEY_EXCHANGE"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
-        android:id="@+id/TypeKE"
-        android:layout_width="60dp"
+        android:id="@+id/KEY_EXCHANGE"
+        android:layout_width="150dp"
         android:layout_height="0dp"
         android:layout_margin="1dp"
         android:background="@color/primary_white"
 
         android:gravity="center"
         android:paddingLeft="2dp"
-        android:text="Type"
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="@dimen/text_size_2"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/KeySize"
+        app:layout_constraintEnd_toStartOf="@+id/AUTHENTIFICATION"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/Name"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <TextView
-        android:id="@+id/KeySize"
-        android:layout_width="90dp"
+        android:id="@+id/AUTHENTIFICATION"
+        android:layout_width="150dp"
         android:layout_height="0dp"
         android:layout_margin="1dp"
         android:background="@color/primary_white"
@@ -58,19 +57,17 @@
         android:gravity="center"
         android:padding="3dp"
         android:paddingLeft="2dp"
-        android:text="Key size"
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="@dimen/text_size_2"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/typeKEAuthentification"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/TypeKE"
+        app:layout_constraintEnd_toStartOf="@+id/ENCRYPTION_TYPE"
+        app:layout_constraintStart_toEndOf="@+id/KEY_EXCHANGE"
         app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
-        android:id="@+id/typeKEAuthentification"
+        android:id="@+id/ENCRYPTION_TYPE"
         android:layout_width="60dp"
         android:layout_height="0dp"
         android:layout_margin="1dp"
@@ -79,59 +76,16 @@
         android:gravity="center"
         android:padding="3dp"
         android:paddingLeft="2dp"
-        android:text="Type"
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="@dimen/text_size_2"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/keySizeAuthentification"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/KeySize"
+        app:layout_constraintEnd_toStartOf="@+id/ENCRYPTION_KZ"
+        app:layout_constraintStart_toEndOf="@+id/AUTHENTIFICATION"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/keySizeAuthentification"
-        android:layout_width="90dp"
-        android:layout_height="0dp"
-        android:layout_margin="1dp"
-        android:background="@color/primary_white"
-
-        android:gravity="center"
-        android:padding="3dp"
-        android:paddingLeft="2dp"
-        android:text="Key size"
-        android:textColor="?android:attr/textColorPrimaryInverse"
-        android:textSize="@dimen/text_size_2"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/typeKEEncryption"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/typeKEAuthentification"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <TextView
-        android:id="@+id/typeKEEncryption"
-        android:layout_width="60dp"
-        android:layout_height="0dp"
-        android:layout_margin="1dp"
-        android:background="@color/primary_white"
-
-        android:gravity="center"
-        android:padding="3dp"
-        android:paddingLeft="2dp"
-        android:text="Type   "
-        android:textColor="?android:attr/textColorPrimaryInverse"
-        android:textSize="@dimen/text_size_2"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/KeySizeEncryption"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/keySizeAuthentification"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/KeySizeEncryption"
+        android:id="@+id/ENCRYPTION_KZ"
         android:layout_width="80dp"
         android:layout_height="0dp"
         android:layout_margin="1dp"
@@ -140,18 +94,17 @@
         android:gravity="center"
         android:padding="3dp"
         android:paddingLeft="2dp"
-        android:text="Key size  "
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="@dimen/text_size_2"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/BlockSizeEncryption"
+        app:layout_constraintEnd_toStartOf="@+id/ENCRYPTION_BZ"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/typeKEEncryption"
+        app:layout_constraintStart_toEndOf="@+id/ENCRYPTION_TYPE"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/BlockSizeEncryption"
+        android:id="@+id/ENCRYPTION_BZ"
         android:layout_width="90dp"
         android:layout_height="0dp"
         android:layout_margin="1dp"
@@ -160,18 +113,17 @@
         android:gravity="center"
         android:padding="3dp"
         android:paddingLeft="2dp"
-        android:text="Block Size"
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="@dimen/text_size_2"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ModeEncryption"
+        app:layout_constraintEnd_toStartOf="@+id/ENCRYPTION_MODE"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/KeySizeEncryption"
+        app:layout_constraintStart_toEndOf="@+id/ENCRYPTION_KZ"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/ModeEncryption"
+        android:id="@+id/ENCRYPTION_MODE"
         android:layout_width="60dp"
         android:layout_height="0dp"
         android:layout_margin="1dp"
@@ -180,19 +132,18 @@
         android:gravity="center"
         android:padding="3dp"
         android:paddingLeft="2dp"
-        android:text="Mode"
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="@dimen/text_size_2"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/keySizeMAC"
+        app:layout_constraintEnd_toStartOf="@+id/MAC_KS"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/BlockSizeEncryption"
+        app:layout_constraintStart_toEndOf="@+id/ENCRYPTION_BZ"
         app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
-        android:id="@+id/keySizeMAC"
+        android:id="@+id/MAC_KS"
         android:layout_width="60dp"
         android:layout_height="0dp"
         android:layout_margin="1dp"
@@ -201,18 +152,17 @@
         android:gravity="center"
         android:padding="3dp"
         android:paddingLeft="2dp"
-        android:text="Type      "
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="@dimen/text_size_2"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/typeKEMAC"
+        app:layout_constraintEnd_toStartOf="@+id/MAC_TYPE"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/ModeEncryption"
+        app:layout_constraintStart_toEndOf="@+id/ENCRYPTION_MODE"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/typeKEMAC"
+        android:id="@+id/MAC_TYPE"
         android:layout_width="90dp"
         android:layout_height="0dp"
         android:layout_margin="1dp"
@@ -221,14 +171,13 @@
         android:gravity="center"
         android:padding="3dp"
         android:paddingLeft="2dp"
-        android:text="Size"
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="@dimen/text_size_2"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/PFS"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/keySizeMAC"
+        app:layout_constraintStart_toEndOf="@+id/MAC_KS"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -240,14 +189,13 @@
 
         android:gravity="center"
         android:padding="3dp"
-        android:text="PFS"
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="@dimen/text_size_2"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/typeKEMAC"
+        app:layout_constraintStart_toEndOf="@+id/MAC_TYPE"
         app:layout_constraintTop_toTopOf="parent" />
 
 

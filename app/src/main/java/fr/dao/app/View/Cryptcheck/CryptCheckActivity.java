@@ -118,7 +118,7 @@ public class CryptCheckActivity extends MyActivity {
     }
 
 
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean              onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.ACTION1:
                 Log.d(TAG, "ACTION1 item");

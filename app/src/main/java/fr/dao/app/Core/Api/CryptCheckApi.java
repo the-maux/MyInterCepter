@@ -31,10 +31,10 @@ public class                            CryptCheckApi {
     }
 
     public void                         callForSite(final CryptFrgmnt cryptFrgmnt, String site) throws IOException {
-        Log.d(TAG, ">>>> " + URL + site);
+        Log.d(TAG, ">>>> " + URL + site + ".json");
 
         Ion.with(cryptFrgmnt)
-                .load(URL + "nuxitar.fr.json")
+                .load(URL + site + ".json")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     public void onCompleted(Exception e, JsonObject result) {

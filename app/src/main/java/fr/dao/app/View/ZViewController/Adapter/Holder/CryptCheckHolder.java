@@ -9,10 +9,10 @@ import fr.dao.app.R;
 
 public class                CryptCheckHolder extends RecyclerView.ViewHolder {
     public View             rootView;
-    public ConstraintLayout relativeLayout;
+    public ConstraintLayout rootViewItemCryptcheck;
     public TextView         name;
-    public TextView         KeyExchange_Type, KeyExchange_KS;
-    public TextView         Authentification_Type, Authentification_KS;
+    public TextView         keyExchange;
+    public TextView         Authentification;
     public TextView         Encryption_Type, Encryption_KZ, Encryption_BZ, Encryption_Mode;
     public TextView         MAC_Type, MAC_KS;
     public TextView         PFS;
@@ -20,19 +20,16 @@ public class                CryptCheckHolder extends RecyclerView.ViewHolder {
     public                  CryptCheckHolder(View v) {
         super(v);
         rootView = v;
-        relativeLayout =  rootView.findViewById(R.id.rootViewItemCryptcheck);
+        rootViewItemCryptcheck =  rootView.findViewById(R.id.rootViewItemCryptcheck);
         name = rootView.findViewById(R.id.Name);
-        KeyExchange_Type = rootView.findViewById(R.id.TypeKE);
-        KeyExchange_KS = rootView.findViewById(R.id.KeySize);
-        Authentification_Type = rootView.findViewById(R.id.typeKEAuthentification);
-        Authentification_KS = rootView.findViewById(R.id.keySizeAuthentification);
-
-        Encryption_Type = rootView.findViewById(R.id.typeKEEncryption);
-        Encryption_KZ = rootView.findViewById(R.id.KeySizeEncryption);
-        Encryption_BZ = rootView.findViewById(R.id.BlockSizeEncryption);
-        Encryption_Mode = rootView.findViewById(R.id.ModeEncryption);
-        MAC_Type = rootView.findViewById(R.id.typeKEMAC);
-        MAC_KS = rootView.findViewById(R.id.keySizeMAC);
+        keyExchange = rootView.findViewById(R.id.KEY_EXCHANGE);
+        Authentification = rootView.findViewById(R.id.AUTHENTIFICATION);
+        Encryption_Type = rootView.findViewById(R.id.ENCRYPTION_TYPE);
+        Encryption_KZ = rootView.findViewById(R.id.ENCRYPTION_KZ);
+        Encryption_BZ = rootView.findViewById(R.id.ENCRYPTION_BZ);
+        Encryption_Mode = rootView.findViewById(R.id.ENCRYPTION_MODE);
+        MAC_Type = rootView.findViewById(R.id.MAC_TYPE);
+        MAC_KS = rootView.findViewById(R.id.MAC_KS);
         PFS = rootView.findViewById(R.id.PFS);
     }
 }
