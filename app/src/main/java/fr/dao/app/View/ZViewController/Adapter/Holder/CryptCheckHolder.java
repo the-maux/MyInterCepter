@@ -13,7 +13,7 @@ public class                CryptCheckHolder extends RecyclerView.ViewHolder {
     public TextView         name;
     public TextView         KeyExchange_Type, KeyExchange_KS;
     public TextView         Authentification_Type, Authentification_KS;
-    public TextView         Encryption_Type, Encryption_SZ, Encryption_BZ, Encryption_Mode;
+    public TextView         Encryption_Type, Encryption_KZ, Encryption_BZ, Encryption_Mode;
     public TextView         MAC_Type, MAC_KS;
     public TextView         PFS;
 
@@ -28,7 +28,7 @@ public class                CryptCheckHolder extends RecyclerView.ViewHolder {
         Authentification_KS = rootView.findViewById(R.id.keySizeAuthentification);
 
         Encryption_Type = rootView.findViewById(R.id.typeKEEncryption);
-        Encryption_SZ = rootView.findViewById(R.id.KeySizeEncryption);
+        Encryption_KZ = rootView.findViewById(R.id.KeySizeEncryption);
         Encryption_BZ = rootView.findViewById(R.id.BlockSizeEncryption);
         Encryption_Mode = rootView.findViewById(R.id.ModeEncryption);
         MAC_Type = rootView.findViewById(R.id.typeKEMAC);

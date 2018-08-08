@@ -87,22 +87,12 @@ public class                    CryptFrgmnt extends MyFragment  {
         progressBarCrypt.setVisibility(View.GONE);
     }
 
-    public void                 onResponseServer(final CryptCheckModel siteAnal) {
-        mActivity.runOnUiThread(new Runnable() {
-            public void run() {
-                output.setText("RESULT");
-                mAdapter.putOnListOfTrame(siteAnal.servers.get(0).protos);
-                progressBarCrypt.setVisibility(View.GONE);
-            }
-        });
-    }
-
     public void                 onResponseServer(final CryptCheckScan scan) {
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
                 output.setText("RESULT");
                 /*TODO: TU DOIS CRER UNE LISTE DE CRYPTMODELS.PROTOCOL POUR LADAPTER ET FAIRE UN TRICKS POUR LES TITRES*/
-                mAdapter.putOnListOfTrame(scan);
+                mAdapter.putOnListOfTrame(scan.getProtos());
                 progressBarCrypt.setVisibility(View.GONE);
             }
         });

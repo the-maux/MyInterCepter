@@ -2,22 +2,21 @@ package fr.dao.app.View.ZViewController.Adapter;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import fr.dao.app.Model.Config.CryptCheckModel;
+import fr.dao.app.Model.Config.Cryptcheck.Ciphers;
 import fr.dao.app.Model.Config.Cryptcheck.CryptCheckScan;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Adapter.Holder.CryptCheckHolder;
-import fr.dao.app.View.ZViewController.Adapter.Holder.WiresharkHolder;
 
 public class                    CryptCheckAdapter extends RecyclerView.Adapter<CryptCheckHolder> {
     private String              TAG = "CryptCheckAdapter";
-    private ArrayList<CryptCheckModel.CypherProto> protoArrayList;
+    private ArrayList<Ciphers>  protos;
     private Activity            mActivity;
 
     public CryptCheckAdapter(Activity activity) {
@@ -31,42 +30,56 @@ public class                    CryptCheckAdapter extends RecyclerView.Adapter<C
     }
 
     public void                 onBindViewHolder(CryptCheckHolder holder, int position) {
-        CryptCheckModel.CypherProto cypherProto = protoArrayList.get(position);
-        holder.name.setText(cypherProto.name);
-        holder.KeyExchange_Type.setText(cypherProto.KeyExchange[0]);
-//        setBackgroundColor(cypherProto.type, holder);
-        holder.KeyExchange_KS.setText(cypherProto.KeyExchange[1]);
-//        setBackgroundColor(cypherProto.type, holder);
-        holder.Encryption_Type.setText(cypherProto.Encryption[0]);
-//        setBackgroundColor(cypherProto.type, holder);
-        holder.Encryption_SZ.setText(cypherProto.Encryption[1]);
-//        setBackgroundColor(cypherProto.type, holder);
-        holder.Encryption_BZ.setText(cypherProto.Encryption[2]);
-//        setBackgroundColor(cypherProto.type, holder);
-        holder.Encryption_Mode.setText(cypherProto.Encryption[3]);
-//        setBackgroundColor(cypherProto.type, holder);
-        holder.MAC_Type.setText(cypherProto.MAC[0]);
-//        setBackgroundColor(cypherProto.type, holder);
-        holder.MAC_KS.setText(cypherProto.MAC[1]);
-//        setBackgroundColor(cypherProto.type, holder);
+        Ciphers cipher = protos.get(position);
+        if (cipher.isTitle) {
+            holder.name.setText(cipher.name);
+            holder.KeyExchange_Type.setText("");
+            holder.Authentification_Type.setText("");
+            holder.Encryption_Type.setText("");
+            holder.Encryption_KZ.setText("");
+            holder.Encryption_BZ.setText("");
+            holder.Encryption_Mode.setText("");
+            holder.MAC_Type.setText("");
+            holder.MAC_KS.setText("");
+        } else {
+            Log.i(TAG, "");
+            holder.name.setText(cipher.name);
+            Log.i(TAG, "");
+            holder.KeyExchange_Type.setText(cipher.key_echange);
+//            holder.KeyExchange_KS.setText(cypherProto.KeyExchange[1]);
+            Log.i(TAG, "");
+            holder.Authentification_Type.setText(cipher.authentification);
+//            holder.Authentification_KS.setText();
+            Log.i(TAG, "");
+            if (cipher.encryption != null) {
+                holder.Encryption_Type.setText(cipher.encryption.get(0).toString());
+                holder.Encryption_KZ.setText(cipher.encryption.get(1).toString());
+                holder.Encryption_BZ.setText(cipher.encryption.get(2).toString());
+                holder.Encryption_Mode.setText(cipher.encryption.get(3).toString());
+            }
+            if (cipher.hmac != null) {
+                Log.i(TAG, "");
+                holder.MAC_Type.setText(cipher.hmac.name);
+                holder.MAC_KS.setText(cipher.hmac.size + "");
+            } else {
+                Log.e(TAG, "no hmac");
+            }
+       }
     }
 
     public int                  getItemCount() {
-        return protoArrayList == null ? 0 : protoArrayList.size();
+        return protos == null ? 0 : protos.size();
     }
 
-    public void                 putOnListOfTrame(final ArrayList<CryptCheckModel.CypherProto> protoArrayList) {
-        this.protoArrayList = protoArrayList;
+    public void                 putOnListOfTrame(final ArrayList<Ciphers> protoArrayList) {
+        this.protos = protoArrayList;
         notifyDataSetChanged();
     }
 
     public void                 reset() {
-        if (protoArrayList != null)
-            protoArrayList.clear();
+        if (protos != null)
+            protos.clear();
         notifyDataSetChanged();
     }
 
-    public void                 putOnListOfTrame(CryptCheckScan scan) {
-
-    }
 }
