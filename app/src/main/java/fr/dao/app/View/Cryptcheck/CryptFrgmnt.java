@@ -31,6 +31,7 @@ public class                    CryptFrgmnt extends MyFragment  {
     private RecyclerView        mRV_cryptcheck;
     private String              mDefaultSite = Singleton.getInstance().Settings.getUserPreferences().defaultTarget;
     private CryptCheckAdapter   mAdapter;
+    private CryptCheckScan      mScan;
 
     public View                 onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_cryptcheck, container, false);
@@ -84,11 +85,23 @@ public class                    CryptFrgmnt extends MyFragment  {
     }
 
     public void                 onResponseServer(final CryptCheckScan scan) {
+        mScan = scan;
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
-                mAdapter.putOnListOfTrame(scan.getProtos());
+                reloadView();
+                mActivity.onResponseServer(scan);
                 progressBarCrypt.setVisibility(View.GONE);
             }
         });
+    }
+
+    public void                 reloadView() {
+        if (mScan != null) {
+            updateHeader();
+            mAdapter.putOnListOfTrame(mScan.getProtos());
+        }
+    }
+
+    private void                updateHeader() {
     }
 }

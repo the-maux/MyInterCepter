@@ -18,8 +18,11 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import fr.dao.app.Core.Configuration.Singleton;
+import fr.dao.app.Model.Config.Cryptcheck.CryptCheckScan;
 import fr.dao.app.R;
+import fr.dao.app.View.Proxy.ProxyReaderFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
+import fr.dao.app.View.ZViewController.Adapter.HTTProxyAdapter;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 
 public class CryptCheckActivity extends MyActivity {
@@ -30,6 +33,7 @@ public class CryptCheckActivity extends MyActivity {
     private CryptFrgmnt         mFragment;
     private AppBarLayout        appBarLayout;
     private Toolbar             mToolbar;
+    private CryptCheckScan      mScan;
     TabLayout                   mTabs;
     private ImageView           mSettingsMenu, addTerminal, mScanType, OsImg;
     ProgressBar                 mProgressBar;
@@ -76,6 +80,19 @@ public class CryptCheckActivity extends MyActivity {
         setToolbarTitle("Cryptcheck","Https Analyse");
         findViewById(R.id.relativeLayout).setBackgroundResource(R.color.cryptcheckPrimary);
         setStatusBarColor(R.color.cryptcheckPrimary);
+        initTabs();
+    }
+
+    private void                initTabs() {
+        mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            public void onTabSelected(TabLayout.Tab tab) {
+                mScan.updateOffset(tab.getPosition());
+                mFragment.reloadView();
+                setToolbarTitle(null, mScan.results.get(tab.getPosition()).ip);
+            }
+            public void onTabUnselected(TabLayout.Tab tab) {}
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
     }
 
     private void                init() {
@@ -129,6 +146,14 @@ public class CryptCheckActivity extends MyActivity {
             default:
                 Log.d(TAG, "default item");
                 return true;
+        }
+    }
+
+    public void                 onResponseServer(CryptCheckScan scan) {
+        if (scan.results.size() > 1) {
+            setToolbarTitle(scan.host, scan.results.get(0).ip);
+        } else {
+            mTabs.setVisibility(View.VISIBLE);
         }
     }
 }

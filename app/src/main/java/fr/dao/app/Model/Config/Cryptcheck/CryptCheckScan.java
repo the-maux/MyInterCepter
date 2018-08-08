@@ -69,6 +69,10 @@ public class                            CryptCheckScan {
         return ciphers;
     }
 
+    public void     updateOffset(int position) {
+        this.resultOffset = position;
+    }
+
     private void    sortThis(HashMap<String, ArrayList<Ciphers>> proto_cypher, ArrayList<Ciphers> ciphers) {
         for (Ciphers cipher : ciphers) {
             if (cipher.protocol.contentEquals("TLSv1"))

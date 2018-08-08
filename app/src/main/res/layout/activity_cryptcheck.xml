@@ -111,7 +111,7 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/NmapPrimary"
+            android:background="@color/cryptcheckPrimary"
             android:visibility="gone"
             app:layout_constraintHeight_min="@dimen/app_bar_height"
             app:layout_constraintLeft_toLeftOf="@+id/OsImg"
