@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.PopupMenu;
@@ -86,9 +87,11 @@ public class CryptCheckActivity extends MyActivity {
     private void                initTabs() {
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             public void onTabSelected(TabLayout.Tab tab) {
-                mScan.updateOffset(tab.getPosition());
-                mFragment.reloadView();
-                setToolbarTitle(null, mScan.results.get(tab.getPosition()).ip);
+                if (mScan != null) {
+                    mScan.updateOffset(tab.getPosition());
+                    mFragment.reloadView();
+                    setToolbarTitle(null, mScan.results.get(tab.getPosition()).ip);
+                }
             }
             public void onTabUnselected(TabLayout.Tab tab) {}
             public void onTabReselected(TabLayout.Tab tab) {}
@@ -150,10 +153,16 @@ public class CryptCheckActivity extends MyActivity {
     }
 
     public void                 onResponseServer(CryptCheckScan scan) {
-        if (scan.results.size() > 1) {
-            setToolbarTitle(scan.host, scan.results.get(0).ip);
+        setToolbarTitle(scan.host, scan.results.get(0).ip);
+        mScan = scan;
+        if (scan.results.size() == 1) {
+
         } else {
             mTabs.setVisibility(View.VISIBLE);
+            mTabs.removeAllTabs();
+            for (int i = 0; i < scan.results.size(); i++) {
+                mTabs.addTab(mTabs.newTab().setText(scan.results.get(i).ip), i);
+            }
         }
     }
 }
