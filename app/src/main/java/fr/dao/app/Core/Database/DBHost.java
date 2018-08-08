@@ -2,7 +2,6 @@ package fr.dao.app.Core.Database;
 
 import android.util.Log;
 
-import com.activeandroid.query.From;
 import com.activeandroid.query.Select;
 
 import java.util.ArrayList;
@@ -16,6 +15,13 @@ import fr.dao.app.Model.Target.Host;
 public class                                DBHost {
     private static String                   TAG = "DBHost";
 
+    public static List<Host>             getAllDevices() {
+        return new Select()
+                .all()
+                .from(Host.class)
+                .execute();
+    }
+
     public static Host                      findDeviceById(String id) {
         return new Select()
                 .from(Host.class)
@@ -24,21 +30,20 @@ public class                                DBHost {
     }
 
     public static Host                      getDevicesFromMAC(String MAC) {
-        From from = new Select()
-                .from(Host.class)
-                .where("mac = \"" + MAC + "\"");
-        Host tmp = from.executeSingle();
-        if (Singleton.getInstance().Settings.UltraDebugMode) {
-            if (tmp != null) {
-                Log.d(TAG, "SQL STRING [" + from.toSql() + "]: FOUND");
-            } else {
-                Log.d(TAG, "SQL STRING [" + from.toSql() + "]: NOT FOUND");
+        if (Singleton.getInstance().hostList != null) {
+            for (Host host : Singleton.getInstance().hostList) {/*Optimisation to Transition while SQL running */
+                if (host.mac.contentEquals(MAC)) {
+                    Log.i(TAG, "host:" + MAC + " already extracted, no sql needed");
+                    return host;
+                }
             }
         }
-        //if (tmp != null)
-            //tmp.dumpMe();
-        if (tmp != null)
+        Host tmp = new Select().from(Host.class).where("mac = \"" + MAC + "\"").executeSingle();
+        if (tmp != null)  {
             Fingerprint.initHost(tmp);
+            if (!Singleton.getInstance().alreadyExtracted.contains(tmp))
+                Singleton.getInstance().alreadyExtracted.add(tmp);
+        }
         return tmp;
     }
 
@@ -91,5 +96,9 @@ public class                                DBHost {
                 return i;
         }
         return -1;
+    }
+
+    public static String                        getAllDevicesNbr() {
+        return getAllDevices().size() + "";
     }
 }

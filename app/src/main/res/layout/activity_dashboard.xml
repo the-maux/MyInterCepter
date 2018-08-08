@@ -5,30 +5,31 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/DashboardPrimary"
-    android:transitionName="rootViewTransition">
+    android:background="@color/DashboardPrimary">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/DashboardPrimary"
+        android:background="@android:color/transparent"
         app:elevation="2dp">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:background="@android:color/transparent"
-            android:elevation="4dp">
+            android:elevation="4dp"
+            android:transitionName="rootViewTransition">
 
 
             <ImageView
                 android:id="@+id/OsImg"
-                android:layout_width="40dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/icon_toolbar_size"
+                android:layout_height="@dimen/icon_toolbar_size"
                 android:layout_marginStart="8dp"
                 android:elevation="4dp"
+                android:padding="2dp"
                 android:tint="@android:color/primary_text_dark"
                 android:transitionName="logo_activity"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
@@ -51,6 +52,7 @@
                 app:layout_constraintHorizontal_weight="6"
                 app:layout_constraintStart_toEndOf="@+id/OsImg"
                 app:layout_constraintTop_toTopOf="parent"
+                app:subtitle="dddddddddddddd"
                 app:title="Statistique">
 
             </android.support.v7.widget.Toolbar>
@@ -104,11 +106,10 @@
                 android:tint="@color/primary_white"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/iconSettings2"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_more_svg" />
+                app:srcCompat="@mipmap/ic_imore_png" />
 
 
             <android.support.constraint.Guideline
@@ -116,7 +117,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="65dp" />
+                app:layout_constraintGuide_begin="56dp" />
 
 
         </android.support.constraint.ConstraintLayout>

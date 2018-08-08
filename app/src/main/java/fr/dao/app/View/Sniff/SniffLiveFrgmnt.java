@@ -57,7 +57,7 @@ public class                    SniffLiveFrgmnt extends MyFragment {
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-        View rootView = inflater.inflate(R.layout.fragment_wireshark, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_sniff, container, false);
         mActivity = (SniffActivity) getActivity();
         initXml(rootView);
         mTcpdump = Tcpdump.getTcpdump(mActivity, true);

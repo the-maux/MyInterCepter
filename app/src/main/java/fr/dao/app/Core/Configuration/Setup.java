@@ -30,6 +30,11 @@ public class                    Setup {
         exec("Creating Directory:", "mkdir -p " + mSingleton.Settings.PcapPath);/*  Build directory    */
         exec("Creating Directory:", "mkdir -p " + mSingleton.Settings.FilesPath);
         exec("Creating Directory:", "chmod 777 " + mSingleton.Settings.FilesPath);
+        mActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                mActivity.HeaderTitle.setText("Installation");
+            }
+        });
         buildFiles();
         exec("Dumping binary:","mount -o rw,remount /system");
         exec("Dumping binary:","cp ./ping /system/bin/;");
@@ -94,8 +99,7 @@ public class                    Setup {
 
     }
 
-    private void                buildFile(String nameFile, int ressource) throws IOException, InterruptedException {
-        mActivity.monitor("Build " + nameFile);
+    private void                buildFile(String nameFile, int ressource, String log) throws IOException, InterruptedException {
         File file = new File(mSingleton.Settings.FilesPath + nameFile);
         file.delete();
         file.createNewFile();
@@ -112,11 +116,12 @@ public class                    Setup {
         out.close();
         file.setExecutable(true, false);
         Log.d(TAG, "Building[" + nameFile + "] chmod::+x::" + file.canExecute() + " and size: " + (file.length() / 1024) + "kb");
+        mActivity.monitor(log + " OK");
     }
 
     private void                unzipNmap(String nameArchive) throws IOException {
         String stdout;
-        RootProcess process = new RootProcess("Setup", mSingleton.Settings.FilesPath);
+        RootProcess process = new RootProcess("Setup::ZIP", mSingleton.Settings.FilesPath);
         Log.d(TAG, mSingleton.Settings.FilesPath + "busybox unzip " + mSingleton.Settings.FilesPath + nameArchive);
         process.exec(mSingleton.Settings.FilesPath + "busybox unzip " + nameArchive).closeProcess();
 /*        Log.d(TAG, "UNZIP[nmap]:");
@@ -127,27 +132,31 @@ public class                    Setup {
     }
 
     private void                buildFiles() throws IOException, InterruptedException  {
-        mActivity.monitor("Building Busybox");
-        buildFile("busybox", R.raw.busybox);
-        mActivity.monitor("Building tcpdump");
-        buildFile("tcpdump", R.raw.tcpdump);
-        mActivity.monitor("Building macchanger");
-        buildFile("macchanger", R.raw.macchanger);
-        buildFile("usernames", R.raw.usernames);
-        mActivity.monitor("Building arpspoof");
-        buildFile("arpspoof", R.raw.arpspoof);
+        mActivity.monitor("(->) Building Busybox");
+        buildFile("busybox", R.raw.busybox, "(->) Building Busybox");
+        mActivity.monitor("(->) Building tcpdump");
+        buildFile("tcpdump", R.raw.tcpdump, "(->) Building tcpdump");
+        mActivity.monitor("(->) Building macchanger");
+        buildFile("macchanger", R.raw.macchanger, "(->) Building macchanger");
+        buildFile("usernames", R.raw.usernames, "(->) Building word.list");
+        mActivity.monitor("(->) Building arpspoof");
+        buildFile("arpspoof", R.raw.arpspoof, "(->) Building arpspoof");
 
-        mActivity.monitor("Building nmap");
-        buildFile("archive_nmap.zip", R.raw.nmap);
+        mActivity.monitor("(->) Building nmap");
+        buildFile("archive_nmap.zip", R.raw.nmap, "(->) Building nmap");
         unzipNmap("archive_nmap.zip");
-        mActivity.monitor("Building ettercap");
-        buildFile("ettercap_archive", R.raw.ettercap_archive);
+        mActivity.monitor("(->) Building ettercap");
+        buildFile("ettercap_archive", R.raw.ettercap_archive, "(->) Building ettercap");
         unzipNmap("ettercap_archive");
         Log.d(TAG, "chmod 744 " + mSingleton.Settings.BinaryPath + "nmap/*" + "::exit::" + exec("chmod 744 " + mSingleton.Settings.BinaryPath + "nmap/*"));
     }
 
     private void                cleanTheKitchenBoy() {
-        mActivity.monitor("Cleaning installation");
+        mActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                mActivity.HeaderTitle.setText("Cleaning installation");
+            }
+        });
         Log.d(TAG, "busybox killall cepter::exit::" + exec(mSingleton.Settings.BinaryPath + "busybox killall cepter"));
         Log.d(TAG, "busybox killall tcpdump::exit::" + exec(mSingleton.Settings.BinaryPath + "busybox killall tcpdump"));
         Log.d(TAG, "busybox killall arpspoof::exit::" + exec(mSingleton.Settings.BinaryPath + "busybox killall arpspoof"));
@@ -158,6 +167,7 @@ public class                    Setup {
         Log.d(TAG, "rm -f " + mSingleton.Settings.FilesPath + "archive_nmap::exit::" + exec("rm -f " + mSingleton.Settings.FilesPath + "archive_nmap"));
         Log.d(TAG, "rm -f " + mSingleton.Settings.FilesPath + "ettercap_archive::exit::" + exec("rm -f " + mSingleton.Settings.FilesPath + "ettercap_archive"));
         Log.d(TAG, "echo '" + mSingleton.VERSION + "' > " + mSingleton.Settings.FilesPath + "version::exit::" + exec("echo '" + mSingleton.VERSION + "' > " + mSingleton.Settings.FilesPath + "version"));
+        mActivity.setupFinished();
     }
 
     private int                 exec(String TAG, String cmd) {

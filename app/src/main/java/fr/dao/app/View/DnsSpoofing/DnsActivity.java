@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewCompat;
@@ -31,7 +32,7 @@ import fr.dao.app.View.ZViewController.Adapter.DnsLogsAdapter;
 import fr.dao.app.View.ZViewController.Adapter.DnsSpoofConfAdapter;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
-import fr.dao.app.View.ZViewController.Dialog.DialogQuestionWithInput;
+import fr.dao.app.View.ZViewController.Dialog.QuestionDialogInput;
 
 
 public class                            DnsActivity extends MITMActivity {
@@ -41,6 +42,7 @@ public class                            DnsActivity extends MITMActivity {
     private AppBarLayout                appBarLayout;
     private Toolbar                     mToolbar;
   //  private SearchView                  mSearchView;
+    protected FloatingActionButton mFab;
     private ImageButton                 mAction_add_host, mSettingsBtn;
     private TabLayout                   mTabs;
     private RecyclerView                mDnsSpoof_RV;
@@ -93,6 +95,7 @@ public class                            DnsActivity extends MITMActivity {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
+        setStatusBarColor(R.color.dnsSpoofPrimary);
     }
 
     private void                        initFab() {
@@ -150,7 +153,7 @@ public class                            DnsActivity extends MITMActivity {
             @Override
             public void onClick(View v) {
                 mInstance.findViewById(R.id.clipper).setVisibility(View.VISIBLE);
-                mFab.setVisibility(View.GONE);
+                mFab.hide();
             }
         });
         mAction_deleteall.setOnClickListener(onClickTopMenu());
@@ -169,10 +172,10 @@ public class                            DnsActivity extends MITMActivity {
             @Override
             public void onClick(View v) {
                 mInstance.findViewById(R.id.clipper).setVisibility(View.GONE);
-                mFab.setVisibility(View.VISIBLE);
+                mFab.show();
                 switch (v.getId()) {
                     case R.id.action_export:
-                        final DialogQuestionWithInput dialog = new DialogQuestionWithInput(mInstance)
+                        final QuestionDialogInput dialog = new QuestionDialogInput(mInstance)
                                 .setIcon(R.drawable.dns)
                                 .setTitle("Exporter la liste des dns")
                                 .setHintToEDFirstQuestion(DnsmasqConfig.PATH_HOST_FILE)
@@ -196,14 +199,14 @@ public class                            DnsActivity extends MITMActivity {
                         mDnsSpoofAdapter.notifyDataSetChanged();
                         break;
                     case R.id.action_import:
-                        final DialogQuestionWithInput dialog2 = new DialogQuestionWithInput(mInstance)
+                        final QuestionDialogInput dialog2 = new QuestionDialogInput(mInstance)
                                 .setIcon(R.drawable.dns)
                                 .setTitle("Importez la liste des dns")
                                 .hideSecondInput()
                                 .setHintToTILFirstQuestion("Name of file")
                                 .setHintToEDFirstQuestion(DnsmasqConfig.PATH_HOST_FILE);
                         dialog2.onPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
+
                             public void onClick(DialogInterface d, int which) {
                                 String nameOfFile = dialog2.getFirstInputQuestion();
                                 if (nameOfFile.contains(".") || nameOfFile.length() < 4) {
@@ -222,7 +225,7 @@ public class                            DnsActivity extends MITMActivity {
     }
 
     private void                        onAddHostDialog() {
-        final DialogQuestionWithInput dialog = new DialogQuestionWithInput(mInstance)
+        final QuestionDialogInput dialog = new QuestionDialogInput(mInstance)
                 .setIcon(R.drawable.dns)
                 .setTitle("Ajouter un title")
                 .setHintToTILFirstQuestion("Domain")

@@ -4,7 +4,7 @@
     android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splashscreen">
+    android:transitionName="rootViewTransition">
 
 
     <android.support.design.widget.AppBarLayout
@@ -17,19 +17,29 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/app_bar_height"
             android:background="@color/NmapPrimary">
 
 
+            <ProgressBar
+                android:id="@+id/progressBar3"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="60dp"
+                android:layout_height="0dp"
+                android:layout_marginLeft="3dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <ImageView
                 android:id="@+id/OsImg"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/icon_toolbar_size"
+                android:layout_height="@dimen/btn_toolbar_size"
                 android:layout_marginLeft="8dp"
                 android:elevation="4dp"
-                android:padding="4dp"
-                android:src="@drawable/nmap2"
-                android:transitionName="NmapIconTransition"
+                android:padding="1dp"
+                android:transitionName="LogoTransition"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/toolbar"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -41,10 +51,11 @@
                 android:id="@+id/toolbar"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:transitionName="title_transition"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/typeScanBtn"
+                app:layout_constraintEnd_toStartOf="@+id/toolbarBtn1"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_weight="2.5"
+                app:layout_constraintHorizontal_weight="4"
                 app:layout_constraintStart_toEndOf="@+id/OsImg"
                 app:layout_constraintTop_toTopOf="parent"
                 app:subtitle="Regular scan"
@@ -57,15 +68,15 @@
             </android.support.v7.widget.Toolbar>
 
             <ImageView
-                android:id="@+id/typeScanBtn"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:id="@+id/toolbarBtn1"
+                android:layout_width="@dimen/icon_generic_size"
+                android:layout_height="@dimen/icon_generic_size"
                 android:background="@android:color/transparent"
                 android:paddingTop="2dp"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/primary_white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/scriptBtn"
+                app:layout_constraintEnd_toStartOf="@+id/toolbarBtn2"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/toolbar"
@@ -73,34 +84,34 @@
                 app:srcCompat="@mipmap/ic_type_scan" />
 
             <ImageView
-                android:id="@+id/scriptBtn"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:id="@+id/toolbarBtn2"
+                android:layout_width="@dimen/icon_generic_size"
+                android:layout_height="@dimen/icon_generic_size"
                 android:background="@android:color/transparent"
                 android:baselineAlignBottom="false"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/primary_white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/settingsMenu"
+                app:layout_constraintEnd_toStartOf="@+id/toolbarSettings"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="0.9"
-                app:layout_constraintStart_toEndOf="@+id/typeScanBtn"
+                app:layout_constraintStart_toEndOf="@+id/toolbarBtn1"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@mipmap/ic_script_listing" />
 
             <ImageView
-                android:id="@+id/settingsMenu"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:id="@+id/toolbarSettings"
+                android:layout_width="@dimen/btn_toolbar_size"
+                android:layout_height="@dimen/btn_toolbar_size"
                 android:background="@android:color/transparent"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/primary_white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="0.8"
-                app:layout_constraintStart_toEndOf="@+id/scriptBtn"
+                app:layout_constraintStart_toEndOf="@+id/toolbarBtn2"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@mipmap/ic_more_scan" />
+                app:srcCompat="@mipmap/ic_imore_png" />
 
 
         </android.support.constraint.ConstraintLayout>
@@ -111,7 +122,7 @@
             android:layout_height="match_parent"
             android:background="@color/NmapPrimary"
             android:visibility="gone"
-            app:layout_constraintHeight_min="56dp"
+            app:layout_constraintHeight_min="@dimen/app_bar_height"
             app:layout_constraintLeft_toLeftOf="@+id/OsImg"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/OsImg"
@@ -131,7 +142,6 @@
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/generic_background"
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
         <RelativeLayout
@@ -147,8 +157,9 @@
                 android:id="@+id/frame_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:alpha="0.95"
-                android:background="@android:drawable/dialog_frame" />
+                android:alpha="0.95">
+
+            </FrameLayout>
 
         </RelativeLayout>
 
@@ -178,8 +189,8 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="@dimen/app_bar_height"
+            android:layout_height="@dimen/app_bar_height"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_margin="16dp"

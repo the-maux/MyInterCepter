@@ -20,7 +20,7 @@
 
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="50dp"
+            android:layout_width="@dimen/icon_generic_size"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:elevation="4dp" />
@@ -40,7 +40,7 @@
             android:maxLines="1"
             android:text="Mon reseau wifi nest pas pret a recevoir des gens"
             android:textColor="?android:attr/textColorTertiary"
-            android:textSize="14sp" />
+            android:textSize="@dimen/text_size_2" />
 
         <TextView
             android:id="@+id/ssid_subtitle"
@@ -56,11 +56,11 @@
             android:maxLines="1"
             android:text="4 Sessions recorded"
             android:textColor="?android:attr/textColorTertiary"
-            android:textSize="12sp" />
+            android:textSize="@dimen/text_size_1" />
 
         <ImageView
             android:id="@+id/icon2"
-            android:layout_width="50dp"
+            android:layout_width="@dimen/icon_generic_size"
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"

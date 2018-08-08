@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Model.Target.Host;
+import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Adapter.HostDetailAdapter;
@@ -23,9 +24,9 @@ import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 public class                    HostDetailFragment extends MyFragment {
     private String              TAG = "HostNotesFragment";
  //   private CoordinatorLayout   mCoordinatorLayout;
-    private Host                mFocusedHost;//TODO need to be init
+    private Host                mFocusedHost;//TODO:CORRIGER LE .Notes
     private Context             mCtx;
-    private HostDetailActivity mActivity;
+    private HostDetailActivity  mActivity;
     private RecyclerView        mRV;
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
@@ -66,16 +67,32 @@ public class                    HostDetailFragment extends MyFragment {
     private ArrayList<String[]> buildInfoArray() {
         ArrayList<String[]> arrayList = new ArrayList<>();
         buildBasicInfos(arrayList);
+        buildWithPort(arrayList);
         buildUpnP(arrayList);
         buildNetBIOS(arrayList);
         buildBonjour(arrayList);
         return arrayList;
     }
 
+    private void                buildWithPort(ArrayList<String[]> arrayList) {
+        try {
+            if (mFocusedHost.Deepest_Scan > 0 && mFocusedHost.getPorts() != null) {
+                String[] title11 = {"Ports", mFocusedHost.getPorts().portArrayList().size() + " ports scanned"};
+                arrayList.add(title11);
+                return;
+            }
+        } catch (Exception e) {
+            if (mFocusedHost.Deepest_Scan > 0)
+                Log.e(TAG, "ERROR IN PARSING PORTS FOR HOST[" + mFocusedHost.ip + "]");
+        }
+        String[] title11 = {"Ports", "Not scanned"};
+        arrayList.add(title11);
+    }
+
     private void                buildBasicInfos(ArrayList<String[]> arrayList) {
         String[] title1 = {"Name", mFocusedHost.name};
         arrayList.add(title1);
-        String[] titleOs = {"Operating System", mFocusedHost.osType.name()};
+        String[] titleOs = {"Operating System", Os.toString(mFocusedHost.osType)};
         arrayList.add(titleOs);
         if (!mFocusedHost.osDetail.contains("Unknown")) {
             String[] titleOsDetail = {"Os Detail", mFocusedHost.osDetail};
@@ -86,7 +103,7 @@ public class                    HostDetailFragment extends MyFragment {
         String[] title3 = {"MAC Address", mFocusedHost.mac};
         arrayList.add(title3);
         if (!mFocusedHost.deviceType.contains("Unknown")) {
-            String[] title4 = {"Device Type", mFocusedHost.osType.name().toUpperCase()};
+            String[] title4 = {"Device Type", Os.toString(mFocusedHost.osType).toUpperCase()};
             arrayList.add(title4);
         }
         String[] title5 = {"MAC Vendor", mFocusedHost.vendor};
@@ -96,16 +113,6 @@ public class                    HostDetailFragment extends MyFragment {
         if (!mFocusedHost.Brand_and_Model.contains("Unknown")) {
             String[] title10 = {"Brand and Model", mFocusedHost.Brand_and_Model};
             arrayList.add(title10);
-        }
-        try {
-            if (mFocusedHost.getPorts() != null) {
-                String[] title11 = {"getPorts", mFocusedHost.getPorts().portArrayList().size() + " ports scanned"};
-                arrayList.add(title11);
-            } else {
-                Log.e(TAG, "NO DUMP IN PORTS");
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "ERROR PORTS FOR HOST[" + mFocusedHost.ip + "]");
         }
     }
 
@@ -151,7 +158,6 @@ public class                    HostDetailFragment extends MyFragment {
             arrayList.add(title14);
             arrayList.add(title15);
         }
-
     }
 
 }

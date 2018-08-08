@@ -11,7 +11,6 @@ import java.util.List;
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
-import fr.dao.app.Model.Unix.Os;
 
 public class                                DBNetwork {
     private static String                   TAG = "DBNetwork";
@@ -54,7 +53,7 @@ public class                                DBNetwork {
         List<Network> AllApWithDeviceIn = new ArrayList<>();
 
         for (Network accessPoint : DBNetwork.getAllAccessPoint()) {
-            if (accessPoint.listDevicesSerialized.contains("" + host.getId()))
+            if (accessPoint.listDevicesSerialized != null && accessPoint.listDevicesSerialized.contains("" + host.getId()))
                 AllApWithDeviceIn.add(accessPoint);
         }
         Log.i(TAG, "getAllAPWith(" + host.getName() + ")In:: returning " + AllApWithDeviceIn.size() + " NetworkInformation ");
@@ -69,7 +68,7 @@ public class                                DBNetwork {
             }
         return false;
     }
-    public static Network                   updateHostOfSessions(Network accessPoint, List<Host> hosts, ArrayList<Os> osList) {
+    public static Network                   updateHostOfSessions(Network accessPoint, List<Host> hosts, ArrayList<Integer> osList) {
         accessPoint.lastScanDate = Calendar.getInstance().getTime();
         accessPoint.listDevicesSerialized = DBHost.SerializeListDevices(hosts);
         accessPoint.nbrOs = osList.size();

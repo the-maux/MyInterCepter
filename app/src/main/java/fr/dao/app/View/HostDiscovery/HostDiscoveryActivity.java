@@ -1,13 +1,18 @@
 package fr.dao.app.View.HostDiscovery;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.ImageViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -36,6 +41,8 @@ import fr.dao.app.View.Startup.HomeActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
+import fr.dao.app.View.ZViewController.Dialog.QuestionDialog;
+import fr.dao.app.View.ZViewController.Dialog.QuestionMultipleAnswerDialog;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 /**
@@ -86,18 +93,17 @@ public class                        HostDiscoveryActivity extends MyActivity {
         mOsFilter.setOnClickListener(onOsFilter());
         mSearchView = findViewById(R.id.searchView);
         mToolbar = findViewById(R.id.toolbar2);
-        mSettingsMenu = findViewById(R.id.settingsMenu);
-        findViewById(R.id.OsImg).setOnClickListener(initTabs());
+        mSettingsMenu = findViewById(R.id.toolbarSettings);
         mTimer = findViewById(R.id.timer);
-        mProgressBar = findViewById(R.id.progressBar);
-        mToolbarBackground = (TransitionDrawable)(findViewById(R.id.appBar).getBackground());
         appBarLayout = findViewById(R.id.appBar);
+        mToolbarBackground = (TransitionDrawable)(appBarLayout).getBackground();
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewCompat.setElevation(appBarLayout, 4);
             }
         });
         mFab.setImageResource(R.drawable.ic_media_play);
+        setStatusBarColor(R.color.generic_background);
     }
 
     private void                    init()  {
@@ -108,6 +114,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         } else {
             initFabs();
             initMonitor();
+            initToolbarIcon((ImageView)findViewById(R.id.OsImg));
             mFragment = new HostDiscoveryScanFrgmnt();
             NetDiscoveryFragment = mFragment;
             initFragment(NetDiscoveryFragment);
@@ -115,7 +122,66 @@ public class                        HostDiscoveryActivity extends MyActivity {
         }
     }
 
-    public void                     initTimer() {
+    private void                    initToolbarIcon(final ImageView viewById) {
+        viewById.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        final CharSequence[] items = new CharSequence[]{"Discrete", "Basic", "Advanced", "Brutal"};
+                        new QuestionMultipleAnswerDialog(mInstance, items,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        dialog.dismiss();
+                                        int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                                        Log.d("SettingsDiscovery", "Type of scan: " + items[selectedPosition]);
+                                        Singleton.getInstance().Settings.getUserPreferences().NmapMode = selectedPosition;
+                                        Singleton.getInstance().Settings.dump(Singleton.getInstance().Settings.getUserPreferences());
+                                        updateScanColor(viewById);
+                                        new QuestionDialog(mInstance)
+                                                .setTitle("Relancer le scan ?")
+                                                .setText("Vous avez changé les parametres, voulez vous restart le scan ?")
+                                                .onPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        mFragment.start();
+                                                    }
+                                                })
+                                                .show();
+                                    }
+                                }, "Type of NetworkInformation discovery", mSingleton.Settings.getUserPreferences().NmapMode, R.drawable.target);
+                    }
+                });
+            }
+        });
+        updateScanColor(viewById);
+    }
+
+    private void                    updateScanColor(final ImageView viewById) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                int res = ContextCompat.getColor(mInstance, R.color.white_secondary);
+                switch (mSingleton.Settings.getUserPreferences().NmapMode) {
+                    case 0:
+                        res = ContextCompat.getColor(mInstance, R.color.green);
+                        break;
+                    case 1:
+                        res = ContextCompat.getColor(mInstance, R.color.white_secondary);
+                        break;
+                    case 2:
+                        res = ContextCompat.getColor(mInstance, R.color.filtered_color);
+                        break;
+                    case 3:
+                        res = ContextCompat.getColor(mInstance, R.color.material_red_500);
+                        break;
+                    case 4:
+                        res = ContextCompat.getColor(mInstance, R.color.material_red_900);
+                        break;
+                }
+                ImageViewCompat.setImageTintList(viewById, ColorStateList.valueOf(res));
+            }
+        });
+    }
+
+    public void                     onScanStarted() {
         class UpdateTimer extends TimerTask {
             private Date start = Calendar.getInstance().getTime();
             public void run() {
@@ -129,6 +195,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
         if (timer == null)
             timer = new Timer();
         timer.scheduleAtFixedRate(new UpdateTimer(), 0, 1000);
+        findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+        ViewAnimate.FabAnimateHide(mInstance, mFab);
     }
 
     public void                     onScanOver() {
@@ -137,25 +205,8 @@ public class                        HostDiscoveryActivity extends MyActivity {
             ViewAnimate.setVisibilityToGoneLong(mTimer);
             timer = null;
         }
-       // ViewAnimate.setVisibilityToGoneLong(mBottomMonitor);
-        ViewAnimate.FabAnimateHide(this, mBottomMonitor, null);
+        ViewAnimate.setVisibilityToGoneQuick(findViewById(R.id.progressBar));
         ViewAnimate.FabAnimateReveal(mInstance, mFab);
-        //mFab.show();
-       // ViewAnimate.setVisibilityToVisibleQuick(mFab);
-        Log.d(TAG, "onScanOver");
-    }
-
-    private View.OnClickListener    initTabs(){
-        return new View.OnClickListener() {
-            public void onClick(View view) {
-                Utils.vibrateDevice(mInstance, 100);
-                MyFragment fragment = NetDiscoveryFragment;
-                //mFab.setVisibility(View.GONE);
-                initFragment(fragment);
-                initSearchView();
-            }
-        };
-
     }
 
     private void                    initFabs() {
@@ -227,9 +278,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     public void                     initFragmentSettings() {
         mFragment = new HostDiscoverySettingsFrgmnt();
         initFragment(mFragment);
-//        mFab.setVisibility(View.GONE);
         ViewAnimate.FabAnimateHide(mInstance, mFab);
-        //mFab.hide();
         mBottomMonitor.setVisibility(View.GONE);
         mToolbarBackground.setCrossFadeEnabled(true);
         mToolbarBackground.startTransition(500);
@@ -289,68 +338,6 @@ public class                        HostDiscoveryActivity extends MyActivity {
             public void onAnimationRepeat(Animation animation) {
             }
         });
-    }
-
-    public void                     progressAnimation() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.setProgress(0);
-        mProgressBar.setMax(MAXIMUM_PROGRESS);
-        new Thread(new Runnable() {
-            public void run() {
-                mProgress = 0;
-                while (mProgress <= (MAXIMUM_PROGRESS)) {//1 tour == 0,8s == 1HOST
-                    try {
-                        Thread.sleep(500);
-                        mProgress += 1;
-                        if (mProgress >= MAXIMUM_PROGRESS)
-                            mProgress -= MAXIMUM_PROGRESS / 8;
-                        final int prog2 = mProgress;
-                        mInstance.runOnUiThread(new Runnable() {
-                            public void run() {
-                                mProgressBar.setProgress(prog2);
-                            }
-                        });
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                mInstance.runOnUiThread(new Runnable() {
-                    public void run() {
-                        //ViewAnimate.setVisibilityToVisibleQuick(mFab);
-                        //mFab.show();
-                        mProgressBar.setVisibility(View.GONE);
-                    }
-                });
-            }
-        }).start();
-    }
-
-    public void                     setMAXIMUM_PROGRESS(int nbrHost) {
-        if (nbrHost < 10) {
-            Log.d(TAG, "setMAXIMUM_PROGRESS::35 for nbrHost:" + nbrHost);
-            mProgressBar.setMax(45);
-            MAXIMUM_PROGRESS = 45;
-        } else if (nbrHost < 50) {
-            Log.d(TAG, "setMAXIMUM_PROGRESS::60 for nbrHost:" + nbrHost);
-            mProgressBar.setMax(60);
-            MAXIMUM_PROGRESS = 60;
-        } else if (nbrHost < 100) {
-            Log.d(TAG, "setMAXIMUM_PROGRESS::80 for nbrHost:" + nbrHost);
-            mProgressBar.setMax(80);
-            MAXIMUM_PROGRESS = 80;
-        } else if (nbrHost < 160) {
-            Log.d(TAG, "setMAXIMUM_PROGRESS::80 for nbrHost:" + nbrHost);
-            mProgressBar.setMax(100);
-            MAXIMUM_PROGRESS = 100;
-        } else if (nbrHost < 200) {
-            Log.d(TAG, "setMAXIMUM_PROGRESS::80 for nbrHost:" + nbrHost);
-            mProgressBar.setMax(140);
-            MAXIMUM_PROGRESS = 140;
-        } else {
-            Log.d(TAG, "setMAXIMUM_PROGRESS::80 for nbrHost:" + nbrHost);
-            mProgressBar.setMax(160);
-            MAXIMUM_PROGRESS = 160;
-        }
     }
 
     public void                     showSnackbar(String txt) {

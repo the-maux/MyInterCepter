@@ -52,6 +52,9 @@
             android:name=".View.Scan.NmapActivity"
             android:launchMode="singleTask" />
         <activity
+            android:name=".View.Terminal.TerminalActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
             android:name=".View.Scan.VulnsScanActivity"
             android:launchMode="singleTask" />
         <activity
@@ -65,6 +68,9 @@
             android:launchMode="singleTask" />
         <activity
             android:name=".View.WebServer.WebServerActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".View.Cryptcheck.CryptCheckActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".View.Dora.DoraActivity"

@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -31,26 +31,28 @@ import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
 import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.Model.Target.State;
-import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
 import fr.dao.app.View.Scan.NmapActivity;
 import fr.dao.app.View.ZViewController.Adapter.HostDiscoveryAdapter;
 import fr.dao.app.View.ZViewController.Adapter.OSFilterAdapter;
 import fr.dao.app.View.ZViewController.Dialog.RV_dialog;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
+import fr.dao.app.View.ZViewController.MSkeleton.RecyclerViewSkeletonScreen;
+import fr.dao.app.View.ZViewController.MSkeleton.Skeleton;
 
-public class                        HostDiscoveryScanFrgmnt extends MyFragment {
-    private String                  TAG = "HostDiscoveryScanFrgmnt";
-    private HostDiscoveryActivity   mActivity;
-    private ArrayList<Host>         mHosts = new ArrayList<>();
-    private HostDiscoveryAdapter    mHostAdapter = null;
-    private RecyclerView            mHost_RV;
-    private TextView                mEmptyList;
-    private SwipeRefreshLayout      mSwipeRefreshLayout;
+public class HostDiscoveryScanFrgmnt extends MyFragment {
+    private String TAG = "HostDiscoveryScanFrgmnt";
+    private HostDiscoveryActivity mActivity;
+    private ArrayList<Host> mHosts = new ArrayList<>();
+    private HostDiscoveryAdapter mHostAdapter = null;
+    private RecyclerView mHost_RV;
+    private TextView mEmptyList;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private NetworkDiscoveryControler mScannerControler;
-    boolean                         mHostLoaded = false;
+    boolean mHostLoaded = false;
+    private RecyclerViewSkeletonScreen skeletonScreen;
 
-    public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         Log.d(TAG, "onCreateView:mSingleton.hostList " + ((mSingleton.hostList == null) ? "null" : mSingleton.hostList.size()));
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hostdiscovery_scan, container, false);
@@ -60,7 +62,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         return rootView;
     }
 
-    public void                     init() {
+    public void init() {
         mScannerControler = NetworkDiscoveryControler.getInstance(this);
         mActivity.initSettingsButton();
         initHostsRecyclerView();
@@ -68,13 +70,25 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         if (mSingleton.hostList != null && !mSingleton.hostList.isEmpty()) {
             mHostLoaded = true;
             mActivity.actualNetwork = mSingleton.CurrentNetwork;
+            Log.d(TAG, "Host already loaded");
             onHostActualized(mSingleton.hostList);
         } else if (!mHostLoaded) {//To not reload for nothing
             start();
+            Log.d(TAG, "Host already NOT loaded SKELETON");
+            skeletonScreen = Skeleton.bind(mHost_RV)
+                    .adapter(mHostAdapter)
+                    .load(R.layout.item_hostdiscovery_skeleton)
+                    .shimmer(true)
+                    .angle(5)
+                    .frozen(false)
+                    .duration(1000)
+                    .count(mSingleton.hostList == null ? 13 : mSingleton.hostList.size())
+
+                    .show();
         }
     }
 
-    public void                     onResume() {
+    public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume::scan discovery host :" + mHostAdapter.getItemCount());
         Log.d(TAG, "onResume::scan discovery hostList :" + mHosts.size());
@@ -85,19 +99,21 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
             mActivity.setToolbarTitle(mSingleton.NetworkInformation.ssid,
                     mHosts.size() + " device" + ((mHosts.size() > 1) ? "s" : ""));
         }
-        if (mHosts == null || mHosts.isEmpty())
-        mHostAdapter.updateHostList(mHosts);
-        mHost_RV.setAdapter(mHostAdapter);
+        //if (mHosts == null || mHosts.isEmpty())
+        if (mHost_RV.getAdapter() == null) {
+            mHost_RV.setAdapter(mHostAdapter);
+            //mHostAdapter.updateHostList(mHosts);
+        }
         mActivity.initToolbarButton();
     }
 
-    private void                    initXml(View rootView) {
+    private void initXml(View rootView) {
         mHost_RV = rootView.findViewById(R.id.recycler_view);
         mEmptyList = rootView.findViewById(R.id.emptyList);
         mSwipeRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayout);
     }
 
-    private void                    initSwipeRefresh() {
+    private void initSwipeRefresh() {
         mSwipeRefreshLayout.setColorSchemeResources(
                 R.color.dnsSpoofPrimary,
                 R.color.NmapPrimary,
@@ -114,16 +130,30 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
             }
         });
     }
-    private void                    initHostsRecyclerView() {
+
+    private void initHostsRecyclerView() {
         if (mHostAdapter == null)
             mHostAdapter = new HostDiscoveryAdapter(getActivity(), mHost_RV, false, mActivity.mFab);
-        mHost_RV.setAdapter(mHostAdapter);
-        mHost_RV.setHasFixedSize(true);
-        mHost_RV.setLayoutManager(new LinearLayoutManager(mActivity));
-        if (mHosts != null && !mHosts.isEmpty())
+        //mHost_RV.setAdapter(mHostAdapter);
+        //mHost_RV.setHasFixedSize(true);new GridLayoutManager(this, 2)
+        mHost_RV.setLayoutManager(new GridLayoutManager(mActivity,
+                mActivity.getResources().getBoolean(R.bool.is_tab) ? 2 : 1));
+        if (mHosts != null && !mHosts.isEmpty()) {
             mHostAdapter.updateHostList(mHosts);
+            Log.e(TAG, "TARGET ALLOWED");
+        }
+        /**
+         *
+         * .shimmer(true)      // whether show shimmer animation.                      default is true
+         .count(10)          // the recycler view item count.                        default is 10
+         .color(color)       // the shimmer color.                                   default is #a2878787
+         .angle(20)          // the shimmer angle.                                   default is 20;
+         .duration(1000)     // the shimmer animation duration.                      default is 1000;
+         .frozen(false)      // whether frozen recyclerView during skeleton showing  default is true;
+         */
     }
-    public void                     initSearchView(SearchView searchView, final Toolbar toolbar) {
+
+    public void initSearchView(SearchView searchView, final Toolbar toolbar) {
         searchView.setGravity(Gravity.END);
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -152,14 +182,14 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         });
     }
 
-    public boolean                  start() {
+    public boolean start() {
         mActivity.setToolbarTitle("Scanner", "Discovering NetworkInformation");
         if (!isWaiting()) {
             if (mScannerControler.run(false)) {
                 init_prologueScan();
                 mActivity.initMonitor();
-                mActivity.initTimer();
-                mActivity.progressAnimation();
+                mActivity.onScanStarted();
+                //mActivity.progressAnimation();
                 Log.d(TAG, "Scanning is started");
                 mHostLoaded = false;
                 return true;
@@ -175,7 +205,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         return false;
     }
 
-    private void                    init_prologueScan() {
+    private void init_prologueScan() {
         /**
          * TODO:
          * + Get Last list of host from this SSID where Gateway.mac.equals(mSingleton.NetworkInformation.gateway.mac)
@@ -187,7 +217,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
          */
     }
 
-    public ArrayList<Host>          getTargetSelectedFromHostList() {
+    public ArrayList<Host> getTargetSelectedFromHostList() {
         ArrayList<Host> selectedHost = new ArrayList<>();
         for (Host host : mHosts) {
             if (host.selected)
@@ -200,28 +230,29 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         return selectedHost;
     }
 
-    public void                     updateStateOfHostAfterIcmp(Network actualNetwork) {
+    public void updateStateOfHostAfterIcmp(Network actualNetwork) {
         mSingleton.CurrentNetwork = actualNetwork;
         mActivity.actualNetwork = actualNetwork;
         mHosts = actualNetwork.listDevices();
         mHostAdapter.updateHostList(actualNetwork.listDevices());
     }
 
-    public void                     onHostActualized(final ArrayList<Host> hosts) {
+    public void onHostActualized(final ArrayList<Host> hosts) {
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
+                Log.d(TAG, "onHostActualized: " + ((hosts == null) ? "null" : hosts.size()));
                 int online = 0;
                 for (Host host : hosts) {
                     if (host.state == State.ONLINE)
                         online++;
                 }
+                if (skeletonScreen != null)
+                    skeletonScreen.hide();
                 mHosts = hosts;
                 mHostLoaded = true;
-                mActivity.setProgressState(mActivity.MAXIMUM_PROGRESS*2);
                 mSingleton.hostList = mHosts;
                 mActivity.setToolbarTitle(mSingleton.NetworkInformation.ssid,
-                        "(" + online + "/" + hosts.size()+ ") device" + ((hosts.size() > 1) ? "s" : ""));
-                Log.d(TAG, "onHostActualized: " + ((mSingleton.hostList == null) ? "null" : mSingleton.hostList.size()));
+                        "(" + online + "/" + hosts.size() + ") device" + ((hosts.size() > 1) ? "s" : ""));
                 mHostAdapter.updateHostList(mHosts);
                 mEmptyList.setVisibility((mHosts == null || mHosts.size() == 0) ? View.VISIBLE : View.GONE);
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -231,9 +262,9 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         });
     }
 
-    public void                     osFilterDialog() {
+    public void osFilterDialog() {
         if (!mScannerControler.inLoading) {
-            final ArrayList<Os> osList = mHostAdapter.getOsList();
+            final ArrayList<Integer> osList = mHostAdapter.getOsList();
             final OSFilterAdapter adapter = new OSFilterAdapter(mActivity, osList);
             new RV_dialog(mActivity)
                     .setAdapter(adapter, false)
@@ -252,7 +283,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
         }
     }
 
-    public BottomSheetMenuDialog    onSettingsClick(final AppBarLayout mAppbar, Activity activity) {
+    public BottomSheetMenuDialog onSettingsClick(final AppBarLayout mAppbar, Activity activity) {
         return new BottomSheetBuilder(activity)
                 .setMode(BottomSheetBuilder.MODE_LIST)
                 .setBackgroundColor(ContextCompat.getColor(activity, R.color.material_light_white))
@@ -264,7 +295,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
                 .setItemClickListener(new BottomSheetItemClickListener() {
                     @Override
                     public void onBottomSheetItemClick(MenuItem menuItem) {
-                        Log.d(TAG, "STRING:"+menuItem.getTitle().toString());
+                        Log.d(TAG, "STRING:" + menuItem.getTitle().toString());
                         switch (menuItem.getTitle().toString()) {
                             case "Select all":
                                 mHostAdapter.selectAll();
@@ -282,7 +313,7 @@ public class                        HostDiscoveryScanFrgmnt extends MyFragment {
                 .createDialog();
     }
 
-    public boolean                  isWaiting() {
+    public boolean isWaiting() {
         return mScannerControler.inLoading;
     }
 

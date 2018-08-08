@@ -15,13 +15,13 @@ import fr.dao.app.View.Settings.SettingsFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Dialog.QuestionMultipleAnswerDialog;
 
-public class HostDiscoverySettingsFrgmnt extends SettingsFrgmnt {
+public class                        HostDiscoverySettingsFrgmnt extends SettingsFrgmnt {
     private MyActivity              mActivity;
 
     public View                     onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         mActivity = (MyActivity) getActivity();
-        setTitle("Host discovery settings");
+        mActivity.setToolbarTitle("Settings", "Network discovery");
         mActivity.setToolbarBackgroundColor(0x111111);
         buildSettings();
         return rootView;
@@ -103,30 +103,28 @@ public class HostDiscoverySettingsFrgmnt extends SettingsFrgmnt {
 
     private void                    initDiscoveryMode() {
         final CharSequence[] items = new CharSequence[]{"Discrete", "Basic", "Advanced", "Brutal"};
-        //TODO: actualize title ?
-        Thread t = new Thread(new Runnable() {
+        Runnable n = new Runnable() {
             public void run() {
-                final DialogInterface.OnClickListener click = new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.dismiss();
-                        int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
-                        showSnackbar("Type of scan: " + items[selectedPosition]);
-                        Log.d("SettingsDiscovery", "Type of scan: " + items[selectedPosition]);
-                        Singleton.getInstance().Settings.getUserPreferences().NmapMode = selectedPosition;
-                        Singleton.getInstance().Settings.dump(Singleton.getInstance().Settings.getUserPreferences());
-                    }
-                };
                 mActivity.runOnUiThread(new Runnable() {
                     public void run() {
                         new QuestionMultipleAnswerDialog(mActivity, items,
-                                click, "Type of NetworkInformation discovery", mSingleton.Settings.getUserPreferences().NmapMode);
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        dialog.dismiss();
+                                        int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                                        showSnackbar("Type of scan: " + items[selectedPosition]);
+                                        Log.d("SettingsDiscovery", "Type of scan: " + items[selectedPosition]);
+                                        Singleton.getInstance().Settings.getUserPreferences().NmapMode = selectedPosition;
+                                        Singleton.getInstance().Settings.dump(Singleton.getInstance().Settings.getUserPreferences());
+                                    }
+                                }, "Type of NetworkInformation discovery", mSingleton.Settings.getUserPreferences().NmapMode, R.drawable.target);
                     }
                 });
             }
-        });
+        };
         addItemMenu(items[mSingleton.Settings.getUserPreferences().NmapMode] + " discovery",
                     "Type of scan who will be launch on the netwotk, Silence, Normal, Agressive, Insane",
-                    t,
+                    n,
                     null,
                 ContextCompat.getColor(mActivity, R.color.settingsSwitch),ContextCompat.getColor(mActivity, R.color.settingsSwitchBack));
     }

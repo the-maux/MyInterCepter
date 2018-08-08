@@ -26,6 +26,8 @@ public class                            Singleton {
     public  SettingsControler           Settings = null;
     public  ArrayList<Host>             hostList = null, savedHostList = null;
     String                              VERSION = "0xDEADBEEF";
+    public ArrayList<Host>              alreadyExtracted = new ArrayList<>();
+
 
     private                             Singleton() { }
 

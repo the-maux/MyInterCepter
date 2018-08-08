@@ -36,7 +36,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="50dp"
+        app:layout_constraintWidth_max="@dimen/icon_generic_size"
         app:layout_constraintWidth_min="40dp" />
 
     <TextView
@@ -50,7 +50,7 @@
         android:padding="2dp"
         android:text="Voici mon subtitle.fr"
         android:textColor="?android:attr/textColorPrimary"
-        android:textSize="14sp"
+        android:textSize="@dimen/text_size_2"
         app:layout_constraintBottom_toBottomOf="@+id/guideline"
         app:layout_constraintLeft_toRightOf="@+id/icon"
         app:layout_constraintRight_toLeftOf="@+id/icon2"
@@ -68,7 +68,7 @@
         android:padding="2dp"
         android:text="Voici mon title.fr"
         android:textColor="?android:attr/textColorPrimary"
-        android:textSize="12sp"
+        android:textSize="@dimen/text_size_1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@+id/title"
         app:layout_constraintRight_toLeftOf="@+id/icon2"
@@ -84,7 +84,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="50dp"
+        app:layout_constraintWidth_max="@dimen/icon_generic_size"
         app:layout_constraintWidth_min="40dp"
         app:srcCompat="@mipmap/ic_trash2" />
 

@@ -15,12 +15,10 @@ import android.support.v4.util.Pair;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Core.Configuration.RootProcess;
@@ -32,6 +30,7 @@ import fr.dao.app.View.DashBoard.DashboardActivity;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
 import fr.dao.app.View.Settings.SettingsActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
+import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 
 public class                    HomeActivity extends MyActivity {
@@ -44,6 +43,7 @@ public class                    HomeActivity extends MyActivity {
     private TextView            TV_Root, TV_Permission, TV_Updated;
     private ProgressBar         PB_Root, PB_Permission, PB_Updated;
     private CardView            cardRoot, cardPermission, cardUpdated;
+    private ImageView           icoScylla;
     private CircleImageView     statusRoot, statusPermission, statusUpdated;
     private static final int    PERMISSIONS_MULTIPLE_REQUEST = 123;
     private Singleton           mSingleton = Singleton.getInstance();
@@ -51,15 +51,53 @@ public class                    HomeActivity extends MyActivity {
     protected void              onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        Log.d(TAG, "" + getResources().getBoolean(R.bool.is_phone_big));
         mSingleton.init(this);
         initXml();
         init();
     }
 
+    private void                animMe() {
+        if (blue_card.getVisibility() == View.INVISIBLE) {
+            ((ImageView) findViewById(R.id.logo_defense)).setImageResource(R.drawable.ic_security_svg);
+            ((ImageView) findViewById(R.id.logo_dashboard)).setImageResource(R.drawable.ic_developer_board_svg);
+            ((ImageView) findViewById(R.id.logo_attack)).setImageResource(R.mipmap.ic_aim_png);
+            //MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_aim_png, ((ImageView) findViewById(R.id.logo_attack)), false);
+            ((ImageView) findViewById(R.id.logo_settings)).setImageResource(R.drawable.ic_build_svg);
+            ViewAnimate.FabAnimateReveal(mInstance, blue_card, new Runnable() {
+                public void run() {
+                    ViewAnimate.FadeAnimateReveal(mInstance, red_card, new Runnable() {
+                        public void run() {
+                            ViewAnimate.FadeAnimateReveal(mInstance, dashboard_card, new Runnable() {
+                                public void run() {
+                                    ViewAnimate.FadeAnimateReveal(mInstance, monitorRoot, null);
+                                    ViewAnimate.FadeAnimateReveal(mInstance, settings_card, new Runnable() {
+                                        public void run() {
+                                            ViewAnimate.FadeAnimateReveal(mInstance, icoScylla, null);
+                                        }
+                                    });
+                                }
+                            });
+                            ViewAnimate.FadeAnimateReveal(mInstance, monitorPermission, null);
+                        }
+                    });
+                    ViewAnimate.FabAnimateReveal(mInstance, monitorUpdated, null);
+                }
+            });
+        }
+    }
+
     protected void              onPostResume() {
         super.onPostResume();
+        hideKeyboard();
         getRootPermission();
         getAndroidPermission();
+        runOnThreadDelay(new Runnable() {
+            public void run() {
+                mSingleton.Session = DBSessions.createOrUpdateSession();
+            }
+        });
+        animMe();
     }
 
     private void                initXml() {
@@ -68,6 +106,7 @@ public class                    HomeActivity extends MyActivity {
         red_card = findViewById(R.id.red_card);
         dashboard_card = findViewById(R.id.dashboard_card);
         settings_card = findViewById(R.id.settings_card);
+        icoScylla = findViewById(R.id.icoScylla);
         monitorRoot = findViewById(R.id.monitorRoot);
         monitorPermission = findViewById(R.id.monitorPermission);
         monitorUpdated = findViewById(R.id.monitorUpdated);
@@ -83,16 +122,12 @@ public class                    HomeActivity extends MyActivity {
         PB_Root = monitorRoot.findViewById(R.id.progressBar_monitor);
         PB_Permission = monitorPermission.findViewById(R.id.progressBar_monitor);
         PB_Updated = monitorUpdated.findViewById(R.id.progressBar_monitor);
-        ViewAnimate.FabAnimateReveal(mInstance, monitorRoot, new Runnable() {
-            public void run() {
 
-            }
-        });
-        ViewAnimate.FabAnimateReveal(mInstance, monitorPermission, new Runnable() {
-            public void run() {
-            }
-        });
-        ViewAnimate.FabAnimateReveal(mInstance, monitorUpdated, null);
+        statusRoot.setImageResource(R.color.material_deep_orange_400);
+        statusPermission.setImageResource(R.color.material_deep_orange_400);
+        statusPermission.setImageResource(R.color.material_deep_orange_400);
+
+        setStatusBarColor(R.color.generic_background);
     }
 
     private void                init() {
@@ -101,8 +136,6 @@ public class                    HomeActivity extends MyActivity {
         settings_card.setOnClickListener(onSettingsClick());
         dashboard_card.setOnClickListener(onDashboardClick());
         defensifCheck();
-        initBottomMonitor();
-        mSingleton.Session = DBSessions.createOrUpdateSession();
     }
 
     private void                defensifCheck() {
@@ -112,13 +145,6 @@ public class                    HomeActivity extends MyActivity {
         } else {
             statusUpdated.setImageResource(R.color.online_color);
         }
-    }
-
-    private void                initBottomMonitor() {
-        statusRoot.setImageResource(R.color.material_deep_orange_400);
-        statusPermission.setImageResource(R.color.material_deep_orange_400);
-        statusPermission.setImageResource(R.color.material_deep_orange_400);
-
     }
 
     private void                getAndroidPermission() {
@@ -131,7 +157,6 @@ public class                    HomeActivity extends MyActivity {
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, PERMISSION_STORAGE, PERMISSIONS_MULTIPLE_REQUEST);
         } else {
-
             statusPermission.setImageDrawable(new ColorDrawable(getResources().getColor(R.color.online_color)));
             PB_Permission.setVisibility(View.GONE);
         }
@@ -147,12 +172,12 @@ public class                    HomeActivity extends MyActivity {
     private View.OnClickListener onDefenseClicked() {
         return new View.OnClickListener() {
             public void onClick(View view) {
-                Utils.vibrateDevice(mInstance, 100);
                 Intent intent = new Intent(mInstance, DefenseHomeActivity.class);
                 Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_defense), "logo_defense2");
-                Pair<View, String> p2 = Pair.create(findViewById(R.id.blue_card), "rootViewTransition");
+                Pair<View, String> p2 = Pair.create(findViewById(R.id.blue_card), "appBarTransition");
                 Pair<View, String> p3 = Pair.create(findViewById(R.id.title_defense), "title");
-                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2, p3).toBundle());
+                ActivityOptionsCompat o = ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2, p3);
+                startActivity(intent,  o.toBundle());
             }
         };
     }
@@ -164,7 +189,7 @@ public class                    HomeActivity extends MyActivity {
                 Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_dashboard), "logo_activity");
                 Pair<View, String> p2 = Pair.create(findViewById(R.id.dashboard_card), "rootViewTransition");
                 Pair<View, String> p3 = Pair.create(findViewById(R.id.title_dashboard), "title");
-                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p2).toBundle());
+                startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2).toBundle());
             }
         };
     }
@@ -193,8 +218,8 @@ public class                    HomeActivity extends MyActivity {
                         }
                         Intent intent = new Intent(mInstance, HostDiscoveryActivity.class);
                         Pair<View, String> p1 = Pair.create(findViewById(R.id.logo_attack), "logo_activity");
-                        Pair<View, String> p3 = Pair.create(findViewById(R.id.title_attack), "title");
                         Pair<View, String> p2 = Pair.create(findViewById(R.id.red_card), "rootViewTransition");
+                        Pair<View, String> p3 = Pair.create((View)icoScylla, "icoScylla");
                         startActivity(intent,  ActivityOptionsCompat.makeSceneTransitionAnimation(mInstance, p1, p2, p3).toBundle());
                     }
                 });
@@ -231,15 +256,15 @@ public class                    HomeActivity extends MyActivity {
         try {
             String RootOk = new RootProcess("RootCheck").exec("id").getReader().readLine();
             return (RootOk != null && RootOk.contains("uid=0(root)"));
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.d("Splashscreen", "RootOK[IOException]");
             e.printStackTrace();
             return false;
         }
     }
 
-    public void                 onBackPressed() {
-        finish();
+    public void             onBackPressed() {
+        //super.onBackPressed();
     }
 
     public void                 showSnackbar(String txt) {

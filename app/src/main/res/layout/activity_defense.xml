@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Coordonitor"
@@ -19,7 +20,7 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/toptoolbar2"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
             android:elevation="6dp"
             android:paddingLeft="8dp">
 
@@ -27,7 +28,8 @@
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="@dimen/icon_toolbar_size"
-                android:layout_height="0dp"
+                android:layout_height="@dimen/icon_toolbar_size"
+                android:layout_margin="4dp"
                 android:elevation="4dp"
                 android:padding="2dp"
                 android:soundEffectsEnabled="true"
@@ -46,13 +48,13 @@
                 android:id="@+id/toolbar2"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:minWidth="120dp"
                 android:transitionName="title"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/searchView"
-                app:layout_constraintHorizontal_weight="5"
                 app:layout_constraintStart_toEndOf="@+id/imageView2"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_scrollFlags="scroll|enterAlways"
+                app:layout_constraintWidth_min="wrap"
                 app:subtitle="Blue team"
                 app:subtitleTextColor="@color/tint_svg"
                 app:title="Defense"
@@ -63,8 +65,8 @@
 
             <ImageView
                 android:id="@+id/searchView"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/icon_generic_size"
+                android:layout_height="@dimen/icon_generic_size"
                 android:padding="8dp"
                 android:soundEffectsEnabled="true"
                 android:src="@drawable/ic_search_svg"
@@ -74,29 +76,28 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/toolbar2"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_min="wrap" />
 
             <ImageView
                 android:id="@+id/action_add_host"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
+                android:layout_width="@dimen/icon_generic_size"
+                android:layout_height="@dimen/icon_generic_size"
+                android:contentDescription="TODO"
+                android:padding="2dp"
                 android:soundEffectsEnabled="true"
                 android:src="@drawable/ic_list_svg"
                 android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/settingsMenu"
+                app:layout_constraintEnd_toStartOf="@+id/toolbarSettings"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/searchView"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/settingsMenu"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginRight="8dp"
-                android:padding="6dp"
+                android:id="@+id/toolbarSettings"
+                android:layout_width="@dimen/icon_generic_size"
+                android:layout_height="@dimen/icon_generic_size"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -105,60 +106,44 @@
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/action_add_host"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_more_svg" />
+                app:srcCompat="@mipmap/ic_imore_png" />
 
         </android.support.constraint.ConstraintLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/blueteam_color"
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/switchSniff"
-            android:layout_width="wrap_content"
-            android:layout_height="42dp"
-            android:layout_alignParentRight="true"
-            android:text="Sniffing"
-            android:visibility="gone" />
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/RV_menu"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/switchSniff"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:elevation="2dp"
             android:scrollbars="vertical"
-            android:visibility="gone"
-            tools:listitem="@layout/monitor_card" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/monitor_card"
+            />
 
         <ImageView
-            android:id="@+id/scylla"
-            android:layout_width="32dp"
-            android:layout_height="24dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:visibility="gone"
-            app:srcCompat="@drawable/scylla_transparent" />
-
-        <ImageView
-            android:id="@+id/logo_defense2"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignParentBottom="true"
+            android:id="@+id/iconScylla"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_margin="8dp"
             android:alpha="0.8"
             android:focusableInTouchMode="false"
             android:tint="@android:color/primary_text_dark"
-            app:layout_constraintBottom_toTopOf="@+id/title_defense"
+            android:transitionName="icoScylla"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="4:4"
-            app:layout_constraintLeft_toLeftOf="@+id/blue_card"
-            app:layout_constraintRight_toRightOf="@+id/blue_card"
-            app:layout_constraintTop_toTopOf="@+id/blue_card"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:srcCompat="@drawable/scylla_transparent" />
-    </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
 </android.support.design.widget.CoordinatorLayout>

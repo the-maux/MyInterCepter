@@ -33,7 +33,7 @@ import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
-import fr.dao.app.View.ZViewController.Dialog.DialogQuestionWithInput;
+import fr.dao.app.View.ZViewController.Dialog.QuestionDialogInput;
 
 public class                    NmapActivity extends MyActivity {
     private String              TAG = "NmapActivity";
@@ -46,7 +46,7 @@ public class                    NmapActivity extends MyActivity {
     private Toolbar             mToolbar;
     private List<Host>          mListHostSelected = new ArrayList<>();
     private TabLayout           mTabs;
-    private ImageView           mSettingsMenu, mScript, mScanType;
+    private ImageView           mSettingsMenu, mScript, mScanType, osImg;
     private NmapControler       nmapControler;
     private ProgressBar         mProgressBar;
     private boolean             isExternalTarget = false, isInScriptMode = false;
@@ -67,11 +67,16 @@ public class                    NmapActivity extends MyActivity {
         mTabs = findViewById(R.id.tabs);
         mToolbar = findViewById(R.id.toolbar);
         mProgressBar = findViewById(R.id.progressBar);
-        mSettingsMenu = findViewById(R.id.settingsMenu);
-        mScript = findViewById(R.id.scriptBtn);
-        mScanType = findViewById(R.id.typeScanBtn);
+        mSettingsMenu = findViewById(R.id.toolbarSettings);
+        mScript = findViewById(R.id.toolbarBtn2);
+        mScanType = findViewById(R.id.toolbarBtn1);
         mFab = findViewById(R.id.fab);
         mFab.setOnClickListener(onClickFAB());
+        osImg = findViewById(R.id.OsImg);
+        float scale = getResources().getDisplayMetrics().density;
+        int dpAsPixels = (int) (4*scale + 0.5f);
+        osImg.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
+        MyGlideLoader.loadDrawableInImageView(mInstance, R.drawable.nmap2, osImg, false);
         appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -82,6 +87,8 @@ public class                    NmapActivity extends MyActivity {
         mScript.setOnClickListener(onClickScript());
         mScanType.setOnClickListener(onClickTypeOfScan());
         MyGlideLoader.coordoBackgroundXMM(this, mCoordinatorLayout);
+        findViewById(R.id.rootView).setBackgroundResource(android.R.drawable.alert_dark_frame);
+        setStatusBarColor(R.color.NmapPrimary);
     }
 
     private void                init() {
@@ -177,7 +184,7 @@ public class                    NmapActivity extends MyActivity {
     }
 
     private void                askForExternalTarget() {
-        final DialogQuestionWithInput dialog = new DialogQuestionWithInput(this)
+        final QuestionDialogInput dialog = new QuestionDialogInput(this)
                 .hideSecondInput()
                 .setIcon(R.drawable.dns) //IMAGE HOST
                 .setTitle("Choose your target")

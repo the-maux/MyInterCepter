@@ -135,6 +135,7 @@ public class                    SniffActivity extends MITMActivity {
                 ViewCompat.setElevation(mAppBar, 4);
             }
         });
+        setStatusBarColor(R.color.snifferPrimary);
     }
 
     private void                onSwitchViewClicked() {
@@ -187,7 +188,7 @@ public class                    SniffActivity extends MITMActivity {
                                 FILTERING = "Output filtering",
                                 GLOBAL_SETTINGS = "Global settings";
 
-        findViewById(R.id.settingsMenu).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.toolbarSettings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BottomSheetBuilder builder = new BottomSheetBuilder(mInstance)

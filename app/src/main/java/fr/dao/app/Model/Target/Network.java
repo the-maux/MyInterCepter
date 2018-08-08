@@ -57,8 +57,9 @@ public class                Network extends Model {
     }
 
     public String           toString() {
-        return new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE)
-                .format(lastScanDate) +" " + listDevices().size() + " Devices Connected";
+        if (lastScanDate == null)
+            return listDevices().size() + " Devices Connected";
+        return new SimpleDateFormat("dd MMMM k:mm:ss", Locale.FRANCE).format(lastScanDate) + " ";
     }
 
     public String           getDateString() {

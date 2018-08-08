@@ -1,7 +1,6 @@
 package fr.dao.app.View.HostDetail;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -10,33 +9,38 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.security.InvalidParameterException;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.dao.app.Core.Configuration.GlideApp;
 import fr.dao.app.Core.Configuration.GlideRequest;
-import fr.dao.app.Core.Configuration.Singleton;
-import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Database.DBManager;
+import fr.dao.app.Core.Scan.NmapControler;
 import fr.dao.app.Model.Net.Pcap;
 import fr.dao.app.Model.Target.Host;
+import fr.dao.app.Model.Target.State;
+import fr.dao.app.Model.Unix.Os;
 import fr.dao.app.R;
 import fr.dao.app.View.DashBoard.HistoricSavedDataFgmnt;
 import fr.dao.app.View.Scan.NmapActivity;
@@ -45,19 +49,20 @@ import fr.dao.app.View.Sniff.SniffActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
+import fr.dao.app.View.ZViewController.Dialog.QuestionMultipleAnswerDialog;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 import fr.dao.app.View.ZViewController.Fragment.PcapListerFragment;
 
 public class                    HostDetailActivity extends MyActivity {
     private String              TAG = "HostDetailActivity";
     private HostDetailActivity  mInstance = this;
-    private Singleton           mSingleton = Singleton.getInstance();
     private Host                mFocusedHost;
     private CoordinatorLayout   mCoordinator;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private FloatingActionMenu  mMenuFAB;
     private CircleImageView     osHostImage;
-    private ImageView           history, settingsMenuDetail;
+    private ProgressBar         mProgressBarDetail;
+    private ImageView           history, rescan, settingsMenuDetail;
     private TabLayout           mTabs;
     private MyFragment          mCurrentFragment;
     private List<Pcap>          mPcapsList;
@@ -79,47 +84,69 @@ public class                    HostDetailActivity extends MyActivity {
     public void                 onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hostdetail);
-        initXml();
+        mFocusedHost = DBHost.getDevicesFromMAC(getIntent().getExtras().getString("macAddress"));
+        if (mFocusedHost == null) {
+            showSnackbar("User can't be loaded from BDD");
+        } else {
+            initXml();
+            MyGlideLoader.setOsIcon(mFocusedHost, osHostImage);
+        }
     }
 
     private void                initXml() {
         mCoordinator = findViewById(R.id.Coordonitor);
-        MyGlideLoader.coordoBackgroundXMM(this, mCoordinator);
         osHostImage = findViewById(R.id.OsImg);
         history = findViewById(R.id.history);
         settingsMenuDetail = findViewById(R.id.settingsMenuDetail);
+        rescan = findViewById(R.id.rescan);
         mTabs  = findViewById(R.id.tabs);
         mMenuFAB = findViewById(R.id.fab_menu);
+        collapsBackground = findViewById(R.id.collapsBackground);
+        mProgressBarDetail = findViewById(R.id.progressBarDetail);
+        printBackground();
+        setStatusBarColor(android.R.color.transparent);
+    }
+
+    private void                printBackground() {
+        int res = R.drawable.bg1;
+        switch (mFocusedHost.osType) {
+            case Os.Ios:
+            case Os.Apple:
+                res = R.drawable.bg1_mac;
+                break;
+            case Os.Android:
+            case Os.Mobile:
+            case Os.Samsung:
+            case Os.Bluebird:
+                res = R.drawable.bg1_android;
+                break;
+            case Os.Windows:
+            case Os.WindowsXP:
+            case Os.Windows7_8_10:
+            case Os.Windows2000:
+            case Os.Cisco:
+                res = R.drawable.bg1_windows;
+                break;
+            case Os.Raspberry:
+            case Os.Linux_Unix:
+            case Os.Ps4:
+            case Os.QUANTA:
+            case Os.OpenBSD:
+            case Os.Unix:
+                res = R.drawable.linux3;
+                break;
+        }
+        GlideRequest r = GlideApp.with(mInstance)
+                .load(res)
+                .centerCrop()
+                //.transition(DrawableTransitionOptions.withCrossFade())
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+        r.into(collapsBackground);
     }
 
     protected void              onResume() {
         super.onResume();
         init();
-    }
-
-    protected void              onPostResume() {
-        super.onPostResume();
-        try {
-            collapsBackground = findViewById(R.id.collapsBackground);
-            collapsBackground.postDelayed(new Runnable() {
-                public void run() {
-                    try {
-
-                        GlideRequest r = GlideApp.with(mInstance)
-                                .load(R.drawable.bg1)
-                                .centerCrop()
-                                .transition(DrawableTransitionOptions.withCrossFade())
-                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
-                        r.into(collapsBackground);
-                    } catch (IllegalArgumentException e) {
-                        Log.e(TAG, "PostDelayed while Activity is destroyed");
-                    }
-                }
-            }, 800);
-
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
         ViewAnimate.setVisibilityToVisibleQuick(settingsMenuDetail, 800);
         ViewAnimate.setVisibilityToVisibleQuick(history, 500);
     }
@@ -137,12 +164,10 @@ public class                    HostDetailActivity extends MyActivity {
             } else if (mode.contains("Recorded")) {
                 mMenuFAB.setVisibility(View.GONE);
             }
-            mFocusedHost = DBHost.getDevicesFromMAC(bundle.getString("macAddress"));
-            MyGlideLoader.setOsIcon(mFocusedHost, osHostImage);
             initMenuFab();
             initTabs();
             initAppBar();
-            displayInfosHost(mFocusedHost.mac);
+            refresh();
         } catch (Exception e) {
             Log.e(TAG, "Error in init, Back to previous fragment");
             e.printStackTrace();
@@ -164,7 +189,10 @@ public class                    HostDetailActivity extends MyActivity {
         FabBtn.setLabelText(title);
         FabBtn.setImageResource(logo);
         FabBtn.setColorNormal(getResources().getColor(R.color.fab_color));
-        FabBtn.setPadding(4, 4, 4, 4);
+        if (title.contentEquals("Vulnerability Scanner") || title.contentEquals("Strip connection"))
+            FabBtn.setPadding(8, 8, 8, 8);
+        else
+           FabBtn.setPadding(4, 4, 4, 4);
         FabBtn.setColorPressed(getResources().getColor(R.color.generic_background));
         FabBtn.setOnClickListener(onItemMenuClicked(type, FabBtn));
         return FabBtn;
@@ -173,15 +201,13 @@ public class                    HostDetailActivity extends MyActivity {
     private View.OnClickListener onItemMenuClicked(final actionActivity classActivity, final FloatingActionButton fabBtn) {
         return new View.OnClickListener() {
             public void onClick(View view) {
-                Utils.vibrateDevice(mInstance, 100);
                 mMenuFAB.close(true);
                 Intent intent = null;
-                Class classActivityToLaunch;
                 Pair<View, String> p1 = null;
                 switch (classActivity) {
                     case NMAP:
                         intent = new Intent(mInstance, NmapActivity.class);
-                        p1  = Pair.create((View)fabBtn, "NmapIconTransition");
+                        p1  = Pair.create((View)fabBtn, "LogoTransition");
                         intent.putExtra("macAddress", getIntent().getExtras().getString("macAddress"));
                         break;
                     case VULN_SCAN:
@@ -191,7 +217,7 @@ public class                    HostDetailActivity extends MyActivity {
                         break;
                     case BLOCK_INTERNET:
                         intent = new Intent(mInstance, NmapActivity.class);
-                        p1  = Pair.create((View)fabBtn, "NmapIconTransition");
+                        p1  = Pair.create((View)fabBtn, "LogoTransition");
                         intent.putExtra("macAddress", getIntent().getExtras().getString("macAddress"));
                         break;
                     case SNIFFER:
@@ -215,36 +241,9 @@ public class                    HostDetailActivity extends MyActivity {
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewCompat.setElevation(collapsingToolbarLayout, 4);
-                int alpha = appBarLayout.getTotalScrollRange() - Math.abs(verticalOffset);
-                if (alpha < 40) {
-                    if (osImg.getVisibility() == View.VISIBLE) {
-                        osImg.animate()
-                                .alpha(0.0f)
-                                .setDuration(250)
-                                .setListener(new AnimatorListenerAdapter() {
-                                    @Override
-                                    public void onAnimationEnd(Animator animation) {
-                                        super.onAnimationEnd(animation);
-                                        osImg.setVisibility(View.GONE);
-                                    }
-                                });
-                    }
-                } else {
-                    if (osImg.getVisibility() == View.GONE)
-                        osImg.animate()
-                                .alpha(1.0f)
-                                .setDuration(250)
-                                .setListener(new AnimatorListenerAdapter() {
-                                    @Override
-                                    public void onAnimationEnd(Animator animation) {
-                                        super.onAnimationEnd(animation);
-                                        osImg.setVisibility(View.VISIBLE);
-                                    }
-                                });
-
-                }
             }
         });
+        rescan.setOnClickListener(onRescanTarget());
     }
 
     private void                initTabs() {
@@ -259,7 +258,6 @@ public class                    HostDetailActivity extends MyActivity {
             mTabs.addTab(mTabs.newTab().setText("Pcap"), ++rax);
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             public void onTabSelected(TabLayout.Tab tab) {
-                Utils.vibrateDevice(mInstance, 100);
                 Log.d(TAG, "tab.getFirstInputQuestion().toString():" + tab.getText().toString());
                 switch (tab.getText().toString().toLowerCase()) {
                     case "historic":
@@ -309,6 +307,82 @@ public class                    HostDetailActivity extends MyActivity {
         initFragment(fragment);
     }
 
+    private View.OnClickListener onRescanTarget() {
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        final CharSequence[] items = new CharSequence[]{"Discrete", "Basic", "Advanced", "Brutal"};
+                        new QuestionMultipleAnswerDialog(mInstance, items,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        dialog.dismiss();
+                                        int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                                        Log.d("SettingsDiscovery", "Type of scan: " + items[selectedPosition]);
+                                        mFocusedHost.Deepest_Scan = selectedPosition;
+                                        mProgressBarDetail.setVisibility(View.VISIBLE);
+                                        new Thread(new Runnable() {
+                                            public void run() {
+                                                try {
+                                                    if (InetAddress.getByName(mFocusedHost.ip).isReachable(null, 64, 10000)) {
+                                                        new NmapControler(null, mInstance, mFocusedHost, false);
+                                                        return;
+                                                    } else
+                                                        mFocusedHost.state = State.OFFLINE;
+                                                } catch (IOException e) {
+                                                    mFocusedHost.state = State.OFFLINE;
+                                                }
+                                                onHostScanned(false);
+                                            }
+                                            //TODO tu dois detecter quand le truc est hors ligne
+                                        }).start();
+                                    }
+                                }, "Which Scan", 0, R.mipmap.ic_refresh_png);
+                    }
+                });
+            }
+        };
+    }
+
+    private void                refresh() {
+        int res = R.color.offline_color;
+        switch (mFocusedHost.state) {
+            case OFFLINE:
+                res = R.color.offline_color;
+                break;
+            case FILTERED:
+                res = R.color.filtered_color;
+                break;
+            case ONLINE:
+                res = R.color.online_color;
+                break;
+        }
+
+        osHostImage.setBorderColor(ContextCompat.getColor(mInstance, res));
+        displayInfosHost(mFocusedHost.mac);
+
+    }
+
+    /**
+     * Si les port 8008 et 8009 sont ouvert c'est une chromecast
+     * if 62078 its an iphone ? wtf
+     * @param succeed
+     */
+
+    public void                 onHostScanned(boolean succeed) {
+        if (succeed)
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    mProgressBarDetail.setVisibility(View.GONE);
+                    refresh();
+                    showSnackbar( mFocusedHost.getName() + " was updated");
+                }
+            });
+        else{
+
+        }
+    }
+
     private void                displayPcap(String macOfHostFocused) {
         Snackbar.make(mCoordinator, "Affiche les Pcap Recorded for " + mFocusedHost.getName(), Snackbar.LENGTH_LONG).show();
         MyFragment fragment = new PcapListerFragment();
@@ -334,7 +408,6 @@ public class                    HostDetailActivity extends MyActivity {
 
     public void                 setToolbarTitle(final String title, final String subtitle) {
         mInstance.runOnUiThread(new Runnable() {
-            @Override
             public void run() {
                 if (title != null)
                     collapsingToolbarLayout.setTitle(title);

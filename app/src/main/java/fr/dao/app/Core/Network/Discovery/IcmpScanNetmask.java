@@ -41,6 +41,7 @@ public class                        IcmpScanNetmask {
             startScanning = Calendar.getInstance().getTime();
             mNumberOfHosts = iPv4CIDR.getNumberOfHosts() - 2;
             List<String> availableIPs = iPv4CIDR.getAvailableIPs(mNumberOfHosts);
+
             Log.i(TAG, "mNumberOfHosts:" + mNumberOfHosts + " ipAvailable:" + availableIPs.size());
             int rax = 0;
             for (final String ip : availableIPs) {
@@ -65,7 +66,7 @@ public class                        IcmpScanNetmask {
                 Log.d(TAG, ipReachable + " reachable");
             }
         }
-        Log.i(TAG, "Icmp scan last for " + getTimeSpend());
+        Log.i(TAG, "Icmp scan last for " + getTimeSpend() + " and found " + mListIpReachable.size() + "  host alive");
         mScanner.onArpScanOver(mListIpReachable);
     }
 

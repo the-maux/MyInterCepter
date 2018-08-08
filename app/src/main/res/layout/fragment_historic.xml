@@ -172,7 +172,7 @@
         <TextView
             android:id="@+id/title"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/icon_generic_size"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="16dp"
@@ -246,7 +246,7 @@
             android:gravity="center_horizontal"
             android:text="Gateway"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_5"
             app:layout_constraintBottom_toTopOf="@+id/subtitleGateway"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="@+id/left"
@@ -316,7 +316,7 @@
             android:gravity="center_horizontal"
             android:text="Devices"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_5"
             app:layout_constraintBottom_toTopOf="@+id/SubtitleDevices"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
@@ -384,7 +384,7 @@
             android:gravity="center_horizontal"
             android:text="Sniffed record"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_5"
             app:layout_constraintBottom_toTopOf="@+id/title_wireshark"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="@+id/left"
@@ -448,7 +448,7 @@
             android:gravity="center_horizontal"
             android:text="Statistique"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_5"
             app:layout_constraintBottom_toTopOf="@+id/titleServices"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="@+id/midle_horizontal"
@@ -525,7 +525,7 @@
             android:maxLines="1"
             android:text="Analysée le 04/12 à 13h42"
             android:textColor="@android:color/white"
-            android:textSize="12sp" />
+            android:textSize="@dimen/text_size_1" />
 
         <RelativeLayout
             android:id="@+id/gatewayLine"
@@ -554,7 +554,7 @@
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:text="Gateway: 192.168.0.1"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_size_2" />
 
             <TextView
                 android:id="@+id/subtitleGateway"
@@ -569,7 +569,7 @@
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:text="(NEUFBOX 4355) - AA:BB:CC:DD:EE:DD"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_size_1" />
 
             <ImageView
                 android:id="@+id/forwardGateway"
@@ -609,7 +609,7 @@
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:text="42 devices decouvert"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_size_2" />
 
             <TextView
                 android:id="@+id/SubtitleDevices"
@@ -624,7 +624,7 @@
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:text="6 Os découvert"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_size_1" />
 
             <ImageView
                 android:id="@+id/forwardDevice"
@@ -665,7 +665,7 @@
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:text="4 sessions sniff realise"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_size_2" />
 
             <TextView
                 android:id="@+id/SubtitleWireshark"
@@ -680,7 +680,7 @@
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:text="2 .pcap avec le device courant"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_size_1" />
 
             <ImageView
                 android:id="@+id/forwardWireshark"
@@ -721,7 +721,7 @@
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:text="4 services découvert"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_size_2" />
 
             <TextView
                 android:id="@+id/SubtitleServices"
@@ -736,7 +736,7 @@
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:text="worstation.__tcp__, video.__udp__, printer.__ipp__, nfs.__tcp__"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_size_1" />
 
             <ImageView
                 android:id="@+id/forwardServices"
@@ -760,7 +760,7 @@
             android:layout_marginRight="4dp"
             android:text="4 services discovered on NetworkInformation"
             android:textColor="@color/primary_text"
-            android:textSize="12sp"
+            android:textSize="@dimen/text_size_1"
             android:textStyle="italic" />
 
         <TextView
@@ -773,7 +773,7 @@
             android:layout_marginRight="4dp"
             android:text="Realised with an Icmp scan "
             android:textColor="@color/primary_text"
-            android:textSize="12sp"
+            android:textSize="@dimen/text_size_1"
             android:textStyle="italic" />
 
     </RelativeLayout-->

@@ -49,30 +49,32 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
     }
 
     public HostDiscoveryHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new HostDiscoveryHolder(LayoutInflater.from(parent.getContext())
+            return new HostDiscoveryHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_hostdiscovery, parent, false));
     }
 
     public void                 onBindViewHolder(final HostDiscoveryHolder holder, final int position) {
-        final Host host = mHosts.get(position);
-        String ipHostname = host.ip + ((host.getName().contains(host.ip)) ? "" : " [" + host.getName() + "]");
-        holder.ipAndHostname.setText(ipHostname);
-        holder.mac.setText(host.mac);
-        if (host.state == State.FILTERED) {
-            pushThisShyGuyToFront(holder, host);
-        }
-        //String os = host.os.contains("Unknow") ? "No os information" : host.os;
-        holder.os.setText(host.os);
-        holder.vendor.setText(host.vendor);
-        if (mIsHistoric)
-            holder.statusIcon.setVisibility(View.GONE);
-        else
-            printHostState(holder, host);
-        checkedBehavior(holder, host, position);
-        holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity, /*Special background to notice my device*/
-                (host.isItMyDevice) ? R.color.primary_dark : R.color.cardview_dark_background));
-        MyGlideLoader.setOsIcon(host, holder.osIcon);
-        setAnimation(holder.cardView, holder);
+        if (mHosts != null && !mOriginalList.isEmpty()) {
+            final Host host = mHosts.get(position);
+            String ipHostname = host.ip + ((host.getName().contains(host.ip)) ? "" : " [" + host.getName() + "]");
+            holder.ipAndHostname.setText(ipHostname);
+            holder.mac.setText(host.mac);
+            if (host.state == State.FILTERED) {
+                pushThisShyGuyToFront(holder, host);
+            }
+            //String os = host.os.contains("Unknow") ? "No os information" : host.os;
+            holder.os.setText(host.os);
+            holder.vendor.setText(host.vendor);
+            if (mIsHistoric)
+                holder.statusIcon.setVisibility(View.GONE);
+            else
+                printHostState(holder, host);
+            checkedBehavior(holder, host, position);
+            holder.relativeLayout.setBackgroundColor(ContextCompat.getColor(mActivity, /*Special background to notice my device*/
+                    (host.isItMyDevice) ? R.color.primary_dark : R.color.cardview_dark_background));
+            MyGlideLoader.setOsIcon(host, holder.osIcon);
+            setAnimation(holder.cardView, holder);
+        } //else Log.d(TAG, "Skeleton Views");
     }
 
     private void                printHostState(HostDiscoveryHolder holder, Host host) {
@@ -151,14 +153,7 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
                         Intent intent = new Intent(mActivity, HostDetailActivity.class);
                         Pair<View, String> p1 = Pair.create((View)holder.osIcon, "hostPicture");
                         Pair<View, String> p2 = Pair.create((View)holder.ipAndHostname, "hostTitle");
-                        if (mFab != null && 1 == 2) {
-                            Pair<View, String> p3 = Pair.create((View)mFab, "fabTransition");
-                            options = ActivityOptionsCompat
-                                    .makeSceneTransitionAnimation(mActivity, p1, p2, p3);
-                        } else {
-                            options = ActivityOptionsCompat
-                                    .makeSceneTransitionAnimation(mActivity, p1, p2);
-                        }
+                        options = ActivityOptionsCompat.makeSceneTransitionAnimation(mActivity, p1, p2);
                         intent.putExtra("mode", "Live");
                         intent.putExtra("macAddress", host.mac);
                         mActivity.startActivity(intent, options.toBundle());
@@ -178,25 +173,25 @@ public class                    HostDiscoveryAdapter extends RecyclerView.Adapte
     }
 
     public int                  getItemCount() {
-        return (mHosts == null) ? 0 : mHosts.size();
+        return (mHosts == null || mOriginalList.isEmpty()) ? 10 : mHosts.size();
     }
 
-    public ArrayList<Os>        getOsList() {
-        ArrayList<Os> listOs = new ArrayList<>();
+    public ArrayList<Integer>        getOsList() {
+        ArrayList<Integer> listOs = new ArrayList<>();
         if (mOriginalList != null) {
             for (Host host : mOriginalList) {
-                if (host.osType != null && !listOs.contains(host.osType))
+                if (!listOs.contains(host.osType))
                     listOs.add(host.osType);
             }
         }
         return listOs;
     }
 
-    public int                  filterByOs(ArrayList<Os> Os) {
+    public int                  filterByOs(ArrayList<Integer> OsList) {
         mHosts.clear();
         for (Host host : mOriginalList) {
-            for (Os os : Os) {
-                if (os.name().contentEquals(host.osType.name())) {
+            for (Integer os : OsList) {
+                if (Os.toString(os).contentEquals(Os.toString(host.osType))) {
                     mHosts.add(host);
                     break;
                 }

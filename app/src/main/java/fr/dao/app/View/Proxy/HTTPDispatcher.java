@@ -67,12 +67,14 @@ public class                        HTTPDispatcher {
                         HttpTrame poppedTrame2 = pop();
                         TrameBuffer.add(poppedTrame);
                         ((HTTProxyAdapter) mAdapterProxy).addTrameOnAdapter(poppedTrame, TrameBuffer.size());
-                        if (poppedTrame.request.contentEquals(poppedTrame2.request)) {
-                            Log.e(TAG, "deleting Doublon ->> [" + poppedTrame.request);
-                            Log.e(TAG, "deleting Doublon ->> [" + poppedTrame2.request);
-                        } else {
-                            TrameBuffer.add(poppedTrame2);
-                            ((HTTProxyAdapter) mAdapterProxy).addTrameOnAdapter(poppedTrame2, TrameBuffer.size());
+                        if (poppedTrame != null && poppedTrame2 != null) {
+                            if (poppedTrame.request.contentEquals(poppedTrame2.request)) {
+                                Log.e(TAG, "deleting Doublon ->> [" + poppedTrame.request);
+                                Log.e(TAG, "deleting Doublon ->> [" + poppedTrame2.request);
+                            } else {
+                                TrameBuffer.add(poppedTrame2);
+                                ((HTTProxyAdapter) mAdapterProxy).addTrameOnAdapter(poppedTrame2, TrameBuffer.size());
+                            }
                         }
                     }
                     if (mAutoscroll)

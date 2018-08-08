@@ -13,13 +13,12 @@
         android:background="@color/snifferPrimary"
         android:paddingBottom="2dp"
         android:transitionName="appBarTransition"
-        android:visibility="visible"
-        app:elevation="6dp">
+        android:visibility="visible">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/appBarConstraint"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/app_bar_height"
             android:elevation="6dp"
             android:paddingLeft="8dp"
             android:visibility="visible">
@@ -28,7 +27,7 @@
             <ImageView
                 android:id="@+id/OsImg"
                 android:layout_width="@dimen/icon_toolbar_size"
-                android:layout_height="0dp"
+                android:layout_height="@dimen/btn_toolbar_size"
                 android:elevation="4dp"
                 android:padding="6dp"
                 android:tint="@color/tint_svg"
@@ -60,9 +59,9 @@
 
             <ImageView
                 android:id="@+id/history"
-                android:layout_width="0dp"
-                android:layout_height="36dp"
-                android:padding="8dp"
+                android:layout_width="@dimen/icon_generic_size"
+                android:layout_height="0dp"
+                android:padding="14dp"
                 android:soundEffectsEnabled="true"
                 android:src="@drawable/pcapfile"
                 android:tint="#85cccccc"
@@ -75,23 +74,23 @@
 
             <ImageButton
                 android:id="@+id/SwitchViewBackBtn"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/icon_generic_size"
+                android:layout_height="@dimen/icon_generic_size"
                 android:background="@android:color/transparent"
                 android:soundEffectsEnabled="true"
                 android:src="@drawable/ic_flip_to_front_svg"
                 android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/settingsMenu"
+                app:layout_constraintEnd_toStartOf="@+id/toolbarSettings"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/history"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
-                android:id="@+id/settingsMenu"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:id="@+id/toolbarSettings"
+                android:layout_width="@dimen/icon_generic_size"
+                android:layout_height="@dimen/icon_generic_size"
                 android:layout_marginRight="8dp"
                 android:background="@android:color/transparent"
                 android:soundEffectsEnabled="true"
@@ -102,7 +101,7 @@
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/SwitchViewBackBtn"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_more_svg" />
+                app:srcCompat="@mipmap/ic_imore_png" />
 
         </android.support.constraint.ConstraintLayout>
 
@@ -143,8 +142,8 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="@dimen/app_bar_height"
+            android:layout_height="@dimen/app_bar_height"
             android:layout_above="@+id/navigation"
             android:layout_alignParentRight="true"
             android:layout_alignWithParentIfMissing="true"

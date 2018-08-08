@@ -27,6 +27,7 @@ import fr.dao.app.Model.Target.Host;
 import fr.dao.app.Model.Target.Network;
 import fr.dao.app.Model.Target.State;
 import fr.dao.app.Model.Unix.Os;
+import fr.dao.app.View.HostDetail.HostDetailActivity;
 
 class                               NmapHostDiscoveryParser {
     private String                  TAG = "NmapHostDiscoveryParser";
@@ -35,8 +36,10 @@ class                               NmapHostDiscoveryParser {
     private NmapControler           mNmapControler;
     private int                     LENGTH_NODE, NBR_PARSED_NODE = 0;
     private NmapUpnpParser          UpnParser;
+    private boolean                 isScan1TargetOnly;
 
     NmapHostDiscoveryParser(NmapControler nmapControler, String NmapDump, Network ap, Context context) {
+        isScan1TargetOnly = false;
         this.mNmapControler = nmapControler;
         UpnParser = new NmapUpnpParser(context);
         if (mSingleton.Settings.getUserPreferences().autoSaveNmapSession)
@@ -55,6 +58,12 @@ class                               NmapHostDiscoveryParser {
             e.printStackTrace();
             nmapIsTooLong();
         }
+    }
+
+    NmapHostDiscoveryParser(Host focusedHost, String NmapDump, HostDetailActivity hostDetailActivity) {
+        isScan1TargetOnly = true;
+        buildHostFromNmapDump(NmapDump, focusedHost);
+        hostDetailActivity.onHostScanned(true);
     }
 
     private void                    dumpToFile(String nmapDump) {
@@ -290,6 +299,7 @@ class                               NmapHostDiscoveryParser {
                     Log.d(TAG, "-------------");
                 }*/
             }
+
             mNmapControler.onHostActualized(mNetwork.listDevices());
         } catch (ConcurrentModificationException ex) {
             ex.getStackTrace();

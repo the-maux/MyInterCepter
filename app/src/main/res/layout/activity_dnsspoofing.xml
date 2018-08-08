@@ -17,15 +17,15 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/topToolbar"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/app_bar_height"
             android:elevation="6dp"
             android:paddingLeft="8dp">
 
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/imageView5"
                 android:layout_width="@dimen/icon_toolbar_size"
-                android:layout_height="0dp"
+                android:layout_height="@dimen/icon_toolbar_size"
                 android:elevation="4dp"
                 android:padding="8dp"
                 android:tint="@color/tint_svg"
@@ -46,7 +46,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/searchView"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="5"
-                app:layout_constraintStart_toEndOf="@+id/imageView3"
+                app:layout_constraintStart_toEndOf="@+id/imageView5"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_min="@dimen/icon_toolbar_size"
                 app:layout_scrollFlags="scroll|enterAlways"
@@ -75,8 +75,8 @@
 
             <ImageButton
                 android:id="@+id/action_add_host"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/icon_generic_size"
+                android:layout_height="@dimen/btn_toolbar_size"
                 android:background="@android:color/transparent"
                 android:soundEffectsEnabled="true"
                 android:src="@drawable/ic_add_svg"
@@ -90,9 +90,8 @@
 
             <ImageButton
                 android:id="@+id/history"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginRight="8dp"
+                android:layout_width="@dimen/icon_generic_size"
+                android:layout_height="@dimen/btn_toolbar_size"
                 android:background="@android:color/transparent"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/tint_svg"
@@ -102,7 +101,7 @@
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/action_add_host"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_more_svg" />
+                app:srcCompat="@mipmap/ic_imore_png" />
 
         </android.support.constraint.ConstraintLayout>
 
@@ -147,7 +146,7 @@
             android:padding="4dp"
             android:text="Spoofable domain:"
             android:textColor="@color/material_light_white"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_4"
             android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -166,8 +165,8 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="@dimen/app_bar_height"
+            android:layout_height="@dimen/app_bar_height"
             android:layout_margin="16dp"
             android:src="@drawable/ic_stop"
             app:backgroundTint="@color/dnsSpoofPrimary"
@@ -234,7 +233,7 @@
                 android:paddingTop="8dp"
                 android:text="Tout supprimer"
                 android:textColor="@color/material_light_black"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_2"
                 android:visibility="visible" />
 
             <TextView
@@ -251,7 +250,7 @@
                 android:paddingTop="8dp"
                 android:text="Importer"
                 android:textColor="@color/material_light_black"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_size_2" />
 
             <TextView
                 android:id="@+id/action_export"
@@ -267,7 +266,7 @@
                 android:paddingTop="8dp"
                 android:text="Exporter"
                 android:textColor="@color/material_light_black"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_2"
                 android:typeface="sans" />
 
         </RelativeLayout>

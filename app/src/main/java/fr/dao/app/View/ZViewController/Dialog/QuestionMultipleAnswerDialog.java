@@ -8,11 +8,22 @@ import fr.dao.app.Core.Configuration.Words;
 import fr.dao.app.R;
 
 public class QuestionMultipleAnswerDialog {
+
     public QuestionMultipleAnswerDialog(Context context, CharSequence[] items,
                                         DialogInterface.OnClickListener onClickListener, String title, int selected) {
         new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setIcon(R.drawable.ico)
+                .setSingleChoiceItems(items, selected, null)
+                .setPositiveButton(Words.yes(context), onClickListener)
+                .show();
+    }
+
+    public QuestionMultipleAnswerDialog(Context context, CharSequence[] items,
+                                        DialogInterface.OnClickListener onClickListener, String title, int selected, int res) {
+        new AlertDialog.Builder(context)
+                .setTitle(title)
+                .setIcon(res)
                 .setSingleChoiceItems(items, selected, null)
                 .setPositiveButton(Words.yes(context), onClickListener)
                 .show();

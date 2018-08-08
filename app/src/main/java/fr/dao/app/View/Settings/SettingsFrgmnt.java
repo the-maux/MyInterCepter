@@ -33,8 +33,10 @@ public class SettingsFrgmnt extends MyFragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_settings, container, false);
         this.inflater = inflater;
         this.container = container;
-        initXml(rootView);
+
         mActivity = (MyActivity) this.getActivity();
+        initXml(rootView);
+        mActivity.setToolbarTitle("Settings", "Network discovery");
         init();
         return rootView;
     }
@@ -44,9 +46,6 @@ public class SettingsFrgmnt extends MyFragment {
         mCentral_layout = rootView.findViewById(R.id.central_layout);
     }
 
-    public void                 setTitle(String txt) {
-        mActivity.setToolbarTitle(txt, "");
-    }
 
     public void                 addItemMenu(String title, String subtitle, final Runnable onClick,
                                             String switchEnabled, int colorThumb, int colorBack) {

@@ -1,34 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!--item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/ico_home_barbutton"
-        android:title="HOME" /-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/navigation_nmap"
-        android:icon="@drawable/ic_nmap_icon_tabbutton"
-        android:iconTint="@color/NmapPrimary"
-        android:title="SCANNER" />
+        android:id="@+id/clear_terminal"
+        android:title="Clear Screen"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/add_terminal"
+        android:title="Add terminal"
+        app:showAsAction="always"/>
 
     <item
-        android:id="@+id/navigation_wireshark"
-        android:icon="@drawable/ic_sniff_barbutton"
-        android:iconTint="@color/snifferPrimary"
-        android:title="SNIFFER" />
+        android:id="@+id/close_terminal"
+        android:title="Close Terminal"
+        app:showAsAction="always"/>
 
     <item
-        android:id="@+id/navigation_dns"
-        android:icon="@drawable/ic_dns_btnbar"
-        android:iconTint="@color/dnsSpoofPrimary"
-        android:title="DNS SPOOFER" />
+        android:id="@+id/show_history"
+        android:title="Show history"
+        app:showAsAction="always"/>
 
     <item
-        android:id="@+id/navigation_webserver"
-        android:icon="@drawable/ic_world_locked"
-        android:iconTint="@color/webserverSpoofPrimary"
-        android:title="HTTP SPOOFER" />
+        android:id="@+id/clear_history"
+        android:title="Clear history"
+        app:showAsAction="always"/>
 
 </menu>

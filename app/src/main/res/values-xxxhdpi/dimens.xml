@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="is_tab">false</bool>
+    <bool name="is_phone_big">true</bool>
+    <dimen name="text_size_1">12sp</dimen>
+    <dimen name="text_size_2">14sp</dimen>
+    <dimen name="text_size_3">16sp</dimen>
+    <dimen name="text_size_4">18sp</dimen>
+    <dimen name="text_size_5">20sp</dimen>
+    <dimen name="text_size_header">24sp</dimen>
+
+    <dimen name="app_bar_height">56dp</dimen>
+    <dimen name="icon_toolbar_size">50dp</dimen>
+
+    <dimen name="fab_marge">16dp</dimen>
+
+    <dimen name="icon_status_size">8dp</dimen>
+    <dimen name="icon_generic_size">50dp</dimen>
+    <dimen name="icon_header_size">120dp</dimen>
+
+    <dimen name="icon_collapsing_size">90dp</dimen>
+    <dimen name="collapsing_size">250dp</dimen>
+    <dimen name="collapsing_size_fab">295dp</dimen>
+    <dimen name="collapsing_size_mini">112dp</dimen>
+    <dimen name="collapsing_padding_icon1">50dp</dimen>
+    <dimen name="collapsing_padding_icon2">100dp</dimen>
+
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="list_item_spacing">16dp</dimen>
+    <dimen name="btn_toolbar_size">55dp</dimen>
+    <dimen name="icon_toolbar2_size">50dp</dimen>
+
+    <dimen name="list_item_spacing_half">8dp</dimen>
+</resources>

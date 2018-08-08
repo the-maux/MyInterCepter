@@ -24,11 +24,9 @@
 
             <ImageView
                 android:id="@+id/OsImg"
-                android:layout_width="40dp"
+                android:layout_width="@dimen/icon_toolbar_size"
                 android:layout_height="0dp"
-                android:layout_marginStart="8dp"
                 android:elevation="4dp"
-                android:padding="8dp"
                 android:tint="@color/tint_svg"
                 android:transitionName="logo_activity"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
@@ -36,7 +34,7 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_build_svg" />
+                app:srcCompat="@mipmap/ic_build_png" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar2"
@@ -95,10 +93,8 @@
 
             <ImageView
                 android:id="@+id/settingsIcon"
-                android:layout_width="40dp"
-                android:layout_height="0dp"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
+                android:layout_width="@dimen/icon_generic_size"
+                android:layout_height="@dimen/icon_generic_size"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/tint_svg"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
@@ -108,7 +104,7 @@
                 app:layout_constraintStart_toEndOf="@+id/iconSettings2"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_min="45dp"
-                app:srcCompat="@drawable/ic_more_svg" />
+                app:srcCompat="@mipmap/ic_imore_png" />
 
 
             <android.support.constraint.Guideline
@@ -151,7 +147,7 @@
             android:paddingTop="4dp"
             android:text="42s"
             android:textColor="@color/accent_material_dark"
-            android:textSize="12sp"
+            android:textSize="@dimen/text_size_1"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@+id/Message"
@@ -168,7 +164,7 @@
             android:lines="2"
             android:padding="8dp"
             android:textColor="@color/accent_material_dark"
-            android:textSize="12sp"
+            android:textSize="@dimen/text_size_1"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

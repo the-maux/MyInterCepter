@@ -19,6 +19,7 @@ import fr.dao.app.Core.Configuration.Singleton;
 public class                            NetDiscovering {
     private static String               TAG = "NetDiscovering";
     private static String               MAC = null;
+
     public static boolean               initNetworkInfo(Activity activity) {
         WifiManager wifiManager = (WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if (wifiManager == null)
@@ -139,10 +140,10 @@ public class                            NetDiscovering {
     }
 
 
-    public static String                getMac(WifiInfo wifiInfo) {
+    private static String                getMac(WifiInfo wifiInfo) {
         if (MAC == null) {
-            BufferedReader reader = new RootProcess("GetMacADDR")
-                    .exec("cat /sys/class/net/wlan0/address").getReader();
+            RootProcess process = new RootProcess("GetMacADDR");
+            BufferedReader reader = process.exec("cat /sys/class/net/wlan0/address").getReader();
             try {
                 String tmp;
                 StringBuilder stringBuilder = new StringBuilder();
@@ -152,7 +153,7 @@ public class                            NetDiscovering {
                 MAC = stringBuilder.toString().toUpperCase();
                 Log.i(TAG, "ADDR MAC DETECTED[" + stringBuilder.toString().toUpperCase() + "]");
                 return stringBuilder.toString().toUpperCase();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return wifiInfo.getMacAddress().toUpperCase();
                 //Using getMacAddress() is not recommended, gna gna gna

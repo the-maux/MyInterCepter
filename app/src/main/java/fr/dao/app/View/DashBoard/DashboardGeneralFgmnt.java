@@ -27,6 +27,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.dao.app.Core.Database.DBHost;
 import fr.dao.app.Core.Database.DBNetwork;
 import fr.dao.app.Model.Config.Action;
 import fr.dao.app.Model.Config.Session;
@@ -48,9 +49,9 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
 
     public View                 onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_dash_general, container, false);
-        initXml(rootView);
         mActivity = (DashboardActivity) getActivity();
-        return rootView;
+        initXml(rootView);
+          return rootView;
     }
     
     private void                initXml(View rootView) {
@@ -58,6 +59,7 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
         titleChartDashboard = rootView.findViewById(R.id.titleChartDashboard);
         jcoolGraph = rootView.findViewById(R.id.chart);
         mRv_dash_general = rootView.findViewById(R.id.rv_dash_general);
+        mActivity.statusBarColor(R.color.DashboardPrimary);
     }
 
     public void                 init() {
@@ -77,7 +79,8 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
         for (Session session : sessions) {
             nbrActionPerformed += session.Actions().size();
         }
-        mActivity.setToolbarTitle("Statistique", nbrActionPerformed + " actions performed");
+
+        mActivity.setToolbarTitle("Statistique", DBHost.getAllDevicesNbr() + "devices scanned");
         SessionAdapter adapter = new SessionAdapter((MyActivity) getActivity(), sessions, R.color.DashboardPrimary);
         mRv_dash_general.setAdapter(adapter);
         mRv_dash_general.setHasFixedSize(true);
