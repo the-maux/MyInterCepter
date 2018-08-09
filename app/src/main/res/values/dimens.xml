@@ -21,6 +21,7 @@
 
     <dimen name="icon_collapsing_size">90dp</dimen>
     <dimen name="collapsing_size">250dp</dimen>
+    <dimen name="collapsing_size_cryptcheck">300dp</dimen>
     <dimen name="collapsing_size_fab">295dp</dimen>
     <dimen name="collapsing_size_mini">112dp</dimen>
     <dimen name="collapsing_padding_icon1">50dp</dimen>

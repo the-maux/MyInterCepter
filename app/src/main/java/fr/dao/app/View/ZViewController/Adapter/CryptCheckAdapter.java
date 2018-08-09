@@ -35,7 +35,7 @@ public class                    CryptCheckAdapter extends RecyclerView.Adapter<C
         if (cipher.isTitle) {
             holder.name.setText(cipher.name);
             holder.name.setGravity(Gravity.LEFT);
-            holder.name.setPadding(20, 4, 0, 0);
+            holder.name.setPadding(20, 8, 0, 0);
             holder.name.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     mActivity.getResources().getDimension(R.dimen.text_size_4));
             holder.rootViewItemCryptcheck.setBackgroundColor(mActivity.getResources().getColor(R.color.primary_white));

@@ -223,7 +223,7 @@ public class CryptCheckActivity extends MyActivity {
 
         MyBarDataSet set = new MyBarDataSet(entrys, "");
         set.setColors(ContextCompat.getColor(mInstance, R.color.material_green_500),
-                ContextCompat.getColor(mInstance, R.color.material_blue_grey_800),
+                ContextCompat.getColor(mInstance, R.color.material_blue_grey_700),
                 ContextCompat.getColor(mInstance, R.color.material_deep_orange_400),
                 ContextCompat.getColor(mInstance, R.color.material_red_500));
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
