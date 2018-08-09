@@ -1,21 +1,14 @@
 package fr.dao.app.Core.Api;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import java.io.IOException;
 
-import fr.dao.app.Model.Config.CryptCheckModel;
 import fr.dao.app.Model.Config.Cryptcheck.CryptCheckScan;
 import fr.dao.app.View.Cryptcheck.CryptFrgmnt;
 
@@ -30,19 +23,41 @@ public class                            CryptCheckApi {
     private                             CryptCheckApi() {
     }
 
-    public void                         callForSite(final CryptFrgmnt cryptFrgmnt, String site) throws IOException {
-        Log.d(TAG, ">>>> " + URL + site + ".json");
-
+    public void                         callForSite(final CryptFrgmnt cryptFrgmnt, final String site) throws IOException {
         Ion.with(cryptFrgmnt)
                 .load(URL + site + ".json")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     public void onCompleted(Exception e, JsonObject result) {
+                        if (e != null || result == null) {
+                            cryptFrgmnt.onResponseServer("Server didn't answer");
+                        }
                         CryptCheckScan scan = new GsonBuilder().create().fromJson(result, CryptCheckScan.class);
+                        getStat(cryptFrgmnt, site, scan);
+                    }
+                });
+    }
+
+    private void                        getStat(final CryptFrgmnt cryptFrgmnt, final String site, final CryptCheckScan scan) {
+        Ion.with(cryptFrgmnt)
+                .load(URL + site + ".json")
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    public void onCompleted(Exception e, JsonObject result) {
+                        JsonArray hosts = result.getAsJsonArray("hosts");
+                        for (JsonElement resultHost : hosts) {
+                            for (CryptCheckScan.CryptcheckResult cryptcheckResult : scan.results) {
+                                if (resultHost.getAsJsonObject().getAsJsonObject("host").getAsJsonObject("ip").getAsString().contentEquals(cryptcheckResult.ip)) {
+                                    cryptcheckResult.grade_score = resultHost.getAsJsonObject().getAsJsonObject("grade").getAsJsonObject("score").getAsInt();
+                                    cryptcheckResult.grade_protocol = resultHost.getAsJsonObject().getAsJsonObject("grade").getAsJsonObject("protocol").getAsInt();
+                                    cryptcheckResult.grade_key_exchange = resultHost.getAsJsonObject().getAsJsonObject("grade").getAsJsonObject("key_exchange").getAsInt();
+                                    cryptcheckResult.grade_cipher_strengths= resultHost.getAsJsonObject().getAsJsonObject("grade").getAsJsonObject("cipher_strengths").getAsInt();
+                                }
+                            }
+                        }
                         cryptFrgmnt.onResponseServer(scan);
                     }
                 });
-        // useJsoup(site, cryptFrgmnt);
     }
 
 }

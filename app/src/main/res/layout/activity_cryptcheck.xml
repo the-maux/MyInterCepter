@@ -21,6 +21,23 @@
             android:background="@color/cryptcheckPrimary">
 
 
+            <TextView
+                android:id="@+id/grade"
+                android:layout_width="@dimen/icon_toolbar_size"
+                android:layout_height="@dimen/icon_toolbar_size"
+                android:gravity="center"
+                android:text="A+"
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/toolbar"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <ImageView
                 android:id="@+id/OsImg"
                 android:layout_width="@dimen/icon_toolbar_size"
@@ -28,6 +45,7 @@
                 android:layout_marginLeft="8dp"
                 android:elevation="4dp"
                 android:transitionName="LogoTransition"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/toolbar"
                 app:layout_constraintHorizontal_bias="0.5"

@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
@@ -16,14 +16,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Config.Cryptcheck.CryptCheckScan;
 import fr.dao.app.R;
-import fr.dao.app.View.Proxy.ProxyReaderFrgmnt;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
-import fr.dao.app.View.ZViewController.Adapter.HTTProxyAdapter;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 
 public class CryptCheckActivity extends MyActivity {
@@ -38,7 +37,7 @@ public class CryptCheckActivity extends MyActivity {
     TabLayout                   mTabs;
     private ImageView           mSettingsMenu, addTerminal, mScanType, OsImg;
     ProgressBar                 mProgressBar;
-
+    private TextView            grade;
 
     protected void              onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +55,7 @@ public class CryptCheckActivity extends MyActivity {
         addTerminal = findViewById(R.id.toolbarBtn2);
         mScanType = findViewById(R.id.toolbarBtn1);
         OsImg = findViewById(R.id.OsImg);
+        grade = findViewById(R.id.grade);
         findViewById(R.id.rootView).setBackgroundResource(R.color.black_primary);
         appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -88,6 +88,7 @@ public class CryptCheckActivity extends MyActivity {
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             public void onTabSelected(TabLayout.Tab tab) {
                 if (mScan != null) {
+                    setGrade(grade);
                     mScan.updateOffset(tab.getPosition());
                     mFragment.reloadView();
                     setToolbarTitle(null, mScan.results.get(tab.getPosition()).ip);
@@ -96,6 +97,19 @@ public class CryptCheckActivity extends MyActivity {
             public void onTabUnselected(TabLayout.Tab tab) {}
             public void onTabReselected(TabLayout.Tab tab) {}
         });
+    }
+
+    private void                setGrade(TextView grade) {
+        String gradeS = mScan.results.get(mScan.resultOffset).grade;
+        if (gradeS.contains("A") || gradeS.contains("B")) {
+            grade.setTextColor(ContextCompat.getColor(mInstance, R.color.green));
+        } else if (gradeS.contains("C") || gradeS.contains("D")) {
+            grade.setTextColor(ContextCompat.getColor(mInstance, R.color.material_orange_700));
+
+        } else if (gradeS.contains("E") || gradeS.contains("F")) {
+            grade.setTextColor(ContextCompat.getColor(mInstance, R.color.material_orange_700));
+        }
+        grade.setText(gradeS);
     }
 
     private void                init() {
@@ -153,6 +167,8 @@ public class CryptCheckActivity extends MyActivity {
     }
 
     public void                 onResponseServer(CryptCheckScan scan) {
+        OsImg.setVisibility(View.INVISIBLE);
+        grade.setVisibility(View.VISIBLE);
         setToolbarTitle(scan.host, scan.results.get(0).ip);
         mScan = scan;
         if (scan.results.size() == 1) {

@@ -10,11 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
@@ -23,12 +21,8 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,12 +30,9 @@ import java.util.List;
 
 import fr.dao.app.Core.Api.CryptCheckApi;
 import fr.dao.app.Core.Configuration.Singleton;
-import fr.dao.app.Core.Database.DBNetwork;
-import fr.dao.app.Model.Config.Action;
-import fr.dao.app.Model.Config.CryptCheckModel;
+import fr.dao.app.Core.Configuration.Words;
 import fr.dao.app.Model.Config.Cryptcheck.CryptCheckScan;
 import fr.dao.app.R;
-import fr.dao.app.View.DashBoard.DashboardGeneralFgmnt;
 import fr.dao.app.View.ZViewController.Adapter.CryptCheckAdapter;
 import fr.dao.app.View.ZViewController.Dialog.QuestionDialogInput;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
@@ -106,7 +97,7 @@ public class                    CryptFrgmnt extends MyFragment  {
 
     public void                 onResponseServer(String result) {
         if (result == null || result.isEmpty())
-            mActivity.showSnackbar("Server didnt answer");
+            mActivity.showSnackbar(result);
         progressBarCrypt.setVisibility(View.GONE);
     }
 
@@ -147,11 +138,12 @@ public class                    CryptFrgmnt extends MyFragment  {
         jcoolGraph.getXAxis().setTextColor(ContextCompat.getColor(mActivity, R.color.white_secondary));
         jcoolGraph.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         jcoolGraph.getAxisLeft().setDrawLabels(false);
+        jcoolGraph.getAxisLeft().setAxisMaximum(100f);
         jcoolGraph.getAxisRight().setTextColor(ContextCompat.getColor(mActivity, R.color.white_secondary));
         jcoolGraph.animateY(2000, Easing.EasingOption.Linear);
         jcoolGraph.setData(data);
         Description description = new Description();
-        description.setText("Statistique");
+        description.setText(Words.getGenericLightDateFormat(mScan.date));
         description.setTextColor(ContextCompat.getColor(mActivity, R.color.white_secondary));
         jcoolGraph.setDescription(description);
         jcoolGraph.invalidate(); // refresh
@@ -159,22 +151,21 @@ public class                    CryptFrgmnt extends MyFragment  {
 
     private List<BarEntry>             initLineDataSet() {
         List<BarEntry> defenseEntry = new ArrayList<BarEntry>();
-        //FOR TEST X: nbrAttack Y: nbrDef
-        //Simulate 9 Session
         int raxattack = 0;
-        for (;raxattack <= 4;raxattack++) { //For nbr network in networkFocused
+        for (;raxattack <= 4;raxattack++) {
             switch (raxattack) {
                 case 1:
-                    defenseEntry.add(new BarEntry(0f, 1f));
+
+                    defenseEntry.add(new BarEntry(0f, mScan.results.get(mScan.resultOffset).grade_score));
                     break;
                 case 2:
-                    defenseEntry.add(new BarEntry(1f, 2f));
+                    defenseEntry.add(new BarEntry(1f, mScan.results.get(mScan.resultOffset).grade_cipher_strengths));
                     break;
                 case 3:
-                    defenseEntry.add(new BarEntry(2f, 3f));
+                    defenseEntry.add(new BarEntry(2f, mScan.results.get(mScan.resultOffset).grade_key_exchange));
                     break;
                 case 4:
-                    defenseEntry.add(new BarEntry(3f, 1f));
+                    defenseEntry.add(new BarEntry(3f, mScan.results.get(mScan.resultOffset).grade_protocol));
                     break;
             }
         }
