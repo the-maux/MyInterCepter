@@ -16,6 +16,7 @@ public class                            CryptCheckApi {
     private static String               TAG = "Cryptcheck";
     private static final CryptCheckApi  ourInstance = new CryptCheckApi();
     private static final String         URL = "https://cryptcheck.fr/https/";
+    private static final String         URLStat = "https://tls.imirhil.fr/https/";
     public static CryptCheckApi         getInstance() {
         return ourInstance;
     }
@@ -40,18 +41,20 @@ public class                            CryptCheckApi {
 
     private void                        getStat(final CryptFrgmnt cryptFrgmnt, final String site, final CryptCheckScan scan) {
         Ion.with(cryptFrgmnt)
-                .load(URL + site + ".json")
+                .load(URLStat + site + ".json")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     public void onCompleted(Exception e, JsonObject result) {
                         JsonArray hosts = result.getAsJsonArray("hosts");
                         for (JsonElement resultHost : hosts) {
                             for (CryptCheckScan.CryptcheckResult cryptcheckResult : scan.results) {
-                                if (resultHost.getAsJsonObject().getAsJsonObject("host").getAsJsonObject("ip").getAsString().contentEquals(cryptcheckResult.ip)) {
-                                    cryptcheckResult.grade_score = resultHost.getAsJsonObject().getAsJsonObject("grade").getAsJsonObject("score").getAsInt();
-                                    cryptcheckResult.grade_protocol = resultHost.getAsJsonObject().getAsJsonObject("grade").getAsJsonObject("protocol").getAsInt();
-                                    cryptcheckResult.grade_key_exchange = resultHost.getAsJsonObject().getAsJsonObject("grade").getAsJsonObject("key_exchange").getAsInt();
-                                    cryptcheckResult.grade_cipher_strengths= resultHost.getAsJsonObject().getAsJsonObject("grade").getAsJsonObject("cipher_strengths").getAsInt();
+                                String ip = resultHost.getAsJsonObject().getAsJsonObject("host").getAsJsonPrimitive("ip").getAsString();
+                                if (ip.contentEquals(cryptcheckResult.ip)) {
+                                    JsonObject grade = resultHost.getAsJsonObject().getAsJsonObject("grade").getAsJsonObject("details");
+                                    cryptcheckResult.grade_score = grade.getAsJsonPrimitive("score").getAsInt();
+                                    cryptcheckResult.grade_protocol = grade.getAsJsonPrimitive("protocol").getAsInt();
+                                    cryptcheckResult.grade_key_exchange = grade.getAsJsonPrimitive("key_exchange").getAsInt();
+                                    cryptcheckResult.grade_cipher_strengths = grade.getAsJsonPrimitive("cipher_strengths").getAsInt();
                                 }
                             }
                         }

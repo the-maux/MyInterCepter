@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootViewItemCryptcheck"
     android:layout_width="wrap_content"
-    android:layout_height="54dp"
-    android:background="@color/material_blue_grey_100"
+    android:layout_height="40dp"
+    android:background="@color/cryptcheckPrimary"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintVertical_bias="0.0">
@@ -16,8 +16,8 @@
         android:layout_margin="1dp"
         android:background="@color/primary_white"
 
-        android:gravity="center"
-        android:padding="3dp"
+        android:gravity="left|center_vertical"
+        android:padding="8dp"
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="@dimen/text_size_2"
         android:textStyle="bold"
@@ -184,7 +184,7 @@
         android:id="@+id/PFS"
         android:layout_width="63dp"
         android:layout_height="0dp"
-        android:layout_margin="1px"
+        android:layout_margin="1dp"
         android:background="@color/primary_white"
 
         android:gravity="center"

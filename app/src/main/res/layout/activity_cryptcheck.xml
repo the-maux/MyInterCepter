@@ -11,11 +11,11 @@
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/NmapPrimary"
+        android:background="@color/cryptcheckPrimary"
         android:transitionName="appBarTransition">
 
         <android.support.constraint.ConstraintLayout
-            android:id="@+id/relativeLayout"
+            android:id="@+id/headerAppBar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/app_bar_height"
             android:background="@color/cryptcheckPrimary">
@@ -28,7 +28,7 @@
                 android:gravity="center"
                 android:text="A+"
                 android:textColor="@android:color/white"
-                android:textSize="24sp"
+                android:textSize="30sp"
                 android:textStyle="bold"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -99,14 +99,14 @@
                 android:baselineAlignBottom="false"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/primary_white"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/toolbarSettings"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="0.9"
                 app:layout_constraintStart_toEndOf="@+id/toolbarBtn1"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@mipmap/ic_script_listing" />
+                app:srcCompat="@mipmap/ic_loop_search" />
 
             <ImageView
                 android:id="@+id/toolbarSettings"
@@ -123,6 +123,31 @@
                 app:srcCompat="@mipmap/ic_imore_png" />
 
 
+        </android.support.constraint.ConstraintLayout>
+
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/headerAppBarStat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/cryptcheckPrimary">
+
+            <FrameLayout
+                android:id="@+id/frame"
+                android:layout_width="0dp"
+                android:layout_height="190dp"
+                android:elevation="4dp"
+                android:padding="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.github.mikephil.charting.charts.HorizontalBarChart xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/cryptGraph"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="visible" />
+            </FrameLayout>
         </android.support.constraint.ConstraintLayout>
 
         <android.support.design.widget.TabLayout
@@ -143,6 +168,20 @@
                 android:layout_height="wrap_content"
                 android:text="Tab1" />
         </android.support.design.widget.TabLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar5"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tabs"
+            android:indeterminate="true"
+            android:paddingTop="2dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/guideline2" />
 
     </android.support.design.widget.AppBarLayout>
 

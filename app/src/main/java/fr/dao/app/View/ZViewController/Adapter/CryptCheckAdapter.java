@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -33,8 +34,10 @@ public class                    CryptCheckAdapter extends RecyclerView.Adapter<C
         Ciphers cipher = protos.get(position);
         if (cipher.isTitle) {
             holder.name.setText(cipher.name);
+            holder.name.setGravity(Gravity.LEFT);
+            holder.name.setPadding(20, 4, 0, 0);
             holder.name.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                    mActivity.getResources().getDimension(R.dimen.text_size_3));
+                    mActivity.getResources().getDimension(R.dimen.text_size_4));
             holder.rootViewItemCryptcheck.setBackgroundColor(mActivity.getResources().getColor(R.color.primary_white));
             holder.keyExchange.setText("");
             holder.Authentification.setText("");
@@ -71,6 +74,8 @@ public class                    CryptCheckAdapter extends RecyclerView.Adapter<C
     }
 
     public void                 putOnListOfTrame(final ArrayList<Ciphers> protoArrayList) {
+        this.protos = null;
+        notifyDataSetChanged();
         this.protos = protoArrayList;
         notifyDataSetChanged();
     }
@@ -81,4 +86,10 @@ public class                    CryptCheckAdapter extends RecyclerView.Adapter<C
         notifyDataSetChanged();
     }
 
+    public void                 clear() {
+        if (protos != null) {
+            this.protos.clear();
+            notifyDataSetChanged();
+        }
+    }
 }
