@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -21,14 +20,14 @@
             android:layout_height="@dimen/collapsing_size_cryptcheck"
             android:minHeight="@dimen/collapsing_size_mini"
             android:transitionName="hostTitle"
-            app:collapsedTitleGravity="left|center"
-            app:layout_scrollFlags="scroll">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            >
 
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/headerAppBar"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/app_bar_height"
+                android:layout_height="@dimen/collapsing_stats"
                 android:background="@color/cryptcheckPrimary"
                 app:layout_collapseMode="pin">
 
@@ -36,14 +35,14 @@
                 <TextView
                     android:id="@+id/grade"
                     android:layout_width="@dimen/icon_toolbar_size"
-                    android:layout_height="@dimen/icon_toolbar_size"
+                    android:layout_height="@dimen/app_bar_height"
                     android:gravity="center"
                     android:text="A+"
                     android:textColor="@android:color/white"
                     android:textSize="30sp"
                     android:textStyle="bold"
                     android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline11"
                     app:layout_constraintEnd_toStartOf="@+id/toolbar"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintHorizontal_weight="1"
@@ -53,12 +52,12 @@
                 <ImageView
                     android:id="@+id/OsImg"
                     android:layout_width="@dimen/icon_toolbar_size"
-                    android:layout_height="@dimen/btn_toolbar_size"
+                    android:layout_height="@dimen/app_bar_height"
                     android:layout_marginLeft="8dp"
                     android:elevation="4dp"
                     android:transitionName="LogoTransition"
                     android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline11"
                     app:layout_constraintEnd_toStartOf="@+id/toolbar"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintHorizontal_weight="1"
@@ -69,9 +68,9 @@
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="@dimen/app_bar_height"
                     android:transitionName="title_transition"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline11"
                     app:layout_constraintEnd_toStartOf="@+id/toolbarBtn1"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintHorizontal_weight="4"
@@ -89,13 +88,13 @@
                 <ImageView
                     android:id="@+id/toolbarBtn1"
                     android:layout_width="@dimen/icon_generic_size"
-                    android:layout_height="@dimen/icon_generic_size"
+                    android:layout_height="@dimen/app_bar_height"
                     android:background="@android:color/transparent"
                     android:paddingTop="2dp"
                     android:soundEffectsEnabled="true"
                     android:tint="@color/primary_white"
                     android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline11"
                     app:layout_constraintEnd_toStartOf="@+id/toolbarBtn2"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintHorizontal_weight="1"
@@ -106,13 +105,13 @@
                 <ImageView
                     android:id="@+id/toolbarBtn2"
                     android:layout_width="@dimen/icon_generic_size"
-                    android:layout_height="@dimen/icon_generic_size"
+                    android:layout_height="@dimen/app_bar_height"
                     android:background="@android:color/transparent"
                     android:baselineAlignBottom="false"
                     android:soundEffectsEnabled="true"
                     android:tint="@color/primary_white"
                     android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline11"
                     app:layout_constraintEnd_toStartOf="@+id/toolbarSettings"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintHorizontal_weight="0.9"
@@ -123,28 +122,53 @@
                 <ImageView
                     android:id="@+id/toolbarSettings"
                     android:layout_width="@dimen/btn_toolbar_size"
-                    android:layout_height="@dimen/btn_toolbar_size"
+                    android:layout_height="@dimen/app_bar_height"
                     android:background="@android:color/transparent"
                     android:soundEffectsEnabled="true"
                     android:tint="@color/primary_white"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline11"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_weight="0.8"
                     app:layout_constraintStart_toEndOf="@+id/toolbarBtn2"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@mipmap/ic_imore_png" />
 
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="1dp"
+                    android:background="@color/cryptcheckPrimary"
+                    android:visibility="visible"
+                    app:layout_collapseMode="pin"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/guideline11"
+                    app:tabMode="scrollable">
 
+                    <android.support.design.widget.TabItem
+                        android:id="@+id/tabItem"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tab1" />
+                </android.support.design.widget.TabLayout>
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="@dimen/app_bar_height" />
             </android.support.constraint.ConstraintLayout>
+
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/headerAppBarStat"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="56dp"
-                android:layout_marginTop="@dimen/app_bar_height"
+                android:layout_marginTop="@dimen/collapsing_stats"
                 android:background="@color/cryptcheckPrimary"
-                app:layout_collapseMode="parallax">
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.5">
 
                 <FrameLayout
                     android:id="@+id/frame"
@@ -164,27 +188,6 @@
                 </FrameLayout>
             </android.support.constraint.ConstraintLayout>
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_gravity="bottom"
-                android:background="@color/cryptcheckPrimary"
-                android:visibility="visible"
-                app:layout_collapseMode="pin"
-                app:layout_constraintHeight_min="@dimen/app_bar_height"
-                app:layout_constraintLeft_toLeftOf="@+id/OsImg"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/OsImg"
-                app:tabMode="scrollable">
-
-                <android.support.design.widget.TabItem
-                    android:id="@+id/tabItem"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tab1" />
-            </android.support.design.widget.TabLayout>
-
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
@@ -201,7 +204,6 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tabs"
             android:background="@color/cryptcheckPrimary"
             android:indeterminate="true"
             android:paddingTop="2dp"

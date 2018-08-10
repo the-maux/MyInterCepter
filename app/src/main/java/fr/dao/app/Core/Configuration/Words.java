@@ -22,7 +22,6 @@ public class                Words {
     }
 
     public static String    getGenericLightDateFormat(Date date) {
-        return new SimpleDateFormat("dd MMMM HH", Locale.FRANCE).format(date)
-                .replace("#", "h").replace("-", "m").replace("é", "e");
+        return new SimpleDateFormat("dd MMMM HH", Locale.FRANCE).format(date) + 'h';
     }
 }

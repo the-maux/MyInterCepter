@@ -234,6 +234,8 @@ public class CryptCheckActivity extends MyActivity {
         BarData data = new BarData(dataSets);
         Legend legend = jcoolGraph.getLegend();
         legend.setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
+        legend.setDrawInside(true);
+        legend.setEnabled(false);
         Description description = new Description();
         description.setText((mScan == null) ? "" : Words.getGenericLightDateFormat(mScan.date));
         description.setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
@@ -242,21 +244,29 @@ public class CryptCheckActivity extends MyActivity {
         jcoolGraph.getXAxis().mAxisMaximum = 4;
         jcoolGraph.getXAxis().mAxisRange = 4;
         jcoolGraph.getXAxis().setLabelCount(4);
+        jcoolGraph.getXAxis().setDrawAxisLine(true);
+        jcoolGraph.getXAxis().setDrawGridLines(true);
         jcoolGraph.getXAxis().setGridColor(ContextCompat.getColor(mInstance, R.color.primary_white));
         jcoolGraph.getXAxis().setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
         jcoolGraph.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        jcoolGraph.setGridBackgroundColor(ContextCompat.getColor(mInstance, R.color.primary_white));
+        jcoolGraph.getXAxis().setAxisMaximum(10);
+        jcoolGraph.getXAxis().setAxisMinimum(0);
+
         jcoolGraph.getAxisRight().setAxisMaximum(100f);
-        jcoolGraph.getAxisRight().setAxisMaximum(0f);
+        jcoolGraph.getAxisRight().setDrawLabels(false);
+        jcoolGraph.getAxisRight().setAxisMinimum(0f);
         jcoolGraph.getAxisRight().setGridColor(ContextCompat.getColor(mInstance, R.color.primary_white));
-        jcoolGraph.getAxisRight().setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
+
+        jcoolGraph.getAxisLeft().setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
         jcoolGraph.getAxisLeft().setGridColor(ContextCompat.getColor(mInstance, R.color.primary_white));
-        jcoolGraph.getAxisLeft().setDrawLabels(false);
+        jcoolGraph.getAxisLeft().setDrawLabels(true);
         jcoolGraph.getAxisLeft().setAxisMaximum(100f);
-        jcoolGraph.animateY(2000, Easing.EasingOption.Linear);
-        jcoolGraph.setData(data);
+        jcoolGraph.getAxisLeft().setAxisMaximum(0.1f);
+        jcoolGraph.setGridBackgroundColor(ContextCompat.getColor(mInstance, R.color.primary_white));
         jcoolGraph.setBorderColor(ContextCompat.getColor(mInstance, R.color.primary_white));
         jcoolGraph.setDescription(description);
+        jcoolGraph.animateY(2000, Easing.EasingOption.Linear);
+        jcoolGraph.setData(data);
         jcoolGraph.invalidate(); // refresh
     }
 
