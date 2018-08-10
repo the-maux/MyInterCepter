@@ -41,6 +41,7 @@ import fr.dao.app.Model.Config.Cryptcheck.CryptCheckScan;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
+import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 
 public class CryptCheckActivity extends MyActivity {
     private String              TAG = "CryptCheckActivity";
@@ -140,6 +141,7 @@ public class CryptCheckActivity extends MyActivity {
 
     private void                init() {
         initFragment();
+        updateHeader(true);
         mTabs.setVisibility(View.GONE);
     }
 
@@ -212,10 +214,11 @@ public class CryptCheckActivity extends MyActivity {
     public void                updateHeader(boolean nodata) {
         List<BarEntry> entrys;
         if (nodata) {
-            jcoolGraph.clearValues();
-            jcoolGraph.clear();
-            jcoolGraph.animateY(1000);
-            jcoolGraph.invalidate();
+            if (jcoolGraph != null) {
+                jcoolGraph.clear();
+                jcoolGraph.animateY(1000);
+                jcoolGraph.invalidate();
+            }
             return;
         } else {
             entrys = initLineDataSet();
@@ -223,7 +226,7 @@ public class CryptCheckActivity extends MyActivity {
 
         MyBarDataSet set = new MyBarDataSet(entrys, "");
         set.setColors(ContextCompat.getColor(mInstance, R.color.material_green_500),
-                ContextCompat.getColor(mInstance, R.color.material_blue_grey_700),
+                ContextCompat.getColor(mInstance, R.color.material_blue_800),
                 ContextCompat.getColor(mInstance, R.color.material_deep_orange_400),
                 ContextCompat.getColor(mInstance, R.color.material_red_500));
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
@@ -249,19 +252,21 @@ public class CryptCheckActivity extends MyActivity {
         jcoolGraph.getXAxis().setGridColor(ContextCompat.getColor(mInstance, R.color.primary_white));
         jcoolGraph.getXAxis().setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
         jcoolGraph.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        jcoolGraph.getXAxis().setAxisMaximum(10);
-        jcoolGraph.getXAxis().setAxisMinimum(0);
+        jcoolGraph.getXAxis().setAxisMaximum(4f);
+    //    jcoolGraph.getXAxis().setAxisMinimum(0f);
 
         jcoolGraph.getAxisRight().setAxisMaximum(100f);
-        jcoolGraph.getAxisRight().setDrawLabels(false);
         jcoolGraph.getAxisRight().setAxisMinimum(0f);
+        jcoolGraph.getAxisRight().setDrawLabels(true);
+        jcoolGraph.getAxisRight().setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
+
         jcoolGraph.getAxisRight().setGridColor(ContextCompat.getColor(mInstance, R.color.primary_white));
 
         jcoolGraph.getAxisLeft().setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
         jcoolGraph.getAxisLeft().setGridColor(ContextCompat.getColor(mInstance, R.color.primary_white));
         jcoolGraph.getAxisLeft().setDrawLabels(true);
         jcoolGraph.getAxisLeft().setAxisMaximum(100f);
-        jcoolGraph.getAxisLeft().setAxisMaximum(0.1f);
+        jcoolGraph.getAxisLeft().setAxisMaximum(-0.1f);
         jcoolGraph.setGridBackgroundColor(ContextCompat.getColor(mInstance, R.color.primary_white));
         jcoolGraph.setBorderColor(ContextCompat.getColor(mInstance, R.color.primary_white));
         jcoolGraph.setDescription(description);
@@ -302,7 +307,7 @@ public class CryptCheckActivity extends MyActivity {
                 case 3:
                     return "Protocol";
                 default:
-                    return "Overall";
+                    return "";
             }
         }
     }
@@ -318,10 +323,10 @@ public class CryptCheckActivity extends MyActivity {
                 return mColors.get(2);
             } else if (getEntryForIndex(index).getY() <= 75) {
                 return mColors.get(1);
-            } else {
+            } else if (getEntryForIndex(index).getY() <= 100) {
                 return mColors.get(0);
-
             }
+            return mColors.get(0);
         }
 
     }

@@ -30,7 +30,6 @@ import fr.dao.app.View.DashBoard.DashboardActivity;
 import fr.dao.app.View.HostDiscovery.HostDiscoveryActivity;
 import fr.dao.app.View.Settings.SettingsActivity;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
-import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 
 public class                    HomeActivity extends MyActivity {
@@ -64,7 +63,7 @@ public class                    HomeActivity extends MyActivity {
             ((ImageView) findViewById(R.id.logo_attack)).setImageResource(R.mipmap.ic_aim_png);
             //MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_aim_png, ((ImageView) findViewById(R.id.logo_attack)), false);
             ((ImageView) findViewById(R.id.logo_settings)).setImageResource(R.drawable.ic_build_svg);
-            ViewAnimate.FabAnimateReveal(mInstance, blue_card, new Runnable() {
+            ViewAnimate.reveal(mInstance, blue_card, new Runnable() {
                 public void run() {
                     ViewAnimate.FadeAnimateReveal(mInstance, red_card, new Runnable() {
                         public void run() {
@@ -81,7 +80,7 @@ public class                    HomeActivity extends MyActivity {
                             ViewAnimate.FadeAnimateReveal(mInstance, monitorPermission, null);
                         }
                     });
-                    ViewAnimate.FabAnimateReveal(mInstance, monitorUpdated, null);
+                    ViewAnimate.reveal(mInstance, monitorUpdated, null);
                 }
             });
         }

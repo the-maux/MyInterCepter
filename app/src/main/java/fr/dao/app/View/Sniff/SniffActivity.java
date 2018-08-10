@@ -83,7 +83,7 @@ public class                    SniffActivity extends MITMActivity {
             }
             initSettings();
             initNavigationBottomBar(SNIFFER);
-            ViewAnimate.FabAnimateReveal(mInstance, mFab);
+            ViewAnimate.reveal(mInstance, mFab);
         } else if (PcapFilePath != null){
             Log.d(TAG, "Pcap Reading mode activated");
             hideBottomBar();

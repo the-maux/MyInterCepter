@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Coordonitor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/cryptcheckPrimary"
     android:transitionName="rootViewTransition">
 
 
@@ -20,8 +22,7 @@
             android:layout_height="@dimen/collapsing_size_cryptcheck"
             android:minHeight="@dimen/collapsing_size_mini"
             android:transitionName="hostTitle"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            >
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
 
             <android.support.constraint.ConstraintLayout
@@ -36,6 +37,7 @@
                     android:id="@+id/grade"
                     android:layout_width="@dimen/icon_toolbar_size"
                     android:layout_height="@dimen/app_bar_height"
+                    android:layout_marginLeft="8dp"
                     android:gravity="center"
                     android:text="A+"
                     android:textColor="@android:color/white"
@@ -139,11 +141,12 @@
                     android:layout_height="0dp"
                     android:layout_margin="1dp"
                     android:background="@color/cryptcheckPrimary"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:layout_collapseMode="pin"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/guideline11"
-                    app:tabMode="scrollable">
+                    app:tabMode="scrollable"
+                    tools:layout_editor_absoluteX="1dp">
 
                     <android.support.design.widget.TabItem
                         android:id="@+id/tabItem"
@@ -207,7 +210,7 @@
             android:background="@color/cryptcheckPrimary"
             android:indeterminate="true"
             android:paddingTop="2dp"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -215,8 +218,11 @@
         <FrameLayout
             android:id="@+id/frame_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar5">
 
         </FrameLayout>
 

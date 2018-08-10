@@ -206,7 +206,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
             timer = null;
         }
         ViewAnimate.setVisibilityToGoneQuick(findViewById(R.id.progressBar));
-        ViewAnimate.FabAnimateReveal(mInstance, mFab);
+        ViewAnimate.reveal(mInstance, mFab);
     }
 
     private void                    initFabs() {
@@ -268,7 +268,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
         else
             mBottomMonitor.setText(mSingleton.NetworkInformation.ssid + ": No connection");
         //ViewAnimate.setVisibilityToVisibleQuick(mBottomMonitor);
-        ViewAnimate.FabAnimateReveal(this, mBottomMonitor, new Runnable() {
+        ViewAnimate.reveal(this, mBottomMonitor, new Runnable() {
             public void run() {
                 ViewAnimate.setVisibilityToVisibleQuick(mTimer);
             }
@@ -347,7 +347,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
     protected void                  onPostResume() {
         super.onPostResume();
         if (NetworkDiscoveryControler.over()) {
-            //ViewAnimate.FabAnimateReveal(mInstance, mFab);
+            //ViewAnimate.reveal(mInstance, mFab);
             ViewAnimate.setVisibilityToVisibleQuick(mFab);
             mFab.show();
             Log.d(TAG, "Scan is over so reveal FAB& opaque:"+mFab.isOpaque());
@@ -376,7 +376,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                     ViewAnimate.setVisibilityToVisibleQuick(mOsFilter, 300);
                     ViewAnimate.setVisibilityToVisibleQuick(mSearchView, 400);
                     //ViewAnimate.setVisibilityToVisibleQuick(mFab, 500);
-                    ViewAnimate.FabAnimateReveal(mInstance, mFab);
+                    ViewAnimate.reveal(mInstance, mFab);
                     //mFab.show();
                     initFragment(NetDiscoveryFragment);
                     initSearchView();
@@ -385,7 +385,7 @@ public class                        HostDiscoveryActivity extends MyActivity {
                 mToolbarBackground.reverseTransition(450);
                 ViewAnimate.setVisibilityToVisibleQuick(mOsFilter, 300);
                 ViewAnimate.setVisibilityToVisibleQuick(mSearchView, 400);
-                ViewAnimate.FabAnimateReveal(mInstance, mFab);
+                ViewAnimate.reveal(mInstance, mFab);
                 //mFab.show();
                // ViewAnimate.setVisibilityToVisibleQuick(mFab, 500);
                 getSupportFragmentManager().popBackStackImmediate();

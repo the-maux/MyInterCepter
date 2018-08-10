@@ -78,7 +78,7 @@ public class                    ViewAnimate {
             }
         });
     }
-    public static void          FabAnimateReveal(final MyActivity context, final View fab, final Runnable runnable) {
+    public static void reveal(final MyActivity context, final View fab, final Runnable runnable) {
         context.runOnUiThread(new Runnable() {
             public void run() {
                 Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.fab_scale_up);
@@ -118,7 +118,7 @@ public class                    ViewAnimate {
         });
         fab.startAnimation(scaleDown);
     }
-    public static void          FabAnimateReveal(Context context, final FloatingActionButton fab) {
+    public static void reveal(Context context, final FloatingActionButton fab) {
         Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.fab_scale_up);
         scaleUp.setDuration(LONG_DURATION);
         scaleUp.setAnimationListener(new Animation.AnimationListener() {

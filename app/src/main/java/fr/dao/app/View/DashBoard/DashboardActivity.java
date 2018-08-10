@@ -65,7 +65,7 @@ public class                        DashboardActivity extends MyActivity {
                 mInstance.runOnUiThread(new Runnable() {
                     public void run() {
                         initGeneral();
-                        ViewAnimate.FabAnimateReveal(mInstance, findViewById(R.id.frame_container), null);
+                        ViewAnimate.reveal(mInstance, findViewById(R.id.frame_container), null);
                     }
                 });
             }

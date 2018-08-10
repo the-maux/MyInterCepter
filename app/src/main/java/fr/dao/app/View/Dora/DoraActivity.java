@@ -27,7 +27,6 @@ import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.Core.Dora;
 import fr.dao.app.Core.Network.Discovery.NetworkDiscoveryControler;
 import fr.dao.app.Model.Target.Host;
-import fr.dao.app.Model.Unix.DoraProcess;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Adapter.DoraAdapter;
@@ -134,7 +133,7 @@ public class                    DoraActivity extends MyActivity {
 //                    })
 //                    .show();
         } else
-            ViewAnimate.FabAnimateReveal(mInstance, mFab);
+            ViewAnimate.reveal(mInstance, mFab);
         mFab.setImageResource((!Dora.isRunning()) ? R.drawable.ic_media_play : android.R.drawable.ic_media_pause);
 //        more.setOnClickListener(new View.OnClickListener() {
 //            public void onClick(View v) {

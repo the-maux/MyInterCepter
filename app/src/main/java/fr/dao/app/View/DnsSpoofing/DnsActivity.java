@@ -100,7 +100,7 @@ public class                            DnsActivity extends MITMActivity {
 
     private void                        initFab() {
 //        ViewAnimate.setVisibilityToVisibleQuick(mFab);
-        ViewAnimate.FabAnimateReveal(mInstance, mFab);
+        ViewAnimate.reveal(mInstance, mFab);
 //        mFab.show();
         if (MitManager.getInstance().isDnsmasqRunning()) {
             mFab.setImageResource(R.mipmap.ic_stop);

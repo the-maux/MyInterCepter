@@ -118,7 +118,7 @@ public class                    NmapActivity extends MyActivity {
             initTabswithTargets(mListHostSelected);
         }
         initUIWithTarget(mListHostSelected.get(0));
-        ViewAnimate.FabAnimateReveal(mInstance, mFab);
+        ViewAnimate.reveal(mInstance, mFab);
     }
 
     private void                initFragment() {
@@ -208,7 +208,7 @@ public class                    NmapActivity extends MyActivity {
                 List<String> listExternalIp = new ArrayList<>();
                 //new NmapControler(listExternalIp);
                 //ViewAnimate.setVisibilityToVisibleQuick(mFab);
-                ViewAnimate.FabAnimateReveal(mInstance, mFab);
+                ViewAnimate.reveal(mInstance, mFab);
                 //mFab.show();
             } catch (UnknownHostException e) {
                 e.printStackTrace();

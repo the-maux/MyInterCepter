@@ -72,9 +72,9 @@ public class                    DashboardAttackFgmnt extends MyFragment {
         mActivity.setToolbarTitle("Attack stats", null);
         initChart();
         initRV();
-        ViewAnimate.FabAnimateReveal(mActivity, mChart, new Runnable() {
+        ViewAnimate.reveal(mActivity, mChart, new Runnable() {
             public void run() {
-                ViewAnimate.FabAnimateReveal(mActivity, mAttack_RV, null);
+                ViewAnimate.reveal(mActivity, mAttack_RV, null);
             }
         });
     }

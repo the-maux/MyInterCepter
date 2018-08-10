@@ -82,7 +82,7 @@ public class                            ProxyActivity extends MITMActivity {
 
     private void                        initFab() {
 //        ViewAnimate.setVisibilityToVisibleQuick(mFab);
-        ViewAnimate.FabAnimateReveal(mInstance, mFab);
+        ViewAnimate.reveal(mInstance, mFab);
 //        mFab.show();
         mFab.setImageResource(R.mipmap.ic_stop);
         if (!mMitManager.isProxyRunning()) {

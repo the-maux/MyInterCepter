@@ -66,9 +66,9 @@ public class                    DashboardGeneralFgmnt extends MyFragment {
         nbrActionPerformed = 0x0;
         initChart();
         initRV();
-        ViewAnimate.FabAnimateReveal(mActivity, jcoolGraph, new Runnable() {
+        ViewAnimate.reveal(mActivity, jcoolGraph, new Runnable() {
             public void run() {
-                ViewAnimate.FabAnimateReveal(mActivity, mRv_dash_general, null);
+                ViewAnimate.reveal(mActivity, mRv_dash_general, null);
             }
         });
     }

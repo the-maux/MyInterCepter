@@ -15,12 +15,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 
 import fr.dao.app.Core.Configuration.MitManager;
-import fr.dao.app.Core.Configuration.Utils;
 import fr.dao.app.R;
-import fr.dao.app.View.DnsSpoofing.DnsActivity;
-import fr.dao.app.View.Proxy.ProxyActivity;
-import fr.dao.app.View.Sniff.SniffActivity;
-import fr.dao.app.View.WebServer.WebServerActivity;
 import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 
 
@@ -111,7 +106,7 @@ public abstract class               MITMActivity extends MyActivity  {
 
     protected void                  onResume() {
         if (mFab != null)
-            ViewAnimate.FabAnimateReveal(mInstance, mFab);
+            ViewAnimate.reveal(mInstance, mFab);
         super.onResume();
         Log.d(TAG, " onResume::setCurrentItem::" + mType);
         mBottomBar.setCurrentItem(mType, false);

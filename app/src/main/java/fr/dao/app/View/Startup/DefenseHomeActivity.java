@@ -215,7 +215,7 @@ public class                    DefenseHomeActivity extends MyActivity {
 //                ViewAnimate.setVisibilityToVisibleLong(holder.card_view);
             holder.card_view.setLayoutParams(lp);
             holder.card_view.setVisibility(View.VISIBLE);
-            /*ViewAnimate.FabAnimateReveal(mInstance, holder.card_view, new Runnable() {
+            /*ViewAnimate.reveal(mInstance, holder.card_view, new Runnable() {
                 public void run() {
                     holder.card_view.setAlpha(0.8f);
                 }

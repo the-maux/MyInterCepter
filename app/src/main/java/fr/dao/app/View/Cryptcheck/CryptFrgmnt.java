@@ -3,13 +3,12 @@ package fr.dao.app.View.Cryptcheck;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.github.mikephil.charting.charts.HorizontalBarChart;
 
 import java.io.IOException;
 
@@ -18,6 +17,7 @@ import fr.dao.app.Core.Configuration.Singleton;
 import fr.dao.app.Model.Config.Cryptcheck.CryptCheckScan;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Adapter.CryptCheckAdapter;
+import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 import fr.dao.app.View.ZViewController.Dialog.QuestionDialogInput;
 import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
@@ -25,7 +25,7 @@ public class                    CryptFrgmnt extends MyFragment  {
     private String              TAG = "NmapOutputView";
     private CryptCheckActivity  mActivity;
     private CryptFrgmnt         mInstance = this;
-    private ConstraintLayout    mCoordinatorLayout, header;
+    private NestedScrollView    rootViewCryptFragment;
     private RecyclerView        mRV_cryptcheck;
     private String              mDefaultSite = Singleton.getInstance().Settings.getUserPreferences().defaultTarget;
     private CryptCheckAdapter   mAdapter;
@@ -36,15 +36,13 @@ public class                    CryptFrgmnt extends MyFragment  {
         mActivity = (CryptCheckActivity)getActivity();
         initXml(rootView);
         init();
-        mActivity.updateHeader(false);
         return rootView;
     }
 
     private void                initXml(View rootView) {
-        mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
         mRV_cryptcheck = rootView.findViewById(R.id.RV_cryptcheck);
-
-        header = rootView.findViewById(R.id.header);
+        rootViewCryptFragment = rootView.findViewById(R.id.rootViewCryptFragment);
+        rootViewCryptFragment.setVisibility(View.INVISIBLE);
     }
 
     public void                 init() {
@@ -65,6 +63,11 @@ public class                    CryptFrgmnt extends MyFragment  {
                 mDefaultSite = (defaultSite.isEmpty()) ? mDefaultSite : defaultSite;
                 mActivity.setToolbarTitle(null, mDefaultSite);
                 mScan = null;
+                mActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        mActivity.mProgressBar.setVisibility(View.VISIBLE);
+                    }
+                });
                 mActivity.updateHeader(true);
                 mAdapter.clear();
                 start();
@@ -73,7 +76,7 @@ public class                    CryptFrgmnt extends MyFragment  {
     }
 
     public boolean              start() {
-        mActivity.mProgressBar.setVisibility(View.VISIBLE);
+
         try {
             CryptCheckApi.getInstance().callForSite(mInstance, mDefaultSite);
         } catch (IOException e) {
@@ -96,6 +99,7 @@ public class                    CryptFrgmnt extends MyFragment  {
                 reloadView();
                 mActivity.onResponseServer(scan);
                 mActivity.mProgressBar.setVisibility(View.GONE);
+                ViewAnimate.reveal(mActivity, rootViewCryptFragment, null);
             }
         });
     }

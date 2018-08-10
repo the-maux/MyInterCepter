@@ -53,7 +53,7 @@ public class                    WebServerActivity extends MITMActivity {
         mWebview = findViewById(R.id.webViewToSeeWebsite);
         mProgressBar = findViewById(R.id.progressBar);
         mFab = findViewById(R.id.fab);
-        ViewAnimate.FabAnimateReveal(mInstance, mFab);
+        ViewAnimate.reveal(mInstance, mFab);
         mToolbar = findViewById(R.id.toolbar);
         appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
