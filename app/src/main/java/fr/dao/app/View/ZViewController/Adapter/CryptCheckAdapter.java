@@ -4,13 +4,14 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
 import fr.dao.app.Model.Config.Cryptcheck.Ciphers;
-import fr.dao.app.Model.Config.Cryptcheck.CryptCheckScan;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Adapter.Holder.CryptCheckHolder;
 
@@ -33,8 +34,13 @@ public class                    CryptCheckAdapter extends RecyclerView.Adapter<C
         Ciphers cipher = protos.get(position);
         if (cipher.isTitle) {
             holder.name.setText(cipher.name);
-            holder.KeyExchange_Type.setText("");
-            holder.Authentification_Type.setText("");
+            holder.name.setGravity(Gravity.LEFT);
+            holder.name.setPadding(20, 8, 0, 0);
+            holder.name.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                    mActivity.getResources().getDimension(R.dimen.text_size_4));
+            holder.rootViewItemCryptcheck.setBackgroundColor(mActivity.getResources().getColor(R.color.primary_white));
+            holder.keyExchange.setText("");
+            holder.Authentification.setText("");
             holder.Encryption_Type.setText("");
             holder.Encryption_KZ.setText("");
             holder.Encryption_BZ.setText("");
@@ -42,28 +48,24 @@ public class                    CryptCheckAdapter extends RecyclerView.Adapter<C
             holder.MAC_Type.setText("");
             holder.MAC_KS.setText("");
         } else {
-            Log.i(TAG, "");
-            holder.name.setText(cipher.name);
-            Log.i(TAG, "");
-            holder.KeyExchange_Type.setText(cipher.key_echange);
-//            holder.KeyExchange_KS.setText(cypherProto.KeyExchange[1]);
-            Log.i(TAG, "");
-            holder.Authentification_Type.setText(cipher.authentification);
-//            holder.Authentification_KS.setText();
-            Log.i(TAG, "");
-            if (cipher.encryption != null) {
-                holder.Encryption_Type.setText(cipher.encryption.get(0).toString());
-                holder.Encryption_KZ.setText(cipher.encryption.get(1).toString());
-                holder.Encryption_BZ.setText(cipher.encryption.get(2).toString());
-                holder.Encryption_Mode.setText(cipher.encryption.get(3).toString());
+            holder.name.setText(cipher.name.toUpperCase());
+            holder.keyExchange.setText(cipher.key_echange.toUpperCase());
+            holder.Authentification.setText(cipher.authentification.toUpperCase());
+           if (cipher.encryption != null) {
+                holder.Encryption_Type.setText(cipher.encryption.get(0).toString().toUpperCase());
+                holder.Encryption_KZ.setText(cipher.encryption.get(1).toString().toUpperCase());
+                holder.Encryption_BZ.setText(cipher.encryption.get(2).toString().toUpperCase());
+                holder.Encryption_Mode.setText(cipher.encryption.get(3).toString().toUpperCase());
             }
             if (cipher.hmac != null) {
                 Log.i(TAG, "");
-                holder.MAC_Type.setText(cipher.hmac.name);
-                holder.MAC_KS.setText(cipher.hmac.size + "");
+                holder.MAC_Type.setText(cipher.hmac.name.toUpperCase());
+                String size = (cipher.hmac.size + "").toUpperCase();
+                holder.MAC_KS.setText(size);
             } else {
                 Log.e(TAG, "no hmac");
             }
+            holder.rootViewItemCryptcheck.setBackgroundColor(mActivity.getResources().getColor(R.color.material_blue_grey_100));
        }
     }
 
@@ -72,6 +74,8 @@ public class                    CryptCheckAdapter extends RecyclerView.Adapter<C
     }
 
     public void                 putOnListOfTrame(final ArrayList<Ciphers> protoArrayList) {
+        this.protos = null;
+        notifyDataSetChanged();
         this.protos = protoArrayList;
         notifyDataSetChanged();
     }
@@ -82,4 +86,10 @@ public class                    CryptCheckAdapter extends RecyclerView.Adapter<C
         notifyDataSetChanged();
     }
 
+    public void                 clear() {
+        if (protos != null) {
+            this.protos.clear();
+            notifyDataSetChanged();
+        }
+    }
 }

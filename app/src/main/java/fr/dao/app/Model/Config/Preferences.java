@@ -17,7 +17,7 @@ public class                Preferences {
     @SerializedName("MaxSizeOfDbSpaceInMB")
     public int              maxSizeOfDbSpace = 200;
     @SerializedName("DefaultSite")
-    public String           defaultTarget = "blog.valvin.fr";
+    public String           defaultTarget = "nuxitar.fr";
 
 
     @SerializedName("PATH_TO_FILES")

@@ -164,7 +164,7 @@ public class                    DashboardAttackFgmnt extends MyFragment {
 
         Description description = mChart.getDescription();
         description.setTextColor(ContextCompat.getColor(mActivity, R.color.white_secondary));
-        description.setText("5 types d'attaques");
+        description.setText("");
         mChart.setData(data);
         mChart.invalidate();
 

@@ -153,12 +153,12 @@
                 android:layout_gravity="bottom|right"
                 android:layout_marginBottom="55dp"
                 android:layout_marginRight="8dp"
+                android:visibility="gone"
                 app:contentScrim="@android:color/transparent"
                 app:layout_behavior="fr.dao.app.View.HostDetail.HostDetailBehavior"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.5"
-                app:srcCompat="@mipmap/ic_ssh_icon"
-                android:visibility="gone" />
+                app:srcCompat="@mipmap/ic_ssh_icon" />
 
             <ImageView
                 android:id="@+id/hostDetailIcon2"

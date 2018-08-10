@@ -8,14 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+
+import com.github.mikephil.charting.charts.HorizontalBarChart;
 
 import java.io.IOException;
 
 import fr.dao.app.Core.Api.CryptCheckApi;
 import fr.dao.app.Core.Configuration.Singleton;
-import fr.dao.app.Model.Config.CryptCheckModel;
 import fr.dao.app.Model.Config.Cryptcheck.CryptCheckScan;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Adapter.CryptCheckAdapter;
@@ -26,33 +25,34 @@ public class                    CryptFrgmnt extends MyFragment  {
     private String              TAG = "NmapOutputView";
     private CryptCheckActivity  mActivity;
     private CryptFrgmnt         mInstance = this;
-    private ConstraintLayout    mCoordinatorLayout;
-    private TextView            output;
-    private ProgressBar         progressBarCrypt;
+    private ConstraintLayout    mCoordinatorLayout, header;
     private RecyclerView        mRV_cryptcheck;
     private String              mDefaultSite = Singleton.getInstance().Settings.getUserPreferences().defaultTarget;
     private CryptCheckAdapter   mAdapter;
+    private CryptCheckScan      mScan;
 
     public View                 onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_cryptcheck, container, false);
         mActivity = (CryptCheckActivity)getActivity();
         initXml(rootView);
         init();
+        mActivity.updateHeader(false);
         return rootView;
     }
 
-    public boolean              start() {
-        progressBarCrypt.setVisibility(View.VISIBLE);
-        try {
-            CryptCheckApi.getInstance().callForSite(mInstance, mDefaultSite);
-        } catch (IOException e) {
-            e.printStackTrace();
-            onResponseServer("");
-        }
-        return true;
+    private void                initXml(View rootView) {
+        mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
+        mRV_cryptcheck = rootView.findViewById(R.id.RV_cryptcheck);
+
+        header = rootView.findViewById(R.id.header);
     }
 
     public void                 init() {
+        if (mAdapter == null) {
+            mAdapter = new CryptCheckAdapter(mActivity);
+            mRV_cryptcheck.setAdapter(mAdapter);
+            mRV_cryptcheck.setLayoutManager(new LinearLayoutManager(mActivity));
+        }
         final QuestionDialogInput dialog = new QuestionDialogInput(mActivity)
                 .hideSecondInput()
                 .setIcon(R.mipmap.ic_cryptcheck_png) //IMAGE HOST
@@ -64,37 +64,48 @@ public class                    CryptFrgmnt extends MyFragment  {
                 String defaultSite = dialog.getFirstInputQuestion();
                 mDefaultSite = (defaultSite.isEmpty()) ? mDefaultSite : defaultSite;
                 mActivity.setToolbarTitle(null, mDefaultSite);
+                mScan = null;
+                mActivity.updateHeader(true);
+                mAdapter.clear();
                 start();
             }
         }).show();
-        mAdapter = new CryptCheckAdapter(mActivity);
-        mRV_cryptcheck.setAdapter(mAdapter);
-        mRV_cryptcheck.setLayoutManager(new LinearLayoutManager(mActivity));
     }
 
-    private void                initXml(View rootView) {
-        mCoordinatorLayout = rootView.findViewById(R.id.Coordonitor);
-        output = rootView.findViewById(R.id.textView2);
-        progressBarCrypt = rootView.findViewById(R.id.progressBarCrypt);
-        mRV_cryptcheck = rootView.findViewById(R.id.RV_cryptcheck);
+    public boolean              start() {
+        mActivity.mProgressBar.setVisibility(View.VISIBLE);
+        try {
+            CryptCheckApi.getInstance().callForSite(mInstance, mDefaultSite);
+        } catch (IOException e) {
+            e.printStackTrace();
+            onResponseServer("");
+        }
+        return true;
     }
 
     public void                 onResponseServer(String result) {
         if (result == null || result.isEmpty())
-            mActivity.showSnackbar("Server didnt answer");
-        else
-            output.setText(result);
-        progressBarCrypt.setVisibility(View.GONE);
+            mActivity.showSnackbar(result);
+        mActivity.mProgressBar.setVisibility(View.GONE);
     }
 
     public void                 onResponseServer(final CryptCheckScan scan) {
+        mScan = scan;
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
-                output.setText("RESULT");
-                /*TODO: TU DOIS CRER UNE LISTE DE CRYPTMODELS.PROTOCOL POUR LADAPTER ET FAIRE UN TRICKS POUR LES TITRES*/
-                mAdapter.putOnListOfTrame(scan.getProtos());
-                progressBarCrypt.setVisibility(View.GONE);
+                reloadView();
+                mActivity.onResponseServer(scan);
+                mActivity.mProgressBar.setVisibility(View.GONE);
             }
         });
     }
+
+    public void                 reloadView() {
+        if (mScan != null) {
+            mActivity.updateHeader(false);
+            mAdapter.putOnListOfTrame(mScan.getProtos());
+        }
+    }
+
+
 }

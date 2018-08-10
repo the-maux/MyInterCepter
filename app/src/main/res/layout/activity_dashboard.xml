@@ -81,11 +81,11 @@
 
             <ImageView
                 android:id="@+id/iconSettings2"
-                android:layout_width="40dp"
+                android:layout_width="@dimen/icon_generic_size"
                 android:layout_height="0dp"
                 android:layout_marginLeft="8dp"
                 android:baselineAlignBottom="false"
-                android:padding="6dp"
+                android:padding="12dp"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/primary_white"
                 android:visibility="visible"
@@ -98,10 +98,8 @@
 
             <ImageView
                 android:id="@+id/settingsIcon"
-                android:layout_width="40dp"
+                android:layout_width="@dimen/icon_generic_size"
                 android:layout_height="0dp"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
                 android:soundEffectsEnabled="true"
                 android:tint="@color/primary_white"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
