@@ -48,6 +48,8 @@ public class                    CryptCheckAdapter extends RecyclerView.Adapter<C
             holder.MAC_Type.setText("");
             holder.MAC_KS.setText("");
         } else {
+            holder.name.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                    mActivity.getResources().getDimension(R.dimen.text_size_2));
             holder.name.setText(cipher.name.toUpperCase());
             holder.keyExchange.setText(cipher.key_echange.toUpperCase());
             holder.Authentification.setText(cipher.authentification.toUpperCase());
