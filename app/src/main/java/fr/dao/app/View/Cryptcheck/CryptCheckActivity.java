@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
@@ -40,6 +41,7 @@ import fr.dao.app.Model.Config.Cryptcheck.CryptCheckScan;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
+import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 
 public class CryptCheckActivity extends MyActivity {
     private String              TAG = "CryptCheckActivity";
@@ -193,22 +195,22 @@ public class CryptCheckActivity extends MyActivity {
     }
 
     public void                 onResponseServer(CryptCheckScan scan) {
+        mScan = scan;
         OsImg.setVisibility(View.INVISIBLE);
         grade.setVisibility(View.VISIBLE);
-        setToolbarTitle(scan.host, scan.results.get(0).ip);
-        mScan = scan;
+        setGrade(grade);
+        setToolbarTitle(mScan.host, mScan.results.get(0).ip);
         updateHeader(false);
-        if (scan.results.size() == 1) {
+        if (mScan.results.size() == 1) {
             mTabs.setVisibility(View.GONE);
         } else {
             mTabs.setVisibility(View.VISIBLE);
             mTabs.removeAllTabs();
-            for (int i = 0; i < scan.results.size(); i++) {
-                mTabs.addTab(mTabs.newTab().setText(scan.results.get(i).ip), i);
+            for (int i = 0; i < mScan.results.size(); i++) {
+                mTabs.addTab(mTabs.newTab().setText(mScan.results.get(i).ip), i);
             }
         }
     }
-
 
     public void                updateHeader(boolean nodata) {
         List<BarEntry> entrys;
@@ -255,18 +257,21 @@ public class CryptCheckActivity extends MyActivity {
 
         jcoolGraph.getAxisLeft().setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
         jcoolGraph.getAxisLeft().setGridColor(ContextCompat.getColor(mInstance, R.color.primary_white));
+        jcoolGraph.getAxisLeft().setDrawTopYLabelEntry(true);
         jcoolGraph.getAxisLeft().setDrawLabels(true);
         jcoolGraph.getAxisLeft().setEnabled(true);
         jcoolGraph.getAxisLeft().setAxisMaximum(100f);
         jcoolGraph.getAxisLeft().setAxisMinimum(0f);
         jcoolGraph.getAxisRight().setEnabled(false);
-
+        jcoolGraph.setDrawBorders(true);
+        jcoolGraph.getAxisRight().setDrawZeroLine(true);
         jcoolGraph.setGridBackgroundColor(ContextCompat.getColor(mInstance, R.color.primary_white));
         jcoolGraph.setBorderColor(ContextCompat.getColor(mInstance, R.color.primary_white));
         jcoolGraph.setDescription(description);
         jcoolGraph.setDrawValueAboveBar(true);
-        //jcoolGraph.animateY(2000, Easing.EasingOption.Linear);
-
+        jcoolGraph.animateY(2000, Easing.EasingOption.Linear);
+        jcoolGraph.setBorderColor(R.color.material_blue_300);
+        jcoolGraph.setBorderWidth(0.5f);
         data.setBarWidth(0.9f);
         jcoolGraph.setData(data);
         jcoolGraph.invalidate(); // refresh

@@ -24,15 +24,15 @@ public class                    CryptFrgmnt extends MyFragment  {
     private String              TAG = "NmapOutputView";
     private CryptCheckActivity  mActivity;
     private CryptFrgmnt         mInstance = this;
-    private NestedScrollView    rootViewCryptFragment;
     private RecyclerView        mRV_cryptcheck;
-    private String              mDefaultSite = Singleton.getInstance().Settings.getUserPreferences().defaultTarget;
+    private String              mDefaultSite;
     private CryptCheckAdapter   mAdapter;
-    private CryptCheckScan      mScan;
+    private CryptCheckScan      mScan = null;
 
     public View                 onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_cryptcheck, container, false);
         mActivity = (CryptCheckActivity)getActivity();
+        mDefaultSite = Singleton.getInstance().Settings.getUserPreferences().defaultTarget;
         initXml(rootView);
         init();
         return rootView;
@@ -40,8 +40,6 @@ public class                    CryptFrgmnt extends MyFragment  {
 
     private void                initXml(View rootView) {
         mRV_cryptcheck = rootView.findViewById(R.id.RV_cryptcheck);
-        rootViewCryptFragment = rootView.findViewById(R.id.rootViewCryptFragment);
-        rootViewCryptFragment.setVisibility(View.INVISIBLE);
     }
 
     public void                 init() {
@@ -61,14 +59,16 @@ public class                    CryptFrgmnt extends MyFragment  {
                 String defaultSite = dialog.getFirstInputQuestion();
                 mDefaultSite = (defaultSite.isEmpty()) ? mDefaultSite : defaultSite;
                 mActivity.setToolbarTitle(null, mDefaultSite);
+                if (mScan != null)
+                    ViewAnimate.scaleUp(mActivity, mRV_cryptcheck);
                 mScan = null;
                 mActivity.runOnUiThread(new Runnable() {
                     public void run() {
                         mActivity.mProgressBar.setVisibility(View.VISIBLE);
+                        mActivity.updateHeader(true);
+                        mAdapter.clear();
                     }
                 });
-                mActivity.updateHeader(true);
-                mAdapter.clear();
                 start();
             }
         }).show();
@@ -99,7 +99,6 @@ public class                    CryptFrgmnt extends MyFragment  {
                 mActivity.mProgressBar.setVisibility(View.GONE);
                 reloadView();
                 mActivity.onResponseServer(scan);
-                ViewAnimate.reveal(mActivity, rootViewCryptFragment, null);
             }
         });
     }
@@ -107,6 +106,7 @@ public class                    CryptFrgmnt extends MyFragment  {
     public void                 reloadView() {
         if (mScan != null) {
             mAdapter.putOnListOfTrame(mScan.getProtos());
+            ViewAnimate.scaleUp(mActivity, mRV_cryptcheck);
         }
     }
 

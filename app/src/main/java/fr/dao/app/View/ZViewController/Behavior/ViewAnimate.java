@@ -51,14 +51,14 @@ public class                    ViewAnimate {
 
         }
     }
-    public static void          FadeAnimateReveal(final MyActivity context, final View fab, final Runnable runnable) {
+    public static void          FadeAnimateReveal(final MyActivity context, final View view, final Runnable runnable) {
         context.runOnUiThread(new Runnable() {
             public void run() {
                 Animation scaleUp = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
                 scaleUp.setDuration(LONG_DURATION);
                 scaleUp.setAnimationListener(new Animation.AnimationListener() {
                     public void onAnimationStart(Animation animation) {
-                        fab.setVisibility(View.VISIBLE);
+                        view.setVisibility(View.VISIBLE);
                     }
                     public void onAnimationEnd(Animation animation) {
                         if (runnable != null) {
@@ -74,18 +74,18 @@ public class                    ViewAnimate {
                 });
                 scaleUp.setFillEnabled(true);
                 scaleUp.setFillBefore(true);
-                fab.startAnimation(scaleUp);
+                view.startAnimation(scaleUp);
             }
         });
     }
-    public static void reveal(final MyActivity context, final View fab, final Runnable runnable) {
+    public static void          reveal(final MyActivity context, final View view, final Runnable runnable) {
         context.runOnUiThread(new Runnable() {
             public void run() {
                 Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.fab_scale_up);
                 scaleUp.setDuration(SHORT_DURATION);
                 scaleUp.setAnimationListener(new Animation.AnimationListener() {
                     public void onAnimationStart(Animation animation) {
-                        fab.setVisibility(View.VISIBLE);
+                        view.setVisibility(View.VISIBLE);
                     }
                     public void onAnimationEnd(Animation animation) {
                         if (runnable != null) {
@@ -99,26 +99,26 @@ public class                    ViewAnimate {
                     }
                     public void onAnimationRepeat(Animation animation) {}
                 });
-                fab.startAnimation(scaleUp);
+                view.startAnimation(scaleUp);
             }
         });
     }
-    public static void          FabAnimateHide(Context context, final View fab, final Runnable runnable) {
+    public static void          FabAnimateHide(Context context, final View view, final Runnable runnable) {
         Animation scaleDown = AnimationUtils.loadAnimation(context, R.anim.fab_scale_down);
         scaleDown.setDuration(LONG_DURATION);
         scaleDown.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {}
             public void onAnimationEnd(Animation animation) {
-                fab.setVisibility(View.GONE);
+                view.setVisibility(View.GONE);
                 if (runnable != null) {
                     new Thread(runnable).start();
                 }
             }
             public void onAnimationRepeat(Animation animation) {}
         });
-        fab.startAnimation(scaleDown);
+        view.startAnimation(scaleDown);
     }
-    public static void reveal(Context context, final FloatingActionButton fab) {
+    public static void          reveal(Context context, final FloatingActionButton fab) {
         Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.fab_scale_up);
         scaleUp.setDuration(LONG_DURATION);
         scaleUp.setAnimationListener(new Animation.AnimationListener() {
@@ -143,16 +143,28 @@ public class                    ViewAnimate {
         fab.startAnimation(scaleDown);
     }
 
-    public static void          scaleUp(Context context, final View mMenuFAB) {
+    public static void          scaleUp(Context context, final View view) {
         Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.fab_scale_up);
         scaleUp.setDuration(1250);
         scaleUp.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
-                mMenuFAB.setVisibility(View.VISIBLE);
+                view.setVisibility(View.VISIBLE);
             }
             public void onAnimationEnd(Animation animation) {}
             public void onAnimationRepeat(Animation animation) {}
         });
-        mMenuFAB.startAnimation(scaleUp);
+        view.startAnimation(scaleUp);
+    }
+    public static void          scaleDown(Context context, final View view) {
+        Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.fab_scale_down);
+        scaleUp.setDuration(1250);
+        scaleUp.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+                view.setVisibility(View.VISIBLE);
+            }
+            public void onAnimationEnd(Animation animation) {}
+            public void onAnimationRepeat(Animation animation) {}
+        });
+        view.startAnimation(scaleUp);
     }
 }

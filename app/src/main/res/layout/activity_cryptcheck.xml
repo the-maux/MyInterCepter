@@ -28,7 +28,7 @@
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/headerAppBar"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/collapsing_stats"
+                android:layout_height="wrap_content"
                 android:background="@color/cryptcheckPrimary"
                 app:layout_collapseMode="pin">
 
@@ -138,15 +138,16 @@
                 <android.support.design.widget.TabLayout
                     android:id="@+id/tabs"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="@dimen/app_bar_height"
                     android:layout_margin="1dp"
                     android:background="@color/cryptcheckPrimary"
                     android:visibility="gone"
                     app:layout_collapseMode="pin"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/guideline11"
-                    app:tabMode="scrollable"
-                    tools:layout_editor_absoluteX="1dp">
+                    app:tabMode="scrollable">
 
                     <android.support.design.widget.TabItem
                         android:id="@+id/tabItem"
@@ -200,6 +201,7 @@
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/cryptcheckPrimary"
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
         <ProgressBar
@@ -219,6 +221,7 @@
             android:id="@+id/frame_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:background="@color/cryptcheckPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="parent"
