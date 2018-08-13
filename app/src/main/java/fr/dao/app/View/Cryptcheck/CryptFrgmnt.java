@@ -2,7 +2,6 @@ package fr.dao.app.View.Cryptcheck;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -94,11 +93,12 @@ public class                    CryptFrgmnt extends MyFragment  {
 
     public void                 onResponseServer(final CryptCheckScan scan) {
         mScan = scan;
+        scan.dump();
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
+                mActivity.mProgressBar.setVisibility(View.GONE);
                 reloadView();
                 mActivity.onResponseServer(scan);
-                mActivity.mProgressBar.setVisibility(View.GONE);
                 ViewAnimate.reveal(mActivity, rootViewCryptFragment, null);
             }
         });
@@ -106,7 +106,6 @@ public class                    CryptFrgmnt extends MyFragment  {
 
     public void                 reloadView() {
         if (mScan != null) {
-            mActivity.updateHeader(false);
             mAdapter.putOnListOfTrame(mScan.getProtos());
         }
     }

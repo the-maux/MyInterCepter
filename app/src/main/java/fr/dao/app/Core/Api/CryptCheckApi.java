@@ -51,10 +51,10 @@ public class                            CryptCheckApi {
                                 String ip = resultHost.getAsJsonObject().getAsJsonObject("host").getAsJsonPrimitive("ip").getAsString();
                                 if (ip.contentEquals(cryptcheckResult.ip)) {
                                     JsonObject grade = resultHost.getAsJsonObject().getAsJsonObject("grade").getAsJsonObject("details");
-                                    cryptcheckResult.grade_score = grade.getAsJsonPrimitive("score").getAsInt();
-                                    cryptcheckResult.grade_protocol = grade.getAsJsonPrimitive("protocol").getAsInt();
-                                    cryptcheckResult.grade_key_exchange = grade.getAsJsonPrimitive("key_exchange").getAsInt();
-                                    cryptcheckResult.grade_cipher_strengths = grade.getAsJsonPrimitive("cipher_strengths").getAsInt();
+                                    scan.grade_score = grade.getAsJsonPrimitive("score").getAsInt();
+                                    scan.grade_protocol = grade.getAsJsonPrimitive("protocol").getAsInt();
+                                    scan.grade_key_exchange = grade.getAsJsonPrimitive("key_exchange").getAsInt();
+                                    scan.grade_cipher_strengths = grade.getAsJsonPrimitive("cipher_strengths").getAsInt();
                                 }
                             }
                         }

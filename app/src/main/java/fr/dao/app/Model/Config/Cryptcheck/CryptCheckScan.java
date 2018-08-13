@@ -1,5 +1,7 @@
 package fr.dao.app.Model.Config.Cryptcheck;
 
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ public class                            CryptCheckScan {
     public Date                         updated_at;
 
     public int                          resultOffset = 0;
+    public float                        grade_score = 0, grade_protocol = 0, grade_key_exchange = 0, grade_cipher_strengths = 0;
 
     public class                     CryptcheckResult {
         @SerializedName("hostname")
@@ -36,7 +39,6 @@ public class                            CryptCheckScan {
         @SerializedName("grade")
         public String                grade;
 
-        public int grade_score = 0, grade_protocol = 0, grade_key_exchange = 0, grade_cipher_strengths = 0;
     }
 
     public ArrayList<CryptcheckResult>  getResults() {
@@ -70,6 +72,19 @@ public class                            CryptCheckScan {
     public void                         updateOffset(int position) {
         this.resultOffset = position;
     }
+
+    public void dump() {
+
+        Log.i("CryptCheckScan", "---------------------------");
+        Log.i("CryptCheckScan", "SCAN:" + host + "\t[SCORE:" + grade_score +";PROTO" + grade_protocol + ";KEYEXCHANGE" + grade_key_exchange + ";CIPHER" + grade_cipher_strengths+ "]");
+        for (CryptcheckResult result : results) {
+            Log.i("CryptCheckScan", "SCAN:" + result.ip + " -> " + result.grade);
+            Log.i("CryptCheckScan", "\tcert[" + result.handshakes.certs.size() + "]& cipher[" + (result.handshakes.ciphers.size() + result.handshakes.ciphersPreferences.size()) + "]");
+        }
+
+    }
+
+
 
     private void                        sortThis(HashMap<String, ArrayList<Ciphers>> proto_cypher, ArrayList<Ciphers> ciphers) {
         for (Ciphers cipher : ciphers) {

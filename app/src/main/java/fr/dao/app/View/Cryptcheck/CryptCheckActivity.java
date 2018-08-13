@@ -19,7 +19,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
@@ -41,7 +40,6 @@ import fr.dao.app.Model.Config.Cryptcheck.CryptCheckScan;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
-import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 
 public class CryptCheckActivity extends MyActivity {
     private String              TAG = "CryptCheckActivity";
@@ -199,8 +197,9 @@ public class CryptCheckActivity extends MyActivity {
         grade.setVisibility(View.VISIBLE);
         setToolbarTitle(scan.host, scan.results.get(0).ip);
         mScan = scan;
+        updateHeader(false);
         if (scan.results.size() == 1) {
-
+            mTabs.setVisibility(View.GONE);
         } else {
             mTabs.setVisibility(View.VISIBLE);
             mTabs.removeAllTabs();
@@ -225,6 +224,7 @@ public class CryptCheckActivity extends MyActivity {
         }
 
         MyBarDataSet set = new MyBarDataSet(entrys, "");
+        set.setDrawValues(true);
         set.setColors(ContextCompat.getColor(mInstance, R.color.material_green_500),
                 ContextCompat.getColor(mInstance, R.color.material_blue_800),
                 ContextCompat.getColor(mInstance, R.color.material_deep_orange_400),
@@ -243,34 +243,31 @@ public class CryptCheckActivity extends MyActivity {
         description.setText((mScan == null) ? "" : Words.getGenericLightDateFormat(mScan.date));
         description.setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
 
+        jcoolGraph.getXAxis().setEnabled(true);
         jcoolGraph.getXAxis().setValueFormatter(getSessionValueFormater());
-        jcoolGraph.getXAxis().mAxisMaximum = 4;
-        jcoolGraph.getXAxis().mAxisRange = 4;
-        jcoolGraph.getXAxis().setLabelCount(4);
         jcoolGraph.getXAxis().setDrawAxisLine(true);
         jcoolGraph.getXAxis().setDrawGridLines(true);
+        jcoolGraph.getXAxis().setLabelCount(4);
         jcoolGraph.getXAxis().setGridColor(ContextCompat.getColor(mInstance, R.color.primary_white));
         jcoolGraph.getXAxis().setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
         jcoolGraph.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        jcoolGraph.getXAxis().setAxisMaximum(4f);
-    //    jcoolGraph.getXAxis().setAxisMinimum(0f);
 
-        jcoolGraph.getAxisRight().setAxisMaximum(100f);
-        jcoolGraph.getAxisRight().setAxisMinimum(0f);
-        jcoolGraph.getAxisRight().setDrawLabels(true);
-        jcoolGraph.getAxisRight().setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
-
-        jcoolGraph.getAxisRight().setGridColor(ContextCompat.getColor(mInstance, R.color.primary_white));
 
         jcoolGraph.getAxisLeft().setTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
         jcoolGraph.getAxisLeft().setGridColor(ContextCompat.getColor(mInstance, R.color.primary_white));
         jcoolGraph.getAxisLeft().setDrawLabels(true);
+        jcoolGraph.getAxisLeft().setEnabled(true);
         jcoolGraph.getAxisLeft().setAxisMaximum(100f);
-        jcoolGraph.getAxisLeft().setAxisMaximum(-0.1f);
+        jcoolGraph.getAxisLeft().setAxisMinimum(0f);
+        jcoolGraph.getAxisRight().setEnabled(false);
+
         jcoolGraph.setGridBackgroundColor(ContextCompat.getColor(mInstance, R.color.primary_white));
         jcoolGraph.setBorderColor(ContextCompat.getColor(mInstance, R.color.primary_white));
         jcoolGraph.setDescription(description);
-        jcoolGraph.animateY(2000, Easing.EasingOption.Linear);
+        jcoolGraph.setDrawValueAboveBar(true);
+        //jcoolGraph.animateY(2000, Easing.EasingOption.Linear);
+
+        data.setBarWidth(0.9f);
         jcoolGraph.setData(data);
         jcoolGraph.invalidate(); // refresh
     }
@@ -278,15 +275,15 @@ public class CryptCheckActivity extends MyActivity {
     private List<BarEntry>      initLineDataSet() {
         List<BarEntry> defenseEntry = new ArrayList<BarEntry>();
         if (mScan != null) {
-            defenseEntry.add(new BarEntry(0f, mScan.results.get(mScan.resultOffset).grade_score));
-            defenseEntry.add(new BarEntry(1f, mScan.results.get(mScan.resultOffset).grade_cipher_strengths));
-            defenseEntry.add(new BarEntry(2f, mScan.results.get(mScan.resultOffset).grade_key_exchange));
-            defenseEntry.add(new BarEntry(3f, mScan.results.get(mScan.resultOffset).grade_protocol));
-        } else {
-            defenseEntry.add(new BarEntry(0f, 0f));
-            defenseEntry.add(new BarEntry(1f, 0f));
-            defenseEntry.add(new BarEntry(2f, 0f));
-            defenseEntry.add(new BarEntry(3f, 0f));
+            defenseEntry.add(new BarEntry(0f, mScan.grade_score));
+            defenseEntry.add(new BarEntry(1f, mScan.grade_cipher_strengths));
+            defenseEntry.add(new BarEntry(2f, mScan.grade_key_exchange));
+            defenseEntry.add(new BarEntry(3f, mScan.grade_protocol));
+//            defenseEntry.add(new BarEntry(0f, 0f));
+//            defenseEntry.add(new BarEntry(1f, 20f));
+//            defenseEntry.add(new BarEntry(2f, 30f));
+//            defenseEntry.add(new BarEntry(3f, 40f));
+
         }
         return defenseEntry;
     }
@@ -317,7 +314,7 @@ public class CryptCheckActivity extends MyActivity {
         }
 
         public int getColor(int index) {
-            if (getEntryForIndex(index).getY()  <= 25) {
+            if (getEntryForIndex(index).getY() <= 25) {
                 return mColors.get(3);
             } else if (getEntryForIndex(index).getY() <= 50) {
                 return mColors.get(2);
