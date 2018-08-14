@@ -24,6 +24,7 @@ public class                            CryptCheckScan {
 
     public int                          resultOffset = 0;
     public float                        grade_score = 0, grade_protocol = 0, grade_key_exchange = 0, grade_cipher_strengths = 0;
+    public boolean                      isTLS10 = false, isTLS11 = false, isTLS12 = false, isTLS13 = false;
 
     public class                     CryptcheckResult {
         @SerializedName("hostname")
@@ -45,24 +46,53 @@ public class                            CryptCheckScan {
         return results;
     }
 
+    public ArrayList<Ciphers>           getProtos(boolean isTLS10OK, boolean isTLS11OK, boolean isTLS12OK, boolean isTLS13OK) {
+        HashMap<String, ArrayList<Ciphers>> proto_cypher = new HashMap<>();
+        sortThis(proto_cypher, results.get(resultOffset).handshakes.ciphers);
+        sortThis(proto_cypher, results.get(resultOffset).handshakes.ciphersPreferences);
+        ArrayList<Ciphers> ciphers = new ArrayList<>();
+        if (proto_cypher.get("TLSv1_0") != null && isTLS10OK)  {
+            ciphers.add(new Ciphers("TLSv1_0"));
+            ciphers.addAll(proto_cypher.get("TLSv1_0"));
+        }
+        if (proto_cypher.get("TLSv1_1") != null && isTLS11OK)  {
+            ciphers.add(new Ciphers("TLSv1_1"));
+            ciphers.addAll(proto_cypher.get("TLSv1_1"));
+        }
+        if (proto_cypher.get("TLSv1_2") != null && isTLS12OK)  {
+            ciphers.add(new Ciphers("TLSv1_2"));
+            ciphers.addAll(proto_cypher.get("TLSv1_2"));
+        }
+        if (proto_cypher.get("TLSv1_3") != null && isTLS13OK)  {
+            ciphers.add(new Ciphers("TLSv1_3"));
+            ciphers.addAll(proto_cypher.get("TLSv1_3"));
+        }
+        return ciphers;
+    }
+
+
     public ArrayList<Ciphers>           getProtos() {
         HashMap<String, ArrayList<Ciphers>> proto_cypher = new HashMap<>();
         sortThis(proto_cypher, results.get(resultOffset).handshakes.ciphers);
         sortThis(proto_cypher, results.get(resultOffset).handshakes.ciphersPreferences);
         ArrayList<Ciphers> ciphers = new ArrayList<>();
         if (proto_cypher.get("TLSv1_0") != null)  {
+            isTLS10 = true;
             ciphers.add(new Ciphers("TLSv1_0"));
             ciphers.addAll(proto_cypher.get("TLSv1_0"));
         }
         if (proto_cypher.get("TLSv1_1") != null)  {
+            isTLS11 = true;
             ciphers.add(new Ciphers("TLSv1_1"));
             ciphers.addAll(proto_cypher.get("TLSv1_1"));
         }
         if (proto_cypher.get("TLSv1_2") != null)  {
+            isTLS12 = true;
             ciphers.add(new Ciphers("TLSv1_2"));
             ciphers.addAll(proto_cypher.get("TLSv1_2"));
         }
         if (proto_cypher.get("TLSv1_3") != null)  {
+            isTLS13 = true;
             ciphers.add(new Ciphers("TLSv1_3"));
             ciphers.addAll(proto_cypher.get("TLSv1_3"));
         }

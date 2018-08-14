@@ -1,7 +1,10 @@
 package fr.dao.app.View.Cryptcheck;
 
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -14,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -41,13 +45,14 @@ import fr.dao.app.Model.Config.Cryptcheck.CryptCheckScan;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Activity.MyActivity;
 import fr.dao.app.View.ZViewController.Behavior.MyGlideLoader;
-import fr.dao.app.View.ZViewController.Behavior.ViewAnimate;
 
 public class CryptCheckActivity extends MyActivity {
     private String              TAG = "CryptCheckActivity";
     private CryptCheckActivity mInstance = this;
     private Singleton           mSingleton = Singleton.getInstance();
     private CoordinatorLayout   mCoordinatorLayout;
+    private CollapsingToolbarLayout settings_menu_hostdetail;
+    private ConstraintLayout    headerAppBarStat;
     private CryptFrgmnt         mFragment;
     private AppBarLayout        appBarLayout;
     private Toolbar             mToolbar;
@@ -75,7 +80,8 @@ public class CryptCheckActivity extends MyActivity {
         mScanType = findViewById(R.id.toolbarBtn1);
         OsImg = findViewById(R.id.OsImg);
         grade = findViewById(R.id.grade);
-        findViewById(R.id.rootView).setBackgroundResource(R.color.black_primary);
+        settings_menu_hostdetail = findViewById(R.id.settings_menu_hostdetail);
+        headerAppBarStat = findViewById(R.id.headerAppBarStat);
         appBarLayout = findViewById(R.id.appBar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -87,20 +93,15 @@ public class CryptCheckActivity extends MyActivity {
         jcoolGraph = findViewById(R.id.cryptGraph);
         mSettingsMenu.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //mToolbar.showOverflowMenu();
                 PopupMenu popup = new PopupMenu(mInstance, mSettingsMenu);
                 MenuInflater inflater = popup.getMenuInflater();
                 inflater.inflate(R.menu.sniff_bottom_bar, popup.getMenu());
                 popup.show();
             }
         });
-
-        MyGlideLoader.loadDrawableInImageView(this, R.mipmap.ic_cryptcheck_png, OsImg, true);
         searchNewSite.setOnClickListener(onSearchNewSiteClick());
         mScanType.setVisibility(View.GONE);
-        setToolbarTitle("Cryptcheck","Https Analyse");
         setStatusBarColor(R.color.cryptcheckPrimary);
-        initTabs();
     }
 
     private View.OnClickListener onSearchNewSiteClick() {
@@ -115,7 +116,7 @@ public class CryptCheckActivity extends MyActivity {
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             public void onTabSelected(TabLayout.Tab tab) {
                 if (mScan != null) {
-                    setGrade(grade);
+                    updateGrade();
                     mScan.updateOffset(tab.getPosition());
                     mFragment.reloadView();
                     setToolbarTitle(null, mScan.results.get(tab.getPosition()).ip);
@@ -126,22 +127,34 @@ public class CryptCheckActivity extends MyActivity {
         });
     }
 
-    private void                setGrade(TextView grade) {
-        String gradeS = mScan.results.get(mScan.resultOffset).grade;
-        if (gradeS.contains("A") || gradeS.contains("B")) {
-            grade.setTextColor(ContextCompat.getColor(mInstance, R.color.green));
-        } else if (gradeS.contains("C") || gradeS.contains("D")) {
-            grade.setTextColor(ContextCompat.getColor(mInstance, R.color.material_orange_700));
+    private void updateGrade() {
+        if (mScan == null) {
+            OsImg.setVisibility(View.VISIBLE);
+            grade.setVisibility(View.INVISIBLE);
+            MyGlideLoader.loadDrawableInImageView(this, R.mipmap.ic_cryptcheck_png, OsImg, true);
+        } else {
+            OsImg.setVisibility(View.INVISIBLE);
+            grade.setVisibility(View.VISIBLE);
+            String gradeS = mScan.results.get(mScan.resultOffset).grade;
+            if (gradeS.contains("A") || gradeS.contains("B")) {
+                grade.setTextColor(ContextCompat.getColor(mInstance, R.color.green));
+            } else if (gradeS.contains("C") || gradeS.contains("D")) {
+                grade.setTextColor(ContextCompat.getColor(mInstance, R.color.material_orange_700));
 
-        } else if (gradeS.contains("E") || gradeS.contains("F")) {
-            grade.setTextColor(ContextCompat.getColor(mInstance, R.color.material_orange_700));
+            } else if (gradeS.contains("E") || gradeS.contains("F")) {
+                grade.setTextColor(ContextCompat.getColor(mInstance, R.color.material_orange_700));
+            }
+            grade.setText(gradeS);
         }
-        grade.setText(gradeS);
     }
 
     private void                init() {
+        setToolbarTitle("Cryptcheck","Https Analyse");
+        updateGrade();
+        initTabs();
         initFragment();
         updateHeader(true);
+        updateCollapSize();
         mTabs.setVisibility(View.GONE);
     }
 
@@ -196,12 +209,11 @@ public class CryptCheckActivity extends MyActivity {
 
     public void                 onResponseServer(CryptCheckScan scan) {
         mScan = scan;
-        OsImg.setVisibility(View.INVISIBLE);
-        grade.setVisibility(View.VISIBLE);
-        setGrade(grade);
         setToolbarTitle(mScan.host, mScan.results.get(0).ip);
+        updateGrade();
+        updateCollapSize();
         updateHeader(false);
-        if (mScan.results.size() == 1) {
+        if (mScan == null || mScan.results.size() == 1) {
             mTabs.setVisibility(View.GONE);
         } else {
             mTabs.setVisibility(View.VISIBLE);
@@ -212,7 +224,7 @@ public class CryptCheckActivity extends MyActivity {
         }
     }
 
-    public void                updateHeader(boolean nodata) {
+    public void                 updateHeader(boolean nodata) {
         List<BarEntry> entrys;
         if (nodata) {
             if (jcoolGraph != null) {
@@ -277,6 +289,26 @@ public class CryptCheckActivity extends MyActivity {
         jcoolGraph.invalidate(); // refresh
     }
 
+    private void                updateCollapSize() {
+        ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) headerAppBarStat.getLayoutParams();
+        Resources r = getResources();
+        lp.setMargins(0, 0,0,0);
+        headerAppBarStat.requestLayout();
+        int px;
+        if (mScan == null || mScan.results.size() == 1) {
+            Log.d(TAG, "Top:NOTABS");
+            px = (int) (r.getDimension(R.dimen.app_bar_height) * Resources.getSystem().getDisplayMetrics().density);
+            lp.setMargins(0, (int)r.getDimension(R.dimen.app_bar_height),0,0);
+            headerAppBarStat.requestLayout();
+        } else {
+            Log.d(TAG, "Top:NOTABS");
+            px = (int) (r.getDimension(R.dimen.collapsing_stats) * Resources.getSystem().getDisplayMetrics().density);
+            lp.setMargins(0, (int)r.getDimension(R.dimen.collapsing_stats),0,0);
+            headerAppBarStat.requestLayout();
+        }
+
+    }
+
     private List<BarEntry>      initLineDataSet() {
         List<BarEntry> defenseEntry = new ArrayList<BarEntry>();
         if (mScan != null) {
@@ -293,8 +325,18 @@ public class CryptCheckActivity extends MyActivity {
         return defenseEntry;
     }
 
-    public IAxisValueFormatter getSessionValueFormater() {
+    public IAxisValueFormatter  getSessionValueFormater() {
         return new CryptCheckActivity.MyCustomXAxisValueFormatter();
+    }
+
+    public void                 newSearch(String host) {
+        mScan = null;
+        updateGrade();
+        updateCollapSize();
+        updateHeader(true);
+        mTabs.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
+        setToolbarTitle(host, "Scan in progress");
     }
 
     public class MyCustomXAxisValueFormatter implements IAxisValueFormatter {

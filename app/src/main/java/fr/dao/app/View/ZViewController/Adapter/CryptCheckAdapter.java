@@ -8,18 +8,21 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import java.util.ArrayList;
 
 import fr.dao.app.Model.Config.Cryptcheck.Ciphers;
+import fr.dao.app.Model.Config.Cryptcheck.CryptCheckScan;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Adapter.Holder.CryptCheckHolder;
 
 public class                    CryptCheckAdapter extends RecyclerView.Adapter<CryptCheckHolder> {
     private String              TAG = "CryptCheckAdapter";
-    private ArrayList<Ciphers>  protos;
+    private ArrayList<Ciphers>  protos, originalProto;
     private Activity            mActivity;
-
+    private boolean             isTLS10 = true, isTLS11 = true, isTLS12 = true, isTLS13 = true;
+    
     public CryptCheckAdapter(Activity activity) {
         this.mActivity = activity;
     }
@@ -75,10 +78,8 @@ public class                    CryptCheckAdapter extends RecyclerView.Adapter<C
         return protos == null ? 0 : protos.size();
     }
 
-    public void                 putOnListOfTrame(final ArrayList<Ciphers> protoArrayList) {
-        this.protos = null;
-        notifyDataSetChanged();
-        this.protos = protoArrayList;
+    public void                 putOnListOfTrame(final CryptCheckScan scan) {
+        protos = scan.getProtos(isTLS10, isTLS11, isTLS12, isTLS13);
         notifyDataSetChanged();
     }
 
@@ -93,5 +94,21 @@ public class                    CryptCheckAdapter extends RecyclerView.Adapter<C
             this.protos.clear();
             notifyDataSetChanged();
         }
+    }
+
+    public void                 sort(CompoundButton buttonView, final CryptCheckScan scan) {
+        switch (buttonView.getId()) {
+            case R.id.radioButtonTLS10:
+                isTLS10 = !isTLS10;
+                break;
+            case R.id.radioButtonTLS2:
+                isTLS11 = !isTLS11;
+                break;
+            case R.id.radioButtonTLS3:
+                isTLS12 = !isTLS12;
+                break;
+        }
+        protos = scan.getProtos(isTLS10, isTLS11, isTLS12, isTLS13);
+        notifyDataSetChanged();
     }
 }

@@ -155,6 +155,7 @@
                     android:layout_height="0dp"
 
                     android:layout_marginBottom="1dp"
+                    android:layout_marginLeft="1dp"
                     android:layout_marginTop="1dp"
                     android:background="@color/primary_white"
                     android:elevation="2dp"
@@ -297,7 +298,6 @@
                     android:layout_width="60dp"
                     android:layout_height="0dp"
 
-                    android:layout_marginBottom="1dp"
                     android:layout_marginLeft="1dp"
                     android:layout_marginTop="1dp"
                     android:background="@color/primary_white"
@@ -340,9 +340,10 @@
                     android:id="@+id/keySizeMAC"
                     android:layout_width="62dp"
                     android:layout_height="25dp"
-                    android:layout_margin="1dp"
-                    android:background="@color/primary_white"
+                    android:layout_marginRight="1dp"
 
+                    android:layout_marginTop="1dp"
+                    android:background="@color/primary_white"
                     android:elevation="2dp"
                     android:gravity="left|center_vertical"
                     android:padding="3dp"
