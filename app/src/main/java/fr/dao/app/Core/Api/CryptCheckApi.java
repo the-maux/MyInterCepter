@@ -1,5 +1,8 @@
 package fr.dao.app.Core.Api;
 
+import android.os.Handler;
+import android.util.Log;
+
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -9,6 +12,7 @@ import com.koushikdutta.ion.Ion;
 
 import java.io.IOException;
 
+import fr.dao.app.Core.Dora;
 import fr.dao.app.Model.Config.Cryptcheck.CryptCheckScan;
 import fr.dao.app.View.Cryptcheck.CryptFrgmnt;
 
@@ -20,11 +24,13 @@ public class                            CryptCheckApi {
     public static CryptCheckApi         getInstance() {
         return ourInstance;
     }
+    private int                         retrie = 0;
 
     private                             CryptCheckApi() {
     }
 
     public void                         callForSite(final CryptFrgmnt cryptFrgmnt, final String site) throws IOException {
+        Log.d(TAG, ">>>>   " + site);
         Ion.with(cryptFrgmnt)
                 .load(URL + site + ".json")
                 .asJsonObject()
@@ -32,8 +38,28 @@ public class                            CryptCheckApi {
                     public void onCompleted(Exception e, JsonObject result) {
                         if (e != null || result == null) {
                             cryptFrgmnt.onResponseServer("Server didn't answer");
+                            return;
+                        }
+
+                        if (result.get("pending") != null && !result.get("pending").isJsonNull() &&
+                                result.get("pending").getAsBoolean() && retrie++ <= 9) {
+                            new Handler().postDelayed(new Runnable() {
+                                public void run() {
+                                    try {
+                                        cryptFrgmnt.scanInProgress();
+                                        callForSite(cryptFrgmnt, site);
+                                    } catch (IOException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                }
+                            }, 1000);
+                            return;
                         }
                         CryptCheckScan scan = new GsonBuilder().create().fromJson(result, CryptCheckScan.class);
+                        if (scan == null || scan.results == null) {
+                            cryptFrgmnt.onResponseServer("Error in scanning");
+                            return;
+                        }
                         getStat(cryptFrgmnt, site, scan);
                     }
                 });
@@ -58,6 +84,7 @@ public class                            CryptCheckApi {
                                 }
                             }
                         }
+                        scan.getProtos(false, false, false, false); //Hack to init the boolean, stfu /!\ i do what i want
                         cryptFrgmnt.onResponseServer(scan);
                     }
                 });

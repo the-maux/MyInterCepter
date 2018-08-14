@@ -293,20 +293,18 @@ public class CryptCheckActivity extends MyActivity {
         ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) headerAppBarStat.getLayoutParams();
         Resources r = getResources();
         lp.setMargins(0, 0,0,0);
-        headerAppBarStat.requestLayout();
         int px;
         if (mScan == null || mScan.results.size() == 1) {
             Log.d(TAG, "Top:NOTABS");
             px = (int) (r.getDimension(R.dimen.app_bar_height) * Resources.getSystem().getDisplayMetrics().density);
             lp.setMargins(0, (int)r.getDimension(R.dimen.app_bar_height),0,0);
-            headerAppBarStat.requestLayout();
+
         } else {
             Log.d(TAG, "Top:NOTABS");
             px = (int) (r.getDimension(R.dimen.collapsing_stats) * Resources.getSystem().getDisplayMetrics().density);
             lp.setMargins(0, (int)r.getDimension(R.dimen.collapsing_stats),0,0);
-            headerAppBarStat.requestLayout();
         }
-
+        headerAppBarStat.requestLayout();
     }
 
     private List<BarEntry>      initLineDataSet() {
@@ -329,14 +327,12 @@ public class CryptCheckActivity extends MyActivity {
         return new CryptCheckActivity.MyCustomXAxisValueFormatter();
     }
 
-    public void                 newSearch(String host) {
+    public void                     newSearch(String host) {
         mScan = null;
         updateGrade();
         updateCollapSize();
         updateHeader(true);
         mTabs.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
-        setToolbarTitle(host, "Scan in progress");
     }
 
     public class MyCustomXAxisValueFormatter implements IAxisValueFormatter {

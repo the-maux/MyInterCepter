@@ -46,65 +46,47 @@ public class                            CryptCheckScan {
         return results;
     }
 
+    private HashMap<String, ArrayList<Ciphers>> proto_cypher = null;
     public ArrayList<Ciphers>           getProtos(boolean isTLS10OK, boolean isTLS11OK, boolean isTLS12OK, boolean isTLS13OK) {
-        HashMap<String, ArrayList<Ciphers>> proto_cypher = new HashMap<>();
-        sortThis(proto_cypher, results.get(resultOffset).handshakes.ciphers);
-        sortThis(proto_cypher, results.get(resultOffset).handshakes.ciphersPreferences);
+        if (proto_cypher == null) {
+            proto_cypher = new HashMap<>();
+            sortThis(proto_cypher, results.get(resultOffset).handshakes.ciphers);
+            sortThis(proto_cypher, results.get(resultOffset).handshakes.ciphersPreferences);
+        }
         ArrayList<Ciphers> ciphers = new ArrayList<>();
-        if (proto_cypher.get("TLSv1_0") != null && isTLS10OK)  {
-            ciphers.add(new Ciphers("TLSv1_0"));
+        if (isTLS10OK && proto_cypher.get("TLSv1_0") != null)  {
             ciphers.addAll(proto_cypher.get("TLSv1_0"));
         }
-        if (proto_cypher.get("TLSv1_1") != null && isTLS11OK)  {
-            ciphers.add(new Ciphers("TLSv1_1"));
+        if (isTLS11OK && proto_cypher.get("TLSv1_1") != null)  {
             ciphers.addAll(proto_cypher.get("TLSv1_1"));
         }
-        if (proto_cypher.get("TLSv1_2") != null && isTLS12OK)  {
-            ciphers.add(new Ciphers("TLSv1_2"));
+        if (isTLS12OK && proto_cypher.get("TLSv1_2") != null)  {
             ciphers.addAll(proto_cypher.get("TLSv1_2"));
         }
-        if (proto_cypher.get("TLSv1_3") != null && isTLS13OK)  {
-            ciphers.add(new Ciphers("TLSv1_3"));
+        if (isTLS13OK && proto_cypher.get("TLSv1_3") != null)  {
             ciphers.addAll(proto_cypher.get("TLSv1_3"));
         }
         return ciphers;
     }
 
-
-    public ArrayList<Ciphers>           getProtos() {
-        HashMap<String, ArrayList<Ciphers>> proto_cypher = new HashMap<>();
-        sortThis(proto_cypher, results.get(resultOffset).handshakes.ciphers);
-        sortThis(proto_cypher, results.get(resultOffset).handshakes.ciphersPreferences);
-        ArrayList<Ciphers> ciphers = new ArrayList<>();
-        if (proto_cypher.get("TLSv1_0") != null)  {
-            isTLS10 = true;
-            ciphers.add(new Ciphers("TLSv1_0"));
-            ciphers.addAll(proto_cypher.get("TLSv1_0"));
+    public int                          getTlsVersionFromItem(int pastVisibleItems, ArrayList<Ciphers> ciphers) {
+        switch (ciphers.get(pastVisibleItems).protocol) {
+            case "TLSv1_0":
+                return 0;
+            case "TLSv1_1":
+                return 1;
+            case "TLSv1_2":
+                return 2;
         }
-        if (proto_cypher.get("TLSv1_1") != null)  {
-            isTLS11 = true;
-            ciphers.add(new Ciphers("TLSv1_1"));
-            ciphers.addAll(proto_cypher.get("TLSv1_1"));
-        }
-        if (proto_cypher.get("TLSv1_2") != null)  {
-            isTLS12 = true;
-            ciphers.add(new Ciphers("TLSv1_2"));
-            ciphers.addAll(proto_cypher.get("TLSv1_2"));
-        }
-        if (proto_cypher.get("TLSv1_3") != null)  {
-            isTLS13 = true;
-            ciphers.add(new Ciphers("TLSv1_3"));
-            ciphers.addAll(proto_cypher.get("TLSv1_3"));
-        }
-        return ciphers;
+        return 0;
     }
+
 
     public void                         updateOffset(int position) {
         this.resultOffset = position;
     }
 
     public void dump() {
-
         Log.i("CryptCheckScan", "---------------------------");
         Log.i("CryptCheckScan", "SCAN:" + host + "\t[SCORE:" + grade_score +";PROTO" + grade_protocol + ";KEYEXCHANGE" + grade_key_exchange + ";CIPHER" + grade_cipher_strengths+ "]");
         for (CryptcheckResult result : results) {
@@ -114,19 +96,25 @@ public class                            CryptCheckScan {
 
     }
 
-
-
     private void                        sortThis(HashMap<String, ArrayList<Ciphers>> proto_cypher, ArrayList<Ciphers> ciphers) {
         for (Ciphers cipher : ciphers) {
             if (cipher.protocol.contentEquals("TLSv1"))
                 cipher.protocol = "TLSv1_0";
             if (proto_cypher.get(cipher.protocol) != null && cipher.name == null) {
+                if (cipher.protocol.contains("TLSv1_2")) {
+                    isTLS12 = true;
+                } else if ( cipher.protocol.contains("TLSv1_1")) {
+                    isTLS11 = true;
+                } else if (cipher.protocol.contains("TLSv1_0")) {
+                    isTLS10 = true;
+                }
                 continue;/* Protection against title doublon*/
             } else if (proto_cypher.get(cipher.protocol) == null) {
                 proto_cypher.put(cipher.protocol, new ArrayList<Ciphers>());
             }
-            if (cipher.name != null && !cipher.name.isEmpty())
+            if (cipher.name != null && !cipher.name.isEmpty()) {
                 proto_cypher.get(cipher.protocol).add(cipher);
+            }
         }
 
     }

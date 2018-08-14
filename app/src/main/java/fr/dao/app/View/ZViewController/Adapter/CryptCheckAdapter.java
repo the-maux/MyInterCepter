@@ -98,13 +98,13 @@ public class                    CryptCheckAdapter extends RecyclerView.Adapter<C
 
     public void                 sort(CompoundButton buttonView, final CryptCheckScan scan) {
         switch (buttonView.getId()) {
-            case R.id.radioButtonTLS10:
+            case R.id.radioButtonTLS1_0:
                 isTLS10 = !isTLS10;
                 break;
-            case R.id.radioButtonTLS2:
+            case R.id.radioButtonTLS1_1:
                 isTLS11 = !isTLS11;
                 break;
-            case R.id.radioButtonTLS3:
+            case R.id.radioButtonTLS1_2:
                 isTLS12 = !isTLS12;
                 break;
         }
