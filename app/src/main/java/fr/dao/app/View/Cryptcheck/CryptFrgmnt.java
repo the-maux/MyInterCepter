@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +66,8 @@ public class                    CryptFrgmnt extends MyFragment  {
                 }
             });
             rd_tls10.setOnCheckedChangeListener(onCheckedChange());
+            rd_tls11.setOnCheckedChangeListener(onCheckedChange());
+            rd_tls12.setOnCheckedChangeListener(onCheckedChange());
         }
         final QuestionDialogInput dialog = new QuestionDialogInput(mActivity)
                 .hideSecondInput()
@@ -76,19 +79,7 @@ public class                    CryptFrgmnt extends MyFragment  {
             public void onClick(DialogInterface d, int which) {
                 String defaultSite = dialog.getFirstInputQuestion();
                 mDefaultSite = (defaultSite.isEmpty()) ? mDefaultSite : defaultSite;
-                if (mScan != null) {
-                    mActivity.runOnUiThread(new Runnable() {
-                        public void run() {
-                            monitorProto.setVisibility(View.GONE);
-                            mActivity.newSearch(mDefaultSite);
-                            ViewAnimate.scaleDown(mActivity, mRV_cryptcheck);
-                            mAdapter.clear();
-                        }
-                    });
-                }
-                mActivity.mProgressBar.setVisibility(View.VISIBLE);
-                mActivity.setToolbarTitle(null, "Scan in progress");
-                mScan = null;
+
                 start();
             }
         }).show();
@@ -115,13 +106,27 @@ public class                    CryptFrgmnt extends MyFragment  {
         return new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mAdapter.sort(buttonView, mScan);
+                buttonView.setChecked(!isChecked);
+                Log.d(TAG, "sorted");
             }
         };
     }
 
     public boolean              start() {
-
         try {
+            if (mScan != null) {
+                mActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        monitorProto.setVisibility(View.GONE);
+                        mActivity.newSearch(mDefaultSite);
+                        ViewAnimate.scaleDown(mActivity, mRV_cryptcheck);
+                        mAdapter.clear();
+                    }
+                });
+            }
+            mActivity.mProgressBar.setVisibility(View.VISIBLE);
+            mActivity.setToolbarTitle(null, "Scan in progress");
+            mScan = null;
             CryptCheckApi.getInstance().callForSite(mInstance, mDefaultSite);
         } catch (IOException e) {
             e.printStackTrace();
