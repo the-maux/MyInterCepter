@@ -19,7 +19,7 @@
             android:id="@+id/settings_menu_hostdetail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="@dimen/collapsing_size_mini"
+            android:minHeight="@dimen/app_bar_height"
             android:transitionName="hostTitle"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -141,7 +141,6 @@
                     android:layout_margin="1dp"
                     android:background="@color/cryptcheckPrimary"
                     android:visibility="gone"
-                    app:layout_collapseMode="pin"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"

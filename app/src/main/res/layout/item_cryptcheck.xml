@@ -4,7 +4,6 @@
     android:id="@+id/rootViewItemCryptcheck"
     android:layout_width="wrap_content"
     android:layout_height="40dp"
-    android:background="@color/cryptcheckPrimary"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintVertical_bias="0.0">
@@ -124,7 +123,7 @@
 
     <TextView
         android:id="@+id/ENCRYPTION_MODE"
-        android:layout_width="60dp"
+        android:layout_width="58dp"
         android:layout_height="0dp"
         android:layout_margin="1dp"
         android:background="@color/primary_white"
@@ -150,8 +149,6 @@
         android:background="@color/primary_white"
 
         android:gravity="center"
-        android:padding="3dp"
-        android:paddingLeft="2dp"
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="@dimen/text_size_2"
         android:textStyle="bold"
@@ -163,7 +160,7 @@
 
     <TextView
         android:id="@+id/MAC_TYPE"
-        android:layout_width="90dp"
+        android:layout_width="89dp"
         android:layout_height="0dp"
         android:layout_margin="1dp"
         android:background="@color/primary_white"

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -29,7 +30,7 @@ public class                    CryptFrgmnt extends MyFragment  {
     private String              TAG = "NmapOutputView";
     private CryptCheckActivity  mActivity;
     private CryptFrgmnt         mInstance = this;
-    private RadioButton         rd_tls10, rd_tls11, rd_tls12;
+    private CheckBox rd_tls10, rd_tls11, rd_tls12;
     private RecyclerView        mRV_cryptcheck;
     private String              mDefaultSite;
     private CryptCheckAdapter   mAdapter;
@@ -61,8 +62,7 @@ public class                    CryptFrgmnt extends MyFragment  {
             mRV_cryptcheck.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
-                    int pastVisibleItems =  ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                    updateSignal(pastVisibleItems);
+                    updateSignal(((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition());
                 }
             });
             rd_tls10.setOnCheckedChangeListener(onCheckedChange());
@@ -79,7 +79,6 @@ public class                    CryptFrgmnt extends MyFragment  {
             public void onClick(DialogInterface d, int which) {
                 String defaultSite = dialog.getFirstInputQuestion();
                 mDefaultSite = (defaultSite.isEmpty()) ? mDefaultSite : defaultSite;
-
                 start();
             }
         }).show();
@@ -92,6 +91,9 @@ public class                    CryptFrgmnt extends MyFragment  {
             return;
         }
         ArrayList<Ciphers> c = mScan.getProtos(true, true, true, true);
+        if (mScan.getTlsVersionFromItem(pastVisibleItems, c) == -1) {
+            monitorProto.setText("Filtered");
+        }
         if (mScan.getTlsVersionFromItem(pastVisibleItems, c) == 0) {
             monitorProto.setText("TLSv1.0");
         } else if (mScan.getTlsVersionFromItem(pastVisibleItems, c) == 1) {
@@ -102,11 +104,11 @@ public class                    CryptFrgmnt extends MyFragment  {
 
     }
 
-    private CompoundButton.OnCheckedChangeListener onCheckedChange() {
-        return new CompoundButton.OnCheckedChangeListener() {
+    private RadioButton.OnCheckedChangeListener onCheckedChange() {
+        return new RadioButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mAdapter.sort(buttonView, mScan);
-                buttonView.setChecked(!isChecked);
+                buttonView.setChecked(isChecked);
                 Log.d(TAG, "sorted");
             }
         };
@@ -119,6 +121,12 @@ public class                    CryptFrgmnt extends MyFragment  {
                     public void run() {
                         monitorProto.setVisibility(View.GONE);
                         mActivity.newSearch(mDefaultSite);
+                        rd_tls10.setChecked(true);
+                        rd_tls11.setChecked(true);
+                        rd_tls12.setChecked(true);
+                        rd_tls10.setEnabled(false);
+                        rd_tls11.setEnabled(false);
+                        rd_tls12.setEnabled(false);
                         ViewAnimate.scaleDown(mActivity, mRV_cryptcheck);
                         mAdapter.clear();
                     }

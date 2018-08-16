@@ -41,41 +41,44 @@
                 app:layout_constraintVertical_bias="0.0">
 
 
-                <RadioButton
+                <CheckBox
                     android:id="@+id/radioButtonTLS1_0"
                     android:layout_width="90dp"
                     android:layout_height="50dp"
                     android:layout_marginLeft="8dp"
                     android:checked="true"
                     android:elevation="2dp"
+                    android:enabled="false"
                     android:text="TLS 1"
                     android:textStyle="bold"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <RadioButton
+                <CheckBox
                     android:id="@+id/radioButtonTLS1_2"
                     android:layout_width="90dp"
                     android:layout_height="50dp"
                     android:checked="true"
                     android:elevation="2dp"
+                    android:enabled="false"
                     android:text="TLS 1.2"
                     android:textStyle="bold"
                     app:layout_constraintLeft_toRightOf="@+id/radioButtonTLS1_1" />
 
-                <RadioButton
+                <CheckBox
                     android:id="@+id/radioButtonTLS1_1"
                     android:layout_width="90dp"
                     android:layout_height="50dp"
                     android:checked="true"
                     android:elevation="2dp"
+                    android:enabled="false"
                     android:text="TLS 1.1"
                     android:textStyle="bold"
                     app:layout_constraintLeft_toRightOf="@+id/radioButtonTLS1_0" />
 
                 <TextView
                     android:id="@+id/Name"
-                    android:layout_width="250dp"
+                    android:layout_width="251dp"
                     android:layout_height="50dp"
                     android:layout_marginBottom="1dp"
 
@@ -94,7 +97,7 @@
 
                 <TextView
                     android:id="@+id/Key_exchange"
-                    android:layout_width="150dp"
+                    android:layout_width="151dp"
                     android:layout_height="0dp"
                     android:layout_margin="1dp"
                     android:background="@color/primary_white"
@@ -153,7 +156,7 @@
 
                 <TextView
                     android:id="@+id/Authentification"
-                    android:layout_width="153dp"
+                    android:layout_width="151dp"
                     android:layout_height="0dp"
 
                     android:layout_marginBottom="1dp"
@@ -180,8 +183,7 @@
 
                     android:elevation="2dp"
                     android:gravity="left|center_vertical"
-                    android:padding="3dp"
-                    android:paddingLeft="2dp"
+                    android:paddingLeft="4dp"
                     android:text="Type"
                     android:textColor="?android:attr/textColorPrimaryInverse"
                     android:textSize="@dimen/text_size_2"
@@ -201,8 +203,7 @@
 
                     android:elevation="2dp"
                     android:gravity="left|center_vertical"
-                    android:padding="3dp"
-                    android:paddingLeft="2dp"
+                    android:paddingLeft="4dp"
                     android:text="Key size"
                     android:textColor="?android:attr/textColorPrimaryInverse"
                     android:textSize="@dimen/text_size_2"
@@ -225,8 +226,7 @@
                     android:background="@color/primary_white"
                     android:elevation="2dp"
                     android:gravity="left|center_vertical"
-                    android:padding="3dp"
-                    android:paddingLeft="8dp"
+                    android:paddingLeft="4dp"
                     android:text="Encryption"
                     android:textColor="?android:attr/textColorPrimaryInverse"
                     android:textSize="@dimen/text_size_2"
@@ -238,15 +238,14 @@
                 <TextView
                     android:id="@+id/typeKEEncryption"
                     android:layout_width="62dp"
-                    android:layout_height="25dp"
+                    android:layout_height="24dp"
                     android:layout_marginBottom="1dp"
 
                     android:layout_marginTop="1dp"
                     android:background="@color/primary_white"
                     android:elevation="2dp"
                     android:gravity="left|center_vertical"
-                    android:padding="3dp"
-                    android:paddingLeft="2dp"
+                    android:paddingLeft="4dp"
                     android:text="Type   "
                     android:textColor="?android:attr/textColorPrimaryInverse"
                     android:textSize="@dimen/text_size_2"
@@ -257,15 +256,14 @@
 
                 <TextView
                     android:id="@+id/KeySizeEncryption"
-                    android:layout_width="82dp"
-                    android:layout_height="25dp"
+                    android:layout_width="81dp"
+                    android:layout_height="24dp"
                     android:layout_margin="1dp"
                     android:background="@color/primary_white"
 
                     android:elevation="2dp"
                     android:gravity="left|center_vertical"
-                    android:padding="3dp"
-                    android:paddingLeft="2dp"
+                    android:paddingLeft="4dp"
                     android:text="Key size"
                     android:textColor="?android:attr/textColorPrimaryInverse"
                     android:textSize="@dimen/text_size_2"
@@ -277,14 +275,16 @@
                 <TextView
                     android:id="@+id/BlockSizeEncryption"
                     android:layout_width="91dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="1dp"
-                    android:background="@color/primary_white"
+                    android:layout_height="24dp"
+                    android:layout_marginBottom="1dp"
 
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_marginTop="1dp"
+                    android:background="@color/primary_white"
                     android:elevation="2dp"
                     android:gravity="left|center_vertical"
-                    android:padding="3dp"
-                    android:paddingLeft="2dp"
+                    android:paddingLeft="4dp"
                     android:text="Block Size"
                     android:textColor="?android:attr/textColorPrimaryInverse"
                     android:textSize="@dimen/text_size_2"
@@ -297,16 +297,15 @@
 
                 <TextView
                     android:id="@+id/ModeEncryption"
-                    android:layout_width="60dp"
-                    android:layout_height="0dp"
+                    android:layout_width="59dp"
+                    android:layout_height="24dp"
 
-                    android:layout_marginLeft="1dp"
+                    android:layout_marginBottom="1dp"
                     android:layout_marginTop="1dp"
                     android:background="@color/primary_white"
                     android:elevation="2dp"
                     android:gravity="left|center_vertical"
-                    android:padding="3dp"
-                    android:paddingLeft="2dp"
+                    android:paddingLeft="4dp"
                     android:text="Mode"
                     android:textColor="?android:attr/textColorPrimaryInverse"
                     android:textSize="@dimen/text_size_2"
@@ -340,16 +339,15 @@
 
                 <TextView
                     android:id="@+id/keySizeMAC"
-                    android:layout_width="62dp"
-                    android:layout_height="25dp"
-                    android:layout_marginRight="1dp"
+                    android:layout_width="61dp"
+                    android:layout_height="24dp"
 
+                    android:layout_marginBottom="1dp"
                     android:layout_marginTop="1dp"
                     android:background="@color/primary_white"
                     android:elevation="2dp"
                     android:gravity="left|center_vertical"
-                    android:padding="3dp"
-                    android:paddingLeft="2dp"
+                    android:paddingLeft="4dp"
                     android:text="Type      "
                     android:textColor="?android:attr/textColorPrimaryInverse"
                     android:textSize="@dimen/text_size_2"
@@ -362,15 +360,15 @@
 
                 <TextView
                     android:id="@+id/typeKEMAC"
-                    android:layout_width="89dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="1dp"
-                    android:background="@color/primary_white"
+                    android:layout_width="90dp"
+                    android:layout_height="24dp"
+                    android:layout_marginBottom="1dp"
 
+                    android:layout_marginTop="1dp"
+                    android:background="@color/primary_white"
                     android:elevation="2dp"
                     android:gravity="left|center_vertical"
-                    android:padding="3dp"
-                    android:paddingLeft="2dp"
+                    android:paddingLeft="4dp"
                     android:text="Size"
                     android:textColor="?android:attr/textColorPrimaryInverse"
                     android:textSize="@dimen/text_size_2"
@@ -401,7 +399,7 @@
                 <TextView
                     android:id="@+id/PFS"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="50dp"
                     android:layout_margin="1dp"
                     android:layout_marginTop="1dp"
 
