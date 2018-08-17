@@ -255,7 +255,7 @@ public class CryptCheckActivity extends MyActivity {
         jcoolGraph.setGridBackgroundColor(ContextCompat.getColor(mInstance, R.color.primary_white));
         jcoolGraph.setBorderColor(ContextCompat.getColor(mInstance, R.color.primary_white));
         jcoolGraph.setDescription(description);
-        jcoolGraph.setElevation(4f);
+
         jcoolGraph.setDrawValueAboveBar(true);
         jcoolGraph.animateY(2000, Easing.EasingOption.Linear);
         jcoolGraph.setBorderColor(R.color.material_blue_300);
