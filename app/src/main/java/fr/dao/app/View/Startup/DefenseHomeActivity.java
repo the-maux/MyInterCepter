@@ -153,7 +153,7 @@ public class                    DefenseHomeActivity extends MyActivity {
                 case 4:
                     holder.titleCard.setText("CryptCheck");
                     holder.progressBar_monitor.setVisibility(View.GONE);
-//                    MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_aeris_png, holder.logo_card, false, false);
+                    MyGlideLoader.loadDrawableInImageView(mInstance, R.mipmap.ic_aeris_png, holder.logo_card, false, false);
 //                    holder.logo_card.setImageResource(R.mipmap.ic_lock);
                     holder.statusIconCardView.setImageResource(R.color.online_color);
                     holder.logo_card.setVisibility(View.VISIBLE);

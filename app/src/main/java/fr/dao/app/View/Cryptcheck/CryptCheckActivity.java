@@ -104,6 +104,31 @@ public class CryptCheckActivity extends MyActivity {
         setStatusBarColor(R.color.cryptcheckPrimary);
     }
 
+    private void                init() {
+        setToolbarTitle("Cryptcheck","Https Analyse");
+        updateGrade();
+        initTabs();
+        initFragment();
+        updateHeader(true);
+        updateCollapSize();
+        mTabs.setVisibility(View.GONE);
+    }
+
+    private void                initFragment() {
+        try {
+            if (mFragment == null)
+                mFragment = new CryptFrgmnt();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frame_container, mFragment)
+                    .commit();
+        } catch (IllegalStateException e) {
+            showSnackbar("Error in fragment: " + e.getCause().getMessage());
+            e.getStackTrace();
+            super.onBackPressed();
+        }
+    }
+
     private View.OnClickListener onSearchNewSiteClick() {
         return new View.OnClickListener() {
             public void onClick(View view) {
@@ -127,7 +152,7 @@ public class CryptCheckActivity extends MyActivity {
         });
     }
 
-    private void updateGrade() {
+    private void                updateGrade() {
         if (mScan == null) {
             OsImg.setVisibility(View.VISIBLE);
             grade.setVisibility(View.INVISIBLE);
@@ -137,74 +162,24 @@ public class CryptCheckActivity extends MyActivity {
             grade.setVisibility(View.VISIBLE);
             String gradeS = mScan.results.get(mScan.resultOffset).grade;
             if (gradeS.contains("A") || gradeS.contains("B")) {
-                grade.setTextColor(ContextCompat.getColor(mInstance, R.color.green));
+                grade.setTextColor(ContextCompat.getColor(mInstance, R.color.material_green_500));
             } else if (gradeS.contains("C") || gradeS.contains("D")) {
-                grade.setTextColor(ContextCompat.getColor(mInstance, R.color.material_orange_700));
+                grade.setTextColor(ContextCompat.getColor(mInstance, R.color.material_orange_500));
 
             } else if (gradeS.contains("E") || gradeS.contains("F")) {
-                grade.setTextColor(ContextCompat.getColor(mInstance, R.color.material_orange_700));
+                grade.setTextColor(ContextCompat.getColor(mInstance, R.color.material_red_500));
             }
             grade.setText(gradeS);
         }
     }
 
-    private void                init() {
-        setToolbarTitle("Cryptcheck","Https Analyse");
+    public void                 newSearch(String host) {
+        mScan = null;
         updateGrade();
-        initTabs();
-        initFragment();
-        updateHeader(true);
         updateCollapSize();
+        updateHeader(true);
+        setToolbarTitle(host, "Analyzing");
         mTabs.setVisibility(View.GONE);
-    }
-
-    private void                initFragment() {
-        try {
-            mFragment = new CryptFrgmnt();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.frame_container, mFragment)
-                    .commit();
-        } catch (IllegalStateException e) {
-            showSnackbar("Error in fragment: " + e.getCause().getMessage());
-            e.getStackTrace();
-            super.onBackPressed();
-        }
-    }
-
-    public void                 setToolbarTitle(final String title, final String subtitle) {
-        mInstance.runOnUiThread(new Runnable() {
-            public void run() {
-                if (title != null)
-                    mToolbar.setTitle(title);
-                if (subtitle != null)
-                    mToolbar.setSubtitle(subtitle);
-            }
-        });
-    }
-
-    public void                 showSnackbar(String txt) {
-        Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
-    }
-
-    public boolean              onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.sniff_bottom_bar, menu);
-        return true;
-    }
-
-
-    public boolean              onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.ACTION1:
-                Log.d(TAG, "ACTION1 item");
-                return true;
-            case R.id.ACTION2:
-                Log.d(TAG, "ACTION2 item");
-                return true;
-            default:
-                Log.d(TAG, "default item");
-                return true;
-        }
     }
 
     public void                 onResponseServer(CryptCheckScan scan) {
@@ -240,9 +215,9 @@ public class CryptCheckActivity extends MyActivity {
         MyBarDataSet set = new MyBarDataSet(entrys, "");
         set.setDrawValues(true);
         set.setColors(ContextCompat.getColor(mInstance, R.color.material_green_500),
-                ContextCompat.getColor(mInstance, R.color.material_blue_800),
-                ContextCompat.getColor(mInstance, R.color.material_deep_orange_400),
-                ContextCompat.getColor(mInstance, R.color.material_red_500));
+                ContextCompat.getColor(mInstance, R.color.material_blue_300),
+                ContextCompat.getColor(mInstance, R.color.material_orange_500),
+                ContextCompat.getColor(mInstance, R.color.material_red_600));
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
         set.setValueTextColor(ContextCompat.getColor(mInstance, R.color.white_secondary));
 
@@ -280,6 +255,7 @@ public class CryptCheckActivity extends MyActivity {
         jcoolGraph.setGridBackgroundColor(ContextCompat.getColor(mInstance, R.color.primary_white));
         jcoolGraph.setBorderColor(ContextCompat.getColor(mInstance, R.color.primary_white));
         jcoolGraph.setDescription(description);
+        jcoolGraph.setElevation(4f);
         jcoolGraph.setDrawValueAboveBar(true);
         jcoolGraph.animateY(2000, Easing.EasingOption.Linear);
         jcoolGraph.setBorderColor(R.color.material_blue_300);
@@ -327,14 +303,6 @@ public class CryptCheckActivity extends MyActivity {
         return new CryptCheckActivity.MyCustomXAxisValueFormatter();
     }
 
-    public void                     newSearch(String host) {
-        mScan = null;
-        updateGrade();
-        updateCollapSize();
-        updateHeader(true);
-        mTabs.setVisibility(View.GONE);
-    }
-
     public class MyCustomXAxisValueFormatter implements IAxisValueFormatter {
         public String getFormattedValue(float value, AxisBase axis) {
             switch ((int)value) {
@@ -368,6 +336,39 @@ public class CryptCheckActivity extends MyActivity {
             }
             return mColors.get(0);
         }
+    }
 
+    public void                 setToolbarTitle(final String title, final String subtitle) {
+        mInstance.runOnUiThread(new Runnable() {
+            public void run() {
+                if (title != null)
+                    mToolbar.setTitle(title);
+                if (subtitle != null)
+                    mToolbar.setSubtitle(subtitle);
+            }
+        });
+    }
+
+    public void                 showSnackbar(String txt) {
+        Snackbar.make(mCoordinatorLayout, txt, Toast.LENGTH_SHORT).show();
+    }
+
+    public boolean              onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.sniff_bottom_bar, menu);
+        return true;
+    }
+
+    public boolean              onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.ACTION1:
+                Log.d(TAG, "ACTION1 item");
+                return true;
+            case R.id.ACTION2:
+                Log.d(TAG, "ACTION2 item");
+                return true;
+            default:
+                Log.d(TAG, "default item");
+                return true;
+        }
     }
 }

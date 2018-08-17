@@ -78,7 +78,7 @@
 
                 <TextView
                     android:id="@+id/Name"
-                    android:layout_width="251dp"
+                    android:layout_width="257dp"
                     android:layout_height="50dp"
                     android:layout_marginBottom="1dp"
 
@@ -97,7 +97,7 @@
 
                 <TextView
                     android:id="@+id/Key_exchange"
-                    android:layout_width="151dp"
+                    android:layout_width="155dp"
                     android:layout_height="0dp"
                     android:layout_margin="1dp"
                     android:background="@color/primary_white"
@@ -156,7 +156,7 @@
 
                 <TextView
                     android:id="@+id/Authentification"
-                    android:layout_width="151dp"
+                    android:layout_width="150dp"
                     android:layout_height="0dp"
 
                     android:layout_marginBottom="1dp"
@@ -176,7 +176,7 @@
 
                 <TextView
                     android:id="@+id/AUTHENTIFICATION"
-                    android:layout_width="60dp"
+                    android:layout_width="61dp"
                     android:layout_height="25dp"
                     android:layout_margin="1dp"
                     android:background="@color/primary_white"
@@ -217,7 +217,7 @@
 
                 <TextView
                     android:id="@+id/Encryption"
-                    android:layout_width="296dp"
+                    android:layout_width="288dp"
                     android:layout_height="25dp"
                     android:layout_marginLeft="1dp"
 
@@ -237,7 +237,7 @@
 
                 <TextView
                     android:id="@+id/typeKEEncryption"
-                    android:layout_width="62dp"
+                    android:layout_width="70dp"
                     android:layout_height="24dp"
                     android:layout_marginBottom="1dp"
 
@@ -256,7 +256,7 @@
 
                 <TextView
                     android:id="@+id/KeySizeEncryption"
-                    android:layout_width="81dp"
+                    android:layout_width="70dp"
                     android:layout_height="24dp"
                     android:layout_margin="1dp"
                     android:background="@color/primary_white"
@@ -274,7 +274,7 @@
 
                 <TextView
                     android:id="@+id/BlockSizeEncryption"
-                    android:layout_width="91dp"
+                    android:layout_width="85dp"
                     android:layout_height="24dp"
                     android:layout_marginBottom="1dp"
 
@@ -297,7 +297,7 @@
 
                 <TextView
                     android:id="@+id/ModeEncryption"
-                    android:layout_width="59dp"
+                    android:layout_width="60dp"
                     android:layout_height="24dp"
 
                     android:layout_marginBottom="1dp"
@@ -320,7 +320,7 @@
 
                 <TextView
                     android:id="@+id/MAC"
-                    android:layout_width="152dp"
+                    android:layout_width="151dp"
                     android:layout_height="25dp"
                     android:layout_marginLeft="1dp"
 
@@ -339,7 +339,7 @@
 
                 <TextView
                     android:id="@+id/keySizeMAC"
-                    android:layout_width="61dp"
+                    android:layout_width="60dp"
                     android:layout_height="24dp"
 
                     android:layout_marginBottom="1dp"
@@ -383,7 +383,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="6dp"
                     android:background="@drawable/rounded_corner_off"
                     android:elevation="6dp"
                     android:gravity="center"
@@ -398,7 +398,7 @@
 
                 <TextView
                     android:id="@+id/PFS"
-                    android:layout_width="0dp"
+                    android:layout_width="63dp"
                     android:layout_height="50dp"
                     android:layout_margin="1dp"
                     android:layout_marginTop="1dp"
@@ -420,7 +420,7 @@
                     android:id="@+id/RV_cryptcheck"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:background="@color/cryptcheckPrimary"
+                    android:background="@color/material_blue_grey_200"
                     android:scrollbars="vertical"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
