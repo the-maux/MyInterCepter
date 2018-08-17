@@ -91,17 +91,22 @@ public class                    CryptFrgmnt extends MyFragment  {
             return;
         }
         ArrayList<Ciphers> c = mScan.getProtos(true, true, true, true);
+        monitorProto.setPadding(10,10,10,10);
         if (mScan.getTlsVersionFromItem(pastVisibleItems, c) == -1) {
             monitorProto.setText("Filtered");
+            monitorProto.setBackgroundResource(R.drawable.rounded_corner_off);
         }
         if (mScan.getTlsVersionFromItem(pastVisibleItems, c) == 0) {
             monitorProto.setText("TLSv1.0");
+            monitorProto.setBackgroundResource(R.drawable.background_tls10);
         } else if (mScan.getTlsVersionFromItem(pastVisibleItems, c) == 1) {
             monitorProto.setText("TLSv1.1");
+            monitorProto.setBackgroundResource(R.drawable.background_tls11);
         } else if (mScan.getTlsVersionFromItem(pastVisibleItems, c ) == 2) {
+            monitorProto.setBackgroundResource(R.drawable.background_tls12);
             monitorProto.setText("TLSv1.2");
         }
-
+        monitorProto.setPadding(10,10,10,10);
     }
 
     private RadioButton.OnCheckedChangeListener onCheckedChange() {

@@ -20,11 +20,16 @@ public class                        Ciphers {
     public Hmac                     hmac;
     @SerializedName("states")
     public Ciphers.States           states;
+
     public boolean                  isTitle = false;
 
     public Ciphers(String name) {
         this.isTitle = true;
         this.name = name;
+    }
+
+    public void setStates(States states) {
+        this.states = states;
     }
 
     public class                Encryption {
@@ -51,7 +56,16 @@ public class                        Ciphers {
         public int              size;
     }
     public class                States {
-        public class        critical {
+        @SerializedName("critical")
+        public Critical         critical;
+        @SerializedName("error")
+        public Error            error;
+        @SerializedName("warning")
+        public Warning          warning;
+        @SerializedName("good")
+        public Good             good;
+
+        public class    Critical {
             @SerializedName("dss")
             public boolean  dss;
             @SerializedName("anonymous")
@@ -69,15 +83,15 @@ public class                        Ciphers {
             @SerializedName("sweet32")
             public boolean  sweet32;
         }
-        public class        error {
+        public class    Error {
             @SerializedName("pfs")
             public boolean  pfs;
         }
-        public class        warning {
+        public class Warning {
             @SerializedName("dhe")
             public boolean  dhe;
         }
-        public class        good {
+        public class        Good {
             @SerializedName("aead")
             public boolean  aead;
         }

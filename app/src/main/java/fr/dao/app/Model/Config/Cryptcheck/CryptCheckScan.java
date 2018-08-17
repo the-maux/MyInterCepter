@@ -72,6 +72,7 @@ public class                            CryptCheckScan {
     public int                          getTlsVersionFromItem(int pastVisibleItems, ArrayList<Ciphers> ciphers) {
         if (ciphers == null || ciphers.isEmpty() || pastVisibleItems == -1)
             return -1;
+        Log.d("CryptCheckScan", "getTlsVersionFromItem::"+ciphers.get(pastVisibleItems).protocol);
         switch (ciphers.get(pastVisibleItems).protocol) {
             case "TLSv1_0":
                 return 0;

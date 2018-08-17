@@ -6,6 +6,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class                        CryptCheckModel {
     private String                  TAG = "CryptCheckModel";
@@ -54,7 +55,7 @@ public class                        CryptCheckModel {
     private void                    parseHeaderServer(Element elem, Server server) {
         /**
          <div class="col-sm-12">
-         <h2> <span class="label label-state-warning">E</span> 2001:bc8:4700:2200::1:c2b : 443 <span class="small">(blog.valvin.fr)</span></h2>
+         <h2> <span class="label label-state-Warning">E</span> 2001:bc8:4700:2200::1:c2b : 443 <span class="small">(blog.valvin.fr)</span></h2>
          </div>
          </div>
          * */
@@ -74,13 +75,13 @@ public class                        CryptCheckModel {
          *
          <div class="row">
          <div class="col-sm-12">
-         <div class="alert alert-warning">
+         <div class="alert alert-Warning">
             This server doesn't support HSTS
          </div>
-         <div class="alert alert-warning">
+         <div class="alert alert-Warning">
             This server supports TLSv1.1
          </div>
-         <div class="alert alert-warning">
+         <div class="alert alert-Warning">
             This server supports DHE ciphers
          </div>
          <div class="alert alert-good">
@@ -103,7 +104,7 @@ public class                        CryptCheckModel {
          </thead>
          <tbody>
          <tr>
-         <th><span class="label label-state-critical">critical</span></th>
+         <th><span class="label label-state-Critical">Critical</span></th>
          <td><span class="label label-success">mdc2_sign</span> <span class="label label-success">md2_sign</span> <span class="label label-success">md4_sign</span> <span class="label label-success">md5_sign</span> <span class="label label-success">sha_sign</span> <span class="label label-success">sha1_sign</span> <span class="label label-success">rsa</span> <span class="label label-success">dh</span> <span class="label label-success">sslv2</span> <span class="label label-success">sslv3</span> <span class="label label-success">dss</span> <span class="label label-success">anonymous</span> <span class="label label-success">null</span> <span class="label label-success">export</span> <span class="label label-success">des</span> <span class="label label-success">md5</span> <span class="label label-success">rc4</span> <span class="label label-success">sweet32</span></td>
          </tr>
          <tr>
@@ -111,7 +112,7 @@ public class                        CryptCheckModel {
          <td><span class="label label-success">rsa</span> <span class="label label-success">dh</span> <span class="label label-success">tlsv1_0</span> <span class="label label-success">pfs</span></td>
          </tr>
          <tr>
-         <th><span class="label label-state-warning">warning</span></th>
+         <th><span class="label label-state-Warning">Warning</span></th>
          <td><span class="label label-danger">hsts</span> <span class="label label-danger">tlsv1_1</span> <span class="label label-danger">dhe</span></td>
          </tr>
          <tr>
@@ -181,6 +182,7 @@ public class                        CryptCheckModel {
     }
 
     public class        CypherProto {
+        public final static int color_critic = 0x1, color_warning = 0x1, color_global = 0x1, color_good = 0x1;
         public String   name;
         public String   KeyExchange[] = new String[2];
         public String   Authentification[] = new String[2];
@@ -236,6 +238,32 @@ public class                        CryptCheckModel {
                     }
                 }
             }
+        }
+    }
+
+
+
+    public class dataNorme {
+        dataNorme() {
+            LinkedHashMap cmds = new LinkedHashMap<>();
+            Integer a1[] = {0, 0, 0, 0, 0, 0, 0, 0};
+            Integer a2[] = {0, 0, 0, 0, 0, 0, 0, 0};
+            Integer a3[] = {0, 0, 0, 0, 0, 0, 0, 0};
+            Integer a4[] = {0, 0, 0, 0, 0, 0, 0, 0};
+            Integer a5[] = {0, 0, 0, 0, 0, 0, 0, 0};
+            Integer a6[] = {0, 0, 0, 0, 0, 0, 0, 0};
+            Integer a7[] = {0, 0, 0, 0, 0, 0, 0, 0};
+            Integer a8[] = {0, 0, 0, 0, 0, 0, 0, 0};
+            Integer a9[] = {0, 0, 0, 0, 0, 0, 0, 0};
+            cmds.put("IDEA-CBC-SHA", a1);
+            cmds.put("IDEA-CBC-SHA", a2);
+            cmds.put("IDEA-CBC-SHA", a3);
+            cmds.put("IDEA-CBC-SHA", a4);
+            cmds.put("IDEA-CBC-SHA", a5);
+            cmds.put("IDEA-CBC-SHA", a6);
+            cmds.put("IDEA-CBC-SHA", a7);
+            cmds.put("IDEA-CBC-SHA", a8);
+            cmds.put("IDEA-CBC-SHA", a9);
         }
     }
 

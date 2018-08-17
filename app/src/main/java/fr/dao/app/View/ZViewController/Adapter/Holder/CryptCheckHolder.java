@@ -8,7 +8,7 @@ import android.widget.TextView;
 import fr.dao.app.R;
 
 public class                CryptCheckHolder extends RecyclerView.ViewHolder {
-    public View             rootView;
+    public View             rootView, headerProto;
     public ConstraintLayout rootViewItemCryptcheck;
     public TextView         name;
     public TextView         keyExchange;
@@ -20,6 +20,7 @@ public class                CryptCheckHolder extends RecyclerView.ViewHolder {
     public                  CryptCheckHolder(View v) {
         super(v);
         rootView = v;
+        headerProto = rootView.findViewById(R.id.headerProto);
         rootViewItemCryptcheck =  rootView.findViewById(R.id.rootViewItemCryptcheck);
         name = rootView.findViewById(R.id.Name);
         keyExchange = rootView.findViewById(R.id.KEY_EXCHANGE);

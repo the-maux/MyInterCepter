@@ -54,6 +54,17 @@ public class                    CryptCheckAdapter extends RecyclerView.Adapter<C
             holder.name.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     mActivity.getResources().getDimension(R.dimen.text_size_2));
             holder.name.setText(cipher.name.toUpperCase());
+            switch (cipher.protocol) {
+                case "TLSv1_0":
+                    holder.headerProto.setBackgroundResource(R.drawable.background_tls10);
+                    break;
+                case "TLSv1_1":
+                    holder.headerProto.setBackgroundResource(R.drawable.background_tls11);
+                    break;
+                case "TLSv1_2":
+                    holder.headerProto.setBackgroundResource(R.drawable.background_tls12);
+                    break;
+            }
             holder.keyExchange.setText(cipher.key_echange.toUpperCase());
             holder.Authentification.setText(cipher.authentification.toUpperCase());
            if (cipher.encryption != null) {
@@ -70,6 +81,7 @@ public class                    CryptCheckAdapter extends RecyclerView.Adapter<C
             } else {
                 Log.e(TAG, "no hmac");
             }
+            holder.PFS.setText((cipher.states.error.pfs) ? "PFS" : "No PFS");
             holder.rootViewItemCryptcheck.setBackgroundColor(mActivity.getResources().getColor(R.color.material_blue_grey_100));
        }
     }
