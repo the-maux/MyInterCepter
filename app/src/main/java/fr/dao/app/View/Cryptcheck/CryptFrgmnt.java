@@ -2,24 +2,17 @@ package fr.dao.app.View.Cryptcheck;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.RadioButton;
-import android.widget.TextView;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 import fr.dao.app.Core.Api.CryptCheckApi;
 import fr.dao.app.Core.Configuration.Singleton;
-import fr.dao.app.Model.Config.Cryptcheck.Ciphers;
 import fr.dao.app.Model.Config.Cryptcheck.CryptCheckScan;
 import fr.dao.app.R;
 import fr.dao.app.View.ZViewController.Adapter.CryptCheckAdapter;
@@ -29,15 +22,16 @@ import fr.dao.app.View.ZViewController.Fragment.MyFragment;
 
 public class                    CryptFrgmnt extends MyFragment  {
     private String              TAG = "NmapOutputView";
+    public static final String  TLS1 = "TLS 1.0";
+    public static final String   TLS11 = "TLS 1.1";
+    public static final String   TLS12 = "TLS 1.2";
     private CryptCheckActivity  mActivity;
     private CryptFrgmnt         mInstance = this;
-    private CheckBox            rd_tls10, rd_tls11, rd_tls12;
     private RecyclerView        mRV_cryptcheck;
     private String              mDefaultSite;
     private CryptCheckAdapter   mAdapter;
     private CryptCheckScan      mScan = null;
-    private TextView            monitorProto;
-
+    private TabLayout           tlsTabLayout;
 
     public View                 onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_cryptcheck, container, false);
@@ -50,10 +44,7 @@ public class                    CryptFrgmnt extends MyFragment  {
 
     private void                initXml(View rootView) {
         mRV_cryptcheck = rootView.findViewById(R.id.RV_cryptcheck);
-        rd_tls10 = rootView.findViewById(R.id.radioButtonTLS1_0);
-        rd_tls11 = rootView.findViewById(R.id.radioButtonTLS1_1);
-        rd_tls12 = rootView.findViewById(R.id.radioButtonTLS1_2);
-        monitorProto = rootView.findViewById(R.id.monitor_Protocol);
+        tlsTabLayout = rootView.findViewById(R.id.tabLayout);
     }
 
     public void                 init() {
@@ -61,15 +52,6 @@ public class                    CryptFrgmnt extends MyFragment  {
             mAdapter = new CryptCheckAdapter(mActivity);
             mRV_cryptcheck.setAdapter(mAdapter);
             mRV_cryptcheck.setLayoutManager(new LinearLayoutManager(mActivity));
-            mRV_cryptcheck.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    updateSignal(((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition());
-                }
-            });
-            rd_tls10.setOnCheckedChangeListener(onCheckedChange());
-            rd_tls11.setOnCheckedChangeListener(onCheckedChange());
-            rd_tls12.setOnCheckedChangeListener(onCheckedChange());
         }
         final QuestionDialogInput dialog = new QuestionDialogInput(mActivity)
                 .hideSecondInput()
@@ -86,41 +68,28 @@ public class                    CryptFrgmnt extends MyFragment  {
         }).show();
     }
 
-
-
-    private void                updateSignal(int pastVisibleItems) {
-        /* Ici on affiche le title du protocol en lecture */
-        if (mScan == null) {
-            monitorProto.setVisibility(View.GONE);
-            return;
+    private void                initTabs() {
+        tlsTabLayout.removeAllTabs();
+        if (mScan != null) {
+            if (mScan.isTLS10)
+                tlsTabLayout.addTab(tlsTabLayout.newTab().setText(TLS1));
+            if (mScan.isTLS11)
+                tlsTabLayout.addTab(tlsTabLayout.newTab().setText(TLS11));
+            if (mScan.isTLS12)
+                tlsTabLayout.addTab(tlsTabLayout.newTab().setText(TLS12));
+            tlsTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                public void onTabSelected(TabLayout.Tab tab) {
+                    if (mScan != null) {
+                        mAdapter.sort(tab.getText().toString(), mScan);
+                    }
+                }
+                public void onTabUnselected(TabLayout.Tab tab) {}
+                public void onTabReselected(TabLayout.Tab tab) {}
+            });
+            tlsTabLayout.setVisibility(View.VISIBLE);
+        } else{
+            tlsTabLayout.setVisibility(View.GONE);
         }
-        ArrayList<Ciphers> c = mScan.getProtos(true, true, true, true);
-        monitorProto.setPadding(10,10,10,10);
-        if (mScan.getTlsVersionFromItem(pastVisibleItems, c) == -1) {
-            monitorProto.setText("  Filtered  ");
-            monitorProto.setBackgroundResource(R.drawable.rounded_corner_off);
-        }
-        if (mScan.getTlsVersionFromItem(pastVisibleItems, c) == 0) {
-            monitorProto.setText("  TLSv1.0  ");
-            monitorProto.setBackgroundResource(R.drawable.background_tls10);
-        } else if (mScan.getTlsVersionFromItem(pastVisibleItems, c) == 1) {
-            monitorProto.setText("  TLSv1.1  ");
-            monitorProto.setBackgroundResource(R.drawable.background_tls11);
-        } else if (mScan.getTlsVersionFromItem(pastVisibleItems, c ) == 2) {
-            monitorProto.setBackgroundResource(R.drawable.background_tls12);
-            monitorProto.setText("  TLSv1.2  ");
-        }
-        monitorProto.setPadding(10,10,10,10);
-    }
-
-    private RadioButton.OnCheckedChangeListener onCheckedChange() {
-        return new RadioButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mAdapter.sort(buttonView, mScan);
-                buttonView.setChecked(isChecked);
-                Log.d(TAG, "sorted");
-            }
-        };
     }
 
     public boolean              start() {
@@ -128,14 +97,8 @@ public class                    CryptFrgmnt extends MyFragment  {
             if (mScan != null) {
                 mActivity.runOnUiThread(new Runnable() {
                     public void run() {
-                        monitorProto.setVisibility(View.GONE);
                         mActivity.newSearch(mDefaultSite);
-                        rd_tls10.setChecked(true);
-                        rd_tls11.setChecked(true);
-                        rd_tls12.setChecked(true);
-                        rd_tls10.setEnabled(false);
-                        rd_tls11.setEnabled(false);
-                        rd_tls12.setEnabled(false);
+                        tlsTabLayout.setVisibility(View.GONE);
                         ViewAnimate.scaleDown(mActivity, mRV_cryptcheck);
                         mAdapter.clear();
                     }
@@ -163,12 +126,9 @@ public class                    CryptFrgmnt extends MyFragment  {
         scan.dump();
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
-                rd_tls10.setEnabled(scan.isTLS10);
-                rd_tls11.setEnabled(scan.isTLS11);
-                rd_tls12.setEnabled(scan.isTLS12);
+                initTabs();
                 mActivity.mProgressBar.setVisibility(View.GONE);
                 reloadView();
-                monitorProto.setVisibility(View.VISIBLE);
                 mActivity.onResponseServer(scan);
             }
         });

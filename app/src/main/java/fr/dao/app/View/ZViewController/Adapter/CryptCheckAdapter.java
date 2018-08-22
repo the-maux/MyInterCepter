@@ -6,11 +6,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -18,6 +16,7 @@ import java.util.LinkedHashMap;
 import fr.dao.app.Model.Config.Cryptcheck.Ciphers;
 import fr.dao.app.Model.Config.Cryptcheck.CryptCheckScan;
 import fr.dao.app.R;
+import fr.dao.app.View.Cryptcheck.CryptFrgmnt;
 import fr.dao.app.View.ZViewController.Adapter.Holder.CryptCheckHolder;
 
 public class                    CryptCheckAdapter extends RecyclerView.Adapter<CryptCheckHolder> {
@@ -301,16 +300,22 @@ public class                    CryptCheckAdapter extends RecyclerView.Adapter<C
         return classicfication;
     }
 
-    public void                 sort(CompoundButton buttonView, final CryptCheckScan scan) {
-        switch (buttonView.getId()) {
-            case R.id.radioButtonTLS1_0:
-                isTLS10 = !isTLS10;
+    public void                 sort(String text ,final CryptCheckScan scan) {
+        switch (text) {
+            case CryptFrgmnt.TLS1:
+                isTLS10 = true;
+                isTLS11 = false;
+                isTLS12 = false;
                 break;
-            case R.id.radioButtonTLS1_1:
-                isTLS11 = !isTLS11;
+            case CryptFrgmnt.TLS11:
+                isTLS10 = false;
+                isTLS11 = true;
+                isTLS12 = false;
                 break;
-            case R.id.radioButtonTLS1_2:
-                isTLS12 = !isTLS12;
+            case CryptFrgmnt.TLS12:
+                isTLS10 = false;
+                isTLS11 = false;
+                isTLS12 = true;
                 break;
         }
         protos = scan.getProtos(isTLS10, isTLS11, isTLS12, isTLS13);

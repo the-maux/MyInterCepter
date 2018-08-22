@@ -28,7 +28,6 @@ public class                                DBSessions {
      * @return
      */
     public static Session                   createOrUpdateSession() {
-        Log.d(TAG, "::createOrUpdateSession");
         List<Session> sessions = getAllSession();
         Calendar cal2 = Calendar.getInstance(), cal1 = Calendar.getInstance();
         if (sessions != null)
@@ -36,11 +35,11 @@ public class                                DBSessions {
                 cal2.setTime(session.date);
                 if (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
                         cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)) {
-                    Log.d(TAG, "::returning network -> " + session.getDateString());
+//                    Log.d(TAG, "::returning network -> " + session.getDateString());
                     return session;
                 } else {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd_MMMM_HH#mm-ss", Locale.FRANCE);
-                    Log.d(TAG, "Session not matching s1[" + sdf.format(cal1.getTime())+ "] s2[" + sdf.format(cal2.getTime()) + "]");
+//                    Log.d(TAG, "Session not matching s1[" + sdf.format(cal1.getTime())+ "] s2[" + sdf.format(cal2.getTime()) + "]");
                 }
             }
         else

@@ -41,40 +41,30 @@
                 app:layout_constraintVertical_bias="0.0">
 
 
-                <CheckBox
-                    android:id="@+id/radioButtonTLS1_0"
-                    android:layout_width="90dp"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="8dp"
-                    android:checked="true"
-                    android:elevation="2dp"
-                    android:enabled="false"
-                    android:text="TLS 1"
-                    android:textStyle="bold"
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="4dp"
+                    android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <CheckBox
-                    android:id="@+id/radioButtonTLS1_2"
-                    android:layout_width="90dp"
-                    android:layout_height="50dp"
-                    android:checked="true"
-                    android:elevation="2dp"
-                    android:enabled="false"
-                    android:text="TLS 1.2"
-                    android:textStyle="bold"
-                    app:layout_constraintLeft_toRightOf="@+id/radioButtonTLS1_1" />
+                    <android.support.design.widget.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TLS 1.0" />
 
-                <CheckBox
-                    android:id="@+id/radioButtonTLS1_1"
-                    android:layout_width="90dp"
-                    android:layout_height="50dp"
-                    android:checked="true"
-                    android:elevation="2dp"
-                    android:enabled="false"
-                    android:text="TLS 1.1"
-                    android:textStyle="bold"
-                    app:layout_constraintLeft_toRightOf="@+id/radioButtonTLS1_0" />
+                    <android.support.design.widget.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TLS 1.1" />
+
+                    <android.support.design.widget.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TLS 1.2" />
+                </android.support.design.widget.TabLayout>
 
                 <TextView
                     android:id="@+id/Name"
@@ -92,7 +82,7 @@
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/RV_cryptcheck"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/radioButtonTLS1_1" />
+                    app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
 
                 <TextView
@@ -110,7 +100,7 @@
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/RV_cryptcheck"
                     app:layout_constraintLeft_toRightOf="@+id/Name"
-                    app:layout_constraintTop_toBottomOf="@+id/radioButtonTLS1_1" />
+                    app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
                 <TextView
                     android:id="@+id/TypeKE"
@@ -171,7 +161,7 @@
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/RV_cryptcheck"
                     app:layout_constraintLeft_toRightOf="@+id/Key_exchange"
-                    app:layout_constraintTop_toBottomOf="@+id/radioButtonTLS1_1" />
+                    app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
 
                 <TextView
@@ -233,7 +223,7 @@
                     android:textStyle="bold"
                     app:layout_constraintLeft_toRightOf="@+id/Authentification"
                     app:layout_constraintRight_toRightOf="@+id/ENCRYPTION_MODE"
-                    app:layout_constraintTop_toBottomOf="@+id/radioButtonTLS1_1" />
+                    app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
                 <TextView
                     android:id="@+id/typeKEEncryption"
@@ -335,7 +325,7 @@
                     android:textSize="@dimen/text_size_2"
                     android:textStyle="bold"
                     app:layout_constraintLeft_toRightOf="@+id/Encryption"
-                    app:layout_constraintTop_toBottomOf="@+id/radioButtonTLS1_1" />
+                    app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
                 <TextView
                     android:id="@+id/keySizeMAC"
@@ -379,24 +369,6 @@
                     app:layout_constraintTop_toBottomOf="@+id/MAC" />
 
                 <TextView
-                    android:id="@+id/monitor_Protocol"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="6dp"
-                    android:background="@drawable/rounded_corner_off"
-                    android:elevation="6dp"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="TLS1.0"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/primary_white"
-                    android:textStyle="bold"
-                    android:visibility="gone"
-                    app:layout_constraintLeft_toLeftOf="@+id/Name"
-                    app:layout_constraintTop_toTopOf="@+id/Name" />
-
-                <TextView
                     android:id="@+id/PFS"
                     android:layout_width="63dp"
                     android:layout_height="50dp"
@@ -414,7 +386,7 @@
                     app:layout_constraintBottom_toTopOf="@+id/RV_cryptcheck"
                     app:layout_constraintLeft_toRightOf="@+id/MAC"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/radioButtonTLS1_1" />
+                    app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/RV_cryptcheck"
